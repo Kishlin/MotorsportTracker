@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Championship\Entity;
+namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Championship\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
