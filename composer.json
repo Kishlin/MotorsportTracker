@@ -1,5 +1,5 @@
 {
-    "name": "kishlin/skeleton",
+    "name": "kishlin/motorsport-tracker",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -52,14 +52,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Kishlin\\Apps\\SymfonyApp\\": "apps/SymfonyApp/src",
+            "Kishlin\\Apps\\MotorsportTracker\\Backend\\": "apps/MotorsportTracker/Backend/src",
+            "Kishlin\\Apps\\Backoffice\\": "apps/Backoffice/src",
 
             "Kishlin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kishlin\\Tests\\Apps\\SymfonyApp\\": "apps/SymfonyApp/tests",
+            "Kishlin\\Tests\\Apps\\MotorsportTracker\\Backend\\": "apps/MotorsportTracker/Backend/tests",
+            "Kishlin\\Tests\\Apps\\Backoffice\\": "apps/Backoffice/tests",
 
             "Kishlin\\Tests\\": "tests/"
         }

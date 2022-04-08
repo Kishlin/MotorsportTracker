@@ -1,0 +1,33 @@
+###> PHPStorm ###
+/.idea
+###< PHPStorm ###
+
+###> Dev Env ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/.docker-cache
+/docker-compose.yaml
+###< Dev Env ###
+
+###> Symfony/Composer ###
+/vendor/
+/apps/Backoffice/var/
+/apps/MotorsportTracker/Backend/var/
+###< Symfony ###
+
+###> Node ###
+/apps/MotorsportTracker/Frontend/.env.local
+/apps/MotorsportTracker/Frontend/node
+/apps/MotorsportTracker/Frontend/build
+/apps/MotorsportTracker/Frontend/node_modules
+/apps/MotorsportTracker/Frontend/yarn-*.log
+###< Node ###
+
+###> phpunit/phpunit ###
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> friendsofphp/php-cs-fixer ###
+.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###

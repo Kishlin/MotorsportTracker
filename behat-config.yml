@@ -1,6 +1,10 @@
 default:
   suites:
-    tests:
+    use_case_tests:
       paths: [ features ]
       contexts:
-        - ~
+        - Kishlin\Tests\Backend\UseCaseTests\Context\Context
+    api_tests:
+      paths: [ features ]
+      contexts:
+        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\Context

@@ -42,16 +42,28 @@
             <directory>tests/Backend/ContractTests</directory>
         </testsuite>
 
-        <testsuite name="driving">
-            <directory>apps/SymfonyApp/tests/DrivingTests</directory>
+        <testsuite name="backoffice-driving">
+            <directory>apps/Backoffice/tests/DrivingTests</directory>
         </testsuite>
 
-        <testsuite name="functional">
-            <directory>apps/SymfonyApp/tests/FunctionalTests</directory>
+        <testsuite name="backoffice-functional">
+            <directory>apps/Backoffice/tests/FunctionalTests</directory>
         </testsuite>
 
-        <testsuite name="integration">
-            <directory>apps/SymfonyApp/tests/IntegrationTests</directory>
+        <testsuite name="backoffice-integration">
+            <directory>apps/Backoffice/tests/IntegrationTests</directory>
+        </testsuite>
+
+        <testsuite name="backend-driving">
+            <directory>apps/MotorsportTracker/Backend/tests/DrivingTests</directory>
+        </testsuite>
+
+        <testsuite name="backend-functional">
+            <directory>apps/MotorsportTracker/Backend/tests/FunctionalTests</directory>
+        </testsuite>
+
+        <testsuite name="backend-integration">
+            <directory>apps/MotorsportTracker/Backend/tests/IntegrationTests</directory>
         </testsuite>
     </testsuites>
 

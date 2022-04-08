@@ -1,0 +1,20 @@
+#imports:
+#  - { resource: ../../../../Module/Infrastructure/DependencyInjection/Symfony/module_services.yaml }
+
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+
+##> Persistence
+
+  Doctrine\ORM\EntityManagerInterface:
+    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+    arguments:
+        $parameters:
+          url: '%kishlin.database.url%'
+        $environment: '%kishlin.app.environment%'
+    public: true
+
+  kishlin.app.infrastructure.entity_manager: '@Doctrine\ORM\EntityManagerInterface'

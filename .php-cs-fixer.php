@@ -1,8 +1,10 @@
  <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__.'/apps/SymfonyApp/tests')
-    ->in(__DIR__.'/apps/SymfonyApp/src')
+    ->in(__DIR__.'/apps/MotorsportTracker/Backend/tests')
+    ->in(__DIR__.'/apps/MotorsportTracker/Backend/src')
+    ->in(__DIR__.'/apps/Backoffice/tests')
+    ->in(__DIR__.'/apps/Backoffice/src')
     ->in(__DIR__.'/tests')
     ->in(__DIR__.'/src')
 ;

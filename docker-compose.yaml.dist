@@ -20,9 +20,9 @@ services:
     networks:
       - "docker-app"
 
-  node:
-    container_name: node-${PROJECT}
-    image: ${PROJECT}-node:${NODE_VERSION}
+  frontend:
+    container_name: frontend-${PROJECT}
+    image: ${PROJECT}-frontend:${NODE_VERSION}
     env_file:
       - .env
       - .env.local
@@ -37,13 +37,13 @@ services:
       - cache:/srv/cache
     ports:
       - "${FRONTEND_SERVER_PORT_EXTERNAL}:3000"
-    working_dir: "/app/apps/ReactApp"
+    working_dir: "/app/apps/MotorsportTracker/Frontend"
     user: <DOCKER_USER>
     command: npm run install-and-start
     networks:
       - "docker-app"
 
-  php:
+  backend:
     env_file:
         - .env
         - .env.local
@@ -52,8 +52,8 @@ services:
       args:
         DOCKER_USER: <DOCKER_USER>
         DOCKER_USER_ID: <DOCKER_USER_ID>
-    container_name: php-${PROJECT}
-    image: ${PROJECT}-php:${PHP_VERSION}
+    container_name: backend-${PROJECT}
+    image: ${PROJECT}-backend:${PHP_VERSION}
     ports:
       - "${BACKEND_SERVER_PORT_EXTERNAL}:8000"
       - "${BACKEND_XDEBUG_PORT_EXTERNAL}:9003"
@@ -69,9 +69,41 @@ services:
         - ${PWD}:/app
         - $SSH_AUTH_SOCK:/ssh-agent
         - cache:/srv/cache
-    working_dir: "/app/apps/SymfonyApp"
+    working_dir: "/app/apps/MotorsportTracker/Backend"
     user: <DOCKER_USER>
-    command: symfony server:start --dir=/app/apps/SymfonyApp/public --port=8000 --force-php-discovery
+    command: symfony server:start --dir=/app/apps/MotorsportTracker/Backend/public --port=8000 --force-php-discovery
+    networks:
+        - "docker-app"
+
+  backoffice:
+    env_file:
+        - .env
+        - .env.local
+    build:
+      context: .docker/php/${PHP_VERSION}
+      args:
+        DOCKER_USER: <DOCKER_USER>
+        DOCKER_USER_ID: <DOCKER_USER_ID>
+    container_name: backoffice-${PROJECT}
+    image: ${PROJECT}-backoffice:${PHP_VERSION}
+    ports:
+      - "${BACKOFFICE_SERVER_PORT_EXTERNAL}:8000"
+      - "${BACKOFFICE_XDEBUG_PORT_EXTERNAL}:9003"
+    depends_on:
+      - postgres
+    restart: on-failure
+    environment:
+        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
+        SSH_AUTH_SOCK: /ssh-agent
+        TZ: ${TIMEZONE}
+        XDEBUG_SESSION: PHPSTORM
+    volumes:
+        - ${PWD}:/app
+        - $SSH_AUTH_SOCK:/ssh-agent
+        - cache:/srv/cache
+    working_dir: "/app/apps/Backoffice"
+    user: <DOCKER_USER>
+    command: symfony server:start --dir=/app/apps/Backoffice/public --port=8000 --force-php-discovery
     networks:
         - "docker-app"
 

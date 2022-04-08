@@ -1,16 +1,16 @@
-# Skeleton App
+# Motorsport Tracker
 [![Symfony](https://img.shields.io/badge/Symfony-v6.0-blue.svg)](https://Symfony.com/)
 [![React](https://img.shields.io/badge/React-v17.0-orange.svg)](https://symfony.com/)
 [![Docker](https://img.shields.io/badge/Docker-v20.10-yellowgreen.svg)](https://Symfony.com/) 
 [![Docker-Compose](https://img.shields.io/badge/DockerCompose-v1.29-blueviolet.svg)](https://symfony.com/)
 
-[![licence](https://img.shields.io/badge/licence-MIT-green.svg)](https://github.com/Kishlin/RPGIdleGame/blob/master/LICENSE.md)
+[![licence](https://img.shields.io/badge/licence-MIT-green.svg)](https://github.com/Kishlin/MotorsportTracker/blob/master/LICENSE.md)
 
 ## Download locally
 
 ```shell
-git clone https://github.com/Kishlin/SkeletonApp.git
-cd SkeletonApp
+git clone https://github.com/Kishlin/MotorsportTracker.git
+cd MotorsportTracker
 ```
 
 ## Run the project in dev environment
@@ -28,10 +28,10 @@ On first start, or if you remove required folders (like dependencies), everythin
 
 ## Links
 
-| Service      | Symfony App                                                   | React App                                                     |
-|--------------|---------------------------------------------------------------|---------------------------------------------------------------|
-| Check Health | [Check Health](http://localhost:8030/monitoring/check-health) | [Check Health](http://localhost:3000/monitoring/check-health) |
-| Home Page    |                                                               | [Home Page](http://localhost:3000/)                           |
+| Service      | Api                                                           | Frontend                                                      | Backoffice                                                    |
+|--------------|---------------------------------------------------------------|---------------------------------------------------------------|---------------------------------------------------------------|
+| Check Health | [Check Health](http://localhost:8030/monitoring/check-health) | [Check Health](http://localhost:3000/monitoring/check-health) | [Check Health](http://localhost:8040/monitoring/check-health) |
+| Home Page    |                                                               | [Home Page](http://localhost:3000/)                           | [Home Page](http://localhost:8040/)                           |
 
 Ports may differ if overridden in the .env.local file.
 

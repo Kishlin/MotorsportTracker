@@ -28,7 +28,7 @@ composer-require: INTERACTIVE=-ti --interactive
 .PHONY: composer
 composer-install composer-update composer-require composer-require-module: .env.local .docker-cache
 	@docker-compose exec backend php /usr/local/bin/composer $(CMD) \
-			--working-dir=/rpgidlegame \
+			--working-dir=/app \
 			--no-ansi
 
 ##> Project
@@ -76,16 +76,17 @@ clean:
 	@if [ -f "./docker-compose.yaml" ]; then \
 		docker-compose down; \
 	fi;
-	@sudo rm -rf docker-compose.yaml vendor apps/ReactApp/node_modules apps/ReactApp/build
+	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
 	@sudo rm -rf .git/hooks/commit-msg .git/hooks/pre-commit
 
 start: containers vendor db.reload db.reload.test
 	@echo "All services should be running."
-	@echo "    SymfonyApp: http://localhost:8030/monitoring/check-health"
-	@echo "    ReactApp: http://localhost:3000/monitoring/check-health"
+	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
+	@echo "    Backend: http://localhost:8030/monitoring/check-health"
+	@echo "    Frontend: http://localhost:3000/monitoring/check-health"
 	@echo "You can access services with the root links."
-	@echo "    SymfonyApp: http://localhost:8030/"
-	@echo "    ReactApp: http://localhost:3000/"
+	@echo "    Backoffice: http://localhost:8040/"
+	@echo "    Frontend: http://localhost:3000/"
 	@echo "Ports may differ if overridden in the .env.local file."
 	@echo "Run tests: \`make tests\` (see Makefile for more options)."
 
@@ -104,9 +105,9 @@ db.reload.test: ENV=test
 
 db.reload db.reload.test:
 	@echo "Creating $(ENV) database"
-	@docker-compose exec postgres /bin/bash -c 'dropdb -U $$POSTGRES_USER --if-exists rpgidlegame-$(ENV) &>/dev/null'
-	@docker-compose exec postgres /bin/bash -c 'createdb -U $$POSTGRES_USER rpgidlegame-$(ENV)'
-	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d rpgidlegame-$(ENV) -f /app/etc/Schema/create.sql &>/dev/null'
+	@docker-compose exec postgres /bin/bash -c 'dropdb -U $$POSTGRES_USER --if-exists app-$(ENV) &>/dev/null'
+	@docker-compose exec postgres /bin/bash -c 'createdb -U $$POSTGRES_USER app-$(ENV)'
+	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d app-$(ENV) -f /app/etc/Schema/create.sql &>/dev/null'
 	@echo "Done reloading $(ENV) database"
 
 db.connect:
@@ -114,7 +115,7 @@ db.connect:
 
 db.dump:
 	@echo "Dump DB schema to file"
-	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d app-dev > /rpgidlegame/etc/Schema/create.sql'
+	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d app-dev > /app/etc/Schema/create.sql'
 
 db.migrations.diff: CMD=diff
 
@@ -141,6 +142,12 @@ tests.backend.usecases:
 		/app/vendor/bin/behat --config /app/behat-config.yml --suite use_case_tests
 	@echo ""
 
+tests.backend.api:
+	@echo "Running Api Tests for the Backend"
+	@docker-compose exec backend php \
+		/app/vendor/bin/behat --config /app/behat-config.yml --suite api_tests
+	@echo ""
+
 tests.backend.src.isolated:
 	@echo "Running Isolated Tests for the src/ folder"
 	@docker-compose exec backend php \
@@ -160,36 +167,60 @@ tests.backend.src:
 	@echo ""
 
 tests.backend.app.driving:
-	@echo "Running Driving Tests for the SymfonyApp"
-	@docker-compose exec php php \
-		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite driving
+	@echo "Running Driving Tests for the Backend"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backend-driving
 	@echo ""
 
 tests.backend.app.functional:
-	@echo "Running Functional Tests for the SymfonyApp"
-	@docker-compose exec php php \
-		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite functional
+	@echo "Running Functional Tests for the Backend"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backend-functional
 	@echo ""
 
 tests.backend.app.integration:
-	@echo "Running Integration Tests for the SymfonyApp"
-	@docker-compose exec php php \
-		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite integration
+	@echo "Running Integration Tests for the Backend"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backend-integration
 	@echo ""
 
 tests.backend.app:
-	@echo "Running Tests for the Symfony App"
-	@docker-compose exec php php \
-		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite driving,functional,integration
+	@echo "Running Tests for the Backend"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backend-driving,backend-functional,backend-integration
+	@echo ""
+
+tests.backoffice.driving:
+	@echo "Running Driving Tests for the Backoffice"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backoffice-driving
+	@echo ""
+
+tests.backoffice.functional:
+	@echo "Running Functional Tests for the Backoffice"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backoffice-functional
+	@echo ""
+
+tests.backoffice.integration:
+	@echo "Running Integration Tests for the Backoffice"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backoffice-integration
+	@echo ""
+
+tests.backoffice:
+	@echo "Running Tests for the Backoffice"
+	@docker-compose exec backend php \
+		/app/vendor/bin/phpunit -c /app/phpunit.xml --testsuite backoffice-driving,backoffice-functional,backoffice-integration
 	@echo ""
 
 tests.frontend:
-	@echo "Running Tests for the ReactApp"
-	@docker-compose exec node npm run test
+	@echo "Running Tests for the Frontend"
+	@docker-compose exec frontend npm run test
 	@echo ""
 
 
-tests.backend: tests.backend.usecases tests.backend.src tests.backend.app
+tests.backend: tests.backend.usecases tests.backend.api tests.backend.src tests.backend.app tests.backoffice
 
 tests: tests.backend tests.frontend
 

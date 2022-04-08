@@ -11,7 +11,9 @@ parameters:
 	paths:
 		- /app/src
 		- /app/tests
-		- /app/apps/SymfonyApp/src
-		- /app/apps/SymfonyApp/tests
+		- /app/apps/Backoffice/src
+		- /app/apps/Backoffice/tests
+		- /app/apps/MotorsportTracker/Backend/src
+		- /app/apps/MotorsportTracker/Backend/tests
 	symfony:
-		container_xml_path: '%currentWorkingDirectory%/var/cache/dev/Kishlin_Apps_SymfonyApp_RPGIdleGameKernelDevDebugContainer.xml'
+		container_xml_path: '%currentWorkingDirectory%/var/cache/dev/Kishlin_Apps_MotorsportTracker_Backend_KernelDevDebugContainer.xml'
