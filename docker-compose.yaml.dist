@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+
+  postgres:
+    container_name: postgres-${PROJECT}
+    image: ${PROJECT}-postgres:${DB_VERSION}
+    build:
+      context: ./.docker/postgres/${DB_VERSION}
+    restart: on-failure
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ${PWD}:/app
+    ports:
+      - "${DB_PORT_EXTERNAL}:5432"
+    working_dir: "/app"
+    networks:
+      - "docker-app"
+
+  node:
+    container_name: node-${PROJECT}
+    image: ${PROJECT}-node:${NODE_VERSION}
+    env_file:
+      - .env
+      - .env.local
+    build:
+      context: ./.docker/node/${NODE_VERSION}
+      args:
+        DOCKER_USER: <DOCKER_USER>
+        DOCKER_USER_ID: <DOCKER_USER_ID>
+    restart: on-failure
+    volumes:
+      - ${PWD}:/app
+      - cache:/srv/cache
+    ports:
+      - "${FRONTEND_SERVER_PORT_EXTERNAL}:3000"
+    working_dir: "/app/apps/ReactApp"
+    user: <DOCKER_USER>
+    command: npm run install-and-start
+    networks:
+      - "docker-app"
+
+  php:
+    env_file:
+        - .env
+        - .env.local
+    build:
+      context: .docker/php/${PHP_VERSION}
+      args:
+        DOCKER_USER: <DOCKER_USER>
+        DOCKER_USER_ID: <DOCKER_USER_ID>
+    container_name: php-${PROJECT}
+    image: ${PROJECT}-php:${PHP_VERSION}
+    ports:
+      - "${BACKEND_SERVER_PORT_EXTERNAL}:8000"
+      - "${BACKEND_XDEBUG_PORT_EXTERNAL}:9003"
+    depends_on:
+      - postgres
+    restart: on-failure
+    environment:
+        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
+        SSH_AUTH_SOCK: /ssh-agent
+        TZ: ${TIMEZONE}
+        XDEBUG_SESSION: PHPSTORM
+    volumes:
+        - ${PWD}:/app
+        - $SSH_AUTH_SOCK:/ssh-agent
+        - cache:/srv/cache
+    working_dir: "/app/apps/SymfonyApp"
+    user: <DOCKER_USER>
+    command: symfony server:start --dir=/app/apps/SymfonyApp/public --port=8000 --force-php-discovery
+    networks:
+        - "docker-app"
+
+networks:
+  docker-app:
+    driver: bridge
+
+volumes:
+  cache:
+    external: true

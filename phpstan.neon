@@ -1,0 +1,17 @@
+includes:
+  - /app/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+  - /app/vendor/phpstan/phpstan-doctrine/extension.neon
+  - /app/vendor/phpstan/phpstan-symfony/extension.neon
+  - /app/vendor/phpstan/phpstan-phpunit/extension.neon
+  - /app/vendor/phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+	level: 9
+	treatPhpDocTypesAsCertain: false
+	paths:
+		- /app/src
+		- /app/tests
+		- /app/apps/SymfonyApp/src
+		- /app/apps/SymfonyApp/tests
+	symfony:
+		container_xml_path: '%currentWorkingDirectory%/var/cache/dev/Kishlin_Apps_SymfonyApp_RPGIdleGameKernelDevDebugContainer.xml'

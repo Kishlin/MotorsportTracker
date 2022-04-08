@@ -1,0 +1,6 @@
+default:
+  suites:
+    tests:
+      paths: [ features ]
+      contexts:
+        - ~
