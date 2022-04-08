@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\Tools\Test\Isolated;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\Constraint\AggregateRecordedDomainEventsConstraint;
+use Kishlin\Tests\Backend\Tools\Test\Isolated\Constraint\ValueObjectSameConstraint;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,5 +21,10 @@ abstract class AggregateRootIsolatedTestCase extends TestCase
     public static function assertItRecordedDomainEvents(AggregateRoot $root, DomainEvent ...$events): void
     {
         self::assertThat($root, new AggregateRecordedDomainEventsConstraint($events));
+    }
+
+    public static function assertValueObjectSame(mixed $expected, object $object): void
+    {
+        self::assertThat($object, new ValueObjectSameConstraint($expected));
     }
 }
