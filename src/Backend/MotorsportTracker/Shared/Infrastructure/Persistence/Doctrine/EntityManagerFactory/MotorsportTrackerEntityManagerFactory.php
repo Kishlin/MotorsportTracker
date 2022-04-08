@@ -78,6 +78,14 @@ final class MotorsportTrackerEntityManagerFactory
         ];
 
         yield [
+            'mainPath'      => __DIR__ . '/../../../../../../../../src/Backend/Country',
+            'mappingsPath'  => 'Infrastructure/Persistence/Doctrine/Mapping',
+            'typesPath'     => 'Infrastructure/Persistence/Doctrine/DbalTypes',
+            'baseNamespace' => 'Kishlin\Backend\Country',
+            'hasModules'    => false,
+        ];
+
+        yield [
             'mainPath'      => __DIR__ . '/../../../../../../../../src/Backend/Shared',
             'mappingsPath'  => 'Infrastructure/Persistence/Doctrine/Mapping',
             'typesPath'     => 'Infrastructure/Persistence/Doctrine/DbalTypes',
