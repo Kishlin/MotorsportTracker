@@ -1,5 +1,5 @@
-#imports:
-#  - { resource: ../../../../Module/Infrastructure/DependencyInjection/Symfony/module_services.yaml }
+imports:
+  - { resource: ../../../../Championship/Infrastructure/DependencyInjection/Symfony/championship_services.yaml }
 
 services:
   _defaults:

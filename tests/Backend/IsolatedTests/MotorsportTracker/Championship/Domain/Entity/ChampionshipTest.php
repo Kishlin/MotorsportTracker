@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\Championsh
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipSlug;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -20,12 +21,14 @@ final class ChampionshipTest extends AggregateRootIsolatedTestCase
     {
         $id   = 'bec0ec9f-e814-4dd6-bc77-d08e6ca17023';
         $name = 'championship';
+        $slug = 'slug';
 
-        $entity = Championship::create(new ChampionshipId($id), new ChampionshipName($name));
+        $entity = Championship::create(new ChampionshipId($id), new ChampionshipName($name), new ChampionshipSlug($slug));
 
         self::assertItRecordedDomainEvents($entity, new ChampionshipCreatedDomainEvent(new ChampionshipId($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($name, $entity->name());
+        self::assertValueObjectSame($slug, $entity->slug());
     }
 }

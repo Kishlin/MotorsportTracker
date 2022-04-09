@@ -26,7 +26,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.championships (
     id character varying(36) NOT NULL,
-    name character varying(255) NOT NULL
+    name character varying(255) NOT NULL,
+    slug character varying(36) NOT NULL
 );
 
 
@@ -74,7 +75,7 @@ ALTER TABLE public.seasons OWNER TO app;
 -- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: app
 --
 
-COPY public.championships (id, name) FROM stdin;
+COPY public.championships (id, name, slug) FROM stdin;
 \.
 
 
@@ -93,6 +94,7 @@ COPY public.countries (id, code) FROM stdin;
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
 Kishlin\\Migrations\\Version20220408213133	2022-04-08 21:49:28	14
 Kishlin\\Migrations\\Version20220409181131	2022-04-09 18:14:25	22
+Kishlin\\Migrations\\Version20220409185635	2022-04-09 18:58:51	12
 \.
 
 

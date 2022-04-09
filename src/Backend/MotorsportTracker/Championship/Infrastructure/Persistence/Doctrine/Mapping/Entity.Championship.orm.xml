@@ -8,6 +8,8 @@
         <id name="id" type="championship_id" column="id" length="36" />
 
         <field name="name" type="championship_name" column="name" unique="true" />
+
+        <field name="slug" type="championship_slug" column="slug" unique="true" length="36" />
     </entity>
 
 </doctrine-mapping>

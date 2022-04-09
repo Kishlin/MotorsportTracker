@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+
+##> Persistence
+
+  Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\ChampionshipGateway:
+    class: Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\ChampionshipGatewayUsingDoctrine
+
+  Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\SeasonGateway:
+    class: Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine
