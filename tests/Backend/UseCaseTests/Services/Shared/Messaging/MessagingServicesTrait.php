@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
+namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Messaging;
 
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging\TestCommandBus;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging\TestEventDispatcher;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging\TestQueryBus;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 
 trait MessagingServicesTrait

@@ -3,7 +3,7 @@ default:
     use_case_tests:
       paths: [ features ]
       contexts:
-        - Kishlin\Tests\Backend\UseCaseTests\Context\Context
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipContext
     api_tests:
       paths: [ features ]
       contexts:
