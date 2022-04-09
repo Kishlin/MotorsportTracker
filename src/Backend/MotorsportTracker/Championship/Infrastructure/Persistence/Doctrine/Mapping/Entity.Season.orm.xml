@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season" table="seasons">
+        <id name="id" type="season_id" column="id" length="36" />
+
+        <field name="championshipId" type="season_championship_id" column="championship" />
+
+        <field name="year" type="season_year" column="year" />
+
+        <unique-constraints>
+            <unique-constraint columns="championship,year" name="championship_season_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Tests\Backend\Tools\Test\Contract\Constraint\AggregateRootWasSavedConstraint;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
@@ -18,6 +20,11 @@ use Throwable;
 abstract class RepositoryContractTestCase extends TestCase
 {
     private static ?EntityManagerInterface $entityManager = null;
+
+    public static function assertAggregateRootWasSaved(AggregateRoot $aggregateRoot): void
+    {
+        self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::entityManager()));
+    }
 
     protected function setUp(): void
     {
@@ -64,11 +71,10 @@ abstract class RepositoryContractTestCase extends TestCase
     private static function createEntityManager(): EntityManagerInterface
     {
         try {
-//            TODO return an entity manager
-//            return EntityManagerFactory::create(
-//                ['url' => $_ENV['DATABASE_URL']],
-//                'test'
-//            );
+            return MotorsportTrackerEntityManagerFactory::create(
+                ['url' => $_ENV['DATABASE_URL']],
+                'test'
+            );
         } catch (Throwable $e) {
             self::fail('Failed to create an entity manager: ' . $e->getMessage());
         }

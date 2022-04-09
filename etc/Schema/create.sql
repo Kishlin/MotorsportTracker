@@ -21,6 +21,18 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: championships; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.championships (
+    id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.championships OWNER TO app;
+
+--
 -- Name: countries; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -46,6 +58,27 @@ CREATE TABLE public.doctrine_migration_versions (
 ALTER TABLE public.doctrine_migration_versions OWNER TO app;
 
 --
+-- Name: seasons; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.seasons (
+    id character varying(36) NOT NULL,
+    championship character varying(36) NOT NULL,
+    year integer NOT NULL
+);
+
+
+ALTER TABLE public.seasons OWNER TO app;
+
+--
+-- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.championships (id, name) FROM stdin;
+\.
+
+
+--
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: app
 --
 
@@ -59,7 +92,24 @@ COPY public.countries (id, code) FROM stdin;
 
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
 Kishlin\\Migrations\\Version20220408213133	2022-04-08 21:49:28	14
+Kishlin\\Migrations\\Version20220409181131	2022-04-09 18:14:25	22
 \.
+
+
+--
+-- Data for Name: seasons; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.seasons (id, championship, year) FROM stdin;
+\.
+
+
+--
+-- Name: championships championships_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.championships
+    ADD CONSTRAINT championships_pkey PRIMARY KEY (id);
 
 
 --
@@ -79,10 +129,40 @@ ALTER TABLE ONLY public.doctrine_migration_versions
 
 
 --
+-- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.seasons
+    ADD CONSTRAINT seasons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: championship_season_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
+
+
+--
 -- Name: uniq_5d66ebad77153098; Type: INDEX; Schema: public; Owner: app
 --
 
 CREATE UNIQUE INDEX uniq_5d66ebad77153098 ON public.countries USING btree (code);
+
+
+--
+-- Name: uniq_b682ea935e237e06; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (name);
+
+
+--
+-- Name: seasons fk_championship; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.seasons
+    ADD CONSTRAINT fk_championship FOREIGN KEY (championship) REFERENCES public.championships(id);
 
 
 --
