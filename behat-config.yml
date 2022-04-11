@@ -9,3 +9,11 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\Context
+      filters:
+        tags: '@api'
+    backoffice_tests:
+      paths: [ features ]
+      contexts:
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Context
+      filters:
+        tags: '@backoffice'

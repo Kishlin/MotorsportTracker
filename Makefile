@@ -131,12 +131,12 @@ frontend.build:
 	@docker-compose exec node npm run build
 
 ##> Tests
-.PHONY: tests.backend.usecases \
+.PHONY: tests.backend.use-cases tests.backend.api tests.backend.backoffice \
         tests.backend.src.isolated tests.backend.src.contract tests.backend.src \
 		tests.backend.app.driving tests.backend.app.functional tests.backend.app.integration tests.backend.app \
 		tests.backend tests.frontend tests
 
-tests.backend.usecases:
+tests.backend.use-cases:
 	@echo "Running Use Case Tests for src/"
 	@docker-compose exec backend php \
 		/app/vendor/bin/behat --config /app/behat-config.yml --suite use_case_tests
@@ -146,6 +146,12 @@ tests.backend.api:
 	@echo "Running Api Tests for the Backend"
 	@docker-compose exec backend php \
 		/app/vendor/bin/behat --config /app/behat-config.yml --suite api_tests
+	@echo ""
+
+tests.backend.backoffice:
+	@echo "Running Backoffice Tests for the Backend"
+	@docker-compose exec backoffice php \
+		/app/vendor/bin/behat --config /app/behat-config.yml --suite backoffice_tests
 	@echo ""
 
 tests.backend.src.isolated:
@@ -220,7 +226,7 @@ tests.frontend:
 	@echo ""
 
 
-tests.backend: tests.backend.usecases tests.backend.api tests.backend.src tests.backend.app tests.backoffice
+tests.backend: tests.backend.use-cases tests.backend.api tests.backend.backoffice tests.backend.src tests.backend.app tests.backoffice
 
 tests: tests.backend tests.frontend
 
