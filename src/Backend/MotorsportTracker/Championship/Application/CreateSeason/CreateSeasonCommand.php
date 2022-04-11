@@ -26,7 +26,7 @@ final class CreateSeasonCommand implements Command
         return new SeasonYear($this->year);
     }
 
-    public static function fromScalar(string $championshipId, int $year): self
+    public static function fromScalars(string $championshipId, int $year): self
     {
         return new self($championshipId, $year);
     }

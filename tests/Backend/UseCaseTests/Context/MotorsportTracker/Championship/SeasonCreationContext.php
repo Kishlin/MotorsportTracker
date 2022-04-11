@@ -50,7 +50,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
         try {
             /** @var SeasonId $seasonId */
             $seasonId = self::container()->commandBus()->execute(
-                CreateSeasonCommand::fromScalar(self::CHAMPIONSHIP_ID, self::SEASON_YEAR),
+                CreateSeasonCommand::fromScalars(self::CHAMPIONSHIP_ID, self::SEASON_YEAR),
             );
 
             $this->seasonId = $seasonId;
