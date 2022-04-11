@@ -14,15 +14,18 @@ final class AggregateRootWasSavedConstraint extends Constraint
         private EntityManagerInterface $entityManager,
     ) {
     }
-    
+
     public function toString(): string
     {
         return ' was saved to the database.';
     }
 
+    /**
+     * @param object $other
+     */
     protected function matches($other): bool
     {
-        if(false === method_exists($other, 'id')) {
+        if (false === method_exists($other, 'id')) {
             return false;
         }
 
@@ -36,6 +39,4 @@ final class AggregateRootWasSavedConstraint extends Constraint
 
         return 1 === $repository->count(['id' => $id]);
     }
-
-
 }
