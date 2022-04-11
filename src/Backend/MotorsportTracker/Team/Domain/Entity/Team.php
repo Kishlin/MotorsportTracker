@@ -27,7 +27,7 @@ final class Team extends AggregateRoot
     }
 
     /**
-     * @internal Only use to get a test object.
+     * @internal only use to get a test object
      */
     public static function instance(TeamId $id, TeamName $name): self
     {

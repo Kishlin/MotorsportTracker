@@ -13,14 +13,15 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championshi
 
 trait ChampionshipServicesTrait
 {
-    abstract public function eventDispatcher(): EventDispatcher;
-    abstract public function uuidGenerator(): UuidGenerator;
-
     private ?ChampionshipRepositorySpy $championshipRepositorySpy = null;
-    private ?SeasonRepositorySpy $seasonRepositorySpy = null;
+    private ?SeasonRepositorySpy $seasonRepositorySpy             = null;
 
     private ?CreateChampionshipCommandHandler $createChampionshipCommandHandler = null;
-    private ?CreateSeasonCommandHandler $createSeasonCommandHandler = null;
+    private ?CreateSeasonCommandHandler $createSeasonCommandHandler             = null;
+
+    abstract public function eventDispatcher(): EventDispatcher;
+
+    abstract public function uuidGenerator(): UuidGenerator;
 
     public function championshipRepositorySpy(): ChampionshipRepositorySpy
     {

@@ -13,6 +13,10 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventVenueId;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event
+ */
 final class EventTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void

@@ -10,6 +10,10 @@ use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\Country\Domain\Entity\Country
+ */
 final class CountryTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void

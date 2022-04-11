@@ -7,7 +7,6 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeaso
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonChampionshipId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CreateSeasonCommand implements Command
 {

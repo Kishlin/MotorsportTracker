@@ -12,6 +12,10 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep
+ */
 final class EventStepTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void

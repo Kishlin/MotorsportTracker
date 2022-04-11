@@ -12,6 +12,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Championship[] $objects
+ *
  * @method Championship get(ChampionshipId $id)
  */
 final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements ChampionshipGateway

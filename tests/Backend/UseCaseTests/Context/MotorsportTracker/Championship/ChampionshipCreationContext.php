@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\ChampionshipCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
@@ -30,6 +30,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
 
     /**
      * @Given /^a championship exists$/
+     *
      * @throws Exception
      */
     public function aChampionshipExists(): void
@@ -57,7 +58,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
             );
 
             $this->championshipId = $championshipId;
-        } catch(Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->thrownException = $exception;
         }
     }

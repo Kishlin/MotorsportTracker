@@ -10,6 +10,10 @@ use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamName;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team
+ */
 final class TeamTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void

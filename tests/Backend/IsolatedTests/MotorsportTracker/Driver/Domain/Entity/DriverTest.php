@@ -11,6 +11,10 @@ use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverName;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver
+ */
 final class DriverTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void

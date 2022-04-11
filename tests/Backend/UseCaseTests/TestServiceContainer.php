@@ -12,8 +12,8 @@ final class TestServiceContainer
 {
     use ChampionshipServicesTrait;
 
-    use RandomnessServicesTrait;
     use MessagingServicesTrait;
+    use RandomnessServicesTrait;
 
     public function serviceContainer(): self
     {

@@ -19,7 +19,7 @@ final class Country extends AggregateRoot
 
     public static function create(CountryId $id, CountryCode $code): self
     {
-        $country = new self($id ,$code);
+        $country = new self($id, $code);
 
         $country->record(new CountryCreatedDomainEvent($id));
 
@@ -27,7 +27,7 @@ final class Country extends AggregateRoot
     }
 
     /**
-     * @internal Only use to get a test object.
+     * @internal only use to get a test object
      */
     public static function instance(CountryId $id, CountryCode $code): self
     {

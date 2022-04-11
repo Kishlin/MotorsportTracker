@@ -29,7 +29,7 @@ final class Driver extends AggregateRoot
     }
 
     /**
-     * @internal Only use to get a test object.
+     * @internal only use to get a test object
      */
     public static function instance(DriverId $id, DriverFirstname $firstname, DriverName $name): self
     {

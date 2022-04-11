@@ -21,11 +21,6 @@ abstract class RepositoryContractTestCase extends TestCase
 {
     private static ?EntityManagerInterface $entityManager = null;
 
-    public static function assertAggregateRootWasSaved(AggregateRoot $aggregateRoot): void
-    {
-        self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::entityManager()));
-    }
-
     protected function setUp(): void
     {
         self::entityManager()->beginTransaction();
@@ -39,6 +34,11 @@ abstract class RepositoryContractTestCase extends TestCase
 
             self::$entityManager = null;
         }
+    }
+
+    public static function assertAggregateRootWasSaved(AggregateRoot $aggregateRoot): void
+    {
+        self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::entityManager()));
     }
 
     protected static function entityManager(): EntityManagerInterface

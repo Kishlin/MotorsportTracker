@@ -8,6 +8,10 @@ use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Do
 use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship
+ */
 final class ChampionshipGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
     public function testItCanSaveAChampionship(): void

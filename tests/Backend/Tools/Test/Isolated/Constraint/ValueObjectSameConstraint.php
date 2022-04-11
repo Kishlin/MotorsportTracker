@@ -10,7 +10,7 @@ final class ValueObjectSameConstraint extends Constraint
 {
     public function __construct(
         private mixed $expected,
-    ) {  
+    ) {
     }
 
     public function toString(): string

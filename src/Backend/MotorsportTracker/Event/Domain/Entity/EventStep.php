@@ -18,7 +18,7 @@ final class EventStep extends AggregateRoot
         private EventStepTypeId $typeId,
         private EventStepEventId $eventId,
         private EventStepDateTime $dateTime,
-    ) {  
+    ) {
     }
 
     public static function create(
@@ -35,7 +35,7 @@ final class EventStep extends AggregateRoot
     }
 
     /**
-     * @internal Only use to get a test object.
+     * @internal only use to get a test object
      */
     public static function instance(
         EventStepId $id,

@@ -65,7 +65,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
     public function theSeasonIsSaved(): void
     {
         Assert::assertNotNull($this->seasonId);
-        Assert::assertTrue(self::container()->seasonRepositorySpy()->has($this->seasonId));;
+        Assert::assertTrue(self::container()->seasonRepositorySpy()->has($this->seasonId));
     }
 
     /**

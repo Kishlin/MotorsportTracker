@@ -11,6 +11,10 @@ use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueName;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue
+ */
 final class VenueTest extends AggregateRootIsolatedTestCase
 {
     public function testItCanBeCreated(): void
