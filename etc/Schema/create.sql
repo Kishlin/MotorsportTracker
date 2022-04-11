@@ -92,9 +92,9 @@ COPY public.countries (id, code) FROM stdin;
 --
 
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
-Kishlin\\Migrations\\Version20220408213133	2022-04-08 21:49:28	14
-Kishlin\\Migrations\\Version20220409181131	2022-04-09 18:14:25	22
-Kishlin\\Migrations\\Version20220409185635	2022-04-09 18:58:51	12
+Kishlin\\Migrations\\Version20220408213133	2022-04-11 15:32:56	14
+Kishlin\\Migrations\\Version20220409181131	2022-04-11 15:32:56	6
+Kishlin\\Migrations\\Version20220409185635	2022-04-11 15:32:56	1
 \.
 
 
@@ -157,6 +157,13 @@ CREATE UNIQUE INDEX uniq_5d66ebad77153098 ON public.countries USING btree (code)
 --
 
 CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (name);
+
+
+--
+-- Name: uniq_b682ea93989d9b62; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (slug);
 
 
 --
