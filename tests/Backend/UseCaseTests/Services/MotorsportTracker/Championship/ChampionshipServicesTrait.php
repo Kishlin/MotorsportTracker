@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
@@ -19,6 +20,7 @@ trait ChampionshipServicesTrait
     private ?SeasonRepositorySpy $seasonRepositorySpy = null;
 
     private ?CreateChampionshipCommandHandler $createChampionshipCommandHandler = null;
+    private ?CreateSeasonCommandHandler $createSeasonCommandHandler = null;
 
     public function championshipRepositorySpy(): ChampionshipRepositorySpy
     {
@@ -49,5 +51,18 @@ trait ChampionshipServicesTrait
         }
 
         return $this->createChampionshipCommandHandler;
+    }
+
+    public function createSeasonCommandHandler(): CreateSeasonCommandHandler
+    {
+        if (null === $this->createSeasonCommandHandler) {
+            $this->createSeasonCommandHandler = new CreateSeasonCommandHandler(
+                $this->seasonRepositorySpy(),
+                $this->uuidGenerator(),
+                $this->eventDispatcher(),
+            );
+        }
+
+        return $this->createSeasonCommandHandler;
     }
 }

@@ -10,6 +10,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 abstract class MotorsportTrackerContext implements Context
 {
     protected const CHAMPIONSHIP_ID = '7c5ff11b-277f-4ca5-bc27-b71d83ce3b39';
+    protected const SEASON_ID       = 'c04ae37a-1c4c-42aa-b3f1-3ab8ec31ee72';
 
     private static ?TestServiceContainer $container = null;
 
