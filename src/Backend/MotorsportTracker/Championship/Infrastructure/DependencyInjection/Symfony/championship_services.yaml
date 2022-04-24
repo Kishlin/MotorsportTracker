@@ -11,3 +11,17 @@ services:
 
   Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\SeasonGateway:
     class: Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine
+
+
+##> Messaging
+
+  Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler:
+    class: 'Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler'
+    tags:
+      - { name: messenger.message_handler, handles: Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand }
+
+
+  Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler:
+    class: 'Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler'
+    tags:
+      - { name: messenger.message_handler, handles: Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand }
