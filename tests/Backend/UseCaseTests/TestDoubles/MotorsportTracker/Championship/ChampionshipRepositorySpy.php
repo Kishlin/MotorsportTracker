@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 

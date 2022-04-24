@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
 
 final class ChampionshipGatewayUsingDoctrine extends DoctrineRepository implements ChampionshipGateway
