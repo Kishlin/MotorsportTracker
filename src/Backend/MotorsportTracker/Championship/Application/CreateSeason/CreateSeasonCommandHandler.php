@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\SeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;

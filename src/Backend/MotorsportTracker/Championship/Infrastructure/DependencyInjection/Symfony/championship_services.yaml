@@ -6,10 +6,10 @@ services:
 
 ##> Persistence
 
-  Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\ChampionshipGateway:
+  Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway:
     class: Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\ChampionshipGatewayUsingDoctrine
 
-  Kishlin\Backend\MotorsportTracker\Championship\Domain\Championship\Gateway\SeasonGateway:
+  Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SeasonGateway:
     class: Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine
 
 
