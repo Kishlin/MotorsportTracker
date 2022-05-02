@@ -22,6 +22,11 @@ abstract class AbstractRepositorySpy
         return $this->objects[$id->value()] ?? null;
     }
 
+    public function count(): int
+    {
+        return count($this->objects);
+    }
+
     public function clear(): void
     {
         $this->objects = [];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
@@ -20,6 +21,10 @@ final class TestCommandBus implements CommandBus
 
     public function execute(Command $command): mixed
     {
+        if ($command instanceof CreateCountryIfNotExistsCommand) {
+            return $this->testServiceContainer->createCountryIfNotExistsCommandHandler()($command);
+        }
+
         if ($command instanceof CreateChampionshipCommand) {
             return $this->testServiceContainer->createChampionshipCommandHandler()($command);
         }
