@@ -15,7 +15,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
  */
 final class SeasonGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
-    public function testItCanSaveAChampionship(): void
+    public function testItCanSaveASeason(): void
     {
         $championship = ChampionshipProvider::championship();
         $season       = SeasonProvider::forChampionship($championship->id());
