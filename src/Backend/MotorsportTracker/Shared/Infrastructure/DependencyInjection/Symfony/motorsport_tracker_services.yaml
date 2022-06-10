@@ -1,5 +1,6 @@
 imports:
   - { resource: ../../../../Championship/Infrastructure/DependencyInjection/Symfony/championship_services.yaml }
+  - { resource: ../../../../Driver/Infrastructure/DependencyInjection/Symfony/driver_services.yaml }
 
 services:
   _defaults:

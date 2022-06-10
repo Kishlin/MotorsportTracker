@@ -17,4 +17,12 @@ final class CountryProvider
             new CountryCode('fr'),
         );
     }
+
+    public static function netherlands(): Country
+    {
+        return Country::instance(
+            new CountryId('32bc1722-2ed6-4a81-b1dd-0cf578027b1f'),
+            new CountryCode('nl'),
+        );
+    }
 }

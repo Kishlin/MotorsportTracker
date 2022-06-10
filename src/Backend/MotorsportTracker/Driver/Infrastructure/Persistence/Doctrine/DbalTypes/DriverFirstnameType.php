@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\Abstrac
 
 final class DriverFirstnameType extends AbstractStringType
 {
-    protected function mappedClass() : string
+    protected function mappedClass(): string
     {
         return StringValueObject::class;
     }

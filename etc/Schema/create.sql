@@ -59,6 +59,20 @@ CREATE TABLE public.doctrine_migration_versions (
 ALTER TABLE public.doctrine_migration_versions OWNER TO app;
 
 --
+-- Name: drivers; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.drivers (
+    id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    firstname character varying(255) NOT NULL,
+    country character varying(36) NOT NULL
+);
+
+
+ALTER TABLE public.drivers OWNER TO app;
+
+--
 -- Name: seasons; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -95,6 +109,16 @@ COPY public.doctrine_migration_versions (version, executed_at, execution_time) F
 Kishlin\\Migrations\\Version20220408213133	2022-04-11 15:32:56	14
 Kishlin\\Migrations\\Version20220409181131	2022-04-11 15:32:56	6
 Kishlin\\Migrations\\Version20220409185635	2022-04-11 15:32:56	1
+Kishlin\\Migrations\\Version20220610215445	2022-06-10 22:22:19	20
+Kishlin\\Migrations\\Version20220611002012	2022-06-10 22:22:19	1
+\.
+
+
+--
+-- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.drivers (id, name, firstname, country) FROM stdin;
 \.
 
 
@@ -131,6 +155,14 @@ ALTER TABLE ONLY public.doctrine_migration_versions
 
 
 --
+-- Name: drivers drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.drivers
+    ADD CONSTRAINT drivers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -143,6 +175,13 @@ ALTER TABLE ONLY public.seasons
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
+
+
+--
+-- Name: driver_name_firstname_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX driver_name_firstname_idx ON public.drivers USING btree (name, firstname);
 
 
 --
@@ -172,6 +211,14 @@ CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (s
 
 ALTER TABLE ONLY public.seasons
     ADD CONSTRAINT fk_championship FOREIGN KEY (championship) REFERENCES public.championships(id);
+
+
+--
+-- Name: drivers fk_driver_country; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.drivers
+    ADD CONSTRAINT fk_driver_country FOREIGN KEY (country) REFERENCES public.countries(id);
 
 
 --
