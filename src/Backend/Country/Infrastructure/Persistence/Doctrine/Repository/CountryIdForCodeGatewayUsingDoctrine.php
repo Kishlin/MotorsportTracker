@@ -7,7 +7,7 @@ namespace Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\Gateway\CountryIdForCodeGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;

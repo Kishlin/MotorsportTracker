@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country;
 use Exception;
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\Gateway\CountryGateway;
-use Kishlin\Backend\Country\Domain\Gateway\CountryIdForCodeGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;

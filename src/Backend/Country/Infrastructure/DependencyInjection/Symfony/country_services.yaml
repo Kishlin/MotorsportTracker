@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+
+  ##> Persistence
+
+  Kishlin\Backend\Country\Domain\Gateway\CountryGateway:
+    class: Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryGatewayUsingDoctrine
+
+  Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway:
+    class: Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine
+
+
+  ##> Messaging
+
+  Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler:
+    class: 'Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler'
+    tags:
+      - { name: messenger.message_handler, handles: Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand }

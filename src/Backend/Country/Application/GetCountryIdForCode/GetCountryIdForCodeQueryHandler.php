@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Country\Application\GetCountryIdForCode;
 
-use Kishlin\Backend\Country\Domain\Gateway\CountryIdForCodeGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 
 final class GetCountryIdForCodeQueryHandler implements QueryHandler
