@@ -6,9 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\Country;
 
 use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
-use Kishlin\Backend\Country\Application\GetCountryIdForCode\CountryNotFoundException;
-use Kishlin\Backend\Country\Application\GetCountryIdForCode\GetCountryIdForCodeQuery;
-use Kishlin\Backend\Country\Application\GetCountryIdForCode\GetCountryIdForCodeResponse;
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
@@ -63,27 +60,6 @@ final class CountryContext extends MotorsportTrackerContext
     }
 
     /**
-     * @When /^a client searches the country's id$/
-     * @When /^a client searches for a non-existing country$/
-     */
-    public function aClientSearchesForACountry(): void
-    {
-        $this->countryId       = null;
-        $this->thrownException = null;
-
-        try {
-            /** @var GetCountryIdForCodeResponse $response */
-            $response = self::container()->queryBus()->ask(
-                GetCountryIdForCodeQuery::fromScalars(self::COUNTRY_CODE),
-            );
-
-            $this->countryId = $response->countryId();
-        } catch (Throwable $e) {
-            $this->thrownException = $e;
-        }
-    }
-
-    /**
      * @Then /^the new country is saved$/
      */
     public function theCountryIsSaved(): void
@@ -102,23 +78,5 @@ final class CountryContext extends MotorsportTrackerContext
         $this->theCountryIsSaved();
 
         Assert::assertEquals(1, self::container()->countryRepositorySpy()->count());
-    }
-
-    /**
-     * @Then /^the country's id is returned$/
-     */
-    public function theCountryIdIsReturned(): void
-    {
-        Assert::assertNotNull($this->countryId);
-        Assert::assertEquals(self::COUNTRY_ID, $this->countryId->value());
-    }
-
-    /**
-     * @Then /^the query is rejected$/
-     */
-    public function theQueryIsRejected(): void
-    {
-        Assert::assertNull($this->countryId);
-        Assert::assertInstanceOf(CountryNotFoundException::class, $this->thrownException);
     }
 }
