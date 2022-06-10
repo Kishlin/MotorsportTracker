@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
+use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
@@ -31,6 +32,10 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof CreateSeasonCommand) {
             return $this->testServiceContainer->createSeasonCommandHandler()($command);
+        }
+
+        if ($command instanceof CreateDriverCommand) {
+            return $this->testServiceContainer->createDriverCommandHandler()($command);
         }
 
         throw new RuntimeException('Unknown command type: ' . get_class($command));
