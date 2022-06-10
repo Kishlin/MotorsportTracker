@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\Country;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler;
+use Kishlin\Backend\Country\Application\GetCountryIdForCode\GetCountryIdForCodeQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
@@ -14,6 +15,8 @@ trait CountryServicesTrait
     private ?CountryRepositorySpy $countryRepositorySpy = null;
 
     private ?CreateCountryIfNotExistsCommandHandler $createCountryIfNotExistsCommandHandler = null;
+
+    private ?GetCountryIdForCodeQueryHandler $getCountryIdForCodeQueryHandler = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -42,5 +45,16 @@ trait CountryServicesTrait
         }
 
         return $this->createCountryIfNotExistsCommandHandler;
+    }
+
+    public function getCountryIdForCodeQueryHandler(): GetCountryIdForCodeQueryHandler
+    {
+        if (null === $this->getCountryIdForCodeQueryHandler) {
+            $this->getCountryIdForCodeQueryHandler = new GetCountryIdForCodeQueryHandler(
+                countryIdForCodeGateway: $this->countryRepositorySpy(),
+            );
+        }
+
+        return $this->getCountryIdForCodeQueryHandler;
     }
 }

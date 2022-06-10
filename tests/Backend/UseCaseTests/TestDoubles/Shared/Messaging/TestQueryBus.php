@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Kishlin\Backend\Country\Application\GetCountryIdForCode\GetCountryIdForCodeQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
@@ -22,6 +23,10 @@ final class TestQueryBus implements QueryBus
      */
     public function ask(Query $query): Response
     {
+        if ($query instanceof GetCountryIdForCodeQuery) {
+            return $this->testServiceContainer->getCountryIdForCodeQueryHandler()($query);
+        }
+
         throw new RuntimeException('Unknown query type: ' . get_class($query));
     }
 }

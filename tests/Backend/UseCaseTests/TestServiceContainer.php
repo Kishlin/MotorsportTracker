@@ -11,8 +11,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Randomness\RandomnessServ
 
 final class TestServiceContainer
 {
-    use CountryServicesTrait;
     use ChampionshipServicesTrait;
+    use CountryServicesTrait;
 
     use MessagingServicesTrait;
     use RandomnessServicesTrait;
