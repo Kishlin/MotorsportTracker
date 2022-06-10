@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver" table="drivers">
+        <id name="id" type="driver_id" column="id" length="36" />
+
+        <field name="name" type="driver_name" column="name" />
+
+        <field name="firstname" type="driver_firstname" column="firstname" />
+
+        <field name="countryId" type="driver_country_id" column="country" length="36" />
+
+        <unique-constraints>
+            <unique-constraint columns="name,firstname" name="driver_name_firstname_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>
