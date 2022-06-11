@@ -86,10 +86,24 @@ CREATE TABLE public.seasons (
 ALTER TABLE public.seasons OWNER TO app;
 
 --
+-- Name: venues; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.venues (
+    id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    country character varying(36) NOT NULL
+);
+
+
+ALTER TABLE public.venues OWNER TO app;
+
+--
 -- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: app
 --
 
 COPY public.championships (id, name, slug) FROM stdin;
+16973325-7969-4013-a125-4844e9c72e9e	formula1	f1
 \.
 
 
@@ -111,6 +125,7 @@ Kishlin\\Migrations\\Version20220409181131	2022-04-11 15:32:56	6
 Kishlin\\Migrations\\Version20220409185635	2022-04-11 15:32:56	1
 Kishlin\\Migrations\\Version20220610215445	2022-06-10 22:22:19	20
 Kishlin\\Migrations\\Version20220611002012	2022-06-10 22:22:19	1
+Kishlin\\Migrations\\Version20220611170308	2022-06-11 17:04:28	19
 \.
 
 
@@ -127,6 +142,14 @@ COPY public.drivers (id, name, firstname, country) FROM stdin;
 --
 
 COPY public.seasons (id, championship, year) FROM stdin;
+\.
+
+
+--
+-- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.venues (id, name, country) FROM stdin;
 \.
 
 
@@ -171,6 +194,14 @@ ALTER TABLE ONLY public.seasons
 
 
 --
+-- Name: venues venues_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.venues
+    ADD CONSTRAINT venues_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: championship_season_idx; Type: INDEX; Schema: public; Owner: app
 --
 
@@ -189,6 +220,13 @@ CREATE UNIQUE INDEX driver_name_firstname_idx ON public.drivers USING btree (nam
 --
 
 CREATE UNIQUE INDEX uniq_5d66ebad77153098 ON public.countries USING btree (code);
+
+
+--
+-- Name: uniq_652e22ad5e237e06; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX uniq_652e22ad5e237e06 ON public.venues USING btree (name);
 
 
 --
@@ -219,6 +257,14 @@ ALTER TABLE ONLY public.seasons
 
 ALTER TABLE ONLY public.drivers
     ADD CONSTRAINT fk_driver_country FOREIGN KEY (country) REFERENCES public.countries(id);
+
+
+--
+-- Name: venues fk_venue_country; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.venues
+    ADD CONSTRAINT fk_venue_country FOREIGN KEY (country) REFERENCES public.countries(id);
 
 
 --
