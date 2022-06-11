@@ -3,19 +3,20 @@ services:
     autoconfigure: true
     autowire: true
 
+  Kishlin\Backend\Country\:
+    resource: '../../../'
+    exclude:
+      - '../../../Application/*/*Exception.php'
+      - '../../../Infrastructure/Persistence/Doctrine/DbalTypes'
+      - '../../../Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
 
-  ##> Persistence
+  _instanceof:
 
-  Kishlin\Backend\Country\Domain\Gateway\CountryGateway:
-    class: Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryGatewayUsingDoctrine
+    Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber:
+      tags: ['kishlin.application_service']
 
-  Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway:
-    class: Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine
+    Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:
+      tags: ['kishlin.application_service']
 
-
-  ##> Messaging
-
-  Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler:
-    class: 'Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler'
-    tags:
-      - { name: messenger.message_handler, handles: Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand }
+    Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
+      tags: ['kishlin.application_service']

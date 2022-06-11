@@ -1,11 +1,25 @@
-imports:
-  - { resource: ../../../../Championship/Infrastructure/DependencyInjection/Symfony/championship_services.yaml }
-  - { resource: ../../../../Driver/Infrastructure/DependencyInjection/Symfony/driver_services.yaml }
-
 services:
   _defaults:
     autoconfigure: true
     autowire: true
+
+  Kishlin\Backend\MotorsportTracker\:
+    resource: '../../../../'
+    exclude:
+      - '../../../../*/Application/*/*Exception.php'
+      - '../../../../*/Infrastructure/Persistence/Doctrine/DbalTypes'
+      - '../../../../*/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
+
+  _instanceof:
+
+    Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber:
+      tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:
+      tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
+      tags: ['kishlin.application_service']
 
 
 ##> Persistence

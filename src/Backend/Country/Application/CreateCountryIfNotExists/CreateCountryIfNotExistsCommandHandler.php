@@ -6,12 +6,12 @@ namespace Kishlin\Backend\Country\Application\CreateCountryIfNotExists;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\Gateway\CountryGateway;
-use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
+use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 
-final class CreateCountryIfNotExistsCommandHandler
+final class CreateCountryIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
         private CountryIdForCodeGateway $idForCodeGateway,

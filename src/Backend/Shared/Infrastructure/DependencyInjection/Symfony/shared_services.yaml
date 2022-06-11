@@ -81,23 +81,6 @@ services:
 
   _instanceof:
 
-  ##> Application
-
-    Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:
-      public: true
-      tags:
-        - { name: messenger.message_handler, bus: Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus }
-
-    Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber:
-      public: true
-      tags:
-        - { name: messenger.message_handler, bus: Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher }
-
-    Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
-      public: true
-      tags:
-        - { name: messenger.message_handler, bus: Kishlin\Backend\Shared\Domain\Bus\Command\QueryBus }
-
   ##> Monitoring
 
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
