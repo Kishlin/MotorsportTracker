@@ -11,7 +11,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Doctrine\Repository\DriverGatewayUsingDoctrine
  */
 final class DriverGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
