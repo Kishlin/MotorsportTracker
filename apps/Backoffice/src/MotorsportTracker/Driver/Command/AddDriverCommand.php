@@ -51,8 +51,8 @@ final class AddDriverCommand extends SymfonyCommand
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $name = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_NAME, self::QUESTION_NAME);
-        $firstname = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_FIRSTNAME, self::QUESTION_FIRSTNAME);
+        $name        = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_NAME, self::QUESTION_NAME);
+        $firstname   = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_FIRSTNAME, self::QUESTION_FIRSTNAME);
         $countryCode = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_COUNTRY, self::QUESTION_COUNTRY);
 
         /** @var CountryId $countryIdValueObject */
