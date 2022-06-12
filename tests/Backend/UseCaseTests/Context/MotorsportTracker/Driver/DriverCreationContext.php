@@ -33,7 +33,7 @@ final class DriverCreationContext extends MotorsportTrackerContext
      */
     public function aDriverExists(): void
     {
-        self::container()->driverRepositorySpy()->save(Driver::instance(
+        self::container()->driverRepositorySpy()->add(Driver::instance(
             new DriverId(self::DRIVER_ID),
             new DriverFirstname(self::DRIVER_FIRSTNAME),
             new DriverName(self::DRIVER_NAME),

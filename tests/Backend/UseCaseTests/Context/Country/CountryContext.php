@@ -32,7 +32,7 @@ final class CountryContext extends MotorsportTrackerContext
      */
     public function aCountryExists(): void
     {
-        self::container()->countryRepositorySpy()->save(Country::create(
+        self::container()->countryRepositorySpy()->add(Country::create(
             new CountryId(self::COUNTRY_ID),
             new CountryCode(self::COUNTRY_CODE),
         ));

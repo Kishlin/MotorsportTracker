@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Utils;
 
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use RuntimeException;
 
 abstract class AbstractRepositorySpy
 {
@@ -20,6 +21,18 @@ abstract class AbstractRepositorySpy
     public function get(UuidValueObject $id): ?AggregateRoot
     {
         return $this->objects[$id->value()] ?? null;
+    }
+
+    public function add(AggregateRoot $aggregateRoot): void
+    {
+        if (method_exists($aggregateRoot, 'id')) {
+            /** @var UuidValueObject $id */
+            $id = $aggregateRoot->id();
+
+            $this->objects[$id->value()] = $aggregateRoot;
+        } else {
+            throw new RuntimeException('Unsure how to store aggregate root of type ' . $aggregateRoot::class);
+        }
     }
 
     public function count(): int

@@ -31,7 +31,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
      */
     public function aSeasonExistsForTheChampionship(): void
     {
-        self::container()->seasonRepositorySpy()->save(Season::instance(
+        self::container()->seasonRepositorySpy()->add(Season::instance(
             new SeasonId(self::SEASON_ID),
             new SeasonYear(self::SEASON_YEAR),
             new SeasonChampionshipId(self::CHAMPIONSHIP_ID),

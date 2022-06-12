@@ -35,7 +35,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
      */
     public function aChampionshipExists(): void
     {
-        self::container()->championshipRepositorySpy()->save(Championship::create(
+        self::container()->championshipRepositorySpy()->add(Championship::create(
             new ChampionshipId(self::CHAMPIONSHIP_ID),
             new ChampionshipName(self::CHAMPIONSHIP_NAME),
             new ChampionshipSlug(self::CHAMPIONSHIP_SLUG),
