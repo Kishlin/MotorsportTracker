@@ -16,4 +16,4 @@ parameters:
 		- /app/apps/MotorsportTracker/Backend/src
 		- /app/apps/MotorsportTracker/Backend/tests
 	symfony:
-		container_xml_path: '%currentWorkingDirectory%/var/cache/dev/Kishlin_Apps_MotorsportTracker_Backend_KernelDevDebugContainer.xml'
+		container_xml_path: '/app/apps/MotorsportTracker/Backend/var/cache/dev/Kishlin_Apps_MotorsportTracker_Backend_KernelDevDebugContainer.xml'
