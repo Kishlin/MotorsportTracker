@@ -19,4 +19,9 @@ final class ChampionshipProvider
             new ChampionshipSlug('formula1'),
         );
     }
+
+    public static function formulaOne(): Championship
+    {
+        return self::championship();
+    }
 }

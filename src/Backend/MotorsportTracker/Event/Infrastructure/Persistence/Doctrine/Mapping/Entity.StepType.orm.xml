@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType" table="step_types">
+        <id name="id" type="step_type_id" column="id" length="36" />
+
+        <field name="label" type="step_type_label" column="label" />
+
+        <unique-constraints>
+            <unique-constraint columns="label" name="step_type_label_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>

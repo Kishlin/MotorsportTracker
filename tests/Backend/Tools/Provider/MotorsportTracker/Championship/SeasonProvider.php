@@ -20,4 +20,13 @@ final class SeasonProvider
             SeasonChampionshipId::fromOther($championshipId),
         );
     }
+
+    public static function formulaOne2022(): Season
+    {
+        return Season::instance(
+            new SeasonId('01dd2498-e231-4f34-82de-bf61153abbc4'),
+            new SeasonYear(2022),
+            new SeasonChampionshipId('9af4082a-0de2-4a8d-bd30-ec5cad0b26ed'),
+        );
+    }
 }

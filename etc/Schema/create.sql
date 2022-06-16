@@ -73,6 +73,42 @@ CREATE TABLE public.drivers (
 ALTER TABLE public.drivers OWNER TO app;
 
 --
+-- Name: event_steps; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.event_steps (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    type character varying(36) NOT NULL,
+    date_time timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.event_steps OWNER TO app;
+
+--
+-- Name: COLUMN event_steps.date_time; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.event_steps.date_time IS '(DC2Type:event_step_date_time)';
+
+
+--
+-- Name: events; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.events (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    venue character varying(36) NOT NULL,
+    index integer NOT NULL,
+    label character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.events OWNER TO app;
+
+--
 -- Name: seasons; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -84,6 +120,18 @@ CREATE TABLE public.seasons (
 
 
 ALTER TABLE public.seasons OWNER TO app;
+
+--
+-- Name: step_types; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.step_types (
+    id character varying(36) NOT NULL,
+    label character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.step_types OWNER TO app;
 
 --
 -- Name: venues; Type: TABLE; Schema: public; Owner: app
@@ -126,6 +174,7 @@ Kishlin\\Migrations\\Version20220409185635	2022-04-11 15:32:56	1
 Kishlin\\Migrations\\Version20220610215445	2022-06-10 22:22:19	20
 Kishlin\\Migrations\\Version20220611002012	2022-06-10 22:22:19	1
 Kishlin\\Migrations\\Version20220611170308	2022-06-11 17:04:28	19
+Kishlin\\Migrations\\Version20220616000809	2022-06-16 00:16:08	28
 \.
 
 
@@ -138,10 +187,34 @@ COPY public.drivers (id, name, firstname, country) FROM stdin;
 
 
 --
+-- Data for Name: event_steps; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.event_steps (id, event, type, date_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.events (id, season, venue, index, label) FROM stdin;
+\.
+
+
+--
 -- Data for Name: seasons; Type: TABLE DATA; Schema: public; Owner: app
 --
 
 COPY public.seasons (id, championship, year) FROM stdin;
+\.
+
+
+--
+-- Data for Name: step_types; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.step_types (id, label) FROM stdin;
 \.
 
 
@@ -186,11 +259,35 @@ ALTER TABLE ONLY public.drivers
 
 
 --
+-- Name: event_steps event_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.event_steps
+    ADD CONSTRAINT event_steps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
 ALTER TABLE ONLY public.seasons
     ADD CONSTRAINT seasons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: step_types step_types_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.step_types
+    ADD CONSTRAINT step_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -213,6 +310,27 @@ CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (champ
 --
 
 CREATE UNIQUE INDEX driver_name_firstname_idx ON public.drivers USING btree (name, firstname);
+
+
+--
+-- Name: event_season_label_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX event_season_label_idx ON public.events USING btree (season, label);
+
+
+--
+-- Name: event_step_event_type_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree (event, type);
+
+
+--
+-- Name: step_type_label_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX step_type_label_idx ON public.step_types USING btree (label);
 
 
 --
@@ -257,6 +375,38 @@ ALTER TABLE ONLY public.seasons
 
 ALTER TABLE ONLY public.drivers
     ADD CONSTRAINT fk_driver_country FOREIGN KEY (country) REFERENCES public.countries(id);
+
+
+--
+-- Name: event_steps fk_event_steps_event; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.event_steps
+    ADD CONSTRAINT fk_event_steps_event FOREIGN KEY (event) REFERENCES public.events(id);
+
+
+--
+-- Name: event_steps fk_event_steps_type; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.event_steps
+    ADD CONSTRAINT fk_event_steps_type FOREIGN KEY (type) REFERENCES public.step_types(id);
+
+
+--
+-- Name: events fk_events_season; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_events_season FOREIGN KEY (season) REFERENCES public.seasons(id);
+
+
+--
+-- Name: events fk_events_venue; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_events_venue FOREIGN KEY (venue) REFERENCES public.venues(id);
 
 
 --
