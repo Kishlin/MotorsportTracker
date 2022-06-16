@@ -25,4 +25,12 @@ final class CountryProvider
             new CountryCode('nl'),
         );
     }
+
+    public static function austria(): Country
+    {
+        return Country::instance(
+            new CountryId('d5e6f0ce-eb8c-4da0-b071-31466027f32d'),
+            new CountryCode('at'),
+        );
+    }
 }

@@ -134,6 +134,20 @@ CREATE TABLE public.step_types (
 ALTER TABLE public.step_types OWNER TO app;
 
 --
+-- Name: teams; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.teams (
+    id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    image character varying(255) NOT NULL,
+    country character varying(36) NOT NULL
+);
+
+
+ALTER TABLE public.teams OWNER TO app;
+
+--
 -- Name: venues; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -175,6 +189,7 @@ Kishlin\\Migrations\\Version20220610215445	2022-06-10 22:22:19	20
 Kishlin\\Migrations\\Version20220611002012	2022-06-10 22:22:19	1
 Kishlin\\Migrations\\Version20220611170308	2022-06-11 17:04:28	19
 Kishlin\\Migrations\\Version20220616000809	2022-06-16 00:16:08	28
+Kishlin\\Migrations\\Version20220616124606	2022-06-16 12:47:03	20
 \.
 
 
@@ -215,6 +230,14 @@ COPY public.seasons (id, championship, year) FROM stdin;
 --
 
 COPY public.step_types (id, label) FROM stdin;
+\.
+
+
+--
+-- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.teams (id, name, image, country) FROM stdin;
 \.
 
 
@@ -291,6 +314,14 @@ ALTER TABLE ONLY public.step_types
 
 
 --
+-- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: venues venues_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -331,6 +362,13 @@ CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree 
 --
 
 CREATE UNIQUE INDEX step_type_label_idx ON public.step_types USING btree (label);
+
+
+--
+-- Name: team_name_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX team_name_idx ON public.teams USING btree (name);
 
 
 --
@@ -407,6 +445,14 @@ ALTER TABLE ONLY public.events
 
 ALTER TABLE ONLY public.events
     ADD CONSTRAINT fk_events_venue FOREIGN KEY (venue) REFERENCES public.venues(id);
+
+
+--
+-- Name: teams fk_team_country; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT fk_team_country FOREIGN KEY (country) REFERENCES public.countries(id);
 
 
 --
