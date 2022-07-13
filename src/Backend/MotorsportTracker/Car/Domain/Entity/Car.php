@@ -14,7 +14,7 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 final class Car extends AggregateRoot
 {
     private function __construct(
-        private CarId $carId,
+        private CarId $id,
         private CarTeamId $teamId,
         private CarSeasonId $seasonId,
         private CarNumber $number,
@@ -38,9 +38,9 @@ final class Car extends AggregateRoot
         return new self($id, $teamId, $seasonId, $number);
     }
 
-    public function carId(): CarId
+    public function id(): CarId
     {
-        return $this->carId;
+        return $this->id;
     }
 
     public function teamId(): CarTeamId

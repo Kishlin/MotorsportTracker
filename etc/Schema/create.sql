@@ -21,6 +21,20 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: cars; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.cars (
+    id character varying(36) NOT NULL,
+    number integer NOT NULL,
+    team character varying(36) NOT NULL,
+    season character varying(36) NOT NULL
+);
+
+
+ALTER TABLE public.cars OWNER TO app;
+
+--
 -- Name: championships; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -161,6 +175,14 @@ CREATE TABLE public.venues (
 ALTER TABLE public.venues OWNER TO app;
 
 --
+-- Data for Name: cars; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.cars (id, number, team, season) FROM stdin;
+\.
+
+
+--
 -- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: app
 --
 
@@ -190,6 +212,7 @@ Kishlin\\Migrations\\Version20220611002012	2022-06-10 22:22:19	1
 Kishlin\\Migrations\\Version20220611170308	2022-06-11 17:04:28	19
 Kishlin\\Migrations\\Version20220616000809	2022-06-16 00:16:08	28
 Kishlin\\Migrations\\Version20220616124606	2022-06-16 12:47:03	20
+Kishlin\\Migrations\\Version20220713181313	2022-07-13 18:14:29	20
 \.
 
 
@@ -247,6 +270,14 @@ COPY public.teams (id, name, image, country) FROM stdin;
 
 COPY public.venues (id, name, country) FROM stdin;
 \.
+
+
+--
+-- Name: cars cars_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.cars
+    ADD CONSTRAINT cars_pkey PRIMARY KEY (id);
 
 
 --
@@ -330,6 +361,13 @@ ALTER TABLE ONLY public.venues
 
 
 --
+-- Name: car_number_season_team_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX car_number_season_team_idx ON public.cars USING btree (number, season, team);
+
+
+--
 -- Name: championship_season_idx; Type: INDEX; Schema: public; Owner: app
 --
 
@@ -397,6 +435,22 @@ CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (n
 --
 
 CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (slug);
+
+
+--
+-- Name: cars fk_car_season; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.cars
+    ADD CONSTRAINT fk_car_season FOREIGN KEY (season) REFERENCES public.seasons(id);
+
+
+--
+-- Name: cars fk_car_team; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.cars
+    ADD CONSTRAINT fk_car_team FOREIGN KEY (team) REFERENCES public.teams(id);
 
 
 --
