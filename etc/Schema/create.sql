@@ -73,6 +73,20 @@ CREATE TABLE public.doctrine_migration_versions (
 ALTER TABLE public.doctrine_migration_versions OWNER TO app;
 
 --
+-- Name: driver_moves; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.driver_moves (
+    id character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    car character varying(36) NOT NULL,
+    date timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.driver_moves OWNER TO app;
+
+--
 -- Name: drivers; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -213,6 +227,15 @@ Kishlin\\Migrations\\Version20220611170308	2022-06-11 17:04:28	19
 Kishlin\\Migrations\\Version20220616000809	2022-06-16 00:16:08	28
 Kishlin\\Migrations\\Version20220616124606	2022-06-16 12:47:03	20
 Kishlin\\Migrations\\Version20220713181313	2022-07-13 18:14:29	20
+Kishlin\\Migrations\\Version20220713183949	2022-07-13 18:40:59	17
+\.
+
+
+--
+-- Data for Name: driver_moves; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.driver_moves (id, driver, car, date) FROM stdin;
 \.
 
 
@@ -305,6 +328,14 @@ ALTER TABLE ONLY public.doctrine_migration_versions
 
 
 --
+-- Name: driver_moves driver_moves_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_moves
+    ADD CONSTRAINT driver_moves_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: drivers drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -372,6 +403,20 @@ CREATE UNIQUE INDEX car_number_season_team_idx ON public.cars USING btree (numbe
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
+
+
+--
+-- Name: driver_move_car_date_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX driver_move_car_date_idx ON public.driver_moves USING btree (car, date);
+
+
+--
+-- Name: driver_move_driver_date_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX driver_move_driver_date_idx ON public.driver_moves USING btree (driver, date);
 
 
 --
@@ -467,6 +512,22 @@ ALTER TABLE ONLY public.seasons
 
 ALTER TABLE ONLY public.drivers
     ADD CONSTRAINT fk_driver_country FOREIGN KEY (country) REFERENCES public.countries(id);
+
+
+--
+-- Name: driver_moves fk_driver_moves_car; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_moves
+    ADD CONSTRAINT fk_driver_moves_car FOREIGN KEY (car) REFERENCES public.cars(id);
+
+
+--
+-- Name: driver_moves fk_driver_moves_driver; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_moves
+    ADD CONSTRAINT fk_driver_moves_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
 
 
 --
