@@ -137,6 +137,35 @@ CREATE TABLE public.events (
 ALTER TABLE public.events OWNER TO app;
 
 --
+-- Name: racers; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.racers (
+    id character varying(36) NOT NULL,
+    car character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    startDate timestamp(0) without time zone NOT NULL,
+    endDate timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.racers OWNER TO app;
+
+--
+-- Name: COLUMN racers.start; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.racers.startDate IS '(DC2Type:racer_start_date)';
+
+
+--
+-- Name: COLUMN racers."end"; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.racers.endDate IS '(DC2Type:racer_end_date)';
+
+
+--
 -- Name: seasons; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -228,6 +257,7 @@ Kishlin\\Migrations\\Version20220616000809	2022-06-16 00:16:08	28
 Kishlin\\Migrations\\Version20220616124606	2022-06-16 12:47:03	20
 Kishlin\\Migrations\\Version20220713181313	2022-07-13 18:14:29	20
 Kishlin\\Migrations\\Version20220713183949	2022-07-13 18:40:59	17
+Kishlin\\Migrations\\Version20220728125835	2022-07-28 12:59:54	21
 \.
 
 
@@ -260,6 +290,14 @@ COPY public.event_steps (id, event, type, date_time) FROM stdin;
 --
 
 COPY public.events (id, season, venue, index, label) FROM stdin;
+\.
+
+
+--
+-- Data for Name: racers; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.racers (id, car, driver, startDate, endDate) FROM stdin;
 \.
 
 
@@ -360,6 +398,14 @@ ALTER TABLE ONLY public.events
 
 
 --
+-- Name: racers racers_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.racers
+    ADD CONSTRAINT racers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -438,6 +484,13 @@ CREATE UNIQUE INDEX event_season_label_idx ON public.events USING btree (season,
 --
 
 CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree (event, type);
+
+
+--
+-- Name: racer_car_driver_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX racer_car_driver_idx ON public.racers USING btree (car, driver);
 
 
 --
@@ -560,6 +613,22 @@ ALTER TABLE ONLY public.events
 
 ALTER TABLE ONLY public.events
     ADD CONSTRAINT fk_events_venue FOREIGN KEY (venue) REFERENCES public.venues(id);
+
+
+--
+-- Name: racers fk_racer_car; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.racers
+    ADD CONSTRAINT fk_racer_car FOREIGN KEY (car) REFERENCES public.cars(id);
+
+
+--
+-- Name: racers fk_racer_driver; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.racers
+    ADD CONSTRAINT fk_racer_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
 
 
 --
