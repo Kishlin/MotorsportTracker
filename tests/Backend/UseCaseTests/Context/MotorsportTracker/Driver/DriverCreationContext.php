@@ -29,7 +29,7 @@ final class DriverCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given a driver exists
+     * @Given /^a driver exists for the country$/
      */
     public function aDriverExists(): void
     {

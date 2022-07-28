@@ -7,7 +7,7 @@ Feature: It can create Drivers
 
   Scenario: It cannot duplicate drivers
     Given a country exists
-    And a driver exists
+    And a driver exists for the country
     When a client creates a driver with same firstname and name
     Then the driver creation is declined
 
