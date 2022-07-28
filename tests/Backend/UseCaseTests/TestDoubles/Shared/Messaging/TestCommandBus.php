@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\RegisterCarCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
@@ -43,9 +44,13 @@ final class TestCommandBus implements CommandBus
         if ($command instanceof CreateVenueCommand) {
             return $this->testServiceContainer->createVenueCommandHandler()($command);
         }
-        
+
         if ($command instanceof CreateTeamCommand) {
             return $this->testServiceContainer->createTeamCommandHandler()($command);
+        }
+
+        if ($command instanceof RegisterCarCommand) {
+            return $this->testServiceContainer->registerCarCommandHandler()($command);
         }
 
         throw new RuntimeException('Unknown command type: ' . get_class($command));

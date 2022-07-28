@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests;
 
 use Kishlin\Tests\Backend\UseCaseTests\Services\Country\CountryServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\CarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver\DriverServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team\TeamServicesTrait;
@@ -14,12 +15,13 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Randomness\RandomnessServ
 
 final class TestServiceContainer
 {
+    use CarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;
     use DriverServicesTrait;
     use MessagingServicesTrait;
-    use TeamServicesTrait;
     use RandomnessServicesTrait;
+    use TeamServicesTrait;
     use VenueServicesTrait;
 
     public function serviceContainer(): self
