@@ -11,7 +11,8 @@ abstract class MotorsportTrackerContext implements Context
 {
     protected const COUNTRY_ID = '883bf45c-f7ca-4a34-86ed-79287139f16e';
 
-    protected const CAR_ID = '8da8665a-be40-4482-af48-314b100e12e3';
+    protected const CAR_ID         = '8da8665a-be40-4482-af48-314b100e12e3';
+    protected const DRIVER_MOVE_ID = 'c2f27d0a-5f18-4015-bf7d-e1c58dba61a5';
 
     protected const CHAMPIONSHIP_ID = '7c5ff11b-277f-4ca5-bc27-b71d83ce3b39';
     protected const SEASON_ID       = 'c04ae37a-1c4c-42aa-b3f1-3ab8ec31ee72';

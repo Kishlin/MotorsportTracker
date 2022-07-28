@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests;
 
 use Kishlin\Tests\Backend\UseCaseTests\Services\Country\CountryServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\CarServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\DriverMoveServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver\DriverServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team\TeamServicesTrait;
@@ -18,6 +19,7 @@ final class TestServiceContainer
     use CarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;
+    use DriverMoveServicesTrait;
     use DriverServicesTrait;
     use MessagingServicesTrait;
     use RandomnessServicesTrait;
