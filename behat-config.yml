@@ -8,6 +8,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
     api_tests:
       paths: [ features ]
       contexts:

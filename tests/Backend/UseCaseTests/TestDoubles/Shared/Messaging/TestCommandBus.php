@@ -8,6 +8,7 @@ use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIf
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
+use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -41,6 +42,10 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof CreateVenueCommand) {
             return $this->testServiceContainer->createVenueCommandHandler()($command);
+        }
+        
+        if ($command instanceof CreateTeamCommand) {
+            return $this->testServiceContainer->createTeamCommandHandler()($command);
         }
 
         throw new RuntimeException('Unknown command type: ' . get_class($command));

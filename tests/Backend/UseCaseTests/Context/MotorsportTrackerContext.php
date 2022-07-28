@@ -16,6 +16,8 @@ abstract class MotorsportTrackerContext implements Context
 
     protected const DRIVER_ID = 'e36d650b-6d98-4fc5-a0a6-f4842f4bdf73';
 
+    protected const TEAM_ID = 'a66f90be-6790-4a65-b864-b248dc6cde22';
+    
     protected const VENUE_ID = '577bb90b-3087-4b8c-a6bc-c70125c254eb';
 
     private static ?TestServiceContainer $container = null;
