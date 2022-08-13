@@ -8,6 +8,10 @@ use Kishlin\Backend\MotorsportTracker\Car\Application\RecordDriverMove\DriverMov
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Gateway\DriverMoveGateway;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
+use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveData;
+use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveDataGateway;
+use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveDataNotFoundException;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -16,7 +20,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  *
  * @method DriverMove get(DriverMoveId $id)
  */
-final class DriverMoveRepositorySpy extends AbstractRepositorySpy implements DriverMoveGateway
+final class DriverMoveRepositorySpy extends AbstractRepositorySpy implements DriverMoveGateway, DriverMoveDataGateway
 {
     public function __construct(
         private CarRepositorySpy $carRepositorySpy,
@@ -34,6 +38,21 @@ final class DriverMoveRepositorySpy extends AbstractRepositorySpy implements Dri
         }
 
         $this->objects[$driverMove->id()->value()] = $driverMove;
+    }
+
+    public function find(UuidValueObject $driverMoveId): DriverMoveData
+    {
+        foreach ($this->objects as $driverMove) {
+            if ($driverMove->id()->equals($driverMoveId)) {
+                return DriverMoveData::fromScalars(
+                    $driverMove->driverId()->value(),
+                    $driverMove->carId()->value(),
+                    $driverMove->date()->value(),
+                );
+            }
+        }
+
+        throw new DriverMoveDataNotFoundException();
     }
 
     private function driverAlreadyMovedOnDate(DriverMove $driverMove): bool

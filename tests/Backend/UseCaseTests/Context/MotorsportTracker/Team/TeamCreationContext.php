@@ -20,6 +20,9 @@ final class TeamCreationContext extends MotorsportTrackerContext
     private const TEAM_NAME  = 'Red Bull Racing';
     private const TEAM_IMAGE = 'https://cdn.motorsporttracker.com/teams/redbullracing.png';
 
+    private const TEAM_NAME_ALT  = 'Mercedes F1';
+    private const TEAM_IMAGE_ALT = 'https://cdn.motorsporttracker.com/teams/merecedesf1.png';
+
     private ?TeamId $teamId             = null;
     private ?Throwable $thrownException = null;
 
@@ -31,12 +34,25 @@ final class TeamCreationContext extends MotorsportTrackerContext
     /**
      * @Given /^a team exists for the country$/
      */
-    public function aDriverExists(): void
+    public function aTeamExists(): void
     {
         self::container()->teamRepositorySpy()->add(Team::instance(
             new TeamId(self::TEAM_ID),
             new TeamName(self::TEAM_NAME),
             new TeamImage(self::TEAM_IMAGE),
+            new TeamCountryId(self::COUNTRY_ID),
+        ));
+    }
+
+    /**
+     * @Given /^another team exists for the country$/
+     */
+    public function anotherTeamExists(): void
+    {
+        self::container()->teamRepositorySpy()->add(Team::instance(
+            new TeamId(self::TEAM_ID_ALT),
+            new TeamName(self::TEAM_NAME_ALT),
+            new TeamImage(self::TEAM_IMAGE_ALT),
             new TeamCountryId(self::COUNTRY_ID),
         ));
     }

@@ -19,6 +19,8 @@ final class CarRegistrationContext extends MotorsportTrackerContext
 {
     private const CAR_NUMBER = 1;
 
+    private const CAR_NUMBER_ALT = 33;
+
     private ?CarId $carId               = null;
     private ?Throwable $thrownException = null;
 
@@ -30,13 +32,26 @@ final class CarRegistrationContext extends MotorsportTrackerContext
     /**
      * @Given /^a car exists for the team and season$/
      */
-    public function aDriverExists(): void
+    public function aCarExists(): void
     {
         self::container()->carRepositorySpy()->add(Car::instance(
             new CarId(self::CAR_ID),
             new CarTeamId(self::TEAM_ID),
             new CarSeasonId(self::SEASON_ID),
             new CarNumber(self::CAR_NUMBER),
+        ));
+    }
+
+    /**
+     * @Given /^another car exists for the other team and season$/
+     */
+    public function anotherCarExists(): void
+    {
+        self::container()->carRepositorySpy()->add(Car::instance(
+            new CarId(self::CAR_ID_ALT),
+            new CarTeamId(self::TEAM_ID_ALT),
+            new CarSeasonId(self::SEASON_ID),
+            new CarNumber(self::CAR_NUMBER_ALT),
         ));
     }
 

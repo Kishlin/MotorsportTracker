@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity;
 
+use DateInterval;
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\DomainEvent\RacerCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerCarId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerDriverId;
@@ -48,6 +50,11 @@ final class Racer extends AggregateRoot
         RacerEndDate $endDate,
     ): self {
         return new self($id, $driverId, $carId, $startDate, $endDate);
+    }
+
+    public function nowEndsJustBefore(DateTimeImmutable $dateToEndBefore): void
+    {
+        $this->endDate = new RacerEndDate($dateToEndBefore->sub(new DateInterval('PT1S')));
     }
 
     public function id(): RacerId

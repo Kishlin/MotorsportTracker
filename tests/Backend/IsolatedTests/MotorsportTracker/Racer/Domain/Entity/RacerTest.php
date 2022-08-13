@@ -11,6 +11,7 @@ use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerDriverId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerEndDate;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerStartDate;
+use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Racer\RacerProvider;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -42,5 +43,14 @@ final class RacerTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($driverId, $entity->driverId());
         self::assertValueObjectSame($startDate, $entity->startDate());
         self::assertValueObjectSame($endDate, $entity->endDate());
+    }
+
+    public function testItCanHaveANewEndDate(): void
+    {
+        $entity = RacerProvider::verstappenToRedBullRacingIn2022();
+
+        $entity->nowEndsJustBefore(new \DateTimeImmutable('2022-07-01 00:00:00'));
+
+        self::assertSame('2022-06-30 23:59:59', $entity->endDate()->value()->format('Y-m-d H:i:s'));
     }
 }

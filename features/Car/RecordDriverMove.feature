@@ -9,6 +9,23 @@ Feature: It can record Driver Moves
     And a car exists for the team and season
     When a client records a driver move for the driver and car
     Then the driver move is recorded
+    And the racer data is created
+
+  Scenario: It handles a mid-season driver move
+    Given a championship exists
+    And a season exists for the championship
+    And a country exists
+    And a team exists for the country
+    And a driver exists for the country
+    And a car exists for the team and season
+    And the driver moved to the car for season starts
+    And a racer exists for the driver and car
+    And another team exists for the country
+    And another car exists for the other team and season
+    When a client records a driver move for the driver and car
+    And a client records a driver move for the driver and the other car
+    Then the second driver move is recorded
+    And the racer data is split at the time of the driver move
 
   Scenario: It cannot duplicate moves for a driver
     Given a championship exists

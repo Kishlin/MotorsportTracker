@@ -4,38 +4,36 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Exception;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\DomainEvent\DriverMoveCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 
 final class TestEventDispatcher implements EventDispatcher
 {
-    /** @var array<string, callable[]> */
-    private array $subscribers = [];
-
-    public function __construct(TestServiceContainer $testServiceContainer)
-    {
+    public function __construct(
+        private TestServiceContainer $testServiceContainer
+    ) {
     }
 
-    public function addSubscriber(string $event, callable $domainEventSubscriber): void
-    {
-        $this->subscribers[$event][] = $domainEventSubscriber;
-    }
-
+    /**
+     * @throws Exception
+     */
     public function dispatch(DomainEvent ...$domainEvents): void
     {
         foreach ($domainEvents as $event) {
-            foreach ($this->subscribersForEvent($event) as $subscriber) {
-                $subscriber($event);
-            }
+            $this->handleEvent($event);
         }
     }
 
     /**
-     * @return callable[]
+     * @throws Exception
      */
-    private function subscribersForEvent(DomainEvent $event): array
+    private function handleEvent(DomainEvent $event): void
     {
-        return $this->subscribers[get_class($event)] ?? [];
+        if ($event instanceof DriverMoveCreatedDomainEvent) {
+            $this->testServiceContainer->updateRacerViewsOnDriverMoveHandler()($event);
+        }
     }
 }
