@@ -21,4 +21,14 @@ final class CarProvider
             new CarNumber(1),
         );
     }
+
+    public static function redBullRacing2022SecondCar(): Car
+    {
+        return Car::instance(
+            new CarId('b572bd5a-f285-4889-8b1a-2c424cd27da6'),
+            new CarTeamId('aee290c9-3ab0-4a9a-a707-8756f9a7760f'),
+            new CarSeasonId('01dd2498-e231-4f34-82de-bf61153abbc4'),
+            new CarNumber(11),
+        );
+    }
 }

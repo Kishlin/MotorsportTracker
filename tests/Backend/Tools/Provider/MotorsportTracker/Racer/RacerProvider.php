@@ -24,4 +24,15 @@ final class RacerProvider
             new RacerEndDate(new DateTimeImmutable('2022-12-31')),
         );
     }
+
+    public static function perezToRedBulRacingIn2022(): Racer
+    {
+        return Racer::instance(
+            new RacerId('c554bae5-7cd1-461c-b73f-5f4e8ea982f9'),
+            new RacerDriverId('355fdac0-2662-472b-b26c-761fb54f1994'),
+            new RacerCarId('b572bd5a-f285-4889-8b1a-2c424cd27da6'),
+            new RacerStartDate(new DateTimeImmutable('2022-01-01')),
+            new RacerEndDate(new DateTimeImmutable('2022-12-31')),
+        );
+    }
 }

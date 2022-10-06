@@ -33,4 +33,12 @@ final class CountryProvider
             new CountryCode('at'),
         );
     }
+
+    public static function mexico(): Country
+    {
+        return Country::instance(
+            new CountryId('dbe42261-243e-4e25-8a80-4aa957006c7e'),
+            new CountryCode('mx'),
+        );
+    }
 }
