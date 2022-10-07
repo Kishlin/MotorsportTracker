@@ -20,6 +20,9 @@ final class DriverCreationContext extends MotorsportTrackerContext
     private const DRIVER_FIRSTNAME = 'Max';
     private const DRIVER_NAME      = 'Verstappen';
 
+    private const DRIVER_OTHER_FIRSTNAME = 'Sergio';
+    private const DRIVER_OTHER_NAME      = 'Perez';
+
     private ?DriverId $driverId         = null;
     private ?Throwable $thrownException = null;
 
@@ -38,6 +41,19 @@ final class DriverCreationContext extends MotorsportTrackerContext
             new DriverFirstname(self::DRIVER_FIRSTNAME),
             new DriverName(self::DRIVER_NAME),
             new DriverCountryId(self::COUNTRY_ID),
+        ));
+    }
+
+    /**
+     * @Given /^another driver exists for the other country$/
+     */
+    public function anotherDriverExists(): void
+    {
+        self::container()->driverRepositorySpy()->add(Driver::instance(
+            new DriverId(self::DRIVER_OTHER_ID),
+            new DriverFirstname(self::DRIVER_OTHER_FIRSTNAME),
+            new DriverName(self::DRIVER_OTHER_NAME),
+            new DriverCountryId(self::COUNTRY_OTHER_ID),
         ));
     }
 

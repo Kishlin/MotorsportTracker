@@ -35,4 +35,9 @@ final class RacerPOPO
     {
         return new self($data['id'], $data['driver_name'], $data['car_number']);
     }
+
+    public static function fromScalars(string $id, string $driverName, int $carNumber): self
+    {
+        return new self($id, $driverName, $carNumber);
+    }
 }

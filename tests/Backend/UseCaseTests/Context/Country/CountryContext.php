@@ -15,7 +15,8 @@ use Throwable;
 
 final class CountryContext extends MotorsportTrackerContext
 {
-    private const COUNTRY_CODE = 'nl';
+    private const COUNTRY_CODE       = 'nl';
+    private const COUNTRY_OTHER_CODE = 'mx';
 
     private ?CountryId $countryId       = null;
     private ?Throwable $thrownException = null;
@@ -35,6 +36,19 @@ final class CountryContext extends MotorsportTrackerContext
         self::container()->countryRepositorySpy()->add(Country::create(
             new CountryId(self::COUNTRY_ID),
             new CountryCode(self::COUNTRY_CODE),
+        ));
+    }
+
+    /**
+     * @Given /^another country exists$/
+     *
+     * @throws Exception
+     */
+    public function anotherCountryExists(): void
+    {
+        self::container()->countryRepositorySpy()->add(Country::create(
+            new CountryId(self::COUNTRY_OTHER_ID),
+            new CountryCode(self::COUNTRY_OTHER_CODE),
         ));
     }
 

@@ -17,9 +17,9 @@ use Throwable;
 
 final class CarRegistrationContext extends MotorsportTrackerContext
 {
-    private const CAR_NUMBER = 1;
-
-    private const CAR_NUMBER_ALT = 33;
+    private const CAR_NUMBER       = 1;
+    private const CAR_NUMBER_ALT   = 33;
+    private const CAR_OTHER_NUMBER = 11;
 
     private ?CarId $carId               = null;
     private ?Throwable $thrownException = null;
@@ -52,6 +52,19 @@ final class CarRegistrationContext extends MotorsportTrackerContext
             new CarTeamId(self::TEAM_ID_ALT),
             new CarSeasonId(self::SEASON_ID),
             new CarNumber(self::CAR_NUMBER_ALT),
+        ));
+    }
+
+    /**
+     * @Given /^another car exists for another driver$/
+     */
+    public function yetAnotherCarExists(): void
+    {
+        self::container()->carRepositorySpy()->add(Car::instance(
+            new CarId(self::CAR_OTHER_ID),
+            new CarTeamId(self::TEAM_ID),
+            new CarSeasonId(self::SEASON_ID),
+            new CarNumber(self::CAR_OTHER_NUMBER),
         ));
     }
 
