@@ -23,6 +23,8 @@ abstract class MotorsportTrackerContext implements Context
     protected const DRIVER_ID       = 'e36d650b-6d98-4fc5-a0a6-f4842f4bdf73';
     protected const DRIVER_OTHER_ID = 'cc418eea-ad11-479b-b3c3-080030dbd470';
 
+    protected const STEP_TYPE_ID = '6162b87e-57e5-4b34-aa2d-42c1bb60f2ba';
+
     protected const RACER_ID       = '53491a72-402e-42c8-9198-e09e7048eab9';
     protected const RACER_OTHER_ID = '5119a499-d163-4d7a-b44f-59771dbe11fb';
 
