@@ -12,6 +12,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\StepTypeContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Racer\RacerContext
     api_tests:
       paths: [ features ]
