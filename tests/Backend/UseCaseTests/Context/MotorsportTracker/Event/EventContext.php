@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\EventCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\SeasonHasEventWithIndexOrVenueException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
