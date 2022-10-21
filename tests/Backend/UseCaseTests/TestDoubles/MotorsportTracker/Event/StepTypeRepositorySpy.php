@@ -31,7 +31,6 @@ final class StepTypeRepositorySpy extends AbstractRepositorySpy implements StepT
         $this->objects[$stepType->id()->value()] = $stepType;
     }
 
-
     public function idForLabel(StepTypeLabel $label): ?StepTypeId
     {
         foreach ($this->objects as $savedEventStep) {
