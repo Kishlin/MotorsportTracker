@@ -17,6 +17,8 @@ final class StepTypeContext extends MotorsportTrackerContext
 {
     private const STEP_TYPE_LABEL = 'race';
 
+    private const STEP_TYPE_LABEL_ALT = 'qualification';
+
     private ?StepTypeId $stepTypeId     = null;
     private ?Throwable $thrownException = null;
 
@@ -35,6 +37,19 @@ final class StepTypeContext extends MotorsportTrackerContext
         self::container()->stepTypeRepositorySpy()->add(StepType::create(
             new StepTypeId(self::STEP_TYPE_ID),
             new StepTypeLabel(self::STEP_TYPE_LABEL),
+        ));
+    }
+
+    /**
+     * @Given /^another step type exists$/
+     *
+     * @throws Exception
+     */
+    public function anotherStepTypeExists(): void
+    {
+        self::container()->stepTypeRepositorySpy()->add(StepType::create(
+            new StepTypeId(self::STEP_TYPE_ID_ALT),
+            new StepTypeLabel(self::STEP_TYPE_LABEL_ALT),
         ));
     }
 
