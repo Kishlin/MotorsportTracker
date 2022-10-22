@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository;
 
+use DateTimeImmutable;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveCarId;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveDate;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveDriverId;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\DriverMoveGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\CarProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\DriverMoveProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Driver\DriverProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Team\TeamProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -20,19 +19,19 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
  */
 final class DriverMoveGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
-    public function testItCanSaveACar(): void
+    public function testItCanSaveADriverMove(): void
     {
         self::loadFixtures(
-            CarProvider::redBullRacing2022FirstCar(),
-            SeasonProvider::formulaOne2022(),
-            TeamProvider::redBullRacing(),
-            DriverProvider::dutchDriver(),
-            CountryProvider::austria(),
-            CountryProvider::netherlands(),
-            ChampionshipProvider::formulaOne(),
+            'motorsport.driver.driver.maxVerstappen',
+            'motorsport.car.car.redBullRacing2022FirstCar',
         );
 
-        $driverMove = DriverMoveProvider::verstappenAtRedBullRacingIn2022();
+        $driverMove = DriverMove::instance(
+            new DriverMoveId(self::uuid()),
+            new DriverMoveDriverId(self::fixtureId('motorsport.driver.driver.maxVerstappen')),
+            new DriverMoveCarId(self::fixtureId('motorsport.car.car.redBullRacing2022FirstCar')),
+            new DriverMoveDate(new DateTimeImmutable('2022-01-01')),
+        );
 
         $repository = new DriverMoveGatewayUsingDoctrine(self::entityManager());
 

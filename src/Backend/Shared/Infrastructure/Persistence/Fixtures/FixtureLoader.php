@@ -34,6 +34,17 @@ final class FixtureLoader
         $this->loadFixtureIfNotLoaded($fixture);
     }
 
+    public function reset(): void
+    {
+        $this->identifiers     = [];
+        $this->loadedFilesData = [];
+    }
+
+    public function identifier(string $fixture): ?string
+    {
+        return array_key_exists($fixture, $this->identifiers) ? $this->identifiers[$fixture] : null;
+    }
+
     private function loadFixtureIfNotLoaded(string $fixture): void
     {
         if ($this->fixtureHasBeenLoaded($fixture)) {

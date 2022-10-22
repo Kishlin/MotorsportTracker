@@ -9,13 +9,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventHasStepAtTheSameTimeRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\EventProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\EventStepProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\StepTypeProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Venue\VenueProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -32,7 +25,7 @@ final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends Reposit
         $repository = new EventHasStepAtTheSameTimeRepositoryUsingDoctrine($this->entityManager());
 
         self::assertFalse($repository->eventHasStepAtTheSameTime(
-            new EventStepEventId('84b3e2e0-0f81-4747-be83-bcbf958b7105'),
+            new EventStepEventId(self::uuid()),
             new EventStepDateTime(new DateTimeImmutable('2022-09-04 15:00:00')),
         ));
     }
@@ -42,20 +35,12 @@ final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends Reposit
      */
     public function testItReturnsTrueIfAnEventStepExistsWithTheSameTime(): void
     {
-        self::loadFixtures(
-            EventStepProvider::dutchGrandPrixRace(),
-            EventProvider::dutchGrandPrix(),
-            StepTypeProvider::race(),
-            VenueProvider::dutchVenue(),
-            CountryProvider::netherlands(),
-            SeasonProvider::formulaOne2022(),
-            ChampionshipProvider::formulaOne(),
-        );
+        self::loadFixture('motorsport.event.eventStep.dutchGrandPrix2022Race');
 
         $repository = new EventHasStepAtTheSameTimeRepositoryUsingDoctrine($this->entityManager());
 
         self::assertTrue($repository->eventHasStepAtTheSameTime(
-            new EventStepEventId('84b3e2e0-0f81-4747-be83-bcbf958b7105'),
+            new EventStepEventId(self::fixtureId('motorsport.event.event.dutchGrandPrix2022')),
             new EventStepDateTime(new DateTimeImmutable('2022-09-04 15:00:00')),
         ));
     }

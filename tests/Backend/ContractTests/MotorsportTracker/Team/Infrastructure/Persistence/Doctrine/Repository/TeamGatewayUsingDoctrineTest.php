@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository;
 
+use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
+use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamCountryId;
+use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
+use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamImage;
+use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamName;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\TeamRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Team\TeamProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -17,9 +20,14 @@ final class TeamGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
     public function testItCanSaveATeam(): void
     {
-        self::loadFixtures(CountryProvider::austria());
+        self::loadFixture('country.country.austria');
 
-        $team = TeamProvider::redBullRacing();
+        $team = Team::instance(
+            new TeamId(self::uuid()),
+            new TeamName('Red Bull Racing'),
+            new TeamImage('https://example.com/redbullracing.webp'),
+            new TeamCountryId(self::fixtureId('country.country.austria')),
+        );
 
         $repository = new TeamRepositoryUsingDoctrine(self::entityManager());
 

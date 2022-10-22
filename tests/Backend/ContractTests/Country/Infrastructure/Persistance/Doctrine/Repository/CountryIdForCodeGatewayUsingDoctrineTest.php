@@ -7,7 +7,6 @@ namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -21,13 +20,11 @@ final class CountryIdForCodeGatewayUsingDoctrineTest extends RepositoryContractT
      */
     public function testItCanRetrieveAnId(): void
     {
-        $country = CountryProvider::country();
-
-        $this->loadFixtures($country);
+        $this->loadFixture('country.country.france');
 
         $repository = new CountryIdForCodeGatewayUsingDoctrine($this->entityManager());
 
-        self::assertEqualsCanonicalizing($country->id(), $repository->idForCode($country->code()));
+        self::assertNotNull($repository->idForCode(new CountryCode('fr')));
     }
 
     /**

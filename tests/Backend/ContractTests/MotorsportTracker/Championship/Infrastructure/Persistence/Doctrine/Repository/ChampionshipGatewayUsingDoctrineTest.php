@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipSlug;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\ChampionshipGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -16,7 +19,11 @@ final class ChampionshipGatewayUsingDoctrineTest extends RepositoryContractTestC
 {
     public function testItCanSaveAChampionship(): void
     {
-        $championship = ChampionshipProvider::championship();
+        $championship = Championship::instance(
+            new ChampionshipId(self::uuid()),
+            new ChampionshipName('Formula 1'),
+            new ChampionshipSlug('formula1'),
+        );
 
         $repository = new ChampionshipGatewayUsingDoctrine(self::entityManager());
 

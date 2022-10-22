@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository;
 
+use DateTimeImmutable;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerCarId;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerDriverId;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerEndDate;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerStartDate;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacerGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\CarProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Driver\DriverProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Racer\RacerProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Team\TeamProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -20,19 +20,20 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
  */
 final class RacerGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
-    public function testItCanSaveADriver(): void
+    public function testItCanSaveARacer(): void
     {
         self::loadFixtures(
-            CarProvider::redBullRacing2022FirstCar(),
-            TeamProvider::redBullRacing(),
-            DriverProvider::dutchDriver(),
-            CountryProvider::austria(),
-            CountryProvider::netherlands(),
-            SeasonProvider::formulaOne2022(),
-            ChampionshipProvider::formulaOne(),
+            'motorsport.driver.driver.maxVerstappen',
+            'motorsport.car.car.redBullRacing2022FirstCar',
         );
 
-        $racer = RacerProvider::verstappenToRedBullRacingIn2022();
+        $racer = Racer::instance(
+            new RacerId(self::uuid()),
+            new RacerDriverId(self::fixtureId('motorsport.driver.driver.maxVerstappen')),
+            new RacerCarId(self::fixtureId('motorsport.car.car.redBullRacing2022FirstCar')),
+            new RacerStartDate(new DateTimeImmutable('2022-01-01')),
+            new RacerEndDate(new DateTimeImmutable('2022-12-31')),
+        );
 
         $repository = new RacerGatewayUsingDoctrine(self::entityManager());
 

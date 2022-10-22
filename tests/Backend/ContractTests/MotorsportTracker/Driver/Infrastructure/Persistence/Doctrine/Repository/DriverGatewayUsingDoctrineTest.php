@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Driver\Infrastructure\Persistence\Doctrine\Repository;
 
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverCountryId;
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverFirstname;
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverName;
 use Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Doctrine\Repository\DriverGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Driver\DriverProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -17,9 +20,14 @@ final class DriverGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
     public function testItCanSaveADriver(): void
     {
-        self::loadFixtures(CountryProvider::netherlands());
+        self::loadFixture('country.country.netherlands');
 
-        $driver = DriverProvider::dutchDriver();
+        $driver = Driver::instance(
+            new DriverId(self::uuid()),
+            new DriverFirstname('Max'),
+            new DriverName('Verstappen'),
+            new DriverCountryId(self::fixtureId('country.country.netherlands')),
+        );
 
         $repository = new DriverGatewayUsingDoctrine(self::entityManager());
 

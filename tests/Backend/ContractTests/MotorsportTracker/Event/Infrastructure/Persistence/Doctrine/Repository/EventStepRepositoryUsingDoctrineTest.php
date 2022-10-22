@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository;
 
+use DateTimeImmutable;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventStepRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\EventProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\EventStepProvider;
-use Kishlin\Tests\Backend\Tools\Provider\Event\StepTypeProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Venue\VenueProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -23,15 +22,16 @@ final class EventStepRepositoryUsingDoctrineTest extends RepositoryContractTestC
     public function testItCanSaveAnEventStep(): void
     {
         self::loadFixtures(
-            EventProvider::dutchGrandPrix(),
-            StepTypeProvider::race(),
-            VenueProvider::dutchVenue(),
-            CountryProvider::netherlands(),
-            SeasonProvider::formulaOne2022(),
-            ChampionshipProvider::formulaOne(),
+            'motorsport.event.event.dutchGrandPrix2022',
+            'motorsport.event.stepType.race',
         );
 
-        $eventStep = EventStepProvider::dutchGrandPrixRace();
+        $eventStep = EventStep::instance(
+            new EventStepId(self::uuid()),
+            new EventStepTypeId(self::fixtureId('motorsport.event.stepType.race')),
+            new EventStepEventId(self::fixtureId('motorsport.event.event.dutchGrandPrix2022')),
+            new EventStepDateTime(new DateTimeImmutable('2022-09-04 15:00:00')),
+        );
 
         $repository = new EventStepRepositoryUsingDoctrine(self::entityManager());
 

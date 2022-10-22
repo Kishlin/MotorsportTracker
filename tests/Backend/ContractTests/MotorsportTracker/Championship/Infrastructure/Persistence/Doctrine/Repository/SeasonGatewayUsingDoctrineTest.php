@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonChampionshipId;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -17,10 +19,13 @@ final class SeasonGatewayUsingDoctrineTest extends RepositoryContractTestCase
 {
     public function testItCanSaveASeason(): void
     {
-        $championship = ChampionshipProvider::championship();
-        $season       = SeasonProvider::forChampionship($championship->id());
+        self::loadFixture('motorsport.championship.championship.formulaOne');
 
-        self::loadFixtures($championship);
+        $season = Season::instance(
+            new SeasonId(self::uuid()),
+            new SeasonYear(2022),
+            new SeasonChampionshipId(self::fixtureId('motorsport.championship.championship.formulaOne'))
+        );
 
         $repository = new SeasonGatewayUsingDoctrine(self::entityManager());
 

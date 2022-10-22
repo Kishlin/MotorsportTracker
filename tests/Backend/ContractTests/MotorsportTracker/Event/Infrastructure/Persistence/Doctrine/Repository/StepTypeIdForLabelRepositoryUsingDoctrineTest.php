@@ -7,7 +7,6 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastruc
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\StepTypeIdForLabelRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Event\StepTypeProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -21,13 +20,14 @@ final class StepTypeIdForLabelRepositoryUsingDoctrineTest extends RepositoryCont
      */
     public function testItCanRetrieveAnId(): void
     {
-        $stepType = StepTypeProvider::race();
-
-        $this->loadFixtures($stepType);
+        $this->loadFixture('motorsport.event.stepType.race');
 
         $repository = new StepTypeIdForLabelRepositoryUsingDoctrine($this->entityManager());
 
-        self::assertEqualsCanonicalizing($stepType->id(), $repository->idForLabel(($stepType->label())));
+        $expected = self::fixtureId('motorsport.event.stepType.race');
+        $actual   = $repository->idForLabel(new StepTypeLabel('race'));
+
+        self::assertEqualsCanonicalizing($expected, $actual);
     }
 
     /**

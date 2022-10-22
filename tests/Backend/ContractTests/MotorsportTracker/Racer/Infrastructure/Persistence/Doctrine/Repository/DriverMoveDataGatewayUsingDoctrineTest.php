@@ -5,14 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\DBAL\Exception;
+use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\DriverMoveDataGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\CarProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\DriverMoveProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Driver\DriverProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Team\TeamProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -26,25 +20,18 @@ final class DriverMoveDataGatewayUsingDoctrineTest extends RepositoryContractTes
      */
     public function testItFindsDriverMoveData(): void
     {
-        $driverMove = DriverMoveProvider::verstappenAtRedBullRacingIn2022();
-
-        self::loadFixtures(
-            $driverMove,
-            CarProvider::redBullRacing2022FirstCar(),
-            TeamProvider::redBullRacing(),
-            DriverProvider::dutchDriver(),
-            CountryProvider::austria(),
-            CountryProvider::netherlands(),
-            SeasonProvider::formulaOne2022(),
-            ChampionshipProvider::formulaOne(),
-        );
+        self::loadFixture('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022');
 
         $repository = new DriverMoveDataGatewayUsingDoctrine(self::entityManager());
 
-        $data = $repository->find($driverMove->id());
+        $data = $repository->find(
+            new DriverMoveId(
+                self::fixtureId('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022'),
+            ),
+        );
 
-        self::assertSame($data->carId(), $driverMove->carId()->value());
-        self::assertSame($data->driverId(), $driverMove->driverId()->value());
-        self::assertSame($data->date()->format(DATE_ATOM), $driverMove->date()->value()->format(DATE_ATOM));
+        self::assertSame(self::fixtureId('motorsport.car.car.redBullRacing2022FirstCar'), $data->carId());
+        self::assertSame(self::fixtureId('motorsport.driver.driver.maxVerstappen'), $data->driverId());
+        self::assertSame(2022, (int) $data->date()->format('Y'));
     }
 }

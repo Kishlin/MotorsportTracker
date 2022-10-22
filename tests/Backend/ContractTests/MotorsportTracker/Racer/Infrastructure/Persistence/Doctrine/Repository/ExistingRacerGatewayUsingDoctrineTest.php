@@ -7,14 +7,6 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Racer\Infrastruc
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\ExistingRacerGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Provider\Country\CountryProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\CarProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Car\DriverMoveProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\ChampionshipProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Championship\SeasonProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Driver\DriverProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Racer\RacerProvider;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Team\TeamProvider;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
 /**
@@ -40,27 +32,22 @@ final class ExistingRacerGatewayUsingDoctrineTest extends RepositoryContractTest
      */
     public function testItCanFindAnExistingRacerId(): void
     {
-        $driverMove = DriverMoveProvider::verstappenAtRedBullRacingIn2022();
-        $expected   = RacerProvider::verstappenToRedBullRacingIn2022();
-
         self::loadFixtures(
-            $expected,
-            $driverMove,
-            CarProvider::redBullRacing2022FirstCar(),
-            TeamProvider::redBullRacing(),
-            DriverProvider::dutchDriver(),
-            CountryProvider::austria(),
-            CountryProvider::netherlands(),
-            SeasonProvider::formulaOne2022(),
-            ChampionshipProvider::formulaOne(),
+            'motorsport.car.driverMove.verstappenAtRedBullRacingIn2022',
+            'motorsport.racer.racer.verstappenToRedBullRacingIn2022',
         );
 
         $repository = new ExistingRacerGatewayUsingDoctrine(self::entityManager());
 
-        $actual = $repository->findIfExistsForDriverMove($driverMove->id());
+        $actual = $repository->findIfExistsForDriverMove(
+            new DriverMoveId(self::fixtureId('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022')),
+        );
 
         self::assertNotNull($actual);
 
-        self::assertSame($expected->id()->value(), $actual->id()->value());
+        self::assertSame(
+            self::fixtureId('motorsport.racer.racer.verstappenToRedBullRacingIn2022'),
+            $actual->id()->value(),
+        );
     }
 }

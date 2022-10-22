@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Racer\Domain\Entity;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\DomainEvent\RacerCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerCarId;
@@ -11,7 +12,6 @@ use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerDriverId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerEndDate;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerStartDate;
-use Kishlin\Tests\Backend\Tools\Provider\MotorsportTracker\Racer\RacerProvider;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -25,8 +25,8 @@ final class RacerTest extends AggregateRootIsolatedTestCase
         $id        = '99164eb7-5a6e-434e-87c5-92be8a608018';
         $carId     = '6cf4177d-89ed-470d-ae98-50014f2ee0d6';
         $driverId  = '74c6f7a3-0409-4a3d-9af5-1956d4b08e40';
-        $startDate = new \DateTimeImmutable('1993-11-22');
-        $endDate   = new \DateTimeImmutable('1993-11-25');
+        $startDate = new DateTimeImmutable('1993-11-22');
+        $endDate   = new DateTimeImmutable('1993-11-25');
 
         $entity = Racer::create(
             new RacerId($id),
@@ -47,9 +47,15 @@ final class RacerTest extends AggregateRootIsolatedTestCase
 
     public function testItCanHaveANewEndDate(): void
     {
-        $entity = RacerProvider::verstappenToRedBullRacingIn2022();
+        $entity = Racer::instance(
+            new RacerId('87d171f5-0a25-4df9-9182-2f501ffbe6e9'),
+            new RacerDriverId('09781b37-55d1-4107-a9b0-2b86b2baabef'),
+            new RacerCarId('c2ba96dc-eef3-4b7b-a06c-718f044206a9'),
+            new RacerStartDate(new DateTimeImmutable('2022-01-01')),
+            new RacerEndDate(new DateTimeImmutable('2022-12-31')),
+        );
 
-        $entity->nowEndsJustBefore(new \DateTimeImmutable('2022-07-01 00:00:00'));
+        $entity->nowEndsJustBefore(new DateTimeImmutable('2022-07-01 00:00:00'));
 
         self::assertSame('2022-06-30 23:59:59', $entity->endDate()->value()->format('Y-m-d H:i:s'));
     }
