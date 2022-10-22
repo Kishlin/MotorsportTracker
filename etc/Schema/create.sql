@@ -230,7 +230,6 @@ COPY public.cars (id, number, team, season) FROM stdin;
 --
 
 COPY public.championships (id, name, slug) FROM stdin;
-16973325-7969-4013-a125-4844e9c72e9e	formula1	f1
 \.
 
 
