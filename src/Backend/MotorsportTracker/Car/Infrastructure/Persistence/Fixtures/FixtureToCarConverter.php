@@ -19,14 +19,9 @@ final class FixtureToCarConverter implements FixtureConverter
     {
         return Car::instance(
             new CarId($fixture->identifier()),
-            new CarTeamId($fixture->value('teamId')),
-            new CarSeasonId($fixture->value('seasonId')),
-            new CarNumber((int) $fixture->value('number')),
+            new CarTeamId($fixture->getString('teamId')),
+            new CarSeasonId($fixture->getString('seasonId')),
+            new CarNumber($fixture->getInt('number')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'car' === $class;
     }
 }

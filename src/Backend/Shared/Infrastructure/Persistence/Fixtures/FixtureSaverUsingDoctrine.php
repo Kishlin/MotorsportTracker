@@ -9,12 +9,9 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 
 final class FixtureSaverUsingDoctrine extends FixtureSaver
 {
-    /** @param FixtureConverter[] $fixturesConverters */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        array $fixturesConverters,
     ) {
-        parent::__construct($fixturesConverters);
     }
 
     protected function saveAggregateRoot(AggregateRoot $aggregateRoot): void

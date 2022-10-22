@@ -8,7 +8,5 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 
 interface FixtureConverter
 {
-    public function handles(string $class): bool;
-
     public function convert(Fixture $fixture): AggregateRoot;
 }

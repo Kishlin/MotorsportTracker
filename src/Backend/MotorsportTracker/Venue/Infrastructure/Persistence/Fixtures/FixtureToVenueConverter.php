@@ -18,13 +18,8 @@ final class FixtureToVenueConverter implements FixtureConverter
     {
         return Venue::instance(
             new VenueId($fixture->identifier()),
-            new VenueName($fixture->value('name')),
-            new VenueCountryId($fixture->value('countryId')),
+            new VenueName($fixture->getString('name')),
+            new VenueCountryId($fixture->getString('countryId')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'venue' === $class;
     }
 }

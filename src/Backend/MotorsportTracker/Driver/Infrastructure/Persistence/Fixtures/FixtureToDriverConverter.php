@@ -19,14 +19,9 @@ final class FixtureToDriverConverter implements FixtureConverter
     {
         return Driver::instance(
             new DriverId($fixture->identifier()),
-            new DriverFirstname($fixture->value('firstname')),
-            new DriverName($fixture->value('name')),
-            new DriverCountryId($fixture->value('countryId')),
+            new DriverFirstname($fixture->getString('firstname')),
+            new DriverName($fixture->getString('name')),
+            new DriverCountryId($fixture->getString('countryId')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'driver' === $class;
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 
 final class FixtureLoader
 {
-    /** @var array<string, array<string, array<string, string>>> */
+    /** @var array<string, array<string, array<string, int|string>>> */
     private array $loadedFilesData = [];
 
     /** @var array<string, string> */
@@ -40,7 +40,7 @@ final class FixtureLoader
             return;
         }
 
-        if (1 !== preg_match('/^([\w]+)\.([\w]+)$/', $fixture, $matches)) {
+        if (1 !== preg_match('/^([\w]+(?:\.[\w]+)+?)\.([\w]+)$/', $fixture, $matches)) {
             throw new InvalidArgumentException('Fixture Name is not in the class.key format.');
         }
 
@@ -76,7 +76,7 @@ final class FixtureLoader
             return;
         }
 
-        /** @var array<string, array<string, string>> $content */
+        /** @var array<string, array<string, int|string>> $content */
         $content = $this->yamlParser()->parseFile("{$this->pathToFixtures}/{$class}.yaml");
 
         $this->loadedFilesData[$class] = $content;

@@ -18,13 +18,8 @@ final class FixtureToSeasonConverter implements FixtureConverter
     {
         return Season::instance(
             new SeasonId($fixture->identifier()),
-            new SeasonYear((int) $fixture->value('year')),
-            new SeasonChampionshipId($fixture->value('championshipId')),
+            new SeasonYear($fixture->getInt('year')),
+            new SeasonChampionshipId($fixture->getString('championshipId')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'season' === $class;
     }
 }

@@ -9,27 +9,23 @@ use RuntimeException;
 
 abstract class FixtureSaver
 {
-    /** @param FixtureConverter[] $fixturesConverters */
-    protected function __construct(
-        private array $fixturesConverters,
-    ) {
+    /** @var array<string, FixtureConverter> */
+    private array $fixturesConverters = [];
+
+    public function addConverter(string $key, FixtureConverter $converter): void
+    {
+        $this->fixturesConverters[$key] = $converter;
     }
 
     public function save(string $class, Fixture $fixture): void
     {
-        foreach ($this->fixturesConverters as $fixturesConverter) {
-            if (false === $fixturesConverter->handles($class)) {
-                continue;
-            }
-
-            $entity = $fixturesConverter->convert($fixture);
-
-            $this->saveAggregateRoot($entity);
-
-            return;
+        if (false === array_key_exists($class, $this->fixturesConverters)) {
+            throw new RuntimeException("No converter able to handle fixture of class {$class}.");
         }
 
-        throw new RuntimeException("Found no converter able to handle fixture of class {$class}.");
+        $entity = $this->fixturesConverters[$class]->convert($fixture);
+
+        $this->saveAggregateRoot($entity);
     }
 
     abstract protected function saveAggregateRoot(AggregateRoot $aggregateRoot): void;

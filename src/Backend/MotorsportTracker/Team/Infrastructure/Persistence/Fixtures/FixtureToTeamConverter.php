@@ -19,14 +19,9 @@ final class FixtureToTeamConverter implements FixtureConverter
     {
         return Team::instance(
             new TeamId($fixture->identifier()),
-            new TeamName($fixture->value('name')),
-            new TeamImage($fixture->value('image')),
-            new TeamCountryId($fixture->value('countryId')),
+            new TeamName($fixture->getString('name')),
+            new TeamImage($fixture->getString('image')),
+            new TeamCountryId($fixture->getString('countryId')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'team' === $class;
     }
 }

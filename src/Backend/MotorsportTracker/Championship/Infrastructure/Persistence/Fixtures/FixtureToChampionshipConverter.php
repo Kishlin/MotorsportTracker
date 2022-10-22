@@ -18,13 +18,8 @@ final class FixtureToChampionshipConverter implements FixtureConverter
     {
         return Championship::instance(
             new ChampionshipId($fixture->identifier()),
-            new ChampionshipName($fixture->value('name')),
-            new ChampionshipSlug($fixture->value('slug')),
+            new ChampionshipName($fixture->getString('name')),
+            new ChampionshipSlug($fixture->getString('slug')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'championship' === $class;
     }
 }

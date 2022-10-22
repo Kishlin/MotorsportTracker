@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Fixtures;
 
-use DateTimeImmutable;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerCarId;
@@ -25,15 +24,10 @@ final class FixtureToRacerConverter implements FixtureConverter
     {
         return Racer::instance(
             new RacerId($fixture->identifier()),
-            new RacerDriverId($fixture->value('driverId')),
-            new RacerCarId($fixture->value('carId')),
-            new RacerStartDate(new DateTimeImmutable($fixture->value('startDate'))),
-            new RacerEndDate(new DateTimeImmutable($fixture->value('endDate'))),
+            new RacerDriverId($fixture->getString('driverId')),
+            new RacerCarId($fixture->getString('carId')),
+            new RacerStartDate($fixture->getDateTime('startDate')),
+            new RacerEndDate($fixture->getDateTime('endDate')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'racer' === $class;
     }
 }

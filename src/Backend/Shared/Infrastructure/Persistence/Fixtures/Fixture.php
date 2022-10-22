@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures;
 
+use DateTimeImmutable;
+use Exception;
+
 final class Fixture
 {
     /**
-     * @param array<string, string> $data
+     * @param array<string, int|string> $data
      */
     private function __construct(
         private string $identifier,
@@ -20,13 +23,26 @@ final class Fixture
         return $this->identifier;
     }
 
-    public function value(string $key): string
+    public function getString(string $key): string
     {
-        return $this->data[$key];
+        return (string) $this->data[$key];
+    }
+
+    public function getInt(string $key): int
+    {
+        return (int) $this->data[$key];
     }
 
     /**
-     * @param array<string, string> $data
+     * @throws Exception
+     */
+    public function getDateTime(string $key): DateTimeImmutable
+    {
+        return new DateTimeImmutable((string) $this->data[$key]);
+    }
+
+    /**
+     * @param array<string, int|string> $data
      */
     public static function fromScalars(string $identifier, array $data): self
     {

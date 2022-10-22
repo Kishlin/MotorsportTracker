@@ -17,12 +17,7 @@ final class FixtureToCountryConverter implements FixtureConverter
     {
         return Country::instance(
             new CountryId($fixture->identifier()),
-            new CountryCode($fixture->value('code')),
+            new CountryCode($fixture->getString('code')),
         );
-    }
-
-    public function handles(string $class): bool
-    {
-        return 'country' === $class;
     }
 }
