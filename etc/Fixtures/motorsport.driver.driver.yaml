@@ -1,0 +1,9 @@
+maxVerstappen:
+  firstname: 'Max'
+  name: 'Verstappen'
+  countryId: '@country.country.netherlands'
+
+sergioPerez:
+  firstname: 'Sergio'
+  name: 'Perez'
+  countryId: '@country.country.mexico'

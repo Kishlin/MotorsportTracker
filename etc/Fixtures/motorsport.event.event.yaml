@@ -1,0 +1,5 @@
+dutchGrandPrix2022:
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  venueId: '@motorsport.venue.venue.zandvoort'
+  index: '16'
+  label: 'Dutch GP'

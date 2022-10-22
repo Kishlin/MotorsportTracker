@@ -1,0 +1,11 @@
+verstappenToRedBullRacingIn2022:
+  driverId: '@motorsport.driver.driver.maxVerstappen'
+  carId: '@motorsport.car.car.redBullRacing2022FirstCar'
+  startDate: '2022-01-01'
+  endDate: '2022-12-31'
+  
+perezToRedBulRacingIn2022:
+  driverId: '@motorsport.driver.driver.sergioPerez'
+  carId: '@motorsport.car.car.redBullRacing2022SecondCar'
+  startDate: '2022-01-01'
+  endDate: '2022-12-31'

@@ -1,0 +1,9 @@
+redBullRacing2022FirstCar:
+  teamId: '@motorsport.team.team.redBullRacing'
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  number: 1
+
+redBullRacing2022SecondCar:
+  teamId: '@motorsport.team.team.redBullRacing'
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  number: 11

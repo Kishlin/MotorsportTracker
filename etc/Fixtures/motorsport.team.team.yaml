@@ -1,0 +1,4 @@
+redBullRacing:
+  name: 'Red Bull Racing'
+  image: 'https://example.com/redbullracing.webp'
+  countryId: '@country.country.austria'
