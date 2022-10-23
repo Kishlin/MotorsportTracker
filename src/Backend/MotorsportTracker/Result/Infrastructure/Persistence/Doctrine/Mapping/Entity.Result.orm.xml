@@ -19,6 +19,7 @@
 
         <unique-constraints>
             <unique-constraint columns="event_step,position" name="result_event_step_position_idx" />
+            <unique-constraint columns="event_step,racer" name="result_event_step_racer_idx" />
         </unique-constraints>
     </entity>
 

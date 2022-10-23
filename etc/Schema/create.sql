@@ -533,6 +533,13 @@ CREATE UNIQUE INDEX result_event_step_position_idx ON public.results USING btree
 
 
 --
+-- Name: result_event_step_racer_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX result_event_step_racer_idx ON public.results USING btree (event_step, racer);
+
+
+--
 -- Name: step_type_label_idx; Type: INDEX; Schema: public; Owner: app
 --
 
