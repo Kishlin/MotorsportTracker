@@ -27,7 +27,7 @@ final class ResultTest extends AggregateRootIsolatedTestCase
         $eventStepId = 'aee5ef8d-9f65-4104-acd5-8d432c6b5c9d';
         $fastestLap  = "1'31.634";
         $position    = 3;
-        $points      = 15;
+        $points      = 15.0;
 
         $entity = Result::create(
             new ResultId($id),
