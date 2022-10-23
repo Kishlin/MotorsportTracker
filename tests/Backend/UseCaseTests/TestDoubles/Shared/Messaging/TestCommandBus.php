@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RecordDriverMove\RecordDriverMoveCommand;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\RegisterCarCommand;
@@ -13,6 +14,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriv
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\CreateEventStepCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\RecordResultsCommand;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
@@ -27,6 +29,9 @@ final class TestCommandBus implements CommandBus
     ) {
     }
 
+    /**
+     * @throws Exception
+     */
     public function execute(Command $command): mixed
     {
         if ($command instanceof CreateCountryIfNotExistsCommand) {
@@ -55,6 +60,10 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof CreateStepTypeIfNotExistsCommand) {
             return $this->testServiceContainer->createStepTypeIfNotExistsCommandHandler()($command);
+        }
+
+        if ($command instanceof RecordResultsCommand) {
+            return $this->testServiceContainer->recordResultsCommandHandler()($command);
         }
 
         if ($command instanceof CreateVenueCommand) {
