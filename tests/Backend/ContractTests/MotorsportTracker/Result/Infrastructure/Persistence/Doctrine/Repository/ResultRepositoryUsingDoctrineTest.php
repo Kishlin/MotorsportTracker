@@ -31,7 +31,7 @@ final class ResultRepositoryUsingDoctrineTest extends RepositoryContractTestCase
             new ResultId(self::uuid()),
             new ResultRacerId(self::fixtureId('motorsport.racer.racer.verstappenAtRedBullRacingIn2022')),
             new ResultEventStepId(self::fixtureId('motorsport.event.eventStep.dutchGrandPrix2022Race')),
-            new ResultFastestLapTime("1:36'42.773"),
+            new ResultFastestLapTime("1'13.652"),
             new ResultPosition(0),
             new ResultPoints(26),
         );
