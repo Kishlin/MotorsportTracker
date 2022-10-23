@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result" table="results">
+        <id name="id" type="result_id" column="id" length="36" />
+
+        <field name="racerId" type="result_racer_id" column="racer" length="36" />
+
+        <field name="eventStepId" type="result_event_step_id" column="event_step" length="36" />
+
+        <field name="fastestLapTime" type="result_fastest_lap_time" column="fastest_lap_time" length="36" />
+
+        <field name="position" type="result_position" column="position" min="0" />
+
+        <field name="points" type="result_points" column="points" min="0" />
+
+        <unique-constraints>
+            <unique-constraint columns="event_step,position" name="result_event_step_position_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>

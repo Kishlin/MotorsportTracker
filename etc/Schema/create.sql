@@ -144,26 +144,42 @@ CREATE TABLE public.racers (
     id character varying(36) NOT NULL,
     car character varying(36) NOT NULL,
     driver character varying(36) NOT NULL,
-    startDate timestamp(0) without time zone NOT NULL,
-    endDate timestamp(0) without time zone NOT NULL
+    startdate timestamp(0) without time zone NOT NULL,
+    enddate timestamp(0) without time zone NOT NULL
 );
 
 
 ALTER TABLE public.racers OWNER TO app;
 
 --
--- Name: COLUMN racers.start; Type: COMMENT; Schema: public; Owner: app
+-- Name: COLUMN racers.startdate; Type: COMMENT; Schema: public; Owner: app
 --
 
-COMMENT ON COLUMN public.racers.startDate IS '(DC2Type:racer_start_date)';
+COMMENT ON COLUMN public.racers.startdate IS '(DC2Type:racer_start_date)';
 
 
 --
--- Name: COLUMN racers."end"; Type: COMMENT; Schema: public; Owner: app
+-- Name: COLUMN racers.enddate; Type: COMMENT; Schema: public; Owner: app
 --
 
-COMMENT ON COLUMN public.racers.endDate IS '(DC2Type:racer_end_date)';
+COMMENT ON COLUMN public.racers.enddate IS '(DC2Type:racer_end_date)';
 
+
+--
+-- Name: results; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.results (
+    id character varying(36) NOT NULL,
+    racer character varying(36) NOT NULL,
+    event_step character varying(36) NOT NULL,
+    fastest_lap_time character varying(36) NOT NULL,
+    "position" integer NOT NULL,
+    points double precision NOT NULL
+);
+
+
+ALTER TABLE public.results OWNER TO app;
 
 --
 -- Name: seasons; Type: TABLE; Schema: public; Owner: app
@@ -257,6 +273,7 @@ Kishlin\\Migrations\\Version20220616124606	2022-06-16 12:47:03	20
 Kishlin\\Migrations\\Version20220713181313	2022-07-13 18:14:29	20
 Kishlin\\Migrations\\Version20220713183949	2022-07-13 18:40:59	17
 Kishlin\\Migrations\\Version20220728125835	2022-07-28 12:59:54	21
+Kishlin\\Migrations\\Version20221023043009	2022-10-23 04:33:43	21
 \.
 
 
@@ -296,7 +313,15 @@ COPY public.events (id, season, venue, index, label) FROM stdin;
 -- Data for Name: racers; Type: TABLE DATA; Schema: public; Owner: app
 --
 
-COPY public.racers (id, car, driver, startDate, endDate) FROM stdin;
+COPY public.racers (id, car, driver, startdate, enddate) FROM stdin;
+\.
+
+
+--
+-- Data for Name: results; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.results (id, racer, event_step, fastest_lap_time, "position", points) FROM stdin;
 \.
 
 
@@ -405,6 +430,14 @@ ALTER TABLE ONLY public.racers
 
 
 --
+-- Name: results results_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.results
+    ADD CONSTRAINT results_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -490,6 +523,13 @@ CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree 
 --
 
 CREATE UNIQUE INDEX racer_car_driver_idx ON public.racers USING btree (car, driver);
+
+
+--
+-- Name: result_event_step_position_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX result_event_step_position_idx ON public.results USING btree (event_step, "position");
 
 
 --
@@ -628,6 +668,22 @@ ALTER TABLE ONLY public.racers
 
 ALTER TABLE ONLY public.racers
     ADD CONSTRAINT fk_racer_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
+
+
+--
+-- Name: results fk_result_event_step; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.results
+    ADD CONSTRAINT fk_result_event_step FOREIGN KEY (event_step) REFERENCES public.event_steps(id);
+
+
+--
+-- Name: results fk_result_racer; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.results
+    ADD CONSTRAINT fk_result_racer FOREIGN KEY (racer) REFERENCES public.racers(id);
 
 
 --
