@@ -5,21 +5,19 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\ResultCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultDriverId;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultEventStepId;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultFastestLapTime;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultId;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPoints;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPosition;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultTeamId;
+use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultRacerId;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 
 final class Result extends AggregateRoot
 {
     public function __construct(
         private ResultId $id,
-        private ResultTeamId $teamId,
-        private ResultDriverId $driverId,
+        private ResultRacerId $racerId,
         private ResultEventStepId $eventStepId,
         private ResultFastestLapTime $fastestLapTime,
         private ResultPosition $position,
@@ -29,14 +27,13 @@ final class Result extends AggregateRoot
 
     public static function create(
         ResultId $id,
-        ResultTeamId $teamId,
-        ResultDriverId $driverId,
+        ResultRacerId $racerId,
         ResultEventStepId $eventStepId,
         ResultFastestLapTime $fastestLapTime,
         ResultPosition $position,
         ResultPoints $points,
     ): self {
-        $result = new self($id, $teamId, $driverId, $eventStepId, $fastestLapTime, $position, $points);
+        $result = new self($id, $racerId, $eventStepId, $fastestLapTime, $position, $points);
 
         $result->record(new ResultCreatedDomainEvent($id));
 
@@ -48,14 +45,13 @@ final class Result extends AggregateRoot
      */
     public static function instance(
         ResultId $id,
-        ResultTeamId $teamId,
-        ResultDriverId $driverId,
+        ResultRacerId $racerId,
         ResultEventStepId $eventStepId,
         ResultFastestLapTime $fastestLapTime,
         ResultPosition $position,
         ResultPoints $points,
     ): self {
-        return new self($id, $teamId, $driverId, $eventStepId, $fastestLapTime, $position, $points);
+        return new self($id, $racerId, $eventStepId, $fastestLapTime, $position, $points);
     }
 
     public function id(): ResultId
@@ -63,14 +59,9 @@ final class Result extends AggregateRoot
         return $this->id;
     }
 
-    public function teamId(): ResultTeamId
+    public function racerId(): ResultRacerId
     {
-        return $this->teamId;
-    }
-
-    public function driverId(): ResultDriverId
-    {
-        return $this->driverId;
+        return $this->racerId;
     }
 
     public function eventStepId(): ResultEventStepId
