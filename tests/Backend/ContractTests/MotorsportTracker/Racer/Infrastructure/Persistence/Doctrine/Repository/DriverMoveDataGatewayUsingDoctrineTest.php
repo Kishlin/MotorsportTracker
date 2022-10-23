@@ -20,13 +20,13 @@ final class DriverMoveDataGatewayUsingDoctrineTest extends RepositoryContractTes
      */
     public function testItFindsDriverMoveData(): void
     {
-        self::loadFixture('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022');
+        self::loadFixture('motorsport.car.driverMove.verstappenToRedBullRacingIn2022');
 
         $repository = new DriverMoveDataGatewayUsingDoctrine(self::entityManager());
 
         $data = $repository->find(
             new DriverMoveId(
-                self::fixtureId('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022'),
+                self::fixtureId('motorsport.car.driverMove.verstappenToRedBullRacingIn2022'),
             ),
         );
 

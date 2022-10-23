@@ -33,20 +33,20 @@ final class ExistingRacerGatewayUsingDoctrineTest extends RepositoryContractTest
     public function testItCanFindAnExistingRacerId(): void
     {
         self::loadFixtures(
-            'motorsport.car.driverMove.verstappenAtRedBullRacingIn2022',
-            'motorsport.racer.racer.verstappenToRedBullRacingIn2022',
+            'motorsport.car.driverMove.verstappenToRedBullRacingIn2022',
+            'motorsport.racer.racer.verstappenAtRedBullRacingIn2022',
         );
 
         $repository = new ExistingRacerGatewayUsingDoctrine(self::entityManager());
 
         $actual = $repository->findIfExistsForDriverMove(
-            new DriverMoveId(self::fixtureId('motorsport.car.driverMove.verstappenAtRedBullRacingIn2022')),
+            new DriverMoveId(self::fixtureId('motorsport.car.driverMove.verstappenToRedBullRacingIn2022')),
         );
 
         self::assertNotNull($actual);
 
         self::assertSame(
-            self::fixtureId('motorsport.racer.racer.verstappenToRedBullRacingIn2022'),
+            self::fixtureId('motorsport.racer.racer.verstappenAtRedBullRacingIn2022'),
             $actual->id()->value(),
         );
     }

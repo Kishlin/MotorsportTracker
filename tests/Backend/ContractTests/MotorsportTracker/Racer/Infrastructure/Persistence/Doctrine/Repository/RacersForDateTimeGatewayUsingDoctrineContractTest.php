@@ -22,8 +22,8 @@ final class RacersForDateTimeGatewayUsingDoctrineContractTest extends Repository
     public function testItCanRetrieveARacerForADate(): void
     {
         self::loadFixtures(
-            'motorsport.racer.racer.perezToRedBullRacingIn2022',
-            'motorsport.racer.racer.verstappenToRedBullRacingIn2022',
+            'motorsport.racer.racer.perezAtRedBullRacingIn2022',
+            'motorsport.racer.racer.verstappenAtRedBullRacingIn2022',
         );
 
         $repository = new RacersForDateTimeAndSeasonGatewayUsingDoctrine(self::entityManager());
