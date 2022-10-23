@@ -39,7 +39,9 @@ final class CarRepositorySpy extends AbstractRepositorySpy implements CarGateway
     private function numberIsAlreadyTaken(Car $car): bool
     {
         foreach ($this->objects as $savedCar) {
-            if ($savedCar->number()->equals($car->number())) {
+            if ($savedCar->number()->equals($car->number())
+                && $savedCar->teamId()->equals($car->teamId())
+                && $savedCar->seasonId()->equals($car->seasonId())) {
                 return true;
             }
         }
