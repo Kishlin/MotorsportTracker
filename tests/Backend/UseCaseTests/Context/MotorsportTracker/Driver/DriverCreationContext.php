@@ -4,25 +4,16 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver;
 
+use Exception;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\DriverCreationFailureException;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverCountryId;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverFirstname;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverName;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class DriverCreationContext extends MotorsportTrackerContext
 {
-    private const DRIVER_FIRSTNAME = 'Max';
-    private const DRIVER_NAME      = 'Verstappen';
-
-    private const DRIVER_OTHER_FIRSTNAME = 'Sergio';
-    private const DRIVER_OTHER_NAME      = 'Perez';
-
     private ?DriverId $driverId         = null;
     private ?Throwable $thrownException = null;
 
@@ -32,45 +23,31 @@ final class DriverCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^a driver exists for the country$/
+     * @Given the driver :name exists
+     *
+     * @throws Exception
      */
-    public function aDriverExists(): void
+    public function theDriverExists(string $name): void
     {
-        self::container()->driverRepositorySpy()->add(Driver::instance(
-            new DriverId(self::DRIVER_ID),
-            new DriverFirstname(self::DRIVER_FIRSTNAME),
-            new DriverName(self::DRIVER_NAME),
-            new DriverCountryId(self::COUNTRY_ID),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
     }
 
     /**
-     * @Given /^another driver exists for the other country$/
-     */
-    public function anotherDriverExists(): void
-    {
-        self::container()->driverRepositorySpy()->add(Driver::instance(
-            new DriverId(self::DRIVER_OTHER_ID),
-            new DriverFirstname(self::DRIVER_OTHER_FIRSTNAME),
-            new DriverName(self::DRIVER_OTHER_NAME),
-            new DriverCountryId(self::COUNTRY_OTHER_ID),
-        ));
-    }
-
-    /**
-     * @When /^a client creates a new driver for the country$/
+     * @When a client creates the driver :firstname :lastname for the country :country
      * @When /^a client creates a driver with same firstname and name$/
      * @When /^a client creates a driver for a missing country$/
      */
-    public function aClientCreatesADriver(): void
+    public function aClientCreatesADriver(string $firstname = 'Max', string $lastname = 'Verstappen', string $country = 'Netherlands'): void
     {
         $this->driverId        = null;
         $this->thrownException = null;
 
         try {
+            $countryId = $this->fixtureId("country.country.{$this->format($country)}");
+
             /** @var DriverId $driverId */
             $driverId = self::container()->commandBus()->execute(
-                CreateDriverCommand::fromScalars(self::DRIVER_NAME, self::DRIVER_FIRSTNAME, self::COUNTRY_ID),
+                CreateDriverCommand::fromScalars($lastname, $firstname, $countryId),
             );
 
             $this->driverId = $driverId;

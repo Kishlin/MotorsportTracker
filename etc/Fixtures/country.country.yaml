@@ -1,8 +1,17 @@
 france:
   code: 'fr'
+
 netherlands:
   code: 'nl'
+
 austria:
   code: 'at'
+
 mexico:
   code: 'mx'
+
+germany:
+  code: 'gr'
+
+italia:
+  code: 'it'

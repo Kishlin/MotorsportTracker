@@ -2,3 +2,8 @@ verstappenAtRedBullRacingIn2022:
   driverId: '@motorsport.driver.driver.maxVerstappen'
   carId: '@motorsport.car.car.redBullRacing2022FirstCar'
   date: '2022-01-01'
+
+gaslyAtRedBullRacingIn2019:
+  driverId: '@motorsport.driver.driver.pierreGasly'
+  carId: '@motorsport.car.car.redBullRacing2019SecondCar'
+  date: '2019-01-01'

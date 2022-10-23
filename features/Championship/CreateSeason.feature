@@ -1,12 +1,11 @@
 Feature: It can create Seasons
 
   Scenario: It saves a new season
-    Given a championship exists
-    When a client creates a season for the championship
+    Given the championship "Formula One" exists
+    When a client creates the season "2022" for the championship "Formula One"
     Then the season is saved
 
   Scenario: It cannot duplicate seasons
-    Given a championship exists
-    And a season exists for the championship
-    When a client creates a season for the same year
+    Given the season "Formula One 2022" exists
+    When a client creates a season for the same championship and year
     Then the season creation is declined

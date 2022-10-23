@@ -7,19 +7,13 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Champions
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\ChampionshipCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipSlug;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class ChampionshipCreationContext extends MotorsportTrackerContext
 {
-    private const CHAMPIONSHIP_NAME = 'name';
-    private const CHAMPIONSHIP_SLUG = 'slug';
-
     private ?ChampionshipId $championshipId = null;
     private ?Throwable $thrownException     = null;
 
@@ -29,24 +23,20 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^a championship exists$/
+     * @Given the championship :name exists
      *
      * @throws Exception
      */
-    public function aChampionshipExists(): void
+    public function theChampionshipExists(string $name): void
     {
-        self::container()->championshipRepositorySpy()->add(Championship::create(
-            new ChampionshipId(self::CHAMPIONSHIP_ID),
-            new ChampionshipName(self::CHAMPIONSHIP_NAME),
-            new ChampionshipSlug(self::CHAMPIONSHIP_SLUG),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
     }
 
     /**
-     * @When /^a client creates a new championship$/
+     * @When a client creates the championship :name with slug :slug
      * @When /^a client creates a championship with the same name$/
      */
-    public function aClientCreatesANewChampionship(): void
+    public function aClientCreatesTheChampionship(string $name = 'Formula 1', string $slug = 'f1'): void
     {
         $this->championshipId  = null;
         $this->thrownException = null;
@@ -54,7 +44,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
         try {
             /** @var ChampionshipId $championshipId */
             $championshipId = self::container()->commandBus()->execute(
-                CreateChampionshipCommand::fromScalars(self::CHAMPIONSHIP_NAME, self::CHAMPIONSHIP_SLUG),
+                CreateChampionshipCommand::fromScalars($name, $slug),
             );
 
             $this->championshipId = $championshipId;

@@ -6,8 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\Country;
 
 use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
-use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -15,9 +13,6 @@ use Throwable;
 
 final class CountryContext extends MotorsportTrackerContext
 {
-    private const COUNTRY_CODE       = 'nl';
-    private const COUNTRY_OTHER_CODE = 'mx';
-
     private ?CountryId $countryId       = null;
     private ?Throwable $thrownException = null;
 
@@ -27,36 +22,19 @@ final class CountryContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^a country exists$/
+     * @Given the country :name exists
      *
      * @throws Exception
      */
-    public function aCountryExists(): void
+    public function theCountryExists(string $name): void
     {
-        self::container()->countryRepositorySpy()->add(Country::create(
-            new CountryId(self::COUNTRY_ID),
-            new CountryCode(self::COUNTRY_CODE),
-        ));
+        self::container()->fixtureLoader()->loadFixture("country.country.{$this->format($name)}");
     }
 
     /**
-     * @Given /^another country exists$/
-     *
-     * @throws Exception
+     * @When a client searches for the country with code :code
      */
-    public function anotherCountryExists(): void
-    {
-        self::container()->countryRepositorySpy()->add(Country::create(
-            new CountryId(self::COUNTRY_OTHER_ID),
-            new CountryCode(self::COUNTRY_OTHER_CODE),
-        ));
-    }
-
-    /**
-     * @When /^a client searches a country which does not exist$/
-     * @When /^a client searches for the existing country$/
-     */
-    public function createCountryIfNotExists(): void
+    public function aClientSearchesForTheCountry(string $code): void
     {
         $this->countryId       = null;
         $this->thrownException = null;
@@ -64,7 +42,7 @@ final class CountryContext extends MotorsportTrackerContext
         try {
             /** @var CountryId $countryId */
             $countryId = self::container()->commandBus()->execute(
-                CreateCountryIfNotExistsCommand::fromScalars(self::COUNTRY_CODE),
+                CreateCountryIfNotExistsCommand::fromScalars($code),
             );
 
             $this->countryId = $countryId;
@@ -74,7 +52,7 @@ final class CountryContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then /^the new country is saved$/
+     * @Then /^the country is saved$/
      */
     public function theCountryIsSaved(): void
     {
@@ -85,11 +63,14 @@ final class CountryContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then /^the country was not recreated$/
+     * @Then /^the country is not recreated$/
      */
-    public function theNewCountryWasNotRecreated(): void
+    public function theCountryIsNotRecreated(): void
     {
-        $this->theCountryIsSaved();
+        Assert::assertNotNull($this->countryId);
+        Assert::assertNull($this->thrownException);
+
+        Assert::assertTrue(self::container()->countryRepositorySpy()->has($this->countryId));
 
         Assert::assertEquals(1, self::container()->countryRepositorySpy()->count());
     }

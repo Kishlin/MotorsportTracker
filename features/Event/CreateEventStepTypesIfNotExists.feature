@@ -1,10 +1,11 @@
 Feature: It can create missing StepTypes
 
   Scenario: It saves a new step type
-    When a client searches a step type which does not exist
-    Then the new step type is saved
+    Given the stepType "race" does not exist yet
+    When a client searches for the stepType with label "race"
+    Then the step type is saved
 
   Scenario: It does not recreate an existing step type
-    Given a step type exists
-    When a client searches for the existing step type
-    Then the step type was not recreated
+    Given the stepType "race" exists
+    When a client searches for the stepType with label "race"
+    Then the step type is not recreated

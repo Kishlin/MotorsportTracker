@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue;
 
+use Exception;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueCountryId;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueName;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class VenueCreationContext extends MotorsportTrackerContext
 {
-    private const VENUE_NAME = 'Circuit Zandvoort';
-
     private ?VenueId $venueId           = null;
     private ?Throwable $thrownException = null;
 
@@ -27,32 +23,31 @@ final class VenueCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^a venue exists for the country$/
+     * @Given the venue :name exists
+     *
+     * @throws Exception
      */
-    public function aVenueExistsForTheCountry(): void
+    public function theVenueAlreadyExists(string $name): void
     {
-        self::container()->venueRepositorySpy()->add(Venue::instance(
-            new VenueId(self::VENUE_ID),
-            new VenueName(self::VENUE_NAME),
-            new VenueCountryId(self::COUNTRY_ID),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
     }
 
     /**
-     * @When /^a client creates a new venue for the country$/
-     * @When /^a client creates a venue for a missing country$/
+     * @When a client creates the venue :name for the :country
      */
-    public function aClientCreatesANewVenueForTheCountry(): void
+    public function aClientCreatesTheVenue(string $name, string $country): void
     {
         $this->venueId         = null;
         $this->thrownException = null;
 
         try {
             /** @var VenueId $venueId */
-            $venueId = self::container()->commandBus()->execute(CreateVenueCommand::fromScalars(
-                self::VENUE_NAME,
-                self::COUNTRY_ID,
-            ));
+            $venueId = self::container()->commandBus()->execute(
+                CreateVenueCommand::fromScalars(
+                    $name,
+                    $this->fixtureId("country.country.{$this->format($country)}"),
+                ),
+            );
 
             $this->venueId = $venueId;
         } catch (Throwable $e) {
@@ -61,9 +56,9 @@ final class VenueCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then /^the new venue is saved$/
+     * @Then /^the venue is saved$/
      */
-    public function theNewVenueIsSaved(): void
+    public function theVenueIsSaved(): void
     {
         Assert::assertNotNull($this->venueId);
         Assert::assertTrue(self::container()->venueRepositorySpy()->has($this->venueId));

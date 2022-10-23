@@ -2,3 +2,13 @@ redBullRacing:
   name: 'Red Bull Racing'
   image: 'https://example.com/redbullracing.webp'
   countryId: '@country.country.austria'
+
+merecedes:
+  name: 'Mercedes'
+  image: 'https://cdn.motorsporttracker.com/teams/merecedesf1.png'
+  countryId: '@country.country.germany'
+
+toroRosso:
+  name: 'Toro Rosso'
+  image: 'https://cdn.motorsporttracker.com/teams/tororosso.png'
+  countryId: '@country.country.italia'

@@ -26,7 +26,7 @@ final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends Reposit
 
         self::assertFalse($repository->eventHasStepAtTheSameTime(
             new EventStepEventId(self::uuid()),
-            new EventStepDateTime(new DateTimeImmutable('2022-09-04 15:00:00')),
+            new EventStepDateTime(new DateTimeImmutable('2022-09-04 13:00:00')),
         ));
     }
 
@@ -41,7 +41,7 @@ final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends Reposit
 
         self::assertTrue($repository->eventHasStepAtTheSameTime(
             new EventStepEventId(self::fixtureId('motorsport.event.event.dutchGrandPrix2022')),
-            new EventStepDateTime(new DateTimeImmutable('2022-09-04 15:00:00')),
+            new EventStepDateTime(new DateTimeImmutable('2022-09-04 13:00:00')),
         ));
     }
 }

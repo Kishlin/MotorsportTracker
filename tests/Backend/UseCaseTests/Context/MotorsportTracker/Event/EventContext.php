@@ -4,25 +4,16 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
+use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\SeasonHasEventWithIndexOrVenueException;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventIndex;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventVenueId;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class EventContext extends MotorsportTrackerContext
 {
-    private const EVENT_INDEX     = 0;
-    private const EVENT_INDEX_ALT = 1;
-    private const EVENT_LABEL     = 'Event';
-    private const EVENT_LABEL_ALT = 'Event Alt';
-
     private ?EventId $eventId           = null;
     private ?Throwable $thrownException = null;
 
@@ -32,47 +23,36 @@ final class EventContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^an event exists for the season and index$/
+     * @Given the event :event exists
+     *
+     * @throws Exception
      */
-    public function aEventExistsForTheSeasonAndIndex(): void
+    public function theEventExists(string $event): void
     {
-        self::container()->eventRepositorySpy()->add(Event::instance(
-            new EventId(self::EVENT_ID),
-            new EventSeasonId(self::SEASON_ID),
-            new EventVenueId(self::VENUE_ID),
-            new EventIndex(self::EVENT_INDEX),
-            new EventLabel(self::EVENT_LABEL_ALT),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
     /**
-     * @Given /^an event exists for the season and label/
+     * @When a client creates the event :label of index :index for the season :season and venue :venue
+     * @When a client creates an event for the same season and index with label :label
+     * @When a client creates an event for the same season and label with index :index
      */
-    public function aEventExistsForTheSeasonAndLabel(): void
-    {
-        self::container()->eventRepositorySpy()->add(Event::instance(
-            new EventId(self::EVENT_ID),
-            new EventSeasonId(self::SEASON_ID),
-            new EventVenueId(self::VENUE_ID),
-            new EventIndex(self::EVENT_INDEX_ALT),
-            new EventLabel(self::EVENT_LABEL),
-        ));
-    }
-
-    /**
-     * @When /^a client creates a new event for the season venue index and label$/
-     * @When /^a client creates an event for the same season and index$/
-     * @When /^a client creates an event for the same season and label$/
-     */
-    public function aClientCreatesAnEvent(): void
-    {
+    public function aClientCreatesAnEvent(
+        string $label = 'Dutch GP',
+        int $index = 16,
+        string $season = 'formulaOne2022',
+        string $venue = 'Zandvoort',
+    ): void {
         $this->eventId         = null;
         $this->thrownException = null;
 
         try {
+            $seasonId = $this->fixtureId("motorsport.championship.season.{$this->format($season)}");
+            $venueId  = $this->fixtureId("motorsport.venue.venue.{$this->format($venue)}");
+
             /** @var EventId $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventCommand::fromScalars(self::SEASON_ID, self::VENUE_ID, self::EVENT_INDEX, self::EVENT_LABEL),
+                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $label),
             );
 
             $this->eventId = $eventId;

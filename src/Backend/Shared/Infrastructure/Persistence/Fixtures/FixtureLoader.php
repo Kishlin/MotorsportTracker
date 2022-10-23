@@ -36,8 +36,7 @@ final class FixtureLoader
 
     public function reset(): void
     {
-        $this->identifiers     = [];
-        $this->loadedFilesData = [];
+        $this->identifiers = [];
     }
 
     public function identifier(string $fixture): ?string

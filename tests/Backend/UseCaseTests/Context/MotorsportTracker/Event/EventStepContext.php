@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
-use DateTimeImmutable;
+use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\CreateEventStepCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\EventHasStepAtTheSameTimeException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\EventHasStepWithTypeException;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class EventStepContext extends MotorsportTrackerContext
 {
-    private const EVENT_STEP_DATE_TIME     = '1993-11-22 18:00:00';
-    private const EVENT_STEP_DATE_TIME_ALT = '1993-11-22 22:00:00';
-
     private ?EventStepId $eventStepId   = null;
     private ?Throwable $thrownException = null;
 
@@ -31,35 +24,30 @@ final class EventStepContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^an event step exists for the event and step type$/
+     * @Given the eventStep :name exists
+     *
+     * @throws Exception
      */
-    public function anEventStepExistsForTheEventAndStepType(): void
+    public function theEventStepExists(string $name): void
     {
-        self::container()->eventStepRepositorySpy()->add(EventStep::instance(
-            new EventStepId(self::EVENT_STEP_ID),
-            new EventStepTypeId(self::STEP_TYPE_ID),
-            new EventStepEventId(self::EVENT_ID),
-            new EventStepDateTime(new DateTimeImmutable(self::EVENT_STEP_DATE_TIME)),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.event.eventStep.{$this->format($name)}");
     }
 
     /**
-     * @When /^a client creates a new event step for the event and step type$/
-     * @When /^a client creates a new event step for the same event and (same|other) step type and (same|other) time$/
+     * @When a client creates the :stepType step for the event :event at :dateTime
      */
-    public function aClientCreatesAnEventStepForTheEventAndStepType(string $stepType = 'same', string $time = 'same'): void
+    public function aClientCreatesAnEventStepForTheEventAndStepType(string $stepType, string $event, string $dateTime): void
     {
         $this->eventStepId     = null;
         $this->thrownException = null;
 
         try {
+            $stepTypeId = $this->fixtureId("motorsport.event.stepType.{$this->format($stepType)}");
+            $eventId    = $this->fixtureId("motorsport.event.event.{$this->format($event)}");
+
             /** @var EventStepId $eventStepId */
             $eventStepId = self::container()->commandBus()->execute(
-                CreateEventStepCommand::fromScalars(
-                    self::EVENT_ID,
-                    'other' === $stepType ? self::STEP_TYPE_ID_ALT : self::STEP_TYPE_ID,
-                    'other' === $time ? self::EVENT_STEP_DATE_TIME_ALT : self::EVENT_STEP_DATE_TIME,
-                ),
+                CreateEventStepCommand::fromScalars($eventId, $stepTypeId, $dateTime),
             );
 
             $this->eventStepId = $eventStepId;

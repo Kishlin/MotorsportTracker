@@ -4,8 +4,14 @@ verstappenToRedBullRacingIn2022:
   startDate: '2022-01-01'
   endDate: '2022-12-31'
   
-perezToRedBulRacingIn2022:
+perezToRedBullRacingIn2022:
   driverId: '@motorsport.driver.driver.sergioPerez'
   carId: '@motorsport.car.car.redBullRacing2022SecondCar'
   startDate: '2022-01-01'
   endDate: '2022-12-31'
+
+gaslyToRedBullRacingIn2019:
+  driverId: '@motorsport.driver.driver.pierreGasly'
+  carId: '@motorsport.car.car.redBullRacing2019SecondCar'
+  startDate: '2019-01-01 00:00:00'
+  endDate: '2019-12-31 23:59:59'

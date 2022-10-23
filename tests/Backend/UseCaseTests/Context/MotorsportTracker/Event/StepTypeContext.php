@@ -6,19 +6,13 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class StepTypeContext extends MotorsportTrackerContext
 {
-    private const STEP_TYPE_LABEL = 'race';
-
-    private const STEP_TYPE_LABEL_ALT = 'qualification';
-
     private ?StepTypeId $stepTypeId     = null;
     private ?Throwable $thrownException = null;
 
@@ -28,36 +22,19 @@ final class StepTypeContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given /^a step type exists$/
+     * @Given the stepType :label exists
      *
      * @throws Exception
      */
-    public function aStepTypeExists(): void
+    public function theStepTypeExists(string $label): void
     {
-        self::container()->stepTypeRepositorySpy()->add(StepType::create(
-            new StepTypeId(self::STEP_TYPE_ID),
-            new StepTypeLabel(self::STEP_TYPE_LABEL),
-        ));
+        self::container()->fixtureLoader()->loadFixture("motorsport.event.stepType.{$this->format($label)}");
     }
 
     /**
-     * @Given /^another step type exists$/
-     *
-     * @throws Exception
+     * @When a client searches for the stepType with label :label
      */
-    public function anotherStepTypeExists(): void
-    {
-        self::container()->stepTypeRepositorySpy()->add(StepType::create(
-            new StepTypeId(self::STEP_TYPE_ID_ALT),
-            new StepTypeLabel(self::STEP_TYPE_LABEL_ALT),
-        ));
-    }
-
-    /**
-     * @When /^a client searches a step type which does not exist$/
-     * @When /^a client searches for the existing step type/
-     */
-    public function createStepTypeIfNotExists(): void
+    public function aClientSearchesForTheStepType(string $label): void
     {
         $this->stepTypeId      = null;
         $this->thrownException = null;
@@ -65,7 +42,7 @@ final class StepTypeContext extends MotorsportTrackerContext
         try {
             /** @var StepTypeId $stepTypeId */
             $stepTypeId = self::container()->commandBus()->execute(
-                CreateStepTypeIfNotExistsCommand::fromScalars(self::STEP_TYPE_LABEL),
+                CreateStepTypeIfNotExistsCommand::fromScalars($this->format($label)),
             );
 
             $this->stepTypeId = $stepTypeId;
@@ -75,7 +52,7 @@ final class StepTypeContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then /^the new step type is saved$/
+     * @Then /^the step type is saved$/
      */
     public function theStepTypeIsSaved(): void
     {
@@ -86,7 +63,7 @@ final class StepTypeContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then /^the step type was not recreated$/
+     * @Then /^the step type is not recreated$/
      */
     public function theNewStepTypeWasNotRecreated(): void
     {

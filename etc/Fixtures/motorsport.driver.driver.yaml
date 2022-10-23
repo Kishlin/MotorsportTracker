@@ -7,3 +7,8 @@ sergioPerez:
   firstname: 'Sergio'
   name: 'Perez'
   countryId: '@country.country.mexico'
+
+pierreGasly:
+  firstname: 'Pierre'
+  name: 'Gasly'
+  countryId: '@country.country.france'

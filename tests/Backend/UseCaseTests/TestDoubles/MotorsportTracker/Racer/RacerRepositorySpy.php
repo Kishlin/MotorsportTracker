@@ -63,10 +63,10 @@ final class RacerRepositorySpy extends AbstractRepositorySpy implements RacerGat
     /**
      * @return Racer[]
      */
-    public function findForDriver(string $driverId): array
+    public function findForDriverAndCar(string $driverId, string $carId): array
     {
-        $driverIdFilter = static function (Racer $racer) use ($driverId) {
-            return $racer->driverId()->value() === $driverId;
+        $driverIdFilter = static function (Racer $racer) use ($driverId, $carId) {
+            return $racer->driverId()->value() === $driverId && $racer->carId()->value() === $carId;
         };
 
         return array_filter($this->objects, $driverIdFilter);

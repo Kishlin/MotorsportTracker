@@ -1,2 +1,5 @@
 race:
   label: 'race'
+
+qualification:
+  label: 'qualification'

@@ -22,7 +22,7 @@ final class RacersForDateTimeGatewayUsingDoctrineContractTest extends Repository
     public function testItCanRetrieveARacerForADate(): void
     {
         self::loadFixtures(
-            'motorsport.racer.racer.perezToRedBulRacingIn2022',
+            'motorsport.racer.racer.perezToRedBullRacingIn2022',
             'motorsport.racer.racer.verstappenToRedBullRacingIn2022',
         );
 
