@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
 abstract class SymfonyCommand extends Command
@@ -55,6 +56,23 @@ abstract class SymfonyCommand extends Command
         } while (empty($response) && false === is_numeric($response));
 
         return (int) $response;
+    }
+
+    /**
+     * @param array|object[] $items
+     */
+    protected function selectItemInList(
+        InputInterface $input,
+        OutputInterface $output,
+        string $question,
+        array $items,
+        string $errorMessage,
+    ): mixed {
+        $question = new ChoiceQuestion($question, $items, 0);
+
+        $question->setErrorMessage($errorMessage);
+
+        return $this->questionHelper()->ask($input, $output, $question);
     }
 
     private function questionHelper(): QuestionHelper

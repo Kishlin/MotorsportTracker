@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships;
 
-final class ChampionshipPOPO
+use Stringable;
+
+final class ChampionshipPOPO implements Stringable
 {
     private function __construct(
         private string $id,
         private string $name,
     ) {
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function id(): string
