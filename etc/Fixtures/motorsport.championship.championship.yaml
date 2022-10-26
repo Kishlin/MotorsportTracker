@@ -1,3 +1,11 @@
 formulaOne:
   name: 'Formula 1'
   slug: 'formula1'
+
+motoGp:
+  name: 'Moto GP'
+  slug: 'motogp'
+
+wec:
+  name: 'FIA World Endurance Championship'
+  slug: 'wec'

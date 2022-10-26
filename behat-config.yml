@@ -5,6 +5,7 @@ default:
       contexts:
         - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ViewChampionshipsContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\DriverMoveRecordingContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext

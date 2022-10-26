@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Champion
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
@@ -18,6 +19,7 @@ trait ChampionshipServicesTrait
 
     private ?CreateChampionshipCommandHandler $createChampionshipCommandHandler = null;
     private ?CreateSeasonCommandHandler $createSeasonCommandHandler             = null;
+    private ?ViewAllChampionshipsQueryHandler $viewAllChampionshipsQueryHandler = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -65,5 +67,16 @@ trait ChampionshipServicesTrait
         }
 
         return $this->createSeasonCommandHandler;
+    }
+
+    public function viewAllChampionshipsQueryHandler(): ViewAllChampionshipsQueryHandler
+    {
+        if (null === $this->viewAllChampionshipsQueryHandler) {
+            $this->viewAllChampionshipsQueryHandler = new ViewAllChampionshipsQueryHandler(
+                $this->championshipRepositorySpy(),
+            );
+        }
+
+        return $this->viewAllChampionshipsQueryHandler;
     }
 }
