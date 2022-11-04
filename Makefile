@@ -91,8 +91,8 @@ start: containers vendor db.reload db.reload.test
 	@echo "Run tests: \`make tests\` (see Makefile for more options)."
 
 ##> Helpers
-.PHONY: xdebug.on xdebug.off
-.PHONY: db.connect db.reload db.reload.test db.migrations.diff db.migrations.migrate frontend.sh frontend.build
+.PHONY: xdebug.on xdebug.off frontend.sh frontend.build
+.PHONY: db.connect db.reload db.reload.test db.migrations.diff db.migrations.migrate
 
 xdebug.on:
 	@docker-compose exec php sudo mv /usr/local/etc/php/conf.d/xdebug.ini.dis /usr/local/etc/php/conf.d/xdebug.ini

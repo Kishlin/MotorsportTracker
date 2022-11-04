@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\ChampionshipCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ChampionshipPOPO;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
@@ -18,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 final class AddSeasonCommand extends SymfonyCommand
 {
@@ -59,18 +59,7 @@ final class AddSeasonCommand extends SymfonyCommand
 
         $year = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
 
-        try {
-            /** @var SeasonId $uuid */
-            $uuid = $this->commandBus->execute(CreateSeasonCommand::fromScalars($selectedChampionshipId, $year));
-        } catch (ChampionshipCreationFailureException) {
-            $ui->error('This season already exists.');
-
-            return Command::FAILURE;
-        }
-
-        $ui->text(sprintf("<info>Season Created: %s</info>\n", $uuid));
-
-        return Command::SUCCESS;
+        return $this->doAddSeason($selectedChampionshipId, $year, $ui);
     }
 
     private function selectAChampionshipId(
@@ -88,5 +77,21 @@ final class AddSeasonCommand extends SymfonyCommand
         );
 
         return $selectedChampionship->id();
+    }
+
+    private function doAddSeason(string $selectedChampionshipId, int $year, SymfonyStyle $ui): int
+    {
+        try {
+            /** @var SeasonId $uuid */
+            $uuid = $this->commandBus->execute(CreateSeasonCommand::fromScalars($selectedChampionshipId, $year));
+        } catch (Throwable) {
+            $ui->error('This season already exists.');
+
+            return Command::FAILURE;
+        }
+
+        $ui->success("Season Created: {$uuid}}");
+
+        return Command::SUCCESS;
     }
 }

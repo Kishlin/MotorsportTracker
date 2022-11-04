@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\ChampionshipCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 final class AddChampionshipCommand extends SymfonyCommand
 {
@@ -51,13 +51,13 @@ final class AddChampionshipCommand extends SymfonyCommand
         try {
             /** @var ChampionshipId $uuid */
             $uuid = $this->commandBus->execute(CreateChampionshipCommand::fromScalars($name, $slug));
-        } catch (ChampionshipCreationFailureException) {
+        } catch (Throwable) {
             $ui->error('A Championship with that name and/or slug already exists.');
 
             return Command::FAILURE;
         }
 
-        $ui->text(sprintf("<info>Championship Created: %s</info>\n", $uuid));
+        $ui->success("Championship Created: {$uuid}");
 
         return Command::SUCCESS;
     }

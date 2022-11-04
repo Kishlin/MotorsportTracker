@@ -27,6 +27,7 @@ default:
     backoffice_tests:
       paths: [ features ]
       contexts:
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Context
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
       filters:
         tags: '@backoffice'
