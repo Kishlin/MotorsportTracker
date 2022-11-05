@@ -39,17 +39,17 @@ Feature: It can create Events
     Given the eventStep "Emilia Romagna Grand Prix 2022 Sprint Qualifying" exists
     When a client records the following results for eventStep "Emilia Romagna Grand Prix 2022 Sprint Qualifying":
       | racer                                 | fastestLapTime | position | points |
-      | Verstappen At Red Bull Racing In 2022 | 1'19.154       | 1        | 8      |
       | Perez At Red Bull Racing In 2022      | 1'19.012       | 3        | 6      |
+      | Verstappen At Red Bull Racing In 2022 | 1'19.154       | 1        | 8      |
       | Hamilton At Mercedes In 2022          | 1'20.663       | 14       | 0      |
     Then the driver's standings are now
       | driver          | event                          | points |
       | Sergio Perez    | Australian Grand Prix 2022     | 18     |
       | Lewis Hamilton  | Australian Grand Prix 2022     | 12     |
       | Max Verstappen  | Australian Grand Prix 2022     | 0      |
-      | Max Verstappen  | Emilia Romagna Grand Prix 2022 | 8      |
       | Sergio Perez    | Emilia Romagna Grand Prix 2022 | 24     |
       | Lewis Hamilton  | Emilia Romagna Grand Prix 2022 | 12     |
+      | Max Verstappen  | Emilia Romagna Grand Prix 2022 | 8      |
     And the team's standings are now
       | team            | event                          | points |
       | Red Bull Racing | Australian Grand Prix 2022     | 18     |
@@ -67,9 +67,9 @@ Feature: It can create Events
       | Sergio Perez    | Australian Grand Prix 2022     | 18     |
       | Lewis Hamilton  | Australian Grand Prix 2022     | 12     |
       | Max Verstappen  | Australian Grand Prix 2022     | 0      |
-      | Max Verstappen  | Emilia Romagna Grand Prix 2022 | 34     |
       | Sergio Perez    | Emilia Romagna Grand Prix 2022 | 42     |
       | Lewis Hamilton  | Emilia Romagna Grand Prix 2022 | 12     |
+      | Max Verstappen  | Emilia Romagna Grand Prix 2022 | 34     |
     And the team's standings are now
       | team            | event                          | points |
       | Red Bull Racing | Australian Grand Prix 2022     | 18     |

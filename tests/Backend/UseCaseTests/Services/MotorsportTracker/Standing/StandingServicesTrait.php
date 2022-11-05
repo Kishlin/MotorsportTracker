@@ -83,7 +83,6 @@ trait StandingServicesTrait
     {
         if (null === $this->standingDataRepositorySpy) {
             $this->standingDataRepositorySpy = new StandingDataRepositorySpy(
-                $this->driverStandingRepositorySpy(),
                 $this->eventStepRepositorySpy(),
                 $this->resultRepositorySpy(),
                 $this->racerRepositorySpy(),

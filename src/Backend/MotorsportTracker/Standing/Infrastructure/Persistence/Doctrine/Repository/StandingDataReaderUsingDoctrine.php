@@ -42,7 +42,7 @@ SQL;
 
         return array_map(
             static function (array $data) {
-                return StandingDataDTO::fromScalars($data['driver'], $data['team'], 0.0, (float) ($data['points']));
+                return StandingDataDTO::fromScalars($data['driver'], $data['team'], (float) ($data['points']));
             },
             $result
         );

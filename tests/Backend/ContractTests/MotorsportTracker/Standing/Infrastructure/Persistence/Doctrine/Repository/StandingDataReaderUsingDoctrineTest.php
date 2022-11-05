@@ -31,8 +31,8 @@ final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCa
         );
 
         $expected = [
-            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 0.0, 26.0),
-            $this->standingDataDTO('sergioPerez', 'redBullRacing', 0.0, 10.0),
+            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 26.0),
+            $this->standingDataDTO('sergioPerez', 'redBullRacing', 10.0),
         ];
 
         self::assertEqualsCanonicalizing($expected, $data);
@@ -58,9 +58,9 @@ final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCa
         );
 
         $expected = [
-            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 0.0, 34.0),
-            $this->standingDataDTO('sergioPerez', 'redBullRacing', 0.0, 24.0),
-            $this->standingDataDTO('lewisHamilton', 'mercedes', 0.0, 0.0),
+            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 34.0),
+            $this->standingDataDTO('sergioPerez', 'redBullRacing', 24.0),
+            $this->standingDataDTO('lewisHamilton', 'mercedes', 0.0),
         ];
 
         self::assertEqualsCanonicalizing($expected, $data);
@@ -86,9 +86,9 @@ final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCa
         );
 
         $expected = [
-            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 0.0, 26.0),
-            $this->standingDataDTO('sergioPerez', 'redBullRacing', 0.0, 36.0),
-            $this->standingDataDTO('lewisHamilton', 'mercedes', 0.0, 12.0),
+            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 26.0),
+            $this->standingDataDTO('sergioPerez', 'redBullRacing', 36.0),
+            $this->standingDataDTO('lewisHamilton', 'mercedes', 12.0),
         ];
 
         self::assertEqualsCanonicalizing($expected, $data);
@@ -117,21 +117,20 @@ final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCa
         );
 
         $expected = [
-            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 0.0, 34.0),
-            $this->standingDataDTO('sergioPerez', 'redBullRacing', 0.0, 42.0),
-            $this->standingDataDTO('lewisHamilton', 'mercedes', 0.0, 12.0),
+            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 34.0),
+            $this->standingDataDTO('sergioPerez', 'redBullRacing', 42.0),
+            $this->standingDataDTO('lewisHamilton', 'mercedes', 12.0),
         ];
 
         self::assertEqualsCanonicalizing($expected, $data);
     }
 
-    private function standingDataDTO(string $driver, string $team, float $pointsUntilPreviousEvent, float $pointsForEvent): StandingDataDTO
+    private function standingDataDTO(string $driver, string $team, float $pointsUntilEvent): StandingDataDTO
     {
         return StandingDataDTO::fromScalars(
             self::fixtureId("motorsport.driver.driver.{$driver}"),
             self::fixtureId("motorsport.team.team.{$team}"),
-            $pointsUntilPreviousEvent,
-            $pointsForEvent,
+            $pointsUntilEvent,
         );
     }
 }

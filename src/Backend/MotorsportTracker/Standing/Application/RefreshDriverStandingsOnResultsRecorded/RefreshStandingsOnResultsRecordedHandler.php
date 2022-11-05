@@ -40,7 +40,7 @@ final class RefreshStandingsOnResultsRecordedHandler implements DomainEventSubsc
         $teamStandings = [];
 
         foreach ($standingData as $standingDataDTO) {
-            $newDriverTotal = $standingDataDTO->pointsTotalUntilPreviousEvent() + $standingDataDTO->pointsForEvent();
+            $newDriverTotal = $standingDataDTO->pointsUntilEvent();
 
             if (array_key_exists($standingDataDTO->teamId(), $teamStandings)) {
                 $teamStandings[$standingDataDTO->teamId()] += $newDriverTotal;

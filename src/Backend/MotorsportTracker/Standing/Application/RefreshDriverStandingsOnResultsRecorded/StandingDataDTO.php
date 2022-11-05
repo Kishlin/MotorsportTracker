@@ -9,8 +9,7 @@ final class StandingDataDTO
     private function __construct(
         private string $driverId,
         private string $teamId,
-        private float $pointsTotalUntilPreviousEvent,
-        private float $pointsForEvent,
+        private float $pointsUntilEvent,
     ) {
     }
 
@@ -24,22 +23,16 @@ final class StandingDataDTO
         return $this->teamId;
     }
 
-    public function pointsTotalUntilPreviousEvent(): float
+    public function pointsUntilEvent(): float
     {
-        return $this->pointsTotalUntilPreviousEvent;
-    }
-
-    public function pointsForEvent(): float
-    {
-        return $this->pointsForEvent;
+        return $this->pointsUntilEvent;
     }
 
     public static function fromScalars(
         string $driverId,
         string $teamId,
-        float $pointsTotalUntilPreviousEvent,
-        float $pointsForEvent,
+        float $pointsUntilEvent,
     ): self {
-        return new self($driverId, $teamId, $pointsTotalUntilPreviousEvent, $pointsForEvent);
+        return new self($driverId, $teamId, $pointsUntilEvent);
     }
 }
