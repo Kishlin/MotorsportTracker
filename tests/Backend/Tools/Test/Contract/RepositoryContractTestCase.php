@@ -93,9 +93,15 @@ abstract class RepositoryContractTestCase extends TestCase
         }
     }
 
-    protected static function fixtureId(string $fixture): ?string
+    protected static function fixtureId(string $fixture): string
     {
-        return self::fixtureLoader()->identifier($fixture);
+        $identifier = self::fixtureLoader()->identifier($fixture);
+
+        if (null === $identifier) {
+            throw new \RuntimeException("Fixture {$fixture} does not appear to have been loaded.");
+        }
+
+        return $identifier;
     }
 
     protected static function execute(string $sql): void

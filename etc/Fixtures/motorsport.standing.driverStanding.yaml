@@ -1,0 +1,9 @@
+verstappenAfterAustralianGP2022:
+  driverId: '@motorsport.driver.driver.maxVerstappen'
+  eventId: '@motorsport.event.event.australianGrandPrix2022'
+  points: 0
+
+perezAfterAustralianGP2022:
+  driverId: '@motorsport.driver.driver.sergioPerez'
+  eventId: '@motorsport.event.event.australianGrandPrix2022'
+  points: 18
