@@ -87,6 +87,20 @@ CREATE TABLE public.driver_moves (
 ALTER TABLE public.driver_moves OWNER TO app;
 
 --
+-- Name: driver_standings; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.driver_standings (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    points double precision NOT NULL
+);
+
+
+ALTER TABLE public.driver_standings OWNER TO app;
+
+--
 -- Name: drivers; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -207,6 +221,20 @@ CREATE TABLE public.step_types (
 ALTER TABLE public.step_types OWNER TO app;
 
 --
+-- Name: team_standings; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.team_standings (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    team character varying(36) NOT NULL,
+    points double precision NOT NULL
+);
+
+
+ALTER TABLE public.team_standings OWNER TO app;
+
+--
 -- Name: teams; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -274,6 +302,7 @@ Kishlin\\Migrations\\Version20220713181313	2022-07-13 18:14:29	20
 Kishlin\\Migrations\\Version20220713183949	2022-07-13 18:40:59	17
 Kishlin\\Migrations\\Version20220728125835	2022-07-28 12:59:54	21
 Kishlin\\Migrations\\Version20221023043009	2022-10-23 04:33:43	21
+Kishlin\\Migrations\\Version20221105182411	2022-11-05 18:26:27	32
 \.
 
 
@@ -282,6 +311,14 @@ Kishlin\\Migrations\\Version20221023043009	2022-10-23 04:33:43	21
 --
 
 COPY public.driver_moves (id, driver, car, date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: driver_standings; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.driver_standings (id, event, driver, points) FROM stdin;
 \.
 
 
@@ -342,6 +379,14 @@ COPY public.step_types (id, label) FROM stdin;
 
 
 --
+-- Data for Name: team_standings; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.team_standings (id, event, team, points) FROM stdin;
+\.
+
+
+--
 -- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: app
 --
 
@@ -395,6 +440,14 @@ ALTER TABLE ONLY public.doctrine_migration_versions
 
 ALTER TABLE ONLY public.driver_moves
     ADD CONSTRAINT driver_moves_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: driver_standings driver_standings_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_standings
+    ADD CONSTRAINT driver_standings_pkey PRIMARY KEY (id);
 
 
 --
@@ -454,6 +507,14 @@ ALTER TABLE ONLY public.step_types
 
 
 --
+-- Name: team_standings team_standings_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.team_standings
+    ADD CONSTRAINT team_standings_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -505,6 +566,13 @@ CREATE UNIQUE INDEX driver_name_firstname_idx ON public.drivers USING btree (nam
 
 
 --
+-- Name: driver_standing_event_driver_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX driver_standing_event_driver_idx ON public.driver_standings USING btree (event, driver);
+
+
+--
 -- Name: event_season_label_idx; Type: INDEX; Schema: public; Owner: app
 --
 
@@ -551,6 +619,13 @@ CREATE UNIQUE INDEX step_type_label_idx ON public.step_types USING btree (label)
 --
 
 CREATE UNIQUE INDEX team_name_idx ON public.teams USING btree (name);
+
+
+--
+-- Name: team_standing_event_team_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX team_standing_event_team_idx ON public.team_standings USING btree (event, team);
 
 
 --
@@ -630,6 +705,22 @@ ALTER TABLE ONLY public.driver_moves
 
 
 --
+-- Name: driver_standings fk_driver_standings_driver; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_standings
+    ADD CONSTRAINT fk_driver_standings_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
+
+
+--
+-- Name: driver_standings fk_driver_standings_event; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_standings
+    ADD CONSTRAINT fk_driver_standings_event FOREIGN KEY (event) REFERENCES public.events(id);
+
+
+--
 -- Name: event_steps fk_event_steps_event; Type: FK CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -699,6 +790,22 @@ ALTER TABLE ONLY public.results
 
 ALTER TABLE ONLY public.teams
     ADD CONSTRAINT fk_team_country FOREIGN KEY (country) REFERENCES public.countries(id);
+
+
+--
+-- Name: team_standings fk_team_standings_driver; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.team_standings
+    ADD CONSTRAINT fk_team_standings_driver FOREIGN KEY (team) REFERENCES public.teams(id);
+
+
+--
+-- Name: team_standings fk_team_standings_event; Type: FK CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.team_standings
+    ADD CONSTRAINT fk_team_standings_event FOREIGN KEY (event) REFERENCES public.events(id);
 
 
 --
