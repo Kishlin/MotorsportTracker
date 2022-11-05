@@ -10,7 +10,7 @@ use Exception;
 final class Fixture
 {
     /**
-     * @param array<string, int|string> $data
+     * @param array<string, float|int|string> $data
      */
     private function __construct(
         private string $identifier,
@@ -33,6 +33,11 @@ final class Fixture
         return (int) $this->data[$key];
     }
 
+    public function getFloat(string $key): float
+    {
+        return (float) $this->data[$key];
+    }
+
     /**
      * @throws Exception
      */
@@ -42,7 +47,7 @@ final class Fixture
     }
 
     /**
-     * @param array<string, int|string> $data
+     * @param array<string, float|int|string> $data
      */
     public static function fromScalars(string $identifier, array $data): self
     {

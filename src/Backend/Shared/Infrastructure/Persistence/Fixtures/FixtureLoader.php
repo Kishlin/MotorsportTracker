@@ -11,7 +11,7 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 
 final class FixtureLoader
 {
-    /** @var array<string, array<string, array<string, int|string>>> */
+    /** @var array<string, array<string, array<string, float|int|string>>> */
     private array $loadedFilesData = [];
 
     /** @var array<string, string> */
@@ -86,7 +86,7 @@ final class FixtureLoader
             return;
         }
 
-        /** @var array<string, array<string, int|string>> $content */
+        /** @var array<string, array<string, float|int|string>> $content */
         $content = $this->yamlParser()->parseFile("{$this->pathToFixtures}/{$class}.yaml");
 
         $this->loadedFilesData[$class] = $content;
