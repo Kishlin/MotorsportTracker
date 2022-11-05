@@ -59,7 +59,10 @@ final class LoadFixtureCommandUsingSymfony extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach (explode(';', ((string) $input->getArgument(self::ARGUMENT_FIXTURES))) as $fixture) {
+        $fixtures = $input->getArgument(self::ARGUMENT_FIXTURES);
+        assert(is_string($fixtures));
+
+        foreach (explode(';', $fixtures) as $fixture) {
             $this->fixtureLoader->loadFixture($fixture);
         }
 
