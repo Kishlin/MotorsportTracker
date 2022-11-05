@@ -17,7 +17,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Event[] $objects
  *
- * @method Event get(EventId $id)
+ * @method Event[]    all()
+ * @method null|Event get(EventId $id)
  */
 final class EventRepositorySpy extends AbstractRepositorySpy implements EventGateway, EventCreationCheckGateway
 {

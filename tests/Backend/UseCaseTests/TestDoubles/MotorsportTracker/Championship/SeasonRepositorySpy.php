@@ -13,7 +13,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Season[] $objects
  *
- * @method Season get(SeasonId $id)
+ * @method Season[]    all()
+ * @method null|Season get(SeasonId $id)
  */
 final class SeasonRepositorySpy extends AbstractRepositorySpy implements SeasonGateway
 {

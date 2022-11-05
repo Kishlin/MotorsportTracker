@@ -14,7 +14,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Venue[] $objects
  *
- * @method Venue get(VenueId $id)
+ * @method Venue[]    all()
+ * @method null|Venue get(VenueId $id)
  */
 final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway
 {

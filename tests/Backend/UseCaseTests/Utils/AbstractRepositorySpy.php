@@ -23,6 +23,14 @@ abstract class AbstractRepositorySpy
         return $this->objects[$id->value()] ?? null;
     }
 
+    /**
+     * @return AggregateRoot[]
+     */
+    public function all(): array
+    {
+        return $this->objects;
+    }
+
     public function add(AggregateRoot $aggregateRoot): void
     {
         if (method_exists($aggregateRoot, 'id')) {

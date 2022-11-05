@@ -14,7 +14,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Driver[] $objects
  *
- * @method Driver get(DriverId $id)
+ * @method Driver[]    all()
+ * @method null|Driver get(DriverId $id)
  */
 final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverGateway
 {

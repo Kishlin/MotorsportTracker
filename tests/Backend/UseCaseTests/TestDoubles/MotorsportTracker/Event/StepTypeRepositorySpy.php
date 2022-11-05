@@ -15,7 +15,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property StepType[] $objects
  *
- * @method StepType get(StepTypeId $id)
+ * @method StepType[]    all()
+ * @method null|StepType get(StepTypeId $id)
  */
 final class StepTypeRepositorySpy extends AbstractRepositorySpy implements StepTypeGateway, StepTypeIdForLabelGateway
 {

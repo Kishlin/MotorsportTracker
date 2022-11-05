@@ -16,7 +16,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Racer[] $objects
  *
- * @method Racer get(RacerId $id)
+ * @method Racer[]    all()
+ * @method null|Racer get(RacerId $id)
  */
 final class RacerRepositorySpy extends AbstractRepositorySpy implements RacerGateway, ExistingRacerGateway
 {
@@ -35,6 +36,7 @@ final class RacerRepositorySpy extends AbstractRepositorySpy implements RacerGat
         assert($driverMoveId instanceof DriverMoveId);
 
         $driverMove = $this->driverMoveRepositorySpy->get($driverMoveId);
+        assert(null !== $driverMove);
 
         foreach ($this->objects as $racer) {
             if (

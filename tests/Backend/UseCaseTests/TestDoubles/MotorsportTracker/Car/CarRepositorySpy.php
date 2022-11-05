@@ -15,7 +15,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Car[] $objects
  *
- * @method Car get(CarId $id)
+ * @method Car[]    all()
+ * @method null|Car get(CarId $id)
  */
 final class CarRepositorySpy extends AbstractRepositorySpy implements CarGateway
 {

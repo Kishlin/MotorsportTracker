@@ -15,6 +15,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Country[] $objects
  *
+ * @method Country[]    all()
  * @method null|Country get(CountryId $id)
  */
 final class CountryRepositorySpy extends AbstractRepositorySpy implements CountryGateway, CountryIdForCodeGateway

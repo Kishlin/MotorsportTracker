@@ -18,7 +18,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property DriverMove[] $objects
  *
- * @method DriverMove get(DriverMoveId $id)
+ * @method DriverMove[]    all()
+ * @method null|DriverMove get(DriverMoveId $id)
  */
 final class DriverMoveRepositorySpy extends AbstractRepositorySpy implements DriverMoveGateway, DriverMoveDataGateway
 {

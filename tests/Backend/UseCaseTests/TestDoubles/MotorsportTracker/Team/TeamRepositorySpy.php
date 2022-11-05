@@ -14,7 +14,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Team[] $objects
  *
- * @method Team get(TeamId $id)
+ * @method Team[]    all()
+ * @method null|Team get(TeamId $id)
  */
 final class TeamRepositorySpy extends AbstractRepositorySpy implements TeamGateway
 {

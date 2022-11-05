@@ -13,12 +13,14 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property EventStep[] $objects
  *
- * @method EventStep get(EventStepId $id)
+ * @method EventStep[]    all()
+ * @method null|EventStep get(EventStepId $id)
  */
 final class EventStepRepositorySpy extends AbstractRepositorySpy implements EventStepGateway, EventHasStepWithTypeGateway, EventHasStepAtTheSameTimeGateway
 {

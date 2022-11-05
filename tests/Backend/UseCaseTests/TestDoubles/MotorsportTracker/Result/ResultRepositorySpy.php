@@ -13,7 +13,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 /**
  * @property Result[] $objects
  *
- * @method Result get(ResultId $id)
+ * @method Result[]    all()
+ * @method null|Result get(ResultId $id)
  */
 final class ResultRepositorySpy extends AbstractRepositorySpy implements ResultGateway
 {
