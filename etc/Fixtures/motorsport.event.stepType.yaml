@@ -1,5 +1,8 @@
 race:
   label: 'race'
 
+sprintQualifying:
+  label: 'sprint qualifying'
+
 qualification:
   label: 'qualification'

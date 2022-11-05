@@ -15,3 +15,9 @@ germany:
 
 italia:
   code: 'it'
+
+australia:
+  code: 'au'
+
+unitedKingdom:
+  code: 'uk'

@@ -12,3 +12,8 @@ pierreGasly:
   firstname: 'Pierre'
   name: 'Gasly'
   countryId: '@country.country.france'
+
+lewisHamilton:
+  firstname: 'Lewis'
+  name: 'Hamilton'
+  countryId: '@country.country.unitedKingdom'

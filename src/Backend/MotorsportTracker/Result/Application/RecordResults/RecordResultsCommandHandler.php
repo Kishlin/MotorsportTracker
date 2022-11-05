@@ -27,6 +27,8 @@ final class RecordResultsCommandHandler implements CommandHandler
             $this->doRecordResult($result, $command);
         }
 
+        $this->eventDispatcher->dispatch(new ResultsRecordedDomainEvent($command->eventStepId()));
+
         return true;
     }
 

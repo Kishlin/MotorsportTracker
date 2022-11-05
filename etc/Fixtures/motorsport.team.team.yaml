@@ -3,9 +3,9 @@ redBullRacing:
   image: 'https://example.com/redbullracing.webp'
   countryId: '@country.country.austria'
 
-merecedes:
+mercedes:
   name: 'Mercedes'
-  image: 'https://cdn.motorsporttracker.com/teams/merecedesf1.png'
+  image: 'https://cdn.motorsporttracker.com/teams/mercedesf1.png'
   countryId: '@country.country.germany'
 
 toroRosso:

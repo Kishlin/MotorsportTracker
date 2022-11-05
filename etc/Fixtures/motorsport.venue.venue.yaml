@@ -1,3 +1,11 @@
 zandvoort:
   countryId: '@country.country.netherlands'
   name: 'Circuit Zandvoort'
+
+melbourne:
+  countryId: '@country.country.australia'
+  name: 'Melbourne Grand Prix Circuit'
+
+emiliaRomagna:
+  countryId: '@country.country.italia'
+  name: 'Autodromo Internazionale Enzo e Dino Ferrari'

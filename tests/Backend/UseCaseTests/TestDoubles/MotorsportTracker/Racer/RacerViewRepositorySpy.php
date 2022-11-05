@@ -41,11 +41,14 @@ final class RacerViewRepositorySpy implements RacersForDateTimeAndSeasonGateway
             }
 
             $car = $this->carRepositorySpy->get(CarId::fromOther($racer->carId()));
+            assert(null !== $car);
+
             if (false === $car->seasonId()->equals($seasonId)) {
                 continue;
             }
 
             $driver = $this->driverRepositorySpy->get(DriverId::fromOther($racer->driverId()));
+            assert(null !== $driver);
 
             $out[] = RacerPOPO::fromScalars(
                 $racer->id()->value(),

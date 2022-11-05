@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\DomainEvent\DriverMoveCreatedDomainEvent;
+use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\ResultsRecordedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
@@ -34,6 +35,10 @@ final class TestEventDispatcher implements EventDispatcher
     {
         if ($event instanceof DriverMoveCreatedDomainEvent) {
             $this->testServiceContainer->updateRacerViewsOnDriverMoveHandler()($event);
+        }
+
+        if ($event instanceof ResultsRecordedDomainEvent) {
+            $this->testServiceContainer->refreshStandingsOnResultsRecordedHandler()($event);
         }
     }
 }
