@@ -63,7 +63,7 @@ final class AddVenueCommand extends SymfonyCommand
             return Command::FAILURE;
         }
 
-        $ui->text(sprintf("<info>Venue Created: %s</info>\n", $uuid));
+        $ui->success("Venue Created: {$uuid}}");
 
         return Command::SUCCESS;
     }

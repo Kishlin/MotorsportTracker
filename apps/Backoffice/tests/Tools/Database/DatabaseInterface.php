@@ -10,6 +10,8 @@ interface DatabaseInterface
 
     public function loadFixture(string $fixture): void;
 
+    public function fixtureId(string $fixture): string;
+
     /**
      * @param array<string, mixed> $params
      *

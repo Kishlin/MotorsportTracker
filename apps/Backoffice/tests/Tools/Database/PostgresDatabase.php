@@ -12,6 +12,7 @@ use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingDoctrine;
 use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;
+use RuntimeException;
 
 abstract class PostgresDatabase implements DatabaseInterface
 {
@@ -44,6 +45,17 @@ abstract class PostgresDatabase implements DatabaseInterface
     public function loadFixture(string $fixture): void
     {
         $this->fixtureLoader()->loadFixture($fixture);
+    }
+
+    public function fixtureId(string $fixture): string
+    {
+        $identifier = $this->fixtureLoader()->identifier($fixture);
+
+        if (null === $identifier) {
+            throw new RuntimeException("Fixture {$fixture} appears to not have been loaded.");
+        }
+
+        return $identifier;
     }
 
     /**
