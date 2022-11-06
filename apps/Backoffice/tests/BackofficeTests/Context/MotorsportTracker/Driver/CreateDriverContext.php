@@ -25,14 +25,9 @@ final class CreateDriverContext extends BackofficeContext
     {
         $this->commandStatus = null;
 
-        $countryId   = self::database()->fixtureId("country.country.{$this->format($country)}");
-        $countryCode = self::database()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
-
-        assert(is_string($countryCode));
-
+        $this->country   = $this->countryNameToCode($country);
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
-        $this->country   = $countryCode;
 
         $commandTester = new CommandTester(
             self::application()->find(CreateDriverCommandUsingSymfony::NAME),

@@ -33,6 +33,16 @@ abstract class BackofficeContext implements Context
         return lcfirst(str_replace(' ', '', $fixture));
     }
 
+    protected function countryNameToCode(string $countryName): string
+    {
+        $countryId   = self::database()->fixtureId("country.country.{$this->format($countryName)}");
+        $countryCode = self::database()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
+
+        assert(is_string($countryCode));
+
+        return $countryCode;
+    }
+
     protected static function application(): ConsoleApplicationInterface
     {
         return SymfonyApplication::application();

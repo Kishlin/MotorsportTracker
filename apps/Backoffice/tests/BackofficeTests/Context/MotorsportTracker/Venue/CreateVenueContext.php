@@ -32,12 +32,7 @@ final class CreateVenueContext extends BackofficeContext
     {
         $this->commandStatus = null;
 
-        $countryId   = self::database()->fixtureId("country.country.{$this->format($country)}");
-        $countryCode = self::database()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
-
-        assert(is_string($countryCode));
-
-        $this->country = $countryCode;
+        $this->country = $this->countryNameToCode($country);
         $this->name    = $name;
 
         $commandTester = new CommandTester(
