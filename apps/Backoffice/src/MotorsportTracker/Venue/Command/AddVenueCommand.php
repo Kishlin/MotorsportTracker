@@ -37,7 +37,7 @@ final class AddVenueCommand extends SymfonyCommand
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Adds a new driver.')
+            ->setDescription('Adds a new venue.')
             ->addArgument(self::ARGUMENT_NAME, InputArgument::OPTIONAL, 'The name of the venue')
             ->addArgument(self::ARGUMENT_COUNTRY, InputArgument::OPTIONAL, 'The country code of the venue')
         ;
