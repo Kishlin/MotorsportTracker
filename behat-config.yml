@@ -15,6 +15,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventStepContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\CalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\StepTypeContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\ResultContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext

@@ -5,3 +5,7 @@ formulaOne2022:
 formulaOne2019:
   championshipId: '@motorsport.championship.championship.formulaOne'
   year: 2019
+
+motoGP2022:
+  championshipId: '@motorsport.championship.championship.motoGp'
+  year: 2022

@@ -9,6 +9,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\CarService
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\DriverMoveServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver\DriverServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\CalendarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\EventServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\EventStepServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\StepTypeServicesTrait;
@@ -23,6 +24,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Randomness\RandomnessServ
 
 final class TestServiceContainer
 {
+    use CalendarServicesTrait;
     use CarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;

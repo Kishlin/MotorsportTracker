@@ -9,3 +9,7 @@ melbourne:
 emiliaRomagna:
   countryId: '@country.country.italia'
   name: 'Autodromo Internazionale Enzo e Dino Ferrari'
+
+circuitOfTheAmericas:
+  countryId: '@country.country.usa'
+  name: 'Circuit of the Americas'

@@ -17,3 +17,8 @@ emiliaRomagnaGrandPrix2022Race:
   stepTypeId: '@motorsport.event.stepType.race'
   eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
   dateTime: '2022-04-24 13:00:00'
+
+americasMotoGP2022Race:
+  stepTypeId: '@motorsport.event.stepType.race'
+  eventId: '@motorsport.event.event.americasMotoGP2022'
+  dateTime: '2022-04-10 18:00:00'

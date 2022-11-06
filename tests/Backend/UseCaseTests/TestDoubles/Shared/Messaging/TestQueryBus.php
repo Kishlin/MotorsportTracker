@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
+use Kishlin\Backend\MotorsportTracker\Event\Application\ViewCalendar\ViewCalendarQuery;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\GetAllRacersForDateTimeQuery;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\ViewDriverStandingsForSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewTeamStandingsForSeason\ViewTeamStandingsForSeasonQuery;
@@ -29,6 +30,10 @@ final class TestQueryBus implements QueryBus
     {
         if ($query instanceof ViewAllChampionshipsQuery) {
             return $this->testServiceContainer->viewAllChampionshipsQueryHandler()($query);
+        }
+
+        if ($query instanceof ViewCalendarQuery) {
+            return $this->testServiceContainer->viewCalendarQueryHandler()($query);
         }
 
         if ($query instanceof GetAllRacersForDateTimeQuery) {

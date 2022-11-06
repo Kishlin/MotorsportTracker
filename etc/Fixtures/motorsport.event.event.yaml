@@ -15,3 +15,9 @@ emiliaRomagnaGrandPrix2022:
   venueId: '@motorsport.venue.venue.emiliaRomagna'
   index: '3'
   label: 'Emilia Romagna GP'
+
+americasMotoGP2022:
+  seasonId: '@motorsport.championship.season.motoGP2022'
+  venueId: '@motorsport.venue.venue.circuitOfTheAmericas'
+  index: '3'
+  label: 'Americas GP'

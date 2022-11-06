@@ -21,3 +21,6 @@ australia:
 
 unitedKingdom:
   code: 'uk'
+
+usa:
+  code: 'us'
