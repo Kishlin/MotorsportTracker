@@ -7,3 +7,18 @@ perezAfterAustralianGP2022:
   driverId: '@motorsport.driver.driver.sergioPerez'
   eventId: '@motorsport.event.event.australianGrandPrix2022'
   points: 18
+
+hamiltonAfterAustralianGP2022:
+  driverId: '@motorsport.driver.driver.lewisHamilton'
+  eventId: '@motorsport.event.event.australianGrandPrix2022'
+  points: 12
+
+verstappenAfterEmiliaRomagnaGP2022:
+  driverId: '@motorsport.driver.driver.maxVerstappen'
+  eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
+  points: 34
+
+hamiltonAfterEmiliaRomagnaGP2022:
+  driverId: '@motorsport.driver.driver.lewisHamilton'
+  eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
+  points: 12

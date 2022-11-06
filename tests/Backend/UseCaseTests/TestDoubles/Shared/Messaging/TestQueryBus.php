@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\GetAllRacersForDateTimeQuery;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\ViewDriverStandingsForSeasonQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
@@ -31,6 +32,10 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof GetAllRacersForDateTimeQuery) {
             return $this->testServiceContainer->getAllRacersForDateTimeQueryHandler()($query);
+        }
+
+        if ($query instanceof ViewDriverStandingsForSeasonQuery) {
+            return $this->testServiceContainer->viewDriverStandingsForSeasonQueryHandler()($query);
         }
 
         throw new RuntimeException('Unknown query type: ' . get_class($query));

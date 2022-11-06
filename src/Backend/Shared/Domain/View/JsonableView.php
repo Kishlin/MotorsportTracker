@@ -20,7 +20,7 @@ abstract class JsonableView implements Stringable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     abstract public function toArray(): array;
 

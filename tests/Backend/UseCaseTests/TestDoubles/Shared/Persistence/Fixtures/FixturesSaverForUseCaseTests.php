@@ -15,6 +15,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\DriverStanding;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
@@ -90,6 +91,12 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
 
         if ($aggregateRoot instanceof Racer) {
             $this->testServiceContainer->racerRepositorySpy()->save($aggregateRoot);
+
+            return;
+        }
+
+        if ($aggregateRoot instanceof DriverStanding) {
+            $this->testServiceContainer->driverStandingRepositorySpy()->save($aggregateRoot);
 
             return;
         }

@@ -1,0 +1,19 @@
+Feature: It can view driver standings for a season
+
+  Scenario: It views the driver standings
+    Given the standing for "Verstappen After Australian GP 2022" exists
+    And the standing for "Hamilton After Australian GP 2022" exists
+    And the standing for "Verstappen After Emilia Romagna GP 2022" exists
+    And the standing for "Hamilton After Emilia Romagna GP 2022" exists
+    When a client views the driver standings for season "Formula One 2022"
+    Then it views the driver standings to be
+    | driver           | points | eventIndex |
+    | Max Verstappen   | 0      | 2          |
+    | Lewis Hamilton   | 12     | 2          |
+    | Max Verstappen   | 34     | 3          |
+    | Lewis Hamilton   | 12     | 3          |
+
+  Scenario: It view no driver standings
+    Given no driver standing exist yet
+    When a client views the driver standings for season "Formula One 2022"
+    Then it receives an empty driver standings response
