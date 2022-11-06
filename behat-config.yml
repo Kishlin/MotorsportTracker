@@ -32,6 +32,8 @@ default:
       contexts:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventStepContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateStepTypeContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue\CreateVenueContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Country\CreateCountryContext

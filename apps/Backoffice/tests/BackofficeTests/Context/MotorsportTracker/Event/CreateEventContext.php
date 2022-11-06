@@ -20,6 +20,14 @@ final class CreateEventContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the event :event exists
+     */
+    public function theEventExists(string $event): void
+    {
+        self::database()->loadFixture("motorsport.event.event.{$this->format($event)}");
+    }
+
+    /**
      * @When a client creates the event :label of index :index for the season :season and venue :venue
      */
     public function aClientCreatesAnEvent(string $label, int $index, string $season, string $venue): void
