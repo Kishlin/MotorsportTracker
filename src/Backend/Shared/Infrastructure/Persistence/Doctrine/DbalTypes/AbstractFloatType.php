@@ -23,13 +23,13 @@ abstract class AbstractFloatType extends FloatType
     }
 
     /**
-     * @param float $value
+     * @param string $value
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): FloatValueObject
     {
         $className = $this->mappedClass();
 
-        return new $className($value);
+        return new $className((float) $value);
     }
 
     /**

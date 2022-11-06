@@ -38,4 +38,29 @@ final class DriverStandingRepositoryUsingDoctrineTest extends RepositoryContract
 
         self::assertAggregateRootWasSaved($teamStanding);
     }
+
+    public function testItDoesNotFindAMissingStanding(): void
+    {
+        $repository = new DriverStandingRepositoryUsingDoctrine(self::entityManager());
+
+        self::assertNull($repository->find(
+            new DriverStandingDriverId('07595707-3f51-4f39-89c7-cf2aa4c01c37'),
+            new DriverStandingEventId('0da0c482-6c2a-4c30-87cc-8755914ff300'),
+        ));
+    }
+
+    public function testItFindsAnExistingStanding(): void
+    {
+        self::loadFixture('motorsport.standing.driverStanding.verstappenAfterAustralianGP2022');
+
+        $repository = new DriverStandingRepositoryUsingDoctrine(self::entityManager());
+
+        $standing = $repository->find(
+            new DriverStandingDriverId(self::fixtureId('motorsport.driver.driver.maxVerstappen')),
+            new DriverStandingEventId(self::fixtureId('motorsport.event.event.australianGrandPrix2022')),
+        );
+
+        self::assertInstanceOf(DriverStanding::class, $standing);
+        self::assertSame(0.0, $standing->points()->value());
+    }
 }

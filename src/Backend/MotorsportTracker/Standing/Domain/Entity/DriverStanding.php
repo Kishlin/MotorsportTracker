@@ -41,6 +41,11 @@ final class DriverStanding extends AggregateRoot
         return new self($id, $eventId, $driverId, $points);
     }
 
+    public function updateScore(DriverStandingPoints $newDriverTotal): void
+    {
+        $this->points = $newDriverTotal;
+    }
+
     public function id(): DriverStandingId
     {
         return $this->id;

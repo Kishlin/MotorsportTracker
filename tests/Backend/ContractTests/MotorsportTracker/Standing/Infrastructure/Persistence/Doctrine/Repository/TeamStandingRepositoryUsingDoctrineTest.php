@@ -38,4 +38,29 @@ final class TeamStandingRepositoryUsingDoctrineTest extends RepositoryContractTe
 
         self::assertAggregateRootWasSaved($teamStanding);
     }
+
+    public function testItDoesNotFindAMissingStanding(): void
+    {
+        $repository = new TeamStandingRepositoryUsingDoctrine(self::entityManager());
+
+        self::assertNull($repository->find(
+            new TeamStandingTeamId('dad4de6a-dfd8-44a6-93c7-3f10e1d2455c'),
+            new TeamStandingEventId('6f8e65d6-0bda-4e48-8804-8dcc125e1c28'),
+        ));
+    }
+
+    public function testItFindsAnExistingStanding(): void
+    {
+        self::loadFixture('motorsport.standing.teamStanding.redBullRacingAfterAustralianGP2022');
+
+        $repository = new TeamStandingRepositoryUsingDoctrine(self::entityManager());
+
+        $standing = $repository->find(
+            new TeamStandingTeamId(self::fixtureId('motorsport.team.team.redBullRacing')),
+            new TeamStandingEventId(self::fixtureId('motorsport.event.event.australianGrandPrix2022')),
+        );
+
+        self::assertInstanceOf(TeamStanding::class, $standing);
+        self::assertSame(18.0, $standing->points()->value());
+    }
 }

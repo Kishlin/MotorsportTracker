@@ -6,7 +6,9 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Stand
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\TeamStanding;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Gateway\TeamStandingGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingEventId;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingId;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingTeamId;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -22,5 +24,16 @@ final class TeamStandingRepositorySpy extends AbstractRepositorySpy implements T
         $uniqueKey = $teamStanding->eventId()->value() . '-' . $teamStanding->teamId()->value();
 
         $this->objects[$uniqueKey] = $teamStanding;
+    }
+
+    public function find(TeamStandingTeamId $teamId, TeamStandingEventId $eventId): ?TeamStanding
+    {
+        foreach ($this->objects as $teamStanding) {
+            if ($teamId->equals($teamStanding->teamId()) && $eventId->equals($teamStanding->eventId())) {
+                return $teamStanding;
+            }
+        }
+
+        return null;
     }
 }

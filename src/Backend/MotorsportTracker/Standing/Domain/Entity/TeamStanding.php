@@ -41,6 +41,11 @@ final class TeamStanding extends AggregateRoot
         return new self($id, $eventId, $teamId, $points);
     }
 
+    public function updateScore(TeamStandingPoints $newTeamTotal): void
+    {
+        $this->points = $newTeamTotal;
+    }
+
     public function id(): TeamStandingId
     {
         return $this->id;

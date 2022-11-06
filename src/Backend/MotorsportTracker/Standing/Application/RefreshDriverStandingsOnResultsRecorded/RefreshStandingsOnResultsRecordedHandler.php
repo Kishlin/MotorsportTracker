@@ -48,11 +48,19 @@ final class RefreshStandingsOnResultsRecordedHandler implements DomainEventSubsc
                 $teamStandings[$standingDataDTO->teamId()] = $newDriverTotal;
             }
 
-            $this->saveDriverStanding($eventId, $standingDataDTO->driverId(), $newDriverTotal);
+            $this->saveDriverStanding(
+                new DriverStandingEventId($eventId),
+                new DriverStandingDriverId($standingDataDTO->driverId()),
+                new DriverStandingPoints($newDriverTotal),
+            );
         }
 
         foreach ($teamStandings as $teamId => $newTeamTotal) {
-            $this->saveTeamStanding($eventId, $teamId, $newTeamTotal);
+            $this->saveTeamStanding(
+                new TeamStandingEventId($eventId),
+                new TeamStandingTeamId($teamId),
+                new TeamStandingPoints($newTeamTotal),
+            );
         }
     }
 
@@ -64,32 +72,42 @@ final class RefreshStandingsOnResultsRecordedHandler implements DomainEventSubsc
     }
 
     private function saveDriverStanding(
-        string $eventId,
-        string $driverId,
-        float $newDriverTotal,
+        DriverStandingEventId $eventId,
+        DriverStandingDriverId $driverId,
+        DriverStandingPoints $newDriverTotal,
     ): void {
-        $driverStanding = DriverStanding::create(
-            new DriverStandingId($this->uuidGenerator->uuid4()),
-            new DriverStandingEventId($eventId),
-            new DriverStandingDriverId($driverId),
-            new DriverStandingPoints($newDriverTotal),
-        );
+        $existing = $this->driverStandingGateway->find($driverId, $eventId);
 
-        $this->driverStandingGateway->save($driverStanding);
+        if (null === $existing) {
+            $id = new DriverStandingId($this->uuidGenerator->uuid4());
+
+            $driverStanding = DriverStanding::create($id, $eventId, $driverId, $newDriverTotal);
+
+            $this->driverStandingGateway->save($driverStanding);
+        } else {
+            $existing->updateScore($newDriverTotal);
+
+            $this->driverStandingGateway->save($existing);
+        }
     }
 
     private function saveTeamStanding(
-        string $eventId,
-        string $teamId,
-        float $newTeamTotal,
+        TeamStandingEventId $eventId,
+        TeamStandingTeamId $teamId,
+        TeamStandingPoints $newTeamTotal,
     ): void {
-        $teamStanding = TeamStanding::create(
-            new TeamStandingId($this->uuidGenerator->uuid4()),
-            new TeamStandingEventId($eventId),
-            new TeamStandingTeamId($teamId),
-            new TeamStandingPoints($newTeamTotal),
-        );
+        $existing = $this->teamStandingGateway->find($teamId, $eventId);
 
-        $this->teamStandingGateway->save($teamStanding);
+        if (null === $existing) {
+            $id = new TeamStandingId($this->uuidGenerator->uuid4());
+
+            $teamStanding = TeamStanding::create($id, $eventId, $teamId, $newTeamTotal);
+
+            $this->teamStandingGateway->save($teamStanding);
+        } else {
+            $existing->updateScore($newTeamTotal);
+
+            $this->teamStandingGateway->save($existing);
+        }
     }
 }
