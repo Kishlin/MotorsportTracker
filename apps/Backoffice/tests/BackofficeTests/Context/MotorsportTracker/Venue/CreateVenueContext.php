@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue;
 
-use Kishlin\Apps\Backoffice\MotorsportTracker\Venue\Command\AddVenueCommand;
+use Kishlin\Apps\Backoffice\MotorsportTracker\Venue\Command\CreateVenueCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Command\Command;
@@ -32,14 +32,19 @@ final class CreateVenueContext extends BackofficeContext
     {
         $this->commandStatus = null;
 
-        $this->country = $country;
+        $countryId   = self::database()->fixtureId("country.country.{$this->format($country)}");
+        $countryCode = self::database()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
+
+        assert(is_string($countryCode));
+
+        $this->country = $countryCode;
         $this->name    = $name;
 
         $commandTester = new CommandTester(
-            self::application()->find(AddVenueCommand::NAME),
+            self::application()->find(CreateVenueCommandUsingSymfony::NAME),
         );
 
-        $commandTester->execute(['name' => $name, 'country' => $country]);
+        $commandTester->execute(['name' => $this->name, 'country' => $this->country]);
 
         $this->commandStatus = $commandTester->getStatusCode();
     }

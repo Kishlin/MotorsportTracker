@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class AddVenueCommand extends SymfonyCommand
+final class CreateVenueCommandUsingSymfony extends SymfonyCommand
 {
     public const NAME = 'kishlin:motorsport:venue:add';
 
