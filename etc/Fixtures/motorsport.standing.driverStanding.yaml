@@ -18,6 +18,11 @@ verstappenAfterEmiliaRomagnaGP2022:
   eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
   points: 34
 
+perezAfterEmiliaRomagnaGP2022:
+  driverId: '@motorsport.driver.driver.sergioPerez'
+  eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
+  points: 42
+
 hamiltonAfterEmiliaRomagnaGP2022:
   driverId: '@motorsport.driver.driver.lewisHamilton'
   eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'

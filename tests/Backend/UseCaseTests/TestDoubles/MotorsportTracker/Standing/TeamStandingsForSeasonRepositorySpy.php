@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing;
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\DriverStandingsForSeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewTeamStandingsForSeason\TeamStandingsForSeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\View\JsonableStandingsView;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventRepositorySpy;
 
-final class DriverStandingsForSeasonRepositorySpy implements DriverStandingsForSeasonGateway
+final class TeamStandingsForSeasonRepositorySpy implements TeamStandingsForSeasonGateway
 {
     public function __construct(
-        private DriverStandingRepositorySpy $driverStandingRepositorySpy,
+        private TeamStandingRepositorySpy $teamStandingRepositorySpy,
         private EventRepositorySpy $eventRepositorySpy,
     ) {
     }
@@ -25,12 +25,12 @@ final class DriverStandingsForSeasonRepositorySpy implements DriverStandingsForS
         /** @var array<string, boolean> $eventIsInSeason */
         $eventIsInSeason = [];
 
-        foreach ($this->driverStandingRepositorySpy->all() as $driverStanding) {
-            $eventId = $driverStanding->eventId()->value();
+        foreach ($this->teamStandingRepositorySpy->all() as $teamStanding) {
+            $eventId = $teamStanding->eventId()->value();
             $event   = $this->eventRepositorySpy->get(new EventId($eventId));
             assert(null !== $event);
 
-            if (false === array_key_exists($driverStanding->eventId()->value(), $eventIsInSeason)) {
+            if (false === array_key_exists($teamStanding->eventId()->value(), $eventIsInSeason)) {
                 $eventIsInSeason[$eventId] = $event->seasonId()->value() === $seasonId;
             }
 
@@ -40,8 +40,8 @@ final class DriverStandingsForSeasonRepositorySpy implements DriverStandingsForS
 
             $standings[] = [
                 'index'  => $event->index()->value(),
-                'rankee' => $driverStanding->driverId()->value(),
-                'points' => $driverStanding->points()->value(),
+                'rankee' => $teamStanding->teamId()->value(),
+                'points' => $teamStanding->points()->value(),
             ];
         }
 

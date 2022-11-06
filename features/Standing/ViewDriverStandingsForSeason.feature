@@ -1,10 +1,10 @@
 Feature: It can view driver standings for a season
 
   Scenario: It views the driver standings
-    Given the standing for "Verstappen After Australian GP 2022" exists
-    And the standing for "Hamilton After Australian GP 2022" exists
-    And the standing for "Verstappen After Emilia Romagna GP 2022" exists
-    And the standing for "Hamilton After Emilia Romagna GP 2022" exists
+    Given the "driver" standing for "Verstappen After Australian GP 2022" exists
+    And the "driver" standing for "Hamilton After Australian GP 2022" exists
+    And the "driver" standing for "Verstappen After Emilia Romagna GP 2022" exists
+    And the "driver" standing for "Hamilton After Emilia Romagna GP 2022" exists
     When a client views the driver standings for season "Formula One 2022"
     Then it views the driver standings to be
     | driver           | points | eventIndex |

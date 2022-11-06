@@ -6,7 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Domain\View;
 
 use Kishlin\Backend\Shared\Domain\View\JsonableView;
 
-final class JsonableDriverStandingsView extends JsonableView
+final class JsonableStandingsView extends JsonableView
 {
     /** @var array<int, array<string, float>> */
     private array $standingsPerEvent = [];
@@ -20,7 +20,7 @@ final class JsonableDriverStandingsView extends JsonableView
     }
 
     /**
-     * @param array{index: int, driverId: string, points: float}[] $source
+     * @param array{index: int, rankee: string, points: float}[] $source
      */
     public static function fromSource(array $source): self
     {
@@ -36,7 +36,7 @@ final class JsonableDriverStandingsView extends JsonableView
         $formattedData = [];
 
         foreach ($source as $item) {
-            $formattedData[$item['index']][$item['driverId']] = $item['points'];
+            $formattedData[$item['index']][$item['rankee']] = $item['points'];
         }
 
         $view = new self();

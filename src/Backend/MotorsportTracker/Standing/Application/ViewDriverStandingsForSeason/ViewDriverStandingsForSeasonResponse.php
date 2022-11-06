@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\View\JsonableDriverStandingsView;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\View\JsonableStandingsView;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
 
 final class ViewDriverStandingsForSeasonResponse implements Response
 {
     private function __construct(
-        private JsonableDriverStandingsView $driverStandingsView
+        private JsonableStandingsView $driverStandingsView
     ) {
     }
 
-    public function driverStandingsView(): JsonableDriverStandingsView
+    public function driverStandingsView(): JsonableStandingsView
     {
         return $this->driverStandingsView;
     }
 
-    public static function fromView(JsonableDriverStandingsView $driverStandingsView): self
+    public static function fromView(JsonableStandingsView $driverStandingsView): self
     {
         return new self($driverStandingsView);
     }

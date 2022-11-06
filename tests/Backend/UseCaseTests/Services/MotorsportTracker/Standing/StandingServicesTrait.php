@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Standing
 
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshDriverStandingsOnResultsRecorded\RefreshStandingsOnResultsRecordedHandler;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\ViewDriverStandingsForSeasonQueryHandler;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewTeamStandingsForSeason\ViewTeamStandingsForSeasonQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
@@ -19,12 +20,15 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\Dr
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\EventIdForEventStepIdRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\StandingDataRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\TeamStandingRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\TeamStandingsForSeasonRepositorySpy;
 
 trait StandingServicesTrait
 {
     private ?RefreshStandingsOnResultsRecordedHandler $refreshStandingsOnResultsRecordedHandler = null;
 
     private ?ViewDriverStandingsForSeasonQueryHandler $viewDriverStandingsForSeasonQueryHandler = null;
+
+    private ?ViewTeamStandingsForSeasonQueryHandler $viewTeamStandingsForSeasonQueryHandler = null;
 
     private ?DriverStandingRepositorySpy $driverStandingRepositorySpy = null;
 
@@ -35,6 +39,8 @@ trait StandingServicesTrait
     private ?EventIdForEventStepIdRepositorySpy $eventIdForEventStepIdRepositorySpy = null;
 
     private ?DriverStandingsForSeasonRepositorySpy $driverStandingsForSeasonRepositorySpy = null;
+
+    private ?TeamStandingsForSeasonRepositorySpy $teamStandingsForSeasonRepositorySpy = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -76,6 +82,17 @@ trait StandingServicesTrait
         }
 
         return $this->viewDriverStandingsForSeasonQueryHandler;
+    }
+
+    public function viewTeamStandingsForSeasonQueryHandler(): ViewTeamStandingsForSeasonQueryHandler
+    {
+        if (null === $this->viewTeamStandingsForSeasonQueryHandler) {
+            $this->viewTeamStandingsForSeasonQueryHandler = new ViewTeamStandingsForSeasonQueryHandler(
+                $this->teamStandingsForSeasonRepositorySpy(),
+            );
+        }
+
+        return $this->viewTeamStandingsForSeasonQueryHandler;
     }
 
     public function driverStandingRepositorySpy(): DriverStandingRepositorySpy
@@ -132,5 +149,17 @@ trait StandingServicesTrait
         }
 
         return $this->driverStandingsForSeasonRepositorySpy;
+    }
+
+    public function teamStandingsForSeasonRepositorySpy(): TeamStandingsForSeasonRepositorySpy
+    {
+        if (null === $this->teamStandingsForSeasonRepositorySpy) {
+            $this->teamStandingsForSeasonRepositorySpy = new TeamStandingsForSeasonRepositorySpy(
+                $this->teamStandingRepositorySpy(),
+                $this->eventRepositorySpy(),
+            );
+        }
+
+        return $this->teamStandingsForSeasonRepositorySpy;
     }
 }
