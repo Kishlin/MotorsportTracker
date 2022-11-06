@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class AddDriverCommand extends SymfonyCommand
+final class CreateDriverCommandUsingSymfony extends SymfonyCommand
 {
     public const NAME = 'kishlin:motorsport:driver:add';
 
@@ -68,7 +68,7 @@ final class AddDriverCommand extends SymfonyCommand
             return Command::FAILURE;
         }
 
-        $ui->text(sprintf("<info>Driver Created: %s</info>\n", $uuid));
+        $ui->success("Driver Created: {$uuid}}");
 
         return Command::SUCCESS;
     }

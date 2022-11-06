@@ -1,5 +1,6 @@
 Feature: It can create Drivers
 
+  @backoffice
   Scenario: It saves a new driver
     Given the country "Netherlands" exists
     When a client creates the driver "Max" "Verstappen" for the country "Netherlands"
