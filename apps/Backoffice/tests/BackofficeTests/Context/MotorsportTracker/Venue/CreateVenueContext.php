@@ -18,6 +18,14 @@ final class CreateVenueContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the venue :name exists
+     */
+    public function theVenueAlreadyExists(string $name): void
+    {
+        self::database()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
+    }
+
+    /**
      * @When a client creates the venue :name for the :country
      */
     public function aClientCreatesTheVenue(string $name, string $country): void

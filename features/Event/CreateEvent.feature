@@ -1,5 +1,6 @@
 Feature: It can create Events
 
+  @backoffice
   Scenario: It saves a new event
     Given the season "Formula One 2022" exists
     And the venue "Zandvoort" exists
