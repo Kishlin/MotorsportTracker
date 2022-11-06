@@ -117,6 +117,14 @@ db.dump:
 	@echo "Dump DB schema to file"
 	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d app-dev > /app/etc/Schema/create.sql'
 
+db.dump.data:
+	@echo "Dump DB data to file"
+	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER --column-inserts --data-only -d app-dev > /app/etc/Data/data.sql'
+
+db.fill:
+	@echo "Filling DB with data from dump"
+	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d app-dev -f /app/etc/Data/data.sql &>/dev/null'
+
 db.migrations.diff: CMD=diff
 
 db.migrations.migrate: CMD=migrate
