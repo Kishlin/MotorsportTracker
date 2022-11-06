@@ -1,5 +1,6 @@
 Feature: It can create Teams
 
+  @backoffice
   Scenario: It saves a new team
     Given the country "Austria" exists
     When a client creates the team "Red Bull Racing" for the country "Austria"
