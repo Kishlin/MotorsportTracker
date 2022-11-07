@@ -6,10 +6,12 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Champion
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQueryHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SearchSeasonViewerRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
 
 trait ChampionshipServicesTrait
@@ -17,9 +19,12 @@ trait ChampionshipServicesTrait
     private ?ChampionshipRepositorySpy $championshipRepositorySpy = null;
     private ?SeasonRepositorySpy $seasonRepositorySpy             = null;
 
+    private ?SearchSeasonViewerRepositorySpy $searchSeasonViewerRepositorySpy = null;
+
     private ?CreateChampionshipCommandHandler $createChampionshipCommandHandler = null;
     private ?CreateSeasonCommandHandler $createSeasonCommandHandler             = null;
     private ?ViewAllChampionshipsQueryHandler $viewAllChampionshipsQueryHandler = null;
+    private ?SearchSeasonQueryHandler $searchSeasonQueryHandler                 = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -41,6 +46,18 @@ trait ChampionshipServicesTrait
         }
 
         return $this->seasonRepositorySpy;
+    }
+
+    public function searchSeasonViewerRepositorySpy(): SearchSeasonViewerRepositorySpy
+    {
+        if (null === $this->searchSeasonViewerRepositorySpy) {
+            $this->searchSeasonViewerRepositorySpy = new SearchSeasonViewerRepositorySpy(
+                $this->championshipRepositorySpy(),
+                $this->seasonRepositorySpy(),
+            );
+        }
+
+        return $this->searchSeasonViewerRepositorySpy;
     }
 
     public function createChampionshipCommandHandler(): CreateChampionshipCommandHandler
@@ -78,5 +95,16 @@ trait ChampionshipServicesTrait
         }
 
         return $this->viewAllChampionshipsQueryHandler;
+    }
+
+    public function searchSeasonQueryHandler(): SearchSeasonQueryHandler
+    {
+        if (null === $this->searchSeasonQueryHandler) {
+            $this->searchSeasonQueryHandler = new SearchSeasonQueryHandler(
+                $this->searchSeasonViewerRepositorySpy(),
+            );
+        }
+
+        return $this->searchSeasonQueryHandler;
     }
 }
