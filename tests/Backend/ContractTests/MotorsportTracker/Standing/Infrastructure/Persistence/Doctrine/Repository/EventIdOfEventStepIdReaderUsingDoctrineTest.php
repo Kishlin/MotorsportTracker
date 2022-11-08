@@ -6,7 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Standing\Infrast
 
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshDriverStandingsOnResultsRecorded\EventNotFoundForEventStepException;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\EventNotFoundForEventStepException;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\EventIdOfEventStepIdReaderUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 

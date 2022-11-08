@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshDriverStandingsOnResultsRecorded;
+namespace Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded;
 
 final class StandingDataDTO
 {

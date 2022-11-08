@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshDriverStandingsOnResultsRecorded;
+namespace Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded;
 
 use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\ResultsRecordedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\DriverStanding;

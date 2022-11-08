@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshDriverStandingsOnResultsRecorded\StandingDataDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\StandingDataReaderUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
