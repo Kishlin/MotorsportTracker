@@ -125,6 +125,35 @@ final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCa
         self::assertEqualsCanonicalizing($expected, $data);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testItHandlesDriversWhoAreMissingDataForSomeEvents(): void
+    {
+        self::loadFixtures(
+            'motorsport.result.result.verstappenAtEmiliaRomagnaGP2022SprintQualifying',
+            'motorsport.result.result.hamiltonAtEmiliaRomagnaGP2022SprintQualifying',
+            'motorsport.result.result.hamiltonAtEmiliaRomagnaGP2022Race',
+            'motorsport.result.result.perezAtEmiliaRomagnaGP2022Race',
+            'motorsport.result.result.verstappenAtAustralianGP2022Race',
+            'motorsport.result.result.hamiltonAtAustralianGP2022Race',
+            'motorsport.result.result.perezAtAustralianGP2022Race',
+        );
+
+        $reader = new StandingDataReaderUsingDoctrine(self::entityManager());
+        $data   = $reader->findStandingDataForEvent(
+            self::fixtureId('motorsport.event.event.emiliaRomagnaGrandPrix2022'),
+        );
+
+        $expected = [
+            $this->standingDataDTO('maxVerstappen', 'redBullRacing', 8.0),
+            $this->standingDataDTO('sergioPerez', 'redBullRacing', 36.0),
+            $this->standingDataDTO('lewisHamilton', 'mercedes', 12.0),
+        ];
+
+        self::assertEqualsCanonicalizing($expected, $data);
+    }
+
     private function standingDataDTO(string $driver, string $team, float $pointsUntilEvent): StandingDataDTO
     {
         return StandingDataDTO::fromScalars(
