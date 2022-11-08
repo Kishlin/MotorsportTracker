@@ -36,7 +36,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
      * @When a client creates the championship :name with slug :slug
      * @When /^a client creates a championship with the same name$/
      */
-    public function aClientCreatesTheChampionship(string $name = 'Formula 1', string $slug = 'f1'): void
+    public function aClientCreatesTheChampionship(string $name = 'Formula On', string $slug = 'formula1'): void
     {
         $this->championshipId  = null;
         $this->thrownException = null;

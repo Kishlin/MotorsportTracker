@@ -22,8 +22,8 @@ final class AddChampionshipCommandDrivingTest extends BackofficeKernelTestCase
     {
         $bus  = $this->getMockForAbstractClass(CommandBus::class);
         $id   = '8ce0b075-d007-41c8-a74e-3a86254f217c';
-        $name = 'Formula 1';
-        $slug = 'formulaone';
+        $name = 'Formula One';
+        $slug = 'formula1';
 
         $this->mockCreateChampionshipCommandHandler($bus, $name, $slug, $id);
         $this->mockService(CommandBus::class, $bus);

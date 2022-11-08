@@ -29,7 +29,7 @@ final class CreateChampionshipContext extends BackofficeContext
      * @When a client creates the championship :name with slug :slug
      * @When a client creates a championship with the same name
      */
-    public function aClientCreatesTheChampionshipWithSlug(string $name = 'Formula 1', string $slug = 'f1'): void
+    public function aClientCreatesTheChampionshipWithSlug(string $name = 'Formula One', string $slug = 'formula1'): void
     {
         $this->name = $name;
         $this->slug = $slug;

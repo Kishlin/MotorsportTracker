@@ -40,7 +40,7 @@ final class SearchSeasonViewerUsingDoctrineTest extends RepositoryContractTestCa
     {
         return [
             'by slug'         => ['championship' => 'formula1', 'year' => 2022],
-            'by full name'    => ['championship' => 'Formula 1', 'year' => 2022],
+            'by full name'    => ['championship' => 'Formula One', 'year' => 2022],
             'by partial name' => ['championship' => 'ormu', 'year' => 2022],
         ];
     }

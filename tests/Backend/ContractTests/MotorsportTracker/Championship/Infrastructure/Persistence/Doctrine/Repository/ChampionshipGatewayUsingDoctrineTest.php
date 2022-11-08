@@ -21,7 +21,7 @@ final class ChampionshipGatewayUsingDoctrineTest extends RepositoryContractTestC
     {
         $championship = Championship::instance(
             new ChampionshipId(self::uuid()),
-            new ChampionshipName('Formula 1'),
+            new ChampionshipName('Formula One'),
             new ChampionshipSlug('formula1'),
         );
 

@@ -26,7 +26,7 @@ final class ViewAllChampionshipsGatewayUsingDoctrineTest extends RepositoryContr
         $championships = $repository->viewAllChampionships();
 
         self::assertCount(3, $championships);
-        self::assertSame('Formula 1', $championships[0]->name());
+        self::assertSame('Formula One', $championships[0]->name());
         self::assertSame('Moto GP', $championships[1]->name());
         self::assertSame('FIA World Endurance Championship', $championships[2]->name());
     }
