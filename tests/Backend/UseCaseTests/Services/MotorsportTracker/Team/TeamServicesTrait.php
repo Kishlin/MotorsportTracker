@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team;
 
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
@@ -15,6 +16,8 @@ trait TeamServicesTrait
     private ?TeamRepositorySpy $teamRepositorySpy = null;
 
     private ?CreateTeamCommandHandler $createTeamCommandHandler = null;
+
+    private ?SearchTeamQueryHandler $searchTeamQueryHandler = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -42,5 +45,16 @@ trait TeamServicesTrait
         }
 
         return $this->createTeamCommandHandler;
+    }
+
+    public function searchTeamQueryHandler(): SearchTeamQueryHandler
+    {
+        if (null === $this->searchTeamQueryHandler) {
+            $this->searchTeamQueryHandler = new SearchTeamQueryHandler(
+                $this->teamRepositorySpy(),
+            );
+        }
+
+        return $this->searchTeamQueryHandler;
     }
 }
