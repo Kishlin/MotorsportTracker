@@ -39,8 +39,9 @@ final class SearchTeamViewerUsingDoctrineTest extends RepositoryContractTestCase
     public function testItCanFindATeamProvider(): array
     {
         return [
-            'by full name'    => ['team' => 'Red'],
-            'by partial name' => ['team' => 'Red Bull Racing'],
+            'by full name'      => ['team' => 'Red'],
+            'string formatting' => ['team' => 'eDbuLlRaCIn'],
+            'by partial name'   => ['team' => 'Red Bull Racing'],
         ];
     }
 

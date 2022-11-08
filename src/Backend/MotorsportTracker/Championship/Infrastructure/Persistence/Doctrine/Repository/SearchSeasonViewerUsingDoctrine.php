@@ -24,15 +24,9 @@ final class SearchSeasonViewerUsingDoctrine extends DoctrineRepository implement
             ->from('seasons', 's')
             ->leftJoin('s', 'championships', 'c', 'c.id = s.championship')
             ->where('s.year = :year')
-            ->andWhere(
-                $qb->expr()->or(
-                    'c.name LIKE :name',
-                    'c.slug LIKE :slug',
-                ),
-            )
+            ->andWhere("LOWER(REPLACE(CONCAT(c.name, c.slug), ' ' , '')) LIKE LOWER(REPLACE(:championship, ' ', ''))")
+            ->setParameter('championship', "%{$championship}%")
             ->setParameter('year', $year)
-            ->setParameter('slug', "%{$championship}%")
-            ->setParameter('name', "%{$championship}%")
         ;
 
         /** @var array<array{id: string}> $result */

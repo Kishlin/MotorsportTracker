@@ -22,7 +22,7 @@ final class SearchTeamViewerUsingDoctrine extends DoctrineRepository implements 
 
         $qb->select('t.id')
             ->from('teams', 't')
-            ->where('t.name LIKE :name')
+            ->where("LOWER(REPLACE(t.name, ' ', '')) LIKE LOWER(REPLACE(:name, ' ', ''))")
             ->setParameter('name', "%{$keyword}%")
         ;
 

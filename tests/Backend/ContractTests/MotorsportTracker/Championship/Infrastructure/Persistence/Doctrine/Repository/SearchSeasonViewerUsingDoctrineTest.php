@@ -39,9 +39,10 @@ final class SearchSeasonViewerUsingDoctrineTest extends RepositoryContractTestCa
     public function testItCanFindAChampionshipProvider(): array
     {
         return [
-            'by slug'         => ['championship' => 'formula1', 'year' => 2022],
-            'by full name'    => ['championship' => 'Formula One', 'year' => 2022],
-            'by partial name' => ['championship' => 'ormu', 'year' => 2022],
+            'by slug'           => ['championship' => 'formula1', 'year' => 2022],
+            'by full name'      => ['championship' => 'Formula One', 'year' => 2022],
+            'by partial name'   => ['championship' => 'ormu', 'year' => 2022],
+            'string formatting' => ['championship' => 'ormu', 'year' => 2022],
         ];
     }
 

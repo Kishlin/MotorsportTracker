@@ -39,8 +39,9 @@ final class SearchDriverViewerUsingDoctrineTest extends RepositoryContractTestCa
     public function testItCanFindADriverProvider(): array
     {
         return [
-            'by full name'    => ['driver' => 'Max Verstappen'],
-            'by partial name' => ['driver' => 'Max'],
+            'by full name'      => ['driver' => 'Max Verstappen'],
+            'string formatting' => ['driver' => 'aXVer'],
+            'by partial name'   => ['driver' => 'Max'],
         ];
     }
 

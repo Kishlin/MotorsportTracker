@@ -22,7 +22,7 @@ final class SearchDriverViewerUsingDoctrine extends DoctrineRepository implement
 
         $qb->select('d.id')
             ->from('drivers', 'd')
-            ->where("CONCAT(d.firstname, ' ', d.name) LIKE :name")
+            ->where("LOWER(REPLACE(CONCAT(d.firstname, d.name), ' ', '')) LIKE LOWER(REPLACE(:name, ' ', ''))")
             ->setParameter('name', "%{$name}%")
         ;
 
