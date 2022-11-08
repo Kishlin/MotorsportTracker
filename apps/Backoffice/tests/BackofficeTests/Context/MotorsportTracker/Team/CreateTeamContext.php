@@ -19,6 +19,14 @@ final class CreateTeamContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the :name team exists
+     */
+    public function theTeamExists(string $name): void
+    {
+        self::database()->loadFixture("motorsport.team.team.{$this->format($name)}");
+    }
+
+    /**
      * @When a client creates the team :team for the country :country
      */
     public function aClientCreatesTheTeam(string $team, string $country, string $image = 'image'): void

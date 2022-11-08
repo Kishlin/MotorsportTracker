@@ -1,5 +1,6 @@
 Feature: It can register Cars
 
+  @backoffice
   Scenario: It saves a new car
     Given the season "Formula One 2022" exists
     And the "Red Bull Racing" team exists
