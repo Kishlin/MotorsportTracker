@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver;
 
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\DriverCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverViewer;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Gateway\DriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
@@ -17,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method Driver[]    all()
  * @method null|Driver get(DriverId $id)
  */
-final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverGateway
+final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverGateway, SearchDriverViewer
 {
     public function __construct(
         private CountryRepositorySpy $countryRepositorySpy,
@@ -32,6 +33,17 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverG
         }
 
         $this->objects[$driver->id()->value()] = $driver;
+    }
+
+    public function search(string $name): ?DriverId
+    {
+        foreach ($this->objects as $driver) {
+            if (str_contains("{$driver->firstname()->value()} {$driver->name()->value()}", $name)) {
+                return $driver->id();
+            }
+        }
+        
+        return null;
     }
 
     private function firstnameAndNameIsAlreadyTaken(Driver $driver): bool
