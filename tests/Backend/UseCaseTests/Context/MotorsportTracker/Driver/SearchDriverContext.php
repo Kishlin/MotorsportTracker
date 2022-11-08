@@ -25,7 +25,7 @@ final class SearchDriverContext extends MotorsportTrackerContext
      */
     public function aClientSearchesForTheDriver(string $name): void
     {
-        $this->response = null;
+        $this->response        = null;
         $this->thrownException = null;
 
         try {

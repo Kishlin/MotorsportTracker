@@ -16,7 +16,7 @@ trait DriverServicesTrait
     private ?DriverRepositorySpy $driverRepositorySpy = null;
 
     private ?CreateDriverCommandHandler $createDriverCommandHandler = null;
-    
+
     private ?SearchDriverQueryHandler $searchDriverQueryHandler = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
@@ -46,7 +46,7 @@ trait DriverServicesTrait
 
         return $this->createDriverCommandHandler;
     }
-    
+
     public function searchDriverQueryHandler(): SearchDriverQueryHandler
     {
         if (null === $this->searchDriverQueryHandler) {
@@ -54,7 +54,7 @@ trait DriverServicesTrait
                 $this->driverRepositorySpy(),
             );
         }
-        
+
         return $this->searchDriverQueryHandler;
     }
 }

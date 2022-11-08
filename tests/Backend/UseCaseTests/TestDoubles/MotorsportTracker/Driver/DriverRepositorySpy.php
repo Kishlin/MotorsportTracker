@@ -42,7 +42,7 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverG
                 return $driver->id();
             }
         }
-        
+
         return null;
     }
 

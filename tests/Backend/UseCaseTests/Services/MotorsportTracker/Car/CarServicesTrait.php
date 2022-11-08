@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car;
 
 use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\RegisterCarCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\SearchCarViewerRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
@@ -15,7 +18,11 @@ trait CarServicesTrait
 {
     private ?CarRepositorySpy $carRepositorySpy = null;
 
+    private ?SearchCarViewerRepositorySpy $searchCarViewerRepositorySpy = null;
+
     private ?RegisterCarCommandHandler $registerCarCommandHandler = null;
+
+    private ?SearchCarQueryHandler $searchCarQueryHandler = null;
 
     abstract public function eventDispatcher(): EventDispatcher;
 
@@ -25,6 +32,8 @@ trait CarServicesTrait
 
     abstract public function seasonRepositorySpy(): SeasonRepositorySpy;
 
+    abstract public function championshipRepositorySpy(): ChampionshipRepositorySpy;
+
     public function carRepositorySpy(): CarRepositorySpy
     {
         if (null === $this->carRepositorySpy) {
@@ -32,6 +41,20 @@ trait CarServicesTrait
         }
 
         return $this->carRepositorySpy;
+    }
+
+    public function searchCarViewerRepositorySpy(): SearchCarViewerRepositorySpy
+    {
+        if (null === $this->searchCarViewerRepositorySpy) {
+            $this->searchCarViewerRepositorySpy = new SearchCarViewerRepositorySpy(
+                $this->carRepositorySpy(),
+                $this->teamRepositorySpy(),
+                $this->seasonRepositorySpy(),
+                $this->championshipRepositorySpy(),
+            );
+        }
+
+        return $this->searchCarViewerRepositorySpy;
     }
 
     public function registerCarCommandHandler(): RegisterCarCommandHandler
@@ -45,5 +68,16 @@ trait CarServicesTrait
         }
 
         return $this->registerCarCommandHandler;
+    }
+
+    public function searchCarQueryHandler(): SearchCarQueryHandler
+    {
+        if (null === $this->searchCarQueryHandler) {
+            $this->searchCarQueryHandler = new SearchCarQueryHandler(
+                $this->searchCarViewerRepositorySpy(),
+            );
+        }
+
+        return $this->searchCarQueryHandler;
     }
 }

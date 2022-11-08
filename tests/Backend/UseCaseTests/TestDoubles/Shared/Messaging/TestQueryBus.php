@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
+use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
@@ -31,6 +32,10 @@ final class TestQueryBus implements QueryBus
      */
     public function ask(Query $query): Response
     {
+        if ($query instanceof SearchCarQuery) {
+            return $this->testServiceContainer->searchCarQueryHandler()($query);
+        }
+
         if ($query instanceof ViewAllChampionshipsQuery) {
             return $this->testServiceContainer->viewAllChampionshipsQueryHandler()($query);
         }
