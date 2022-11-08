@@ -20,6 +20,14 @@ final class CreateCarContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the car :name exists
+     */
+    public function theCarExists(string $name): void
+    {
+        self::database()->loadFixture("motorsport.car.car.{$this->format($name)}");
+    }
+
+    /**
      * @When a client registers the car :number for the team :team and season :season
      * @When a client creates the car number :number of team :team for the year :year of championship :championship
      */

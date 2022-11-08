@@ -19,6 +19,14 @@ final class CreateDriverContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the driver :name exists
+     */
+    public function theDriverExists(string $name): void
+    {
+        self::database()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
+    }
+
+    /**
      * @When a client creates the driver :firstname :lastname for the country :country
      */
     public function aClientCreatesADriver(string $firstname, string $lastname, string $country): void

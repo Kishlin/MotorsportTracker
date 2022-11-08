@@ -1,5 +1,6 @@
 Feature: It can record Driver Moves
 
+  @backoffice
   Scenario: It saves a new driver move
     Given the car "Red Bull Racing 2022 First Car" exists
     And the driver "Max Verstappen" exists
@@ -7,6 +8,7 @@ Feature: It can record Driver Moves
     Then the driver move is recorded
     And the racer data for "Max Verstappen" is created
 
+  @backoffice
   Scenario: It handles a mid-season driver move
     Given the racer for "Gasly At Red Bull Racing In 2019" exists
     And the car "Toro Rosso 2019 First Car" exists
