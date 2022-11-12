@@ -34,9 +34,9 @@ final class InMemoryCommandBusUsingSymfony implements CommandBus
             assert($stamp instanceof HandledStamp);
 
             $result = $stamp->getResult();
-            assert(null === $result || is_object($result));
+            assert(null === $result || true === $result || is_object($result));
 
-            return $result;
+            return is_object($result) ? $result : null;
         } catch (NoHandlerForMessageException) {
             throw new CommandNotRegisteredError($command);
         } catch (HandlerFailedException $error) {
