@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event;
 
-use Kishlin\Apps\Backoffice\MotorsportTracker\Event\CreateEventStepCommandUsingSymfony;
+use Kishlin\Apps\Backoffice\MotorsportTracker\Event\Command\CreateEventStepCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Command\Command;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportTracker\Team;
+namespace Kishlin\Apps\Backoffice\MotorsportTracker\Team\Command;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;

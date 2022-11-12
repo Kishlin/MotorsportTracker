@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportTracker\Event;
+namespace Kishlin\Apps\Backoffice\MotorsportTracker\Event\Command;
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\EventCreationFailureException;

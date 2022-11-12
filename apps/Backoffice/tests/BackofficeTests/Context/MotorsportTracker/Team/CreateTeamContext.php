@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team;
 
-use Kishlin\Apps\Backoffice\MotorsportTracker\Team\CreateTeamCommandUsingSymfony;
+use Kishlin\Apps\Backoffice\MotorsportTracker\Team\Command\CreateTeamCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Command\Command;
