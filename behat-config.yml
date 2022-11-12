@@ -12,6 +12,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SearchSeasonContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\DriverMoveRecordingContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\CarRegistrationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\SearchDriverContext
