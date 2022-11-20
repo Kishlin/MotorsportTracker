@@ -15,6 +15,41 @@ abstract class SymfonyCommand extends Command
 {
     private ?QuestionHelper $questionHelper = null;
 
+    protected function stringFromPrompt(InputInterface $input, OutputInterface $output, string $promptText): string
+    {
+        $prompt = new Question($promptText);
+
+        do {
+            $response = $this->questionHelper()->ask($input, $output, $prompt);
+        } while (false === is_string($response) || empty($response));
+
+        return $response;
+    }
+
+    protected function intFromPrompt(InputInterface $input, OutputInterface $output, string $promptText): int
+    {
+        $prompt = new Question($promptText);
+
+        do {
+            /** @var string $response */
+            $response = $this->questionHelper()->ask($input, $output, $prompt);
+        } while (empty($response) && false === is_numeric($response));
+
+        return (int) $response;
+    }
+
+    protected function floatFromPrompt(InputInterface $input, OutputInterface $output, string $promptText): float
+    {
+        $prompt = new Question($promptText);
+
+        do {
+            /** @var string $response */
+            $response = $this->questionHelper()->ask($input, $output, $prompt);
+        } while (empty($response) && false === is_numeric($response));
+
+        return (float) $response;
+    }
+
     protected function stringFromArgumentsOrPrompt(
         InputInterface $input,
         OutputInterface $output,
@@ -27,13 +62,7 @@ abstract class SymfonyCommand extends Command
             return $response;
         }
 
-        $prompt = new Question($promptText);
-
-        do {
-            $response = $this->questionHelper()->ask($input, $output, $prompt);
-        } while (false === is_string($response) || empty($response));
-
-        return $response;
+        return $this->stringFromPrompt($input, $output, $promptText);
     }
 
     protected function intFromArgumentsOrPrompt(
@@ -48,14 +77,7 @@ abstract class SymfonyCommand extends Command
             return (int) $response;
         }
 
-        $prompt = new Question($promptText);
-
-        do {
-            /** @var string $response */
-            $response = $this->questionHelper()->ask($input, $output, $prompt);
-        } while (empty($response) && false === is_numeric($response));
-
-        return (int) $response;
+        return $this->intFromPrompt($input, $output, $promptText);
     }
 
     /**

@@ -21,7 +21,7 @@ abstract class BackofficeContext implements Context
     }
 
     /**
-     * @AfterFeature
+     * @AfterScenario
      */
     public static function clearEnvironment(): void
     {

@@ -1,5 +1,6 @@
 Feature: It can create Events
 
+  @backoffice @current
   Scenario: It records the results
     Given the eventStep "Dutch Grand Prix 2022 Race" exists
     And the racer for "Verstappen At Red Bull Racing In 2022" exists
@@ -17,6 +18,7 @@ Feature: It can create Events
       | team            | event                 | points |
       | Red Bull Racing | Dutch Grand Prix 2022 | 36     |
 
+  @backoffice @current
   Scenario: It records results over multiple events and steps
     Given the eventStep "Australian Grand Prix 2022 Race" exists
     And the racer for "Verstappen At Red Bull Racing In 2022" exists

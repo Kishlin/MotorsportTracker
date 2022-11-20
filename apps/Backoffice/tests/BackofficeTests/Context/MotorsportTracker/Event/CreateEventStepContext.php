@@ -19,6 +19,14 @@ final class CreateEventStepContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
+     * @Given the eventStep :eventStep exists
+     */
+    public function theEventStepExists(string $eventStep): void
+    {
+        self::database()->loadFixture("motorsport.event.eventStep.{$this->format($eventStep)}");
+    }
+
+    /**
      * @When a client creates the :stepType step for the event :event at :dateTime
      */
     public function aClientCreatesAnEventStepForTheEventAndStepType(string $stepType, string $event, string $dateTime): void
