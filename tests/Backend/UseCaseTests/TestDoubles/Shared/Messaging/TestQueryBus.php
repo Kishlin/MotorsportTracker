@@ -16,6 +16,7 @@ use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\ViewDriverStandingsForSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewTeamStandingsForSeason\ViewTeamStandingsForSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamQuery;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
@@ -76,6 +77,10 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof SearchTeamQuery) {
             return $this->testServiceContainer->searchTeamQueryHandler()($query);
+        }
+
+        if ($query instanceof SearchVenueQuery) {
+            return $this->testServiceContainer->searchVenueQueryHandler()($query);
         }
 
         throw new RuntimeException('Unknown query type: ' . get_class($query));

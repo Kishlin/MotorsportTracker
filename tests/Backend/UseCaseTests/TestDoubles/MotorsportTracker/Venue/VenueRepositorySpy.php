@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueViewer;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\VenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
@@ -17,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method Venue[]    all()
  * @method null|Venue get(VenueId $id)
  */
-final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway
+final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway, SearchVenueViewer
 {
     public function __construct(
         private CountryRepositorySpy $countryRepositorySpy,
@@ -32,6 +33,22 @@ final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGat
         }
 
         $this->objects[$venue->id()->value()] = $venue;
+    }
+
+    public function search(string $keyword): ?VenueId
+    {
+        foreach ($this->objects as $venue) {
+            if (
+                str_contains(
+                    str_replace(' ', '', strtolower($venue->name()->value())),
+                    str_replace(' ', '', strtolower($keyword)),
+                )
+            ) {
+                return $venue->id();
+            }
+        }
+
+        return null;
     }
 
     private function venueNameIsAlreadyTaken(Venue $venue): bool
