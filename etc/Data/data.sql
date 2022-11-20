@@ -103,6 +103,7 @@ INSERT INTO public.cars (id, number, team, season) VALUES ('c69289d7-1fa4-4d5d-9
 INSERT INTO public.cars (id, number, team, season) VALUES ('b56ede6e-8211-492f-b639-762ec367e0dc', 63, 'a050a229-f93a-49f8-9209-8ce4297f6b26', '28137908-06e4-4346-b309-c4c04dda4e10');
 INSERT INTO public.cars (id, number, team, season) VALUES ('0e968bbf-c046-4116-9409-19c65ad381b3', 77, '433ccb42-fe09-4ba1-a4b0-e6f5c0c7850d', '28137908-06e4-4346-b309-c4c04dda4e10');
 INSERT INTO public.cars (id, number, team, season) VALUES ('0b2b5f17-6e4d-4486-8f10-2336d392dddc', 27, '91793127-a828-4bac-870e-b781f94a8bc8', '28137908-06e4-4346-b309-c4c04dda4e10');
+INSERT INTO public.cars (id, number, team, season) VALUES ('953f13a4-5f6b-4da6-a23a-147d7e27739c', 45, '08903254-d543-482e-a358-e6129a3f4ffe', '28137908-06e4-4346-b309-c4c04dda4e10');
 
 
 --
@@ -124,6 +125,7 @@ INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221105182411', '2022-11-05 18:26:27', 32);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120040214', '2022-11-20 04:06:24', 13);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120065527', '2022-11-20 06:56:28', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120071036', '2022-11-20 07:12:02', 14);
 
 
 --
@@ -131,15 +133,15 @@ INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_
 --
 
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('72dbaa68-4dc3-4087-90b0-8153cb441738', 'Hamilton', 'Lewis', '849c2feb-208f-40f7-b719-131e34082381');
-INSERT INTO public.drivers (id, name, firstname, country) VALUES ('59dc6702-fde8-4b2f-b04e-1a0f8ffebe38', 'Perez', 'Sergio', '98d0e3cd-d803-4517-9cdb-7feb82b0422b');
-INSERT INTO public.drivers (id, name, firstname, country) VALUES ('376f88ca-b07a-4802-b117-799421598d03', 'Verstappen', 'Max', 'b16cab89-6df3-4e96-8858-1ef550e6c946');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('494f6b1d-7622-4032-bf04-182a0dee404e', 'Russell', 'George', '849c2feb-208f-40f7-b719-131e34082381');
-INSERT INTO public.drivers (id, name, firstname, country) VALUES ('f4c60528-4f64-47d0-b460-15c0ec4d69fe', 'Norris', 'Lando', '849c2feb-208f-40f7-b719-131e34082381');
-INSERT INTO public.drivers (id, name, firstname, country) VALUES ('f9157781-1615-4d1e-9b58-6298ea1c9200', 'Ricciardo', 'Daniel', 'b94997db-940a-4ddc-a133-a4140d168b94');
+INSERT INTO public.drivers (id, name, firstname, country) VALUES ('376f88ca-b07a-4802-b117-799421598d03', 'Verstappen', 'Max', 'b16cab89-6df3-4e96-8858-1ef550e6c946');
+INSERT INTO public.drivers (id, name, firstname, country) VALUES ('59dc6702-fde8-4b2f-b04e-1a0f8ffebe38', 'Perez', 'Sergio', '98d0e3cd-d803-4517-9cdb-7feb82b0422b');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('886072d0-3f71-44d9-a28e-5d1120b34239', 'Leclerc', 'Charles', '5ef1a30f-7f85-493a-8db9-265c10c435d7');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('5db217dc-d298-479e-ac24-0e2e0178d30a', 'Sainz', 'Carlos', '0a7c4ba4-b3a0-4219-a5bd-6466750441a5');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('0c7f0cf0-8d2f-438f-b1d8-c15be2e8cc96', 'Alonso', 'Fernando', '0a7c4ba4-b3a0-4219-a5bd-6466750441a5');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('b8242bfc-831e-41d3-99ca-a15906bef28b', 'Ocon', 'Esteban', '606e0956-7707-43b4-a065-57f59a6b2885');
+INSERT INTO public.drivers (id, name, firstname, country) VALUES ('f4c60528-4f64-47d0-b460-15c0ec4d69fe', 'Norris', 'Lando', '849c2feb-208f-40f7-b719-131e34082381');
+INSERT INTO public.drivers (id, name, firstname, country) VALUES ('f9157781-1615-4d1e-9b58-6298ea1c9200', 'Ricciardo', 'Daniel', 'b94997db-940a-4ddc-a133-a4140d168b94');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('d98aaa41-6948-4216-9585-c84faedcd17c', 'Gasly', 'Pierre', '606e0956-7707-43b4-a065-57f59a6b2885');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('4da2cb59-5bc4-4502-983c-8ab5ba156f78', 'Tsunoda', 'Yuki', '29e86eef-3917-4352-afbb-9407f33ec479');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('93cd5944-2646-4681-ba0c-fe24be31a2d7', 'Bottas', 'Valtteri', 'e0ef3345-7693-43c5-95ef-039d1de894a7');
@@ -151,6 +153,7 @@ INSERT INTO public.drivers (id, name, firstname, country) VALUES ('b480ff53-a91e
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('92bba624-1864-4053-8c7f-7f1ea6709063', 'Schumacher', 'Mick', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('caf2d7ff-8372-4043-b79d-e2062d799da6', 'Magnussen', 'Kevin', '6f4379bb-5c80-4b10-a225-dc70d51f154c');
 INSERT INTO public.drivers (id, name, firstname, country) VALUES ('88038686-7a0e-4d23-8043-93e56e48a804', 'Hulkenberg', 'Nico', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
+INSERT INTO public.drivers (id, name, firstname, country) VALUES ('f3296964-0bf7-4ad6-aa47-3fc349d66720', 'de Vries', 'Nyck', 'b16cab89-6df3-4e96-8858-1ef550e6c946');
 
 
 --
@@ -162,6 +165,7 @@ INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('599e91ab-4680-4
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('49c6078a-eefe-4616-92c2-b0862e2322cb', 'f4c60528-4f64-47d0-b460-15c0ec4d69fe', 'ab4c09bb-e2cd-4e06-9c59-372fd8365736', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('3b9cd10b-bd3f-446b-8c4a-db41ae633817', 'b871589d-32f5-43c6-9cf6-9750b8748498', '242e5a1a-e706-4824-905a-977767d0bb71', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('a573977c-673a-426a-8a62-9e7c9ced9891', '8345df6c-8d1a-4de8-8616-23869b2b316f', '978eba5d-481b-4c9e-b44d-90f657a882f8', '2022-01-01 00:00:00');
+INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('2ffe1c0a-ba50-4cbc-bca4-3c142d3f822e', '8345df6c-8d1a-4de8-8616-23869b2b316f', '978eba5d-481b-4c9e-b44d-90f657a882f8', '2022-09-12 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('b7c85850-154d-425e-acfe-d0668ee87e74', 'd98aaa41-6948-4216-9585-c84faedcd17c', '10977814-6cf1-4088-a5b8-b8e2fa70d0d4', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('831732b5-031b-4b82-a05e-32465b1d557f', '59dc6702-fde8-4b2f-b04e-1a0f8ffebe38', 'ecc7854d-5aae-42e7-a1d7-19081677f431', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('8634a1ee-9de5-4678-b2e3-cf7bc9f54579', '0c7f0cf0-8d2f-438f-b1d8-c15be2e8cc96', '5d9a78a4-7cd5-4452-8dc4-d054d6786daa', '2022-01-01 00:00:00');
@@ -178,6 +182,7 @@ INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('be112b60-4922-4
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('15677068-3205-47a3-a86a-45a08c407e98', '494f6b1d-7622-4032-bf04-182a0dee404e', 'b56ede6e-8211-492f-b639-762ec367e0dc', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('8ce73ef3-df08-4b24-b725-3972fea0d6ba', '93cd5944-2646-4681-ba0c-fe24be31a2d7', '0e968bbf-c046-4116-9409-19c65ad381b3', '2022-01-01 00:00:00');
 INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('34170647-59f6-442e-95cd-b5524bf6e031', '88038686-7a0e-4d23-8043-93e56e48a804', '0b2b5f17-6e4d-4486-8f10-2336d392dddc', '2022-01-01 00:00:00');
+INSERT INTO public.driver_moves (id, driver, car, date) VALUES ('0b92fa88-5708-4721-af62-4dd193cdfd18', 'f3296964-0bf7-4ad6-aa47-3fc349d66720', '953f13a4-5f6b-4da6-a23a-147d7e27739c', '2022-09-05 00:00:00');
 
 
 --
@@ -212,28 +217,28 @@ INSERT INTO public.venues (id, name, country) VALUES ('bf8dc1d2-760f-468f-93ad-0
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: app
 --
 
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('b7941e54-d8a0-4785-85b4-36316bff4b71', '28137908-06e4-4346-b309-c4c04dda4e10', 'ef313471-20cc-42c3-91eb-9d079a7f7b03', 3, 'Rolex Emilia Romagna GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('6afbb5e2-e169-411f-9f30-e1919f4fbb6a', '28137908-06e4-4346-b309-c4c04dda4e10', '7242a078-f76c-4166-8658-70eb8fc909a0', 6, 'Monaco GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('9165f124-a621-476f-a419-d1fc4727ac27', '28137908-06e4-4346-b309-c4c04dda4e10', '9cc0ccc4-504c-423d-a16e-24c951d36a4b', 20, 'Heineken Brazil GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('51d9d255-07ec-4934-a314-d8f47302d0b7', '28137908-06e4-4346-b309-c4c04dda4e10', '409bb6eb-aaaf-48b9-9012-07bc9628ffe2', 0, 'Gulf Air Bahrain Grand Prix');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('967cb75d-60f6-4998-9e60-ba45e94c3ee8', '28137908-06e4-4346-b309-c4c04dda4e10', '89c1ba61-c777-461e-9abc-c524c34a3b68', 8, 'AWS Canada GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('d41a2e1d-ac4e-42e9-a72d-54abd0620887', '28137908-06e4-4346-b309-c4c04dda4e10', 'e400d424-2bee-47ab-a1f3-637823129f88', 1, 'STC Saudi Arabian GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('31939543-3a9f-45f4-aa4e-78f8f2aade70', '28137908-06e4-4346-b309-c4c04dda4e10', 'a9cbe6b1-e38f-417c-b206-824fc7ae1f7c', 2, 'Heineken Australian GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('b7941e54-d8a0-4785-85b4-36316bff4b71', '28137908-06e4-4346-b309-c4c04dda4e10', 'ef313471-20cc-42c3-91eb-9d079a7f7b03', 3, 'Rolex Emilia Romagna GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('2f11aff6-baae-4bd6-9426-678cc33281e0', '28137908-06e4-4346-b309-c4c04dda4e10', 'c2116751-22ca-40d1-bf2f-2fd30ab0cd18', 4, 'Crypto.com Miami GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('b3f67443-31cb-4263-84b3-e861ddba4e4b', '28137908-06e4-4346-b309-c4c04dda4e10', 'd2f04839-e8de-484a-98f7-beda803d4239', 5, 'Pirelli Spanish GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('9edfaf1e-6fe2-44ba-92fb-0b946fc64f59', '28137908-06e4-4346-b309-c4c04dda4e10', 'c85b066e-72fe-41e9-b787-3cb4c6ca5de9', 13, 'Rolex Belgian GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('dd2bc70a-71d8-48c2-b36e-01a765d7a5e9', '28137908-06e4-4346-b309-c4c04dda4e10', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 15, 'Pirelli Italian GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('6afbb5e2-e169-411f-9f30-e1919f4fbb6a', '28137908-06e4-4346-b309-c4c04dda4e10', '7242a078-f76c-4166-8658-70eb8fc909a0', 6, 'Monaco GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('226da250-a350-457d-864d-ebe8f47d9f73', '28137908-06e4-4346-b309-c4c04dda4e10', '13d8a8ce-074f-487c-b514-fd109f62934b', 7, 'Azerbaijan GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('967cb75d-60f6-4998-9e60-ba45e94c3ee8', '28137908-06e4-4346-b309-c4c04dda4e10', '89c1ba61-c777-461e-9abc-c524c34a3b68', 8, 'AWS Canada GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('5565ab3f-ee96-474f-a266-b1a83885aaa9', '28137908-06e4-4346-b309-c4c04dda4e10', '0965e59b-fe6f-4799-8239-01f95d665ef4', 9, 'Lenovo British GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('20f33cc2-edf0-462d-813f-3c88853c5935', '28137908-06e4-4346-b309-c4c04dda4e10', '90cf17ad-29f6-43c1-999a-84674b0c758f', 12, 'Aramco Hungarian GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('1c6c16fb-e472-48d3-8bc6-7000a342f881', '28137908-06e4-4346-b309-c4c04dda4e10', '6d6cf63e-751d-4153-bff4-354ab70951fb', 14, 'Heineken Dutch GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('f5aabd63-10dc-4bf7-908f-b78b48cfe866', '28137908-06e4-4346-b309-c4c04dda4e10', '0455078c-93a1-41c1-ac3a-6149908b04fa', 10, 'Rolex Austrian GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('fcbe8a95-ab56-4ec6-815b-e12e3d3eda54', '28137908-06e4-4346-b309-c4c04dda4e10', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 11, 'Lenovo French GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('20f33cc2-edf0-462d-813f-3c88853c5935', '28137908-06e4-4346-b309-c4c04dda4e10', '90cf17ad-29f6-43c1-999a-84674b0c758f', 12, 'Aramco Hungarian GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('9edfaf1e-6fe2-44ba-92fb-0b946fc64f59', '28137908-06e4-4346-b309-c4c04dda4e10', 'c85b066e-72fe-41e9-b787-3cb4c6ca5de9', 13, 'Rolex Belgian GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('1c6c16fb-e472-48d3-8bc6-7000a342f881', '28137908-06e4-4346-b309-c4c04dda4e10', '6d6cf63e-751d-4153-bff4-354ab70951fb', 14, 'Heineken Dutch GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('dd2bc70a-71d8-48c2-b36e-01a765d7a5e9', '28137908-06e4-4346-b309-c4c04dda4e10', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 15, 'Pirelli Italian GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('1ca163e0-f93a-41e0-b935-ebd1ea86bf97', '28137908-06e4-4346-b309-c4c04dda4e10', 'bd9bf718-17d4-4f9b-b3ee-5f95b6155611', 16, 'Singapore Air Singapore GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('c83f5cc3-47ed-46b6-baeb-3bfe254b5647', '28137908-06e4-4346-b309-c4c04dda4e10', '71ed29b0-1ec8-4402-8d85-65e1ed6d7eef', 18, 'Aramco United States GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('d41a2e1d-ac4e-42e9-a72d-54abd0620887', '28137908-06e4-4346-b309-c4c04dda4e10', 'e400d424-2bee-47ab-a1f3-637823129f88', 1, 'STC Saudi Arabian GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('debaeb4c-92e5-4309-9004-e85727ff7b12', '28137908-06e4-4346-b309-c4c04dda4e10', '508affbb-0506-4423-9fe3-725b49d95274', 21, 'Etihad Airways Abu Dhabi GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('31939543-3a9f-45f4-aa4e-78f8f2aade70', '28137908-06e4-4346-b309-c4c04dda4e10', 'a9cbe6b1-e38f-417c-b206-824fc7ae1f7c', 2, 'Heineken Australian GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('44d55619-b5ca-4d9d-b33d-293cd87272af', '28137908-06e4-4346-b309-c4c04dda4e10', 'bf8dc1d2-760f-468f-93ad-046230923184', 17, 'Honda Japanese GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('c83f5cc3-47ed-46b6-baeb-3bfe254b5647', '28137908-06e4-4346-b309-c4c04dda4e10', '71ed29b0-1ec8-4402-8d85-65e1ed6d7eef', 18, 'Aramco United States GP');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('384ca8e9-9563-4908-b487-024f0653a0cc', '28137908-06e4-4346-b309-c4c04dda4e10', '415d0c44-0804-445c-9579-56fe5e976dd5', 19, 'Mexico GP');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('226da250-a350-457d-864d-ebe8f47d9f73', '28137908-06e4-4346-b309-c4c04dda4e10', '13d8a8ce-074f-487c-b514-fd109f62934b', 7, 'Azerbaijan GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('9165f124-a621-476f-a419-d1fc4727ac27', '28137908-06e4-4346-b309-c4c04dda4e10', '9cc0ccc4-504c-423d-a16e-24c951d36a4b', 20, 'Heineken Brazil GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('debaeb4c-92e5-4309-9004-e85727ff7b12', '28137908-06e4-4346-b309-c4c04dda4e10', '508affbb-0506-4423-9fe3-725b49d95274', 21, 'Etihad Airways Abu Dhabi GP');
 
 
 --
@@ -377,7 +382,6 @@ INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('97db111b-44
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('6faa4747-db3c-4869-8532-d4706ee921be', '9091a5af-b588-4632-9251-66654d35f77d', '376f88ca-b07a-4802-b117-799421598d03', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('f24a8df4-e2d5-4b11-a0ba-2c9eba96abb4', '5b927c77-32da-48ac-b6f3-c10f7e042aac', 'f9157781-1615-4d1e-9b58-6298ea1c9200', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('22e3a5e7-b814-4912-bd23-9b5abb67af4c', 'ab4c09bb-e2cd-4e06-9c59-372fd8365736', 'f4c60528-4f64-47d0-b460-15c0ec4d69fe', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
-INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('27426e68-0d4f-428b-85c9-c917cc808ac6', '978eba5d-481b-4c9e-b44d-90f657a882f8', '8345df6c-8d1a-4de8-8616-23869b2b316f', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('eac10244-6119-46a1-9541-7a486ec83442', '10977814-6cf1-4088-a5b8-b8e2fa70d0d4', 'd98aaa41-6948-4216-9585-c84faedcd17c', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('cc56f492-ae21-47d5-92db-f0e94fb059ff', 'ecc7854d-5aae-42e7-a1d7-19081677f431', '59dc6702-fde8-4b2f-b04e-1a0f8ffebe38', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('ef9ed0e7-568f-40e3-af6e-1d48ff961a65', '5d9a78a4-7cd5-4452-8dc4-d054d6786daa', '0c7f0cf0-8d2f-438f-b1d8-c15be2e8cc96', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
@@ -395,6 +399,9 @@ INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('0d4d5a0
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('1ca83a76-9c12-4609-9508-24b8d7b7fa7a', '0e968bbf-c046-4116-9409-19c65ad381b3', '93cd5944-2646-4681-ba0c-fe24be31a2d7', '2022-01-01 00:00:00', '2022-12-31 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('cda5215b-aed3-4528-ad43-f751060dcbba', '0b2b5f17-6e4d-4486-8f10-2336d392dddc', '88038686-7a0e-4d23-8043-93e56e48a804', '2022-01-01 00:00:00', '2022-03-25 23:59:59');
 INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('3a96b26d-f495-479a-8ac2-584058e09e26', '242e5a1a-e706-4824-905a-977767d0bb71', 'b871589d-32f5-43c6-9cf6-9750b8748498', '2022-03-26 00:00:00', '2022-12-31 23:59:59');
+INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('27426e68-0d4f-428b-85c9-c917cc808ac6', '978eba5d-481b-4c9e-b44d-90f657a882f8', '8345df6c-8d1a-4de8-8616-23869b2b316f', '2022-01-01 00:00:00', '2022-09-04 23:59:59');
+INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('a9532c63-4450-45a6-a128-1df4e9fec5cf', '953f13a4-5f6b-4da6-a23a-147d7e27739c', 'f3296964-0bf7-4ad6-aa47-3fc349d66720', '2022-09-05 00:00:00', '2022-09-11 23:59:59');
+INSERT INTO public.racers (id, car, driver, startdate, enddate) VALUES ('846338c7-fa59-4dde-bba4-52510f6cff2c', '978eba5d-481b-4c9e-b44d-90f657a882f8', '8345df6c-8d1a-4de8-8616-23869b2b316f', '2022-09-12 00:00:00', '2022-12-31 23:59:59');
 
 
 --
