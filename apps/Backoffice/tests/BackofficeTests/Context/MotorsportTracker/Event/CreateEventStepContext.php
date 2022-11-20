@@ -12,9 +12,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class CreateEventStepContext extends BackofficeContext
 {
-    private ?string $dateTime = null;
-    private ?string $event    = null;
-    private ?string $type     = null;
+    private ?string $championship = null;
+    private ?int $year            = null;
+    private ?string $event        = null;
+    private ?string $dateTime     = null;
+    private ?string $type         = null;
 
     private ?int $commandStatus = null;
 
@@ -33,7 +35,25 @@ final class CreateEventStepContext extends BackofficeContext
     {
         $this->commandStatus = null;
 
-        $this->event    = self::database()->fixtureId("motorsport.event.event.{$this->format($event)}");
+        $eventId = self::database()->fixtureId("motorsport.event.event.{$this->format($event)}");
+
+        $query = <<<'SQL'
+SELECT e.label as event, c.name as championship, s.year
+FROM events e
+LEFT JOIN seasons s on e.season = s.id
+LEFT JOIN championships c on s.championship = c.id
+WHERE e.id = :eventId
+SQL;
+
+        /** @var array{championship: string, year: int, event: string} $data */
+        $data = self::database()->fetchAssociative($query, ['eventId' => $eventId]);
+
+        [
+            'championship' => $this->championship,
+            'year'         => $this->year,
+            'event'        => $this->event,
+        ] = $data;
+
         $this->type     = $stepType;
         $this->dateTime = $dateTime;
 
@@ -42,9 +62,11 @@ final class CreateEventStepContext extends BackofficeContext
         );
 
         $commandTester->execute([
-            'dateTime' => $this->dateTime,
-            'event'    => $this->event,
-            'type'     => $this->type,
+            'championship' => $this->championship,
+            'year'         => $this->year,
+            'event'        => $this->event,
+            'dateTime'     => $this->dateTime,
+            'type'         => $this->type,
         ]);
 
         $this->commandStatus = $commandTester->getStatusCode();
@@ -60,15 +82,22 @@ final class CreateEventStepContext extends BackofficeContext
         $query = <<<'SQL'
 SELECT *
 FROM event_steps es
+LEFT JOIN events e on es.event = e.id
+LEFT JOIN seasons s on e.season = s.id
+LEFT JOIN championships c on s.championship = c.id
 WHERE es.date_time = :dateTime
-AND es.event = :event
+AND c.name = :championship
+AND e.label = :event
 AND es.type = :type
+AND s.year = :year
 SQL;
 
         $params = [
-            'type'     => self::database()->fixtureId("motorsport.event.stepType.{$this->format($this->type ?? '')}"),
-            'dateTime' => $this->dateTime,
-            'event'    => $this->event,
+            'type'         => self::database()->fixtureId("motorsport.event.stepType.{$this->format($this->type ?? '')}"),
+            'championship' => $this->championship,
+            'dateTime'     => $this->dateTime,
+            'event'        => $this->event,
+            'year'         => $this->year,
         ];
 
         Assert::assertNotNull(self::database()->fetchOne($query, $params));
