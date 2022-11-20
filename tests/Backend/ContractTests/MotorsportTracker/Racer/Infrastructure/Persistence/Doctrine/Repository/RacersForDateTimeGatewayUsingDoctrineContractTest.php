@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Racer\Infrastruc
 use DateTimeImmutable;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\SeasonId;
+use Kishlin\Backend\MotorsportTracker\Racer\Domain\View\RacerPOPO;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacersForDateTimeAndSeasonGatewayUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
 
@@ -33,8 +34,20 @@ final class RacersForDateTimeGatewayUsingDoctrineContractTest extends Repository
             new SeasonId(self::fixtureId('motorsport.championship.season.formulaOne2022')),
         );
 
-        self::assertCount(2, $racers);
-        self::assertSame('Sergio Perez', $racers[0]->driverName());
-        self::assertSame('Max Verstappen', $racers[1]->driverName());
+        self::assertEqualsCanonicalizing(
+            [
+                RacerPOPO::fromScalars(
+                    self::fixtureId('motorsport.racer.racer.perezAtRedBullRacingIn2022'),
+                    'Sergio Perez',
+                    11,
+                ),
+                RacerPOPO::fromScalars(
+                    self::fixtureId('motorsport.racer.racer.verstappenAtRedBullRacingIn2022'),
+                    'Max Verstappen',
+                    1,
+                ),
+            ],
+            $racers,
+        );
     }
 }
