@@ -35,7 +35,7 @@ SQL;
 
     private ?int $commandStatus = null;
 
-    /** @var array<string, array{points: float, position: int}> */
+    /** @var array<string, array{points: float, position: string}> */
     private array $results;
 
     /**
@@ -45,10 +45,10 @@ SQL;
     {
         $this->commandStatus = null;
 
-        /** @var array<string, array{position: int, points: float}> $results */
+        /** @var array<string, array{position: string, points: float}> $results */
         $results = [];
 
-        /** @var array<array{racer: string, position: int, points: float}> $resultTable */
+        /** @var array<array{racer: string, position: string, points: float}> $resultTable */
         $resultTable = $resultsTable;
 
         foreach ($resultTable as $resultData) {
@@ -132,7 +132,7 @@ SQL;
     }
 
     /**
-     * @return array{points: float, position: int}
+     * @return array{points: float, position: string}
      */
     public function getResultsForCar(string $carNumber): array
     {

@@ -77,7 +77,7 @@ final class RecordResultsForEventStepCommand extends SymfonyCommand
 
             [$position, $points] = explode(' ', $result);
 
-            $resultsDTO[] = ResultDTO::fromScalars($racer->racerId(), (int) $position, (float) $points);
+            $resultsDTO[] = ResultDTO::fromScalars($racer->racerId(), $position, (float) $points);
         }
 
         try {

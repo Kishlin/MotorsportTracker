@@ -123,6 +123,7 @@ INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221023043009', '2022-10-23 04:33:43', 21);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221105182411', '2022-11-05 18:26:27', 32);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120040214', '2022-11-20 04:06:24', 13);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120065527', '2022-11-20 06:56:28', 20);
 
 
 --

@@ -24,7 +24,7 @@ final class ResultTest extends AggregateRootIsolatedTestCase
         $id          = '23d86bca-61e2-4c40-aa32-57c572a8c65a';
         $racerId     = '9cb772c5-b36f-4c6f-ad09-d4f78e389945';
         $eventStepId = 'aee5ef8d-9f65-4104-acd5-8d432c6b5c9d';
-        $position    = 3;
+        $position    = '3';
         $points      = 15.0;
 
         $entity = Result::create(

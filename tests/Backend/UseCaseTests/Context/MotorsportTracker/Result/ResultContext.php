@@ -47,7 +47,7 @@ final class ResultContext extends MotorsportTrackerContext
             foreach ($resultTable as $result) {
                 $resultsDTOs[] = ResultDTO::fromScalars(
                     $this->fixtureId("motorsport.racer.racer.{$this->format($result['racer'])}"),
-                    (int) $result['position'],
+                    (string) $result['position'],
                     (float) $result['points'],
                 );
 

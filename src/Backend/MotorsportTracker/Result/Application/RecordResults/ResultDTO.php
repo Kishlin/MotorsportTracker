@@ -12,7 +12,7 @@ final class ResultDTO
 {
     private function __construct(
         private string $racerId,
-        private int $position,
+        private string $position,
         private float $points,
     ) {
     }
@@ -32,7 +32,7 @@ final class ResultDTO
         return new ResultPoints($this->points);
     }
 
-    public static function fromScalars(string $racerId, int $position, float $points): self
+    public static function fromScalars(string $racerId, string $position, float $points): self
     {
         return new self($racerId, $position, $points);
     }
