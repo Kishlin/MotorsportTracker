@@ -86,7 +86,7 @@ final class RegisterDriverMoveCommandUsingSymfony extends SymfonyCommand
         try {
             /** @var DriverMoveId $uuid */
             $uuid = $this->commandBus->execute(RecordDriverMoveCommand::fromScalars($carId, $driverId, $dateTime));
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             $ui->error('Failed to register the driver move with these parameters.');
 
             return Command::FAILURE;

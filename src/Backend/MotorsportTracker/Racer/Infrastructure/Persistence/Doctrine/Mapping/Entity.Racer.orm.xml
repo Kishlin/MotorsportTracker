@@ -14,10 +14,6 @@
         <field name="startDate" type="racer_start_date" column="startDate" />
 
         <field name="endDate" type="racer_end_date" column="endDate" />
-
-        <unique-constraints>
-            <unique-constraint columns="car,driver" name="racer_car_driver_idx" />
-        </unique-constraints>
     </entity>
 
 </doctrine-mapping>
