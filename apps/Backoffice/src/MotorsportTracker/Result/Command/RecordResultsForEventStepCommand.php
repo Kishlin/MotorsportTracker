@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Result\Command;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonResponse;
+use Kishlin\Apps\Backoffice\MotorsportTracker\Shared\Command\CommandRequiringSeasonIdTrait;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeResponse;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\View\EventStepIdAndDateTimePOPO;
@@ -26,13 +25,9 @@ use Throwable;
 
 final class RecordResultsForEventStepCommand extends SymfonyCommand
 {
+    use CommandRequiringSeasonIdTrait;
+
     public const NAME = 'kishlin:motorsport:result:add';
-
-    private const ARGUMENT_CHAMPIONSHIP = 'championship';
-    private const QUESTION_CHAMPIONSHIP = "Please enter a keyword to find the championship:\n";
-
-    private const ARGUMENT_YEAR = 'year';
-    private const QUESTION_YEAR = "Please enter the year of the season:\n";
 
     private const ARGUMENT_EVENT = 'event';
     private const QUESTION_EVENT = "Please enter a keyword to find the event:\n";
@@ -54,8 +49,7 @@ final class RecordResultsForEventStepCommand extends SymfonyCommand
         $this
             ->setName(self::NAME)
             ->setDescription('Record results for an event step.')
-            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'A keyword to find the championship')
-            ->addArgument(self::ARGUMENT_YEAR, InputArgument::OPTIONAL, 'The year of the season')
+            ->addSeasonIdArguments()
             ->addArgument(self::ARGUMENT_EVENT, InputArgument::OPTIONAL, 'The event for which to record results')
             ->addArgument(self::ARGUMENT_TYPE, InputArgument::OPTIONAL, 'The type of the event for which to record results')
         ;
@@ -97,26 +91,6 @@ final class RecordResultsForEventStepCommand extends SymfonyCommand
         $ui->success('Results recorded.');
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @throws Throwable
-     */
-    private function findSeasonId(InputInterface $input, OutputInterface $output, SymfonyStyle $ui): string
-    {
-        $championship = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
-        $year         = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
-
-        try {
-            /** @var SearchSeasonResponse $seasonResponse */
-            $seasonResponse = $this->queryBus->ask(SearchSeasonQuery::fromScalars($championship, $year));
-        } catch (Throwable $e) {
-            $ui->error("Failed to find the season with keyword {$championship} for year {$year}.");
-
-            throw $e;
-        }
-
-        return $seasonResponse->seasonId()->value();
     }
 
     /**
