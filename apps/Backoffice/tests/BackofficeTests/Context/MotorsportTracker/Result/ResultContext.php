@@ -35,7 +35,7 @@ SQL;
 
     private ?int $commandStatus = null;
 
-    /** @var array<string, array{points: float, position: int, fastestLapTime: string}> */
+    /** @var array<string, array{points: float, position: int}> */
     private array $results;
 
     /**
@@ -45,10 +45,10 @@ SQL;
     {
         $this->commandStatus = null;
 
-        /** @var array<string, array{position: int, points: float, fastestLapTime: string}> $results */
+        /** @var array<string, array{position: int, points: float}> $results */
         $results = [];
 
-        /** @var array<array{racer: string, fastestLapTime: string, position: int, points: float}> $resultTable */
+        /** @var array<array{racer: string, position: int, points: float}> $resultTable */
         $resultTable = $resultsTable;
 
         foreach ($resultTable as $resultData) {
@@ -58,9 +58,8 @@ SQL;
             $carNumberResult = self::database()->fetchAssociative(self::CAR_NUMBER_QUERY, ['racerId' => $racerId]);
 
             $results[$carNumberResult['number']] = [
-                'points'         => $resultData['points'],
-                'position'       => $resultData['position'],
-                'fastestLapTime' => $resultData['fastestLapTime'],
+                'points'   => $resultData['points'],
+                'position' => $resultData['position'],
             ];
 
             $this->results = $results;
@@ -133,7 +132,7 @@ SQL;
     }
 
     /**
-     * @return array{points: float, position: int, fastestLapTime: string}
+     * @return array{points: float, position: int}
      */
     public function getResultsForCar(string $carNumber): array
     {

@@ -22,6 +22,6 @@ final class ResultsQuestionHelper extends QuestionHelper
 
         $result = $this->resultContext->getResultsForCar($matches[1]);
 
-        return "{$result['position']} {$result['points']} {$result['fastestLapTime']}";
+        return "{$result['position']} {$result['points']}";
     }
 }

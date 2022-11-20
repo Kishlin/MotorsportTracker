@@ -38,7 +38,6 @@ final class RecordResultsCommandHandler implements CommandHandler
             new ResultId($this->uuidGenerator->uuid4()),
             $result->racerId(),
             $command->eventStepId(),
-            $result->fastestLapTime(),
             $result->position(),
             $result->points(),
         );

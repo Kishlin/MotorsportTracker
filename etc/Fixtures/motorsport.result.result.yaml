@@ -1,83 +1,71 @@
 verstappenAtDutchGP2022Race:
   eventStepId: '@motorsport.event.eventStep.dutchGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.verstappenAtRedBullRacingIn2022'
-  fastestLapTime: "1'13.652"
   position: 1
   points: 26
 
 perezAtDutchGP2022Race:
   eventStepId: '@motorsport.event.eventStep.dutchGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.perezAtRedBullRacingIn2022'
-  fastestLapTime: "1'14.404"
   position: 5
   points: 10
 
 hamiltonAtDutchGP2022Race:
   eventStepId: '@motorsport.event.eventStep.dutchGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.hamiltonAtMercedesIn2022'
-  fastestLapTime: "1'13.854"
   position: 4
   points: 12
 
 verstappenAtAustralianGP2022Race:
   eventStepId: '@motorsport.event.eventStep.australianGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.verstappenAtRedBullRacingIn2022'
-  fastestLapTime: "1'21.677"
   position: 18
   points: 0
 
 perezAtAustralianGP2022Race:
   eventStepId: '@motorsport.event.eventStep.australianGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.perezAtRedBullRacingIn2022'
-  fastestLapTime: "1'21.094"
   position: 2
   points: 18
 
 hamiltonAtAustralianGP2022Race:
   eventStepId: '@motorsport.event.eventStep.australianGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.hamiltonAtMercedesIn2022'
-  fastestLapTime: "1'21.886"
   position: 4
   points: 12
 
 verstappenAtEmiliaRomagnaGP2022SprintQualifying:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'
   racerId: '@motorsport.racer.racer.verstappenAtRedBullRacingIn2022'
-  fastestLapTime: "1'19.154"
   position: 1
   points: 8
 
 perezAtEmiliaRomagnaGP2022SprintQualifying:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'
   racerId: '@motorsport.racer.racer.perezAtRedBullRacingIn2022'
-  fastestLapTime: "1'19.012"
   position: 3
   points: 6
 
 hamiltonAtEmiliaRomagnaGP2022SprintQualifying:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'
   racerId: '@motorsport.racer.racer.hamiltonAtMercedesIn2022'
-  fastestLapTime: "1'20.663"
   position: 14
   points: 0
 
 verstappenAtEmiliaRomagnaGP2022Race:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.verstappenAtRedBullRacingIn2022'
-  fastestLapTime: "1'18.446"
   position: 1
   points: 26
 
 perezAtEmiliaRomagnaGP2022Race:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.perezAtRedBullRacingIn2022'
-  fastestLapTime: "1'18.949"
   position: 2
   points: 18
 
 hamiltonAtEmiliaRomagnaGP2022Race:
   eventStepId: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race'
   racerId: '@motorsport.racer.racer.hamiltonAtMercedesIn2022'
-  fastestLapTime: "1'21.419"
   position: 13
   points: 0

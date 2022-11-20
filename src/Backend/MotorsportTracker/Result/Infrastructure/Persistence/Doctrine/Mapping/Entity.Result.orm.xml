@@ -11,8 +11,6 @@
 
         <field name="eventStepId" type="result_event_step_id" column="event_step" length="36" />
 
-        <field name="fastestLapTime" type="result_fastest_lap_time" column="fastest_lap_time" length="36" />
-
         <field name="position" type="result_position" column="position" min="0" />
 
         <field name="points" type="result_points" column="points" min="0" />

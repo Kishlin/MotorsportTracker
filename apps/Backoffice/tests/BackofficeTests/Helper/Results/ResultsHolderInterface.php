@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Helper\Results;
 interface ResultsHolderInterface
 {
     /**
-     * @return array{points: float, position: int, fastestLapTime: string}
+     * @return array{points: float, position: int}
      */
     public function getResultsForCar(string $carNumber): array;
 }

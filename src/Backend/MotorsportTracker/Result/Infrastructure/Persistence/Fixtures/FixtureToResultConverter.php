@@ -7,7 +7,6 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fi
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultEventStepId;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultFastestLapTime;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultId;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPoints;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPosition;
@@ -27,7 +26,6 @@ final class FixtureToResultConverter implements FixtureConverter
             new ResultId($fixture->identifier()),
             new ResultRacerId($fixture->getString('racerId')),
             new ResultEventStepId($fixture->getString('eventStepId')),
-            new ResultFastestLapTime($fixture->getString('fastestLapTime')),
             new ResultPosition($fixture->getInt('position')),
             new ResultPoints($fixture->getFloat('points')),
         );

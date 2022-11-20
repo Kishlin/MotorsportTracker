@@ -35,7 +35,7 @@ final class RecordResultsForEventStepCommand extends SymfonyCommand
     private const ARGUMENT_TYPE = 'type';
     private const QUESTION_TYPE = "Please enter the type of the event:\n";
 
-    private const QUESTION_RESULT = "Please enter {position} - {points} - {fastest lap} for %s #%d:\n";
+    private const QUESTION_RESULT = "Please enter {position} - {points} for %s #%d:\n";
 
     public function __construct(
         private QueryBus $queryBus,
@@ -75,9 +75,9 @@ final class RecordResultsForEventStepCommand extends SymfonyCommand
 
             $result = $this->stringFromPrompt($input, $output, $resultQuestion);
 
-            [$position, $points, $fastestLapTime] = explode(' ', $result);
+            [$position, $points] = explode(' ', $result);
 
-            $resultsDTO[] = ResultDTO::fromScalars($racer->racerId(), $fastestLapTime, (int) $position, (float) $points);
+            $resultsDTO[] = ResultDTO::fromScalars($racer->racerId(), (int) $position, (float) $points);
         }
 
         try {

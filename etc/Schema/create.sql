@@ -187,7 +187,6 @@ CREATE TABLE public.results (
     id character varying(36) NOT NULL,
     racer character varying(36) NOT NULL,
     event_step character varying(36) NOT NULL,
-    fastest_lap_time character varying(36) NOT NULL,
     "position" integer NOT NULL,
     points double precision NOT NULL
 );
@@ -303,6 +302,7 @@ Kishlin\\Migrations\\Version20220713183949	2022-07-13 18:40:59	17
 Kishlin\\Migrations\\Version20220728125835	2022-07-28 12:59:54	21
 Kishlin\\Migrations\\Version20221023043009	2022-10-23 04:33:43	21
 Kishlin\\Migrations\\Version20221105182411	2022-11-05 18:26:27	32
+Kishlin\\Migrations\\Version20221120040214	2022-11-20 04:06:24	13
 \.
 
 
@@ -358,7 +358,7 @@ COPY public.racers (id, car, driver, startdate, enddate) FROM stdin;
 -- Data for Name: results; Type: TABLE DATA; Schema: public; Owner: app
 --
 
-COPY public.results (id, racer, event_step, fastest_lap_time, "position", points) FROM stdin;
+COPY public.results (id, racer, event_step, "position", points) FROM stdin;
 \.
 
 

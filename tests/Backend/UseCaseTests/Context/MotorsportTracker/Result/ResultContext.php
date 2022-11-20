@@ -41,13 +41,12 @@ final class ResultContext extends MotorsportTrackerContext
             $eventStepId = $this->fixtureId("motorsport.event.eventStep.{$this->format($eventStep)}");
             $resultsDTOs = [];
 
-            /** @var array<array{racer: string, fastestLapTime: string, position: int, points: float}> $resultTable */
+            /** @var array<array{racer: string, position: int, points: float}> $resultTable */
             $resultTable = $results;
 
             foreach ($resultTable as $result) {
                 $resultsDTOs[] = ResultDTO::fromScalars(
                     $this->fixtureId("motorsport.racer.racer.{$this->format($result['racer'])}"),
-                    $result['fastestLapTime'],
                     (int) $result['position'],
                     (float) $result['points'],
                 );

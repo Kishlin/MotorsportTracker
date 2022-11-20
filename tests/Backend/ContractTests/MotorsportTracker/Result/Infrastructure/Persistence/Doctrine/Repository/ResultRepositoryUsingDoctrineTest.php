@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Result\Infrastru
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultEventStepId;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultFastestLapTime;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultId;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPoints;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultPosition;
@@ -31,7 +30,6 @@ final class ResultRepositoryUsingDoctrineTest extends RepositoryContractTestCase
             new ResultId(self::uuid()),
             new ResultRacerId(self::fixtureId('motorsport.racer.racer.verstappenAtRedBullRacingIn2022')),
             new ResultEventStepId(self::fixtureId('motorsport.event.eventStep.dutchGrandPrix2022Race')),
-            new ResultFastestLapTime("1'13.652"),
             new ResultPosition(0),
             new ResultPoints(26),
         );
