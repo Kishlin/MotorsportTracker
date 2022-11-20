@@ -12,10 +12,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class CreateEventContext extends BackofficeContext
 {
-    private ?string $label  = null;
-    private ?int $index     = null;
-    private ?string $season = null;
-    private ?string $venue  = null;
+    private ?string $championship = null;
+    private ?int $year            = null;
+    private ?string $label        = null;
+    private ?int $index           = null;
+    private ?string $venue        = null;
 
     private ?int $commandStatus = null;
 
@@ -34,20 +35,24 @@ final class CreateEventContext extends BackofficeContext
     {
         $this->commandStatus = null;
 
-        $this->label  = $label;
-        $this->index  = $index;
-        $this->venue  = self::database()->fixtureId("motorsport.venue.venue.{$this->format($venue)}");
-        $this->season = self::database()->fixtureId("motorsport.championship.season.{$this->format($season)}");
+        preg_match('/([\w\s]+)\s([\w]+)/', $season, $matches);
+
+        $this->year         = (int) $matches[2];
+        $this->championship = $matches[1];
+        $this->label        = $label;
+        $this->index        = $index;
+        $this->venue        = $venue;
 
         $commandTester = new CommandTester(
             self::application()->find(CreateEventCommandUsingSymfony::NAME),
         );
 
         $commandTester->execute([
-            'season' => $this->season,
-            'venue'  => $this->venue,
-            'index'  => $this->index,
-            'label'  => $this->label,
+            'championship' => $this->championship,
+            'year'         => $this->year,
+            'venue'        => $this->venue,
+            'index'        => $this->index,
+            'label'        => $this->label,
         ]);
 
         $this->commandStatus = $commandTester->getStatusCode();
@@ -63,17 +68,21 @@ final class CreateEventContext extends BackofficeContext
         $query = <<<'SQL'
 SELECT *
 FROM events e
-WHERE e.season = :season
+JOIN seasons s on e.season = s.id
+JOIN championships ch on s.championship = ch.id
+WHERE LOWER(REPLACE(' ', '', e.venue)) = LOWER(REPLACE(' ', '', :venue))
+AND ch.name = :championship
 AND e.index = :index
 AND e.label = :label
-AND e.venue = :venue
+AND s.year = :year
 SQL;
 
         $params = [
-            'season' => $this->season,
-            'index'  => $this->index,
-            'label'  => $this->label,
-            'venue'  => $this->venue,
+            'championship' => $this->championship,
+            'year'         => $this->year,
+            'index'        => $this->index,
+            'label'        => $this->label,
+            'venue'        => $this->venue,
         ];
 
         Assert::assertNotNull(self::database()->fetchOne($query, $params));
