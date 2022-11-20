@@ -39,7 +39,7 @@ final class EventContext extends MotorsportTrackerContext
      */
     public function aClientCreatesAnEvent(
         string $label = 'Dutch GP',
-        int $index = 16,
+        int $index = 14,
         string $season = 'formulaOne2022',
         string $venue = 'Zandvoort',
     ): void {

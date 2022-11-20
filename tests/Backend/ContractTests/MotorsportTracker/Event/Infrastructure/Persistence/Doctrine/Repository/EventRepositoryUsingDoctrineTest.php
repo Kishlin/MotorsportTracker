@@ -30,7 +30,7 @@ final class EventRepositoryUsingDoctrineTest extends RepositoryContractTestCase
             new EventId(self::uuid()),
             new EventSeasonId(self::fixtureId('motorsport.championship.season.formulaOne2022')),
             new EventVenueId(self::fixtureId('motorsport.venue.venue.zandvoort')),
-            new EventIndex(16),
+            new EventIndex(14),
             new EventLabel('Dutch GP'),
         );
 

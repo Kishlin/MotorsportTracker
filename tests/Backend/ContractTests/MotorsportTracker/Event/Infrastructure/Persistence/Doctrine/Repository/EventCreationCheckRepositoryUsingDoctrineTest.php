@@ -44,7 +44,7 @@ final class EventCreationCheckRepositoryUsingDoctrineTest extends RepositoryCont
 
         self::assertTrue($repository->seasonHasEventWithIndexOrVenue(
             new EventSeasonId(self::fixtureId('motorsport.championship.season.formulaOne2022')),
-            new EventIndex(16),
+            new EventIndex(14),
             new EventLabel('Free Label'),
         ));
     }
