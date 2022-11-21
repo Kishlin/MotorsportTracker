@@ -92,6 +92,11 @@ abstract class PostgresDatabase implements DatabaseInterface
         $this->entityManager()->getConnection()->executeStatement($query, $params);
     }
 
+    public function close(): void
+    {
+        $this->entityManager()->getConnection()->close();
+    }
+
     abstract protected function entityManager(): EntityManagerInterface;
 
     private function fixtureLoader(): FixtureLoader

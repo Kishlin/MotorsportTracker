@@ -25,6 +25,7 @@ abstract class BackofficeContext implements Context
      */
     public static function clearEnvironment(): void
     {
+        SymfonyApplication::database()->close();
         SymfonyApplication::clearEnvironment();
     }
 
