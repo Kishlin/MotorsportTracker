@@ -10,13 +10,15 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\StepTypeGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property StepType[] $objects
  *
  * @method StepType[]    all()
- * @method null|StepType get(StepTypeId $id)
+ * @method null|StepType get(UuidValueObject $id)
+ * @method StepType      safeGet(UuidValueObject $id)
  */
 final class StepTypeRepositorySpy extends AbstractRepositorySpy implements StepTypeGateway, StepTypeIdForLabelGateway
 {

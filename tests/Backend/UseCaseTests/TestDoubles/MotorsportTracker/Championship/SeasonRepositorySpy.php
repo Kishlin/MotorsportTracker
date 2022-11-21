@@ -7,14 +7,15 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Champ
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\SeasonCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SeasonGateway;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Season[] $objects
  *
  * @method Season[]    all()
- * @method null|Season get(SeasonId $id)
+ * @method null|Season get(UuidValueObject $id)
+ * @method Season      safeGet(UuidValueObject $id)
  */
 final class SeasonRepositorySpy extends AbstractRepositorySpy implements SeasonGateway
 {

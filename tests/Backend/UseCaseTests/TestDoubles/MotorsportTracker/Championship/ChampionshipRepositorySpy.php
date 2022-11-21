@@ -9,14 +9,15 @@ use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionsh
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Championship[] $objects
  *
  * @method Championship[]    all()
- * @method null|Championship get(ChampionshipId $id)
+ * @method null|Championship get(UuidValueObject $id)
+ * @method Championship      safeGet(UuidValueObject $id)
  */
 final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements ChampionshipGateway, ViewAllChampionshipsGateway
 {

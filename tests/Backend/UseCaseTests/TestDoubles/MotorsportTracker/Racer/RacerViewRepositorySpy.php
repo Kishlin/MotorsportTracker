@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Racer;
 
 use DateTimeImmutable;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\RacersForDateTimeAndSeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\SeasonId as RacerSeasonId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
@@ -40,15 +38,13 @@ final class RacerViewRepositorySpy implements RacersForDateTimeAndSeasonGateway
                 continue;
             }
 
-            $car = $this->carRepositorySpy->get(CarId::fromOther($racer->carId()));
-            assert(null !== $car);
+            $car = $this->carRepositorySpy->safeGet($racer->carId());
 
             if (false === $car->seasonId()->equals($seasonId)) {
                 continue;
             }
 
-            $driver = $this->driverRepositorySpy->get(DriverId::fromOther($racer->driverId()));
-            assert(null !== $driver);
+            $driver = $this->driverRepositorySpy->safeGet($racer->driverId());
 
             $out[] = RacerPOPO::fromScalars(
                 $racer->id()->value(),

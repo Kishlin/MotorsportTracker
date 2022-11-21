@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\CarRegistrationFailureException;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\Car;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Gateway\CarGateway;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -16,7 +16,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property Car[] $objects
  *
  * @method Car[]    all()
- * @method null|Car get(CarId $id)
+ * @method null|Car get(UuidValueObject $id)
+ * @method Car      safeGet(UuidValueObject $id)
  */
 final class CarRepositorySpy extends AbstractRepositorySpy implements CarGateway
 {

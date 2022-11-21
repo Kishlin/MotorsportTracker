@@ -27,8 +27,7 @@ final class TeamStandingsForSeasonRepositorySpy implements TeamStandingsForSeaso
 
         foreach ($this->teamStandingRepositorySpy->all() as $teamStanding) {
             $eventId = $teamStanding->eventId()->value();
-            $event   = $this->eventRepositorySpy->get(new EventId($eventId));
-            assert(null !== $event);
+            $event   = $this->eventRepositorySpy->safeGet(new EventId($eventId));
 
             if (false === array_key_exists($teamStanding->eventId()->value(), $eventIsInSeason)) {
                 $eventIsInSeason[$eventId] = $event->seasonId()->value() === $seasonId;

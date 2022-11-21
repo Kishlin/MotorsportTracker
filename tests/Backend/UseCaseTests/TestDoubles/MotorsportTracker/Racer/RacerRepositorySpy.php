@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Racer;
 
-use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\ExistingRacerGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Gateway\RacerGateway;
-use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\DriverMoveRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -17,7 +15,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property Racer[] $objects
  *
  * @method Racer[]    all()
- * @method null|Racer get(RacerId $id)
+ * @method null|Racer get(UuidValueObject $id)
+ * @method Racer      safeGet(UuidValueObject $id)
  */
 final class RacerRepositorySpy extends AbstractRepositorySpy implements RacerGateway, ExistingRacerGateway
 {
@@ -33,10 +32,7 @@ final class RacerRepositorySpy extends AbstractRepositorySpy implements RacerGat
 
     public function findIfExistsForDriverMove(UuidValueObject $driverMoveId): ?Racer
     {
-        assert($driverMoveId instanceof DriverMoveId);
-
-        $driverMove = $this->driverMoveRepositorySpy->get($driverMoveId);
-        assert(null !== $driverMove);
+        $driverMove = $this->driverMoveRepositorySpy->safeGet($driverMoveId);
 
         foreach ($this->objects as $racer) {
             if (

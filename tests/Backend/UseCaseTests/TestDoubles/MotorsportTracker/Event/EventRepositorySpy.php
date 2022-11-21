@@ -8,17 +8,18 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\EventCreationCheckGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\EventGateway;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventIndex;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Event[] $objects
  *
  * @method Event[]    all()
- * @method null|Event get(EventId $id)
+ * @method null|Event get(UuidValueObject $id)
+ * @method Event      safeGet(UuidValueObject $id)
  */
 final class EventRepositorySpy extends AbstractRepositorySpy implements EventGateway, EventCreationCheckGateway
 {

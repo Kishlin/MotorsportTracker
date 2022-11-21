@@ -18,9 +18,6 @@ final class EventIdForEventStepIdRepositorySpy implements EventIdOfEventStepIdRe
 
     public function eventIdForEventStepId(UuidValueObject $eventStepId): string
     {
-        $eventStep = $this->eventStepRepositorySpy->get(EventStepId::fromOther($eventStepId));
-        assert(null !== $eventStep);
-
-        return $eventStep->eventId()->value();
+        return $this->eventStepRepositorySpy->safeGet(EventStepId::fromOther($eventStepId))->eventId()->value();
     }
 }

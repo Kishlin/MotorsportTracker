@@ -10,13 +10,15 @@ use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\Gateway\CountryGateway;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Country[] $objects
  *
  * @method Country[]    all()
- * @method null|Country get(CountryId $id)
+ * @method null|Country get(UuidValueObject $id)
+ * @method Country      safeGet(UuidValueObject $id)
  */
 final class CountryRepositorySpy extends AbstractRepositorySpy implements CountryGateway, CountryIdForCodeGateway
 {

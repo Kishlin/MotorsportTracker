@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
 use Kishlin\Backend\MotorsportTracker\Event\Application\ViewCalendar\CalendarViewGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\View\JsonableCalendarView;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
 
@@ -28,11 +26,8 @@ final class CalendarViewRepositorySpy implements CalendarViewGateway
         return JsonableCalendarView::fromSource(
             array_map(
                 static function (EventStep $eventStep) use ($seasonRepository, $eventRepository) {
-                    $event = $eventRepository->get(EventId::fromOther($eventStep->eventId()));
-                    assert(null !== $event);
-
-                    $season = $seasonRepository->get(SeasonId::fromOther($event->seasonId()));
-                    assert(null !== $season);
+                    $event  = $eventRepository->safeGet($eventStep->eventId());
+                    $season = $seasonRepository->safeGet($event->seasonId());
 
                     return [
                         'date_time'    => $eventStep->dateTime()->value()->format('Y-m-d H:i:s'),

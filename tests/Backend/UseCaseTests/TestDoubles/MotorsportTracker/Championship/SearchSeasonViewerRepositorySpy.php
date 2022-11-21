@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonViewer;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
 
 final class SearchSeasonViewerRepositorySpy implements SearchSeasonViewer
@@ -20,11 +18,7 @@ final class SearchSeasonViewerRepositorySpy implements SearchSeasonViewer
     public function search(string $championship, int $year): ?SeasonId
     {
         foreach ($this->seasonRepositorySpy->all() as $season) {
-            $seasonChampionship = $this->championshipRepositorySpy->get(
-                ChampionshipId::fromOther($season->championshipId())
-            );
-
-            assert($seasonChampionship instanceof Championship);
+            $seasonChampionship = $this->championshipRepositorySpy->safeGet($season->championshipId());
 
             if ($season->year()->value() !== $year) {
                 continue;

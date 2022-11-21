@@ -7,7 +7,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RecordDriverMove\DriverMoveRecordingFailureException;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Gateway\DriverMoveGateway;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveData;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveDataGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveDataNotFoundException;
@@ -19,7 +18,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property DriverMove[] $objects
  *
  * @method DriverMove[]    all()
- * @method null|DriverMove get(DriverMoveId $id)
+ * @method null|DriverMove get(UuidValueObject $id)
+ * @method DriverMove      safeGet(UuidValueObject $id)
  */
 final class DriverMoveRepositorySpy extends AbstractRepositorySpy implements DriverMoveGateway, DriverMoveDataGateway
 {

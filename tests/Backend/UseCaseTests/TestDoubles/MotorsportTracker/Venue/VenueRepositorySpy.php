@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueV
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\VenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -16,7 +17,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property Venue[] $objects
  *
  * @method Venue[]    all()
- * @method null|Venue get(VenueId $id)
+ * @method null|Venue get(UuidValueObject $id)
+ * @method Venue      safeGet(UuidValueObject $id)
  */
 final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway, SearchVenueViewer
 {

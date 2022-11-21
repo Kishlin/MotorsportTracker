@@ -7,14 +7,15 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Resul
 use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\ResultCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Gateway\ResultGateway;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\ResultId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property Result[] $objects
  *
  * @method Result[]    all()
- * @method null|Result get(ResultId $id)
+ * @method null|Result get(UuidValueObject $id)
+ * @method Result      safeGet(UuidValueObject $id)
  */
 final class ResultRepositorySpy extends AbstractRepositorySpy implements ResultGateway
 {

@@ -23,6 +23,17 @@ abstract class AbstractRepositorySpy
         return $this->objects[$id->value()] ?? null;
     }
 
+    public function safeGet(UuidValueObject $id): AggregateRoot
+    {
+        $idString = $id->value();
+
+        if (false === array_key_exists($idString, $this->objects)) {
+            throw new RuntimeException("Requesting object with id {$idString} which does not exist.");
+        }
+
+        return $this->objects[$id->value()];
+    }
+
     /**
      * @return AggregateRoot[]
      */

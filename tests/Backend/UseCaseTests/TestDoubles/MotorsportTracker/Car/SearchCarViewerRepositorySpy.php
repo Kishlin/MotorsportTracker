@@ -6,12 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car;
 
 use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarViewer;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
@@ -34,27 +28,19 @@ final class SearchCarViewerRepositorySpy implements SearchCarViewer
                 continue;
             }
 
-            $carTeam = $this->teamRepositorySpy->get(TeamId::fromOther($car->teamId()));
-            assert($carTeam instanceof Team);
+            $carTeam = $this->teamRepositorySpy->safeGet($car->teamId());
 
             if (false === $this->stringsMatch($carTeam->name(), $team)) {
                 continue;
             }
 
-            $carSeason = $this->seasonRepositorySpy->get(SeasonId::fromOther($car->seasonId()));
-            assert($carSeason instanceof Season);
+            $carSeason = $this->seasonRepositorySpy->safeGet($car->seasonId());
 
             if ($carSeason->year()->value() !== $year) {
                 continue;
             }
 
-            $carChampionship = $this->championshipRepositorySpy->get(
-                ChampionshipId::fromOther(
-                    $carSeason->championshipId(),
-                )
-            );
-
-            assert($carChampionship instanceof Championship);
+            $carChampionship = $this->championshipRepositorySpy->safeGet($carSeason->championshipId());
 
             if ($this->stringsMatch($carChampionship->name(), $championship)
                 || $this->stringsMatch($carChampionship->slug(), $championship)

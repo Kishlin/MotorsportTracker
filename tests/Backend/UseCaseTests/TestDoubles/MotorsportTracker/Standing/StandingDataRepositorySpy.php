@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing;
 
-use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\Car;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
-use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
-use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataReader;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
@@ -59,8 +53,8 @@ final class StandingDataRepositorySpy implements StandingDataReader
                 continue;
             }
 
-            $racer = $this->getRacer($result);
-            $car   = $this->getCar($racer);
+            $racer = $this->racerRepositorySpy->safeGet($result->racerId());
+            $car   = $this->carRepositorySpy->safeGet($racer->carId());
 
             $driverId = $racer->driverId()->value();
             $teamId   = $car->teamId()->value();
@@ -73,37 +67,16 @@ final class StandingDataRepositorySpy implements StandingDataReader
 
     private function getEvent(string $eventId): Event
     {
-        $event = $this->eventRepositorySpy->get(new EventId($eventId));
-        assert($event instanceof Event);
-
-        return $event;
+        return $this->eventRepositorySpy->safeGet(new EventId($eventId));
     }
 
     private function isEventStepPartOfSameChampionship(string $eventStepId, Event $referenceEvent): bool
     {
-        $eventStep = $this->eventStepRepositorySpy->get(new EventStepId($eventStepId));
-        assert($eventStep instanceof EventStep);
+        $eventStep = $this->eventStepRepositorySpy->safeGet(new EventStepId($eventStepId));
 
-        $event = $this->eventRepositorySpy->get(EventId::fromOther($eventStep->eventId()));
-        assert($event instanceof Event);
+        $event = $this->eventRepositorySpy->safeGet($eventStep->eventId());
 
         return $event->seasonId()->equals($referenceEvent->seasonId())
             && $event->index()->value() <= $referenceEvent->index()->value();
-    }
-
-    private function getRacer(Result $result): Racer
-    {
-        $racer = $this->racerRepositorySpy->get(RacerId::fromOther($result->racerId()));
-        assert($racer instanceof Racer);
-
-        return $racer;
-    }
-
-    private function getCar(Racer $racer): Car
-    {
-        $car = $this->carRepositorySpy->get(CarId::fromOther($racer->carId()));
-        assert($car instanceof Car);
-
-        return $car;
     }
 }

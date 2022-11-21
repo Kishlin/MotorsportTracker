@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriv
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Gateway\DriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -16,7 +17,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property Driver[] $objects
  *
  * @method Driver[]    all()
- * @method null|Driver get(DriverId $id)
+ * @method null|Driver get(UuidValueObject $id)
+ * @method Driver      safeGet(UuidValueObject $id)
  */
 final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverGateway, SearchDriverViewer
 {

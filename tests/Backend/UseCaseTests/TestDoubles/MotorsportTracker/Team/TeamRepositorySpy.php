@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamView
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Gateway\TeamGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -16,7 +17,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @property Team[] $objects
  *
  * @method Team[]    all()
- * @method null|Team get(TeamId $id)
+ * @method null|Team get(UuidValueObject $id)
+ * @method Team      safeGet(UuidValueObject $id)
  */
 final class TeamRepositorySpy extends AbstractRepositorySpy implements TeamGateway, SearchTeamViewer
 {

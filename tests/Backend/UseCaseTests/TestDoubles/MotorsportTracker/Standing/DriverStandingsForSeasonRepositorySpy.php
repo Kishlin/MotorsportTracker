@@ -27,8 +27,7 @@ final class DriverStandingsForSeasonRepositorySpy implements DriverStandingsForS
 
         foreach ($this->driverStandingRepositorySpy->all() as $driverStanding) {
             $eventId = $driverStanding->eventId()->value();
-            $event   = $this->eventRepositorySpy->get(new EventId($eventId));
-            assert(null !== $event);
+            $event   = $this->eventRepositorySpy->safeGet(new EventId($eventId));
 
             if (false === array_key_exists($driverStanding->eventId()->value(), $eventIsInSeason)) {
                 $eventIsInSeason[$eventId] = $event->seasonId()->value() === $seasonId;

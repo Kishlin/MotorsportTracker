@@ -8,14 +8,15 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\DriverStanding;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Gateway\DriverStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\DriverStandingDriverId;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\DriverStandingEventId;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\DriverStandingId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
  * @property DriverStanding[] $objects
  *
  * @method DriverStanding[]    all()
- * @method null|DriverStanding get(DriverStandingId $id)
+ * @method null|DriverStanding get(UuidValueObject $id)
+ * @method DriverStanding      safeGet(UuidValueObject $id)
  */
 final class DriverStandingRepositorySpy extends AbstractRepositorySpy implements DriverStandingGateway
 {
