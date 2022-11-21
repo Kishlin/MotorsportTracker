@@ -12,6 +12,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
+use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataReader;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
@@ -38,9 +39,36 @@ final class StandingDataRepositorySpy implements StandingDataReader
     {
         $referenceEvent = $this->getEvent($eventId);
 
-        $pointsPerRacer = $this->getPointsPerRacer($referenceEvent);
+        /** @var array<string, boolean> $memoizedEventStepData */
+        $memoizedEventStepData = [];
 
-        return $this->mapPointsPerRacerToStandings($pointsPerRacer);
+        /** @var StandingDataDTO[] $standings */
+        $standings = [];
+
+        foreach ($this->resultRepositorySpy->all() as $result) {
+            $eventStepId = $result->eventStepId()->value();
+
+            if (false === array_key_exists($eventStepId, $memoizedEventStepData)) {
+                $memoizedEventStepData[$eventStepId] = $this->isEventStepPartOfSameChampionship(
+                    $eventStepId,
+                    $referenceEvent,
+                );
+            }
+
+            if (false === $memoizedEventStepData[$eventStepId]) {
+                continue;
+            }
+
+            $racer = $this->getRacer($result);
+            $car   = $this->getCar($racer);
+
+            $driverId = $racer->driverId()->value();
+            $teamId   = $car->teamId()->value();
+
+            $standings[] = StandingDataDTO::fromScalars($driverId, $teamId, $result->points()->value());
+        }
+
+        return $standings;
     }
 
     private function getEvent(string $eventId): Event
@@ -51,70 +79,31 @@ final class StandingDataRepositorySpy implements StandingDataReader
         return $event;
     }
 
-    /**
-     * @return array<string, float>
-     */
-    private function getPointsPerRacer(Event $referenceEvent): array
+    private function isEventStepPartOfSameChampionship(string $eventStepId, Event $referenceEvent): bool
     {
-        /** @var array<string, float> $pointsPerRacer */
-        $pointsPerRacer = [];
+        $eventStep = $this->eventStepRepositorySpy->get(new EventStepId($eventStepId));
+        assert($eventStep instanceof EventStep);
 
-        /** @var array<string, boolean> $eventStepData */
-        $eventStepData = [];
+        $event = $this->eventRepositorySpy->get(EventId::fromOther($eventStep->eventId()));
+        assert($event instanceof Event);
 
-        foreach ($this->resultRepositorySpy->all() as $result) {
-            $eventStepId = $result->eventStepId()->value();
-
-            if (false === array_key_exists($eventStepId, $eventStepData)) {
-                $eventStep = $this->eventStepRepositorySpy->get(new EventStepId($eventStepId));
-                assert($eventStep instanceof EventStep);
-
-                $event = $this->eventRepositorySpy->get(EventId::fromOther($eventStep->eventId()));
-                assert($event instanceof Event);
-
-                $eventStepData[$eventStepId] = $event->seasonId()->equals($referenceEvent->seasonId())
-                    && $event->index()->value() <= $referenceEvent->index()->value();
-            }
-
-            if (false === $eventStepData[$eventStepId]) {
-                continue;
-            }
-
-            $racerId = $result->racerId()->value();
-
-            if (array_key_exists($racerId, $pointsPerRacer)) {
-                $pointsPerRacer[$racerId] += $result->points()->value();
-            } else {
-                $pointsPerRacer[$racerId] = $result->points()->value();
-            }
-        }
-
-        return $pointsPerRacer;
+        return $event->seasonId()->equals($referenceEvent->seasonId())
+            && $event->index()->value() <= $referenceEvent->index()->value();
     }
 
-    /**
-     * @param array<string, float> $pointsPerRacer
-     *
-     * @return StandingDataDTO[]
-     */
-    private function mapPointsPerRacerToStandings(array $pointsPerRacer): array
+    private function getRacer(Result $result): Racer
     {
-        /** @var StandingDataDTO[] $standingDataList */
-        $standingDataList = [];
+        $racer = $this->racerRepositorySpy->get(RacerId::fromOther($result->racerId()));
+        assert($racer instanceof Racer);
 
-        foreach ($pointsPerRacer as $racerId => $points) {
-            $racer = $this->racerRepositorySpy->get(new RacerId($racerId));
-            assert($racer instanceof Racer);
+        return $racer;
+    }
 
-            $car = $this->carRepositorySpy->get(CarId::fromOther($racer->carId()));
-            assert($car instanceof Car);
+    private function getCar(Racer $racer): Car
+    {
+        $car = $this->carRepositorySpy->get(CarId::fromOther($racer->carId()));
+        assert($car instanceof Car);
 
-            $driverId = $racer->driverId()->value();
-            $teamId   = $car->teamId()->value();
-
-            $standingDataList[] = StandingDataDTO::fromScalars($driverId, $teamId, $points);
-        }
-
-        return $standingDataList;
+        return $car;
     }
 }

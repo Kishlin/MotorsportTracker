@@ -13,3 +13,11 @@ emiliaRomagna:
 circuitOfTheAmericas:
   countryId: '@country.country.usa'
   name: 'Circuit of the Americas'
+
+monza:
+  countryId: '@country.country.italia'
+  name: 'Autodromo Nazionale Monza'
+
+singapore:
+  countryId: '@country.country.singapore'
+  name: 'Marina Bay Street Circuit'

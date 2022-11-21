@@ -79,6 +79,51 @@ Feature: It can create Events
       | Red Bull Racing | Emilia Romagna Grand Prix 2022 | 76     |
       | Mercedes        | Emilia Romagna Grand Prix 2022 | 12     |
 
+  @backoffice
+  Scenario: It records results over multiple events with changing drivers
+    Given the eventStep "Dutch Grand Prix 2022 Race" exists
+    And the racer for "Latifi At Williams In 2022 First Part" exists
+    When a client records the following results for eventStep "Dutch Grand Prix 2022 Race":
+      | racer                                 | position | points |
+      | Latifi At Williams In 2022 First Part | 10       | 1      |
+    Then the driver's standings are now
+      | driver          | event                 | points |
+      | Nicholas Latifi | Dutch Grand Prix 2022 | 1      |
+    And the team's standings are now
+      | team     | event                 | points |
+      | Williams | Dutch Grand Prix 2022 | 1      |
+    Given the eventStep "Italian Grand Prix 2022 Race" exists
+    And the racer for "De Vries At Williams In 2022" exists
+    When a client records the following results for eventStep "Italian Grand Prix 2022 Race":
+      | racer                        | position | points |
+      | De Vries At Williams In 2022 | 2        | 18     |
+    Then the driver's standings are now
+      | driver          | event                   | points |
+      | Nicholas Latifi | Dutch Grand Prix 2022   | 1      |
+      | Nicholas Latifi | Italian Grand Prix 2022 | 1      |
+      | Nyck De Vries   | Italian Grand Prix 2022 | 18     |
+    And the team's standings are now
+      | team     | event                   | points |
+      | Williams | Dutch Grand Prix 2022   | 1      |
+      | Williams | Italian Grand Prix 2022 | 19     |
+    Given the eventStep "Singapore Grand Prix 2022 Race" exists
+    And the racer for "Latifi At Williams In 2022 Second Part" exists
+    When a client records the following results for eventStep "Singapore Grand Prix 2022 Race":
+      | racer                                  | position | points |
+      | Latifi At Williams In 2022 Second Part | 9        | 2      |
+    Then the driver's standings are now
+      | driver          | event                     | points |
+      | Nicholas Latifi | Dutch Grand Prix 2022     | 1      |
+      | Nicholas Latifi | Italian Grand Prix 2022   | 1      |
+      | Nyck De Vries   | Italian Grand Prix 2022   | 18     |
+      | Nicholas Latifi | Singapore Grand Prix 2022 | 3      |
+      | Nyck De Vries   | Singapore Grand Prix 2022 | 18     |
+    And the team's standings are now
+      | team     | event                     | points |
+      | Williams | Dutch Grand Prix 2022     | 1      |
+      | Williams | Italian Grand Prix 2022   | 19     |
+      | Williams | Singapore Grand Prix 2022 | 21     |
+
   Scenario: It cannot record two racers at the same position
     Given the eventStep "Dutch Grand Prix 2022 Race" exists
     And the racer for "Verstappen At Red Bull Racing In 2022" exists

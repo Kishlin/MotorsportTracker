@@ -17,3 +17,13 @@ lewisHamilton:
   firstname: 'Lewis'
   name: 'Hamilton'
   countryId: '@country.country.unitedKingdom'
+
+nicholasLatifi:
+  firstname: 'Nicholas'
+  name: 'Latifi'
+  countryId: '@country.country.canada'
+
+nyckDeVries:
+  firstname: 'Nick'
+  name: 'de Vries'
+  countryId: '@country.country.netherlands'

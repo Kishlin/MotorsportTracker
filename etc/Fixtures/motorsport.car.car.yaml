@@ -22,3 +22,13 @@ redBullRacing2019SecondCar:
   teamId: '@motorsport.team.team.redBullRacing'
   seasonId: '@motorsport.championship.season.formulaOne2019'
   number: 10
+
+williams2022SecondCar:
+  teamId: '@motorsport.team.team.williams'
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  number: 6
+
+williams2022ThirdCar:
+  teamId: '@motorsport.team.team.williams'
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  number: 45

@@ -24,3 +24,9 @@ unitedKingdom:
 
 usa:
   code: 'us'
+
+canada:
+  code: 'ca'
+
+singapore:
+  code: 'sg'

@@ -12,3 +12,8 @@ toroRosso:
   name: 'Toro Rosso'
   image: 'https://cdn.motorsporttracker.com/teams/tororosso.png'
   countryId: '@country.country.italia'
+
+williams:
+  name: 'Williams'
+  image: 'https://cdn.motorsporttracker.com/teams/williams.png'
+  countryId: '@country.country.unitedKingdom'

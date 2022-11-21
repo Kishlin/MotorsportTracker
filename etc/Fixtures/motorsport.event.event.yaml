@@ -21,3 +21,15 @@ americasMotoGP2022:
   venueId: '@motorsport.venue.venue.circuitOfTheAmericas'
   index: '3'
   label: 'Americas GP'
+
+italianGrandPrix2022:
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  venueId: '@motorsport.venue.venue.monza'
+  index: '15'
+  label: 'Italian GP'
+
+singaporeGrandPrix2022:
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  venueId: '@motorsport.venue.venue.singapore'
+  index: '16'
+  label: 'Singapore GP'

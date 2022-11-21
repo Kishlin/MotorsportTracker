@@ -36,21 +36,32 @@ final class RefreshStandingsOnResultsRecordedHandler implements DomainEventSubsc
         $eventId      = $this->eventIdForEventStepIdRepositorySpy->eventIdForEventStepId($domainEvent->eventStepId());
         $standingData = $this->standingDataGateway->findStandingDataForEvent($eventId);
 
+        /** @var array<string, float> $driverStandings */
+        $driverStandings = [];
+
         /** @var array<string, float> $teamStandings */
         $teamStandings = [];
 
         foreach ($standingData as $standingDataDTO) {
-            $newDriverTotal = $standingDataDTO->pointsUntilEvent();
+            $pointsUntilEvent = $standingDataDTO->pointsUntilEvent();
 
-            if (array_key_exists($standingDataDTO->teamId(), $teamStandings)) {
-                $teamStandings[$standingDataDTO->teamId()] += $newDriverTotal;
+            if (array_key_exists($standingDataDTO->driverId(), $driverStandings)) {
+                $driverStandings[$standingDataDTO->driverId()] += $pointsUntilEvent;
             } else {
-                $teamStandings[$standingDataDTO->teamId()] = $newDriverTotal;
+                $driverStandings[$standingDataDTO->driverId()] = $pointsUntilEvent;
             }
 
+            if (array_key_exists($standingDataDTO->teamId(), $teamStandings)) {
+                $teamStandings[$standingDataDTO->teamId()] += $pointsUntilEvent;
+            } else {
+                $teamStandings[$standingDataDTO->teamId()] = $pointsUntilEvent;
+            }
+        }
+
+        foreach ($driverStandings as $driverId => $newDriverTotal) {
             $this->saveDriverStanding(
                 new DriverStandingEventId($eventId),
-                new DriverStandingDriverId($standingDataDTO->driverId()),
+                new DriverStandingDriverId($driverId),
                 new DriverStandingPoints($newDriverTotal),
             );
         }
