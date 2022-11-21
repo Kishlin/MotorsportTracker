@@ -22,6 +22,18 @@ gaslyAtRedBullRacingIn2019:
   startDate: '2019-01-01 00:00:00'
   endDate: '2019-12-31 23:59:59'
 
+gaslyAtRedBullRacingIn2019FirstHalf:
+  driverId: '@motorsport.driver.driver.pierreGasly'
+  carId: '@motorsport.car.car.redBullRacing2019SecondCar'
+  startDate: '2019-01-01 00:00:00'
+  endDate: '2019-08-04 23:59:59'
+
+gaslyAtToroRossoIn2019SecondHalf:
+  driverId: '@motorsport.driver.driver.pierreGasly'
+  carId: '@motorsport.car.car.toroRosso2019FirstCar'
+  startDate: '2019-08-05 00:00:00'
+  endDate: '2019-12-31 23:59:59'
+
 latifiAtWilliamsIn2022FirstPart:
   driverId: '@motorsport.driver.driver.nicholasLatifi'
   carId: '@motorsport.car.car.williams2022SecondCar'

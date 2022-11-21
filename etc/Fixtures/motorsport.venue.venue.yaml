@@ -21,3 +21,11 @@ monza:
 singapore:
   countryId: '@country.country.singapore'
   name: 'Marina Bay Street Circuit'
+
+hungaroring:
+  countryId: '@country.country.hungary'
+  name: 'Hungaroring'
+
+spaFrancorchamps:
+  countryId: '@country.country.belgium'
+  name: 'Circuit de Spa Francorchamps'

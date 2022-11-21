@@ -30,3 +30,9 @@ canada:
 
 singapore:
   code: 'sg'
+
+hungary:
+  code: 'hu'
+
+belgium:
+  code: 'be'

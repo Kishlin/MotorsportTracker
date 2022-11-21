@@ -124,6 +124,34 @@ Feature: It can create Events
       | Williams | Italian Grand Prix 2022   | 19     |
       | Williams | Singapore Grand Prix 2022 | 21     |
 
+  @backoffice
+  Scenario: It records results over multiple events with drivers changing teams
+    Given the eventStep "Hungarian Grand Prix 2019 Race" exists
+    And the racer for "Gasly At Red Bull Racing In 2019 First Half" exists
+    When a client records the following results for eventStep "Hungarian Grand Prix 2019 Race":
+      | racer                                       | position | points |
+      | Gasly At Red Bull Racing In 2019 First Half | 6        | 8      |
+    Then the driver's standings are now
+      | driver       | event                     | points |
+      | Pierre Gasly | Hungarian Grand Prix 2019 | 8      |
+    And the team's standings are now
+      | team            | event                     | points |
+      | Red Bull Racing | Hungarian Grand Prix 2019 | 8      |
+    Given the eventStep "Belgian Grand Prix 2019 Race" exists
+    And the racer for "Gasly At Toro Rosso In 2019 Second Half" exists
+    When a client records the following results for eventStep "Belgian Grand Prix 2019 Race":
+      | racer                                   | position | points |
+      | Gasly At Toro Rosso In 2019 Second Half | 9        | 2      |
+    Then the driver's standings are now
+      | driver       | event                     | points |
+      | Pierre Gasly | Hungarian Grand Prix 2019 | 8      |
+      | Pierre Gasly | Belgian Grand Prix 2019   | 10     |
+    And the team's standings are now
+      | team            | event                     | points |
+      | Red Bull Racing | Hungarian Grand Prix 2019 | 8      |
+      | Red Bull Racing | Belgian Grand Prix 2019   | 8      |
+      | Toro Rosso      | Belgian Grand Prix 2019   | 2      |
+
   Scenario: It cannot record two racers at the same position
     Given the eventStep "Dutch Grand Prix 2022 Race" exists
     And the racer for "Verstappen At Red Bull Racing In 2022" exists
