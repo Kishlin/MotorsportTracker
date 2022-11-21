@@ -34,6 +34,12 @@ gaslyAtToroRossoIn2019SecondHalf:
   startDate: '2019-08-05 00:00:00'
   endDate: '2019-12-31 23:59:59'
 
+latifiAtWilliamsIn2022:
+  driverId: '@motorsport.driver.driver.nicholasLatifi'
+  carId: '@motorsport.car.car.williams2022SecondCar'
+  startDate: '2022-01-01 00:00:00'
+  endDate: '2022-12-31 23:59:59'
+
 latifiAtWilliamsIn2022FirstPart:
   driverId: '@motorsport.driver.driver.nicholasLatifi'
   carId: '@motorsport.car.car.williams2022SecondCar'

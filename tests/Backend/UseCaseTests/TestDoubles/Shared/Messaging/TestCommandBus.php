@@ -14,6 +14,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriv
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\CreateEventStepCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerEndDate\UpdateRacerEndDateCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\RecordResultsCommand;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommand;
@@ -60,6 +61,10 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof CreateStepTypeIfNotExistsCommand) {
             return $this->testServiceContainer->createStepTypeIfNotExistsCommandHandler()($command);
+        }
+
+        if ($command instanceof UpdateRacerEndDateCommand) {
+            return $this->testServiceContainer->updateRacerEndDateCommandHandler()($command);
         }
 
         if ($command instanceof RecordResultsCommand) {
