@@ -46,6 +46,7 @@ default:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Driver\CreateDriverContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue\CreateVenueContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Racer\ChangeRacerContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\CreateTeamContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\CreateCarContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Result\ResultContext
