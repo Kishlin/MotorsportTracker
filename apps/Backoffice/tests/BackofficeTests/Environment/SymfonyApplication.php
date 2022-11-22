@@ -7,8 +7,8 @@ namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Environment;
 use Kishlin\Apps\Backoffice\Kernel;
 use Kishlin\Tests\Apps\Backoffice\Tools\ConsoleApplication\ConsoleApplicationInterface;
 use Kishlin\Tests\Apps\Backoffice\Tools\ConsoleApplication\SymfonyConsoleApplication;
-use Kishlin\Tests\Apps\Backoffice\Tools\Database\DatabaseInterface;
-use Kishlin\Tests\Apps\Backoffice\Tools\Database\SymfonyPostgresDatabase;
+use Kishlin\Tests\Backend\Tools\Database\DatabaseInterface;
+use Kishlin\Tests\Backend\Tools\Database\SymfonyPostgresDatabase;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpKernel\KernelInterface;
 

@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context;
 use Behat\Behat\Context\Context;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Environment\SymfonyApplication;
 use Kishlin\Tests\Apps\Backoffice\Tools\ConsoleApplication\ConsoleApplicationInterface;
-use Kishlin\Tests\Apps\Backoffice\Tools\Database\DatabaseInterface;
+use Kishlin\Tests\Backend\Tools\Database\DatabaseInterface;
 
 abstract class BackofficeContext implements Context
 {
