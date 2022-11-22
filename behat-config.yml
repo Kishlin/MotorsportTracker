@@ -32,7 +32,7 @@ default:
     api_tests:
       paths: [ features ]
       contexts:
-        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\Context
+        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Event\CalendarContext
       filters:
         tags: '@api'
     backoffice_tests:

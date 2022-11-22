@@ -1,10 +1,12 @@
 Feature: It can view the calendar
 
+  @api
   Scenario: It views an empty calendar
     Given there are no events planned
     When a client views the calendar
     Then an empty calendar is viewed
 
+  @api
   Scenario: It views a complex calendar
     Given the eventStep "Emilia Romagna Grand Prix 2022 Sprint Qualifying" exists
     And the eventStep "Emilia Romagna Grand Prix 2022 Race" exists

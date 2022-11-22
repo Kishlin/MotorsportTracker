@@ -1,0 +1,5 @@
+monitoring:
+  resource: ../../src/MotorsportTracker/Event/Controller/
+  prefix: /events
+  type: annotation
+  stateless: true
