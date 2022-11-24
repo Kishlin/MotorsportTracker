@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '/team/{championship}/{year}',
-    name: 'standings_team',
+    '/teams/{championship}/{year}',
+    name: 'standings_teams',
     requirements: ['year' => '\d{4}'],
     methods: [Request::METHOD_GET],
 )]

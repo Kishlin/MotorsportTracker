@@ -43,7 +43,7 @@ final class StandingContext extends BackendApiContext
         $championship = $this->format(substr($season, 0, strlen($season) - 4));
         $year         = substr($season, -4, 4);
 
-        $this->response = self::handle(Request::create("/standings/team/{$championship}/{$year}", 'GET'));
+        $this->response = self::handle(Request::create("/standings/teams/{$championship}/{$year}", 'GET'));
     }
 
     /**
@@ -74,11 +74,11 @@ final class StandingContext extends BackendApiContext
         Assert::assertIsArray($actual);
 
         foreach ($expected as $expectedStanding) {
-            $driverId = self::fixtureId("motorsport.team.team.{$this->format($expectedStanding['team'])}");
+            $teamId = self::fixtureId("motorsport.team.team.{$this->format($expectedStanding['team'])}");
 
             Assert::assertSame(
                 (float) ($expectedStanding['points']),
-                (float) $actual[$expectedStanding['eventIndex']][$driverId],
+                (float) $actual[$expectedStanding['eventIndex']][$teamId],
             );
         }
     }
