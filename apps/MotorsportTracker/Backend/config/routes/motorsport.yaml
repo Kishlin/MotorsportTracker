@@ -1,5 +1,11 @@
-monitoring:
+events:
   resource: ../../src/MotorsportTracker/Event/Controller/
   prefix: /events
+  type: annotation
+  stateless: true
+
+standings:
+  resource: ../../src/MotorsportTracker/Standing/Controller/
+  prefix: /standings
   type: annotation
   stateless: true
