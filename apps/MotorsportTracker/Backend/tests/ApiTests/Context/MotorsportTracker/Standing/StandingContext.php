@@ -27,6 +27,7 @@ final class StandingContext extends BackendApiContext
 
     /**
      * @Given /^no team standing exist yet$/
+     * @Given /^no driver standing exist yet$/
      */
     public function noTeamStandingExistYet(): void
     {
@@ -43,6 +44,19 @@ final class StandingContext extends BackendApiContext
         $year         = substr($season, -4, 4);
 
         $this->response = self::handle(Request::create("/standings/team/{$championship}/{$year}", 'GET'));
+    }
+
+    /**
+     * @When a client views the driver standings for season :season
+     *
+     * @throws Exception
+     */
+    public function aClientViewsTheDriverStandingsForSeason(string $season): void
+    {
+        $championship = $this->format(substr($season, 0, strlen($season) - 4));
+        $year         = substr($season, -4, 4);
+
+        $this->response = self::handle(Request::create("/standings/drivers/{$championship}/{$year}", 'GET'));
     }
 
     /**
@@ -70,7 +84,32 @@ final class StandingContext extends BackendApiContext
     }
 
     /**
+     * @Then /^it views the driver standings to be$/
+     */
+    public function itViewsTheDriverStandingsToBe(TableNode $expectedStandings): void
+    {
+        /** @var array{driver: string, points: string, eventIndex: int}[] $expectedStandings */
+        $expected = $expectedStandings;
+
+        $content = $this->response->getContent();
+        Assert::assertNotFalse($content);
+
+        $actual = json_decode($content, true);
+        Assert::assertIsArray($actual);
+
+        foreach ($expected as $expectedStanding) {
+            $driverId = self::fixtureId("motorsport.driver.driver.{$this->format($expectedStanding['driver'])}");
+
+            Assert::assertSame(
+                (float) ($expectedStanding['points']),
+                (float) $actual[$expectedStanding['eventIndex']][$driverId],
+            );
+        }
+    }
+
+    /**
      * @Then /^it receives an empty team standings response$/
+     * @Then /^it receives an empty driver standings response$/
      */
     public function itReceivesAnEmptyTeamStandingsResponse(): void
     {
