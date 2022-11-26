@@ -16,13 +16,13 @@
 /apps/MotorsportTracker/Backend/var/
 ###< Symfony ###
 
-###> Node ###
+###> Frontend ###
 /apps/MotorsportTracker/Frontend/.env.local
 /apps/MotorsportTracker/Frontend/node
 /apps/MotorsportTracker/Frontend/build
 /apps/MotorsportTracker/Frontend/node_modules
-/apps/MotorsportTracker/Frontend/yarn-*.log
-###< Node ###
+/apps/MotorsportTracker/Frontend/.next
+###< Frontend ###
 
 ###> phpunit/phpunit ###
 .phpunit.result.cache
