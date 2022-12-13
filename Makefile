@@ -240,7 +240,7 @@ tests: tests.backend tests.frontend
 
 ##> Static Analysis
 
-.PHONY: phpstan php-cs-fixer php-cs-fixer.force complete-analysis
+.PHONY: phpstan php-cs-fixer php-cs-fixer.force eslint complete-analysis.back complete-analysis.front complete-analysis
 
 phpstan:
 	@echo "Running PHPStan"
@@ -256,4 +256,9 @@ php-cs-fixer php-cs-fixer.force:
 		/app/vendor/bin/php-cs-fixer fix --config=/app/.php-cs-fixer.php -vv ${DRY_RUN}
 	@echo ""
 
-complete-analysis: tests phpstan php-cs-fixer
+eslint:
+	@docker-compose exec frontend npm run lint
+
+complete-analysis.back: tests.backend phpstan php-cs-fixer
+complete-analysis.front: eslint tests.frontend
+complete-analysis: complete-analysis.back complete-analysis.front
