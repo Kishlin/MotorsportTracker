@@ -13,12 +13,11 @@ const CalendarPage: React.FunctionComponent = () => {
         return <noscript />;
     }
 
+    const date = new Date(Date.parse(`${month} 1, ${year}`));
+
     return (
         <Layout>
-            <Calendar
-                month={month as string}
-                year={parseInt(year as string, 10)}
-            />
+            <Calendar date={date} />
         </Layout>
     );
 };

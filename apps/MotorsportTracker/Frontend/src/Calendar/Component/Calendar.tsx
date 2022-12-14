@@ -7,15 +7,14 @@ import CalendarWeekHeader from './CalendarWeekHeader';
 import CalendarBody from './CalendarBody';
 
 declare type CalendarProps = {
-    month: string,
-    year: number,
+    date: Date,
 }
 
-const Calendar: React.FunctionComponent<CalendarProps> = ({ month, year }) => (
+const Calendar: React.FunctionComponent<CalendarProps> = ({ date }) => (
     <CalendarContainer>
-        <CalendarNavigation month={month} year={year} />
+        <CalendarNavigation date={date} />
         <CalendarWeekHeader />
-        <CalendarBody month={month} year={year} />
+        <CalendarBody date={date} />
     </CalendarContainer>
 );
 

@@ -6,21 +6,19 @@ import firstMondayBeforeOrAtDate from '../Utils/Date/firstMondayBeforeOrAtDate';
 import CalendarDay from './CalendarDay';
 
 declare type CalendarBodyProps = {
-    month: string,
-    year: number,
+    date: Date,
 }
 
-const CalendarBody: React.FunctionComponent<CalendarBodyProps> = ({ month, year }) => {
-    const firstDayOfRequestedMonth = new Date(Date.parse(`${month} 1, ${year}`));
-    const firstDayOfCalendar = firstMondayBeforeOrAtDate(firstDayOfRequestedMonth);
-    const lastDayOfCalendar = firstSundayAfterEndOfMonthDate(firstDayOfRequestedMonth);
+const CalendarBody: React.FunctionComponent<CalendarBodyProps> = ({ date }) => {
+    const lastDayOfCalendar = firstSundayAfterEndOfMonthDate(date);
+    const firstDayOfCalendar = firstMondayBeforeOrAtDate(date);
 
     const calendar = [];
 
     for (let day = firstDayOfCalendar; day <= lastDayOfCalendar; day.setDate(day.getDate() + 1)) {
         calendar.push((
             <CalendarDay
-                refMonth={month}
+                refMonth={date.getMonth()}
                 key={day.getTime()}
                 day={new Date(day.getTime())}
             />

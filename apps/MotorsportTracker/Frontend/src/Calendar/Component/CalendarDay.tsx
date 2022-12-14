@@ -5,12 +5,12 @@ import CalendarDayContainer from '../Ui/CalendarDayContainer';
 import CalendarDayDateTitle from '../Ui/CalendarDayDateTitle';
 
 declare type CalendarDayProps = {
-    refMonth: string,
+    refMonth: number,
     day: Date,
 };
 
 const CalendarDay: React.FunctionComponent<CalendarDayProps> = ({ day, refMonth }) => {
-    const isAnotherMonthThanRef = (day.toLocaleString(undefined, { month: 'long' }).toLowerCase() !== refMonth);
+    const isAnotherMonthThanRef = day.getMonth() !== refMonth;
 
     return (
         <CalendarDayContainer>
