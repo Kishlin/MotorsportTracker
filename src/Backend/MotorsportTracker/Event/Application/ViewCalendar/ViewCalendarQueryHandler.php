@@ -15,8 +15,14 @@ final class ViewCalendarQueryHandler implements QueryHandler
 
     public function __invoke(ViewCalendarQuery $query): ViewCalendarResponse
     {
+        $date = \DateTimeImmutable::createFromFormat('Y:F', "{$query->year()}:{$query->month()}");
+
+        if (false === $date) {
+            throw new NotAValidMonthAndYearException();
+        }
+
         return ViewCalendarResponse::fromView(
-            $this->calendarViewGateway->view(),
+            $this->calendarViewGateway->viewAt($date),
         );
     }
 }

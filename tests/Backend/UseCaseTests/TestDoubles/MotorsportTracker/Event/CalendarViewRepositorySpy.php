@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Event\Application\ViewCalendar\CalendarViewGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\View\JsonableCalendarView;
@@ -18,10 +19,22 @@ final class CalendarViewRepositorySpy implements CalendarViewGateway
     ) {
     }
 
-    public function view(): JsonableCalendarView
+    public function viewAt(DateTimeImmutable $date): JsonableCalendarView
     {
         $seasonRepository = $this->seasonRepositorySpy;
         $eventRepository  = $this->eventRepositorySpy;
+
+        $format   = 'Y:n';
+        $expected = $date->format($format);
+
+        $filteredEventSteps = array_filter(
+            $this->eventStepRepositorySpy->all(),
+            static function (EventStep $eventStep) use ($expected, $format) {
+                $eventStepDate = $eventStep->dateTime()->value();
+
+                return $eventStepDate->format($format) === $expected;
+            }
+        );
 
         return JsonableCalendarView::fromSource(
             array_map(
@@ -37,7 +50,7 @@ final class CalendarViewRepositorySpy implements CalendarViewGateway
                         'event'        => $eventStep->eventId()->value(),
                     ];
                 },
-                $this->eventStepRepositorySpy->all(),
+                $filteredEventSteps,
             )
         );
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CalendarViewRepositoryUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
@@ -21,7 +22,7 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
     {
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        self::assertEmpty($repository->view()->toArray());
+        self::assertEmpty($repository->viewAt(new DateTimeImmutable())->toArray());
     }
 
     /**
@@ -31,9 +32,12 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
     {
         self::loadFixture('motorsport.event.eventStep.dutchGrandPrix2022Race');
 
+        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:9');
+        assert($date instanceof DateTimeImmutable);
+
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        $actual = $repository->view()->toArray();
+        $actual = $repository->viewAt($date)->toArray();
 
         $expected = [
             '2022-09-04' => [
@@ -62,9 +66,12 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
             'motorsport.event.eventStep.americasMotoGP2022Race',
         );
 
+        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:4');
+        assert($date instanceof DateTimeImmutable);
+
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        $actual = $repository->view()->toArray();
+        $actual = $repository->viewAt($date)->toArray();
 
         $expected = [
             '2022-04-10' => [
@@ -92,6 +99,38 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'date_time'    => '2022-04-23 14:30:00',
                 ],
             ],
+            '2022-04-24' => [
+                '2022-04-24 13:00:00' => [
+                    'championship' => self::fixtureId('motorsport.championship.championship.formulaOne'),
+                    'venue'        => self::fixtureId('motorsport.venue.venue.emiliaRomagna'),
+                    'type'         => self::fixtureId('motorsport.event.stepType.race'),
+                    'event'        => self::fixtureId('motorsport.event.event.emiliaRomagnaGrandPrix2022'),
+                    'date_time'    => '2022-04-24 13:00:00',
+                ],
+            ],
+        ];
+
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testItCanFilterASpecificMonth(): void
+    {
+        self::loadFixtures(
+            'motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race',
+            'motorsport.event.eventStep.dutchGrandPrix2022Race',
+        );
+
+        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:4');
+        assert($date instanceof DateTimeImmutable);
+
+        $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
+
+        $actual = $repository->viewAt($date)->toArray();
+
+        $expected = [
             '2022-04-24' => [
                 '2022-04-24 13:00:00' => [
                     'championship' => self::fixtureId('motorsport.championship.championship.formulaOne'),

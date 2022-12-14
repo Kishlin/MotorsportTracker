@@ -3,7 +3,7 @@ Feature: It can view the calendar
   @api
   Scenario: It views an empty calendar
     Given there are no events planned
-    When a client views the calendar
+    When a client views the calendar for "september" "2022"
     Then an empty calendar is viewed
 
   @api
@@ -12,7 +12,7 @@ Feature: It can view the calendar
     And the eventStep "Emilia Romagna Grand Prix 2022 Race" exists
     And the eventStep "Australian Grand Prix 2022 Race" exists
     And the eventStep "Americas Moto GP 2022 Race" exists
-    When a client views the calendar
+    When a client views the calendar for "april" "2022"
     Then a calendar is viewed with events
     | dateTime            | championship | venue                   | type              | event                          |
     | 2022-04-10 05:00:00 | Formula One  | Melbourne               | Race              | Australian Grand Prix 2022     |

@@ -31,13 +31,13 @@ final class CalendarContext extends BackendApiContext
     }
 
     /**
-     * @When /^a client views the calendar$/
+     * @When a client views the calendar for :string :year
      *
      * @throws Exception
      */
-    public function aClientViewsTheCalendar(): void
+    public function aClientViewsTheCalendar(string $month, int $year): void
     {
-        $this->response = self::handle(Request::create('/events/calendar', 'GET'));
+        $this->response = self::handle(Request::create("/events/calendar/{$month}/{$year}", 'GET'));
     }
 
     /**

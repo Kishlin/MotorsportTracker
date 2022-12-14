@@ -27,13 +27,13 @@ final class CalendarContext extends MotorsportTrackerContext
     }
 
     /**
-     * @When /^a client views the calendar$/
+     * @When a client views the calendar for :month :year
      *
      * @throws Exception
      */
-    public function aClientViewsTheCalendar(): void
+    public function aClientViewsTheCalendar(string $month, int $year): void
     {
-        $response = self::container()->queryBus()->ask(new ViewCalendarQuery());
+        $response = self::container()->queryBus()->ask(ViewCalendarQuery::fromScalars($month, $year));
 
         assert($response instanceof ViewCalendarResponse);
 
