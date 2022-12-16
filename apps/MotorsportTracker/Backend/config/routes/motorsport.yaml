@@ -1,11 +1,11 @@
 events:
   resource: ../../src/MotorsportTracker/Event/Controller/
-  prefix: /events
+  prefix: /api/v1/events
   type: annotation
   stateless: true
 
 standings:
   resource: ../../src/MotorsportTracker/Standing/Controller/
-  prefix: /standings
+  prefix: /api/v1/standings
   type: annotation
   stateless: true

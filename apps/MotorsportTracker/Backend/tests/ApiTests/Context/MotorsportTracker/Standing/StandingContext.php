@@ -43,7 +43,7 @@ final class StandingContext extends BackendApiContext
         $championship = $this->format(substr($season, 0, strlen($season) - 4));
         $year         = substr($season, -4, 4);
 
-        $this->response = self::handle(Request::create("/standings/teams/{$championship}/{$year}", 'GET'));
+        $this->response = self::handle(Request::create("/api/v1/standings/teams/{$championship}/{$year}", 'GET'));
     }
 
     /**
@@ -56,7 +56,7 @@ final class StandingContext extends BackendApiContext
         $championship = $this->format(substr($season, 0, strlen($season) - 4));
         $year         = substr($season, -4, 4);
 
-        $this->response = self::handle(Request::create("/standings/drivers/{$championship}/{$year}", 'GET'));
+        $this->response = self::handle(Request::create("/api/v1/standings/drivers/{$championship}/{$year}", 'GET'));
     }
 
     /**

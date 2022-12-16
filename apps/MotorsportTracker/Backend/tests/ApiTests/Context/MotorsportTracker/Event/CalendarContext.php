@@ -37,7 +37,7 @@ final class CalendarContext extends BackendApiContext
      */
     public function aClientViewsTheCalendar(string $month, int $year): void
     {
-        $this->response = self::handle(Request::create("/events/calendar/{$month}/{$year}", 'GET'));
+        $this->response = self::handle(Request::create("/api/v1/events/calendar/{$month}/{$year}", 'GET'));
     }
 
     /**
