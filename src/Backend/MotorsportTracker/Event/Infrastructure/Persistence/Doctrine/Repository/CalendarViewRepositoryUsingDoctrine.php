@@ -24,7 +24,7 @@ final class CalendarViewRepositoryUsingDoctrine extends DoctrineRepository imple
             ->join('es', 'events', 'e', 'es.event = e.id')
             ->join('e', 'seasons', 's', 'e.season = s.id')
             ->where('es.date_time >= :firstDay')
-            ->where('es.date_time <= :lastDay')
+            ->andWhere('es.date_time <= :lastDay')
             ->setParameter('lastDay', $endDate->format('Y-m-d H:i:s'))
             ->setParameter('firstDay', $startDate->format('Y-m-d H:i:s'))
         ;

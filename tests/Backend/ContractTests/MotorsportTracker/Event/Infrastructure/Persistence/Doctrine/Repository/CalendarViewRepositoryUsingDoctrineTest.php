@@ -122,15 +122,16 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
     /**
      * @throws Exception
      */
-    public function testItCanFilterASpecificMonth(): void
+    public function testItCanFilterOnSpecificDates(): void
     {
         self::loadFixtures(
+            'motorsport.event.eventStep.australianGrandPrix2022Race',
+            'motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying',
             'motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race',
-            'motorsport.event.eventStep.dutchGrandPrix2022Race',
         );
 
-        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-01');
-        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-30');
+        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-22');
+        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-23');
         assert($startDate instanceof DateTimeImmutable);
         assert($endDate instanceof DateTimeImmutable);
 
@@ -139,13 +140,13 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
         $actual = $repository->viewAt($startDate, $endDate)->toArray();
 
         $expected = [
-            '2022-04-24' => [
-                '2022-04-24 13:00:00' => [
+            '2022-04-23' => [
+                '2022-04-23 14:30:00' => [
                     'championship' => self::fixtureId('motorsport.championship.championship.formulaOne'),
                     'venue'        => self::fixtureId('motorsport.venue.venue.emiliaRomagna'),
-                    'type'         => self::fixtureId('motorsport.event.stepType.race'),
+                    'type'         => self::fixtureId('motorsport.event.stepType.sprintQualifying'),
                     'event'        => self::fixtureId('motorsport.event.event.emiliaRomagnaGrandPrix2022'),
-                    'date_time'    => '2022-04-24 13:00:00',
+                    'date_time'    => '2022-04-23 14:30:00',
                 ],
             ],
         ];
