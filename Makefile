@@ -54,16 +54,12 @@ $(CACHE): .docker-cache
 
 .INTERMEDIATE: .docker-cache
 
-git-hooks:
-	@cp .git-hooks/commit-msg.sh .git/hooks/commit-msg
-	@cp .git-hooks/pre-commit.sh .git/hooks/pre-commit
-
-.PHONY: help setup start stop clean containers node_modules git-hooks
+.PHONY: help setup start stop clean containers node_modules
 
 help:
 	@echo "Run make start_working"
 
-setup: .env.local docker-compose.yaml git-hooks
+setup: .env.local docker-compose.yaml
 
 containers: setup $(CACHE)
 	@echo "Starting services"
@@ -77,7 +73,6 @@ clean:
 		docker-compose down; \
 	fi;
 	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
-	@sudo rm -rf .git/hooks/commit-msg .git/hooks/pre-commit
 
 start: containers vendor db.reload db.reload.test
 	@echo "All services should be running."
@@ -88,7 +83,7 @@ start: containers vendor db.reload db.reload.test
 	@echo "    Backoffice: http://localhost:8040/"
 	@echo "    Frontend: http://localhost:3000/"
 	@echo "Ports may differ if overridden in the .env.local file."
-	@echo "Run tests: \`make tests\` (see Makefile for more options)."
+	@echo "Run static analysis: \`make complete-analysis\` (see Makefile for more options)."
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
