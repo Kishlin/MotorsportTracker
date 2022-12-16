@@ -19,20 +19,17 @@ final class CalendarViewRepositorySpy implements CalendarViewGateway
     ) {
     }
 
-    public function viewAt(DateTimeImmutable $date): JsonableCalendarView
+    public function viewAt(DateTimeImmutable $startDate, DateTimeImmutable $endDate): JsonableCalendarView
     {
         $seasonRepository = $this->seasonRepositorySpy;
         $eventRepository  = $this->eventRepositorySpy;
 
-        $format   = 'Y:n';
-        $expected = $date->format($format);
-
         $filteredEventSteps = array_filter(
             $this->eventStepRepositorySpy->all(),
-            static function (EventStep $eventStep) use ($expected, $format) {
+            static function (EventStep $eventStep) use ($startDate, $endDate) {
                 $eventStepDate = $eventStep->dateTime()->value();
 
-                return $eventStepDate->format($format) === $expected;
+                return $eventStepDate > $startDate && $eventStepDate < $endDate;
             }
         );
 

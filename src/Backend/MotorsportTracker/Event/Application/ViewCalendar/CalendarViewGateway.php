@@ -9,5 +9,5 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\View\JsonableCalendarView;
 
 interface CalendarViewGateway
 {
-    public function viewAt(DateTimeImmutable $date): JsonableCalendarView;
+    public function viewAt(DateTimeImmutable $startDate, DateTimeImmutable $endDate): JsonableCalendarView;
 }

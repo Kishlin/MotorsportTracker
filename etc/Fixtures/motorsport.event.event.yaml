@@ -34,6 +34,12 @@ singaporeGrandPrix2022:
   index: '16'
   label: 'Singapore GP'
 
+hungarianGrandPrix2022:
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  venueId: '@motorsport.venue.venue.hungaroring'
+  index: '12'
+  label: 'Hungarian GP'
+
 hungarianGrandPrix2019:
   seasonId: '@motorsport.championship.season.formulaOne2019'
   venueId: '@motorsport.venue.venue.hungaroring'

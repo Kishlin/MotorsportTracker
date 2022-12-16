@@ -33,11 +33,15 @@ singaporeGrandPrix2022Race:
   eventId: '@motorsport.event.event.singaporeGrandPrix2022'
   dateTime: '2022-10-02 12:00:00'
 
+hungarianGrandPrix2022Race:
+  stepTypeId: '@motorsport.event.stepType.race'
+  eventId: '@motorsport.event.event.hungarianGrandPrix2022'
+  dateTime: '2022-07-31 13:00:00'
+
 hungarianGrandPrix2019Race:
   stepTypeId: '@motorsport.event.stepType.race'
   eventId: '@motorsport.event.event.hungarianGrandPrix2019'
   dateTime: '2019-08-04 13:10:00'
-  label: 'Hungarian GP'
 
 belgianGrandPrix2019Race:
   stepTypeId: '@motorsport.event.stepType.race'

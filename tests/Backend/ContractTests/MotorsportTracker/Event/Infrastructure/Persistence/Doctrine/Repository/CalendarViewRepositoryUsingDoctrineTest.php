@@ -22,7 +22,9 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
     {
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        self::assertEmpty($repository->viewAt(new DateTimeImmutable())->toArray());
+        $jsonableCalendarView = $repository->viewAt(new DateTimeImmutable(), new DateTimeImmutable());
+
+        self::assertEmpty($jsonableCalendarView->toArray());
     }
 
     /**
@@ -32,12 +34,14 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
     {
         self::loadFixture('motorsport.event.eventStep.dutchGrandPrix2022Race');
 
-        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:9');
-        assert($date instanceof DateTimeImmutable);
+        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-09-01');
+        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-09-30');
+        assert($startDate instanceof DateTimeImmutable);
+        assert($endDate instanceof DateTimeImmutable);
 
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        $actual = $repository->viewAt($date)->toArray();
+        $actual = $repository->viewAt($startDate, $endDate)->toArray();
 
         $expected = [
             '2022-09-04' => [
@@ -66,12 +70,14 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
             'motorsport.event.eventStep.americasMotoGP2022Race',
         );
 
-        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:4');
-        assert($date instanceof DateTimeImmutable);
+        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-01');
+        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-30');
+        assert($startDate instanceof DateTimeImmutable);
+        assert($endDate instanceof DateTimeImmutable);
 
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        $actual = $repository->viewAt($date)->toArray();
+        $actual = $repository->viewAt($startDate, $endDate)->toArray();
 
         $expected = [
             '2022-04-10' => [
@@ -123,12 +129,14 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
             'motorsport.event.eventStep.dutchGrandPrix2022Race',
         );
 
-        $date = DateTimeImmutable::createFromFormat('Y:n', '2022:4');
-        assert($date instanceof DateTimeImmutable);
+        $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-01');
+        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-30');
+        assert($startDate instanceof DateTimeImmutable);
+        assert($endDate instanceof DateTimeImmutable);
 
         $repository = new CalendarViewRepositoryUsingDoctrine(self::entityManager());
 
-        $actual = $repository->viewAt($date)->toArray();
+        $actual = $repository->viewAt($startDate, $endDate)->toArray();
 
         $expected = [
             '2022-04-24' => [
