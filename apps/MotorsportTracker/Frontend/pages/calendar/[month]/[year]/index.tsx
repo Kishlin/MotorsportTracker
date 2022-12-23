@@ -5,6 +5,8 @@ import Calendar from '../../../../src/Calendar/Component/Calendar';
 import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
 import listOfAllMonths from '../../../../src/Calendar/Utils/Date/listOfAllMonths';
+import calendarApi from '../../../../src/Calendar/Api/CalendarApi';
+import { EventCalendarMonth } from '../../../../src/Calendar/Types';
 
 declare type CalendarPathParams = {
     params: {
@@ -14,19 +16,17 @@ declare type CalendarPathParams = {
 };
 
 declare type CalendarProps = {
+    events: EventCalendarMonth,
     month: string,
     year: string,
-    events: {},
 }
 
 const CalendarPage: React.FunctionComponent<CalendarProps> = ({ events, year, month }) => {
     const date = new Date(Date.parse(`${month} 1, ${year}`));
 
-    console.log(events);
-
     return (
         <Layout>
-            <Calendar date={date} />
+            <Calendar date={date} events={events} />
         </Layout>
     );
 };
@@ -34,8 +34,7 @@ const CalendarPage: React.FunctionComponent<CalendarProps> = ({ events, year, mo
 export const getStaticProps = async ({ params: { month, year } }: CalendarPathParams) => {
     const props: CalendarProps = { year, month, events: {} };
 
-    const response = await fetch(`http://backend:8000/api/v1/events/calendar/${month}/${year}`);
-    props.events = await response.json();
+    props.events = await calendarApi(month, year);
 
     return { props };
 };
