@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
+import { HydrationContext, HydrationContextType } from '../../Shared/Contexts/HydrationContext';
 import formatDateForCalendar from '../Utils/Date/formatDateForCalendar';
+import CalendarDayDateEvents from '../Ui/CalendarDayDateEvents';
 import CalendarDayContainer from '../Ui/CalendarDayContainer';
 import CalendarDayDateTitle from '../Ui/CalendarDayDateTitle';
 import { EventCalendarDay, MotorsportEvent } from '../Types';
 import CalendarEvent from './CalendarEvent';
-import CalendarDayDateEvents from '../Ui/CalendarDayDateEvents';
 
 declare type CalendarDayProps = {
     events: EventCalendarDay,
@@ -14,25 +15,21 @@ declare type CalendarDayProps = {
 };
 
 const CalendarDay: React.FunctionComponent<CalendarDayProps> = ({ day, refMonth, events }) => {
-    const isAnotherMonthThanRef = day.getMonth() !== refMonth;
+    const ifHydrated = useContext<HydrationContextType>(HydrationContext);
 
-    const [hydrated, setHydrated] = useState<boolean>(false);
-
-    useEffect(() => setHydrated(true), []);
+    const eventsJSX = ifHydrated(
+        Object.values(events).map(
+            (value: MotorsportEvent) => (<CalendarEvent key={value.date_time} event={value} />),
+        ),
+    );
 
     return (
         <CalendarDayContainer>
-            <CalendarDayDateTitle isAnotherDayThanRefMonth={isAnotherMonthThanRef}>
+            <CalendarDayDateTitle isAnotherDayThanRefMonth={day.getMonth() !== refMonth}>
                 {formatDateForCalendar(day)}
             </CalendarDayDateTitle>
             <CalendarDayDateEvents>
-                {
-                    hydrated
-                        ? Object.values(events).map(
-                            (value: MotorsportEvent) => (<CalendarEvent key={value.date_time} event={value} />),
-                        )
-                        : <noscript />
-                }
+                {eventsJSX}
             </CalendarDayDateEvents>
         </CalendarDayContainer>
     );

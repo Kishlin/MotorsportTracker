@@ -8,6 +8,8 @@ import {
     ThemeProvider,
 } from '@mui/material';
 
+import { HydrationProvider } from '../src/Shared/Contexts/HydrationContext';
+
 const paletteOptions: ThemeOptions = {
     palette: {
         mode: 'dark',
@@ -30,7 +32,9 @@ const darkTheme = createTheme(paletteOptions);
 const App: React.FunctionComponent<AppProps> = ({ Component, pageProps }) => (
     <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <HydrationProvider>
+            <Component {...pageProps} />
+        </HydrationProvider>
     </ThemeProvider>
 );
 
