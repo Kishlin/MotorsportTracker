@@ -35,6 +35,28 @@ CREATE TABLE public.cars (
 ALTER TABLE public.cars OWNER TO app;
 
 --
+-- Name: championship_presentations; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.championship_presentations (
+    id character varying(36) NOT NULL,
+    championship character varying(36) NOT NULL,
+    icon character varying(255) NOT NULL,
+    color character varying(255) NOT NULL,
+    created_on timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.championship_presentations OWNER TO app;
+
+--
+-- Name: COLUMN championship_presentations.created_on; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.championship_presentations.created_on IS '(DC2Type:championship_presentation_created_on)';
+
+
+--
 -- Name: championships; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -269,6 +291,14 @@ COPY public.cars (id, number, team, season) FROM stdin;
 
 
 --
+-- Data for Name: championship_presentations; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.championship_presentations (id, championship, icon, color, created_on) FROM stdin;
+\.
+
+
+--
 -- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: app
 --
 
@@ -304,6 +334,8 @@ Kishlin\\Migrations\\Version20221023043009	2022-10-23 04:33:43	21
 Kishlin\\Migrations\\Version20221105182411	2022-11-05 18:26:27	32
 Kishlin\\Migrations\\Version20221120040214	2022-11-20 04:06:24	13
 Kishlin\\Migrations\\Version20221120065527	2022-11-20 06:56:28	20
+Kishlin\\Migrations\\Version20221120071036	2022-12-25 18:11:29	1
+Kishlin\\Migrations\\Version20221225180107	2022-12-25 18:11:29	15
 \.
 
 
@@ -409,6 +441,14 @@ COPY public.venues (id, name, country) FROM stdin;
 
 ALTER TABLE ONLY public.cars
     ADD CONSTRAINT cars_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: championship_presentations championship_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.championship_presentations
+    ADD CONSTRAINT championship_presentations_pkey PRIMARY KEY (id);
 
 
 --
@@ -536,6 +576,13 @@ ALTER TABLE ONLY public.venues
 --
 
 CREATE UNIQUE INDEX car_number_season_team_idx ON public.cars USING btree (number, season, team);
+
+
+--
+-- Name: championship_created_on_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentations USING btree (championship, created_on);
 
 
 --
