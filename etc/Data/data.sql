@@ -107,28 +107,6 @@ INSERT INTO public.cars (id, number, team, season) VALUES ('953f13a4-5f6b-4da6-a
 
 
 --
--- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: app
---
-
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220408213133', '2022-04-11 15:32:56', 14);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220409181131', '2022-04-11 15:32:56', 6);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220409185635', '2022-04-11 15:32:56', 1);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220610215445', '2022-06-10 22:22:19', 20);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220611002012', '2022-06-10 22:22:19', 1);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220611170308', '2022-06-11 17:04:28', 19);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220616000809', '2022-06-16 00:16:08', 28);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220616124606', '2022-06-16 12:47:03', 20);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220713181313', '2022-07-13 18:14:29', 20);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220713183949', '2022-07-13 18:40:59', 17);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220728125835', '2022-07-28 12:59:54', 21);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221023043009', '2022-10-23 04:33:43', 21);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221105182411', '2022-11-05 18:26:27', 32);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120040214', '2022-11-20 04:06:24', 13);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120065527', '2022-11-20 06:56:28', 20);
-INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120071036', '2022-11-20 07:12:02', 14);
-
-
---
 -- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: app
 --
 
