@@ -1,0 +1,5 @@
+formulaOneWhite:
+  championshipId: '@motorsport.championship.championship.formulaOne'
+  icon: 'f1.png'
+  color: "#fff"
+  createdOn: '1993-11-22'

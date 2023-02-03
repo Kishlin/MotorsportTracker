@@ -9,6 +9,7 @@ use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\Car;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
@@ -56,6 +57,12 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
 
         if ($aggregateRoot instanceof Championship) {
             $this->testServiceContainer->championshipRepositorySpy()->save($aggregateRoot);
+
+            return;
+        }
+
+        if ($aggregateRoot instanceof ChampionshipPresentation) {
+            $this->testServiceContainer->championshipPresentationRepositorySpy()->save($aggregateRoot);
 
             return;
         }

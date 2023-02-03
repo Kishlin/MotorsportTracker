@@ -4,6 +4,7 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\ViewStandingsForSeasonContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ViewChampionshipsContext
@@ -40,6 +41,7 @@ default:
     backoffice_tests:
       paths: [ features ]
       contexts:
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\RegisterDriverMoveContext

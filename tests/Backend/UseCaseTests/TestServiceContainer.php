@@ -23,6 +23,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\venue\VenueSer
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Messaging\MessagingServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Persistence\Fixtures\FixturesServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Randomness\RandomnessServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Time\TimeServicesTrait;
 
 final class TestServiceContainer
 {
@@ -44,6 +45,7 @@ final class TestServiceContainer
     use StandingServicesTrait;
     use StepTypeServicesTrait;
     use TeamServicesTrait;
+    use TimeServicesTrait;
     use VenueServicesTrait;
 
     public function serviceContainer(): self
