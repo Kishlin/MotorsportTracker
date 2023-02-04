@@ -131,7 +131,7 @@ final class CalendarViewRepositoryUsingDoctrineTest extends RepositoryContractTe
         );
 
         $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-22');
-        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-04-23');
+        $endDate   = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2022-04-23 23:59:59');
         assert($startDate instanceof DateTimeImmutable);
         assert($endDate instanceof DateTimeImmutable);
 
