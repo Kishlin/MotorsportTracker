@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\Calendar\Domain\Entity\CalendarEventStepView" table="calendar_event_step_views">
+        <id name="id" type="calendar_event_step_view_id" column="id" length="36" />
+
+        <field name="championshipSlug" type="calendar_event_step_view_championship_slug" column="championship_slug" />
+
+        <field name="color" type="calendar_event_step_view_color" column="color" />
+
+        <field name="icon" type="calendar_event_step_view_icon" column="icon" />
+
+        <field name="name" type="calendar_event_step_view_name" column="name" />
+
+        <field name="type" type="calendar_event_step_view_type" column="type" />
+
+        <field name="venueLabel" type="calendar_event_step_view_venue_label" column="venue_label" />
+
+        <field name="dateTime" type="calendar_event_step_view_date_time" column="date_time" />
+
+        <unique-constraints>
+            <unique-constraint columns="championship_slug,date_time" name="calendar_event_step_championship_datetime_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>
