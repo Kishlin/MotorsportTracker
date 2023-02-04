@@ -10,6 +10,9 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\Calen
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventStepRepositorySpy;
 
+/**
+ * @deprecated
+ */
 trait CalendarServicesTrait
 {
     private ?ViewCalendarQueryHandler $viewCalendarQueryHandler = null;
