@@ -15,7 +15,7 @@ Feature: It can create Championship Presentations
     Then the championship presentation is saved
     And the latest championship presentation for "Formula One" has icon "f1.png" and color "#000"
 
-  @backoffice @current
+  @backoffice
   Scenario: It updates the calendar views accordingly
     Given the championship presentation "Formula One White" exists
     And the calendar event view "Dutch Grand Prix 2022 Race White" exists
