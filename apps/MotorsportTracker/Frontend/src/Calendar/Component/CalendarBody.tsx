@@ -1,24 +1,26 @@
 import { Grid } from '@mui/material';
 import React from 'react';
 
-import firstSundayAfterEndOfMonthDate from '../Utils/Date/firstSundayAfterEndOfMonthDate';
-import firstMondayBeforeOrAtDate from '../Utils/Date/firstMondayBeforeOrAtDate';
 import formatDateAsCalendarKey from '../Utils/Date/formatDateAsCalendarKey';
 import { EventCalendarMonth } from '../Types';
 import CalendarDay from './CalendarDay';
 
 declare type CalendarBodyProps = {
     events: EventCalendarMonth,
+    firstDay: Date,
+    lastDay: Date,
     date: Date,
 }
 
-const CalendarBody: React.FunctionComponent<CalendarBodyProps> = ({ date, events }) => {
-    const lastDayOfCalendar = firstSundayAfterEndOfMonthDate(date);
-    const firstDayOfCalendar = firstMondayBeforeOrAtDate(date);
-
+const CalendarBody: React.FunctionComponent<CalendarBodyProps> = ({
+    events,
+    firstDay,
+    lastDay,
+    date,
+}) => {
     const calendar = [];
 
-    for (let day = firstDayOfCalendar; day <= lastDayOfCalendar; day.setDate(day.getDate() + 1)) {
+    for (let day = firstDay; day <= lastDay; day.setDate(day.getDate() + 1)) {
         const calendarKey = formatDateAsCalendarKey(day);
 
         calendar.push((

@@ -1,9 +1,11 @@
 import { EventCalendarMonth } from '../Types';
 
-export type CalendarApi = (month: string, year: string) => Promise<EventCalendarMonth>;
+export type CalendarApi = (firstDay: Date, lastDay: Date) => Promise<EventCalendarMonth>;
 
-const calendarApi: CalendarApi = async (month, year) => {
-    const response = await fetch(`http://backend:8000/api/v1/events/calendar/${month}/${year}`);
+const format = (date: Date) => date.toISOString().split('T')[0];
+
+const calendarApi: CalendarApi = async (firstDay, lastDay) => {
+    const response = await fetch(`http://backend:8000/api/v1/calendar/view/${format(firstDay)}/${format(lastDay)}`);
 
     return await response.json() as EventCalendarMonth;
 };

@@ -10,14 +10,21 @@ import { EventCalendarMonth } from '../Types';
 
 declare type CalendarProps = {
     events: EventCalendarMonth,
+    firstDay: Date,
+    lastDay: Date,
     date: Date,
 }
 
-const Calendar: React.FunctionComponent<CalendarProps> = ({ date, events }) => (
+const Calendar: React.FunctionComponent<CalendarProps> = ({
+    events,
+    firstDay,
+    lastDay,
+    date,
+}) => (
     <CalendarContainer>
         <CalendarNavigation date={date} />
         <CalendarWeekHeader />
-        <CalendarBody date={date} events={events} />
+        <CalendarBody firstDay={firstDay} lastDay={lastDay} date={date} events={events} />
     </CalendarContainer>
 );
 

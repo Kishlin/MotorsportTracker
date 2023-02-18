@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
 import { Grid } from '@mui/material';
 
-const CalendarEventContainer: React.FunctionComponent<{ children: ReactNode }> = ({ children }) => {
+declare type Created = { children: ReactNode, color: string };
+
+const CalendarEventContainer: React.FunctionComponent<Created> = ({ children, color }) => {
     const sx = {
-        backgroundColor: 'red',
+        backgroundColor: color,
         borderRadius: '3px',
         mt: '3px',
         p: '1px',

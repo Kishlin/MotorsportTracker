@@ -1,9 +1,12 @@
 export type MotorsportEvent = {
-    championship: string,
+    championship_slug: string,
+    color: string,
     date_time: string,
-    event: string,
-    venue: string,
+    icon: string
+    name: string,
+    reference: string,
     type: string,
+    venue_label: string,
 };
 
 export type EventCalendarDay = {
