@@ -100,3 +100,13 @@ when@test:
 
     Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus:
       public: true
+
+    Kishlin\Backend\Shared\Domain\Time\Clock:
+      class: 'Kishlin\Backend\Shared\Infrastructure\Time\FrozenClock'
+
+
+when@acceptance:
+  services:
+    Kishlin\Backend\Shared\Domain\Time\Clock:
+      class: 'Kishlin\Backend\Shared\Infrastructure\Time\FrozenClock'
+      public: true
