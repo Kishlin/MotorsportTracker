@@ -12,9 +12,17 @@ use Kishlin\Backend\Shared\Domain\Time\Clock;
  */
 final class FrozenClock implements Clock
 {
+    private DateTimeImmutable $frozenTime;
+
     public function __construct(
-        private DateTimeImmutable $frozenTime,
+        DateTimeImmutable $time = null,
     ) {
+        $this->frozenTime = $time ?? new DateTimeImmutable();
+    }
+
+    public function set(DateTimeImmutable $time): void
+    {
+        $this->frozenTime = $time;
     }
 
     public function now(): DateTimeImmutable
