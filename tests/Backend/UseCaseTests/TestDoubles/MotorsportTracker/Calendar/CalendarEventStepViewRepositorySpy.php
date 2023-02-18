@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\CalendarEventStepViewGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdate;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\NewPresentationApplierGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApply;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\JsonableCalendarView;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\ViewCalendarGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\Entity\CalendarEventStepView;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewColor;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewIcon;
@@ -21,7 +24,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|CalendarEventStepView get(UuidValueObject $id)
  * @method CalendarEventStepView      safeGet(UuidValueObject $id)
  */
-final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements CalendarEventStepViewGateway, NewPresentationApplierGateway
+final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements CalendarEventStepViewGateway, NewPresentationApplierGateway, ViewCalendarGateway
 {
     public function save(CalendarEventStepView $calendarEventStepView): void
     {
@@ -56,5 +59,33 @@ final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy imp
                 unset($idsToUpdate[$key]);
             }
         }
+    }
+
+    public function view(DateTimeImmutable $start, DateTimeImmutable $end): JsonableCalendarView
+    {
+        $events = array_filter(
+            $this->objects,
+            static function (CalendarEventStepView $view) use ($start, $end) {
+                return $start <= $view->dateTime()->value() && $view->dateTime()->value() <= $end;
+            },
+        );
+
+        $eventsAsArray = array_map(
+            static function (CalendarEventStepView $view) {
+                return [
+                    'championship_slug' => $view->championshipSlug()->value(),
+                    'color'             => $view->color()->value(),
+                    'icon'              => $view->icon()->value(),
+                    'name'              => $view->name()->value(),
+                    'type'              => $view->type()->value(),
+                    'venue_label'       => $view->venueLabel()->value(),
+                    'date_time'         => $view->dateTime()->value()->format('Y-m-d H:i:s'),
+                    'reference'         => $view->reference()->value(),
+                ];
+            },
+            $events,
+        );
+
+        return JsonableCalendarView::fromSource($eventsAsArray);
     }
 }

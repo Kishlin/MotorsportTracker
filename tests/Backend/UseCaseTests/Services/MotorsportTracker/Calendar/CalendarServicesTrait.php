@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Calendar
 
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\CreateViewOnEventStepCreationEventHandler;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\UpdateViewsAfterAChampionshipPresentationCreationHandler;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\ViewCalendarQueryHandler;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar\CalendarEventStepDataRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar\CalendarEventStepViewRepositorySpy;
@@ -29,6 +30,8 @@ trait CalendarServicesTrait
     private ?CalendarEventStepDataRepositorySpy $calendarEventStepDataRepositorySpy = null;
 
     private ?CreateViewOnEventStepCreationEventHandler $createViewOnEventStepCreationEventHandler = null;
+
+    private ?ViewCalendarQueryHandler $viewCalendarQueryHandler = null;
 
     abstract public function uuidGenerator(): UuidGenerator;
 
@@ -109,5 +112,16 @@ trait CalendarServicesTrait
         }
 
         return $this->createViewOnEventStepCreationEventHandler;
+    }
+
+    public function viewCalendarQueryHandler(): ViewCalendarQueryHandler
+    {
+        if (null === $this->viewCalendarQueryHandler) {
+            $this->viewCalendarQueryHandler = new ViewCalendarQueryHandler(
+                $this->calendarEventStepViewRepositorySpy(),
+            );
+        }
+
+        return $this->viewCalendarQueryHandler;
     }
 }

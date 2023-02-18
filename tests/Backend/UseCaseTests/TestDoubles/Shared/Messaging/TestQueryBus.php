@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\ViewCalendarQuery;
 use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeQuery;
-use Kishlin\Backend\MotorsportTracker\Event\Application\ViewCalendar\ViewCalendarQuery;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\GetAllRacersForDateTimeQuery;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\ViewDriverStandingsForSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewTeamStandingsForSeason\ViewTeamStandingsForSeasonQuery;
@@ -26,7 +26,7 @@ use RuntimeException;
 final class TestQueryBus implements QueryBus
 {
     public function __construct(
-        private TestServiceContainer $testServiceContainer,
+        private readonly TestServiceContainer $testServiceContainer,
     ) {
     }
 
@@ -35,6 +35,10 @@ final class TestQueryBus implements QueryBus
      */
     public function ask(Query $query): Response
     {
+        if ($query instanceof ViewCalendarQuery) {
+            return $this->testServiceContainer->viewCalendarQueryHandler()($query);
+        }
+
         if ($query instanceof SearchCarQuery) {
             return $this->testServiceContainer->searchCarQueryHandler()($query);
         }
@@ -53,10 +57,6 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof SearchEventStepIdAndDateTimeQuery) {
             return $this->testServiceContainer->searchEventStepIdAndDateTimeQueryHandler()($query);
-        }
-
-        if ($query instanceof ViewCalendarQuery) {
-            return $this->testServiceContainer->viewCalendarQueryHandler()($query);
         }
 
         if ($query instanceof SearchDriverQuery) {

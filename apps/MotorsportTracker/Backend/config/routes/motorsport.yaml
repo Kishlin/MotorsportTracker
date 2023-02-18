@@ -1,6 +1,6 @@
-events:
-  resource: ../../src/MotorsportTracker/Event/Controller/
-  prefix: /api/v1/events
+calendar:
+  resource: ../../src/MotorsportTracker/Calendar/Controller/
+  prefix: /api/v1/calendar
   type: annotation
   stateless: true
 

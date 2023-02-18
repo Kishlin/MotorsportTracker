@@ -3,7 +3,7 @@ dutchGrandPrix2022RaceWhite:
   color: '#fff'
   icon: 'f1.png'
   name: 'Dutch GP'
-  venueLabel: 'Zandvoort'
+  venueLabel: 'Circuit Zandvoort'
   type: 'race'
   dateTime: '2022-09-04 13:00:00'
   reference: '@motorsport.event.eventStep.dutchGrandPrix2022Race'
@@ -17,3 +17,33 @@ australianGrandPrix2022RaceWhite:
   type: 'race'
   dateTime: '2022-04-10 05:00:00'
   reference: '@motorsport.event.eventStep.australianGrandPrix2022Race'
+
+emiliaRomagnaGrandPrix2022SprintQualifyingWhite:
+  championshipSlug: 'formula1'
+  color: '#fff'
+  icon: 'f1.png'
+  name: 'Emilia Romagna GP'
+  venueLabel: 'Autodromo Internazionale Enzo e Dino Ferrari'
+  type: 'sprint qualifying'
+  dateTime: '2022-04-23 14:30:00'
+  reference: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'
+
+emiliaRomagnaGrandPrix2022RaceWhite:
+  championshipSlug: 'formula1'
+  color: '#fff'
+  icon: 'f1.png'
+  name: 'Emilia Romagna GP'
+  venueLabel: 'Autodromo Internazionale Enzo e Dino Ferrari'
+  type: 'race'
+  dateTime: '2022-04-24 13:00:00'
+  reference: '@motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race'
+
+americasMotoGP2022RaceBlack:
+  championshipSlug: 'motogp'
+  color: '#ddd'
+  icon: 'motogp.png'
+  name: 'Americas GP'
+  venueLabel: 'Circuit of the Americas'
+  type: 'race'
+  dateTime: '2022-04-10 18:00:00'
+  reference: '@motorsport.event.eventStep.americasMotoGP2022Race'
