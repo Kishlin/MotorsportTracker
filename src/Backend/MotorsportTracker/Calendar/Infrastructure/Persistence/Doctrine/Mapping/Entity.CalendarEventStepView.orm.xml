@@ -21,7 +21,10 @@
 
         <field name="dateTime" type="calendar_event_step_view_date_time" column="date_time" />
 
+        <field name="reference" type="calendar_event_step_view_reference_id" column="reference" length="36" />
+
         <unique-constraints>
+            <unique-constraint columns="reference" name="calendar_event_step_reference_idx" />
             <unique-constraint columns="championship_slug,date_time" name="calendar_event_step_championship_datetime_idx" />
         </unique-constraints>
     </entity>

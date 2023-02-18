@@ -32,7 +32,8 @@ CREATE TABLE public.calendar_event_step_views (
     name character varying(255) NOT NULL,
     type character varying(255) NOT NULL,
     venue_label character varying(255) NOT NULL,
-    date_time timestamp(0) without time zone NOT NULL
+    date_time timestamp(0) without time zone NOT NULL,
+    reference character varying(36) NOT NULL
 );
 
 
@@ -311,7 +312,7 @@ ALTER TABLE public.venues OWNER TO app;
 -- Data for Name: calendar_event_step_views; Type: TABLE DATA; Schema: public; Owner: app
 --
 
-COPY public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time) FROM stdin;
+COPY public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) FROM stdin;
 \.
 
 
@@ -370,6 +371,7 @@ Kishlin\\Migrations\\Version20221120065527	2022-11-20 06:56:28	20
 Kishlin\\Migrations\\Version20221120071036	2022-12-25 18:11:29	1
 Kishlin\\Migrations\\Version20221225180107	2022-12-25 18:11:29	15
 Kishlin\\Migrations\\Version20230204042827	2023-02-04 04:32:56	20
+Kishlin\\Migrations\\Version20230218154951	2023-02-18 15:51:30	15
 \.
 
 
@@ -618,6 +620,13 @@ ALTER TABLE ONLY public.venues
 --
 
 CREATE UNIQUE INDEX calendar_event_step_championship_datetime_idx ON public.calendar_event_step_views USING btree (championship_slug, date_time);
+
+
+--
+-- Name: calendar_event_step_reference_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX calendar_event_step_reference_idx ON public.calendar_event_step_views USING btree (reference);
 
 
 --

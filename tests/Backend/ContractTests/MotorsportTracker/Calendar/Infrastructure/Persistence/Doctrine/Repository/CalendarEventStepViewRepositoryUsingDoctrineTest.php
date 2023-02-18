@@ -11,6 +11,7 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventS
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewIcon;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewName;
+use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewReferenceId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewType;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewVenueLabel;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\CalendarEventStepViewRepositoryUsingDoctrine;
@@ -33,6 +34,7 @@ final class CalendarEventStepViewRepositoryUsingDoctrineTest extends RepositoryC
             new CalendarEventStepViewVenueLabel('venue'),
             new CalendarEventStepViewType('type'),
             new CalendarEventStepViewDateTime(new \DateTimeImmutable()),
+            new CalendarEventStepViewReferenceId('7e54cf9c-f48d-437a-9e56-43b4b5ad7cd0'),
         );
 
         $repository = new CalendarEventStepViewRepositoryUsingDoctrine(self::entityManager());

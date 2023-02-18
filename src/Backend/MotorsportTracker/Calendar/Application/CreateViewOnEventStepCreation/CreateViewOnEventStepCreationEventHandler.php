@@ -11,6 +11,7 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventS
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewIcon;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewName;
+use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewReferenceId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewType;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewVenueLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventStepCreatedDomainEvent;
@@ -43,6 +44,7 @@ final class CreateViewOnEventStepCreationEventHandler implements DomainEventSubs
             new CalendarEventStepViewVenueLabel($data->venueLabel()),
             new CalendarEventStepViewType($data->type()),
             new CalendarEventStepViewDateTime($data->dateTime()),
+            CalendarEventStepViewReferenceId::fromOther($event->aggregateUuid()),
         );
 
         $this->calendarEventStepViewGateway->save($calendarView);

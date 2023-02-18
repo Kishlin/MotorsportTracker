@@ -10,6 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventS
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewIcon;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewName;
+use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewReferenceId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewType;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewVenueLabel;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
@@ -25,6 +26,7 @@ final class CalendarEventStepView extends AggregateRoot
         private readonly CalendarEventStepViewVenueLabel $venueLabel,
         private readonly CalendarEventStepViewType $type,
         private readonly CalendarEventStepViewDateTime $dateTime,
+        private readonly CalendarEventStepViewReferenceId $reference,
     ) {
     }
 
@@ -37,8 +39,9 @@ final class CalendarEventStepView extends AggregateRoot
         CalendarEventStepViewVenueLabel $venueLabel,
         CalendarEventStepViewType $type,
         CalendarEventStepViewDateTime $dateTime,
+        CalendarEventStepViewReferenceId $reference,
     ): self {
-        return new self($id, $championshipSlug, $color, $icon, $name, $venueLabel, $type, $dateTime);
+        return new self($id, $championshipSlug, $color, $icon, $name, $venueLabel, $type, $dateTime, $reference);
     }
 
     /**
@@ -53,8 +56,9 @@ final class CalendarEventStepView extends AggregateRoot
         CalendarEventStepViewVenueLabel $venueLabel,
         CalendarEventStepViewType $type,
         CalendarEventStepViewDateTime $dateTime,
+        CalendarEventStepViewReferenceId $reference,
     ): self {
-        return new self($id, $championshipSlug, $color, $icon, $name, $venueLabel, $type, $dateTime);
+        return new self($id, $championshipSlug, $color, $icon, $name, $venueLabel, $type, $dateTime, $reference);
     }
 
     public function id(): CalendarEventStepViewId
@@ -95,5 +99,10 @@ final class CalendarEventStepView extends AggregateRoot
     public function dateTime(): CalendarEventStepViewDateTime
     {
         return $this->dateTime;
+    }
+
+    public function reference(): CalendarEventStepViewReferenceId
+    {
+        return $this->reference;
     }
 }

@@ -6,6 +6,7 @@ dutchGrandPrix2022RaceWhite:
   venueLabel: 'Zandvoort'
   type: 'race'
   dateTime: '2022-09-04 13:00:00'
+  reference: '@motorsport.event.eventStep.dutchGrandPrix2022Race'
 
 australianGrandPrix2022RaceWhite:
   championshipSlug: 'formula1'
@@ -15,3 +16,4 @@ australianGrandPrix2022RaceWhite:
   venueLabel: 'Melbourne Grand Prix Circuit'
   type: 'race'
   dateTime: '2022-04-10 05:00:00'
+  reference: '@motorsport.event.eventStep.australianGrandPrix2022Race'

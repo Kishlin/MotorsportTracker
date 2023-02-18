@@ -12,6 +12,7 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventS
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewIcon;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewName;
+use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewReferenceId;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewType;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewVenueLabel;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
@@ -34,6 +35,7 @@ final class FixtureToCalendarEventStepViewConverter implements FixtureConverter
             new CalendarEventStepViewVenueLabel($fixture->getString('venueLabel')),
             new CalendarEventStepViewType($fixture->getString('type')),
             new CalendarEventStepViewDateTime($fixture->getDateTime('dateTime')),
+            new CalendarEventStepViewReferenceId($fixture->getString('reference')),
         );
     }
 }

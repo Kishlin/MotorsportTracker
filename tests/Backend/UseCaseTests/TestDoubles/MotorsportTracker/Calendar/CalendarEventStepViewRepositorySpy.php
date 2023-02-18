@@ -48,6 +48,7 @@ final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy imp
                     clone $view->venueLabel(),
                     clone $view->type(),
                     clone $view->dateTime(),
+                    clone $view->reference(),
                 );
 
                 $this->objects[$newView->id()->value()] = $newView;
