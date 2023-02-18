@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Calendar;
 
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\CreateViewOnEventStepCreationEventHandler;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\UpdateViewsAfterAChampionshipPresentationCreationHandler;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar\CalendarEventStepDataRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar\CalendarEventStepViewRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar\EventStepViewDataRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipPresentationRepositorySpy;
@@ -20,7 +22,11 @@ trait CalendarServicesTrait
 {
     private ?CalendarEventStepViewRepositorySpy $calendarEventStepViewRepositorySpy = null;
 
+    private ?UpdateViewsAfterAChampionshipPresentationCreationHandler $updateViewsAfterAChampionshipPresentationCreationHandler = null;
+
     private ?EventStepViewDataRepositorySpy $eventStepViewDataRepositorySpy = null;
+
+    private ?CalendarEventStepDataRepositorySpy $calendarEventStepDataRepositorySpy = null;
 
     private ?CreateViewOnEventStepCreationEventHandler $createViewOnEventStepCreationEventHandler = null;
 
@@ -64,6 +70,32 @@ trait CalendarServicesTrait
         }
 
         return $this->eventStepViewDataRepositorySpy;
+    }
+
+    public function calendarEventStepDataRepositorySpy(): CalendarEventStepDataRepositorySpy
+    {
+        if (null === $this->calendarEventStepDataRepositorySpy) {
+            $this->calendarEventStepDataRepositorySpy = new CalendarEventStepDataRepositorySpy(
+                $this->championshipPresentationRepositorySpy(),
+                $this->calendarEventStepViewRepositorySpy(),
+                $this->championshipRepositorySpy(),
+            );
+        }
+
+        return $this->calendarEventStepDataRepositorySpy;
+    }
+
+    public function updateViewsAfterAChampionshipPresentationCreationHandler(): UpdateViewsAfterAChampionshipPresentationCreationHandler
+    {
+        if (null === $this->updateViewsAfterAChampionshipPresentationCreationHandler) {
+            $this->updateViewsAfterAChampionshipPresentationCreationHandler = new UpdateViewsAfterAChampionshipPresentationCreationHandler(
+                $this->calendarEventStepDataRepositorySpy(),
+                $this->calendarEventStepDataRepositorySpy(),
+                $this->calendarEventStepViewRepositorySpy(),
+            );
+        }
+
+        return $this->updateViewsAfterAChampionshipPresentationCreationHandler;
     }
 
     public function createViewOnEventStepCreationEventHandler(): CreateViewOnEventStepCreationEventHandler

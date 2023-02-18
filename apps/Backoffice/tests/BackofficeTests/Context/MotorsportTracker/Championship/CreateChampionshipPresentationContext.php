@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship;
 
+use DateInterval;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command\AddChampionshipPresentationCommand;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
@@ -51,6 +52,9 @@ SQL;
             self::application()->find(AddChampionshipPresentationCommand::NAME),
         );
 
+        // This guaranties time uniqueness in database, when multiple presentations are created in one test
+        self::application()->advanceInTime(new DateInterval('PT1S'));
+
         $commandTester->execute(['icon' => $icon, 'color' => $color]);
 
         $this->commandStatus = $commandTester->getStatusCode();
@@ -64,7 +68,9 @@ SQL;
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
 
         /** @var array<array{id: string, championshipId: string, icon: string, color: string}> $championshipPresentationData */
-        $championshipPresentationData = self::database()->fetchAllAssociative('SELECT * FROM championship_presentations;');
+        $championshipPresentationData = self::database()->fetchAllAssociative(
+            'SELECT * FROM championship_presentations ORDER BY created_on DESC LIMIT 1;'
+        );
 
         Assert::assertCount(1, $championshipPresentationData);
         Assert::assertSame($this->icon, $championshipPresentationData[0]['icon']);

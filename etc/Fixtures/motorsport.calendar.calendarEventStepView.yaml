@@ -1,0 +1,17 @@
+dutchGrandPrix2022RaceWhite:
+  championshipSlug: 'formula1'
+  color: '#fff'
+  icon: 'f1.png'
+  name: 'Dutch GP'
+  venueLabel: 'Zandvoort'
+  type: 'race'
+  dateTime: '2022-09-04 13:00:00'
+
+australianGrandPrix2022RaceWhite:
+  championshipSlug: 'formula1'
+  color: '#fff'
+  icon: 'f1.png'
+  name: 'Australian GP'
+  venueLabel: 'Melbourne Grand Prix Circuit'
+  type: 'race'
+  dateTime: '2022-04-10 05:00:00'

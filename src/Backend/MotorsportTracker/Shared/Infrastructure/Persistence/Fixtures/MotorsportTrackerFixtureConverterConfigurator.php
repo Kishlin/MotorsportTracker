@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures;
 
+use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Fixtures\FixtureToCalendarEventStepViewConverter;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Fixtures\FixtureToCarConverter;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Fixtures\FixtureToDriverMoveConverter;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToChampionshipConverter;
@@ -29,6 +30,8 @@ final class MotorsportTrackerFixtureConverterConfigurator
 
     public static function populateFixtureSaverWithConverters(FixtureSaver $fixtureSaver): void
     {
+        $fixtureSaver->addConverter('motorsport.calendar.calendarEventStepView', new FixtureToCalendarEventStepViewConverter());
+
         $fixtureSaver->addConverter('motorsport.car.car', new FixtureToCarConverter());
         $fixtureSaver->addConverter('motorsport.car.driverMove', new FixtureToDriverMoveConverter());
 

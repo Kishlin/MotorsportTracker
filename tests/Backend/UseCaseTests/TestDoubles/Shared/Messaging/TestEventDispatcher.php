@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\DomainEvent\DriverMoveCreatedDomainEvent;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipPresentationCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventStepCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Result\Application\RecordResults\ResultsRecordedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
@@ -15,7 +16,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 final class TestEventDispatcher implements EventDispatcher
 {
     public function __construct(
-        private TestServiceContainer $testServiceContainer
+        private readonly TestServiceContainer $testServiceContainer,
     ) {
     }
 
@@ -36,14 +37,12 @@ final class TestEventDispatcher implements EventDispatcher
     {
         if ($event instanceof DriverMoveCreatedDomainEvent) {
             $this->testServiceContainer->updateRacerViewsOnDriverMoveHandler()($event);
-        }
-
-        if ($event instanceof ResultsRecordedDomainEvent) {
+        } elseif ($event instanceof ResultsRecordedDomainEvent) {
             $this->testServiceContainer->refreshStandingsOnResultsRecordedHandler()($event);
-        }
-
-        if ($event instanceof EventStepCreatedDomainEvent) {
+        } elseif ($event instanceof EventStepCreatedDomainEvent) {
             $this->testServiceContainer->createViewOnEventStepCreationEventHandler()($event);
+        } elseif ($event instanceof ChampionshipPresentationCreatedDomainEvent) {
+            $this->testServiceContainer->updateViewsAfterAChampionshipPresentationCreationHandler()($event);
         }
     }
 }

@@ -3,3 +3,15 @@ formulaOneWhite:
   icon: 'f1.png'
   color: "#fff"
   createdOn: '1993-11-22'
+
+formulaOneRed:
+  championshipId: '@motorsport.championship.championship.formulaOne'
+  icon: 'f1.png'
+  color: "#f00"
+  createdOn: '2000-01-01'
+
+motoGpBlack:
+  championshipId: '@motorsport.championship.championship.motoGp'
+  icon: 'motogp.png'
+  color: "#ddd"
+  createdOn: '1993-11-22'
