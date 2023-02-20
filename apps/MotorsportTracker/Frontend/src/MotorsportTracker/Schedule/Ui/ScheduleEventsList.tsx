@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import React from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { EventsSchedule } from '../../Shared/Types';
 import formatDateAsScheduleKey from '../Utils/Date/formatDateAsScheduleKey';
@@ -16,25 +16,34 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({
     firstDay,
     lastDay,
 }) => {
-    const schedule = [];
+    const [scheduleJSX, setScheduleJSX] = useState<ReactNode>(<noscript />);
 
-    for (let day = firstDay; day <= lastDay; day.setDate(day.getDate() + 1)) {
-        const scheduleKey = formatDateAsScheduleKey(day);
+    useEffect(
+        () => {
+            const nextScheduleJSX = [];
 
-        if (undefined !== events[scheduleKey]) {
-            schedule.push((
-                <ScheduleDay
-                    key={day.getTime()}
-                    events={events[scheduleKey]}
-                />
-            ));
-        }
-    }
+            for (let day = firstDay; day <= lastDay; day.setDate(day.getDate() + 1)) {
+                const scheduleKey = formatDateAsScheduleKey(day);
+
+                if (undefined !== events[scheduleKey]) {
+                    nextScheduleJSX.push((
+                        <ScheduleDay
+                            key={day.getTime()}
+                            events={events[scheduleKey]}
+                        />
+                    ));
+                }
+            }
+
+            setScheduleJSX(nextScheduleJSX);
+        },
+        [events],
+    );
 
     return (
         <Grid item>
             <Grid container flexDirection="column" columns={{ xs: 1 }}>
-                {schedule}
+                {scheduleJSX}
             </Grid>
         </Grid>
     );
