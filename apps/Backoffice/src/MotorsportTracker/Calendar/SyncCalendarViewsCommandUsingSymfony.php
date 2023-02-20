@@ -28,7 +28,6 @@ WHERE es.id NOT IN (
 )
 SQL;
 
-
     public function __construct(
         private readonly EventDispatcher $eventDispatcher,
         private readonly EntityManagerInterface $entityManager,
