@@ -247,6 +247,8 @@ INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('0aea3eed-67be-4416-8154-82f2b90d9b3b', 'formula2', '#043961', 'f2.svg', 'R13 Monza', 'Feature Race', 'Autodromo Nazionale Monza', '2023-09-03 09:05:00', '1f7f6576-bbd0-4020-bccf-35e646fa815c');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('e176068a-0f52-49cf-9d2f-ef35356c8d84', 'formula2', '#043961', 'f2.svg', 'R14 Yas Island', 'Sprint Race', 'Yas Marina Circuit', '2023-11-25 12:20:00', 'c49fafa2-d8d2-4527-8fb0-6f53fe761d11');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('9cd70d7a-b644-4c59-a312-a8abfe172d7c', 'formula2', '#043961', 'f2.svg', 'R14 Yas Island', 'Feature Race', 'Yas Marina Circuit', '2023-11-26 09:00:00', '028b2cbd-38cc-4339-81ef-f204ee3f9188');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('e8a1420c-8fc1-4dde-ae18-dc65c3085ed7', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'Paul Ricard Test Days', 'Test Day 1', 'Circuit Paul Ricard', '2023-03-07 08:00:00', 'bf9b0a1a-40e8-40fe-96bd-bfe0fdd5e766');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('816387d0-1278-450c-a504-2cd953f1e257', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'Paul Ricard Test Days', 'Test Day 2', 'Circuit Paul Ricard', '2023-03-08 08:00:00', 'eb1c67fe-7691-44e1-b538-223596e69c88');
 
 
 --
@@ -626,7 +628,6 @@ INSERT INTO public.events (id, season, venue, index, label) VALUES ('068e7ec8-8f
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('217131e2-173c-4dd0-87af-eb75bf7ba0bf', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'bb862ede-5353-4bad-8f2b-f2fd87ea85dd', 8, 'Michelin GT Challenge at VIR');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('2261119c-6781-412c-9e94-34a869b2ea64', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '760e5f01-9c4e-426d-b998-f1b4b26a5349', 9, 'IMSA Battle on The Bricks');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('7064a92b-ec41-4b89-ac9e-de4b066869c7', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '6e6c0e03-4fb0-4dbc-9b0d-4c0d58101008', 10, 'Motul Petit Le Mans');
-INSERT INTO public.events (id, season, venue, index, label) VALUES ('6119ab77-2b69-45d7-978c-e5684a6e4eaf', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 0, 'Test Days');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('25ab3fdb-d2fd-4a99-a83a-2351c276a0cc', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 1, 'R1 Monza Endurance');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('25bdb04c-6648-423f-9399-8e8b2dea0d3b', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '6ccc70ff-058f-44de-8a88-785b0f4eeaee', 2, 'R2 Brands Hatch Sprint');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('48f6cf8f-f088-41fc-8f1d-324adfefc522', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 3, 'R3 Endurance Paul Ricard');
@@ -651,6 +652,7 @@ INSERT INTO public.events (id, season, venue, index, label) VALUES ('551a5e3d-78
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('c1f6bc2c-8c35-4b3b-a4fc-876697eaed4b', '74cc992a-c0bd-4970-9e94-4cffcd0dc434', '6d6cf63e-751d-4153-bff4-354ab70951fb', 11, 'R12 Zandvoort');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('920c1719-187d-4f79-9244-52c86046b76f', '74cc992a-c0bd-4970-9e94-4cffcd0dc434', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 12, 'R13 Monza');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('151e5a6d-be04-4794-ae56-e27b214adac3', '74cc992a-c0bd-4970-9e94-4cffcd0dc434', '508affbb-0506-4423-9fe3-725b49d95274', 13, 'R14 Yas Island');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('6119ab77-2b69-45d7-978c-e5684a6e4eaf', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 0, 'Paul Ricard Test Days');
 
 
 --
@@ -677,6 +679,8 @@ INSERT INTO public.step_types (id, label) VALUES ('8091c3c7-1e9d-4726-a87b-ba659
 INSERT INTO public.step_types (id, label) VALUES ('d00b18ba-da9f-450f-af47-90dbddb8be6c', 'Race 1');
 INSERT INTO public.step_types (id, label) VALUES ('946a2e6c-7ffe-4a00-be96-f33815c091f0', 'Race 2');
 INSERT INTO public.step_types (id, label) VALUES ('15ac3019-b681-45f6-a1cd-01239a387b17', 'Feature Race');
+INSERT INTO public.step_types (id, label) VALUES ('c79a321e-a9ed-41fb-a7a9-21950823bf45', 'Test Day 1');
+INSERT INTO public.step_types (id, label) VALUES ('d5ef9e9a-5c98-492b-979e-8ce58ec1b767', 'Test Day 2');
 
 
 --
@@ -910,6 +914,8 @@ INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('212319e5-7a
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('1f7f6576-bbd0-4020-bccf-35e646fa815c', '920c1719-187d-4f79-9244-52c86046b76f', '15ac3019-b681-45f6-a1cd-01239a387b17', '2023-09-03 09:05:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('c49fafa2-d8d2-4527-8fb0-6f53fe761d11', '151e5a6d-be04-4794-ae56-e27b214adac3', '8091c3c7-1e9d-4726-a87b-ba659e86f80a', '2023-11-25 12:20:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('028b2cbd-38cc-4339-81ef-f204ee3f9188', '151e5a6d-be04-4794-ae56-e27b214adac3', '15ac3019-b681-45f6-a1cd-01239a387b17', '2023-11-26 09:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('bf9b0a1a-40e8-40fe-96bd-bfe0fdd5e766', '6119ab77-2b69-45d7-978c-e5684a6e4eaf', 'c79a321e-a9ed-41fb-a7a9-21950823bf45', '2023-03-07 08:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('eb1c67fe-7691-44e1-b538-223596e69c88', '6119ab77-2b69-45d7-978c-e5684a6e4eaf', 'd5ef9e9a-5c98-492b-979e-8ce58ec1b767', '2023-03-08 08:00:00');
 
 
 --

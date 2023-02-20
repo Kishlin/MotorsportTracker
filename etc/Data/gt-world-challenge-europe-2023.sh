@@ -15,7 +15,7 @@ $prefix kishlin:motorsport:venue:add "Brands Hatch Circuit Kent" "gb"
 $prefix kishlin:motorsport:venue:add "Hockenheimring" "de"
 $prefix kishlin:motorsport:venue:add "Nürburgring" "de"
 
-$prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "paulricard" 0 "Test Days"
+$prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "paulricard" 0 "Paul Ricard Test Days"
 $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "monza" 1 "R1 Monza Endurance"
 $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "brandshatch" 2 "R2 Brands Hatch Sprint"
 $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "paulricard" 3 "R3 Endurance Paul Ricard"
@@ -27,6 +27,8 @@ $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "valencia" 8 "R
 $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "barcelona" 9 "R9 Endurance Barcelona"
 $prefix kishlin:motorsport:event:add gtworldchallengeeurope 2023 "zandvoort" 10 "R10 Sprint Zandvoort"
 
+$prefix kishlin:motorsport:event-step:add gtworldchallengeeurope 2023 "Test Days" "Test Day 1" "2023-03-07 08:00:00"
+$prefix kishlin:motorsport:event-step:add gtworldchallengeeurope 2023 "Test Days" "Test Day 2" "2023-03-08 08:00:00"
 $prefix kishlin:motorsport:event-step:add gtworldchallengeeurope 2023 "monza" "Race" "2023-04-23 15:00:00"
 $prefix kishlin:motorsport:event-step:add gtworldchallengeeurope 2023 "brandshatch" "Race 1" "2023-05-14 11:05:00"
 $prefix kishlin:motorsport:event-step:add gtworldchallengeeurope 2023 "brandshatch" "Race 2" "2023-05-14 16:10:00"
