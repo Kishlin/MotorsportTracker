@@ -4,7 +4,6 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outFile": "../../build/local/tsc.js",
     "sourceMap": true,
     "jsx": "preserve",
     "moduleResolution": "node",
