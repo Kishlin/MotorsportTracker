@@ -208,6 +208,17 @@ INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('b83bd39c-96d7-4113-9bf4-27bfdace37ac', 'imsa', '#fefffe', 'imsa.svg', 'Michelin GT Challenge at VIR', 'Race', 'VIRginia International Raceway', '2023-08-27 01:00:00', '4390ef72-7a80-4b67-b6b4-2e8a8b0fb3ed');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('47c7fb6c-e819-4a14-81c1-a519504c11cf', 'imsa', '#fefffe', 'imsa.svg', 'IMSA Battle on The Bricks', 'Race', 'Indianapolis Motor Speedway', '2023-09-17 01:00:00', '48c4bca5-9db4-4292-9a3d-617a551a78f7');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('3909ff15-8758-4e6d-968b-317d538fcc64', 'imsa', '#fefffe', 'imsa.svg', 'Motul Petit Le Mans', 'Race', 'Michelin Raceway Road Atlanta', '2023-10-14 01:00:00', 'a053abf1-6c69-4f48-9e8e-ed60047949aa');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('8cd31a2a-7293-490e-90da-8ab9e6969fb4', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R1 Monza Endurance', 'Race', 'Autodromo Nazionale Monza', '2023-04-23 15:00:00', '162954a5-e240-496f-a165-61d70327f3a6');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('1c3752c9-9592-4921-b2c6-7318cba04189', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R2 Brands Hatch Sprint', 'Race 1', 'Brands Hatch Circuit Kent', '2023-05-14 11:05:00', '4be25835-d4fc-4508-aed8-cdb9b1271c46');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('82172b6f-6ab7-4905-a270-1511a0a2bf3f', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R2 Brands Hatch Sprint', 'Race 2', 'Brands Hatch Circuit Kent', '2023-05-14 16:10:00', '1a853543-b01a-4d80-9280-d722c2b55fd9');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('f85078f8-7744-488e-86cd-02f91e00e5b5', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R3 Endurance Paul Ricard', 'Race', 'Circuit Paul Ricard', '2023-06-04 01:00:00', '279adb4f-8980-49aa-b8bb-3a9457506bac');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('307e8c04-8c9e-4b9f-9bfa-d6efb1166c10', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R4 CrowdStrike 24 Hours of Spa', 'Race', 'Circuit de Spa Francorchamps', '2023-07-01 01:00:00', 'f9362cf3-099c-45ab-bab6-2c09377cfc11');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('9d63a814-1c5f-45c2-bcf7-de34f4007a3f', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R5 Sprint Misano', 'Race', 'Misano World Circuit Marco Simoncelli', '2023-07-16 12:00:00', '7025dce5-5d84-46c4-a809-0fafc8825139');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('29df2de7-59eb-40a1-9b9a-69543a27138f', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R6 Endurance Nürburgring', 'Race', 'Nürburgring', '2023-07-30 12:00:00', '03b91011-c067-4653-b4eb-bb7d7fd21b5b');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('3486c09a-a37a-4792-8fea-d31dd937510e', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R7 Sprint Hockenheim', 'Race', 'Hockenheimring', '2023-09-03 12:00:00', 'fe8025f7-2d87-4086-a8a7-a43a1c073e88');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('4a1cdc26-4be1-4c51-83ec-60ab955dcd90', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R8 Sprint Ricardo Tormo Valencia', 'Race', 'Circuit Ricardo Tormo Valencia', '2023-09-17 12:00:00', '9ca9972c-3339-46d7-81e4-9fc0c25e3236');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('6272d0c7-2127-4e46-84ca-48ded2d3794a', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R9 Endurance Barcelona', 'Race', 'Circuit de Barcelona-Catalunya', '2023-10-01 12:00:00', '4c60c2e4-2a2a-4fff-8792-d9a0808ccf6a');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('fd4671c7-047f-4975-be5f-618acb6e8701', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'R10 Sprint Zandvoort', 'Race', 'Circuit Zandvoort', '2023-10-15 12:00:00', 'a4736d5a-9364-44af-9545-5160a701e433');
 
 
 --
@@ -357,6 +368,31 @@ INSERT INTO public.championship_presentations (id, championship, icon, color, cr
 
 
 --
+-- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220408213133', '2022-04-11 15:32:56', 14);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220409181131', '2022-04-11 15:32:56', 6);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220409185635', '2022-04-11 15:32:56', 1);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220610215445', '2022-06-10 22:22:19', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220611002012', '2022-06-10 22:22:19', 1);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220611170308', '2022-06-11 17:04:28', 19);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220616000809', '2022-06-16 00:16:08', 28);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220616124606', '2022-06-16 12:47:03', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220713181313', '2022-07-13 18:14:29', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220713183949', '2022-07-13 18:40:59', 17);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20220728125835', '2022-07-28 12:59:54', 21);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221023043009', '2022-10-23 04:33:43', 21);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221105182411', '2022-11-05 18:26:27', 32);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120040214', '2022-11-20 04:06:24', 13);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120065527', '2022-11-20 06:56:28', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221120071036', '2022-12-25 18:11:29', 1);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20221225180107', '2022-12-25 18:11:29', 15);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20230204042827', '2023-02-04 04:32:56', 20);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Version20230218154951', '2023-02-18 15:51:30', 15);
+
+
+--
 -- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: app
 --
 
@@ -478,7 +514,6 @@ INSERT INTO public.venues (id, name, country) VALUES ('3c7356e3-3605-48ea-9c0c-3
 INSERT INTO public.venues (id, name, country) VALUES ('2578791d-c57c-4877-ab52-ce869329c625', 'Mandalika International Street Circuit', '54427f06-1b66-41fa-bf0f-7b96e9026d2e');
 INSERT INTO public.venues (id, name, country) VALUES ('e0c5467e-2837-463e-8a17-8fb1f49b0255', 'Phillip Island', 'b94997db-940a-4ddc-a133-a4140d168b94');
 INSERT INTO public.venues (id, name, country) VALUES ('b8c08866-437f-46bb-a069-475d02778ef8', 'Chang International Circuit', '2546e6e8-2d5f-4730-8f3d-7346c34991b7');
-INSERT INTO public.venues (id, name, country) VALUES ('0b4934dc-0a43-4168-b4ef-e5fa05e2ff30', 'Circuit Ricardo Tormo', '0a7c4ba4-b3a0-4219-a5bd-6466750441a5');
 INSERT INTO public.venues (id, name, country) VALUES ('d2ddd638-bdc0-4501-b6be-f9d30749c89b', 'Sebring International Raceway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
 INSERT INTO public.venues (id, name, country) VALUES ('018faf97-1e9a-4bd0-8929-4157692158da', 'Fuji Speedway', '29e86eef-3917-4352-afbb-9407f33ec479');
 INSERT INTO public.venues (id, name, country) VALUES ('955c0c3f-0f45-40e7-adff-13ed23c00d72', 'Daytona International Speedway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
@@ -491,6 +526,10 @@ INSERT INTO public.venues (id, name, country) VALUES ('581059c6-97fb-4b09-9a86-9
 INSERT INTO public.venues (id, name, country) VALUES ('bb862ede-5353-4bad-8f2b-f2fd87ea85dd', 'VIRginia International Raceway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
 INSERT INTO public.venues (id, name, country) VALUES ('760e5f01-9c4e-426d-b998-f1b4b26a5349', 'Indianapolis Motor Speedway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
 INSERT INTO public.venues (id, name, country) VALUES ('6e6c0e03-4fb0-4dbc-9b0d-4c0d58101008', 'Michelin Raceway Road Atlanta', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('0b4934dc-0a43-4168-b4ef-e5fa05e2ff30', 'Circuit Ricardo Tormo Valencia', '0a7c4ba4-b3a0-4219-a5bd-6466750441a5');
+INSERT INTO public.venues (id, name, country) VALUES ('6ccc70ff-058f-44de-8a88-785b0f4eeaee', 'Brands Hatch Circuit Kent', '849c2feb-208f-40f7-b719-131e34082381');
+INSERT INTO public.venues (id, name, country) VALUES ('78260cfc-5cc9-418e-845f-caf31ef3e5f9', 'Hockenheimring', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
+INSERT INTO public.venues (id, name, country) VALUES ('d4ad8683-8cf2-4c96-bd4d-6b3cf7f065a7', 'Nürburgring', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
 
 
 --
@@ -584,6 +623,17 @@ INSERT INTO public.events (id, season, venue, index, label) VALUES ('068e7ec8-8f
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('217131e2-173c-4dd0-87af-eb75bf7ba0bf', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'bb862ede-5353-4bad-8f2b-f2fd87ea85dd', 8, 'Michelin GT Challenge at VIR');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('2261119c-6781-412c-9e94-34a869b2ea64', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '760e5f01-9c4e-426d-b998-f1b4b26a5349', 9, 'IMSA Battle on The Bricks');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('7064a92b-ec41-4b89-ac9e-de4b066869c7', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '6e6c0e03-4fb0-4dbc-9b0d-4c0d58101008', 10, 'Motul Petit Le Mans');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('6119ab77-2b69-45d7-978c-e5684a6e4eaf', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 0, 'Test Days');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('25ab3fdb-d2fd-4a99-a83a-2351c276a0cc', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 1, 'R1 Monza Endurance');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('25bdb04c-6648-423f-9399-8e8b2dea0d3b', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '6ccc70ff-058f-44de-8a88-785b0f4eeaee', 2, 'R2 Brands Hatch Sprint');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('48f6cf8f-f088-41fc-8f1d-324adfefc522', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 3, 'R3 Endurance Paul Ricard');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('013bf375-bcd3-4b19-b2d0-85541b322b02', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', 'c85b066e-72fe-41e9-b787-3cb4c6ca5de9', 4, 'R4 CrowdStrike 24 Hours of Spa');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('4c663866-cb66-4072-89b6-c855668c315f', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '8e6b6661-b1eb-4a89-98f1-05e4f586cba4', 5, 'R5 Sprint Misano');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('b958b6f5-f905-4fae-97ba-f6ad1e345bf5', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', 'd4ad8683-8cf2-4c96-bd4d-6b3cf7f065a7', 6, 'R6 Endurance Nürburgring');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('fe01c86d-561d-4bd1-ad58-a33b8e97a747', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '78260cfc-5cc9-418e-845f-caf31ef3e5f9', 7, 'R7 Sprint Hockenheim');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('95ed073c-20a7-4bdb-9e46-a1a6a5e9450d', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '0b4934dc-0a43-4168-b4ef-e5fa05e2ff30', 8, 'R8 Sprint Ricardo Tormo Valencia');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('5e4d9d8d-95ba-46f1-96b3-3b57acc581fe', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', 'd2f04839-e8de-484a-98f7-beda803d4239', 9, 'R9 Endurance Barcelona');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('77076e82-22f9-4cc0-be96-dc9bb2bd6c2c', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '6d6cf63e-751d-4153-bff4-354ab70951fb', 10, 'R10 Sprint Zandvoort');
 
 
 --
@@ -607,6 +657,8 @@ INSERT INTO public.step_types (id, label) VALUES ('4009943f-3390-4d7f-a3cd-47432
 INSERT INTO public.step_types (id, label) VALUES ('2a143500-eba9-41de-9dd5-dd0285421af0', 'Day 2');
 INSERT INTO public.step_types (id, label) VALUES ('c94d976d-704c-4592-a86b-29859c9d95b4', 'Day 3');
 INSERT INTO public.step_types (id, label) VALUES ('8091c3c7-1e9d-4726-a87b-ba659e86f80a', 'Sprint Race');
+INSERT INTO public.step_types (id, label) VALUES ('d00b18ba-da9f-450f-af47-90dbddb8be6c', 'Race 1');
+INSERT INTO public.step_types (id, label) VALUES ('946a2e6c-7ffe-4a00-be96-f33815c091f0', 'Race 2');
 
 
 --
@@ -801,6 +853,17 @@ INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('f0033364-85
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('4390ef72-7a80-4b67-b6b4-2e8a8b0fb3ed', '217131e2-173c-4dd0-87af-eb75bf7ba0bf', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-08-27 01:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('48c4bca5-9db4-4292-9a3d-617a551a78f7', '2261119c-6781-412c-9e94-34a869b2ea64', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-09-17 01:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('a053abf1-6c69-4f48-9e8e-ed60047949aa', '7064a92b-ec41-4b89-ac9e-de4b066869c7', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-10-14 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('162954a5-e240-496f-a165-61d70327f3a6', '25ab3fdb-d2fd-4a99-a83a-2351c276a0cc', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-04-23 15:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('4be25835-d4fc-4508-aed8-cdb9b1271c46', '25bdb04c-6648-423f-9399-8e8b2dea0d3b', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-05-14 11:05:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('1a853543-b01a-4d80-9280-d722c2b55fd9', '25bdb04c-6648-423f-9399-8e8b2dea0d3b', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-05-14 16:10:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('279adb4f-8980-49aa-b8bb-3a9457506bac', '48f6cf8f-f088-41fc-8f1d-324adfefc522', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-06-04 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('f9362cf3-099c-45ab-bab6-2c09377cfc11', '013bf375-bcd3-4b19-b2d0-85541b322b02', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-07-01 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('7025dce5-5d84-46c4-a809-0fafc8825139', '4c663866-cb66-4072-89b6-c855668c315f', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-07-16 12:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('03b91011-c067-4653-b4eb-bb7d7fd21b5b', 'b958b6f5-f905-4fae-97ba-f6ad1e345bf5', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-07-30 12:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('fe8025f7-2d87-4086-a8a7-a43a1c073e88', 'fe01c86d-561d-4bd1-ad58-a33b8e97a747', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-09-03 12:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('9ca9972c-3339-46d7-81e4-9fc0c25e3236', '95ed073c-20a7-4bdb-9e46-a1a6a5e9450d', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-09-17 12:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('4c60c2e4-2a2a-4fff-8792-d9a0808ccf6a', '5e4d9d8d-95ba-46f1-96b3-3b57acc581fe', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-10-01 12:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('a4736d5a-9364-44af-9545-5160a701e433', '77076e82-22f9-4cc0-be96-dc9bb2bd6c2c', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-10-15 12:00:00');
 
 
 --
