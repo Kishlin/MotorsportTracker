@@ -206,6 +206,11 @@ INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon
 INSERT INTO public.championships (id, name, slug) VALUES ('f4618d91-2df9-4a39-b857-7b751b27111a', 'Formula One', 'formula1');
 INSERT INTO public.championships (id, name, slug) VALUES ('e64a940b-e4c3-4caa-948a-dca4b9716c78', 'Moto GP', 'motogp');
 INSERT INTO public.championships (id, name, slug) VALUES ('38afa966-116c-4ec1-ae20-590c43977906', 'World Endurance Championship', 'wec');
+INSERT INTO public.championships (id, name, slug) VALUES ('24b1d23b-d02b-41f2-82e3-62e73b105691', 'IMSA', 'imsa');
+INSERT INTO public.championships (id, name, slug) VALUES ('647fcf89-b1d3-4450-997c-884313c1b259', 'Formula E', 'formulae');
+INSERT INTO public.championships (id, name, slug) VALUES ('e5ae8a14-3fa8-4adf-95af-a4f2dd97ff42', 'Formula 2', 'formula2');
+INSERT INTO public.championships (id, name, slug) VALUES ('05b1d906-3a15-4a88-a623-0e10b2c2e88c', 'GT World Challenge', 'gtworldchallenge');
+INSERT INTO public.championships (id, name, slug) VALUES ('bc702072-ce7f-4ab1-9deb-e1ed12ca059d', 'GT World Challenge Europe', 'gtworldchallengeeurope');
 
 
 --
@@ -255,6 +260,11 @@ INSERT INTO public.seasons (id, championship, year) VALUES ('28137908-06e4-4346-
 INSERT INTO public.seasons (id, championship, year) VALUES ('50093d15-7156-4cee-874c-97e531511dc6', 'f4618d91-2df9-4a39-b857-7b751b27111a', 2023);
 INSERT INTO public.seasons (id, championship, year) VALUES ('f9a7174d-cef8-4436-ad19-c32edbf33673', 'e64a940b-e4c3-4caa-948a-dca4b9716c78', 2023);
 INSERT INTO public.seasons (id, championship, year) VALUES ('9ef0243a-6f56-40d7-8249-7ed3d1f28901', '38afa966-116c-4ec1-ae20-590c43977906', 2023);
+INSERT INTO public.seasons (id, championship, year) VALUES ('12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '24b1d23b-d02b-41f2-82e3-62e73b105691', 2023);
+INSERT INTO public.seasons (id, championship, year) VALUES ('ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', '647fcf89-b1d3-4450-997c-884313c1b259', 2023);
+INSERT INTO public.seasons (id, championship, year) VALUES ('74cc992a-c0bd-4970-9e94-4cffcd0dc434', 'e5ae8a14-3fa8-4adf-95af-a4f2dd97ff42', 2023);
+INSERT INTO public.seasons (id, championship, year) VALUES ('e1bf83c0-80f1-4869-b0c0-1d9cee7aa264', '05b1d906-3a15-4a88-a623-0e10b2c2e88c', 2023);
+INSERT INTO public.seasons (id, championship, year) VALUES ('50a8ab1a-6b74-45a0-85d5-49678a07d9ca', 'bc702072-ce7f-4ab1-9deb-e1ed12ca059d', 2023);
 
 
 --
@@ -325,9 +335,14 @@ INSERT INTO public.cars (id, number, team, season) VALUES ('86bd6f56-be33-411b-b
 -- Data for Name: championship_presentations; Type: TABLE DATA; Schema: public; Owner: app
 --
 
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('8f0777bb-e267-42e8-a882-04c5d1b5e0aa', '24b1d23b-d02b-41f2-82e3-62e73b105691', 'imsa.svg', '#fefffe', '2023-02-20 19:35:52');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('19f8b660-51b2-41ca-be05-9691b7a05e52', '647fcf89-b1d3-4450-997c-884313c1b259', 'fe.svg', '#019dcb', '2023-02-20 19:36:07');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('45032318-2b17-46c2-b79b-af1c334708fd', '05b1d906-3a15-4a88-a623-0e10b2c2e88c', 'gt-world-challenge.svg', '#e04b00', '2023-02-20 19:36:43');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('099b1713-3cce-4fed-8a41-f405b8bee329', 'bc702072-ce7f-4ab1-9deb-e1ed12ca059d', 'gt-world-challenge-europe.svg', '#e09600', '2023-02-20 19:37:00');
 INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('99b574f3-4a28-46d2-a32a-c8b2e873562f', 'f4618d91-2df9-4a39-b857-7b751b27111a', 'f1.svg', '#e00000', '2023-02-18 18:47:12');
 INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('20a155bb-ed52-4fd4-be44-0cdb4af4b7a7', 'e64a940b-e4c3-4caa-948a-dca4b9716c78', 'motogp.svg', '#e0e000', '2023-02-20 16:25:03');
-INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('a80fe78b-d3c3-4799-a7fa-b421fd673a18', '38afa966-116c-4ec1-ae20-590c43977906', 'wec.svg', '#042b60', '2023-02-20 17:42:19');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('a80fe78b-d3c3-4799-a7fa-b421fd673a18', '38afa966-116c-4ec1-ae20-590c43977906', 'wec.svg', '#0649a1', '2023-02-20 17:42:19');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('f83829cc-96b3-4357-80f9-261bde68e86e', 'e5ae8a14-3fa8-4adf-95af-a4f2dd97ff42', 'f2.svg', '#043961', '2023-02-20 19:36:20');
 
 
 --
