@@ -197,6 +197,17 @@ INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('12d2ec62-c5fd-44a3-b357-ee058a8c13bf', 'wec', '#0649a1', 'wec.svg', 'R6 Fuji | 6H', 'Race', 'Fuji Speedway', '2023-09-10 11:00:00', '65490acc-6462-4b17-a56c-c20cbf8b164a');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('d3fc6870-4202-44f4-89d4-8152234b3857', 'wec', '#0649a1', 'wec.svg', 'R3 Spa-Francorchamps | 6H', 'Race', 'Circuit de Spa Francorchamps', '2023-04-29 12:45:00', '09274fcb-b9f2-4b67-8d00-1d9e4ce72950');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('19b657f9-615b-4e33-9222-dec6c080046b', 'wec', '#0649a1', 'wec.svg', 'R2 Portimao | 6H', 'Race', 'Autódromo Internacional do Algarve', '2023-04-16 12:00:00', '2cfcdc47-ddaf-4067-8c33-90ed8d8a518e');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('d2af453f-9a47-4724-adf4-7931fcdbc4af', 'imsa', '#fefffe', 'imsa.svg', 'Rolex 24 at Daytona', 'Race', 'Daytona International Speedway', '2023-01-28 13:40:00', '260ac02d-7b8f-4f81-b470-156fdcd98698');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('f55da2aa-c8ba-4c68-b6b5-7777cff3de35', 'imsa', '#fefffe', 'imsa.svg', '12 Hours of Sebring', 'Race', 'Sebring International Raceway', '2023-03-18 10:10:00', '5ddd65cd-316c-4c6e-b997-efe620395e47');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('a5d6aee9-2d74-47d5-98ee-0cd983a9de55', 'imsa', '#fefffe', 'imsa.svg', 'Acura GP of Long Beach', 'Race', 'Long Beach Street Circuit', '2023-04-15 01:00:00', 'fe4ded35-a7da-42bb-8847-b766b86764a1');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('726da480-4d47-426d-a21d-c29719d24e5c', 'imsa', '#fefffe', 'imsa.svg', 'Motul Course de Monterey', 'Race', 'WeatherTech Raceway Laguna Seca', '2023-05-14 01:00:00', '7dfd9724-ded5-42e2-863e-16efd2adaf04');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('4b0c1716-5075-4407-9b93-db6313349d33', 'imsa', '#fefffe', 'imsa.svg', '6 Hours of The Glen', 'Race', 'Watkins Glen International', '2023-06-25 01:00:00', 'ee858784-b0bd-48a5-a1f6-fd1e3c0bd534');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('7da792f6-7efe-4ec4-b183-aa8cc4c4c66d', 'imsa', '#fefffe', 'imsa.svg', 'Chevrolet GP', 'Race', 'Canadian Tire Motorsport Park', '2023-07-09 01:00:00', '24cfce48-75ae-4bad-9aed-e515ca223057');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('c8a2512c-44ea-47c0-92a4-1597c84d74e3', 'imsa', '#fefffe', 'imsa.svg', 'FCP Euro Northeast GP', 'Race', 'Lime Rock Park', '2023-07-22 01:00:00', '4481b4c9-d28c-4295-bc11-d0281835b74f');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('7e133376-8b2b-433c-8623-1f25efbbf0ab', 'imsa', '#fefffe', 'imsa.svg', 'IMSA Sportscar Weekend', 'Race', 'Road America', '2023-08-06 01:00:00', 'f0033364-8510-4e17-8d9d-1336c2609edf');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('b83bd39c-96d7-4113-9bf4-27bfdace37ac', 'imsa', '#fefffe', 'imsa.svg', 'Michelin GT Challenge at VIR', 'Race', 'VIRginia International Raceway', '2023-08-27 01:00:00', '4390ef72-7a80-4b67-b6b4-2e8a8b0fb3ed');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('47c7fb6c-e819-4a14-81c1-a519504c11cf', 'imsa', '#fefffe', 'imsa.svg', 'IMSA Battle on The Bricks', 'Race', 'Indianapolis Motor Speedway', '2023-09-17 01:00:00', '48c4bca5-9db4-4292-9a3d-617a551a78f7');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('3909ff15-8758-4e6d-968b-317d538fcc64', 'imsa', '#fefffe', 'imsa.svg', 'Motul Petit Le Mans', 'Race', 'Michelin Raceway Road Atlanta', '2023-10-14 01:00:00', 'a053abf1-6c69-4f48-9e8e-ed60047949aa');
 
 
 --
@@ -470,6 +481,16 @@ INSERT INTO public.venues (id, name, country) VALUES ('b8c08866-437f-46bb-a069-4
 INSERT INTO public.venues (id, name, country) VALUES ('0b4934dc-0a43-4168-b4ef-e5fa05e2ff30', 'Circuit Ricardo Tormo', '0a7c4ba4-b3a0-4219-a5bd-6466750441a5');
 INSERT INTO public.venues (id, name, country) VALUES ('d2ddd638-bdc0-4501-b6be-f9d30749c89b', 'Sebring International Raceway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
 INSERT INTO public.venues (id, name, country) VALUES ('018faf97-1e9a-4bd0-8929-4157692158da', 'Fuji Speedway', '29e86eef-3917-4352-afbb-9407f33ec479');
+INSERT INTO public.venues (id, name, country) VALUES ('955c0c3f-0f45-40e7-adff-13ed23c00d72', 'Daytona International Speedway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('2cd6953c-35f9-4a7f-802c-42abf11f03f1', 'Long Beach Street Circuit', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('f86a312a-9346-456b-b951-bfd2a2c33e59', 'WeatherTech Raceway Laguna Seca', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('77dc8569-1523-4dd7-ab2a-c77519fb8570', 'Watkins Glen International', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('7f7715ad-eb38-4b87-8ba1-e7957aeb1caa', 'Canadian Tire Motorsport Park', '7f49f09b-f1f7-4312-b5d0-e8be78e10f01');
+INSERT INTO public.venues (id, name, country) VALUES ('c987fbd7-e1b7-47a0-b7bf-78661c20591f', 'Lime Rock Park', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('581059c6-97fb-4b09-9a86-9f0c979253f1', 'Road America', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('bb862ede-5353-4bad-8f2b-f2fd87ea85dd', 'VIRginia International Raceway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('760e5f01-9c4e-426d-b998-f1b4b26a5349', 'Indianapolis Motor Speedway', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('6e6c0e03-4fb0-4dbc-9b0d-4c0d58101008', 'Michelin Raceway Road Atlanta', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
 
 
 --
@@ -552,6 +573,17 @@ INSERT INTO public.events (id, season, venue, index, label) VALUES ('01e3829e-50
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('94a14683-4f80-4c85-bfa9-ae2e638262ac', '9ef0243a-6f56-40d7-8249-7ed3d1f28901', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 4, 'R5 Monza | 6H');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('2df96fc9-2d08-4a7b-a973-4e6a78e67e14', '9ef0243a-6f56-40d7-8249-7ed3d1f28901', '018faf97-1e9a-4bd0-8929-4157692158da', 5, 'R6 Fuji | 6H');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('93897fce-b1c0-4fed-8411-afeddd483937', '9ef0243a-6f56-40d7-8249-7ed3d1f28901', '409bb6eb-aaaf-48b9-9012-07bc9628ffe2', 6, 'R7 Bahrain | 8H');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('9e4f0f2e-750a-49c6-8b1f-0ad46a728371', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '955c0c3f-0f45-40e7-adff-13ed23c00d72', 0, 'Rolex 24 at Daytona');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('ac547b54-2f7e-41d0-a944-50ffdfe658f2', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'd2ddd638-bdc0-4501-b6be-f9d30749c89b', 1, '12 Hours of Sebring');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('dcbf25ee-1b60-48fc-a103-45ed9aa3f0b6', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '2cd6953c-35f9-4a7f-802c-42abf11f03f1', 2, 'Acura GP of Long Beach');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('7dae93a2-26c7-49f7-9eab-09b5942bcca0', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'f86a312a-9346-456b-b951-bfd2a2c33e59', 3, 'Motul Course de Monterey');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('d6c1da4b-a41f-4955-a065-381a80645b1c', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '77dc8569-1523-4dd7-ab2a-c77519fb8570', 4, '6 Hours of The Glen');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('efd97afb-2461-4a64-b273-b1a695859781', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '7f7715ad-eb38-4b87-8ba1-e7957aeb1caa', 5, 'Chevrolet GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('e43f86a8-e125-4e9b-88f0-58eb6aa0d9e8', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'c987fbd7-e1b7-47a0-b7bf-78661c20591f', 6, 'FCP Euro Northeast GP');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('068e7ec8-8f12-44dc-82eb-f88737ee461e', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '581059c6-97fb-4b09-9a86-9f0c979253f1', 7, 'IMSA Sportscar Weekend');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('217131e2-173c-4dd0-87af-eb75bf7ba0bf', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', 'bb862ede-5353-4bad-8f2b-f2fd87ea85dd', 8, 'Michelin GT Challenge at VIR');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('2261119c-6781-412c-9e94-34a869b2ea64', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '760e5f01-9c4e-426d-b998-f1b4b26a5349', 9, 'IMSA Battle on The Bricks');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('7064a92b-ec41-4b89-ac9e-de4b066869c7', '12a4951f-9dfa-47ec-8f5e-73c8aeb3406a', '6e6c0e03-4fb0-4dbc-9b0d-4c0d58101008', 10, 'Motul Petit Le Mans');
 
 
 --
@@ -758,6 +790,17 @@ INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('e0c31915-ab
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('a3c8e180-18f3-486c-93b0-8eefe9256b65', '3b17d019-e1a4-40c2-a7cf-9de47261f5d5', '8091c3c7-1e9d-4726-a87b-ba659e86f80a', '2023-11-25 14:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('ec014abd-2334-438d-a5b8-0c5f66d4e374', '3b17d019-e1a4-40c2-a7cf-9de47261f5d5', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-11-26 13:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('65490acc-6462-4b17-a56c-c20cbf8b164a', '2df96fc9-2d08-4a7b-a973-4e6a78e67e14', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-09-10 11:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('260ac02d-7b8f-4f81-b470-156fdcd98698', '9e4f0f2e-750a-49c6-8b1f-0ad46a728371', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-01-28 13:40:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('5ddd65cd-316c-4c6e-b997-efe620395e47', 'ac547b54-2f7e-41d0-a944-50ffdfe658f2', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-03-18 10:10:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('fe4ded35-a7da-42bb-8847-b766b86764a1', 'dcbf25ee-1b60-48fc-a103-45ed9aa3f0b6', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-04-15 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('7dfd9724-ded5-42e2-863e-16efd2adaf04', '7dae93a2-26c7-49f7-9eab-09b5942bcca0', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-05-14 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('ee858784-b0bd-48a5-a1f6-fd1e3c0bd534', 'd6c1da4b-a41f-4955-a065-381a80645b1c', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-06-25 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('24cfce48-75ae-4bad-9aed-e515ca223057', 'efd97afb-2461-4a64-b273-b1a695859781', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-07-09 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('4481b4c9-d28c-4295-bc11-d0281835b74f', 'e43f86a8-e125-4e9b-88f0-58eb6aa0d9e8', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-07-22 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('f0033364-8510-4e17-8d9d-1336c2609edf', '068e7ec8-8f12-44dc-82eb-f88737ee461e', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-08-06 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('4390ef72-7a80-4b67-b6b4-2e8a8b0fb3ed', '217131e2-173c-4dd0-87af-eb75bf7ba0bf', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-08-27 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('48c4bca5-9db4-4292-9a3d-617a551a78f7', '2261119c-6781-412c-9e94-34a869b2ea64', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-09-17 01:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('a053abf1-6c69-4f48-9e8e-ed60047949aa', '7064a92b-ec41-4b89-ac9e-de4b066869c7', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-10-14 01:00:00');
 
 
 --
