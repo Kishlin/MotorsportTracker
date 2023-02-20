@@ -32,7 +32,7 @@ const ScheduleEvent: React.FunctionComponent<ScheduleEventProps> = ({ event }) =
         <Grid item>
             <Grid container direction="row" sx={{ my: 1 }} justifyContent="center">
                 <Grid item>
-                    <Grid container direction="column" justifyContent="center" sx={{ height: '100%',  width: `${dateWidth}px` }}>
+                    <Grid container direction="column" justifyContent="center" sx={{ height: '100%', width: `${dateWidth}px` }}>
                         <Typography noWrap sx={{ maxWidth: `${dateWidth - 20}px` }}>{dateLabels.date}</Typography>
                         <Typography noWrap sx={{ maxWidth: `${dateWidth - 20}px` }}>{dateLabels.time}</Typography>
                     </Grid>
