@@ -249,6 +249,22 @@ INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('9cd70d7a-b644-4c59-a312-a8abfe172d7c', 'formula2', '#043961', 'f2.svg', 'R14 Yas Island', 'Feature Race', 'Yas Marina Circuit', '2023-11-26 09:00:00', '028b2cbd-38cc-4339-81ef-f204ee3f9188');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('e8a1420c-8fc1-4dde-ae18-dc65c3085ed7', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'Paul Ricard Test Days', 'Test Day 1', 'Circuit Paul Ricard', '2023-03-07 08:00:00', 'bf9b0a1a-40e8-40fe-96bd-bfe0fdd5e766');
 INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('816387d0-1278-450c-a504-2cd953f1e257', 'gtworldchallengeeurope', '#e09600', 'gt-world-challenge-europe.svg', 'Paul Ricard Test Days', 'Test Day 2', 'Circuit Paul Ricard', '2023-03-08 08:00:00', 'eb1c67fe-7691-44e1-b538-223596e69c88');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('44bf31da-d45f-4c9e-800a-827ca2321afd', 'formulae', '#019dcb', 'fe.svg', 'Mexico City EPrix', 'Race', 'Mexico City', '2023-01-14 20:03:00', '669b5e8d-4b0f-49b1-b093-77be7d1a574c');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('5c9e76f4-17e8-484e-bf94-fe3e6e5eae51', 'formulae', '#019dcb', 'fe.svg', 'Diriyah EPrix', 'Race 1', 'City of Diriyah', '2023-01-27 17:03:00', 'b72a5634-299a-4e42-864d-d2124bb387a6');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('e56347b6-bfcd-4860-9188-b0c5ec67e9da', 'formulae', '#019dcb', 'fe.svg', 'Diriyah EPrix', 'Race 2', 'City of Diriyah', '2023-01-28 17:03:00', 'fdbcd400-efbc-4992-97e6-7943a81206ce');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('7c91c1f6-aa69-411b-82fd-1e0153d273d3', 'formulae', '#019dcb', 'fe.svg', 'Hyderabad EPrix', 'Race', 'City of Hyderabad', '2023-02-11 09:33:00', '60b045da-e70b-421d-9226-b134c0cbad24');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('25b5f762-5f87-46f8-b181-3289aacd08a5', 'formulae', '#019dcb', 'fe.svg', 'Cape Town EPrix', 'Race', 'City of Cape Town', '2023-02-25 14:03:00', '5ec25c77-a99a-4dae-8b99-9dc2d3890399');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('34cd4807-cae8-4e34-9caf-14a530ac7ac1', 'formulae', '#019dcb', 'fe.svg', 'Sao Paulo EPrix', 'Race', 'City of Sao Paulo', '2023-03-25 17:03:00', 'b2f28858-36a1-4cfe-aed5-faa9158a9889');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('251f14c8-317f-4350-bad8-efdcd64be08a', 'formulae', '#019dcb', 'fe.svg', 'Berlin EPrix', 'Race 1', 'City of Berlin', '2023-04-22 14:03:00', '06e4f3b9-2d59-43eb-98ce-7212bc438c33');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('2fcd2404-c944-462b-b68d-da011e0f11ae', 'formulae', '#019dcb', 'fe.svg', 'Berlin EPrix', 'Race 2', 'City of Berlin', '2023-04-23 14:03:00', '5442e1a2-6ec6-46c3-9671-b3e011842f85');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('82d01044-3030-4518-8ece-02e7cd3db53a', 'formulae', '#019dcb', 'fe.svg', 'Monaco EPrix', 'Race', 'Circuit de Monaco', '2023-05-06 14:03:00', 'be53a1a7-1c53-43c3-9563-0d2cfca488ff');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('964886f1-784e-4e18-8b5d-86918a832077', 'formulae', '#019dcb', 'fe.svg', 'Jakarta EPrix', 'Race 1', 'City of Jakarta', '2023-06-03 09:03:00', 'dd7535c3-bd6e-4622-b639-f99cdca492df');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('77dd4ae3-a4cc-4dda-8f73-322a8a34dcd2', 'formulae', '#019dcb', 'fe.svg', 'Jakarta EPrix', 'Race 2', 'City of Jakarta', '2023-06-04 09:03:00', 'e96a0dc6-91b0-4d24-a6eb-742a83c5933a');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('cccc3694-ec10-49b8-9031-ca4b0f18917c', 'formulae', '#019dcb', 'fe.svg', 'Portland EPrix', 'Race', 'City of Portland', '2023-06-24 08:03:00', '61a13de5-14af-40da-afcc-d9d462e1b8bd');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('f84def08-757e-4748-9a01-bfa0aaac6050', 'formulae', '#019dcb', 'fe.svg', 'Rome EPrix', 'Race 1', 'City of Rome', '2023-07-15 14:03:00', '285fae28-f94a-4fb0-aa9a-1c661e10cf37');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('d3c2e474-2547-4e5b-8638-a0363bccb444', 'formulae', '#019dcb', 'fe.svg', 'Rome EPrix', 'Race 2', 'City of Rome', '2023-07-16 14:03:00', 'fa70b8dd-f94d-45d0-8720-754303efefb1');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('743b43f3-e763-4c23-ba85-37c42ff64d12', 'formulae', '#019dcb', 'fe.svg', 'London EPrix', 'Race 1', 'City of London', '2023-07-29 17:03:00', '9cbed9d8-ef5c-4cb1-b0c7-ba5b136e585a');
+INSERT INTO public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) VALUES ('fa846ab8-cfec-47d2-9022-1f8b5f7901f1', 'formulae', '#019dcb', 'fe.svg', 'London EPrix', 'Race 2', 'City of London', '2023-07-30 17:03:00', '604544cc-e1fb-4ad8-850b-a443280c248c');
 
 
 --
@@ -302,6 +318,8 @@ INSERT INTO public.countries (id, code) VALUES ('63c9b1ff-5b8e-4cf5-8438-e0e212b
 INSERT INTO public.countries (id, code) VALUES ('3752ca78-3d54-4c61-b9e3-2eb78bb7f85e', 'kz');
 INSERT INTO public.countries (id, code) VALUES ('8169965d-7424-4a15-b30d-5cdb3f3f4f32', 'in');
 INSERT INTO public.countries (id, code) VALUES ('54427f06-1b66-41fa-bf0f-7b96e9026d2e', 'id');
+INSERT INTO public.countries (id, code) VALUES ('970b3cec-a230-45e3-8b41-b4ec1e01a344', 'za');
+INSERT INTO public.countries (id, code) VALUES ('2930a4a8-a360-464d-8e4a-5ff37d75f62c', 'kr');
 
 
 --
@@ -535,6 +553,17 @@ INSERT INTO public.venues (id, name, country) VALUES ('0b4934dc-0a43-4168-b4ef-e
 INSERT INTO public.venues (id, name, country) VALUES ('6ccc70ff-058f-44de-8a88-785b0f4eeaee', 'Brands Hatch Circuit Kent', '849c2feb-208f-40f7-b719-131e34082381');
 INSERT INTO public.venues (id, name, country) VALUES ('78260cfc-5cc9-418e-845f-caf31ef3e5f9', 'Hockenheimring', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
 INSERT INTO public.venues (id, name, country) VALUES ('d4ad8683-8cf2-4c96-bd4d-6b3cf7f065a7', 'Nürburgring', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
+INSERT INTO public.venues (id, name, country) VALUES ('e6425c22-46d6-452f-9ce6-98a9bdfdc2bd', 'Mexico City', '98d0e3cd-d803-4517-9cdb-7feb82b0422b');
+INSERT INTO public.venues (id, name, country) VALUES ('fb00633f-3da4-4f29-ad8d-720831e96e8f', 'City of Diriyah', '237e1373-7a68-4841-b541-d17f340aa003');
+INSERT INTO public.venues (id, name, country) VALUES ('30fb9fdc-0011-43a7-afbd-1419808a3404', 'City of Hyderabad', '8169965d-7424-4a15-b30d-5cdb3f3f4f32');
+INSERT INTO public.venues (id, name, country) VALUES ('f6176e7f-4fca-4d63-9f5a-f51767f59d03', 'City of Cape Town', '970b3cec-a230-45e3-8b41-b4ec1e01a344');
+INSERT INTO public.venues (id, name, country) VALUES ('b2f01e76-6452-444a-9dda-b0f672c73d10', 'City of Sao Paulo', '9157eea3-8a50-4a8c-a139-8310731c0d65');
+INSERT INTO public.venues (id, name, country) VALUES ('0ac89de2-194c-49f9-baa4-f277c46058f1', 'City of Berlin', 'c1400d2e-b38f-4562-a019-2f2d82f37d01');
+INSERT INTO public.venues (id, name, country) VALUES ('fc694ed7-a6c3-4ec1-80c2-f5799f978add', 'City of Seoul', '2930a4a8-a360-464d-8e4a-5ff37d75f62c');
+INSERT INTO public.venues (id, name, country) VALUES ('c2c97bc1-402e-47fc-9a18-826abacdd091', 'City of Jakarta', '54427f06-1b66-41fa-bf0f-7b96e9026d2e');
+INSERT INTO public.venues (id, name, country) VALUES ('cf6b6fdb-0285-4f51-85d5-d835c4fe4063', 'City of Portland', '73d7cf5c-6add-46cb-a97a-4757c6b7764c');
+INSERT INTO public.venues (id, name, country) VALUES ('c2571251-7af3-4d77-89c6-91bcf0fa2d40', 'City of Rome', '87afcfd4-a08c-47bf-8d96-e903b34f6c39');
+INSERT INTO public.venues (id, name, country) VALUES ('a77d06c6-a381-430b-a420-22166956d24b', 'City of London', '849c2feb-208f-40f7-b719-131e34082381');
 
 
 --
@@ -653,6 +682,17 @@ INSERT INTO public.events (id, season, venue, index, label) VALUES ('c1f6bc2c-8c
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('920c1719-187d-4f79-9244-52c86046b76f', '74cc992a-c0bd-4970-9e94-4cffcd0dc434', '9d5146df-6054-4238-bb63-897d1f4dcc2b', 12, 'R13 Monza');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('151e5a6d-be04-4794-ae56-e27b214adac3', '74cc992a-c0bd-4970-9e94-4cffcd0dc434', '508affbb-0506-4423-9fe3-725b49d95274', 13, 'R14 Yas Island');
 INSERT INTO public.events (id, season, venue, index, label) VALUES ('6119ab77-2b69-45d7-978c-e5684a6e4eaf', '50a8ab1a-6b74-45a0-85d5-49678a07d9ca', '05c6b668-ef04-4412-9a1f-46cf8c1aabbf', 0, 'Paul Ricard Test Days');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('e645eab3-b510-43a1-9f18-0b5188b9e131', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'e6425c22-46d6-452f-9ce6-98a9bdfdc2bd', 0, 'Mexico City EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('d49a877f-1937-43f2-85d3-f035751f350e', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'fb00633f-3da4-4f29-ad8d-720831e96e8f', 1, 'Diriyah EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('59ec6f9f-6ad9-4e76-883a-e14a1bf76fb5', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', '30fb9fdc-0011-43a7-afbd-1419808a3404', 2, 'Hyderabad EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('bc005609-a1c2-4825-9239-52601a5346ca', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'f6176e7f-4fca-4d63-9f5a-f51767f59d03', 3, 'Cape Town EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('be4c80e7-24d2-4ee1-ac05-7e62c83e8542', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'b2f01e76-6452-444a-9dda-b0f672c73d10', 4, 'Sao Paulo EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('b4eadc1f-3546-4464-a254-0c295b1c0781', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', '0ac89de2-194c-49f9-baa4-f277c46058f1', 5, 'Berlin EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('46e44679-cbad-4c0a-8ec1-d858483f6672', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', '7242a078-f76c-4166-8658-70eb8fc909a0', 6, 'Monaco EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('bfe3d562-2c11-46fc-b1cf-88844d8eff68', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'c2c97bc1-402e-47fc-9a18-826abacdd091', 7, 'Jakarta EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('728d7a6d-8296-4f71-9935-280e4061247f', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'cf6b6fdb-0285-4f51-85d5-d835c4fe4063', 8, 'Portland EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('6993b379-34fe-4f6d-8c31-207b4c5e9c39', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'c2571251-7af3-4d77-89c6-91bcf0fa2d40', 9, 'Rome EPrix');
+INSERT INTO public.events (id, season, venue, index, label) VALUES ('163fe178-f3c7-4eac-9191-1d37c0eaa958', 'ced08a1d-a1ce-4943-a9b0-a958ee19ddeb', 'a77d06c6-a381-430b-a420-22166956d24b', 10, 'London EPrix');
 
 
 --
@@ -916,6 +956,22 @@ INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('c49fafa2-d8
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('028b2cbd-38cc-4339-81ef-f204ee3f9188', '151e5a6d-be04-4794-ae56-e27b214adac3', '15ac3019-b681-45f6-a1cd-01239a387b17', '2023-11-26 09:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('bf9b0a1a-40e8-40fe-96bd-bfe0fdd5e766', '6119ab77-2b69-45d7-978c-e5684a6e4eaf', 'c79a321e-a9ed-41fb-a7a9-21950823bf45', '2023-03-07 08:00:00');
 INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('eb1c67fe-7691-44e1-b538-223596e69c88', '6119ab77-2b69-45d7-978c-e5684a6e4eaf', 'd5ef9e9a-5c98-492b-979e-8ce58ec1b767', '2023-03-08 08:00:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('669b5e8d-4b0f-49b1-b093-77be7d1a574c', 'e645eab3-b510-43a1-9f18-0b5188b9e131', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-01-14 20:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('b72a5634-299a-4e42-864d-d2124bb387a6', 'd49a877f-1937-43f2-85d3-f035751f350e', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-01-27 17:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('fdbcd400-efbc-4992-97e6-7943a81206ce', 'd49a877f-1937-43f2-85d3-f035751f350e', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-01-28 17:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('60b045da-e70b-421d-9226-b134c0cbad24', '59ec6f9f-6ad9-4e76-883a-e14a1bf76fb5', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-02-11 09:33:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('5ec25c77-a99a-4dae-8b99-9dc2d3890399', 'bc005609-a1c2-4825-9239-52601a5346ca', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-02-25 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('b2f28858-36a1-4cfe-aed5-faa9158a9889', 'be4c80e7-24d2-4ee1-ac05-7e62c83e8542', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-03-25 17:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('06e4f3b9-2d59-43eb-98ce-7212bc438c33', 'b4eadc1f-3546-4464-a254-0c295b1c0781', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-04-22 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('5442e1a2-6ec6-46c3-9671-b3e011842f85', 'b4eadc1f-3546-4464-a254-0c295b1c0781', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-04-23 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('be53a1a7-1c53-43c3-9563-0d2cfca488ff', '46e44679-cbad-4c0a-8ec1-d858483f6672', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-05-06 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('dd7535c3-bd6e-4622-b639-f99cdca492df', 'bfe3d562-2c11-46fc-b1cf-88844d8eff68', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-06-03 09:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('e96a0dc6-91b0-4d24-a6eb-742a83c5933a', 'bfe3d562-2c11-46fc-b1cf-88844d8eff68', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-06-04 09:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('61a13de5-14af-40da-afcc-d9d462e1b8bd', '728d7a6d-8296-4f71-9935-280e4061247f', 'b3418e4c-73dc-4304-b45a-c64bc9fb3f27', '2023-06-24 08:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('285fae28-f94a-4fb0-aa9a-1c661e10cf37', '6993b379-34fe-4f6d-8c31-207b4c5e9c39', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-07-15 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('fa70b8dd-f94d-45d0-8720-754303efefb1', '6993b379-34fe-4f6d-8c31-207b4c5e9c39', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-07-16 14:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('9cbed9d8-ef5c-4cb1-b0c7-ba5b136e585a', '163fe178-f3c7-4eac-9191-1d37c0eaa958', 'd00b18ba-da9f-450f-af47-90dbddb8be6c', '2023-07-29 17:03:00');
+INSERT INTO public.event_steps (id, event, type, date_time) VALUES ('604544cc-e1fb-4ad8-850b-a443280c248c', '163fe178-f3c7-4eac-9191-1d37c0eaa958', '946a2e6c-7ffe-4a00-be96-f33815c091f0', '2023-07-30 17:03:00');
 
 
 --
