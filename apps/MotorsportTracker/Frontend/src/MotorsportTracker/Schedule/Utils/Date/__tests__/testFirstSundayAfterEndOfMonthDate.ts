@@ -23,3 +23,11 @@ it('returns the sunday after when it is in the middle of the week', () => {
 
     expect(actual).toEqual(new Date(2022, 11, 4)); // December the 4th.
 });
+
+it('returns the sunday after when it is in the middle of the week, double check', () => {
+    const reference = new Date(1680220800000); // March the 31st, 2023. A Friday.
+
+    const actual = firstSundayAfterEndOfMonthDate(reference);
+
+    expect(actual).toEqual(new Date(2023, 3, 2)); // April the 2nd.
+});

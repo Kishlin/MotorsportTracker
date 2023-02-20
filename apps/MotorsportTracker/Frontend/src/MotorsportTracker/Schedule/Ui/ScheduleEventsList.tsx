@@ -22,7 +22,7 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({
         () => {
             const nextScheduleJSX = [];
 
-            for (let day = firstDay; day <= lastDay; day.setDate(day.getDate() + 1)) {
+            for (let day = new Date(firstDay); day <= lastDay; day.setDate(day.getDate() + 1)) {
                 const scheduleKey = formatDateAsScheduleKey(day);
 
                 if (undefined !== events[scheduleKey]) {
