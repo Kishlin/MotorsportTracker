@@ -73,7 +73,8 @@ abstract class SymfonyCommand extends Command
     ): int {
         /** @var null|string $response */
         $response = $input->getArgument($argument);
-        if (false === empty($response) && is_numeric($response)) {
+
+        if (is_numeric($response)) {
             return (int) $response;
         }
 
