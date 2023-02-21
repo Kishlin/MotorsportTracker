@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { EventsSchedule } from '../../Shared/Types';
@@ -20,9 +20,17 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({
 
     useEffect(
         () => {
+            const now = new Date();
             const nextScheduleJSX = [];
 
             for (let day = new Date(firstDay); day <= lastDay; day.setDate(day.getDate() + 1)) {
+
+                if (now.toLocaleDateString() === day.toLocaleDateString()) {
+                    nextScheduleJSX.push((
+                        <Divider key="divider" textAlign="center" sx={{ color: '#d95757' }}>Today</Divider>
+                    ));
+                }
+
                 const scheduleKey = formatDateAsScheduleKey(day);
 
                 if (undefined !== events[scheduleKey]) {
