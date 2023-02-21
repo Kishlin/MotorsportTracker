@@ -1,11 +1,12 @@
 // @ts-ignore
 import React, { useState } from 'react';
 
+import MotorsportTrackerMenu from '../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 import previousMonday from '../../src/MotorsportTracker/Schedule/Utils/Date/previousMonday';
 import ScheduleScrollable from '../../src/MotorsportTracker/Schedule/Ui/ScheduleScrollable';
-import Layout from '../../src/Shared/Ui/Layout/Layout';
 import { EventsSchedule } from '../../src/MotorsportTracker/Shared/Types';
 import calendarApi from '../../src/MotorsportTracker/Api/CalendarApi';
+import Layout from '../../src/Shared/Ui/Layout/Layout';
 
 declare type SchedulePageProps = {
     events: EventsSchedule,
@@ -14,13 +15,14 @@ declare type SchedulePageProps = {
 };
 
 const SchedulePage: React.FunctionComponent<SchedulePageProps> = ({ firstDayString, lastDayString, events }) => {
-    const [firstDay, setFirstDay] = useState<Date>(new Date(firstDayString));
-    const [lastDay, setLastDay] = useState<Date>(new Date(lastDayString));
+    const [firstDay] = useState<Date>(new Date(firstDayString));
+    const [lastDay] = useState<Date>(new Date(lastDayString));
 
     return (
-        <Layout>
-            <ScheduleScrollable events={events} firstDay={firstDay} lastDay={lastDay} />
-        </Layout>
+        <Layout
+            menu={<MotorsportTrackerMenu />}
+            content={<ScheduleScrollable events={events} firstDay={firstDay} lastDay={lastDay} />}
+        />
     );
 };
 

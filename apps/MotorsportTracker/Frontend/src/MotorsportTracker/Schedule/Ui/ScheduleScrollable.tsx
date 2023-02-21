@@ -12,7 +12,7 @@ declare type CalendarProps = {
 }
 
 const ScheduleScrollable: React.FunctionComponent<CalendarProps> = ({ events, firstDay, lastDay }) => (
-    <Grid container spacing={0} direction="column" sx={{ mx: 8, my: 2 }}>
+    <Grid container spacing={0} direction="column" sx={{ mx: 8, my: 2, maxWidth: '90%' }}>
         <ScheduleTitle />
         <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />
     </Grid>

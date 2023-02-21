@@ -1,8 +1,8 @@
 import { Divider, Grid } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { EventsSchedule } from '../../Shared/Types';
 import formatDateAsScheduleKey from '../Utils/Date/formatDateAsScheduleKey';
+import { EventsSchedule } from '../../Shared/Types';
 import ScheduleDay from './ScheduleDay';
 
 declare type ScheduleEventsListProps = {
@@ -24,7 +24,6 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({
             const nextScheduleJSX = [];
 
             for (let day = new Date(firstDay); day <= lastDay; day.setDate(day.getDate() + 1)) {
-
                 if (now.toLocaleDateString() === day.toLocaleDateString()) {
                     nextScheduleJSX.push((
                         <Divider key="divider" textAlign="center" sx={{ color: '#d95757' }}>Today</Divider>
@@ -49,10 +48,8 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({
     );
 
     return (
-        <Grid item>
-            <Grid container flexDirection="column" columns={{ xs: 1 }}>
-                {scheduleJSX}
-            </Grid>
+        <Grid item container flexDirection="column" columns={{ xs: 1 }}>
+            {scheduleJSX}
         </Grid>
     );
 };

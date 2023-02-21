@@ -19,7 +19,7 @@ const Schedule: React.FunctionComponent<CalendarProps> = ({
     lastDay,
     date,
 }) => (
-    <Grid container spacing={0} direction="column" sx={{ mx: 8, my: 2 }}>
+    <Grid container spacing={0} direction="column" sx={{ mx: 8, my: 2, maxWidth: '90%' }}>
         <ScheduleTitle />
         <ScheduleNavigation date={date} />
         <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />

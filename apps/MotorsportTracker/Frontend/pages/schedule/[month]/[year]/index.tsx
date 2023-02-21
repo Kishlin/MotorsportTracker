@@ -9,6 +9,7 @@ import listOfAllMonths from '../../../../src/MotorsportTracker/Schedule/Utils/Da
 import { EventsSchedule } from '../../../../src/MotorsportTracker/Shared/Types';
 import Schedule from '../../../../src/MotorsportTracker/Schedule/Ui/Schedule';
 import calendarApi from '../../../../src/MotorsportTracker/Api/CalendarApi';
+import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 
 declare type SchedulePathParams = {
     params: {
@@ -30,9 +31,12 @@ const MonthlySchedulePage: React.FunctionComponent<MonthlySchedulePageProps> = (
     lastDay,
     date,
 }) => (
-    <Layout>
-        <Schedule firstDay={new Date(firstDay)} lastDay={new Date(lastDay)} date={new Date(date)} events={events} />
-    </Layout>
+    <Layout
+        menu={<MotorsportTrackerMenu />}
+        content={
+            <Schedule firstDay={new Date(firstDay)} lastDay={new Date(lastDay)} date={new Date(date)} events={events} />
+        }
+    />
 );
 
 export const getStaticProps = async ({ params: { month, year } }: SchedulePathParams) => {

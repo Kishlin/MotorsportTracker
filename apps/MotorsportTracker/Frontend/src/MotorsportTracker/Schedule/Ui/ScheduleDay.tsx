@@ -14,10 +14,8 @@ const ScheduleDay: React.FunctionComponent<ScheduleDayProps> = ({ events }) => {
     );
 
     return (
-        <Grid item sx={{ mb: 2 }} columns={{ xs: 1 }}>
-            <Grid container flexDirection="column">
-                {eventsJSX}
-            </Grid>
+        <Grid item container flexDirection="column" sx={{ my: 1 }}>
+            {eventsJSX}
         </Grid>
     );
 };
