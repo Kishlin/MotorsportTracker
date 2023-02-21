@@ -17,14 +17,14 @@ declare type SchedulePathParams = {
     },
 };
 
-declare type ScheduleProps = {
+declare type MonthlySchedulePageProps = {
     events: EventsSchedule,
     firstDay: number,
     lastDay: number,
     date: number,
 }
 
-const SchedulePage: React.FunctionComponent<ScheduleProps> = ({
+const MonthlySchedulePage: React.FunctionComponent<MonthlySchedulePageProps> = ({
     events,
     firstDay,
     lastDay,
@@ -40,7 +40,7 @@ export const getStaticProps = async ({ params: { month, year } }: SchedulePathPa
     const lastDay = firstSundayAfterEndOfMonthDate(date);
     const firstDay = firstMondayBeforeOrAtDate(date);
 
-    const props: ScheduleProps = {
+    const props: MonthlySchedulePageProps = {
         firstDay: firstDay.getTime(),
         lastDay: lastDay.getTime(),
         date: date.getTime(),
@@ -62,4 +62,4 @@ export async function getStaticPaths(): Promise<{ paths: Array<SchedulePathParam
     return { paths, fallback: false };
 }
 
-export default SchedulePage;
+export default MonthlySchedulePage;
