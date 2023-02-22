@@ -268,6 +268,28 @@ CREATE TABLE public.step_types (
 ALTER TABLE public.step_types OWNER TO app;
 
 --
+-- Name: team_presentations; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.team_presentations (
+    id character varying(36) NOT NULL,
+    team character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    image character varying(255) NOT NULL,
+    created_on timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.team_presentations OWNER TO app;
+
+--
+-- Name: COLUMN team_presentations.created_on; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.team_presentations.created_on IS '(DC2Type:team_presentation_created_on)';
+
+
+--
 -- Name: team_standings; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -372,6 +394,7 @@ Kishlin\\Migrations\\Version20221120071036	2022-12-25 18:11:29	1
 Kishlin\\Migrations\\Version20221225180107	2022-12-25 18:11:29	15
 Kishlin\\Migrations\\Version20230204042827	2023-02-04 04:32:56	20
 Kishlin\\Migrations\\Version20230218154951	2023-02-18 15:51:30	15
+Kishlin\\Migrations\\Version20230222232032	2023-02-22 23:21:33	18
 \.
 
 
@@ -444,6 +467,14 @@ COPY public.seasons (id, championship, year) FROM stdin;
 --
 
 COPY public.step_types (id, label) FROM stdin;
+\.
+
+
+--
+-- Data for Name: team_presentations; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.team_presentations (id, team, name, image, created_on) FROM stdin;
 \.
 
 
@@ -592,6 +623,14 @@ ALTER TABLE ONLY public.step_types
 
 
 --
+-- Name: team_presentations team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.team_presentations
+    ADD CONSTRAINT team_presentations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: team_standings team_standings_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -718,6 +757,13 @@ CREATE UNIQUE INDEX step_type_label_idx ON public.step_types USING btree (label)
 --
 
 CREATE UNIQUE INDEX team_name_idx ON public.teams USING btree (name);
+
+
+--
+-- Name: team_presentation_team_created_on_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX team_presentation_team_created_on_idx ON public.team_presentations USING btree (team, created_on);
 
 
 --
