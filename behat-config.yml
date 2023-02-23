@@ -15,6 +15,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Calendar\CalendarViewContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventStepContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\CarRegistrationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\SearchDriverContext
@@ -48,6 +49,7 @@ default:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\RegisterDriverMoveContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Calendar\CalendarViewContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventStepContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateStepTypeContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Driver\CreateDriverContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue\CreateVenueContext

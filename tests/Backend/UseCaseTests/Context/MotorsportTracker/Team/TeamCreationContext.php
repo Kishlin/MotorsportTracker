@@ -24,6 +24,7 @@ final class TeamCreationContext extends MotorsportTrackerContext
 
     /**
      * @Given the :teamName team exists
+     * @Given the team :teamName exists
      *
      * @throws Exception
      */

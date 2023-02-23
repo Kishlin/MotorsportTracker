@@ -1,0 +1,5 @@
+redBullRacing:
+  teamId: '@motorsport.team.team.redBullRacing'
+  name: 'Red Bull Racing'
+  image: 'https://example.com/redbullracing.webp'
+  createdOn: '1993-11-22 01:00:00'

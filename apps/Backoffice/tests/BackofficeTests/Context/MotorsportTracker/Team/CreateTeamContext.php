@@ -20,6 +20,7 @@ final class CreateTeamContext extends BackofficeContext
 
     /**
      * @Given the :name team exists
+     * @Given the team :name exists
      */
     public function theTeamExists(string $name): void
     {
