@@ -149,6 +149,28 @@ CREATE TABLE public.driver_standings (
 ALTER TABLE public.driver_standings OWNER TO app;
 
 --
+-- Name: driver_standings_views; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.driver_standings_views (
+    id character varying(36) NOT NULL,
+    championship_slug character varying(255) NOT NULL,
+    year integer NOT NULL,
+    events text NOT NULL,
+    standings json NOT NULL
+);
+
+
+ALTER TABLE public.driver_standings_views OWNER TO app;
+
+--
+-- Name: COLUMN driver_standings_views.events; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.driver_standings_views.events IS '(DC2Type:standings_view_events)';
+
+
+--
 -- Name: drivers; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -304,6 +326,28 @@ CREATE TABLE public.team_standings (
 ALTER TABLE public.team_standings OWNER TO app;
 
 --
+-- Name: team_standings_views; Type: TABLE; Schema: public; Owner: app
+--
+
+CREATE TABLE public.team_standings_views (
+    id character varying(36) NOT NULL,
+    championship_slug character varying(255) NOT NULL,
+    year integer NOT NULL,
+    events text NOT NULL,
+    standings json NOT NULL
+);
+
+
+ALTER TABLE public.team_standings_views OWNER TO app;
+
+--
+-- Name: COLUMN team_standings_views.events; Type: COMMENT; Schema: public; Owner: app
+--
+
+COMMENT ON COLUMN public.team_standings_views.events IS '(DC2Type:standings_view_events)';
+
+
+--
 -- Name: teams; Type: TABLE; Schema: public; Owner: app
 --
 
@@ -395,6 +439,7 @@ Kishlin\\Migrations\\Version20221225180107	2022-12-25 18:11:29	15
 Kishlin\\Migrations\\Version20230204042827	2023-02-04 04:32:56	20
 Kishlin\\Migrations\\Version20230218154951	2023-02-18 15:51:30	15
 Kishlin\\Migrations\\Version20230222232032	2023-02-22 23:21:33	18
+Kishlin\\Migrations\\Version20230226141240	2023-02-26 14:14:08	18
 \.
 
 
@@ -411,6 +456,14 @@ COPY public.driver_moves (id, driver, car, date) FROM stdin;
 --
 
 COPY public.driver_standings (id, event, driver, points) FROM stdin;
+\.
+
+
+--
+-- Data for Name: driver_standings_views; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.driver_standings_views (id, championship_slug, year, events, standings) FROM stdin;
 \.
 
 
@@ -483,6 +536,14 @@ COPY public.team_presentations (id, team, name, image, created_on) FROM stdin;
 --
 
 COPY public.team_standings (id, event, team, points) FROM stdin;
+\.
+
+
+--
+-- Data for Name: team_standings_views; Type: TABLE DATA; Schema: public; Owner: app
+--
+
+COPY public.team_standings_views (id, championship_slug, year, events, standings) FROM stdin;
 \.
 
 
@@ -567,6 +628,14 @@ ALTER TABLE ONLY public.driver_standings
 
 
 --
+-- Name: driver_standings_views driver_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.driver_standings_views
+    ADD CONSTRAINT driver_standings_views_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: drivers drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: app
 --
 
@@ -636,6 +705,14 @@ ALTER TABLE ONLY public.team_presentations
 
 ALTER TABLE ONLY public.team_standings
     ADD CONSTRAINT team_standings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: team_standings_views team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: app
+--
+
+ALTER TABLE ONLY public.team_standings_views
+    ADD CONSTRAINT team_standings_views_pkey PRIMARY KEY (id);
 
 
 --
@@ -718,6 +795,13 @@ CREATE UNIQUE INDEX driver_standing_event_driver_idx ON public.driver_standings 
 
 
 --
+-- Name: driver_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_views USING btree (championship_slug, year);
+
+
+--
 -- Name: event_season_label_idx; Type: INDEX; Schema: public; Owner: app
 --
 
@@ -771,6 +855,13 @@ CREATE UNIQUE INDEX team_presentation_team_created_on_idx ON public.team_present
 --
 
 CREATE UNIQUE INDEX team_standing_event_team_idx ON public.team_standings USING btree (event, team);
+
+
+--
+-- Name: team_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: app
+--
+
+CREATE UNIQUE INDEX team_standings_views_championship_year_idx ON public.team_standings_views USING btree (championship_slug, year);
 
 
 --
