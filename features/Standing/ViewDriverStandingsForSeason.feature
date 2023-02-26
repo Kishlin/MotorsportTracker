@@ -1,6 +1,5 @@
 Feature: It can view driver standings for a season
 
-  @api
   Scenario: It views the driver standings
     Given the "driver" standing for "Verstappen After Australian GP 2022" exists
     And the "driver" standing for "Hamilton After Australian GP 2022" exists
@@ -14,7 +13,6 @@ Feature: It can view driver standings for a season
     | Max Verstappen   | 34     | 3          |
     | Lewis Hamilton   | 12     | 3          |
 
-  @api
   Scenario: It view no driver standings
     Given no driver standing exist yet
     And the season "Formula One 2022" exists

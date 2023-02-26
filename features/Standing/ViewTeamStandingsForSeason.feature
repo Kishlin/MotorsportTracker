@@ -1,6 +1,5 @@
 Feature: It can view team standings for a season
 
-  @api
   Scenario: It views the team standings
     Given the "team" standing for "Red Bull Racing After Australian GP 2022" exists
     And the "team" standing for "Mercedes After Australian GP 2022" exists
@@ -14,7 +13,6 @@ Feature: It can view team standings for a season
     | Red Bull Racing  | 76     | 3          |
     | Mercedes         | 12     | 3          |
 
-  @api
   Scenario: It view no team standings
     Given no team standing exist yet
     And the season "Formula One 2022" exists

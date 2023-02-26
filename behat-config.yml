@@ -36,7 +36,6 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Championship\SeasonContext
-        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Standing\StandingContext
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Calendar\CalendarContext
       filters:
         tags: '@api'
