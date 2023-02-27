@@ -1,19 +1,72 @@
 // @ts-ignore
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { Grid, Tab, Tabs, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
 
 import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
+declare type Standing = { name: string, color: string, data: number[] };
+
+declare type StandingsAPIType = { events: string[], standings: Standing[] };
+
 declare type StandingsPageProps = {
     events: string[],
-    drivers: { name: string, color: string, data: number[] }[],
-    teams: { name: string, color: string, data: number[] }[],
+    drivers: Standing[],
+    teams: Standing[],
 };
 
+declare type StandingsPathParams = {
+    params: {
+        championship: string,
+        year: string,
+    }
+};
+
+interface TabPanelProps {
+    children: React.ReactNode;
+    index: number;
+    value: number;
+}
+
+const TabPanel = (props: TabPanelProps) => {
+    const {
+        children,
+        value,
+        index,
+        ...other
+    } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+};
+
+function a11yProps(index: number) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
 const StandingsPage: React.FunctionComponent<StandingsPageProps> = ({ events, drivers, teams }) => {
+    const [tabIndex, setTabIndex] = React.useState<number>(0);
+
     const renderTooltip = ({ w }) => {
         let items = '';
         w.globals.tooltip.ttItems.forEach((x) => {
@@ -53,67 +106,93 @@ const StandingsPage: React.FunctionComponent<StandingsPageProps> = ({ events, dr
         xAxisCollection[0].append(...newXAxis);
     };
 
-    const data = {
-        options: {
-            chart: {
-                id: 'apexchart-example',
-                toolbar: {
-                    show: true,
-                    tools: {
-                        download: false,
-                    },
-                },
-                background: '#121212',
-                events: {
-                    mounted: changeLabelsOnChartDrawn,
-                    updated: changeLabelsOnChartDrawn,
+    const chartOptions = {
+        chart: {
+            id: 'apexchart-example',
+            toolbar: {
+                show: true,
+                tools: {
+                    download: false,
+                    pan: false,
                 },
             },
-            xaxis: {
-                categories: events,
-                tooltip: {
-                    enabled: false,
+            background: '#121212',
+            events: {
+                mounted: changeLabelsOnChartDrawn,
+                updated: changeLabelsOnChartDrawn,
+            },
+            animations: {
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 50,
                 },
-            },
-            yaxis: {
-                title: {
-                    text: 'Points',
-                },
-                tooltip: {
-                    enabled: false,
-                },
-            },
-            menu: {
-                enabled: false,
-            },
-            tooltip: {
-                theme: 'dark',
-                custom: renderTooltip,
-            },
-            stroke: {
-                width: 2,
-            },
-            theme: {
-                mode: 'dark',
             },
         },
-        series: teams,
+        xaxis: {
+            categories: events,
+            tooltip: {
+                enabled: false,
+            },
+        },
+        yaxis: {
+            title: {
+                text: 'Points',
+            },
+            tooltip: {
+                enabled: false,
+            },
+        },
+        menu: {
+            enabled: false,
+        },
+        tooltip: {
+            theme: 'dark',
+            custom: renderTooltip,
+        },
+        stroke: {
+            width: 2,
+        },
+        theme: {
+            mode: 'dark',
+        },
+    };
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabIndex(newValue);
     };
 
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
-            content={('undefined' !== typeof window) && <Chart options={data.options} series={data.series} type="line" width="85%" height={700} />}
+            content={(
+                <Grid container spacing={0} direction="column" sx={{ mx: 8, my: 2, maxWidth: '88%' }}>
+                    <Grid item container flexDirection="column" columns={{ xs: 1 }} sx={{ overflow: 'hidden' }}>
+                        <Grid item sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs value={tabIndex} onChange={handleChange} aria-label="basic tabs example">
+                                <Tab label="Drivers" {...a11yProps(0)} />
+                                <Tab label="Teams" {...a11yProps(1)} />
+                            </Tabs>
+                        </Grid>
+                        <TabPanel value={tabIndex} index={0}>
+                            {('undefined' !== typeof window) && <Chart options={chartOptions} series={drivers} type="line" width="98%" height={650} />}
+                        </TabPanel>
+                        <TabPanel value={tabIndex} index={1}>
+                            {('undefined' !== typeof window) && <Chart options={chartOptions} series={teams} type="line" width="98%" height={650} />}
+                        </TabPanel>
+                    </Grid>
+                </Grid>
+            )}
         />
     );
 };
 
-export async function getServerSideProps({ params: { championship, year } }): Promise<{ props: StandingsPageProps }> {
+export async function getStaticProps({ params: { championship, year } }): Promise<{ props: StandingsPageProps }> {
     const driversResponse = await fetch(`http://backend:8000/api/v1/standings/drivers/${championship}/${year}`);
     const teamsResponse = await fetch(`http://backend:8000/api/v1/standings/teams/${championship}/${year}`);
 
-    const driversData = await driversResponse.json() as { events: string[], standings: { name: string, color: string, data: number[] }[]};
-    const teamsData = await teamsResponse.json() as { events: string[], standings: { name: string, color: string, data: number[] }[]};
+    const driversData = await driversResponse.json() as StandingsAPIType;
+    const teamsData = await teamsResponse.json() as StandingsAPIType;
 
     return {
         props: {
@@ -122,6 +201,14 @@ export async function getServerSideProps({ params: { championship, year } }): Pr
             teams: teamsData.standings,
         },
     };
+}
+
+export async function getStaticPaths(): Promise<{ paths: Array<StandingsPathParams>, fallback: boolean }> {
+    const paths: Array<StandingsPathParams> = [
+        { params: { championship: 'formula1', year: '2022' } },
+    ];
+
+    return { paths, fallback: false };
 }
 
 export default StandingsPage;
