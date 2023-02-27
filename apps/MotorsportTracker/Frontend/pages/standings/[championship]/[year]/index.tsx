@@ -1,8 +1,13 @@
 // @ts-ignore
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { Grid, Tab, Tabs, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import {
+    Grid,
+    Tab,
+    Tabs,
+    Typography,
+} from '@mui/material';
 
 import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';

@@ -7,7 +7,7 @@ import LayoutHeader from './LayoutHeader';
 
 const drawerWidth = 240;
 
-const Layout: React.FunctionComponent<{ menu: ReactNode, content: ReactNode }> = ({ menu, content}) => {
+const Layout: React.FunctionComponent<{ menu: ReactNode, content: ReactNode }> = ({ menu, content }) => {
     const [open, setOpen] = React.useState(true);
 
     const handleDrawerOpen = () => {
