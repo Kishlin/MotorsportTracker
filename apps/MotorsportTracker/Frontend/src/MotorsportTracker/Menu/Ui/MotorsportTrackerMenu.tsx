@@ -28,6 +28,9 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
 
     const navigate = (path: string) => () => router.replace(path);
 
+    const now = new Date();
+    const schedulePath = now.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toLowerCase().replace(' ', '/');
+
     return (
         <List>
             <ListItem disablePadding>
@@ -49,7 +52,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                     </ListItemButton>
                 </List>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={navigate('/schedule/february/2022')}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={navigate(`/schedule/${schedulePath}`)}>
                         <ListItemIcon>
                             <CalendarMonthIcon />
                         </ListItemIcon>
