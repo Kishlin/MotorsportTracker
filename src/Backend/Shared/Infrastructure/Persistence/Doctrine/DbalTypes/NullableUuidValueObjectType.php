@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use ReflectionException;
 
-abstract class AbstractNullableUuidType extends StringType
+class NullableUuidValueObjectType extends StringType
 {
     /**
      * @throws ReflectionException
@@ -43,5 +43,8 @@ abstract class AbstractNullableUuidType extends StringType
     /**
      * @return class-string<NullableUuidValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return NullableUuidValueObject::class;
+    }
 }

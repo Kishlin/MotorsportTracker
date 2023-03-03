@@ -18,7 +18,7 @@ final class PositiveIntValueObjectTest extends TestCase
     {
         self::assertSame(
             1,
-            (new class(1) extends PositiveIntValueObject {})->value(),
+            (new PositiveIntValueObject(1))->value(),
         );
     }
 
@@ -26,7 +26,7 @@ final class PositiveIntValueObjectTest extends TestCase
     {
         self::assertSame(
             0,
-            (new class(0) extends PositiveIntValueObject {})->value(),
+            (new PositiveIntValueObject(0))->value(),
         );
     }
 
@@ -35,6 +35,6 @@ final class PositiveIntValueObjectTest extends TestCase
         $negativeInt = -1;
 
         self::expectException(InvalidValueException::class);
-        new class($negativeInt) extends PositiveIntValueObject {};
+        new PositiveIntValueObject($negativeInt);
     }
 }

@@ -18,7 +18,7 @@ final class PositiveFloatValueObjectTest extends TestCase
     {
         self::assertSame(
             1.0,
-            (new class(1.0) extends PositiveFloatValueObject {})->value(),
+            (new PositiveFloatValueObject(1.0))->value(),
         );
     }
 
@@ -26,7 +26,7 @@ final class PositiveFloatValueObjectTest extends TestCase
     {
         self::assertSame(
             0.0,
-            (new class(0.0) extends PositiveFloatValueObject {})->value(),
+            (new PositiveFloatValueObject(0.0))->value(),
         );
     }
 
@@ -35,6 +35,6 @@ final class PositiveFloatValueObjectTest extends TestCase
         $negativeInt = -1.0;
 
         self::expectException(InvalidValueException::class);
-        new class($negativeInt) extends PositiveFloatValueObject {};
+        new PositiveFloatValueObject($negativeInt);
     }
 }

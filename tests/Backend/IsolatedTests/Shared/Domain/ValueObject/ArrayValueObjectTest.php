@@ -15,21 +15,17 @@ final class ArrayValueObjectTest extends TestCase
 {
     public function testItCanBeCreatedAndConvertedBackToArray(): void
     {
-        self::assertIsArray((new class([]) extends ArrayValueObject {
-        })->value());
+        self::assertIsArray((new ArrayValueObject([]))->value());
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class([3, 50, 85]) extends ArrayValueObject {
-        };
+        $reference = new ArrayValueObject([3, 50, 85]);
 
-        $shouldBeEqual = new class([3, 50, 85]) extends ArrayValueObject {
-        };
+        $shouldBeEqual = new ArrayValueObject([3, 50, 85]);
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class([3, 50]) extends ArrayValueObject {
-        };
+        $shouldNotBeEqual = new ArrayValueObject([3, 50]);
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 }

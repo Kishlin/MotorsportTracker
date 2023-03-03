@@ -17,24 +17,24 @@ final class FloatValueObjectTest extends TestCase
     {
         self::assertSame(
             42.0,
-            (new class(42.0) extends FloatValueObject {})->value(),
+            (new FloatValueObject(42.0))->value(),
         );
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class(42.0) extends FloatValueObject {};
+        $reference = new FloatValueObject(42.0);
 
-        $shouldBeEqual = new class(42.0) extends FloatValueObject {};
+        $shouldBeEqual = new FloatValueObject(42.0);
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class(50.0) extends FloatValueObject {};
+        $shouldNotBeEqual = new FloatValueObject(50.0);
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 
     public function testItCanBeCreatedFromOtherInt(): void
     {
-        $other = new class(42.0) extends FloatValueObject {};
+        $other = new FloatValueObject(42.0);
 
         self::assertTrue($other::fromOther($other)->equals($other));
     }

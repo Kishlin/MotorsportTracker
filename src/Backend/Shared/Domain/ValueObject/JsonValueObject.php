@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
-abstract class JsonValueObject
+class JsonValueObject
 {
     /**
      * @param array<int|string, mixed> $value

@@ -17,24 +17,24 @@ final class IntValueObjectTest extends TestCase
     {
         self::assertSame(
             42,
-            (new class(42) extends IntValueObject {})->value(),
+            (new IntValueObject(42))->value(),
         );
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class(42) extends IntValueObject {};
+        $reference = new IntValueObject(42);
 
-        $shouldBeEqual = new class(42) extends IntValueObject {};
+        $shouldBeEqual = new IntValueObject(42);
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class(50) extends IntValueObject {};
+        $shouldNotBeEqual = new IntValueObject(50);
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 
     public function testItCanBeCreatedFromOtherInt(): void
     {
-        $other = new class(42) extends IntValueObject {};
+        $other = new IntValueObject(42);
 
         self::assertTrue($other::fromOther($other)->equals($other));
     }

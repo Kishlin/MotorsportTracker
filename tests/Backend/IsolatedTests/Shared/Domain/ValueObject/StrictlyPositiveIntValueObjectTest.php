@@ -18,7 +18,7 @@ final class StrictlyPositiveIntValueObjectTest extends TestCase
     {
         self::assertSame(
             1,
-            (new class(1) extends StrictlyPositiveIntValueObject {})->value(),
+            (new StrictlyPositiveIntValueObject(1))->value(),
         );
     }
 
@@ -27,7 +27,7 @@ final class StrictlyPositiveIntValueObjectTest extends TestCase
         $zero = 0;
 
         self::expectException(InvalidValueException::class);
-        new class($zero) extends StrictlyPositiveIntValueObject {};
+        new StrictlyPositiveIntValueObject($zero);
     }
 
     public function testItRefusesToBeNegative(): void
@@ -35,6 +35,6 @@ final class StrictlyPositiveIntValueObjectTest extends TestCase
         $negativeInt = -1;
 
         self::expectException(InvalidValueException::class);
-        new class($negativeInt) extends StrictlyPositiveIntValueObject {};
+        new StrictlyPositiveIntValueObject($negativeInt);
     }
 }

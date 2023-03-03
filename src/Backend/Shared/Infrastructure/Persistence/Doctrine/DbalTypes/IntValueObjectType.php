@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\IntegerType;
 use Kishlin\Backend\Shared\Domain\Tools;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use ReflectionException;
 
-abstract class AbstractStringType extends StringType
+class IntValueObjectType extends IntegerType
 {
     /**
      * @throws ReflectionException
@@ -23,9 +23,9 @@ abstract class AbstractStringType extends StringType
     }
 
     /**
-     * @param string $value
+     * @param int $value
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): StringValueObject
+    public function convertToPHPValue($value, AbstractPlatform $platform): IntValueObject
     {
         $className = $this->mappedClass();
 
@@ -33,15 +33,18 @@ abstract class AbstractStringType extends StringType
     }
 
     /**
-     * @param StringValueObject $value
+     * @param IntValueObject $value
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): int
     {
         return $value->value();
     }
 
     /**
-     * @return class-string<StringValueObject>
+     * @return class-string<IntValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return IntValueObject::class;
+    }
 }

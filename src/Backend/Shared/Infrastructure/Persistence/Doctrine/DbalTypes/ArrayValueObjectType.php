@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Domain\ValueObject\ArrayValueObject;
 use ReflectionException;
 
-abstract class AbstractArrayType extends ArrayType
+class ArrayValueObjectType extends ArrayType
 {
     /**
      * @throws ReflectionException
@@ -52,5 +52,8 @@ abstract class AbstractArrayType extends ArrayType
     /**
      * @return class-string<ArrayValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return ArrayValueObject::class;
+    }
 }

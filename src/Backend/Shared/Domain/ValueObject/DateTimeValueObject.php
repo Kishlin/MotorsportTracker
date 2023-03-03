@@ -6,7 +6,7 @@ namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
 use DateTimeImmutable;
 
-abstract class DateTimeValueObject
+class DateTimeValueObject
 {
     public function __construct(
         protected readonly DateTimeImmutable $value

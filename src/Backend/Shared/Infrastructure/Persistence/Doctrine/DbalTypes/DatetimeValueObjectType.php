@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
 use ReflectionException;
 
-abstract class AbstractDatetimeType extends DateTimeImmutableType
+class DatetimeValueObjectType extends DateTimeImmutableType
 {
     /**
      * @throws ReflectionException
@@ -56,5 +56,8 @@ abstract class AbstractDatetimeType extends DateTimeImmutableType
     /**
      * @return class-string<DateTimeValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return DateTimeValueObject::class;
+    }
 }

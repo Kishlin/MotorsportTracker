@@ -6,7 +6,7 @@ namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
 use Kishlin\Backend\Shared\Domain\Exception\InvalidValueException;
 
-abstract class StrictlyPositiveIntValueObject extends IntValueObject
+class StrictlyPositiveIntValueObject extends IntValueObject
 {
     protected function ensureIsValid(int $value): void
     {

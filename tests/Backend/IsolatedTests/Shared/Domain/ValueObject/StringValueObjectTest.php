@@ -17,18 +17,18 @@ final class StringValueObjectTest extends TestCase
     {
         self::assertSame(
             'project',
-            (new class('project') extends StringValueObject {})->value(),
+            (new StringValueObject('project'))->value(),
         );
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class('project') extends StringValueObject {};
+        $reference = new StringValueObject('project');
 
-        $shouldBeEqual = new class('project') extends StringValueObject {};
+        $shouldBeEqual = new StringValueObject('project');
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class('app') extends StringValueObject {};
+        $shouldNotBeEqual = new StringValueObject('app');
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 }

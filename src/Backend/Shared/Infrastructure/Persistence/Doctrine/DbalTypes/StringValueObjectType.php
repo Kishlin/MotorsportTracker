@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\StringType;
 use Kishlin\Backend\Shared\Domain\Tools;
-use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use ReflectionException;
 
-abstract class AbstractBooleanType extends BooleanType
+class StringValueObjectType extends StringType
 {
     /**
      * @throws ReflectionException
@@ -23,9 +23,9 @@ abstract class AbstractBooleanType extends BooleanType
     }
 
     /**
-     * @param bool $value
+     * @param string $value
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): BoolValueObject
+    public function convertToPHPValue($value, AbstractPlatform $platform): StringValueObject
     {
         $className = $this->mappedClass();
 
@@ -33,15 +33,18 @@ abstract class AbstractBooleanType extends BooleanType
     }
 
     /**
-     * @param BoolValueObject $value
+     * @param StringValueObject $value
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): bool
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         return $value->value();
     }
 
     /**
-     * @return class-string<BoolValueObject>
+     * @return class-string<StringValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return StringValueObject::class;
+    }
 }

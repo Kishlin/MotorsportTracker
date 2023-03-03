@@ -7,7 +7,7 @@ namespace Kishlin\Backend\Shared\Domain\ValueObject;
 use Kishlin\Backend\Shared\Domain\Exception\InvalidValueException;
 use Stringable;
 
-abstract class NullableUuidValueObject implements Stringable
+class NullableUuidValueObject implements Stringable
 {
     private const VALID_PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-5]{1}[0-9A-Fa-f]{3}-[ABab89]{1}[0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}\z';
 

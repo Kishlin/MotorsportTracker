@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Domain\ValueObject\JsonValueObject;
 use ReflectionException;
 
-abstract class AbstractJsonType extends JsonType
+class JsonValueObjectType extends JsonType
 {
     /**
      * @throws ReflectionException
@@ -52,5 +52,8 @@ abstract class AbstractJsonType extends JsonType
     /**
      * @return class-string<JsonValueObject>
      */
-    abstract protected function mappedClass(): string;
+    protected function mappedClass(): string
+    {
+        return JsonValueObject::class;
+    }
 }

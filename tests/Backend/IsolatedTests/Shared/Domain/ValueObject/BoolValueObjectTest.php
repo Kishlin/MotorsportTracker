@@ -15,17 +15,17 @@ final class BoolValueObjectTest extends TestCase
 {
     public function testItCanBeCreatedAndConvertedBackToBoolean(): void
     {
-        self::assertFalse((new class(false) extends BoolValueObject {})->value());
+        self::assertFalse((new BoolValueObject(false))->value());
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class(true) extends BoolValueObject {};
+        $reference = new BoolValueObject(true);
 
-        $shouldBeEqual = new class(true) extends BoolValueObject {};
+        $shouldBeEqual = new BoolValueObject(true);
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class(false) extends BoolValueObject {};
+        $shouldNotBeEqual = new BoolValueObject(false);
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 }

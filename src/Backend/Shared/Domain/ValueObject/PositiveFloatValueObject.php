@@ -6,7 +6,7 @@ namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
 use Kishlin\Backend\Shared\Domain\Exception\InvalidValueException;
 
-abstract class PositiveFloatValueObject extends FloatValueObject
+class PositiveFloatValueObject extends FloatValueObject
 {
     protected function ensureIsValid(float $value): void
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
-abstract class ArrayValueObject
+class ArrayValueObject
 {
     /**
      * @param array<int|string, float|integer|string> $value

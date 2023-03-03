@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Shared\Domain\ValueObject;
 
-abstract class BoolValueObject
+class BoolValueObject
 {
     public function __construct(
         protected readonly bool $value

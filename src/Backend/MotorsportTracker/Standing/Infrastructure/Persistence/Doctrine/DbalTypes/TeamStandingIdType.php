@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\DbalTypes;
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\AbstractUuidType;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\UuidValueObjectType;
 
-final class TeamStandingIdType extends AbstractUuidType
+final class TeamStandingIdType extends UuidValueObjectType
 {
     protected function mappedClass(): string
     {

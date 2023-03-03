@@ -15,17 +15,17 @@ final class JsonValueObjectTest extends TestCase
 {
     public function testItCanBeCreatedAndConvertedBackToJson(): void
     {
-        self::assertIsArray((new class([]) extends JsonValueObject {})->value());
+        self::assertIsArray((new JsonValueObject([]))->value());
     }
 
     public function testItCanCompareItselfToAnotherInstance(): void
     {
-        $reference = new class(['first' => ['a' => 20, 'b' => 35], 'second' => true]) extends JsonValueObject {};
+        $reference = new JsonValueObject(['first' => ['a' => 20, 'b' => 35], 'second' => true]);
 
-        $shouldBeEqual = new class(['first' => ['a' => 20, 'b' => 35], 'second' => true]) extends JsonValueObject {};
+        $shouldBeEqual = new JsonValueObject(['first' => ['a' => 20, 'b' => 35], 'second' => true]);
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class(['differentKey' => 'wrong value']) extends JsonValueObject {};
+        $shouldNotBeEqual = new JsonValueObject(['differentKey' => 'wrong value']);
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 }

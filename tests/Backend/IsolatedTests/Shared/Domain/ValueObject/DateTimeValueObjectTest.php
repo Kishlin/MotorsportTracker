@@ -24,18 +24,18 @@ final class DateTimeValueObjectTest extends TestCase
 
         self::assertEqualsCanonicalizing(
             new DateTimeImmutable($dateTime),
-            (new class(new DateTimeImmutable($dateTime)) extends DateTimeValueObject {})->value(),
+            (new DateTimeValueObject(new DateTimeImmutable($dateTime)))->value(),
         );
     }
 
     public function testItCanCompareItselfToAnotherDateTimeImmutable(): void
     {
-        $reference = new class(new DateTimeImmutable('22-11-1993 01:00')) extends DateTimeValueObject {};
+        $reference = new DateTimeValueObject(new DateTimeImmutable('22-11-1993 01:00'));
 
-        $shouldBeEqual = new class(new DateTimeImmutable('22-11-1993 01:00')) extends DateTimeValueObject {};
+        $shouldBeEqual = new DateTimeValueObject(new DateTimeImmutable('22-11-1993 01:00'));
         self::assertTrue($reference->equals($shouldBeEqual));
 
-        $shouldNotBeEqual = new class(new DateTimeImmutable('12-05-1997 12:00')) extends DateTimeValueObject {};
+        $shouldNotBeEqual = new DateTimeValueObject(new DateTimeImmutable('12-05-1997 12:00'));
         self::assertFalse($reference->equals($shouldNotBeEqual));
     }
 }

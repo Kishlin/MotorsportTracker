@@ -6,7 +6,7 @@ namespace Kishlin\Tests\Backend\Tools\Test\Isolated;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\AbstractUuidType;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\UuidValueObjectType;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 
@@ -14,19 +14,19 @@ use ReflectionException;
  * Abstract TestCase for custom DbalTypes mapping a \Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject.
  *
  * @internal
- * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\AbstractUuidType
+ * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\UuidValueObjectType
  */
 abstract class UuidTypeIsolatedTestCase extends TestCase
 {
     /**
      * @throws ReflectionException
      */
-    public function assertTypeNameIs(string $expected, AbstractUuidType $type): void
+    public function assertTypeNameIs(string $expected, UuidValueObjectType $type): void
     {
         self::assertSame($expected, $type->getName());
     }
 
-    public function assertItIsConvertedToDatabaseValue(string $uuid, UuidValueObject $valueObject, AbstractUuidType $type): void
+    public function assertItIsConvertedToDatabaseValue(string $uuid, UuidValueObject $valueObject, UuidValueObjectType $type): void
     {
         $converted = $type->convertToDatabaseValue($valueObject, $this->platform());
 
@@ -36,7 +36,7 @@ abstract class UuidTypeIsolatedTestCase extends TestCase
     /**
      * @param class-string<object> $expectedClass
      */
-    public function assertIsConvertedToPhpValue(string $expectedClass, string $uuid, AbstractUuidType $type): void
+    public function assertIsConvertedToPhpValue(string $expectedClass, string $uuid, UuidValueObjectType $type): void
     {
         $converted = $type->convertToPHPValue($uuid, $this->platform());
 

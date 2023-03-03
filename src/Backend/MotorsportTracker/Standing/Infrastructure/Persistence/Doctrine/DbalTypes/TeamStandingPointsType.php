@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\DbalTypes;
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingPoints;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\AbstractFloatType;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\DbalTypes\FloatValueObjectType;
 
-final class TeamStandingPointsType extends AbstractFloatType
+final class TeamStandingPointsType extends FloatValueObjectType
 {
     protected function mappedClass(): string
     {
