@@ -193,8 +193,8 @@ const StandingsPage: React.FunctionComponent<StandingsPageProps> = ({ events, dr
 };
 
 export async function getStaticProps({ params: { championship, year } }): Promise<{ props: StandingsPageProps }> {
-    const driversResponse = await fetch(`http://backend:8000/api/v1/standings/drivers/${championship}/${year}`);
-    const teamsResponse = await fetch(`http://backend:8000/api/v1/standings/teams/${championship}/${year}`);
+    const driversResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/drivers/${championship}/${year}`);
+    const teamsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/teams/${championship}/${year}`);
 
     const driversData = await driversResponse.json() as StandingsAPIType;
     const teamsData = await teamsResponse.json() as StandingsAPIType;
