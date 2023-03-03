@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Gateway\TeamGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -23,7 +23,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 final class TeamRepositorySpy extends AbstractRepositorySpy implements TeamGateway, SearchTeamViewer
 {
     public function __construct(
-        private CountryRepositorySpy $countryRepositorySpy,
+        private SaveSearchCountryRepositorySpy $countryRepositorySpy,
     ) {
     }
 

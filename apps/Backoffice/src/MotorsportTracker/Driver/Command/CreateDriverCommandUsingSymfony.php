@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Driver\Command;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\DriverCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -55,8 +55,8 @@ final class CreateDriverCommandUsingSymfony extends SymfonyCommand
         $firstname   = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_FIRSTNAME, self::QUESTION_FIRSTNAME);
         $countryCode = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_COUNTRY, self::QUESTION_COUNTRY);
 
-        /** @var CountryId $countryIdValueObject */
-        $countryIdValueObject = $this->commandBus->execute(CreateCountryIfNotExistsCommand::fromScalars($countryCode));
+        /** @var UuidValueObject $countryIdValueObject */
+        $countryIdValueObject = $this->commandBus->execute(CreateCountryIfNotExistsCommand::fromScalars($countryCode, $countryCode));
         $countryId            = $countryIdValueObject->value();
 
         try {

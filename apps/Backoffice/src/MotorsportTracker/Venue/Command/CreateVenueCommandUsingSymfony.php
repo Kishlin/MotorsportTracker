@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Venue\Command;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,8 +50,8 @@ final class CreateVenueCommandUsingSymfony extends SymfonyCommand
         $name        = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_NAME, self::QUESTION_NAME);
         $countryCode = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_COUNTRY, self::QUESTION_COUNTRY);
 
-        /** @var CountryId $countryIdValueObject */
-        $countryIdValueObject = $this->commandBus->execute(CreateCountryIfNotExistsCommand::fromScalars($countryCode));
+        /** @var UuidValueObject $countryIdValueObject */
+        $countryIdValueObject = $this->commandBus->execute(CreateCountryIfNotExistsCommand::fromScalars($countryCode, $countryCode));
         $countryId            = $countryIdValueObject->value();
 
         try {

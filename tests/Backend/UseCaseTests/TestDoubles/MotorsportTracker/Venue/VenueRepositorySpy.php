@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\VenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -23,7 +23,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway, SearchVenueViewer
 {
     public function __construct(
-        private CountryRepositorySpy $countryRepositorySpy,
+        private SaveSearchCountryRepositorySpy $countryRepositorySpy,
     ) {
     }
 

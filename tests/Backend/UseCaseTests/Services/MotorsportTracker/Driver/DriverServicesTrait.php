@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriv
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
 
 trait DriverServicesTrait
@@ -23,7 +23,7 @@ trait DriverServicesTrait
 
     abstract public function uuidGenerator(): UuidGenerator;
 
-    abstract public function countryRepositorySpy(): CountryRepositorySpy;
+    abstract public function countryRepositorySpy(): SaveSearchCountryRepositorySpy;
 
     public function driverRepositorySpy(): DriverRepositorySpy
     {

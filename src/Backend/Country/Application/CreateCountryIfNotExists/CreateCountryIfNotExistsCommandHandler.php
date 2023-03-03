@@ -5,36 +5,31 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Country\Application\CreateCountryIfNotExists;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\Gateway\CountryGateway;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
-use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CreateCountryIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private CountryIdForCodeGateway $idForCodeGateway,
-        private EventDispatcher $eventDispatcher,
-        private CountryGateway $countryGateway,
-        private UuidGenerator $uuidGenerator,
+        private readonly SearchCountryGateway $searchGateway,
+        private readonly SaveCountryGateway $saveGateway,
+        private readonly UuidGenerator $uuidGenerator,
     ) {
     }
 
-    public function __invoke(CreateCountryIfNotExistsCommand $command): CountryId
+    public function __invoke(CreateCountryIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->idForCodeGateway->idForCode($command->code());
+        $id = $this->searchGateway->searchForCode($command->code());
 
         if (null !== $id) {
             return $id;
         }
 
-        $newId   = new CountryId($this->uuidGenerator->uuid4());
-        $country = Country::create($newId, $command->code());
+        $newId   = new UuidValueObject($this->uuidGenerator->uuid4());
+        $country = Country::create($newId, $command->code(), $command->name());
 
-        $this->countryGateway->save($country);
-
-        $this->eventDispatcher->dispatch(...$country->pullDomainEvents());
+        $this->saveGateway->save($country);
 
         return $country->id();
     }

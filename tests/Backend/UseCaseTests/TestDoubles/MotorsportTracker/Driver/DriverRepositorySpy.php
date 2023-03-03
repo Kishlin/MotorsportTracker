@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Gateway\DriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -23,7 +23,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 final class DriverRepositorySpy extends AbstractRepositorySpy implements DriverGateway, SearchDriverViewer
 {
     public function __construct(
-        private CountryRepositorySpy $countryRepositorySpy,
+        private SaveSearchCountryRepositorySpy $countryRepositorySpy,
     ) {
     }
 

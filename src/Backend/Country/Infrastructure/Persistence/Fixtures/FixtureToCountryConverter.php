@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Country\Infrastructure\Persistence\Fixtures;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
 
@@ -16,8 +16,9 @@ final class FixtureToCountryConverter implements FixtureConverter
     public function convert(Fixture $fixture): AggregateRoot
     {
         return Country::instance(
-            new CountryId($fixture->identifier()),
-            new CountryCode($fixture->getString('code')),
+            new UuidValueObject($fixture->identifier()),
+            new StringValueObject($fixture->getString('code')),
+            new StringValueObject($fixture->getString('name')),
         );
     }
 }

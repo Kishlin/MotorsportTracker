@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamComm
 use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamQueryHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
 trait TeamServicesTrait
@@ -23,7 +23,7 @@ trait TeamServicesTrait
 
     abstract public function uuidGenerator(): UuidGenerator;
 
-    abstract public function countryRepositorySpy(): CountryRepositorySpy;
+    abstract public function countryRepositorySpy(): SaveSearchCountryRepositorySpy;
 
     public function teamRepositorySpy(): TeamRepositorySpy
     {

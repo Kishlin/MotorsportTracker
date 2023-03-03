@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\Country\Domain\Gateway;
+namespace Kishlin\Backend\Country\Application\CreateCountryIfNotExists;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
 
-interface CountryGateway
+interface SaveCountryGateway
 {
     public function save(Country $country): void;
 }

@@ -7,11 +7,11 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\Country;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\CountryRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 
 trait CountryServicesTrait
 {
-    private ?CountryRepositorySpy $countryRepositorySpy = null;
+    private ?SaveSearchCountryRepositorySpy $countryRepositorySpy = null;
 
     private ?CreateCountryIfNotExistsCommandHandler $createCountryIfNotExistsCommandHandler = null;
 
@@ -19,10 +19,10 @@ trait CountryServicesTrait
 
     abstract public function uuidGenerator(): UuidGenerator;
 
-    public function countryRepositorySpy(): CountryRepositorySpy
+    public function countryRepositorySpy(): SaveSearchCountryRepositorySpy
     {
         if (null === $this->countryRepositorySpy) {
-            $this->countryRepositorySpy = new CountryRepositorySpy();
+            $this->countryRepositorySpy = new SaveSearchCountryRepositorySpy();
         }
 
         return $this->countryRepositorySpy;
@@ -35,7 +35,6 @@ trait CountryServicesTrait
 
             $this->createCountryIfNotExistsCommandHandler = new CreateCountryIfNotExistsCommandHandler(
                 $countryRepositorySpy,
-                $this->eventDispatcher(),
                 $countryRepositorySpy,
                 $this->uuidGenerator(),
             );

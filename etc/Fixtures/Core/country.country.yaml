@@ -1,38 +1,51 @@
 france:
   code: 'fr'
+  name: 'France'
 
 netherlands:
   code: 'nl'
+  name: 'Netherlands'
 
 austria:
   code: 'at'
+  name: 'Austria'
 
 mexico:
   code: 'mx'
+  name: 'Mexico'
 
 germany:
   code: 'gr'
+  name: 'Germany'
 
 italia:
   code: 'it'
+  name: 'Italia'
 
 australia:
   code: 'au'
+  name: 'Australia'
 
 unitedKingdom:
   code: 'uk'
+  name: 'United Kingdom'
 
 usa:
   code: 'us'
+  name: 'USA'
 
 canada:
   code: 'ca'
+  name: 'Canada'
 
 singapore:
   code: 'sg'
+  name: 'Singapore'
 
 hungary:
   code: 'hu'
+  name: 'Hungary'
 
 belgium:
   code: 'be'
+  name: 'Belgium'

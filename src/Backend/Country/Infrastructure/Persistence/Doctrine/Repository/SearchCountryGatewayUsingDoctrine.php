@@ -6,18 +6,18 @@ namespace Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\SearchCountryGateway;
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class CountryIdForCodeGatewayUsingDoctrine extends CoreRepository implements CountryIdForCodeGateway
+final class SearchCountryGatewayUsingDoctrine extends CoreRepository implements SearchCountryGateway
 {
     /**
      * @throws NonUniqueResultException
      */
-    public function idForCode(CountryCode $code): ?CountryId
+    public function searchForCode(StringValueObject $code): ?UuidValueObject
     {
         $qb = $this->entityManager->createQueryBuilder();
 
@@ -30,7 +30,7 @@ final class CountryIdForCodeGatewayUsingDoctrine extends CoreRepository implemen
         ;
 
         try {
-            /** @var array{id: CountryId} $data */
+            /** @var array{id: UuidValueObject} $data */
             $data = $query->getSingleResult();
         } catch (NoResultException) {
             return null;

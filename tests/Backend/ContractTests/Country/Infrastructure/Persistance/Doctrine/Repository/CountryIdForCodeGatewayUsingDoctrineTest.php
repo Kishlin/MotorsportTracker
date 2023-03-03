@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance\Doctrine\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
-use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine;
+use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\SearchCountryGatewayUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine
+ * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\SearchCountryGatewayUsingDoctrine
  */
 final class CountryIdForCodeGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
@@ -22,9 +22,9 @@ final class CountryIdForCodeGatewayUsingDoctrineTest extends CoreRepositoryContr
     {
         $this->loadFixture('country.country.france');
 
-        $repository = new CountryIdForCodeGatewayUsingDoctrine($this->entityManager());
+        $repository = new SearchCountryGatewayUsingDoctrine($this->entityManager());
 
-        self::assertNotNull($repository->idForCode(new CountryCode('fr')));
+        self::assertNotNull($repository->searchForCode(new StringValueObject('fr')));
     }
 
     /**
@@ -32,8 +32,8 @@ final class CountryIdForCodeGatewayUsingDoctrineTest extends CoreRepositoryContr
      */
     public function testItReturnsNullIfCodeDoesNotExist(): void
     {
-        $repository = new CountryIdForCodeGatewayUsingDoctrine($this->entityManager());
+        $repository = new SearchCountryGatewayUsingDoctrine($this->entityManager());
 
-        self::assertNull($repository->idForCode(new CountryCode('fr')));
+        self::assertNull($repository->searchForCode(new StringValueObject('fr')));
     }
 }

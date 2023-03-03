@@ -75,7 +75,8 @@ ALTER TABLE public.championships OWNER TO motorsporttracker;
 
 CREATE TABLE public.countries (
     id character varying(36) NOT NULL,
-    code character varying(255) NOT NULL
+    code character varying(255) NOT NULL,
+    name character varying(255) NOT NULL
 );
 
 
@@ -332,7 +333,7 @@ COPY public.championships (id, name, slug) FROM stdin;
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.countries (id, code) FROM stdin;
+COPY public.countries (id, code, name) FROM stdin;
 \.
 
 
@@ -359,6 +360,7 @@ Kishlin\\Migrations\\Core\\Version20221120065527	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20221120071036	2023-03-03 15:11:04	0
 Kishlin\\Migrations\\Core\\Version20221225180107	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20230222232032	2023-03-03 15:11:04	4
+Kishlin\\Migrations\\Core\\Version20230303233637	2023-03-03 23:38:29	17
 \.
 
 

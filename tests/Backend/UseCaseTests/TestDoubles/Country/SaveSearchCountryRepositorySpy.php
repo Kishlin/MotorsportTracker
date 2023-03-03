@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country;
 
 use Exception;
-use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCodeGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\SaveCountryGateway;
+use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\SearchCountryGateway;
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Domain\Gateway\CountryGateway;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
-use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -20,7 +19,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Country get(UuidValueObject $id)
  * @method Country      safeGet(UuidValueObject $id)
  */
-final class CountryRepositorySpy extends AbstractRepositorySpy implements CountryGateway, CountryIdForCodeGateway
+final class SaveSearchCountryRepositorySpy extends AbstractRepositorySpy implements SaveCountryGateway, SearchCountryGateway
 {
     /**
      * @throws Exception
@@ -34,7 +33,7 @@ final class CountryRepositorySpy extends AbstractRepositorySpy implements Countr
         $this->objects[$country->id()->value()] = $country;
     }
 
-    public function idForCode(CountryCode $code): ?CountryId
+    public function searchForCode(StringValueObject $code): ?UuidValueObject
     {
         foreach ($this->objects as $savedCountry) {
             if ($savedCountry->code()->equals($code)) {
