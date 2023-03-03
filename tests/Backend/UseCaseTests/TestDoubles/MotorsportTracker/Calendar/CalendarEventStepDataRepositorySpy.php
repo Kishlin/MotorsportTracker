@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calendar;
 
-use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdate;
-use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdateGateway;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\ChampionshipSlugForPresentationGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApply;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApplyGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
@@ -13,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipPresentationRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
 
-final class CalendarEventStepDataRepositorySpy implements CalendarViewsToUpdateGateway, PresentationToApplyGateway
+final class CalendarEventStepDataRepositorySpy implements PresentationToApplyGateway, ChampionshipSlugForPresentationGateway
 {
     /**
      * @var array<string, ChampionshipPresentation>
@@ -22,29 +21,18 @@ final class CalendarEventStepDataRepositorySpy implements CalendarViewsToUpdateG
 
     public function __construct(
         private readonly ChampionshipPresentationRepositorySpy $championshipPresentationRepositorySpy,
-        private readonly CalendarEventStepViewRepositorySpy $calendarEventStepViewRepositorySpy,
         private readonly ChampionshipRepositorySpy $championshipRepositorySpy,
     ) {
     }
 
-    public function findForPresentation(UuidValueObject $presentationId): CalendarViewsToUpdate
+    public function findChampionshipSlugForPresentationId(UuidValueObject $presentationId): string
     {
-        $championshipSlug = $this
+        return $this
             ->championshipRepositorySpy
             ->safeGet($this->presentationForId($presentationId)->championshipId())
             ->slug()
+            ->value()
         ;
-
-        $idList = [];
-        foreach ($this->calendarEventStepViewRepositorySpy->all() as $calendarEventStepView) {
-            if (false === $championshipSlug->equals($calendarEventStepView->championshipSlug())) {
-                continue;
-            }
-
-            $idList[] = $calendarEventStepView->id()->value();
-        }
-
-        return CalendarViewsToUpdate::fromScalars($idList);
     }
 
     public function findData(UuidValueObject $presentationId): PresentationToApply

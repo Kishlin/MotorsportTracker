@@ -17,7 +17,7 @@ final class FixturesContext extends MotorsportTrackerContext
      */
     public function cleanUpFixtures(): void
     {
-        self::container()->fixtureLoader()->reset();
+        self::container()->coreFixtureLoader()->reset();
     }
 
     /**

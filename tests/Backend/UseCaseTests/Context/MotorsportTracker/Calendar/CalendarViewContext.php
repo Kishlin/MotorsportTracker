@@ -24,7 +24,7 @@ final class CalendarViewContext extends MotorsportTrackerContext
     #[Given('the calendar event view :name exists')]
     public function theCalendarEventViewExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($name)}");
+        self::container()->cacheFixtureLoader()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($name)}");
     }
 
     #[Then('the event step calendar view is created for :name :type on :dateTime for :slug')]

@@ -7,8 +7,34 @@ services:
     resource: '../../../../'
     exclude:
       - '../../../../*/Application/*/*Exception.php'
+      - '../../../../*/Infrastructure/Persistence/Fixtures'
       - '../../../../*/Infrastructure/Persistence/Doctrine/DbalTypes'
       - '../../../../*/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
+
+
+##> Persistence
+
+  kishlin.app.infrastructure.entity_manager.core:
+    class: Doctrine\ORM\EntityManagerInterface
+    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+    arguments:
+      $parameters:
+        url: '%kishlin.database.core.url%'
+      $database: 'core'
+      $environment: '%kishlin.app.environment%'
+    public: true
+
+  kishlin.app.infrastructure.entity_manager.cache:
+    class: Doctrine\ORM\EntityManagerInterface
+    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+    arguments:
+      $parameters:
+        url: '%kishlin.database.cache.url%'
+      $database: 'cache'
+      $environment: '%kishlin.app.environment%'
+    public: true
+
+  Doctrine\ORM\EntityManagerInterface: '@kishlin.app.infrastructure.entity_manager.core'
 
   _instanceof:
 
@@ -21,15 +47,6 @@ services:
     Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
       tags: ['kishlin.application_service']
 
-
-##> Persistence
-
-  Doctrine\ORM\EntityManagerInterface:
-    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
-    arguments:
-        $parameters:
-          url: '%kishlin.database.url%'
-        $environment: '%kishlin.app.environment%'
-    public: true
-
-  kishlin.app.infrastructure.entity_manager: '@Doctrine\ORM\EntityManagerInterface'
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository:
+      bind:
+        $entityManager: '@kishlin.app.infrastructure.entity_manager.cache'

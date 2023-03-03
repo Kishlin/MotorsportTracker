@@ -8,13 +8,13 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdate;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApply;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\NewPresentationApplierRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\NewPresentationApplierRepositoryUsingDoctrine
  */
-final class NewPresentationApplierRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class NewPresentationApplierRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
 {
     private const CHECK_QUERY = 'SELECT color, icon FROM calendar_event_step_views;';
 
@@ -29,8 +29,6 @@ final class NewPresentationApplierRepositoryUsingDoctrineTest extends Repository
         self::loadFixtures(
             'motorsport.calendar.calendarEventStepView.australianGrandPrix2022RaceWhite',
             'motorsport.calendar.calendarEventStepView.dutchGrandPrix2022RaceWhite',
-            'motorsport.championship.championshipPresentation.formulaOneWhite',
-            'motorsport.championship.championshipPresentation.formulaOneRed',
         );
 
         $repository = new NewPresentationApplierRepositoryUsingDoctrine(self::entityManager());

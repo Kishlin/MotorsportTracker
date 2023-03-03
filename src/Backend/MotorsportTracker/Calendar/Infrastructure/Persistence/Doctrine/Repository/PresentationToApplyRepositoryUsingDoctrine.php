@@ -9,9 +9,9 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterACham
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApplyGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApplyNotFoundException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class PresentationToApplyRepositoryUsingDoctrine extends DoctrineRepository implements PresentationToApplyGateway
+final class PresentationToApplyRepositoryUsingDoctrine extends CoreRepository implements PresentationToApplyGateway
 {
     /**
      * @throws Exception

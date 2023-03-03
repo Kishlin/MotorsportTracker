@@ -30,7 +30,7 @@ final class DriverMoveRecordingContext extends MotorsportTrackerContext
      */
     public function aDriverMoveExists(string $driverMove): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.car.driverMove.{$this->format($driverMove)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.car.driverMove.{$this->format($driverMove)}");
     }
 
     /**

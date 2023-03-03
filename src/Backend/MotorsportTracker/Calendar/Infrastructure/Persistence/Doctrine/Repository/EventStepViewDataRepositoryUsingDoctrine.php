@@ -8,9 +8,9 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\EventStepViewData;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\EventStepViewDataGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventStepViewDataRepositoryUsingDoctrine extends DoctrineRepository implements EventStepViewDataGateway
+final class EventStepViewDataRepositoryUsingDoctrine extends CoreRepository implements EventStepViewDataGateway
 {
     /**
      * @throws Exception

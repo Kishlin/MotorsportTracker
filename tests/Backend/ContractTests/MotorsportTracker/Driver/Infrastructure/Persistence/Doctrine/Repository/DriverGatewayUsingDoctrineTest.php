@@ -10,13 +10,13 @@ use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverFirstname;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverName;
 use Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Doctrine\Repository\DriverGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Doctrine\Repository\DriverGatewayUsingDoctrine
  */
-final class DriverGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class DriverGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveADriver(): void
     {

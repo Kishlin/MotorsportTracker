@@ -8,9 +8,9 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\TeamStanding;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Gateway\TeamStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingEventId;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingTeamId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class TeamStandingRepositoryUsingDoctrine extends DoctrineRepository implements TeamStandingGateway
+final class TeamStandingRepositoryUsingDoctrine extends CoreRepository implements TeamStandingGateway
 {
     public function save(TeamStanding $teamStanding): void
     {

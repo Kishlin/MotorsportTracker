@@ -28,7 +28,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
      */
     public function theChampionshipPresentationExists(string $championshipPresentation): void
     {
-        self::container()->fixtureLoader()->loadFixture(
+        self::container()->coreFixtureLoader()->loadFixture(
             "motorsport.championship.championshipPresentation.{$this->format($championshipPresentation)}",
         );
     }

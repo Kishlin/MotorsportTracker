@@ -12,13 +12,13 @@ use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerEndDate;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\ValueObject\RacerStartDate;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacerGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacerGatewayUsingDoctrine
  */
-final class RacerGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class RacerGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveARacer(): void
     {

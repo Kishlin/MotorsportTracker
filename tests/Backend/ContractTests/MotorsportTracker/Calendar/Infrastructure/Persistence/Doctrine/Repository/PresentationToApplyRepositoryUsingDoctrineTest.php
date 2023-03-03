@@ -8,13 +8,13 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApplyNotFoundException;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\PresentationToApplyRepositoryUsingDoctrine;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\PresentationToApplyRepositoryUsingDoctrine
  */
-final class PresentationToApplyRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class PresentationToApplyRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

@@ -30,7 +30,7 @@ final class EventStepContext extends MotorsportTrackerContext
      */
     public function theEventStepExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.event.eventStep.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.event.eventStep.{$this->format($name)}");
     }
 
     /**

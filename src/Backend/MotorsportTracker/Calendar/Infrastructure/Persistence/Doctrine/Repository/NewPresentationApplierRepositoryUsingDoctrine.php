@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdate;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\NewPresentationApplierGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApply;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository;
 
-final class NewPresentationApplierRepositoryUsingDoctrine extends DoctrineRepository implements NewPresentationApplierGateway
+final class NewPresentationApplierRepositoryUsingDoctrine extends CacheRepository implements NewPresentationApplierGateway
 {
     /**
      * @throws Exception

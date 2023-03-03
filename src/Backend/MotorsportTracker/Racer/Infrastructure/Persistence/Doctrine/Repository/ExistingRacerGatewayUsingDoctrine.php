@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\ExistingRacerGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class ExistingRacerGatewayUsingDoctrine extends DoctrineRepository implements ExistingRacerGateway
+final class ExistingRacerGatewayUsingDoctrine extends CoreRepository implements ExistingRacerGateway
 {
     /**
      * @throws NonUniqueResultException

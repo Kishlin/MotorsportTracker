@@ -9,13 +9,13 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventIndex;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventCreationCheckRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventCreationCheckRepositoryUsingDoctrine
  */
-final class EventCreationCheckRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class EventCreationCheckRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\EventHas
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventHasStepWithTypeRepositoryUsingDoctrine extends DoctrineRepository implements EventHasStepWithTypeGateway
+final class EventHasStepWithTypeRepositoryUsingDoctrine extends CoreRepository implements EventHasStepWithTypeGateway
 {
     /**
      * @throws NonUniqueResultException

@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory;
 use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
@@ -26,8 +25,6 @@ use Throwable;
  */
 abstract class RepositoryContractTestCase extends TestCase
 {
-    private const FIXTURES_FOLDER = '/app/etc/Fixtures';
-
     private static ?EntityManagerInterface $entityManager = null;
 
     private static ?FixtureLoader $fixtureLoader = null;
@@ -71,6 +68,10 @@ abstract class RepositoryContractTestCase extends TestCase
     {
         self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::entityManager()));
     }
+
+    abstract protected static function fixturesFolder(): string;
+
+    abstract protected static function createEntityManager(): EntityManagerInterface;
 
     protected static function uuid(): string
     {
@@ -116,7 +117,7 @@ abstract class RepositoryContractTestCase extends TestCase
     protected static function entityManager(): EntityManagerInterface
     {
         if (null === self::$entityManager) {
-            self::$entityManager = self::createEntityManager();
+            self::$entityManager = static::createEntityManager();
         }
 
         return self::$entityManager;
@@ -137,7 +138,7 @@ abstract class RepositoryContractTestCase extends TestCase
     private static function fixtureLoader(): FixtureLoader
     {
         if (null === self::$fixtureLoader) {
-            self::$fixtureLoader = new FixtureLoader(self::uuidGenerator(), self::fixtureSaver(), self::FIXTURES_FOLDER);
+            self::$fixtureLoader = new FixtureLoader(self::uuidGenerator(), self::fixtureSaver(), static::fixturesFolder());
         }
 
         return self::$fixtureLoader;
@@ -150,17 +151,5 @@ abstract class RepositoryContractTestCase extends TestCase
         }
 
         return self::$uuidGenerator;
-    }
-
-    private static function createEntityManager(): EntityManagerInterface
-    {
-        try {
-            return MotorsportTrackerEntityManagerFactory::create(
-                ['url' => $_ENV['DATABASE_URL']],
-                'test'
-            );
-        } catch (Throwable $e) {
-            self::fail('Failed to create an entity manager: ' . $e->getMessage());
-        }
     }
 }

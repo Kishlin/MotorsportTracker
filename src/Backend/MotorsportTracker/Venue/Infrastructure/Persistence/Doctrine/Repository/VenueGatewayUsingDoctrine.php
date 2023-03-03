@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doc
 
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\VenueGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class VenueGatewayUsingDoctrine extends DoctrineRepository implements VenueGateway
+final class VenueGatewayUsingDoctrine extends CoreRepository implements VenueGateway
 {
     public function save(Venue $venue): void
     {

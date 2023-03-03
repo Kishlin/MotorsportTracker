@@ -30,7 +30,7 @@ use RuntimeException;
 final class FixturesSaverForUseCaseTests extends FixtureSaver
 {
     public function __construct(
-        private TestServiceContainer $testServiceContainer
+        private readonly TestServiceContainer $testServiceContainer
     ) {
     }
 

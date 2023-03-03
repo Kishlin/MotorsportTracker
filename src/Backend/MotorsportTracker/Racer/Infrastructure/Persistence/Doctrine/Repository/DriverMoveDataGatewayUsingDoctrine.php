@@ -9,9 +9,9 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveData;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerViewsOnDriverMove\DriverMoveDataGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class DriverMoveDataGatewayUsingDoctrine extends DoctrineRepository implements DriverMoveDataGateway
+final class DriverMoveDataGatewayUsingDoctrine extends CoreRepository implements DriverMoveDataGateway
 {
     /**
      * @throws DoctrineException|Exception

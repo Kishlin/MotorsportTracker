@@ -10,13 +10,13 @@ use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamImage;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamName;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\TeamRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\TeamRepositoryUsingDoctrine
  */
-final class TeamGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class TeamGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveATeam(): void
     {

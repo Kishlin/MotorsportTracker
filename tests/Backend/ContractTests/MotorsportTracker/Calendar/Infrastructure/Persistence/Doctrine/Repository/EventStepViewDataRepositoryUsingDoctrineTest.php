@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Calendar\Infrast
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\EventStepViewDataRepositoryUsingDoctrine;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\EventStepViewDataRepositoryUsingDoctrine
  */
-final class EventStepViewDataRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class EventStepViewDataRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

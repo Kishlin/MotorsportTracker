@@ -29,7 +29,7 @@ final class RacerContext extends MotorsportTrackerContext
      */
     public function theRacerDataExists(string $racer): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.racer.racer.{$this->format($racer)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.racer.racer.{$this->format($racer)}");
     }
 
     /**

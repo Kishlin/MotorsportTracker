@@ -10,9 +10,9 @@ use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CountryIdForCod
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class CountryIdForCodeGatewayUsingDoctrine extends DoctrineRepository implements CountryIdForCodeGateway
+final class CountryIdForCodeGatewayUsingDoctrine extends CoreRepository implements CountryIdForCodeGateway
 {
     /**
      * @throws NonUniqueResultException

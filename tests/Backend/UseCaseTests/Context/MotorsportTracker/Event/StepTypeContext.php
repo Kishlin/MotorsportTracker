@@ -28,7 +28,7 @@ final class StepTypeContext extends MotorsportTrackerContext
      */
     public function theStepTypeExists(string $label): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.event.stepType.{$this->format($label)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.event.stepType.{$this->format($label)}");
     }
 
     /**

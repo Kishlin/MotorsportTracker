@@ -37,7 +37,7 @@ final class ViewStandingsForSeasonContext extends MotorsportTrackerContext
      */
     public function theStandingExists(string $class, string $standing): void
     {
-        self::container()->fixtureLoader()->loadFixture(
+        self::container()->coreFixtureLoader()->loadFixture(
             "motorsport.standing.{$class}Standing.{$this->format($standing)}",
         );
     }

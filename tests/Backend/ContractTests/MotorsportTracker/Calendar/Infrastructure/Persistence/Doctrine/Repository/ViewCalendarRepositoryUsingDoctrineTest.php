@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Calendar\Infrast
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarRepositoryUsingDoctrine
  */
-final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class ViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
 {
     /**
      * @throws Exception
@@ -53,7 +53,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Circuit Zandvoort',
                     'type'              => 'race',
                     'date_time'         => '2022-09-04 13:00:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.dutchGrandPrix2022Race'),
+                    'reference'         => 'a7a9bcb9-2fb1-41d4-bc25-223c83a2564a',
                 ],
             ],
         ];
@@ -92,7 +92,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Melbourne Grand Prix Circuit',
                     'type'              => 'race',
                     'date_time'         => '2022-04-10 05:00:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.australianGrandPrix2022Race'),
+                    'reference'         => 'de5737f9-3005-42ae-b4af-96c895ac3d8c',
                 ],
                 '2022-04-10 18:00:00' => [
                     'championship_slug' => 'motogp',
@@ -102,7 +102,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Circuit of the Americas',
                     'type'              => 'race',
                     'date_time'         => '2022-04-10 18:00:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.americasMotoGP2022Race'),
+                    'reference'         => 'ebb73545-bbbb-4538-86b9-03aeefdfb298',
                 ],
             ],
             '2022-04-23' => [
@@ -114,7 +114,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Autodromo Internazionale Enzo e Dino Ferrari',
                     'type'              => 'sprint qualifying',
                     'date_time'         => '2022-04-23 14:30:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'),
+                    'reference'         => 'c573aac1-6224-4045-abad-2d4a498e0a1b',
                 ],
             ],
             '2022-04-24' => [
@@ -126,7 +126,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Autodromo Internazionale Enzo e Dino Ferrari',
                     'type'              => 'race',
                     'date_time'         => '2022-04-24 13:00:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.emiliaRomagnaGrandPrix2022Race'),
+                    'reference'         => '2c500ba2-f78b-4393-8bb3-e055b2d8005c',
                 ],
             ],
         ];
@@ -164,7 +164,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends RepositoryContractTe
                     'venue_label'       => 'Autodromo Internazionale Enzo e Dino Ferrari',
                     'type'              => 'sprint qualifying',
                     'date_time'         => '2022-04-23 14:30:00',
-                    'reference'         => self::fixtureId('motorsport.event.eventStep.emiliaRomagnaGrandPrix2022SprintQualifying'),
+                    'reference'         => 'c573aac1-6224-4045-abad-2d4a498e0a1b',
                 ],
             ],
         ];

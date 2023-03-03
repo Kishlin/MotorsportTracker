@@ -9,13 +9,13 @@ use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonCham
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine
  */
-final class SeasonGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class SeasonGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveASeason(): void
     {

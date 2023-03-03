@@ -29,7 +29,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
      */
     public function theSeasonExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.championship.season.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.season.{$this->format($name)}");
     }
 
     /**

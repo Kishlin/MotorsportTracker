@@ -10,14 +10,20 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-(new Dotenv())->bootEnv(__DIR__. '/../../../.env.dev');
+(new Dotenv())->bootEnv(__DIR__ . '/../../../.env.dev');
 
-$config = new PhpFile('/app/etc/Migrations/Config/config.php');
+$database = 'core';
+if ('--conn=cache' === $_SERVER['argv'][2]) {
+    $database = 'cache';
+}
+
+$config = new PhpFile('/app/etc/Migrations/' . ucfirst($database) . '/Config/config.php');
 
 $entityManager = MotorsportTrackerEntityManagerFactory::create(
     parameters: [
-        'url' => $_ENV['DATABASE_URL'],
+        'url' => $_ENV['DATABASE_' . strtoupper($database) . '_URL'],
     ],
+    database: $database,
     environment: 'dev',
 );
 

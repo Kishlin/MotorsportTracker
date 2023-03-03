@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Calen
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\CreateViewOnEventStepCreation\CalendarEventStepViewGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdate;
+use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\CalendarViewsToUpdateGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\NewPresentationApplierGateway;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\UpdateViewsAfterAChampionshipPresentationCreation\PresentationToApply;
 use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\JsonableCalendarView;
@@ -24,11 +25,25 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|CalendarEventStepView get(UuidValueObject $id)
  * @method CalendarEventStepView      safeGet(UuidValueObject $id)
  */
-final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements CalendarEventStepViewGateway, NewPresentationApplierGateway, ViewCalendarGateway
+final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements CalendarViewsToUpdateGateway, CalendarEventStepViewGateway, NewPresentationApplierGateway, ViewCalendarGateway
 {
     public function save(CalendarEventStepView $calendarEventStepView): void
     {
         $this->add($calendarEventStepView);
+    }
+
+    public function findForSlug(string $slug): CalendarViewsToUpdate
+    {
+        $idList = [];
+        foreach ($this->all() as $calendarEventStepView) {
+            if ($slug !== $calendarEventStepView->championshipSlug()->value()) {
+                continue;
+            }
+
+            $idList[] = $calendarEventStepView->id()->value();
+        }
+
+        return CalendarViewsToUpdate::fromScalars($idList);
     }
 
     public function applyDataToViews(CalendarViewsToUpdate $viewsToUpdate, PresentationToApply $presentationToApply): void

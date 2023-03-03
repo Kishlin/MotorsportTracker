@@ -29,7 +29,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
      */
     public function theChampionshipExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
     }
 
     /**

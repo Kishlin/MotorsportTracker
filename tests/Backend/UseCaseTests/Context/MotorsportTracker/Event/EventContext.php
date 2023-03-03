@@ -29,7 +29,7 @@ final class EventContext extends MotorsportTrackerContext
      */
     public function theEventExists(string $event): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
     /**

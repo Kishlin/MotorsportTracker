@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverViewer;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SearchDriverViewerUsingDoctrine extends DoctrineRepository implements SearchDriverViewer
+final class SearchDriverViewerUsingDoctrine extends CoreRepository implements SearchDriverViewer
 {
     /**
      * @throws Exception

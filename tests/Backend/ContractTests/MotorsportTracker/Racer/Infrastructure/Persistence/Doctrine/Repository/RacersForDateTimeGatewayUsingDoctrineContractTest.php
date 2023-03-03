@@ -9,13 +9,13 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\SeasonId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\View\RacerPOPO;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacersForDateTimeAndSeasonGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\RacersForDateTimeAndSeasonGatewayUsingDoctrine
  */
-final class RacersForDateTimeGatewayUsingDoctrineContractTest extends RepositoryContractTestCase
+final class RacersForDateTimeGatewayUsingDoctrineContractTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

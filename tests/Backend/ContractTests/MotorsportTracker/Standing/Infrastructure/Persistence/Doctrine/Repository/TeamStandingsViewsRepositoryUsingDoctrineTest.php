@@ -11,13 +11,13 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\StandingsViewI
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\StandingsViewStandings;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\StandingsViewYear;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsViewsRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsViewsRepositoryUsingDoctrine
  */
-final class TeamStandingsViewsRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class TeamStandingsViewsRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
 {
     public function testItCanSaveAndRetrieveAnEntity(): void
     {

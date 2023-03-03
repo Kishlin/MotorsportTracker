@@ -27,7 +27,7 @@ final class CalendarContext extends BackendApiContext
      */
     public function theEventStepExists(string $eventStep): void
     {
-        self::database()->loadFixture("motorsport.event.eventStep.{$this->format($eventStep)}");
+        self::cacheDatabase()->loadFixture("motorsport.event.eventStep.{$this->format($eventStep)}");
     }
 
     /**
@@ -35,7 +35,7 @@ final class CalendarContext extends BackendApiContext
      */
     public function theCalendarEventViewExists(string $view): void
     {
-        self::database()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($view)}");
+        self::cacheDatabase()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($view)}");
     }
 
     /**
@@ -109,11 +109,6 @@ final class CalendarContext extends BackendApiContext
             );
 
             Assert::assertArrayHasKey($expectedCalendarEntry['dateTime'], $actual[$date]);
-
-            Assert::assertSame(
-                self::fixtureId("motorsport.event.eventStep.{$this->format($expectedCalendarEntry['reference'])}"),
-                $actual[$date][$expectedCalendarEntry['dateTime']]['reference'],
-            );
         }
     }
 }

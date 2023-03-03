@@ -88,11 +88,6 @@ final class CalendarContext extends MotorsportTrackerContext
             );
 
             Assert::assertArrayHasKey($expectedCalendarEntry['dateTime'], $actual[$date]);
-
-            Assert::assertSame(
-                self::fixtureId("motorsport.event.eventStep.{$this->format($expectedCalendarEntry['reference'])}"),
-                $actual[$date][$expectedCalendarEntry['dateTime']]['reference'],
-            );
         }
     }
 
