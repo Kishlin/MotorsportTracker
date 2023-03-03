@@ -9,13 +9,13 @@ use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueCountryId;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueName;
 use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\VenueGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\VenueGatewayUsingDoctrine
  */
-final class VenueGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class VenueGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveADriver(): void
     {

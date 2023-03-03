@@ -23,7 +23,7 @@ abstract class MotorsportTrackerContext implements Context
 
     public function fixtureId(string $fixture): string
     {
-        return self::container()->fixtureLoader()->identifier($fixture) ?? self::container()->uuidGenerator()->uuid4();
+        return self::container()->coreFixtureLoader()->identifier($fixture) ?? self::container()->uuidGenerator()->uuid4();
     }
 
     protected static function container(): TestServiceContainer

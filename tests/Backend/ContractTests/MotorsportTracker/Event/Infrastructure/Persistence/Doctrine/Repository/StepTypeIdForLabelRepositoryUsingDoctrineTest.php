@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastruc
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\StepTypeIdForLabelRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\StepTypeIdForLabelRepositoryUsingDoctrine
  */
-final class StepTypeIdForLabelRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class StepTypeIdForLabelRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

@@ -6,13 +6,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Standing\Infrast
 
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsForSeasonRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsForSeasonRepositoryUsingDoctrine
  */
-final class TeamStandingsForSeasonRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class TeamStandingsForSeasonRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

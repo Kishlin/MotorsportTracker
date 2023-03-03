@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\EventIdOfEventStepIdReader;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\EventNotFoundForEventStepException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventIdOfEventStepIdReaderUsingDoctrine extends DoctrineRepository implements EventIdOfEventStepIdReader
+final class EventIdOfEventStepIdReaderUsingDoctrine extends CoreRepository implements EventIdOfEventStepIdReader
 {
     /**
      * @throws Exception

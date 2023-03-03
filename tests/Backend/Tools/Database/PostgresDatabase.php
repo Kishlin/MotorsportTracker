@@ -7,36 +7,36 @@ namespace Kishlin\Tests\Backend\Tools\Database;
 use Doctrine\DBAL\Exception as DoctrineException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingDoctrine;
-use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;
 use RuntimeException;
 
-abstract class PostgresDatabase implements DatabaseInterface
+final class PostgresDatabase implements DatabaseInterface
 {
-    private ?FixtureLoader $fixtureLoader = null;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly FixtureLoader $fixtureLoader,
+    ) {
+    }
 
     /**
      * @throws DoctrineException
      */
     public function refreshDatabase(): void
     {
-        $this->entityManager()->clear();
-        $this->fixtureLoader()->reset();
+        $this->entityManager->clear();
+        $this->fixtureLoader->reset();
 
         // Disables all triggers and foreign key checks
-        $this->entityManager()->getConnection()->executeQuery("SET session_replication_role = 'replica';");
+        $this->entityManager->getConnection()->executeQuery("SET session_replication_role = 'replica';");
 
-        $listTableNames = $this->entityManager()->getConnection()->createSchemaManager()->listTableNames();
+        $listTableNames = $this->entityManager->getConnection()->createSchemaManager()->listTableNames();
 
         foreach ($listTableNames as $tableName) {
             $sql = "DELETE FROM {$tableName}";
-            $this->entityManager()->getConnection()->executeQuery($sql);
+            $this->entityManager->getConnection()->executeQuery($sql);
         }
 
-        $this->entityManager()->getConnection()->executeQuery("SET session_replication_role = 'origin';");
+        $this->entityManager->getConnection()->executeQuery("SET session_replication_role = 'origin';");
     }
 
     /**
@@ -44,12 +44,12 @@ abstract class PostgresDatabase implements DatabaseInterface
      */
     public function loadFixture(string $fixture): void
     {
-        $this->fixtureLoader()->loadFixture($fixture);
+        $this->fixtureLoader->loadFixture($fixture);
     }
 
     public function fixtureId(string $fixture): string
     {
-        $identifier = $this->fixtureLoader()->identifier($fixture);
+        $identifier = $this->fixtureLoader->identifier($fixture);
 
         if (null === $identifier) {
             throw new RuntimeException("Fixture {$fixture} appears to not have been loaded.");
@@ -63,7 +63,7 @@ abstract class PostgresDatabase implements DatabaseInterface
      */
     public function fetchOne(string $query, array $params = []): mixed
     {
-        $result = $this->entityManager()->getConnection()->fetchOne($query, $params);
+        $result = $this->entityManager->getConnection()->fetchOne($query, $params);
 
         return false !== $result ? $result : null;
     }
@@ -73,7 +73,7 @@ abstract class PostgresDatabase implements DatabaseInterface
      */
     public function fetchAssociative(string $query, array $params = []): array|null
     {
-        return $this->entityManager()->getConnection()->fetchAssociative($query, $params) ?: null;
+        return $this->entityManager->getConnection()->fetchAssociative($query, $params) ?: null;
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class PostgresDatabase implements DatabaseInterface
      */
     public function fetchAllAssociative(string $query, array $params = []): array|null
     {
-        return $this->entityManager()->getConnection()->fetchAllAssociative($query, $params) ?: null;
+        return $this->entityManager->getConnection()->fetchAllAssociative($query, $params) ?: null;
     }
 
     /**
@@ -89,27 +89,11 @@ abstract class PostgresDatabase implements DatabaseInterface
      */
     public function exec(string $query, array $params = []): void
     {
-        $this->entityManager()->getConnection()->executeStatement($query, $params);
+        $this->entityManager->getConnection()->executeStatement($query, $params);
     }
 
     public function close(): void
     {
-        $this->entityManager()->getConnection()->close();
-    }
-
-    abstract protected function entityManager(): EntityManagerInterface;
-
-    private function fixtureLoader(): FixtureLoader
-    {
-        if (null === $this->fixtureLoader) {
-            $fixtureSaver = new FixtureSaverUsingDoctrine($this->entityManager());
-
-            CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
-            MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
-
-            $this->fixtureLoader = new FixtureLoader(new UuidGeneratorUsingRamsey(), $fixtureSaver, '/app/etc/Fixtures');
-        }
-
-        return $this->fixtureLoader;
+        $this->entityManager->getConnection()->close();
     }
 }

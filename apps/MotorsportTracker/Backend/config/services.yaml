@@ -1,7 +1,8 @@
 parameters:
   kishlin.app.name: 'MotorsportTracker'
   kishlin.app.environment: '%env(APP_ENV)%'
-  kishlin.database.url: '%env(DATABASE_URL)%'
+  kishlin.database.core.url: '%env(DATABASE_CORE_URL)%'
+  kishlin.database.cache.url: '%env(DATABASE_CACHE_URL)%'
   kishlin.src.dir: '/app'
   kishlin.jwt.secretKey: '%env(JWT_SECRET_KEY)%'
   kishlin.jwt.algorithm: '%env(JWT_ALGORITHM)%'

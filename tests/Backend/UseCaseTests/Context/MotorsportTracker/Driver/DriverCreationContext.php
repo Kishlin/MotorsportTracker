@@ -29,7 +29,7 @@ final class DriverCreationContext extends MotorsportTrackerContext
      */
     public function theDriverExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
     }
 
     /**

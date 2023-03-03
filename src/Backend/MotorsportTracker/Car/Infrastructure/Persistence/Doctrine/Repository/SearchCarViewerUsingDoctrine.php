@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarViewer;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SearchCarViewerUsingDoctrine extends DoctrineRepository implements SearchCarViewer
+final class SearchCarViewerUsingDoctrine extends CoreRepository implements SearchCarViewer
 {
     /**
      * @throws Exception

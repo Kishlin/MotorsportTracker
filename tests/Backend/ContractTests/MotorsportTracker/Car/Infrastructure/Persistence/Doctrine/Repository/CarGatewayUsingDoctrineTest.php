@@ -10,13 +10,13 @@ use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarNumber;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarSeasonId;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarTeamId;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\CarGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\CarGatewayUsingDoctrine
  */
-final class CarGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class CarGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveACar(): void
     {

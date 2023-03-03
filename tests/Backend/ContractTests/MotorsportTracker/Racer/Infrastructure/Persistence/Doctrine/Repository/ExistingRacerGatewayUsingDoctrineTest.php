@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Racer\Infrastruc
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\DriverMoveId;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\ExistingRacerGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\ExistingRacerGatewayUsingDoctrine
  */
-final class ExistingRacerGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class ExistingRacerGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

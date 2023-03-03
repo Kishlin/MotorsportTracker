@@ -27,7 +27,7 @@ final class TeamPresentationContext extends MotorsportTrackerContext
     #[Given('the team presentation :teamPresentation exists')]
     public function theTeamPresentationExists(string $teamPresentation): void
     {
-        self::container()->fixtureLoader()->loadFixture(
+        self::container()->coreFixtureLoader()->loadFixture(
             "motorsport.team.teamPresentation.{$this->format($teamPresentation)}",
         );
     }

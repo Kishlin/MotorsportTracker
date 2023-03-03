@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExist
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class StepTypeIdForLabelRepositoryUsingDoctrine extends DoctrineRepository implements StepTypeIdForLabelGateway
+final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository implements StepTypeIdForLabelGateway
 {
     /**
      * @throws NonUniqueResultException

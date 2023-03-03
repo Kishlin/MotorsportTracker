@@ -10,13 +10,13 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingId
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingPoints;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\ValueObject\TeamStandingTeamId;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingRepositoryUsingDoctrine
  */
-final class TeamStandingRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class TeamStandingRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAnEntity(): void
     {

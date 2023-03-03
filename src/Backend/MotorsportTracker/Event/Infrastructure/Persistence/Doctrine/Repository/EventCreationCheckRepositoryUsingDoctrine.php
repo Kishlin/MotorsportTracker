@@ -11,9 +11,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventIndex;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventCreationCheckRepositoryUsingDoctrine extends DoctrineRepository implements EventCreationCheckGateway
+final class EventCreationCheckRepositoryUsingDoctrine extends CoreRepository implements EventCreationCheckGateway
 {
     /**
      * @throws NonUniqueResultException

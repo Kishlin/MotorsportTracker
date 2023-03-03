@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonViewer;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SearchSeasonViewerUsingDoctrine extends DoctrineRepository implements SearchSeasonViewer
+final class SearchSeasonViewerUsingDoctrine extends CoreRepository implements SearchSeasonViewer
 {
     /**
      * @throws Exception

@@ -9,9 +9,9 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\RacersForDateTimeAndSeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\SeasonId;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\View\RacerPOPO;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class RacersForDateTimeAndSeasonGatewayUsingDoctrine extends DoctrineRepository implements RacersForDateTimeAndSeasonGateway
+final class RacersForDateTimeAndSeasonGatewayUsingDoctrine extends CoreRepository implements RacersForDateTimeAndSeasonGateway
 {
     /**
      * @throws Exception

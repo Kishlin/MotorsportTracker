@@ -28,7 +28,7 @@ final class CountryContext extends MotorsportTrackerContext
      */
     public function theCountryExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("country.country.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("country.country.{$this->format($name)}");
     }
 
     /**

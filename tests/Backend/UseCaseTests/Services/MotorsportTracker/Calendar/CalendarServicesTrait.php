@@ -80,7 +80,6 @@ trait CalendarServicesTrait
         if (null === $this->calendarEventStepDataRepositorySpy) {
             $this->calendarEventStepDataRepositorySpy = new CalendarEventStepDataRepositorySpy(
                 $this->championshipPresentationRepositorySpy(),
-                $this->calendarEventStepViewRepositorySpy(),
                 $this->championshipRepositorySpy(),
             );
         }
@@ -93,8 +92,9 @@ trait CalendarServicesTrait
         if (null === $this->updateViewsAfterAChampionshipPresentationCreationHandler) {
             $this->updateViewsAfterAChampionshipPresentationCreationHandler = new UpdateViewsAfterAChampionshipPresentationCreationHandler(
                 $this->calendarEventStepDataRepositorySpy(),
-                $this->calendarEventStepDataRepositorySpy(),
                 $this->calendarEventStepViewRepositorySpy(),
+                $this->calendarEventStepViewRepositorySpy(),
+                $this->calendarEventStepDataRepositorySpy(),
             );
         }
 

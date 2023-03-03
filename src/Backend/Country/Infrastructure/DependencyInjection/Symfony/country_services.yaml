@@ -7,6 +7,7 @@ services:
     resource: '../../../'
     exclude:
       - '../../../Application/*/*Exception.php'
+      - '../../../Infrastructure/Persistence/Fixtures'
       - '../../../Infrastructure/Persistence/Doctrine/DbalTypes'
       - '../../../Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
 

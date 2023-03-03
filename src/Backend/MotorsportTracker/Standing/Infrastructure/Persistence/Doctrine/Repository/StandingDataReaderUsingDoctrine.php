@@ -7,9 +7,9 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataReader;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class StandingDataReaderUsingDoctrine extends DoctrineRepository implements StandingDataReader
+final class StandingDataReaderUsingDoctrine extends CoreRepository implements StandingDataReader
 {
     /**
      * @throws Exception

@@ -10,9 +10,10 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber;
 final class UpdateViewsAfterAChampionshipPresentationCreationHandler implements DomainEventSubscriber
 {
     public function __construct(
+        private readonly ChampionshipSlugForPresentationGateway $championshipSlugGateway,
+        private readonly NewPresentationApplierGateway $newPresentationApplierGateway,
         private readonly CalendarViewsToUpdateGateway $calendarViewsToUpdateGateway,
         private readonly PresentationToApplyGateway $presentationToApplyGateway,
-        private readonly NewPresentationApplierGateway $newPresentationApplierGateway,
     ) {
     }
 
@@ -20,7 +21,9 @@ final class UpdateViewsAfterAChampionshipPresentationCreationHandler implements 
     {
         $championshipPresentationId = $event->aggregateUuid();
 
-        $viewsToUpdate = $this->calendarViewsToUpdateGateway->findForPresentation($championshipPresentationId);
+        $slug = $this->championshipSlugGateway->findChampionshipSlugForPresentationId($championshipPresentationId);
+
+        $viewsToUpdate = $this->calendarViewsToUpdateGateway->findForSlug($slug);
 
         if (empty($viewsToUpdate->idList())) {
             return;

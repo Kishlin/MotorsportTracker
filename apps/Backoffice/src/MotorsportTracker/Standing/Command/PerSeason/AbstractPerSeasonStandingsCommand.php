@@ -158,7 +158,7 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
         $championship = $this->championship();
         $year         = $this->year();
 
-        $this->clearDataIfTheyAlreadyExist($championship, $year);
+        $this->teamStandingsViewsGateway->deleteIfExists($championship, $year);
 
         $this->teamStandingsViewsGateway->save(TeamStandingsView::instance(
             new StandingsViewId($teamStandingsViewId),
@@ -167,6 +167,8 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
             new StandingsViewEvents($events),
             new StandingsViewStandings(array_values($teamsStandings)),
         ));
+
+        $this->driverStandingsViewsGateway->deleteIfExists($championship, $year);
 
         $this->driverStandingsViewsGateway->save(DriverStandingsView::instance(
             new StandingsViewId($driverStandingsViewId),

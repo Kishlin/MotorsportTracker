@@ -8,13 +8,13 @@ use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepTypeId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventHasStepWithTypeRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventHasStepWithTypeRepositoryUsingDoctrine
  */
-final class EventHasStepWithTypeRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class EventHasStepWithTypeRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeViewer;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\View\EventStepIdAndDateTimePOPO;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SearchEventStepIdAndDateTimeViewerUsingDoctrine extends DoctrineRepository implements SearchEventStepIdAndDateTimeViewer
+final class SearchEventStepIdAndDateTimeViewerUsingDoctrine extends CoreRepository implements SearchEventStepIdAndDateTimeViewer
 {
     /**
      * @throws Exception|NonUniqueResultException

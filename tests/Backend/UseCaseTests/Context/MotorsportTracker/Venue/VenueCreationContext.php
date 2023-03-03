@@ -29,7 +29,7 @@ final class VenueCreationContext extends MotorsportTrackerContext
      */
     public function theVenueAlreadyExists(string $name): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
     }
 
     /**

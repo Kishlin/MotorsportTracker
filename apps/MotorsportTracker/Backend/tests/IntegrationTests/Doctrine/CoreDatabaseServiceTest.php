@@ -27,6 +27,9 @@ final class CoreDatabaseServiceTest extends CoreDatabaseServiceTestCase
      */
     public function testItHasAnActiveDatabaseConnection(): void
     {
-        self::assertItHasAnActiveDatabaseConnection($this->getContainer());
+        self::assertItHasAnActiveDatabaseConnection(
+            $this->getContainer(),
+            'kishlin.app.infrastructure.entity_manager.core'
+        );
     }
 }

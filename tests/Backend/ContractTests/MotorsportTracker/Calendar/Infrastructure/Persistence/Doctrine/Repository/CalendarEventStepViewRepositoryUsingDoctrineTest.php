@@ -15,13 +15,13 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventS
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewType;
 use Kishlin\Backend\MotorsportTracker\Calendar\Domain\ValueObject\CalendarEventStepViewVenueLabel;
 use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\CalendarEventStepViewRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Doctrine\Repository\CalendarEventStepViewRepositoryUsingDoctrine
  */
-final class CalendarEventStepViewRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class CalendarEventStepViewRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
 {
     public function testItCanSaveACalendarView(): void
     {

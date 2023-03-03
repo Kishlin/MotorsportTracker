@@ -33,7 +33,7 @@ final class MotorsportTrackerEntityManagerFactory
      *
      * @throws Exception|ORMException|ReflectionException
      */
-    public static function create(array $parameters, string $environment): EntityManagerInterface
+    public static function create(array $parameters, string $database, string $environment): EntityManagerInterface
     {
         $isDevMod = 'prod' !== $environment;
 
@@ -43,7 +43,7 @@ final class MotorsportTrackerEntityManagerFactory
             $prefixes = array_merge(
                 DoctrinePrefixesSearcher::inPath(
                     mainPath: $configurationDatum['mainPath'],
-                    mappingsPath: $configurationDatum['mappingsPath'],
+                    mappingsPath: $configurationDatum['mappingsPath'] . '/' . ucfirst($database),
                     baseNamespace: $configurationDatum['baseNamespace'],
                     hasModules: $configurationDatum['hasModules'],
                 ),

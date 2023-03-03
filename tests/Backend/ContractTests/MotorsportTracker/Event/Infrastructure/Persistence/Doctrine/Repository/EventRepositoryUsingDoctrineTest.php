@@ -11,13 +11,13 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventVenueId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventRepositoryUsingDoctrine
  */
-final class EventRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class EventRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAnEvent(): void
     {

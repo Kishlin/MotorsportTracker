@@ -9,4 +9,6 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\TeamStandingsView;
 interface TeamStandingsViewsGateway
 {
     public function save(TeamStandingsView $view): void;
+
+    public function deleteIfExists(string $championship, int $year): void;
 }

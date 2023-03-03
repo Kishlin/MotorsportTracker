@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\SaveChampionshipPresentationGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SaveChampionshipPresentationGatewayUsingDoctrine extends DoctrineRepository implements SaveChampionshipPresentationGateway
+final class SaveChampionshipPresentationGatewayUsingDoctrine extends CoreRepository implements SaveChampionshipPresentationGateway
 {
     public function save(ChampionshipPresentation $championshipPresentation): void
     {

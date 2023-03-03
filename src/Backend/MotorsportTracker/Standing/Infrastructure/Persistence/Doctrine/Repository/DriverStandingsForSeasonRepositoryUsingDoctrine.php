@@ -7,9 +7,9 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\ViewDriverStandingsForSeason\DriverStandingsForSeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\View\JsonableStandingsView;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class DriverStandingsForSeasonRepositoryUsingDoctrine extends DoctrineRepository implements DriverStandingsForSeasonGateway
+final class DriverStandingsForSeasonRepositoryUsingDoctrine extends CoreRepository implements DriverStandingsForSeasonGateway
 {
     /**
      * @throws Exception

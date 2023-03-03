@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\EventHas
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventHasStepAtTheSameTimeRepositoryUsingDoctrine extends DoctrineRepository implements EventHasStepAtTheSameTimeGateway
+final class EventHasStepAtTheSameTimeRepositoryUsingDoctrine extends CoreRepository implements EventHasStepAtTheSameTimeGateway
 {
     /**
      * @throws NonUniqueResultException

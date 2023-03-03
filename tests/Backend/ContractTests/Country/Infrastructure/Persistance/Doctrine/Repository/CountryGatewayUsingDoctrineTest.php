@@ -8,13 +8,13 @@ use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryId;
 use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryGatewayUsingDoctrine
  */
-final class CountryGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class CountryGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveACountry(): void
     {

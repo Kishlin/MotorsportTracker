@@ -14,7 +14,7 @@ final class CalendarViewContext extends BackofficeContext
     #[Given('the calendar event view :name exists')]
     public function theCalendarEventViewExists(string $name): void
     {
-        self::database()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($name)}");
+        self::cacheDatabase()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($name)}");
     }
 
     #[Then('the event step calendar view is created for :name :type on :dateTime for :slug')]
@@ -23,7 +23,7 @@ final class CalendarViewContext extends BackofficeContext
         $query = 'SELECT date_time, championship_slug, name, type FROM calendar_event_step_views;';
 
         /** @var array<array{championship_slug: string, name: string, type: string, date_time: string}> $views */
-        $views = self::database()->fetchAllAssociative($query);
+        $views = self::cacheDatabase()->fetchAllAssociative($query);
 
         $matchingViews = array_filter(
             $views,
@@ -45,7 +45,7 @@ final class CalendarViewContext extends BackofficeContext
         $query = 'SELECT color, championship_slug, name, type FROM calendar_event_step_views;';
 
         /** @var array<array{championship_slug: string, name: string, type: string, color: string}> $views */
-        $views = self::database()->fetchAllAssociative($query);
+        $views = self::cacheDatabase()->fetchAllAssociative($query);
 
         $matchingViews = array_filter(
             $views,

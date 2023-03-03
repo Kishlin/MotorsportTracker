@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ChampionshipPOPO;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class ViewAllChampionshipsGatewayUsingDoctrine extends DoctrineRepository implements ViewAllChampionshipsGateway
+final class ViewAllChampionshipsGatewayUsingDoctrine extends CoreRepository implements ViewAllChampionshipsGateway
 {
     public function viewAllChampionships(): array
     {

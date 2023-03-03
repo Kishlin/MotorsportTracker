@@ -8,13 +8,13 @@ use Doctrine\DBAL\Exception as DoctrineException;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\FindRacerGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Racer\Infrastructure\Persistence\Doctrine\Repository\FindRacerGatewayUsingDoctrine
  */
-final class FindRacerGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class FindRacerGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws DoctrineException|Exception|NonUniqueResultException

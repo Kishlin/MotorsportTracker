@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\Country\Domain\ValueObject\CountryCode;
 use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\CountryIdForCodeGatewayUsingDoctrine
  */
-final class CountryIdForCodeGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class CountryIdForCodeGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

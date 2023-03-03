@@ -8,13 +8,13 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\EventNotFoundForEventStepException;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\EventIdOfEventStepIdReaderUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\EventIdOfEventStepIdReaderUsingDoctrine
  */
-final class EventIdOfEventStepIdReaderUsingDoctrineTest extends RepositoryContractTestCase
+final class EventIdOfEventStepIdReaderUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

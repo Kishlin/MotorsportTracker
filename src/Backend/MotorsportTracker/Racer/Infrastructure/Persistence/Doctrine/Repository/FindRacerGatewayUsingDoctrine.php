@@ -9,9 +9,9 @@ use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerEndDate\FindRacerGateway;
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class FindRacerGatewayUsingDoctrine extends DoctrineRepository implements FindRacerGateway
+final class FindRacerGatewayUsingDoctrine extends CoreRepository implements FindRacerGateway
 {
     /**
      * @throws DoctrineException|Exception|NonUniqueResultException

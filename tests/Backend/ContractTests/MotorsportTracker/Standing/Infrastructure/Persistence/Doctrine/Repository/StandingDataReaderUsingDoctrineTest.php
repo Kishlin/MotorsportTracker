@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Standing\Infrast
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\RefreshStandingsOnResultsRecorded\StandingDataDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\StandingDataReaderUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\StandingDataReaderUsingDoctrine
  */
-final class StandingDataReaderUsingDoctrineTest extends RepositoryContractTestCase
+final class StandingDataReaderUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws Exception

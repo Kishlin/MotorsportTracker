@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doc
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\EventStepGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class EventStepRepositoryUsingDoctrine extends DoctrineRepository implements EventStepGateway
+final class EventStepRepositoryUsingDoctrine extends CoreRepository implements EventStepGateway
 {
     public function save(EventStep $eventStep): void
     {

@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Do
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Result;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Gateway\ResultGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class ResultRepositoryUsingDoctrine extends DoctrineRepository implements ResultGateway
+final class ResultRepositoryUsingDoctrine extends CoreRepository implements ResultGateway
 {
     public function save(Result $result): void
     {

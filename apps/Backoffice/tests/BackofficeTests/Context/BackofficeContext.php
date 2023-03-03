@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context;
 
 use Behat\Behat\Context\Context;
-use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Environment\SymfonyApplication;
-use Kishlin\Tests\Apps\Backoffice\Tools\ConsoleApplication\ConsoleApplicationInterface;
+use Kishlin\Apps\Backoffice\Kernel as BackofficeKernel;
+use Kishlin\Tests\Backend\Tools\ConsoleApplication\ConsoleApplicationInterface;
 use Kishlin\Tests\Backend\Tools\Database\DatabaseInterface;
+use Kishlin\Tests\Backend\Tools\Environment\SymfonyApplication;
 
 abstract class BackofficeContext implements Context
 {
+    private static ?SymfonyApplication $symfonyApplication = null;
+
     /**
      * @BeforeSuite
      * @AfterScenario
      */
     public static function reloadDatabase(): void
     {
-        self::database()->refreshDatabase();
+        self::coreDatabase()->refreshDatabase();
+        self::cacheDatabase()->refreshDatabase();
     }
 
     /**
@@ -25,8 +29,11 @@ abstract class BackofficeContext implements Context
      */
     public static function clearEnvironment(): void
     {
-        SymfonyApplication::database()->close();
-        SymfonyApplication::clearEnvironment();
+        self::symfonyApplication()->database('cache')->close();
+        self::symfonyApplication()->database('core')->close();
+        self::symfonyApplication()->clearEnvironment();
+
+        self::$symfonyApplication = null;
     }
 
     protected function format(string $fixture): string
@@ -36,8 +43,8 @@ abstract class BackofficeContext implements Context
 
     protected function countryNameToCode(string $countryName): string
     {
-        $countryId   = self::database()->fixtureId("country.country.{$this->format($countryName)}");
-        $countryCode = self::database()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
+        $countryId   = self::coreDatabase()->fixtureId("country.country.{$this->format($countryName)}");
+        $countryCode = self::coreDatabase()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
 
         assert(is_string($countryCode));
 
@@ -46,11 +53,30 @@ abstract class BackofficeContext implements Context
 
     protected static function application(): ConsoleApplicationInterface
     {
-        return SymfonyApplication::application();
+        return self::symfonyApplication()->application();
     }
 
-    protected static function database(): DatabaseInterface
+    protected static function database(string $database = 'core'): DatabaseInterface
     {
-        return SymfonyApplication::database();
+        return self::symfonyApplication()->database($database);
+    }
+
+    protected static function coreDatabase(): DatabaseInterface
+    {
+        return self::symfonyApplication()->database('core');
+    }
+
+    protected static function cacheDatabase(): DatabaseInterface
+    {
+        return self::symfonyApplication()->database('cache');
+    }
+
+    private static function symfonyApplication(): SymfonyApplication
+    {
+        if (null === self::$symfonyApplication) {
+            self::$symfonyApplication = new SymfonyApplication(BackofficeKernel::class);
+        }
+
+        return self::$symfonyApplication;
     }
 }

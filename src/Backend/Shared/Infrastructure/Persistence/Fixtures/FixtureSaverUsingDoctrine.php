@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 final class FixtureSaverUsingDoctrine extends FixtureSaver
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 

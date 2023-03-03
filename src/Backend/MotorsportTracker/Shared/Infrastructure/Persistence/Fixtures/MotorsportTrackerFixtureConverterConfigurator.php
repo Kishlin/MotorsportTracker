@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Calendar\Infrastructure\Persistence\Fixtur
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Fixtures\FixtureToCarConverter;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Fixtures\FixtureToDriverMoveConverter;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToChampionshipConverter;
-use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToChampionshipPresentation;
+use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToChampionshipPresentationConverter;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToSeasonConverter;
 use Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Fixtures\FixtureToDriverConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventConverter;
@@ -36,7 +36,7 @@ final class MotorsportTrackerFixtureConverterConfigurator
         $fixtureSaver->addConverter('motorsport.car.car', new FixtureToCarConverter());
         $fixtureSaver->addConverter('motorsport.car.driverMove', new FixtureToDriverMoveConverter());
 
-        $fixtureSaver->addConverter('motorsport.championship.championshipPresentation', new FixtureToChampionshipPresentation());
+        $fixtureSaver->addConverter('motorsport.championship.championshipPresentation', new FixtureToChampionshipPresentationConverter());
         $fixtureSaver->addConverter('motorsport.championship.championship', new FixtureToChampionshipConverter());
         $fixtureSaver->addConverter('motorsport.championship.season', new FixtureToSeasonConverter());
 

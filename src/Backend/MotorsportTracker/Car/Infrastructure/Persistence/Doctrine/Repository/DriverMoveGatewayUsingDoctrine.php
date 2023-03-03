@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctr
 
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Gateway\DriverMoveGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class DriverMoveGatewayUsingDoctrine extends DoctrineRepository implements DriverMoveGateway
+final class DriverMoveGatewayUsingDoctrine extends CoreRepository implements DriverMoveGateway
 {
     public function save(DriverMove $driverMove): void
     {

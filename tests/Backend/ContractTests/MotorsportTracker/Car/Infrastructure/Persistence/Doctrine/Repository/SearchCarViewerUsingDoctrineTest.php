@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Car\Infrastructu
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\SearchCarViewerUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\SearchCarViewerUsingDoctrine
  */
-final class SearchCarViewerUsingDoctrineTest extends RepositoryContractTestCase
+final class SearchCarViewerUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Car\Infrastructure\Persistence\Doctrine\Repository\SearchCarViewerUsingDoctrineTest::testItCanFindACarProvider

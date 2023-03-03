@@ -30,7 +30,7 @@ final class TeamCreationContext extends MotorsportTrackerContext
      */
     public function theTeamExists(string $teamName): void
     {
-        self::container()->fixtureLoader()->loadFixture("motorsport.team.team.{$this->format($teamName)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.team.team.{$this->format($teamName)}");
     }
 
     /**

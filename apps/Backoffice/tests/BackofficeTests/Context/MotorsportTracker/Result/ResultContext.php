@@ -7,8 +7,8 @@ namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracke
 use Behat\Gherkin\Node\TableNode;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Result\Command\RecordResultsForEventStepCommand;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
-use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Helper\Results\ResultsHolderInterface;
-use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Helper\Results\ResultsQuestionHelper;
+use Kishlin\Tests\Backend\Tools\ConsoleApplication\Helper\Results\ResultsHolderInterface;
+use Kishlin\Tests\Backend\Tools\ConsoleApplication\Helper\Results\ResultsQuestionHelper;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;

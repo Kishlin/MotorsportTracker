@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doc
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\StepTypeGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class StepTypeRepositoryUsingDoctrine extends DoctrineRepository implements StepTypeGateway
+final class StepTypeRepositoryUsingDoctrine extends CoreRepository implements StepTypeGateway
 {
     public function save(StepType $stepType): void
     {

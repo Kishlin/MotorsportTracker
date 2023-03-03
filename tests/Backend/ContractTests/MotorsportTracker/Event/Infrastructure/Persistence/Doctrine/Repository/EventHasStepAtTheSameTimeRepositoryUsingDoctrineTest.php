@@ -9,13 +9,13 @@ use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepDateTime;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepEventId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventHasStepAtTheSameTimeRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventHasStepAtTheSameTimeRepositoryUsingDoctrine
  */
-final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class EventHasStepAtTheSameTimeRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @throws NonUniqueResultException

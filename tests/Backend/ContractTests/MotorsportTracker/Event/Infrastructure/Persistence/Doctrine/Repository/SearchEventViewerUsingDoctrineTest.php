@@ -7,13 +7,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastruc
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\SearchEventViewerUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\SearchEventViewerUsingDoctrine
  */
-final class SearchEventViewerUsingDoctrineTest extends RepositoryContractTestCase
+final class SearchEventViewerUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
      * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\SearchEventViewerUsingDoctrineTest::testItCanFindAnEventProvider

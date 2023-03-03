@@ -9,13 +9,13 @@ use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\Championsh
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipSlug;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\ChampionshipGatewayUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship
  */
-final class ChampionshipGatewayUsingDoctrineTest extends RepositoryContractTestCase
+final class ChampionshipGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAChampionship(): void
     {

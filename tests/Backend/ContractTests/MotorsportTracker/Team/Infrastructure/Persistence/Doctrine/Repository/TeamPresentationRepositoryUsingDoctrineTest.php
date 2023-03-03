@@ -12,13 +12,13 @@ use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamPresentationIm
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamPresentationName;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamPresentationTeamId;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\TeamPresentationRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\RepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\TeamPresentationRepositoryUsingDoctrine
  */
-final class TeamPresentationRepositoryUsingDoctrineTest extends RepositoryContractTestCase
+final class TeamPresentationRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAnEntity(): void
     {
