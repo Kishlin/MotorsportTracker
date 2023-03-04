@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\CarRegistratio
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\Car;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\Gateway\CarGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -23,7 +23,7 @@ final class CarRepositorySpy extends AbstractRepositorySpy implements CarGateway
 {
     public function __construct(
         private TeamRepositorySpy $teamRepositorySpy,
-        private SeasonRepositorySpy $seasonRepositorySpy,
+        private SaveSeasonRepositorySpy $seasonRepositorySpy,
     ) {
     }
 

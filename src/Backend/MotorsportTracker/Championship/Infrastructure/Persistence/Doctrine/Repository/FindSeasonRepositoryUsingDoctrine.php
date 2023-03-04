@@ -6,26 +6,25 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonViewer;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\FindSeasonGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class SearchSeasonViewerUsingDoctrine extends CoreRepository implements SearchSeasonViewer
+final class FindSeasonRepositoryUsingDoctrine extends CoreRepository implements FindSeasonGateway
 {
     /**
      * @throws Exception
      * @throws NonUniqueResultException
      */
-    public function search(string $championship, int $year): ?UuidValueObject
+    public function find(string $championshipId, int $year): ?UuidValueObject
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
         $qb->select('s.id')
             ->from('seasons', 's')
-            ->leftJoin('s', 'championships', 'c', 'c.id = s.championship')
             ->where('s.year = :year')
-            ->andWhere("LOWER(REPLACE(CONCAT(c.name, c.slug), ' ' , '')) LIKE LOWER(REPLACE(:championship, ' ', ''))")
-            ->setParameter('championship', "%{$championship}%")
+            ->andWhere('s.championship = :championship')
+            ->setParameter('championship', $championshipId)
             ->setParameter('year', $year)
         ;
 

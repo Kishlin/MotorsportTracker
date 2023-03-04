@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\SeasonCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\FindSeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\SaveSeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\SeasonCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -17,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Season get(UuidValueObject $id)
  * @method Season      safeGet(UuidValueObject $id)
  */
-final class SeasonRepositorySpy extends AbstractRepositorySpy implements SeasonGateway
+final class SaveSeasonRepositorySpy extends AbstractRepositorySpy implements SaveSeasonGateway, FindSeasonGateway
 {
     public function save(Season $season): void
     {
@@ -26,6 +27,17 @@ final class SeasonRepositorySpy extends AbstractRepositorySpy implements SeasonG
         }
 
         $this->objects[$season->id()->value()] = $season;
+    }
+
+    public function find(string $championshipId, int $year): ?UuidValueObject
+    {
+        foreach ($this->objects as $season) {
+            if ($championshipId === $season->championshipId()->value() && $year === $season->year()->value()) {
+                return $season->id();
+            }
+        }
+
+        return null;
     }
 
     private function thereIsAlreadyASeasonForThisYear(Season $season): bool

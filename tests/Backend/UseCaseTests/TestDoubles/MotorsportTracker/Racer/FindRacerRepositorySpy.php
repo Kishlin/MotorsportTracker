@@ -11,13 +11,13 @@ use Kishlin\Backend\MotorsportTracker\Racer\Application\UpdateRacerEndDate\FindR
 use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
 
 final class FindRacerRepositorySpy implements FindRacerGateway
 {
     public function __construct(
         private ChampionshipRepositorySpy $championshipRepositorySpy,
-        private SeasonRepositorySpy $seasonRepositorySpy,
+        private SaveSeasonRepositorySpy $seasonRepositorySpy,
         private RacerRepositorySpy $racerRepositorySpy,
         private CarRepositorySpy $carRepositorySpy,
     ) {

@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Car\Application\RecordDriverMove\RecordDri
 use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\RegisterCarCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\CreateEventStepCommand;
@@ -50,7 +50,7 @@ final class TestCommandBus implements CommandBus
             return $this->testServiceContainer->createChampionshipPresentationCommandHandler()($command);
         }
 
-        if ($command instanceof CreateSeasonCommand) {
+        if ($command instanceof CreateSeasonIfNotExistsCommand) {
             return $this->testServiceContainer->createSeasonCommandHandler()($command);
         }
 

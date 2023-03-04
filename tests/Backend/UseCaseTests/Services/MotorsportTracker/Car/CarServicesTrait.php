@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\CarRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Car\SearchCarViewerRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
 trait CarServicesTrait
@@ -30,7 +30,7 @@ trait CarServicesTrait
 
     abstract public function teamRepositorySpy(): TeamRepositorySpy;
 
-    abstract public function seasonRepositorySpy(): SeasonRepositorySpy;
+    abstract public function seasonRepositorySpy(): SaveSeasonRepositorySpy;
 
     abstract public function championshipRepositorySpy(): ChampionshipRepositorySpy;
 

@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarViewer;
 use Kishlin\Backend\MotorsportTracker\Car\Domain\ValueObject\CarId;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SeasonRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
 final class SearchCarViewerRepositorySpy implements SearchCarViewer
@@ -16,7 +16,7 @@ final class SearchCarViewerRepositorySpy implements SearchCarViewer
     public function __construct(
         private CarRepositorySpy $carRepositorySpy,
         private TeamRepositorySpy $teamRepositorySpy,
-        private SeasonRepositorySpy $seasonRepositorySpy,
+        private SaveSeasonRepositorySpy $seasonRepositorySpy,
         private ChampionshipRepositorySpy $championshipRepositorySpy,
     ) {
     }

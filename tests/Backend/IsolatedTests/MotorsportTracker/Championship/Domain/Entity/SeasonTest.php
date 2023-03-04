@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Championship\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\SeasonCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
+use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -24,9 +22,7 @@ final class SeasonTest extends AggregateRootIsolatedTestCase
         $id   = 'bec0ec9f-e814-4dd6-bc77-d08e6ca17023';
         $year = 1993;
 
-        $entity = Season::create(new SeasonId($id), new SeasonYear($year), new SeasonChampionshipId($championshipId));
-
-        self::assertItRecordedDomainEvents($entity, new SeasonCreatedDomainEvent(new SeasonId($id)));
+        $entity = Season::create(new UuidValueObject($id), new StrictlyPositiveIntValueObject($year), new UuidValueObject($championshipId));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($year, $entity->year());

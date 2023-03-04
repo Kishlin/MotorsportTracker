@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 final class SearchSeasonQueryHandler implements QueryHandler
 {
     public function __construct(
-        private SearchSeasonViewer $searchSeasonViewer,
+        private readonly SearchSeasonViewer $searchSeasonViewer,
     ) {
     }
 

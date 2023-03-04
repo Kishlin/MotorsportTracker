@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Apps\DrivingTests\MotorsportTracker\Championship;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 
@@ -23,15 +23,15 @@ trait CreateSeasonDrivingTestCaseTrait
             ->expects($this->once())
             ->method('execute')
             ->with(
-                $this->callback(static function (CreateSeasonCommand $parameter) use ($year, $championship) {
+                $this->callback(static function (CreateSeasonIfNotExistsCommand $parameter) use ($year, $championship) {
                     return $year         === $parameter->year()->value()
                         && $championship === $parameter->championshipId()->value()
                     ;
                 }),
             )
             ->willReturnCallback(
-                static function (CreateSeasonCommand $command) use ($id) {
-                    return new SeasonId($id);
+                static function (CreateSeasonIfNotExistsCommand $command) use ($id) {
+                    return new UuidValueObject($id);
                 },
             )
         ;

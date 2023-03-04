@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship;
 
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonResponse;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SeasonNotFoundException;
@@ -20,9 +22,7 @@ final class SearchSeasonContext extends MotorsportTrackerContext
     {
     }
 
-    /**
-     * @When a client searches seasons with keyword :championship and year :year
-     */
+    #[When('a client searches seasons with keyword :championship and year :year')]
     public function itSearchesASeason(string $championship, int $year): void
     {
         $this->response        = null;
@@ -40,9 +40,7 @@ final class SearchSeasonContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then the id of the season :season is returned
-     */
+    #[Then('the id of the season :season is returned')]
     public function theIdOfTheSeasonIsReturned(string $season): void
     {
         Assert::assertNotNull($this->response);
@@ -54,9 +52,7 @@ final class SearchSeasonContext extends MotorsportTrackerContext
         );
     }
 
-    /**
-     * @Then /^it does not receive any season id$/
-     */
+    #[Then('it does not receive any season id')]
     public function itDoesNotReceiveAnySeason(): void
     {
         Assert::assertNull($this->response);

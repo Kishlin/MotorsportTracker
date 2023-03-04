@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ChampionshipPOPO;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsResponse;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,8 +27,8 @@ final class AddSeasonCommand extends SymfonyCommand
     private const QUESTION_YEAR = "Please enter a numeric year:\n";
 
     public function __construct(
-        private CommandBus $commandBus,
-        private QueryBus $queryBus,
+        private readonly CommandBus $commandBus,
+        private readonly QueryBus $queryBus,
     ) {
         parent::__construct();
     }
@@ -82,8 +82,8 @@ final class AddSeasonCommand extends SymfonyCommand
     private function doAddSeason(string $selectedChampionshipId, int $year, SymfonyStyle $ui): int
     {
         try {
-            /** @var SeasonId $uuid */
-            $uuid = $this->commandBus->execute(CreateSeasonCommand::fromScalars($selectedChampionshipId, $year));
+            /** @var UuidValueObject $uuid */
+            $uuid = $this->commandBus->execute(CreateSeasonIfNotExistsCommand::fromScalars($selectedChampionshipId, $year));
         } catch (Throwable) {
             $ui->error('This season already exists.');
 

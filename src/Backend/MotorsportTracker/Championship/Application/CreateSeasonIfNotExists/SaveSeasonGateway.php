@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway;
+namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 
-interface SeasonGateway
+interface SaveSeasonGateway
 {
     public function save(Season $season): void;
 }

@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonViewer;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class SearchSeasonViewerRepositorySpy implements SearchSeasonViewer
+final class SearchSeasonRepositorySpy implements SearchSeasonViewer
 {
     public function __construct(
-        private ChampionshipRepositorySpy $championshipRepositorySpy,
-        private SeasonRepositorySpy $seasonRepositorySpy,
+        private readonly ChampionshipRepositorySpy $championshipRepositorySpy,
+        private readonly SaveSeasonRepositorySpy $seasonRepositorySpy,
     ) {
     }
 
-    public function search(string $championship, int $year): ?SeasonId
+    public function search(string $championship, int $year): ?UuidValueObject
     {
         foreach ($this->seasonRepositorySpy->all() as $season) {
             $seasonChampionship = $this->championshipRepositorySpy->safeGet($season->championshipId());

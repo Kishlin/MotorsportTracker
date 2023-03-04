@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
-use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine;
+use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SaveSeasonGatewayUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SeasonGatewayUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SaveSeasonGatewayUsingDoctrine
  */
 final class SeasonGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
@@ -22,12 +21,12 @@ final class SeasonGatewayUsingDoctrineTest extends CoreRepositoryContractTestCas
         self::loadFixture('motorsport.championship.championship.formulaOne');
 
         $season = Season::instance(
-            new SeasonId(self::uuid()),
-            new SeasonYear(2022),
-            new SeasonChampionshipId(self::fixtureId('motorsport.championship.championship.formulaOne'))
+            new UuidValueObject(self::uuid()),
+            new StrictlyPositiveIntValueObject(2022),
+            new UuidValueObject(self::fixtureId('motorsport.championship.championship.formulaOne'))
         );
 
-        $repository = new SeasonGatewayUsingDoctrine(self::entityManager());
+        $repository = new SaveSeasonGatewayUsingDoctrine(self::entityManager());
 
         $repository->save($season);
 

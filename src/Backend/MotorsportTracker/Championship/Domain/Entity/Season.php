@@ -4,49 +4,49 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\SeasonCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\SeasonYear;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Season extends AggregateRoot
 {
     private function __construct(
-        private SeasonId $id,
-        private SeasonYear $year,
-        private SeasonChampionshipId $championshipId,
+        private readonly UuidValueObject $id,
+        private readonly StrictlyPositiveIntValueObject $year,
+        private readonly UuidValueObject $championshipId,
     ) {
     }
 
-    public static function create(SeasonId $id, SeasonYear $year, SeasonChampionshipId $championshipId): self
-    {
-        $season = new self($id, $year, $championshipId);
-
-        $season->record(new SeasonCreatedDomainEvent($id));
-
-        return $season;
+    public static function create(
+        UuidValueObject $id,
+        StrictlyPositiveIntValueObject $year,
+        UuidValueObject $championshipId,
+    ): self {
+        return new self($id, $year, $championshipId);
     }
 
     /**
      * @internal only use to get a test object
      */
-    public static function instance(SeasonId $id, SeasonYear $year, SeasonChampionshipId $championshipId): self
-    {
+    public static function instance(
+        UuidValueObject $id,
+        StrictlyPositiveIntValueObject $year,
+        UuidValueObject $championshipId,
+    ): self {
         return new self($id, $year, $championshipId);
     }
 
-    public function id(): SeasonId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function year(): SeasonYear
+    public function year(): StrictlyPositiveIntValueObject
     {
         return $this->year;
     }
 
-    public function championshipId(): SeasonChampionshipId
+    public function championshipId(): UuidValueObject
     {
         return $this->championshipId;
     }
