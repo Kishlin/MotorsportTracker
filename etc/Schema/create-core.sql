@@ -21,20 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: cars; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.cars (
-    id character varying(36) NOT NULL,
-    number integer NOT NULL,
-    team character varying(36) NOT NULL,
-    season character varying(36) NOT NULL
-);
-
-
-ALTER TABLE public.cars OWNER TO motorsporttracker;
-
---
 -- Name: championship_presentations; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -94,20 +80,6 @@ CREATE TABLE public.doctrine_migration_versions (
 
 
 ALTER TABLE public.doctrine_migration_versions OWNER TO motorsporttracker;
-
---
--- Name: driver_moves; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.driver_moves (
-    id character varying(36) NOT NULL,
-    driver character varying(36) NOT NULL,
-    car character varying(36) NOT NULL,
-    date timestamp(0) without time zone NOT NULL
-);
-
-
-ALTER TABLE public.driver_moves OWNER TO motorsporttracker;
 
 --
 -- Name: drivers; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -175,50 +147,6 @@ COMMENT ON COLUMN public.events.start_date IS '(DC2Type:nullable_date_time_value
 
 COMMENT ON COLUMN public.events.end_date IS '(DC2Type:nullable_date_time_value_object)';
 
-
---
--- Name: racers; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.racers (
-    id character varying(36) NOT NULL,
-    car character varying(36) NOT NULL,
-    driver character varying(36) NOT NULL,
-    startdate timestamp(0) without time zone NOT NULL,
-    enddate timestamp(0) without time zone NOT NULL
-);
-
-
-ALTER TABLE public.racers OWNER TO motorsporttracker;
-
---
--- Name: COLUMN racers.startdate; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.racers.startdate IS '(DC2Type:racer_start_date)';
-
-
---
--- Name: COLUMN racers.enddate; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.racers.enddate IS '(DC2Type:racer_end_date)';
-
-
---
--- Name: results; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.results (
-    id character varying(36) NOT NULL,
-    racer character varying(36) NOT NULL,
-    event_step character varying(36) NOT NULL,
-    "position" character varying(255) NOT NULL,
-    points double precision NOT NULL
-);
-
-
-ALTER TABLE public.results OWNER TO motorsporttracker;
 
 --
 -- Name: seasons; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -296,14 +224,6 @@ CREATE TABLE public.venues (
 ALTER TABLE public.venues OWNER TO motorsporttracker;
 
 --
--- Data for Name: cars; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.cars (id, number, team, season) FROM stdin;
-\.
-
-
---
 -- Data for Name: championship_presentations; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
@@ -355,14 +275,7 @@ Kishlin\\Migrations\\Core\\Version20230304002928	2023-03-04 00:30:32	22
 Kishlin\\Migrations\\Core\\Version20230304012938	2023-03-04 01:31:47	17
 Kishlin\\Migrations\\Core\\Version20230304173646	2023-03-04 17:45:11	15
 Kishlin\\Migrations\\Core\\Version20230304213122	2023-03-04 21:33:59	21
-\.
-
-
---
--- Data for Name: driver_moves; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.driver_moves (id, driver, car, date) FROM stdin;
+Kishlin\\Migrations\\Core\\Version20230304231912	2023-03-04 23:20:58	12
 \.
 
 
@@ -387,22 +300,6 @@ COPY public.event_steps (id, event, type, date_time) FROM stdin;
 --
 
 COPY public.events (id, season, venue, index, slug, name, short_name, start_date, end_date) FROM stdin;
-\.
-
-
---
--- Data for Name: racers; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.racers (id, car, driver, startdate, enddate) FROM stdin;
-\.
-
-
---
--- Data for Name: results; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.results (id, racer, event_step, "position", points) FROM stdin;
 \.
 
 
@@ -447,14 +344,6 @@ COPY public.venues (id, name, country, slug) FROM stdin;
 
 
 --
--- Name: cars cars_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.cars
-    ADD CONSTRAINT cars_pkey PRIMARY KEY (id);
-
-
---
 -- Name: championship_presentations championship_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -487,14 +376,6 @@ ALTER TABLE ONLY public.doctrine_migration_versions
 
 
 --
--- Name: driver_moves driver_moves_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.driver_moves
-    ADD CONSTRAINT driver_moves_pkey PRIMARY KEY (id);
-
-
---
 -- Name: drivers drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -516,22 +397,6 @@ ALTER TABLE ONLY public.event_steps
 
 ALTER TABLE ONLY public.events
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
-
-
---
--- Name: racers racers_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.racers
-    ADD CONSTRAINT racers_pkey PRIMARY KEY (id);
-
-
---
--- Name: results results_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.results
-    ADD CONSTRAINT results_pkey PRIMARY KEY (id);
 
 
 --
@@ -575,13 +440,6 @@ ALTER TABLE ONLY public.venues
 
 
 --
--- Name: car_number_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX car_number_season_team_idx ON public.cars USING btree (number, season, team);
-
-
---
 -- Name: championship_created_on_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -593,20 +451,6 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
-
-
---
--- Name: driver_move_car_date_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX driver_move_car_date_idx ON public.driver_moves USING btree (car, date);
-
-
---
--- Name: driver_move_driver_date_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX driver_move_driver_date_idx ON public.driver_moves USING btree (driver, date);
 
 
 --
@@ -628,20 +472,6 @@ CREATE UNIQUE INDEX event_season_name_idx ON public.events USING btree (season, 
 --
 
 CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree (event, type);
-
-
---
--- Name: result_event_step_position_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX result_event_step_position_idx ON public.results USING btree (event_step, "position");
-
-
---
--- Name: result_event_step_racer_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX result_event_step_racer_idx ON public.results USING btree (event_step, racer);
 
 
 --
@@ -715,22 +545,6 @@ CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.drivers USING btree (name);
 
 
 --
--- Name: cars fk_car_season; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.cars
-    ADD CONSTRAINT fk_car_season FOREIGN KEY (season) REFERENCES public.seasons(id);
-
-
---
--- Name: cars fk_car_team; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.cars
-    ADD CONSTRAINT fk_car_team FOREIGN KEY (team) REFERENCES public.teams(id);
-
-
---
 -- Name: seasons fk_championship; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -747,22 +561,6 @@ ALTER TABLE ONLY public.drivers
 
 
 --
--- Name: driver_moves fk_driver_moves_car; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.driver_moves
-    ADD CONSTRAINT fk_driver_moves_car FOREIGN KEY (car) REFERENCES public.cars(id);
-
-
---
--- Name: driver_moves fk_driver_moves_driver; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.driver_moves
-    ADD CONSTRAINT fk_driver_moves_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
-
-
---
 -- Name: event_steps fk_event_steps_event; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -776,38 +574,6 @@ ALTER TABLE ONLY public.event_steps
 
 ALTER TABLE ONLY public.event_steps
     ADD CONSTRAINT fk_event_steps_type FOREIGN KEY (type) REFERENCES public.step_types(id);
-
-
---
--- Name: racers fk_racer_car; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.racers
-    ADD CONSTRAINT fk_racer_car FOREIGN KEY (car) REFERENCES public.cars(id);
-
-
---
--- Name: racers fk_racer_driver; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.racers
-    ADD CONSTRAINT fk_racer_driver FOREIGN KEY (driver) REFERENCES public.drivers(id);
-
-
---
--- Name: results fk_result_event_step; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.results
-    ADD CONSTRAINT fk_result_event_step FOREIGN KEY (event_step) REFERENCES public.event_steps(id);
-
-
---
--- Name: results fk_result_racer; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.results
-    ADD CONSTRAINT fk_result_racer FOREIGN KEY (racer) REFERENCES public.racers(id);
 
 
 --

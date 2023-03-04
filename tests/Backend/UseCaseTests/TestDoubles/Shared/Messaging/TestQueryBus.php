@@ -6,13 +6,11 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarQuery;
-use Kishlin\Backend\MotorsportTracker\Car\Application\SearchCar\SearchCarQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeQuery;
-use Kishlin\Backend\MotorsportTracker\Racer\Application\GetAllRacersForDateTime\GetAllRacersForDateTimeQuery;
 use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamQuery;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
@@ -37,10 +35,6 @@ final class TestQueryBus implements QueryBus
             return $this->testServiceContainer->viewCalendarQueryHandler()($query);
         }
 
-        if ($query instanceof SearchCarQuery) {
-            return $this->testServiceContainer->searchCarQueryHandler()($query);
-        }
-
         if ($query instanceof ViewAllChampionshipsQuery) {
             return $this->testServiceContainer->viewAllChampionshipsQueryHandler()($query);
         }
@@ -59,10 +53,6 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof SearchDriverQuery) {
             return $this->testServiceContainer->searchDriverQueryHandler()($query);
-        }
-
-        if ($query instanceof GetAllRacersForDateTimeQuery) {
-            return $this->testServiceContainer->getAllRacersForDateTimeQueryHandler()($query);
         }
 
         if ($query instanceof SearchTeamQuery) {

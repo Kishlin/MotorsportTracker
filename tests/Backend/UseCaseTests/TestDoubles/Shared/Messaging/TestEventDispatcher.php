@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\DomainEvent\DriverMoveCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 
 final class TestEventDispatcher implements EventDispatcher
 {
-    public function __construct(
-        private readonly TestServiceContainer $testServiceContainer,
-    ) {
+    /**
+     * @noinspection PhpPropertyOnlyWrittenInspection
+     * @phpstan-ignore-next-line
+     */
+    public function __construct(private readonly TestServiceContainer $testServiceContainer)
+    {
     }
 
     /**
@@ -32,8 +34,5 @@ final class TestEventDispatcher implements EventDispatcher
      */
     private function handleEvent(DomainEvent $event): void
     {
-        if ($event instanceof DriverMoveCreatedDomainEvent) {
-            $this->testServiceContainer->updateRacerViewsOnDriverMoveHandler()($event);
-        }
     }
 }

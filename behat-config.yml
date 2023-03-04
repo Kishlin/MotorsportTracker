@@ -9,24 +9,18 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ViewChampionshipsContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SearchSeasonContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\DriverMoveRecordingContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\CarRegistrationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\SearchDriverContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\SearchVenueContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Racer\RacerUpdateContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\SearchTeamContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\StepTypeContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\ResultContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\SearchCarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Racer\RacerContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\CalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\Shared\FixturesContext
     api_tests:
@@ -42,18 +36,13 @@ default:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\RegisterDriverMoveContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventStepContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateStepTypeContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Driver\CreateDriverContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue\CreateVenueContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Racer\ChangeRacerContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\CreateTeamContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\CreateCarContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Result\ResultContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Racer\RacerContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Country\CreateCountryContext
       filters:
         tags: '@backoffice'

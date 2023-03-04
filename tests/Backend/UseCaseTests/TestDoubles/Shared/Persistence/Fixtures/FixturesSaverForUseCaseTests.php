@@ -7,8 +7,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence\Fixt
 use Exception;
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEventStepView;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\Car;
-use Kishlin\Backend\MotorsportTracker\Car\Domain\Entity\DriverMove;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
@@ -16,7 +14,6 @@ use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
-use Kishlin\Backend\MotorsportTracker\Racer\Domain\Entity\Racer;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
@@ -45,18 +42,6 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
 
         if ($aggregateRoot instanceof CalendarEventStepView) {
             $this->testServiceContainer->calendarEventStepViewRepositorySpy()->save($aggregateRoot);
-
-            return;
-        }
-
-        if ($aggregateRoot instanceof Car) {
-            $this->testServiceContainer->carRepositorySpy()->save($aggregateRoot);
-
-            return;
-        }
-
-        if ($aggregateRoot instanceof DriverMove) {
-            $this->testServiceContainer->driverMoveRepositorySpy()->save($aggregateRoot);
 
             return;
         }
@@ -99,12 +84,6 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
 
         if ($aggregateRoot instanceof StepType) {
             $this->testServiceContainer->stepTypeRepositorySpy()->save($aggregateRoot);
-
-            return;
-        }
-
-        if ($aggregateRoot instanceof Racer) {
-            $this->testServiceContainer->racerRepositorySpy()->save($aggregateRoot);
 
             return;
         }
