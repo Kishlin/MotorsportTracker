@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\venue;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\CreateVenueCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueQueryHandler;
-use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\VenueRepositorySpy;
@@ -18,8 +17,6 @@ trait VenueServicesTrait
     private ?SearchVenueQueryHandler $searchVenueQueryHandler = null;
 
     private ?CreateVenueCommandHandler $createVenueCommandHandler = null;
-
-    abstract public function eventDispatcher(): EventDispatcher;
 
     abstract public function uuidGenerator(): UuidGenerator;
 
@@ -51,7 +48,6 @@ trait VenueServicesTrait
             $this->createVenueCommandHandler = new CreateVenueCommandHandler(
                 $this->venueRepositorySpy(),
                 $this->uuidGenerator(),
-                $this->eventDispatcher(),
             );
         }
 

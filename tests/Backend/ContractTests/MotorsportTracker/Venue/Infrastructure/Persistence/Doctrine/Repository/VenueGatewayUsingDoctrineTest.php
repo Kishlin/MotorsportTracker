@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueCountryId;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueName;
 use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\VenueGatewayUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
@@ -22,9 +21,10 @@ final class VenueGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
         self::loadFixture('country.country.netherlands');
 
         $venue = Venue::instance(
-            new VenueId(self::uuid()),
-            new VenueName('Circuit Zandvoort'),
-            new VenueCountryId(self::fixtureId('country.country.netherlands')),
+            new UuidValueObject(self::uuid()),
+            new StringValueObject('Circuit Zandvoort'),
+            new StringValueObject('circuit-zandvoort'),
+            new UuidValueObject(self::fixtureId('country.country.netherlands')),
         );
 
         $repository = new VenueGatewayUsingDoctrine(self::entityManager());

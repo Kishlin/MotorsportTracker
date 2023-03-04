@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Venue\Command\CreateVenueCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
@@ -17,17 +20,13 @@ final class CreateVenueContext extends BackofficeContext
 
     private ?int $commandStatus = null;
 
-    /**
-     * @Given the venue :name exists
-     */
+    #[Given('the venue :name exists')]
     public function theVenueAlreadyExists(string $name): void
     {
         self::database()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
     }
 
-    /**
-     * @When a client creates the venue :name for the :country
-     */
+    #[When('a client creates the venue :name for the :country')]
     public function aClientCreatesTheVenue(string $name, string $country): void
     {
         $this->commandStatus = null;
@@ -39,14 +38,12 @@ final class CreateVenueContext extends BackofficeContext
             self::application()->find(CreateVenueCommandUsingSymfony::NAME),
         );
 
-        $commandTester->execute(['name' => $this->name, 'country' => $this->country]);
+        $commandTester->execute(['name' => $this->name, 'slug' => $this->name, 'country' => $this->country]);
 
         $this->commandStatus = $commandTester->getStatusCode();
     }
 
-    /**
-     * @Then /^the venue is saved$/
-     */
+    #[Then('the venue is saved')]
     public function theVenueIsSaved(): void
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);

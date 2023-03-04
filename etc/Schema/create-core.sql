@@ -298,7 +298,8 @@ ALTER TABLE public.teams OWNER TO motorsporttracker;
 CREATE TABLE public.venues (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    country character varying(36) NOT NULL
+    country character varying(36) NOT NULL,
+    slug character varying(255) NOT NULL
 );
 
 
@@ -361,6 +362,7 @@ Kishlin\\Migrations\\Core\\Version20221225180107	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20230222232032	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20230303233637	2023-03-03 23:38:29	17
 Kishlin\\Migrations\\Core\\Version20230304002928	2023-03-04 00:30:32	22
+Kishlin\\Migrations\\Core\\Version20230304012938	2023-03-04 01:31:47	17
 \.
 
 
@@ -464,7 +466,7 @@ COPY public.teams (id, name, image, country) FROM stdin;
 -- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.venues (id, name, country) FROM stdin;
+COPY public.venues (id, name, country, slug) FROM stdin;
 \.
 
 
@@ -725,6 +727,13 @@ CREATE UNIQUE INDEX uniq_652e22ad5e237e06 ON public.venues USING btree (name);
 
 
 --
+-- Name: uniq_652e22ad989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_652e22ad989d9b62 ON public.venues USING btree (slug);
+
+
+--
 -- Name: uniq_b682ea935e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -895,14 +904,6 @@ ALTER TABLE ONLY public.team_standings
 
 ALTER TABLE ONLY public.team_standings
     ADD CONSTRAINT fk_team_standings_event FOREIGN KEY (event) REFERENCES public.events(id);
-
-
---
--- Name: venues fk_venue_country; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.venues
-    ADD CONSTRAINT fk_venue_country FOREIGN KEY (country) REFERENCES public.countries(id);
 
 
 --

@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doc
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueViewer;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
 final class SearchVenueViewerUsingDoctrine extends CoreRepository implements SearchVenueViewer
@@ -15,14 +15,14 @@ final class SearchVenueViewerUsingDoctrine extends CoreRepository implements Sea
     /**
      * @throws Exception|NonUniqueResultException
      */
-    public function search(string $keyword): ?VenueId
+    public function search(string $slug): ?UuidValueObject
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
         $qb->select('v.id')
             ->from('venues', 'v')
-            ->where("LOWER(REPLACE(v.name, ' ', '')) LIKE LOWER(REPLACE(:name, ' ', ''))")
-            ->setParameter('name', "%{$keyword}%")
+            ->where('v.slug = :slug')
+            ->setParameter('slug', $slug)
         ;
 
         /** @var array<array{id: string}> $result */
@@ -36,6 +36,6 @@ final class SearchVenueViewerUsingDoctrine extends CoreRepository implements Sea
             throw new NonUniqueResultException();
         }
 
-        return new VenueId($result[0]['id']);
+        return new UuidValueObject($result[0]['id']);
     }
 }

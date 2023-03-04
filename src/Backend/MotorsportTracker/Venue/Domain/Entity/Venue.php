@@ -4,49 +4,57 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\DomainEvent\VenueCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueCountryId;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueName;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Venue extends AggregateRoot
 {
     private function __construct(
-        private VenueId $id,
-        private VenueName $name,
-        private VenueCountryId $countryId,
+        private readonly UuidValueObject $id,
+        private readonly StringValueObject $name,
+        private readonly StringValueObject $slug,
+        private readonly UuidValueObject $countryId,
     ) {
     }
 
-    public static function create(VenueId $id, VenueName $name, VenueCountryId $countryId): self
-    {
-        $venue = new self($id, $name, $countryId);
-
-        $venue->record(new VenueCreatedDomainEvent($id));
-
-        return $venue;
+    public static function create(
+        UuidValueObject $id,
+        StringValueObject $name,
+        StringValueObject $slug,
+        UuidValueObject $countryId,
+    ): self {
+        return new self($id, $name, $slug, $countryId);
     }
 
     /**
      * @internal only use to get a test object
      */
-    public static function instance(VenueId $id, VenueName $name, VenueCountryId $countryId): self
-    {
-        return new self($id, $name, $countryId);
+    public static function instance(
+        UuidValueObject $id,
+        StringValueObject $name,
+        StringValueObject $slug,
+        UuidValueObject $countryId,
+    ): self {
+        return new self($id, $name, $slug, $countryId);
     }
 
-    public function id(): VenueId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function name(): VenueName
+    public function name(): StringValueObject
     {
         return $this->name;
     }
 
-    public function countryId(): VenueCountryId
+    public function slug(): StringValueObject
+    {
+        return $this->slug;
+    }
+
+    public function countryId(): UuidValueObject
     {
         return $this->countryId;
     }

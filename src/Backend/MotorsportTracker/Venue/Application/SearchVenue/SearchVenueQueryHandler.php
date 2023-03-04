@@ -9,18 +9,18 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 final class SearchVenueQueryHandler implements QueryHandler
 {
     public function __construct(
-        private SearchVenueViewer $viewer,
+        private readonly SearchVenueViewer $viewer,
     ) {
     }
 
     public function __invoke(SearchVenueQuery $query): SearchVenueResponse
     {
-        $venueId = $this->viewer->search($query->keyword());
+        $venueId = $this->viewer->search($query->slug());
 
         if (null === $venueId) {
             throw new VenueNotFoundException();
         }
 
-        return SearchVenueResponse::fromScalar($venueId);
+        return SearchVenueResponse::fromObject($venueId);
     }
 }

@@ -9,17 +9,17 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 final class SearchVenueQuery implements Query
 {
     private function __construct(
-        private string $keyword
+        private readonly string $slug,
     ) {
     }
 
-    public function keyword(): string
+    public function slug(): string
     {
-        return $this->keyword;
+        return $this->slug;
     }
 
-    public static function fromScalar(string $keyword): self
+    public static function fromScalar(string $slug): self
     {
-        return new self($keyword);
+        return new self($slug);
     }
 }

@@ -16,12 +16,10 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 final class SearchVenueViewerUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     /**
-     * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\SearchVenueViewerUsingDoctrineTest::testItCanFindAVenueProvider
-     *
      * @throws Exception
      * @throws NonUniqueResultException
      */
-    public function testItCanFindAVenue(string $venue): void
+    public function testItCanFindAVenue(): void
     {
         $this->loadFixture('motorsport.venue.venue.zandvoort');
 
@@ -29,51 +27,18 @@ final class SearchVenueViewerUsingDoctrineTest extends CoreRepositoryContractTes
 
         self::assertSame(
             $this->fixtureId('motorsport.venue.venue.zandvoort'),
-            $repository->search($venue)?->value(),
+            $repository->search('circuit-zandvoort')?->value(),
         );
-    }
-
-    /**
-     * @return array<string , array{venue: string}>
-     */
-    public function testItCanFindAVenueProvider(): array
-    {
-        return [
-            'by full name'      => ['venue' => 'Circuit Zandvoort'],
-            'string formatting' => ['venue' => 'zAnDvOoRt'],
-            'by partial name'   => ['venue' => 'and'],
-        ];
     }
 
     /**
      * @throws Exception
      * @throws NonUniqueResultException
      */
-    public function testItFailsWhenThereIsMoreThanOneResult(): void
+    public function testItIsNullWhenThereIsNoResult(): void
     {
-        $this->loadFixtures(
-            'motorsport.venue.venue.zandvoort',
-            'motorsport.venue.venue.circuitOfTheAmericas',
-        );
-
         $repository = new SearchVenueViewerUsingDoctrine(self::entityManager());
 
-        self::expectException(NonUniqueResultException::class);
-
-        $repository->search('circuit');
-    }
-
-    /**
-     * @throws Exception
-     * @throws NonUniqueResultException
-     */
-    public function testItReturnsNullWhenThereIsNoResult(): void
-    {
-        $this->loadFixture('motorsport.venue.venue.zandvoort');
-
-        $repository = new SearchVenueViewerUsingDoctrine(self::entityManager());
-
-        self::assertNull($repository->search('Melbourne')); // does not exist
-        self::assertNull($repository->search('zandvort')); // typo
+        self::assertNull($repository->search('circuit-zandvoort'));
     }
 }

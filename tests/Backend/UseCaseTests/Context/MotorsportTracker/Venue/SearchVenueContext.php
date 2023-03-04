@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue;
 
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueQuery;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueResponse;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\VenueNotFoundException;
@@ -20,17 +22,15 @@ final class SearchVenueContext extends MotorsportTrackerContext
     {
     }
 
-    /**
-     * @When a client searches for the venue :name
-     */
-    public function aClientSearchesForTheVenue(string $name): void
+    #[When('a client searches for the venue :slug')]
+    public function aClientSearchesForTheVenue(string $slug): void
     {
         $this->response        = null;
         $this->thrownException = null;
 
         try {
             $response = self::container()->queryBus()->ask(
-                SearchVenueQuery::fromScalar($name),
+                SearchVenueQuery::fromScalar($slug),
             );
 
             assert($response instanceof SearchVenueResponse);
@@ -41,9 +41,7 @@ final class SearchVenueContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then the id of the venue :name is returned
-     */
+    #[Then('the id of the venue :name is returned')]
     public function theIdOfTheVenueIsReturned(string $name): void
     {
         Assert::assertNull($this->thrownException);
@@ -55,9 +53,7 @@ final class SearchVenueContext extends MotorsportTrackerContext
         );
     }
 
-    /**
-     * @Then /^it does not receive any venue id$/
-     */
+    #[Then('it does not receive any venue id')]
     public function itDoesNotReceiveAnyVenueId(): void
     {
         Assert::assertNull($this->response);

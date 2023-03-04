@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueViewer;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\VenueGateway;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\ValueObject\VenueId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -23,7 +22,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway, SearchVenueViewer
 {
     public function __construct(
-        private SaveSearchCountryRepositorySpy $countryRepositorySpy,
+        private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,
     ) {
     }
 
@@ -37,15 +36,10 @@ final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGat
         $this->objects[$venue->id()->value()] = $venue;
     }
 
-    public function search(string $keyword): ?VenueId
+    public function search(string $slug): ?UuidValueObject
     {
         foreach ($this->objects as $venue) {
-            if (
-                str_contains(
-                    str_replace(' ', '', strtolower($venue->name()->value())),
-                    str_replace(' ', '', strtolower($keyword)),
-                )
-            ) {
+            if ($slug === $venue->slug()->value()) {
                 return $venue->id();
             }
         }
