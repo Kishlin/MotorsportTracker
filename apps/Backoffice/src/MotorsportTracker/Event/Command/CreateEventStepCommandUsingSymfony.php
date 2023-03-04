@@ -11,9 +11,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExist
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventQuery;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventResponse;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,8 +38,8 @@ final class CreateEventStepCommandUsingSymfony extends SymfonyCommand
     private const QUESTION_DATETIME = "Please enter a dateTime for the event step.\n";
 
     public function __construct(
-        private CommandBus $commandBus,
-        private QueryBus $queryBus,
+        private readonly CommandBus $commandBus,
+        private readonly QueryBus $queryBus,
     ) {
         parent::__construct();
     }
@@ -68,7 +68,7 @@ final class CreateEventStepCommandUsingSymfony extends SymfonyCommand
         $type     = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_TYPE, self::QUESTION_TYPE);
         $dateTime = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_DATETIME, self::QUESTION_DATETIME);
 
-        /** @var StepTypeId $stepTypeIdValueObject */
+        /** @var UuidValueObject $stepTypeIdValueObject */
         $stepTypeIdValueObject = $this->commandBus->execute(CreateStepTypeIfNotExistsCommand::fromScalars($type));
         $stepTypeId            = $stepTypeIdValueObject->value();
 

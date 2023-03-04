@@ -6,22 +6,22 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNo
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\StepTypeGateway;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CreateStepTypeIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StepTypeIdForLabelGateway $stepTypeIdForLabelGateway,
-        private StepTypeGateway $stepTypeGateway,
-        private UuidGenerator $uuidGenerator,
-        private EventDispatcher $eventDispatcher,
+        private readonly StepTypeIdForLabelGateway $stepTypeIdForLabelGateway,
+        private readonly StepTypeGateway $stepTypeGateway,
+        private readonly UuidGenerator $uuidGenerator,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
-    public function __invoke(CreateStepTypeIfNotExistsCommand $command): StepTypeId
+    public function __invoke(CreateStepTypeIfNotExistsCommand $command): UuidValueObject
     {
         $id = $this->stepTypeIdForLabelGateway->idForLabel($command->label());
 
@@ -29,7 +29,7 @@ final class CreateStepTypeIfNotExistsCommandHandler implements CommandHandler
             return $id;
         }
 
-        $newId    = new StepTypeId($this->uuidGenerator->uuid4());
+        $newId    = new UuidValueObject($this->uuidGenerator->uuid4());
         $stepType = StepType::create($newId, $command->label());
 
         $this->stepTypeGateway->save($stepType);

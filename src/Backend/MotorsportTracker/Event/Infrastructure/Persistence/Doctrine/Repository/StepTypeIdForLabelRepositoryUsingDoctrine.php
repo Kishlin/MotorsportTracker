@@ -8,8 +8,8 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\StepTypeIdForLabelGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
 final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository implements StepTypeIdForLabelGateway
@@ -17,7 +17,7 @@ final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository imp
     /**
      * @throws NonUniqueResultException
      */
-    public function idForLabel(StepTypeLabel $label): ?StepTypeId
+    public function idForLabel(StringValueObject $label): ?UuidValueObject
     {
         $qb = $this->entityManager->createQueryBuilder();
 
@@ -30,7 +30,7 @@ final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository imp
         ;
 
         try {
-            /** @var array{id: StepTypeId} $data */
+            /** @var array{id: UuidValueObject} $data */
             $data = $query->getSingleResult();
         } catch (NoResultException) {
             return null;

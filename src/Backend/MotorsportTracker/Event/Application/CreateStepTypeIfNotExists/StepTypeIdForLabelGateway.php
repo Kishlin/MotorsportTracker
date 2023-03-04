@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface StepTypeIdForLabelGateway
 {
-    public function idForLabel(StepTypeLabel $label): ?StepTypeId;
+    public function idForLabel(StringValueObject $label): ?UuidValueObject;
 }

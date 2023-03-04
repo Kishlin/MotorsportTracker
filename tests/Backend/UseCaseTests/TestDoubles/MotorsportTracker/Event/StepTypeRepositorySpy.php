@@ -8,8 +8,7 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\StepTypeIdForLabelGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\StepTypeGateway;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -34,7 +33,7 @@ final class StepTypeRepositorySpy extends AbstractRepositorySpy implements StepT
         $this->objects[$stepType->id()->value()] = $stepType;
     }
 
-    public function idForLabel(StepTypeLabel $label): ?StepTypeId
+    public function idForLabel(StringValueObject $label): ?UuidValueObject
     {
         foreach ($this->objects as $savedEventStep) {
             if ($savedEventStep->label()->equals($label)) {

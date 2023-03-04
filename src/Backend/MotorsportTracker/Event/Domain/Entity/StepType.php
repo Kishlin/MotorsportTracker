@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Event\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\StepTypeCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class StepType extends AggregateRoot
 {
     private function __construct(
-        private StepTypeId $id,
-        private StepTypeLabel $label,
+        private readonly UuidValueObject $id,
+        private readonly StringValueObject $label,
     ) {
     }
 
-    public static function create(StepTypeId $id, StepTypeLabel $label): self
+    public static function create(UuidValueObject $id, StringValueObject $label): self
     {
         $stepType = new self($id, $label);
 
@@ -29,17 +29,17 @@ final class StepType extends AggregateRoot
     /**
      * @internal only use to get a test object
      */
-    public static function instance(StepTypeId $id, StepTypeLabel $label): self
+    public static function instance(UuidValueObject $id, StringValueObject $label): self
     {
         return new self($id, $label);
     }
 
-    public function id(): StepTypeId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function label(): StepTypeLabel
+    public function label(): StringValueObject
     {
         return $this->label;
     }

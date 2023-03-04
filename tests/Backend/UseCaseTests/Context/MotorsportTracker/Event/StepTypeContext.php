@@ -6,15 +6,15 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class StepTypeContext extends MotorsportTrackerContext
 {
-    private ?StepTypeId $stepTypeId     = null;
-    private ?Throwable $thrownException = null;
+    private ?UuidValueObject $stepTypeId = null;
+    private ?Throwable $thrownException  = null;
 
     public function clearGatewaySpies(): void
     {
@@ -40,7 +40,7 @@ final class StepTypeContext extends MotorsportTrackerContext
         $this->thrownException = null;
 
         try {
-            /** @var StepTypeId $stepTypeId */
+            /** @var UuidValueObject $stepTypeId */
             $stepTypeId = self::container()->commandBus()->execute(
                 CreateStepTypeIfNotExistsCommand::fromScalars($this->format($label)),
             );

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\StepTypeIdForLabelRepositoryUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
@@ -25,7 +25,7 @@ final class StepTypeIdForLabelRepositoryUsingDoctrineTest extends CoreRepository
         $repository = new StepTypeIdForLabelRepositoryUsingDoctrine($this->entityManager());
 
         $expected = self::fixtureId('motorsport.event.stepType.race');
-        $actual   = $repository->idForLabel(new StepTypeLabel('race'));
+        $actual   = $repository->idForLabel(new StringValueObject('race'));
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
@@ -37,6 +37,6 @@ final class StepTypeIdForLabelRepositoryUsingDoctrineTest extends CoreRepository
     {
         $repository = new StepTypeIdForLabelRepositoryUsingDoctrine($this->entityManager());
 
-        self::assertNull($repository->idForLabel(new StepTypeLabel('race')));
+        self::assertNull($repository->idForLabel(new StringValueObject('race')));
     }
 }

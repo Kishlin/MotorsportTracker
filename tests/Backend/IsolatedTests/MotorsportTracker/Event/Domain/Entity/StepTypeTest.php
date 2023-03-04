@@ -6,8 +6,8 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Event\Domain\Ent
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\StepTypeCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\StepTypeLabel;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -21,9 +21,9 @@ final class StepTypeTest extends AggregateRootIsolatedTestCase
         $id    = '1f686dd4-1ca3-42cf-82fb-ab3e5f20bbf4';
         $label = 'step';
 
-        $entity = StepType::create(new StepTypeId($id), new StepTypeLabel($label));
+        $entity = StepType::create(new UuidValueObject($id), new StringValueObject($label));
 
-        self::assertItRecordedDomainEvents($entity, new StepTypeCreatedDomainEvent(new StepTypeId($id)));
+        self::assertItRecordedDomainEvents($entity, new StepTypeCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($label, $entity->label());
