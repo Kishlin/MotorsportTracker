@@ -22,7 +22,7 @@ final class RacersForDateTimeAndSeasonGatewayUsingDoctrine extends CoreRepositor
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
-        $qb->select('r.id as id, CONCAT(d.firstname, \' \', d.name) as driver_name, c.number as car_number')
+        $qb->select('r.id as id, d.name as driver_name, c.number as car_number')
             ->from('racers', 'r')
             ->leftJoin('r', 'cars', 'c', 'c.id = r.car')
             ->leftJoin('r', 'drivers', 'd', 'd.id = r.driver')

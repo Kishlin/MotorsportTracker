@@ -72,7 +72,7 @@ SELECT dm.id
 FROM driver_moves dm
 LEFT JOIN drivers d on dm.driver = d.id
 WHERE dm.car = :carId
-AND CONCAT(d.firstname, ' ', d.name) = :driver
+AND d.name = :driver
 AND dm.date = :dateTime
 SQL;
 

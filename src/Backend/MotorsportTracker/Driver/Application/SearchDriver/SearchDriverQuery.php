@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 final class SearchDriverQuery implements Query
 {
     private function __construct(
-        private string $name,
+        private readonly string $name,
     ) {
     }
 

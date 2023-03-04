@@ -130,7 +130,6 @@ ALTER TABLE public.driver_standings OWNER TO motorsporttracker;
 CREATE TABLE public.drivers (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    firstname character varying(255) NOT NULL,
     country character varying(36) NOT NULL
 );
 
@@ -361,6 +360,7 @@ Kishlin\\Migrations\\Core\\Version20221120071036	2023-03-03 15:11:04	0
 Kishlin\\Migrations\\Core\\Version20221225180107	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20230222232032	2023-03-03 15:11:04	4
 Kishlin\\Migrations\\Core\\Version20230303233637	2023-03-03 23:38:29	17
+Kishlin\\Migrations\\Core\\Version20230304002928	2023-03-04 00:30:32	22
 \.
 
 
@@ -384,7 +384,7 @@ COPY public.driver_standings (id, event, driver, points) FROM stdin;
 -- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.drivers (id, name, firstname, country) FROM stdin;
+COPY public.drivers (id, name, country) FROM stdin;
 \.
 
 
@@ -648,13 +648,6 @@ CREATE UNIQUE INDEX driver_move_driver_date_idx ON public.driver_moves USING btr
 
 
 --
--- Name: driver_name_firstname_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX driver_name_firstname_idx ON public.drivers USING btree (name, firstname);
-
-
---
 -- Name: driver_standing_event_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -743,6 +736,13 @@ CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (n
 --
 
 CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (slug);
+
+
+--
+-- Name: uniq_e410c3075e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.drivers USING btree (name);
 
 
 --

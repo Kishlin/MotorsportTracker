@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 final class SearchDriverQueryHandler implements QueryHandler
 {
     public function __construct(
-        private SearchDriverViewer $driverViewer,
+        private readonly SearchDriverViewer $driverViewer,
     ) {
     }
 
@@ -21,6 +21,6 @@ final class SearchDriverQueryHandler implements QueryHandler
             throw new DriverNotFoundException();
         }
 
-        return SearchDriverResponse::fromScalars($driverId);
+        return SearchDriverResponse::fromObject($driverId);
     }
 }

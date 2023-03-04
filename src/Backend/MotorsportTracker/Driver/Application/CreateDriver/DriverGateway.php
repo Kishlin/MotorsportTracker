@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Driver\Domain\Gateway;
+namespace Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver;
 
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Driver;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Driver\Command\CreateDriverCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
@@ -12,43 +15,35 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class CreateDriverContext extends BackofficeContext
 {
-    private ?string $firstname = null;
-    private ?string $lastname  = null;
-    private ?string $country   = null;
+    private ?string $name    = null;
+    private ?string $country = null;
 
     private ?int $commandStatus = null;
 
-    /**
-     * @Given the driver :name exists
-     */
+    #[Given('the driver :name exists')]
     public function theDriverExists(string $name): void
     {
         self::database()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
     }
 
-    /**
-     * @When a client creates the driver :firstname :lastname for the country :country
-     */
-    public function aClientCreatesADriver(string $firstname, string $lastname, string $country): void
+    #[When('a client creates the driver :name for the country :country')]
+    public function aClientCreatesADriver(string $name, string $country): void
     {
         $this->commandStatus = null;
 
-        $this->country   = $this->countryNameToCode($country);
-        $this->firstname = $firstname;
-        $this->lastname  = $lastname;
+        $this->country = $this->countryNameToCode($country);
+        $this->name    = $name;
 
         $commandTester = new CommandTester(
             self::application()->find(CreateDriverCommandUsingSymfony::NAME),
         );
 
-        $commandTester->execute(['firstname' => $this->firstname, 'name' => $this->lastname, 'country' => $this->country]);
+        $commandTester->execute(['name' => $this->name, 'country' => $this->country]);
 
         $this->commandStatus = $commandTester->getStatusCode();
     }
 
-    /**
-     * @Then /^the driver is saved$/
-     */
+    #[Then('the driver is saved')]
     public function theDriverIsSaved(): void
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
@@ -57,12 +52,11 @@ final class CreateDriverContext extends BackofficeContext
 SELECT *
 FROM drivers d
 JOIN countries c on d.country = c.id
-WHERE d.firstname = :firstname
-AND d.name = :lastname
+WHERE d.name = :name
 AND c.code = :country
 SQL;
 
-        $params = ['lastname' => $this->lastname, 'firstname' => $this->firstname, 'country' => $this->country];
+        $params = ['name' => $this->name, 'country' => $this->country];
 
         Assert::assertNotNull(self::database()->fetchOne($query, $params));
     }

@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Do
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverViewer;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
 final class SearchDriverViewerUsingDoctrine extends CoreRepository implements SearchDriverViewer
@@ -16,13 +16,13 @@ final class SearchDriverViewerUsingDoctrine extends CoreRepository implements Se
      * @throws Exception
      * @throws NonUniqueResultException
      */
-    public function search(string $name): ?DriverId
+    public function search(string $name): ?UuidValueObject
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
         $qb->select('d.id')
             ->from('drivers', 'd')
-            ->where("LOWER(REPLACE(CONCAT(d.firstname, d.name), ' ', '')) LIKE LOWER(REPLACE(:name, ' ', ''))")
+            ->where("LOWER(REPLACE(d.name, ' ', '')) LIKE LOWER(REPLACE(:name, ' ', ''))")
             ->setParameter('name', "%{$name}%")
         ;
 
@@ -37,6 +37,6 @@ final class SearchDriverViewerUsingDoctrine extends CoreRepository implements Se
             throw new NonUniqueResultException();
         }
 
-        return new DriverId($result[0]['id']);
+        return new UuidValueObject($result[0]['id']);
     }
 }

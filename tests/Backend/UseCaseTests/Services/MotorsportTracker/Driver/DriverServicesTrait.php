@@ -40,7 +40,6 @@ trait DriverServicesTrait
             $this->createDriverCommandHandler = new CreateDriverCommandHandler(
                 $this->driverRepositorySpy(),
                 $this->uuidGenerator(),
-                $this->eventDispatcher(),
             );
         }
 

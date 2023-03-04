@@ -1,29 +1,23 @@
 maxVerstappen:
-  firstname: 'Max'
-  name: 'Verstappen'
+  name: 'Max Verstappen'
   countryId: '@country.country.netherlands'
 
 sergioPerez:
-  firstname: 'Sergio'
-  name: 'Perez'
+  name: 'Sergio Perez'
   countryId: '@country.country.mexico'
 
 pierreGasly:
-  firstname: 'Pierre'
-  name: 'Gasly'
+  name: 'Pierre Gasly'
   countryId: '@country.country.france'
 
 lewisHamilton:
-  firstname: 'Lewis'
-  name: 'Hamilton'
+  name: 'Lewis Hamilton'
   countryId: '@country.country.unitedKingdom'
 
 nicholasLatifi:
-  firstname: 'Nicholas'
-  name: 'Latifi'
+  name: 'Nicholas Latifi'
   countryId: '@country.country.canada'
 
 nyckDeVries:
-  firstname: 'Nick'
-  name: 'de Vries'
+  name: 'de Nick Vries'
   countryId: '@country.country.netherlands'

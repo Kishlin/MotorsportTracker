@@ -4,37 +4,30 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver;
 
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverCountryId;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverFirstname;
-use Kishlin\Backend\MotorsportTracker\Driver\Domain\ValueObject\DriverName;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CreateDriverCommand implements Command
 {
     private function __construct(
-        private string $name,
-        private string $firstname,
-        private string $countryId,
+        private readonly string $name,
+        private readonly string $countryId,
     ) {
     }
 
-    public function name(): DriverName
+    public function name(): StringValueObject
     {
-        return new DriverName($this->name);
+        return new StringValueObject($this->name);
     }
 
-    public function firstname(): DriverFirstname
+    public function countryId(): UuidValueObject
     {
-        return new DriverFirstname($this->firstname);
+        return new UuidValueObject($this->countryId);
     }
 
-    public function countryId(): DriverCountryId
+    public static function fromScalars(string $name, string $countryId): self
     {
-        return new DriverCountryId($this->countryId);
-    }
-
-    public static function fromScalars(string $name, string $firstname, string $countryCode): self
-    {
-        return new self($name, $firstname, $countryCode);
+        return new self($name, $countryId);
     }
 }

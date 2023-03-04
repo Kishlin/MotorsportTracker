@@ -26,7 +26,7 @@ final class RacerContext extends BackofficeContext
 SELECT r.id
 FROM racers r
 LEFT JOIN drivers d on r.driver = d.id
-WHERE CONCAT(d.firstname, ' ', d.name) = :driver
+WHERE d.name = :driver
 SQL;
 
         Assert::assertNotNull(self::database()->fetchOne($query, ['driver' => $driver]));
@@ -43,7 +43,7 @@ SQL;
 SELECT r.id
 FROM racers r
 LEFT JOIN drivers d on r.driver = d.id
-WHERE CONCAT(d.firstname, ' ', d.name) = :driver
+WHERE d.name = :driver
 AND r.startdate = :start
 AND r.enddate = :end
 AND r.car = :carId

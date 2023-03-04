@@ -48,7 +48,7 @@ final class RacerViewRepositorySpy implements RacersForDateTimeAndSeasonGateway
 
             $out[] = RacerPOPO::fromScalars(
                 $racer->id()->value(),
-                sprintf('%s %s', $driver->firstname()->value(), $driver->name()->value()),
+                $driver->name()->value(),
                 $car->number()->value(),
             );
         }
