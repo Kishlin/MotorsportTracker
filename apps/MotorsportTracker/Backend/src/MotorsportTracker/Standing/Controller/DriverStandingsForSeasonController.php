@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportTracker\Standing\Controller;
 
 use Kishlin\Apps\MotorsportTracker\Backend\Shared\Exception\ErrorJsonResponseBuilder;
-use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Doctrine\Repository\DriverStandingsViewsRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\DriverStandingsViewsRepositoryUsingDoctrine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

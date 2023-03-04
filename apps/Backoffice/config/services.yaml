@@ -13,11 +13,6 @@ parameters:
   kishlin.jwt.exp_claim_is_required: '%env(bool:JWT_EXP_CLAIM_IS_REQUIRED)%'
   kishlin.hostname: '%env(HOSTNAME)%'
 
-imports:
-  - { resource: ../../../src/Backend/MotorsportTracker/Shared/Infrastructure/DependencyInjection/Symfony/motorsport_tracker_services.yaml }
-  - { resource: ../../../src/Backend/Country/Infrastructure/DependencyInjection/Symfony/country_services.yaml }
-  - { resource: ../../../src/Backend/Shared/Infrastructure/DependencyInjection/Symfony/shared_services.yaml }
-
 services:
   _defaults:
     autoconfigure: true
@@ -25,6 +20,90 @@ services:
 
   Kishlin\Apps\Backoffice\:
     resource: '../src'
+
+  Kishlin\Backend\:
+    resource: '../../../src/Backend'
+    exclude:
+      - '../../../src/Backend/Shared'
+      - '../../../src/Backend/**/Application/*/*Exception.php'
+      - '../../../src/Backend/**/Infrastructure/Persistence/Fixtures'
+      - '../../../src/Backend/**/Infrastructure/Persistence/Doctrine/DbalTypes'
+      - '../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
+
+
+  ##> Monitoring
+
+  Kishlin\Backend\Shared\Infrastructure\Monitoring\:
+    resource: '../../../src/Backend/Shared/Infrastructure/Monitoring'
+    bind:
+      $appName: '%kishlin.app.name%'
+
+
+  ##> Messaging
+
+  Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Command\InMemoryCommandBusUsingSymfony'
+    arguments:
+      - '@symfony.messenger.bus.command'
+    tags:
+      - { name: messenger.bus }
+
+  Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Event\InMemoryEventDispatcherUsingSymfony'
+    arguments:
+      - '@symfony.messenger.bus.event'
+    tags:
+      - { name: messenger.bus }
+
+  Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Query\InMemoryQueryBusUsingSymfony'
+    arguments:
+      - '@symfony.messenger.bus.query'
+    tags:
+      - { name: messenger.bus }
+
+
+  ##> Time
+
+  Kishlin\Backend\Shared\Domain\Time\Clock:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Time\SystemClock'
+
+
+  ##> Randomness
+
+  Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey:
+  Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator:
+    alias: 'Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey'
+
+  Kishlin\Backend\Shared\Domain\Randomness\GenerateUuidCommandUsingSymfony:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Randomness\GenerateUuidCommandUsingSymfony'
+    tags: ['console.command']
+
+
+  ##> Persistence
+
+  kishlin.app.infrastructure.entity_manager.core:
+    class: Doctrine\ORM\EntityManagerInterface
+    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+    arguments:
+      $parameters:
+        url: '%kishlin.database.core.url%'
+      $database: 'core'
+      $environment: '%kishlin.app.environment%'
+    public: true
+
+  kishlin.app.infrastructure.entity_manager.cache:
+    class: Doctrine\ORM\EntityManagerInterface
+    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+    arguments:
+      $parameters:
+        url: '%kishlin.database.cache.url%'
+      $database: 'cache'
+      $environment: '%kishlin.app.environment%'
+    public: true
+
+  Doctrine\ORM\EntityManagerInterface: '@kishlin.app.infrastructure.entity_manager.core'
+
 
   _instanceof:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
@@ -35,3 +114,44 @@ services:
 
     Symfony\Component\Console\Command\Command:
       tags: ['console.command']
+
+    Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber:
+      tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:
+      tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
+      tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository:
+      bind:
+        $entityManager: '@kishlin.app.infrastructure.entity_manager.cache'
+
+    Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
+      tags: ['kishlin.shared.infrastructure.monitoring.probe']
+
+
+##> Make some services public to override them in tests
+
+when@test:
+  services:
+
+    Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus:
+      public: true
+
+    Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher:
+      public: true
+
+    Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus:
+      public: true
+
+    Kishlin\Backend\Shared\Domain\Time\Clock:
+      class: 'Kishlin\Backend\Shared\Infrastructure\Time\FrozenClock'
+
+
+when@acceptance:
+  services:
+    Kishlin\Backend\Shared\Domain\Time\Clock:
+      class: 'Kishlin\Backend\Shared\Infrastructure\Time\FrozenClock'
+      public: true

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportTracker\Calendar\Controller;
 
-use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\ViewCalendarQuery;
-use Kishlin\Backend\MotorsportTracker\Calendar\Application\ViewCalendar\ViewCalendarResponse;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarQuery;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarResponse;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

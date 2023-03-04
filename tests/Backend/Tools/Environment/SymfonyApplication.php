@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\Tools\Environment;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
+use Kishlin\Backend\MotorsportCache\Shared\Infrastructure\Persistence\Fixtures\MotorsportCacheFixtureConverterConfigurator;
 use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingDoctrine;
@@ -71,6 +72,7 @@ final class SymfonyApplication
             $fixtureSaver = new FixtureSaverUsingDoctrine($entityManager);
 
             CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
+            MotorsportCacheFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
             MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
 
             $fixtureLoader = new FixtureLoader(new UuidGeneratorUsingRamsey(), $fixtureSaver, '/app/etc/Fixtures/' . ucfirst($database));

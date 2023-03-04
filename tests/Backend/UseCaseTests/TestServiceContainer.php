@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests;
 
 use Kishlin\Tests\Backend\UseCaseTests\Services\Country\CountryServicesTrait;
-use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Calendar\CalendarServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar\CalendarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\CarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Car\DriverMoveServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
@@ -17,7 +17,6 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\SearchEv
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\StepTypeServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Racer\RacerServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Result\ResultServicesTrait;
-use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Standing\StandingServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team\TeamPresentationServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team\TeamServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\venue\VenueServicesTrait;
@@ -43,7 +42,6 @@ final class TestServiceContainer
     use ResultServicesTrait;
     use SearchEventServicesTrait;
     use SearchEventStepServicesTrait;
-    use StandingServicesTrait;
     use StepTypeServicesTrait;
     use TeamPresentationServicesTrait;
     use TeamServicesTrait;

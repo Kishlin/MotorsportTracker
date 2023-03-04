@@ -6,20 +6,16 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\ViewStandingsForSeasonContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ViewChampionshipsContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\StandingRefreshmentContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SearchSeasonContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\DriverMoveRecordingContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Calendar\CalendarViewContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\CarRegistrationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\SearchDriverContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Calendar\CalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\SearchVenueContext
@@ -31,12 +27,13 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Car\SearchCarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Racer\RacerContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\CalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\Shared\FixturesContext
     api_tests:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Championship\SeasonContext
-        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Calendar\CalendarContext
+        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Calendar\CalendarContext
       filters:
         tags: '@api'
     backoffice_tests:
@@ -46,7 +43,6 @@ default:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Car\RegisterDriverMoveContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Calendar\CalendarViewContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventStepContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateStepTypeContext

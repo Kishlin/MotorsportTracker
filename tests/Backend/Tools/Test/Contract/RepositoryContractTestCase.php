@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
@@ -71,6 +69,8 @@ abstract class RepositoryContractTestCase extends TestCase
 
     abstract protected static function fixturesFolder(): string;
 
+    abstract protected static function configureFixtureSaver(FixtureSaver $fixtureSaver): void;
+
     abstract protected static function createEntityManager(): EntityManagerInterface;
 
     protected static function uuid(): string
@@ -128,8 +128,7 @@ abstract class RepositoryContractTestCase extends TestCase
         if (null === self::$fixtureSaver) {
             self::$fixtureSaver = new FixtureSaverUsingDoctrine(self::entityManager());
 
-            CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters(self::$fixtureSaver);
-            MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters(self::$fixtureSaver);
+            static::configureFixtureSaver(self::$fixtureSaver);
         }
 
         return self::$fixtureSaver;

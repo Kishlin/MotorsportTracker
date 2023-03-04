@@ -29,7 +29,7 @@ use RuntimeException;
 final class TestCommandBus implements CommandBus
 {
     public function __construct(
-        private TestServiceContainer $testServiceContainer
+        private readonly TestServiceContainer $testServiceContainer
     ) {
     }
 

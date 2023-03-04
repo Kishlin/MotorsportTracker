@@ -7,17 +7,14 @@ Feature: It can create EventSteps
     And the event "Dutch Grand Prix 2022" exists
     When a client creates the "race" step for the event "Dutch Grand Prix 2022" at "2022-09-04 13:00:00"
     Then the event step is saved
-    And the event step calendar view is created for "Dutch GP" "race" on "2022-09-04 13:00:00" for "formula1"
 
   Scenario: It cannot save two event steps of the same type
     Given the eventStep "Dutch Grand Prix 2022 Race" exists
     When a client creates the "race" step for the event "Dutch Grand Prix 2022" at "2022-09-04 15:00:00"
     Then the event step creation for the same type is declined
-    And the event step calendar view was not created
 
   Scenario: It cannot save two event steps at the same time
     Given the stepType "qualification" exists
     And the eventStep "Dutch Grand Prix 2022 Race" exists
     When a client creates the "qualification" step for the event "Dutch Grand Prix 2022" at "2022-09-04 13:00:00"
     Then the event step creation for the same time is declined
-    And the event step calendar view was not created

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Persistence\Fixtures;
 
 use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
+use Kishlin\Backend\MotorsportCache\Shared\Infrastructure\Persistence\Fixtures\MotorsportCacheFixtureConverterConfigurator;
 use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
@@ -55,6 +56,7 @@ trait FixturesServicesTrait
             $this->fixtureSaver = new FixturesSaverForUseCaseTests($this->serviceContainer());
 
             CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($this->fixtureSaver);
+            MotorsportCacheFixtureConverterConfigurator::populateFixtureSaverWithConverters($this->fixtureSaver);
             MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($this->fixtureSaver);
         }
 
