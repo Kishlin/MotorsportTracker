@@ -154,7 +154,7 @@ COMMENT ON COLUMN public.events.end_date IS '(DC2Type:nullable_date_time_value_o
 
 CREATE TABLE public.seasons (
     id character varying(36) NOT NULL,
-    championship character varying(36) NOT NULL,
+    championship character varying(255) NOT NULL,
     year integer NOT NULL
 );
 
@@ -216,8 +216,8 @@ ALTER TABLE public.teams OWNER TO motorsporttracker;
 CREATE TABLE public.venues (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    country character varying(36) NOT NULL,
-    slug character varying(255) NOT NULL
+    slug character varying(255) NOT NULL,
+    country character varying(36) NOT NULL
 );
 
 
@@ -252,30 +252,7 @@ COPY public.countries (id, code, name) FROM stdin;
 --
 
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
-Kishlin\\Migrations\\Core\\Version20220408213133	2023-03-03 15:11:04	17
-Kishlin\\Migrations\\Core\\Version20220409181131	2023-03-03 15:11:04	5
-Kishlin\\Migrations\\Core\\Version20220409185635	2023-03-03 15:11:04	1
-Kishlin\\Migrations\\Core\\Version20220610215445	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20220611002012	2023-03-03 15:11:04	1
-Kishlin\\Migrations\\Core\\Version20220611170308	2023-03-03 15:11:04	3
-Kishlin\\Migrations\\Core\\Version20220616000809	2023-03-03 15:11:04	9
-Kishlin\\Migrations\\Core\\Version20220616124606	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20220713181313	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20220713183949	2023-03-03 15:11:04	5
-Kishlin\\Migrations\\Core\\Version20220728125835	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20221023043009	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20221105182411	2023-03-03 15:11:04	6
-Kishlin\\Migrations\\Core\\Version20221120040214	2023-03-03 15:11:04	0
-Kishlin\\Migrations\\Core\\Version20221120065527	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20221120071036	2023-03-03 15:11:04	0
-Kishlin\\Migrations\\Core\\Version20221225180107	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20230222232032	2023-03-03 15:11:04	4
-Kishlin\\Migrations\\Core\\Version20230303233637	2023-03-03 23:38:29	17
-Kishlin\\Migrations\\Core\\Version20230304002928	2023-03-04 00:30:32	22
-Kishlin\\Migrations\\Core\\Version20230304012938	2023-03-04 01:31:47	17
-Kishlin\\Migrations\\Core\\Version20230304173646	2023-03-04 17:45:11	15
-Kishlin\\Migrations\\Core\\Version20230304213122	2023-03-04 21:33:59	21
-Kishlin\\Migrations\\Core\\Version20230304231912	2023-03-04 23:20:58	12
+Kishlin\\Migrations\\Core\\Version0	2023-03-04 23:29:52	55
 \.
 
 
@@ -339,7 +316,7 @@ COPY public.teams (id, name, image, country) FROM stdin;
 -- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.venues (id, name, country, slug) FROM stdin;
+COPY public.venues (id, name, slug, country) FROM stdin;
 \.
 
 
@@ -503,6 +480,13 @@ CREATE UNIQUE INDEX uniq_5387574a989d9b62 ON public.events USING btree (slug);
 
 
 --
+-- Name: uniq_5d66ebad5e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_5d66ebad5e237e06 ON public.countries USING btree (name);
+
+
+--
 -- Name: uniq_5d66ebad77153098; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -542,46 +526,6 @@ CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (s
 --
 
 CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.drivers USING btree (name);
-
-
---
--- Name: seasons fk_championship; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.seasons
-    ADD CONSTRAINT fk_championship FOREIGN KEY (championship) REFERENCES public.championships(id);
-
-
---
--- Name: drivers fk_driver_country; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.drivers
-    ADD CONSTRAINT fk_driver_country FOREIGN KEY (country) REFERENCES public.countries(id);
-
-
---
--- Name: event_steps fk_event_steps_event; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.event_steps
-    ADD CONSTRAINT fk_event_steps_event FOREIGN KEY (event) REFERENCES public.events(id);
-
-
---
--- Name: event_steps fk_event_steps_type; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.event_steps
-    ADD CONSTRAINT fk_event_steps_type FOREIGN KEY (type) REFERENCES public.step_types(id);
-
-
---
--- Name: teams fk_team_country; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.teams
-    ADD CONSTRAINT fk_team_country FOREIGN KEY (country) REFERENCES public.countries(id);
 
 
 --
