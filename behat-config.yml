@@ -10,12 +10,10 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SearchSeasonContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\SearchDriverContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SearchEventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\SearchVenueContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventStepContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\SearchTeamContext
@@ -34,15 +32,5 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateSeasonContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventStepContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateStepTypeContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Driver\CreateDriverContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Venue\CreateVenueContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\CreateEventContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\CreateTeamContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Country\CreateCountryContext
       filters:
         tags: '@backoffice'

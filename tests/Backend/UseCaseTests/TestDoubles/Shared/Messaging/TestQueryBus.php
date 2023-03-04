@@ -9,8 +9,6 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalend
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQuery;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsQuery;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
-use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventQuery;
-use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEventStepIdAndDateTime\SearchEventStepIdAndDateTimeQuery;
 use Kishlin\Backend\MotorsportTracker\Team\Application\SearchTeam\SearchTeamQuery;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
@@ -41,14 +39,6 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof SearchSeasonQuery) {
             return $this->testServiceContainer->searchSeasonQueryHandler()($query);
-        }
-
-        if ($query instanceof SearchEventQuery) {
-            return $this->testServiceContainer->searchEventQueryHandler()($query);
-        }
-
-        if ($query instanceof SearchEventStepIdAndDateTimeQuery) {
-            return $this->testServiceContainer->searchEventStepIdAndDateTimeQueryHandler()($query);
         }
 
         if ($query instanceof SearchDriverQuery) {

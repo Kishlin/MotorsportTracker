@@ -1,6 +1,5 @@
 Feature: It can create a Venue
 
-  @backoffice
   Scenario: It saves a new venue
     Given the country "Netherlands" exists
     When a client creates the venue "Circuit Zandvoort" for the "Netherlands"

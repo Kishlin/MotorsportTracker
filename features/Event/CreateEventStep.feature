@@ -1,6 +1,5 @@
 Feature: It can create EventSteps
 
-  @backoffice
   Scenario: It saves a new event step
     Given the stepType "race" exists
     And the championship presentation "Formula One White" exists

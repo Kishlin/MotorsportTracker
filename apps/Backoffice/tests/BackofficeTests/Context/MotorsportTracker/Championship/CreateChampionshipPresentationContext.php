@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use DateInterval;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command\AddChampionshipPresentationCommand;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
@@ -27,10 +30,18 @@ SQL;
     private ?int $commandStatus = null;
 
     /**
-     * @Given the championship presentation :championshipPresentation exists
-     *
      * @throws Throwable
      */
+    #[Given('the championship :championship exists')]
+    public function theChampionshipExists(string $championship): void
+    {
+        self::database()->loadFixture("motorsport.championship.championship.{$this->format($championship)}");
+    }
+
+    /**
+     * @throws Throwable
+     */
+    #[Given('the championship presentation :championshipPresentation exists')]
     public function theChampionshipPresentationExists(string $championshipPresentation): void
     {
         self::database()->loadFixture(
@@ -38,9 +49,7 @@ SQL;
         );
     }
 
-    /**
-     * @When a client creates a championship presentation for :championship with icon :icon and color :color
-     */
+    #[When('a client creates a championship presentation for :championship with icon :icon and color :color')]
     public function aClientCreatesAChampionshipPresentation(string $championship, string $icon, string $color): void
     {
         $this->commandStatus = null;
@@ -60,9 +69,7 @@ SQL;
         $this->commandStatus = $commandTester->getStatusCode();
     }
 
-    /**
-     * @Then /^the championship presentation is saved$/
-     */
+    #[Then('the championship presentation is saved')]
     public function theChampionshipPresentationIsSaved(): void
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
@@ -77,9 +84,7 @@ SQL;
         Assert::assertSame($this->color, $championshipPresentationData[0]['color']);
     }
 
-    /**
-     * @Then the latest championship presentation for :championship has icon :icon and color :color
-     */
+    #[Then('the latest championship presentation for :championship has icon :icon and color :color')]
     public function theLatestChampionshipPresentationIs(string $championship, string $icon, string $color): void
     {
         $championshipId = self::database()->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
