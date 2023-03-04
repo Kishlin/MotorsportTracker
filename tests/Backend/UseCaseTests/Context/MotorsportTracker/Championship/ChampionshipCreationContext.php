@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\ChampionshipCreationFailureException;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class ChampionshipCreationContext extends MotorsportTrackerContext
 {
-    private ?ChampionshipId $championshipId = null;
-    private ?Throwable $thrownException     = null;
+    private ?UuidValueObject $championshipId = null;
+    private ?Throwable $thrownException      = null;
 
     public function clearGatewaySpies(): void
     {
@@ -23,28 +25,25 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given the championship :name exists
-     *
      * @throws Exception
      */
+    #[Given('the championship :name exists')]
     public function theChampionshipExists(string $name): void
     {
         self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
     }
 
-    /**
-     * @When a client creates the championship :name with slug :slug
-     * @When /^a client creates a championship with the same name$/
-     */
+    #[When('a client creates a championship with the same name')]
+    #[When('a client creates the championship :name with slug :slug')]
     public function aClientCreatesTheChampionship(string $name = 'Formula On', string $slug = 'formula1'): void
     {
         $this->championshipId  = null;
         $this->thrownException = null;
 
         try {
-            /** @var ChampionshipId $championshipId */
+            /** @var UuidValueObject $championshipId */
             $championshipId = self::container()->commandBus()->execute(
-                CreateChampionshipCommand::fromScalars($name, $slug),
+                CreateChampionshipIfNotExistsCommand::fromScalars($name, $slug),
             );
 
             $this->championshipId = $championshipId;
@@ -53,21 +52,12 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then /^the championship is saved$/
-     */
+    #[Then('the championship is saved')]
+    #[Then('the championship id is returned')]
     public function theChampionshipIsSaved(): void
     {
+        Assert::assertNull($this->thrownException);
         Assert::assertNotNull($this->championshipId);
         Assert::assertTrue(self::container()->championshipRepositorySpy()->has($this->championshipId));
-    }
-
-    /**
-     * @Then /^the championship creation is declined$/
-     */
-    public function theChampionshipCreationIsDeclined(): void
-    {
-        Assert::assertNotNull($this->thrownException);
-        Assert::assertInstanceOf(ChampionshipCreationFailureException::class, $this->thrownException);
     }
 }

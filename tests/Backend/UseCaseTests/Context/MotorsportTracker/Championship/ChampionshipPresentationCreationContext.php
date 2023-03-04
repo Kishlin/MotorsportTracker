@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
@@ -76,7 +76,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
         $championshipId = $this->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
 
         $championshipPresentation = self::container()->championshipPresentationRepositorySpy()->latest(
-            new ChampionshipId($championshipId),
+            new UuidValueObject($championshipId),
         );
 
         Assert::assertNotNull($championshipPresentation);

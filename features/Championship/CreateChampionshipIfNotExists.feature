@@ -9,4 +9,4 @@ Feature: It can create Championships
   Scenario: It cannot duplicate championship
     Given the championship "Formula One" exists
     When a client creates a championship with the same name
-    Then the championship creation is declined
+    Then the championship id is returned

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,7 +26,7 @@ final class AddChampionshipCommand extends SymfonyCommand
     private const QUESTION_SLUG = "Please enter a slug for the championship:\n";
 
     public function __construct(
-        private CommandBus $commandBus,
+        private readonly CommandBus $commandBus,
     ) {
         parent::__construct();
     }
@@ -49,8 +49,8 @@ final class AddChampionshipCommand extends SymfonyCommand
         $slug = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_SLUG, self::QUESTION_SLUG);
 
         try {
-            /** @var ChampionshipId $uuid */
-            $uuid = $this->commandBus->execute(CreateChampionshipCommand::fromScalars($name, $slug));
+            /** @var UuidValueObject $uuid */
+            $uuid = $this->commandBus->execute(CreateChampionshipIfNotExistsCommand::fromScalars($name, $slug));
         } catch (Throwable) {
             $ui->error('A Championship with that name and/or slug already exists.');
 

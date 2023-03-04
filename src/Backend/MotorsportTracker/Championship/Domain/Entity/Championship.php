@@ -4,49 +4,43 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipName;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipSlug;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Championship extends AggregateRoot
 {
     private function __construct(
-        private ChampionshipId $id,
-        private ChampionshipName $name,
-        private ChampionshipSlug $slug,
+        private readonly UuidValueObject $id,
+        private readonly StringValueObject $name,
+        private readonly StringValueObject $slug,
     ) {
     }
 
-    public static function create(ChampionshipId $id, ChampionshipName $name, ChampionshipSlug $slug): self
+    public static function create(UuidValueObject $id, StringValueObject $name, StringValueObject $slug): self
     {
-        $championship = new self($id, $name, $slug);
-
-        $championship->record(new ChampionshipCreatedDomainEvent($id));
-
-        return $championship;
+        return new self($id, $name, $slug);
     }
 
     /**
      * @internal only use to get a test object
      */
-    public static function instance(ChampionshipId $id, ChampionshipName $name, ChampionshipSlug $slug): self
+    public static function instance(UuidValueObject $id, StringValueObject $name, StringValueObject $slug): self
     {
         return new self($id, $name, $slug);
     }
 
-    public function id(): ChampionshipId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function name(): ChampionshipName
+    public function name(): StringValueObject
     {
         return $this->name;
     }
 
-    public function slug(): ChampionshipSlug
+    public function slug(): StringValueObject
     {
         return $this->slug;
     }

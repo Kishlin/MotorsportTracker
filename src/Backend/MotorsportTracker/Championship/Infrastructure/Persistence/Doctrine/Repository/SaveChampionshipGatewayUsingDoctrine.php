@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SaveChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class ChampionshipGatewayUsingDoctrine extends CoreRepository implements ChampionshipGateway
+final class SaveChampionshipGatewayUsingDoctrine extends CoreRepository implements SaveChampionshipGateway
 {
     public function save(Championship $championship): void
     {

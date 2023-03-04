@@ -8,7 +8,7 @@ use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RecordDriverMove\RecordDriverMoveCommand;
 use Kishlin\Backend\MotorsportTracker\Car\Application\RegisterCar\RegisterCarCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommand;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
@@ -42,7 +42,7 @@ final class TestCommandBus implements CommandBus
             return $this->testServiceContainer->createCountryIfNotExistsCommandHandler()($command);
         }
 
-        if ($command instanceof CreateChampionshipCommand) {
+        if ($command instanceof CreateChampionshipIfNotExistsCommand) {
             return $this->testServiceContainer->createChampionshipCommandHandler()($command);
         }
 

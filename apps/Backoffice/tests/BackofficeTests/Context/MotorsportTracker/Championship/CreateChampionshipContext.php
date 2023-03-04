@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
+use Exception;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command\AddChampionshipCommand;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
@@ -18,17 +22,16 @@ final class CreateChampionshipContext extends BackofficeContext
     private ?int $commandStatus = null;
 
     /**
-     * @Given the championship :name exists
+     * @throws Exception
      */
+    #[Given('the championship :name exists')]
     public function theChampionshipExists(string $name): void
     {
         self::database()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
     }
 
-    /**
-     * @When a client creates the championship :name with slug :slug
-     * @When a client creates a championship with the same name
-     */
+    #[When('a client creates a championship with the same name')]
+    #[When('a client creates the championship :name with slug :slug')]
     public function aClientCreatesTheChampionshipWithSlug(string $name = 'Formula One', string $slug = 'formula1'): void
     {
         $this->name = $name;
@@ -45,9 +48,8 @@ final class CreateChampionshipContext extends BackofficeContext
         $this->commandStatus = $commandTester->getStatusCode();
     }
 
-    /**
-     * @Then /^the championship is saved$/
-     */
+    #[Then('the championship is saved')]
+    #[Then('the championship id is returned')]
     public function theChampionshipIsSaved(): void
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
@@ -59,15 +61,5 @@ final class CreateChampionshipContext extends BackofficeContext
 
         Assert::assertSame($this->name, $championshipData[0]['name']);
         Assert::assertSame($this->slug, $championshipData[0]['slug']);
-    }
-
-    /**
-     * @Then the championship creation is declined
-     */
-    public function theChampionshipCreationIsDeclined(): void
-    {
-        Assert::assertSame(Command::FAILURE, $this->commandStatus);
-
-        Assert::assertCount(1, self::database()->fetchAllAssociative('SELECT id FROM championships;') ?? []);
     }
 }

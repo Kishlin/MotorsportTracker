@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship;
 
 use Exception;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SaveChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ChampionshipPOPO;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\ChampionshipGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -19,7 +20,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Championship get(UuidValueObject $id)
  * @method Championship      safeGet(UuidValueObject $id)
  */
-final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements ChampionshipGateway, ViewAllChampionshipsGateway
+final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements SaveChampionshipGateway, SearchChampionshipGateway, ViewAllChampionshipsGateway
 {
     /**
      * @throws Exception
@@ -31,6 +32,17 @@ final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements C
         }
 
         $this->objects[$championship->id()->value()] = $championship;
+    }
+
+    public function findBySlug(string $slug): ?UuidValueObject
+    {
+        foreach ($this->objects as $championship) {
+            if ($slug === $championship->slug()->value()) {
+                return $championship->id();
+            }
+        }
+
+        return null;
     }
 
     public function viewAllChampionships(): array

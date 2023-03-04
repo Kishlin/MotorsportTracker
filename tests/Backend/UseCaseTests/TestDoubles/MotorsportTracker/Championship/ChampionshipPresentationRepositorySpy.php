@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Champ
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\SaveChampionshipPresentationGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -24,7 +23,7 @@ final class ChampionshipPresentationRepositorySpy extends AbstractRepositorySpy 
         $this->add($championshipPresentation);
     }
 
-    public function latest(ChampionshipId $championshipId): ?ChampionshipPresentation
+    public function latest(UuidValueObject $championshipId): ?ChampionshipPresentation
     {
         /** @var ?ChampionshipPresentation $latest */
         $latest = null;

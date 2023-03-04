@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionship\CreateChampionshipCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeason\CreateSeasonCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\SearchSeason\SearchSeasonQueryHandler;
@@ -26,7 +26,7 @@ trait ChampionshipServicesTrait
 
     private ?ChampionshipPresentationRepositorySpy $championshipPresentationRepositorySpy = null;
 
-    private ?CreateChampionshipCommandHandler $createChampionshipCommandHandler                         = null;
+    private ?CreateChampionshipIfNotExistsCommandHandler $createChampionshipCommandHandler              = null;
     private ?CreateChampionshipPresentationCommandHandler $createChampionshipPresentationCommandHandler = null;
     private ?CreateSeasonCommandHandler $createSeasonCommandHandler                                     = null;
     private ?ViewAllChampionshipsQueryHandler $viewAllChampionshipsQueryHandler                         = null;
@@ -77,13 +77,13 @@ trait ChampionshipServicesTrait
         return $this->searchSeasonViewerRepositorySpy;
     }
 
-    public function createChampionshipCommandHandler(): CreateChampionshipCommandHandler
+    public function createChampionshipCommandHandler(): CreateChampionshipIfNotExistsCommandHandler
     {
         if (null === $this->createChampionshipCommandHandler) {
-            $this->createChampionshipCommandHandler = new CreateChampionshipCommandHandler(
-                $this->uuidGenerator(),
+            $this->createChampionshipCommandHandler = new CreateChampionshipIfNotExistsCommandHandler(
                 $this->championshipRepositorySpy(),
-                $this->eventDispatcher(),
+                $this->championshipRepositorySpy(),
+                $this->uuidGenerator(),
             );
         }
 
