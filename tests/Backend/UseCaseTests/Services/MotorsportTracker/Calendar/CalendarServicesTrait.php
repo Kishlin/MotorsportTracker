@@ -17,7 +17,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championshi
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventStepRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\StepTypeRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\VenueRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\SaveVenueRepositorySpy;
 
 trait CalendarServicesTrait
 {
@@ -41,7 +41,7 @@ trait CalendarServicesTrait
 
     abstract public function stepTypeRepositorySpy(): StepTypeRepositorySpy;
 
-    abstract public function venueRepositorySpy(): VenueRepositorySpy;
+    abstract public function venueRepositorySpy(): SaveVenueRepositorySpy;
 
     abstract public function seasonRepositorySpy(): SeasonRepositorySpy;
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
-use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueGateway;
-use Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue\SearchVenueViewer;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
+use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SaveVenueGateway;
+use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -19,7 +19,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Venue get(UuidValueObject $id)
  * @method Venue      safeGet(UuidValueObject $id)
  */
-final class VenueRepositorySpy extends AbstractRepositorySpy implements VenueGateway, SearchVenueViewer
+final class SaveVenueRepositorySpy extends AbstractRepositorySpy implements SaveVenueGateway, SearchVenueGateway
 {
     public function __construct(
         private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue;
+namespace Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway;
 
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-interface SearchVenueViewer
+interface SearchVenueGateway
 {
     public function search(string $slug): ?UuidValueObject;
 }

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Venue\Application\SearchVenue;
 
+use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 
 final class SearchVenueQueryHandler implements QueryHandler
 {
     public function __construct(
-        private readonly SearchVenueViewer $viewer,
+        private readonly SearchVenueGateway $viewer,
     ) {
     }
 

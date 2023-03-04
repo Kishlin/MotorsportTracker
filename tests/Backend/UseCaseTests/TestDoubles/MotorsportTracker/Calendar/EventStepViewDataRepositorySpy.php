@@ -13,7 +13,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championshi
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventStepRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\StepTypeRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\VenueRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\SaveVenueRepositorySpy;
 
 final class EventStepViewDataRepositorySpy implements EventStepViewDataGateway
 {
@@ -21,7 +21,7 @@ final class EventStepViewDataRepositorySpy implements EventStepViewDataGateway
         private readonly EventStepRepositorySpy $eventStepRepositorySpy,
         private readonly EventRepositorySpy $eventRepositorySpy,
         private readonly StepTypeRepositorySpy $stepTypeRepositorySpy,
-        private readonly VenueRepositorySpy $venueRepositorySpy,
+        private readonly SaveVenueRepositorySpy $venueRepositorySpy,
         private readonly SeasonRepositorySpy $seasonRepositorySpy,
         private readonly ChampionshipRepositorySpy $championshipRepositorySpy,
         private readonly ChampionshipPresentationRepositorySpy $championshipPresentationRepositorySpy,

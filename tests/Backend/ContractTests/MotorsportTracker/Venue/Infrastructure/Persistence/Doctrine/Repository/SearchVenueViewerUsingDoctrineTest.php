@@ -6,12 +6,12 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Venue\Infrastruc
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\SearchVenueViewerUsingDoctrine;
+use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\SearchVenueGatewayUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\SearchVenueViewerUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doctrine\Repository\SearchVenueGatewayUsingDoctrine
  */
 final class SearchVenueViewerUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
@@ -23,7 +23,7 @@ final class SearchVenueViewerUsingDoctrineTest extends CoreRepositoryContractTes
     {
         $this->loadFixture('motorsport.venue.venue.zandvoort');
 
-        $repository = new SearchVenueViewerUsingDoctrine(self::entityManager());
+        $repository = new SearchVenueGatewayUsingDoctrine(self::entityManager());
 
         self::assertSame(
             $this->fixtureId('motorsport.venue.venue.zandvoort'),
@@ -37,7 +37,7 @@ final class SearchVenueViewerUsingDoctrineTest extends CoreRepositoryContractTes
      */
     public function testItIsNullWhenThereIsNoResult(): void
     {
-        $repository = new SearchVenueViewerUsingDoctrine(self::entityManager());
+        $repository = new SearchVenueGatewayUsingDoctrine(self::entityManager());
 
         self::assertNull($repository->search('circuit-zandvoort'));
     }
