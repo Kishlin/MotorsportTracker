@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\SeasonHasEventWithIndexOrVenueException;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\EventCreationFailureException;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class EventContext extends MotorsportTrackerContext
 {
-    private ?EventId $eventId           = null;
+    private ?UuidValueObject $eventId   = null;
     private ?Throwable $thrownException = null;
 
     public function clearGatewaySpies(): void
@@ -23,20 +26,17 @@ final class EventContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given the event :event exists
-     *
      * @throws Exception
      */
+    #[Given('the event :event exists')]
     public function theEventExists(string $event): void
     {
         self::container()->coreFixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
-    /**
-     * @When a client creates the event :label of index :index for the season :season and venue :venue
-     * @When a client creates an event for the same season and index with label :label
-     * @When a client creates an event for the same season and label with index :index
-     */
+    #[When('a client creates the event :label of index :index for the season :season and venue :venue')]
+    #[When('a client creates an event for the same season and index with label :label')]
+    #[When('a client creates an event for the same season and label with index :index')]
     public function aClientCreatesAnEvent(
         string $label = 'Dutch GP',
         int $index = 14,
@@ -50,9 +50,9 @@ final class EventContext extends MotorsportTrackerContext
             $seasonId = $this->fixtureId("motorsport.championship.season.{$this->format($season)}");
             $venueId  = $this->fixtureId("motorsport.venue.venue.{$this->format($venue)}");
 
-            /** @var EventId $eventId */
+            /** @var UuidValueObject $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $label),
+                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $label, $label, $label, null, null),
             );
 
             $this->eventId = $eventId;
@@ -61,22 +61,19 @@ final class EventContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then /^the event is saved$/
-     */
+    #[Then('the event is saved')]
     public function theEventIsSaved(): void
     {
         Assert::assertNotNull($this->eventId);
+        Assert::assertNull($this->thrownException);
         Assert::assertTrue(self::container()->eventRepositorySpy()->has($this->eventId));
     }
 
-    /**
-     * @Then /^the event creation with the same index is declined$/
-     * @Then /^the event creation with the same label is declined$/
-     */
+    #[Then('the event creation with the same index is declined')]
+    #[Then('the event creation with the same label is declined')]
     public function theEventCreationIsDeclined(): void
     {
         Assert::assertNull($this->eventId);
-        Assert::assertInstanceOf(SeasonHasEventWithIndexOrVenueException::class, $this->thrownException);
+        Assert::assertInstanceOf(EventCreationFailureException::class, $this->thrownException);
     }
 }

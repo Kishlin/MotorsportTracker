@@ -38,7 +38,7 @@ final class CreateEventStepContext extends BackofficeContext
         $eventId = self::database()->fixtureId("motorsport.event.event.{$this->format($event)}");
 
         $query = <<<'SQL'
-SELECT e.label as event, c.name as championship, s.year
+SELECT e.name as event, c.name as championship, s.year
 FROM events e
 LEFT JOIN seasons s on e.season = s.id
 LEFT JOIN championships c on s.championship = c.id
@@ -87,7 +87,7 @@ LEFT JOIN seasons s on e.season = s.id
 LEFT JOIN championships c on s.championship = c.id
 WHERE es.date_time = :dateTime
 AND c.name = :championship
-AND e.label = :event
+AND e.name = :event
 AND es.type = :type
 AND s.year = :year
 SQL;

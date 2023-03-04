@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Apps\Backoffice\MotorsportTracker\Event\Command\CreateEventCommandUsingSymfony;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
@@ -14,24 +17,20 @@ final class CreateEventContext extends BackofficeContext
 {
     private ?string $championship = null;
     private ?int $year            = null;
-    private ?string $label        = null;
+    private ?string $name         = null;
     private ?int $index           = null;
     private ?string $venue        = null;
 
     private ?int $commandStatus = null;
 
-    /**
-     * @Given the event :event exists
-     */
+    #[Given('the event :event exists')]
     public function theEventExists(string $event): void
     {
         self::database()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
-    /**
-     * @When a client creates the event :label of index :index for the season :season and venue :venue
-     */
-    public function aClientCreatesAnEvent(string $label, int $index, string $season, string $venue): void
+    #[When('a client creates the event :name of index :index for the season :season and venue :venue')]
+    public function aClientCreatesAnEvent(string $name, int $index, string $season, string $venue): void
     {
         $this->commandStatus = null;
 
@@ -39,7 +38,7 @@ final class CreateEventContext extends BackofficeContext
 
         $this->year         = (int) $matches[2];
         $this->championship = $matches[1];
-        $this->label        = $label;
+        $this->name         = $name;
         $this->index        = $index;
         $this->venue        = $venue;
 
@@ -52,15 +51,17 @@ final class CreateEventContext extends BackofficeContext
             'year'         => $this->year,
             'venue'        => $this->venue,
             'index'        => $this->index,
-            'label'        => $this->label,
+            'slug'         => $this->name,
+            'name'         => $this->name,
+            'short-name'   => $this->name,
+            'start-date'   => '2022-11-22 00:00:00',
+            'end-date'     => '2022-11-22 01:00:00',
         ]);
 
         $this->commandStatus = $commandTester->getStatusCode();
     }
 
-    /**
-     * @Then /^the event is saved$/
-     */
+    #[Then('the event is saved')]
     public function theEventIsSaved(): void
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
@@ -73,7 +74,7 @@ JOIN championships ch on s.championship = ch.id
 WHERE LOWER(REPLACE(' ', '', e.venue)) = LOWER(REPLACE(' ', '', :venue))
 AND ch.name = :championship
 AND e.index = :index
-AND e.label = :label
+AND e.name = :name
 AND s.year = :year
 SQL;
 
@@ -81,7 +82,7 @@ SQL;
             'championship' => $this->championship,
             'year'         => $this->year,
             'index'        => $this->index,
-            'label'        => $this->label,
+            'name'         => $this->name,
             'venue'        => $this->venue,
         ];
 

@@ -152,11 +152,29 @@ CREATE TABLE public.events (
     season character varying(36) NOT NULL,
     venue character varying(36) NOT NULL,
     index integer NOT NULL,
-    label character varying(255) NOT NULL
+    slug character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    short_name character varying(255) DEFAULT NULL::character varying,
+    start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone
 );
 
 
 ALTER TABLE public.events OWNER TO motorsporttracker;
+
+--
+-- Name: COLUMN events.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.events.start_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: COLUMN events.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.events.end_date IS '(DC2Type:nullable_date_time_value_object)';
+
 
 --
 -- Name: racers; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -336,6 +354,7 @@ Kishlin\\Migrations\\Core\\Version20230303233637	2023-03-03 23:38:29	17
 Kishlin\\Migrations\\Core\\Version20230304002928	2023-03-04 00:30:32	22
 Kishlin\\Migrations\\Core\\Version20230304012938	2023-03-04 01:31:47	17
 Kishlin\\Migrations\\Core\\Version20230304173646	2023-03-04 17:45:11	15
+Kishlin\\Migrations\\Core\\Version20230304213122	2023-03-04 21:33:59	21
 \.
 
 
@@ -367,7 +386,7 @@ COPY public.event_steps (id, event, type, date_time) FROM stdin;
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.events (id, season, venue, index, label) FROM stdin;
+COPY public.events (id, season, venue, index, slug, name, short_name, start_date, end_date) FROM stdin;
 \.
 
 
@@ -591,10 +610,17 @@ CREATE UNIQUE INDEX driver_move_driver_date_idx ON public.driver_moves USING btr
 
 
 --
--- Name: event_season_label_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+-- Name: event_season_index_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX event_season_label_idx ON public.events USING btree (season, label);
+CREATE UNIQUE INDEX event_season_index_idx ON public.events USING btree (season, index);
+
+
+--
+-- Name: event_season_name_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_season_name_idx ON public.events USING btree (season, name);
 
 
 --
@@ -637,6 +663,13 @@ CREATE UNIQUE INDEX team_name_idx ON public.teams USING btree (name);
 --
 
 CREATE UNIQUE INDEX team_presentation_team_created_on_idx ON public.team_presentations USING btree (team, created_on);
+
+
+--
+-- Name: uniq_5387574a989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_5387574a989d9b62 ON public.events USING btree (slug);
 
 
 --
@@ -743,22 +776,6 @@ ALTER TABLE ONLY public.event_steps
 
 ALTER TABLE ONLY public.event_steps
     ADD CONSTRAINT fk_event_steps_type FOREIGN KEY (type) REFERENCES public.step_types(id);
-
-
---
--- Name: events fk_events_season; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.events
-    ADD CONSTRAINT fk_events_season FOREIGN KEY (season) REFERENCES public.seasons(id);
-
-
---
--- Name: events fk_events_venue; Type: FK CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.events
-    ADD CONSTRAINT fk_events_venue FOREIGN KEY (venue) REFERENCES public.venues(id);
 
 
 --

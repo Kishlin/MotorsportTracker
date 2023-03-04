@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\View\EventStepIdAndDateTimePO
 final class SearchEventStepIdAndDateTimeRepositorySpy implements SearchEventStepIdAndDateTimeViewer
 {
     public function __construct(
-        private EventStepRepositorySpy $eventStepRepositorySpy,
-        private StepTypeRepositorySpy $stepTypeRepositorySpy,
-        private EventRepositorySpy $eventRepositorySpy,
+        private readonly EventStepRepositorySpy $eventStepRepositorySpy,
+        private readonly StepTypeRepositorySpy $stepTypeRepositorySpy,
+        private readonly EventRepositorySpy $eventRepositorySpy,
     ) {
     }
 
@@ -27,7 +27,7 @@ final class SearchEventStepIdAndDateTimeRepositorySpy implements SearchEventStep
 
             $event = $this->eventRepositorySpy->safeGet($eventStep->eventId());
 
-            if (false === str_contains(strtolower($event->label()->value()), strtolower($keyword))) {
+            if (false === str_contains(strtolower($event->name()->value()), strtolower($keyword))) {
                 continue;
             }
 

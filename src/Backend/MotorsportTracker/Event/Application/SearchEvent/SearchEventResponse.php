@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent;
 
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class SearchEventResponse implements Response
 {
     private function __construct(
-        private EventId $eventId,
+        private readonly UuidValueObject $eventId,
     ) {
     }
 
-    public function eventId(): EventId
+    public function eventId(): UuidValueObject
     {
         return $this->eventId;
     }
 
-    public static function fromScalar(EventId $eventId): self
+    public static function fromScalar(UuidValueObject $eventId): self
     {
         return new self($eventId);
     }

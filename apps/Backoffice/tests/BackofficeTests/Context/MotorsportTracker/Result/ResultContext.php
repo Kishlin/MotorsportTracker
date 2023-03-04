@@ -24,7 +24,7 @@ WHERE r.id = :racerId
 SQL;
 
     private const DATA_FROM_EVENT_STEP_ID_QUERY = <<<'SQL'
-SELECT c.slug as championship, s.year as year, e.label as event, st.label as type
+SELECT c.slug as championship, s.year as year, e.name as event, st.label as type
 FROM event_steps es
 LEFT JOIN events e on es.event = e.id
 LEFT JOIN step_types st on st.id = es.type

@@ -9,8 +9,8 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 final class SearchEventQuery implements Query
 {
     private function __construct(
-        private string $seasonId,
-        private string $keyword,
+        private readonly string $seasonId,
+        private readonly string $keyword,
     ) {
     }
 

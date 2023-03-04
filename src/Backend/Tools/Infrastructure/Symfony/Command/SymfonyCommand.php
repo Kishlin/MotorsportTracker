@@ -81,6 +81,25 @@ abstract class SymfonyCommand extends Command
         return $this->intFromPrompt($input, $output, $promptText);
     }
 
+    protected function nullableStringFromArgumentsOrPrompt(
+        InputInterface $input,
+        OutputInterface $output,
+        string $argument,
+        string $promptText,
+    ): ?string {
+        /** @var null|string $response */
+        $response = $input->getArgument($argument);
+        if (false === empty($response)) {
+            return $response;
+        }
+
+        $prompt = new Question($promptText);
+
+        $response = $this->questionHelper()->ask($input, $output, $prompt);
+
+        return (empty($response) || false === is_string($response)) ? null : $response;
+    }
+
     /**
      * @param array|object[] $items
      */

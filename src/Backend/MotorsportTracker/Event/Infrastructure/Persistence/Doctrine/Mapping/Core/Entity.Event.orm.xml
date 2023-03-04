@@ -5,18 +5,27 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event" table="events">
-        <id name="id" type="event_id" column="id" length="36" />
+        <id name="id" type="uuid_value_object" column="id" length="36" />
 
-        <field name="seasonId" type="event_season_id" column="season" length="36" />
+        <field name="seasonId" type="uuid_value_object" column="season" length="36" />
 
-        <field name="venueId" type="event_venue_id" column="venue" length="36" />
+        <field name="venueId" type="uuid_value_object" column="venue" length="36" />
 
-        <field name="index" type="event_index" column="index" min="0" />
+        <field name="index" type="positive_int_value_object" column="index" min="0" />
 
-        <field name="label" type="event_label" column="label" />
+        <field name="slug" type="string_value_object" column="slug" unique="true" />
+
+        <field name="name" type="string_value_object" column="name" />
+
+        <field name="shortName" type="nullable_string_value_object" column="short_name" nullable="true" />
+
+        <field name="startDate" type="nullable_date_time_value_object" column="start_date" nullable="true" />
+
+        <field name="endDate" type="nullable_date_time_value_object" column="end_date" nullable="true" />
 
         <unique-constraints>
-            <unique-constraint columns="season,label" name="event_season_label_idx" />
+            <unique-constraint columns="season,name" name="event_season_name_idx" />
+            <unique-constraint columns="season,index" name="event_season_index_idx" />
         </unique-constraints>
     </entity>
 

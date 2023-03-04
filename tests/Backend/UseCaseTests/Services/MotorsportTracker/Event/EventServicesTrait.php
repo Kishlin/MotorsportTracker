@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event;
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommandHandler;
-use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventRepositorySpy;
 
@@ -14,8 +13,6 @@ trait EventServicesTrait
     private ?EventRepositorySpy $eventRepositorySpy = null;
 
     private ?CreateEventCommandHandler $createEventCommandHandler = null;
-
-    abstract public function eventDispatcher(): EventDispatcher;
 
     abstract public function uuidGenerator(): UuidGenerator;
 
@@ -33,9 +30,7 @@ trait EventServicesTrait
         if (null === $this->createEventCommandHandler) {
             $this->createEventCommandHandler = new CreateEventCommandHandler(
                 $this->eventRepositorySpy(),
-                $this->eventRepositorySpy(),
                 $this->uuidGenerator(),
-                $this->eventDispatcher(),
             );
         }
 

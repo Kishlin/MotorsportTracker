@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 final class SearchEventQueryHandler implements QueryHandler
 {
     public function __construct(
-        private SearchEventViewer $viewer,
+        private readonly SearchEventViewer $viewer,
     ) {
     }
 

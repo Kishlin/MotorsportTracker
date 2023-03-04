@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventIndex;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventLabel;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventSeasonId;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventVenueId;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\EventRepositoryUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
@@ -27,11 +28,15 @@ final class EventRepositoryUsingDoctrineTest extends CoreRepositoryContractTestC
         );
 
         $event = Event::instance(
-            new EventId(self::uuid()),
-            new EventSeasonId(self::fixtureId('motorsport.championship.season.formulaOne2022')),
-            new EventVenueId(self::fixtureId('motorsport.venue.venue.zandvoort')),
-            new EventIndex(14),
-            new EventLabel('Dutch GP'),
+            new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+            new UuidValueObject(self::fixtureId('motorsport.venue.venue.zandvoort')),
+            new PositiveIntValueObject(14),
+            new StringValueObject('Dutch Grand Prix'),
+            new StringValueObject('dutch-gp'),
+            new NullableStringValueObject('Dutch GP'),
+            new NullableDateTimeValueObject(new DateTimeImmutable('2022-11-22 01:00:00')),
+            new NullableDateTimeValueObject(new DateTimeImmutable('2022-11-22 02:00:00')),
         );
 
         $repository = new EventRepositoryUsingDoctrine(self::entityManager());
@@ -39,5 +44,41 @@ final class EventRepositoryUsingDoctrineTest extends CoreRepositoryContractTestC
         $repository->save($event);
 
         self::assertAggregateRootWasSaved($event);
+    }
+
+    public function testItCanSaveAnEventWithNullValues(): void
+    {
+        self::loadFixtures(
+            'motorsport.venue.venue.zandvoort',
+            'motorsport.championship.season.formulaOne2022',
+        );
+
+        $id = self::uuid();
+
+        $event = Event::instance(
+            new UuidValueObject($id),
+            new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+            new UuidValueObject(self::fixtureId('motorsport.venue.venue.zandvoort')),
+            new PositiveIntValueObject(14),
+            new StringValueObject('Dutch Grand Prix'),
+            new StringValueObject('dutch-gp'),
+            new NullableStringValueObject(null),
+            new NullableDateTimeValueObject(null),
+            new NullableDateTimeValueObject(null),
+        );
+
+        $repository = new EventRepositoryUsingDoctrine(self::entityManager());
+
+        $repository->save($event);
+
+        self::assertAggregateRootWasSaved($event);
+
+        $saved = self::entityManager()->getRepository(Event::class)->find($id);
+
+        self::assertInstanceOf(Event::class, $saved);
+
+        self::assertNull($saved->shortName()->value());
+        self::assertNull($saved->startDate()->value());
+        self::assertNull($saved->endDate()->value());
     }
 }

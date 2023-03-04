@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doc
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\SearchEvent\SearchEventViewer;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
 final class SearchEventViewerUsingDoctrine extends CoreRepository implements SearchEventViewer
@@ -15,14 +15,14 @@ final class SearchEventViewerUsingDoctrine extends CoreRepository implements Sea
     /**
      * @throws Exception|NonUniqueResultException
      */
-    public function search(string $seasonId, string $keyword): ?EventId
+    public function search(string $seasonId, string $keyword): ?UuidValueObject
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
         $qb->select('e.id as id')
             ->from('events', 'e')
             ->leftJoin('e', 'venues', 'v', 'e.venue = v.id')
-            ->where("LOWER(REPLACE(CONCAT(e.label, v.name), ' ', '')) LIKE LOWER(REPLACE(:keyword, ' ', ''))")
+            ->where("LOWER(REPLACE(CONCAT(e.name, v.name), ' ', '')) LIKE LOWER(REPLACE(:keyword, ' ', ''))")
             ->andWhere('e.season = :seasonId')
             ->setParameter('keyword', "%{$keyword}%")
             ->setParameter('seasonId', $seasonId)
@@ -39,6 +39,6 @@ final class SearchEventViewerUsingDoctrine extends CoreRepository implements Sea
             throw new NonUniqueResultException();
         }
 
-        return new EventId($result[0]['id']);
+        return new UuidValueObject($result[0]['id']);
     }
 }

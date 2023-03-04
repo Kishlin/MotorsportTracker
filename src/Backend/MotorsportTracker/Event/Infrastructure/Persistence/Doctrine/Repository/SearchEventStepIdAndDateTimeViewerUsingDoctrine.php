@@ -24,7 +24,7 @@ final class SearchEventStepIdAndDateTimeViewerUsingDoctrine extends CoreReposito
             ->leftJoin('es', 'step_types', 'st', 'es.type = st.id')
             ->leftJoin('es', 'events', 'e', 'es.event = e.id')
             ->leftJoin('e', 'venues', 'v', 'e.venue = v.id')
-            ->where("LOWER(REPLACE(CONCAT(e.label, v.name), ' ', '')) LIKE LOWER(REPLACE(:keyword, ' ', ''))")
+            ->where("LOWER(REPLACE(CONCAT(e.name, v.name), ' ', '')) LIKE LOWER(REPLACE(:keyword, ' ', ''))")
             ->andWhere("LOWER(REPLACE(st.label, ' ', '')) LIKE LOWER(REPLACE(:eventType, ' ', ''))")
             ->andWhere('e.season = :seasonId')
             ->setParameter('eventType', "%{$eventType}%")
