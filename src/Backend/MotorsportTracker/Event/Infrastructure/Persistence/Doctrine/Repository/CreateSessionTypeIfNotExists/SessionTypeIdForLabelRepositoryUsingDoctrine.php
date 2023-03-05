@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CreateStepTypeIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CreateSessionTypeIfNotExists;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\StepTypeIdForLabelGateway;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\SessionTypeIdForLabelGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
-final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository implements StepTypeIdForLabelGateway
+final class SessionTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository implements SessionTypeIdForLabelGateway
 {
     /**
      * @throws NonUniqueResultException
@@ -22,9 +22,9 @@ final class StepTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository imp
         $qb = $this->entityManager->createQueryBuilder();
 
         $query = $qb
-            ->select('stepType.id')
-            ->from(StepType::class, 'stepType')
-            ->where('stepType.label = :label')
+            ->select('sessionType.id')
+            ->from(SessionType::class, 'sessionType')
+            ->where('sessionType.label = :label')
             ->setParameter('label', $label->value())
             ->getQuery()
         ;

@@ -41,7 +41,7 @@ final class EventSessionContext extends MotorsportTrackerContext
         $this->thrownException = null;
 
         try {
-            $stepTypeId = $this->fixtureId("motorsport.event.stepType.{$this->format($sessionType)}");
+            $stepTypeId = $this->fixtureId("motorsport.event.sessionType.{$this->format($sessionType)}");
             $eventId    = $this->fixtureId("motorsport.event.event.{$this->format($event)}");
 
             /** @var UuidValueObject $eventSessionId */

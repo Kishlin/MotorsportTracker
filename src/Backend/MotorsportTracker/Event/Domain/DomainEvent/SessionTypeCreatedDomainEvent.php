@@ -6,6 +6,6 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 
-final class StepTypeCreatedDomainEvent extends DomainEvent
+final class SessionTypeCreatedDomainEvent extends DomainEvent
 {
 }

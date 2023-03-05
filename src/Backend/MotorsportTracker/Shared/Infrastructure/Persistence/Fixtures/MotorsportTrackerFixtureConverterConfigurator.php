@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fi
 use Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Fixtures\FixtureToDriverConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventSessionConverter;
-use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToStepTypeConverter;
+use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToSessionTypeConverter;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixtures\FixtureToTeamConverter;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixtures\FixtureToTeamPresentationConverter;
 use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Fixtures\FixtureToVenueConverter;
@@ -32,7 +32,7 @@ final class MotorsportTrackerFixtureConverterConfigurator
 
         $fixtureSaver->addConverter('motorsport.event.event', new FixtureToEventConverter());
         $fixtureSaver->addConverter('motorsport.event.eventSession', new FixtureToEventSessionConverter());
-        $fixtureSaver->addConverter('motorsport.event.stepType', new FixtureToStepTypeConverter());
+        $fixtureSaver->addConverter('motorsport.event.sessionType', new FixtureToSessionTypeConverter());
 
         $fixtureSaver->addConverter('motorsport.team.team', new FixtureToTeamConverter());
         $fixtureSaver->addConverter('motorsport.team.teamPresentation', new FixtureToTeamPresentationConverter());

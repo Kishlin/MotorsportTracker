@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 
-final class CreateStepTypeIfNotExistsCommand implements Command
+final class CreateSessionTypeIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $label,

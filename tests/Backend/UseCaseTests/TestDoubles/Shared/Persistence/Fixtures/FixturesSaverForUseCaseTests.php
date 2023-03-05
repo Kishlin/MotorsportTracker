@@ -13,7 +13,7 @@ use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
@@ -82,8 +82,8 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
             return;
         }
 
-        if ($aggregateRoot instanceof StepType) {
-            $this->testServiceContainer->stepTypeRepositorySpy()->save($aggregateRoot);
+        if ($aggregateRoot instanceof SessionType) {
+            $this->testServiceContainer->sessionTypeRepositorySpy()->save($aggregateRoot);
 
             return;
         }

@@ -4,13 +4,13 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\StepType" table="step_types">
+    <entity name="Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType" table="session_types">
         <id name="id" type="uuid_value_object" column="id" length="36" />
 
         <field name="label" type="string_value_object" column="label" />
 
         <unique-constraints>
-            <unique-constraint columns="label" name="step_type_label_idx" />
+            <unique-constraint columns="label" name="session_type_label_idx" />
         </unique-constraints>
     </entity>
 

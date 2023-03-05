@@ -172,16 +172,16 @@ CREATE TABLE public.seasons (
 ALTER TABLE public.seasons OWNER TO motorsporttracker;
 
 --
--- Name: step_types; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: session_types; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.step_types (
+CREATE TABLE public.session_types (
     id character varying(36) NOT NULL,
     label character varying(255) NOT NULL
 );
 
 
-ALTER TABLE public.step_types OWNER TO motorsporttracker;
+ALTER TABLE public.session_types OWNER TO motorsporttracker;
 
 --
 -- Name: team_presentations; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -264,6 +264,7 @@ COPY public.countries (id, code, name) FROM stdin;
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
 Kishlin\\Migrations\\Core\\Version0	2023-03-04 23:29:52	55
 Kishlin\\Migrations\\Core\\Version20230305015621	2023-03-05 01:57:03	19
+Kishlin\\Migrations\\Core\\Version20230305024031	2023-03-05 02:41:09	17
 \.
 
 
@@ -300,10 +301,10 @@ COPY public.seasons (id, championship, year) FROM stdin;
 
 
 --
--- Data for Name: step_types; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: session_types; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.step_types (id, label) FROM stdin;
+COPY public.session_types (id, label) FROM stdin;
 \.
 
 
@@ -396,11 +397,11 @@ ALTER TABLE ONLY public.seasons
 
 
 --
--- Name: step_types step_types_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: session_types session_types_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.step_types
-    ADD CONSTRAINT step_types_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.session_types
+    ADD CONSTRAINT session_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -463,10 +464,10 @@ CREATE UNIQUE INDEX event_session_event_type_idx ON public.event_sessions USING 
 
 
 --
--- Name: step_type_label_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+-- Name: session_type_label_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX step_type_label_idx ON public.step_types USING btree (label);
+CREATE UNIQUE INDEX session_type_label_idx ON public.session_types USING btree (label);
 
 
 --

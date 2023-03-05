@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Event\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\StepTypeCreatedDomainEvent;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\SessionTypeCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class StepType extends AggregateRoot
+final class SessionType extends AggregateRoot
 {
     private function __construct(
         private readonly UuidValueObject $id,
@@ -21,7 +21,7 @@ final class StepType extends AggregateRoot
     {
         $stepType = new self($id, $label);
 
-        $stepType->record(new StepTypeCreatedDomainEvent($id));
+        $stepType->record(new SessionTypeCreatedDomainEvent($id));
 
         return $stepType;
     }

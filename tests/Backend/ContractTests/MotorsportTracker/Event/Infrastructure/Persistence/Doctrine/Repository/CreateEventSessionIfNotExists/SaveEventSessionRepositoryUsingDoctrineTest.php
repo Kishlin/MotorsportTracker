@@ -23,12 +23,12 @@ final class SaveEventSessionRepositoryUsingDoctrineTest extends CoreRepositoryCo
     {
         self::loadFixtures(
             'motorsport.event.event.dutchGrandPrix2022',
-            'motorsport.event.stepType.race',
+            'motorsport.event.sessionType.race',
         );
 
         $eventSession = EventSession::instance(
             new UuidValueObject(self::uuid()),
-            new UuidValueObject(self::fixtureId('motorsport.event.stepType.race')),
+            new UuidValueObject(self::fixtureId('motorsport.event.sessionType.race')),
             new UuidValueObject(self::fixtureId('motorsport.event.event.dutchGrandPrix2022')),
             new StringValueObject('Dutch GP Race'),
             new BoolValueObject(false),
