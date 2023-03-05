@@ -19,8 +19,8 @@ final class CreateEventSessionCommand implements Command
         private readonly string $typeId,
         private readonly string $slug,
         private readonly bool $hasResult,
-        private readonly ?string $startDate,
-        private readonly ?string $endDate,
+        private readonly ?DateTimeImmutable $startDate,
+        private readonly ?DateTimeImmutable $endDate,
     ) {
     }
 
@@ -49,7 +49,7 @@ final class CreateEventSessionCommand implements Command
      */
     public function startDate(): NullableDateTimeValueObject
     {
-        return new NullableDateTimeValueObject(null === $this->startDate ? null : new DateTimeImmutable($this->startDate));
+        return new NullableDateTimeValueObject($this->startDate);
     }
 
     /**
@@ -57,7 +57,7 @@ final class CreateEventSessionCommand implements Command
      */
     public function endDate(): NullableDateTimeValueObject
     {
-        return new NullableDateTimeValueObject(null === $this->endDate ? null : new DateTimeImmutable($this->endDate));
+        return new NullableDateTimeValueObject($this->endDate);
     }
 
     public static function fromScalars(
@@ -65,8 +65,8 @@ final class CreateEventSessionCommand implements Command
         string $typeId,
         string $slug,
         bool $hasResult,
-        ?string $startDate,
-        ?string $endDate,
+        ?DateTimeImmutable $startDate,
+        ?DateTimeImmutable $endDate,
     ): self {
         return new self($eventId, $typeId, $slug, $hasResult, $startDate, $endDate);
     }

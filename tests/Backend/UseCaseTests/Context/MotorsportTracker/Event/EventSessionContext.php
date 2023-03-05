@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use DateTimeImmutable;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\EventSessionCreationFailureException;
@@ -51,8 +52,8 @@ final class EventSessionContext extends MotorsportTrackerContext
                     $stepTypeId,
                     $slug,
                     false,
-                    $dateTime,
-                    $dateTime,
+                    new DateTimeImmutable($dateTime),
+                    new DateTimeImmutable($dateTime),
                 ),
             );
 
