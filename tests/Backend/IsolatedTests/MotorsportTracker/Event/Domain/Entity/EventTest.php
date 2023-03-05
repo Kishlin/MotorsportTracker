@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Event\Domain\Entity;
 
 use DateTimeImmutable;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
@@ -31,7 +32,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
         $startDate = new DateTimeImmutable('2022-11-22 01:00:00');
         $endDate   = new DateTimeImmutable('2022-11-22 02:00:00');
 
-        $entity = Event::instance(
+        $entity = Event::create(
             new UuidValueObject($id),
             new UuidValueObject($seasonId),
             new UuidValueObject($venueId),
@@ -42,6 +43,8 @@ final class EventTest extends AggregateRootIsolatedTestCase
             new NullableDateTimeValueObject($startDate),
             new NullableDateTimeValueObject($endDate),
         );
+
+        self::assertItRecordedDomainEvents($entity, new EventCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($seasonId, $entity->seasonId());

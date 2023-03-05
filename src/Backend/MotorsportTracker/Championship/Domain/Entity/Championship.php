@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -19,7 +20,11 @@ final class Championship extends AggregateRoot
 
     public static function create(UuidValueObject $id, StringValueObject $name, StringValueObject $slug): self
     {
-        return new self($id, $name, $slug);
+        $championship = new self($id, $name, $slug);
+
+        $championship->record(new ChampionshipCreatedDomainEvent($id));
+
+        return $championship;
     }
 
     /**

@@ -29,6 +29,7 @@ trait VenueServicesTrait
                 $this->venueRepositorySpy(),
                 $this->venueRepositorySpy(),
                 $this->uuidGenerator(),
+                $this->eventDispatcher(),
             );
         }
 

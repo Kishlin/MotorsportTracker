@@ -10,8 +10,4 @@ namespace Kishlin\Backend\Shared\Domain\Bus\Event;
  */
 interface DomainEventSubscriber
 {
-    /**
-     * @return class-string<DomainEvent>[]
-     */
-    public static function subscribedTo(): array;
 }

@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SaveVenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -17,6 +18,7 @@ final class CreateVenueIfNotExistsCommandHandler implements CommandHandler
         private readonly SearchVenueGateway $searchGateway,
         private readonly SaveVenueGateway $saveGateway,
         private readonly UuidGenerator $uuidGenerator,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -32,6 +34,8 @@ final class CreateVenueIfNotExistsCommandHandler implements CommandHandler
         $venue = Venue::create($newId, $command->slug(), $command->name(), $command->countryId());
 
         $this->saveGateway->save($venue);
+
+        $this->eventDispatcher->dispatch(...$venue->pullDomainEvents());
 
         return $venue->id();
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Event\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
@@ -37,7 +38,11 @@ final class Event extends AggregateRoot
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
     ): self {
-        return new self($id, $seasonId, $venueId, $index, $slug, $name, $shortName, $startDate, $endDate);
+        $event = new self($id, $seasonId, $venueId, $index, $slug, $name, $shortName, $startDate, $endDate);
+
+        $event->record(new EventCreatedDomainEvent($id));
+
+        return $event;
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeaso
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
@@ -16,6 +17,7 @@ final class CreateSeasonIfNotExistsCommandHandler implements CommandHandler
         private readonly FindSeasonGateway $findGateway,
         private readonly SaveSeasonGateway $saveGateway,
         private readonly UuidGenerator $uuidGenerator,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -35,6 +37,8 @@ final class CreateSeasonIfNotExistsCommandHandler implements CommandHandler
         } catch (Throwable $e) {
             throw new SeasonCreationFailureException(previous: $e);
         }
+
+        $this->eventDispatcher->dispatch(...$season->pullDomainEvents());
 
         return $season->id();
     }

@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotEx
 
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
@@ -16,6 +17,7 @@ final class CreateEventCommandHandler implements CommandHandler
         private readonly SearchEventGateway $searchGateway,
         private readonly SaveEventGateway $saveGateway,
         private readonly UuidGenerator $uuidGenerator,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -33,6 +35,8 @@ final class CreateEventCommandHandler implements CommandHandler
         } catch (Throwable $e) {
             throw new EventCreationFailureException(previous: $e);
         }
+
+        $this->eventDispatcher->dispatch(...$event->pullDomainEvents());
 
         return $event->id();
     }

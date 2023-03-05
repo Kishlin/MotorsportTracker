@@ -29,6 +29,7 @@ trait EventServicesTrait
                 $this->eventRepositorySpy(),
                 $this->eventRepositorySpy(),
                 $this->uuidGenerator(),
+                $this->eventDispatcher(),
             );
         }
 

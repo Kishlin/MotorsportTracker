@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Championship\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -26,6 +27,8 @@ final class ChampionshipTest extends AggregateRootIsolatedTestCase
             new StringValueObject($name),
             new StringValueObject($slug),
         );
+
+        self::assertItRecordedDomainEvents($entity, new ChampionshipCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($name, $entity->name());

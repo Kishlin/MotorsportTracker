@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Venue\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Venue\Domain\DomainEvent\VenueCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -28,6 +29,8 @@ final class VenueTest extends AggregateRootIsolatedTestCase
             new StringValueObject($slug),
             new UuidValueObject($countryId),
         );
+
+        self::assertItRecordedDomainEvents($entity, new VenueCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($name, $entity->name());

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Venue\Domain\DomainEvent\VenueCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -24,7 +25,11 @@ final class Venue extends AggregateRoot
         StringValueObject $slug,
         UuidValueObject $countryId,
     ): self {
-        return new self($id, $name, $slug, $countryId);
+        $venue = new self($id, $name, $slug, $countryId);
+
+        $venue->record(new VenueCreatedDomainEvent($id));
+
+        return $venue;
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\SeasonCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -22,7 +23,11 @@ final class Season extends AggregateRoot
         StrictlyPositiveIntValueObject $year,
         UuidValueObject $championshipId,
     ): self {
-        return new self($id, $year, $championshipId);
+        $season = new self($id, $year, $championshipId);
+
+        $season->record(new SeasonCreatedDomainEvent($id));
+
+        return $season;
     }
 
     /**

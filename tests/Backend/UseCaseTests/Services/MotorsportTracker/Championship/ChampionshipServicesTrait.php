@@ -83,6 +83,7 @@ trait ChampionshipServicesTrait
                 $this->seasonRepositorySpy(),
                 $this->seasonRepositorySpy(),
                 $this->uuidGenerator(),
+                $this->eventDispatcher(),
             );
         }
 

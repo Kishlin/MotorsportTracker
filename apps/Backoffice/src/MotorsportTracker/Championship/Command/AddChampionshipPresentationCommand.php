@@ -20,7 +20,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
     public const NAME = 'kishlin:motorsport:championship-presentation:add';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
-    private const QUESTION_CHAMPIONSHIP = 'Please enter the id of the championship:\n';
+    private const QUESTION_CHAMPIONSHIP = "Please enter the id of the championship:\n";
 
     private const ARGUMENT_ICON = 'icon';
     private const QUESTION_ICON = "Please enter an icon for the championship presentation:\n";
@@ -58,7 +58,8 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
             $uuid = $this->commandBus->execute(
                 CreateChampionshipPresentationCommand::fromScalars($championship, $icon, $color),
             );
-        } catch (Throwable) {
+        } catch (Throwable $e) {
+            var_dump($e->getMessage());
             $ui->error('Failed to save the championship presentation.');
 
             return Command::FAILURE;
