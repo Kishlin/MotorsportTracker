@@ -68,9 +68,9 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                 <ListItem disablePadding>
                     <ListItemButton onClick={toggleMenu('formula1')}>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/f1.svg" alt="f1" width={40} />
+                            <img src="/assets/championships/logos/f1.svg" alt="f1" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="Formula 1" />
+                        <ListItemText sx={{ ml: 1 }} primary="Formula 1" />
                         {menuOpen.formula1 ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                 </ListItem>
@@ -86,49 +86,89 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/f2.svg" alt="f2" width={40} />
+                            <img src="/assets/championships/logos/f2.svg" alt="f2" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="Formula 2" />
+                        <ListItemText sx={{ ml: 1 }} primary="Formula 2" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/fe.svg" alt="fe" width={40} />
+                            <img src="/assets/championships/logos/f3.svg" alt="f3" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="Formula E" />
+                        <ListItemText sx={{ ml: 1 }} primary="Formula 3" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/gt-world-challenge-europe.svg" alt="gte" width={40} />
+                            <img src="/assets/championships/logos/f4.svg" alt="f4" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="GT Europe" />
+                        <ListItemText sx={{ ml: 1 }} primary="Formula 4" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/imsa.svg" alt="imsa" width={40} />
+                            <img src="/assets/championships/logos/fe.svg" alt="fe" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="IMSA" />
+                        <ListItemText sx={{ ml: 1 }} primary="Formula E" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/motogp.svg" alt="f2" width={40} />
+                            <img src="/assets/championships/logos/w-series.svg" alt="w" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="Moto GP" />
+                        <ListItemText sx={{ ml: 1 }} primary="W Series" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
-                            <img src="/assets/championships/logos/wec.svg" alt="wec" width={40} />
+                            <img src="/assets/championships/logos/wec.svg" alt="wec" height={24} />
                         </ListItemIcon>
-                        <ListItemText primary="WEC" />
+                        <ListItemText sx={{ ml: 1 }} primary="WEC" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <img src="/assets/championships/logos/gt-world-challenge-europe.svg" alt="gte" height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary="GT Europe" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <img src="/assets/championships/logos/gt4.svg" alt="gt4" height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary="GT4 France" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <img src="/assets/championships/logos/imsa.svg" alt="imsa" height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary="IMSA" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <img src="/assets/championships/logos/adac.svg" alt="adac" height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary="ADAC" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <img src="/assets/championships/logos/motogp.svg" alt="f2" height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary="Moto GP" />
                     </ListItemButton>
                 </ListItem>
             </List>
