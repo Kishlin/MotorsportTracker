@@ -55,6 +55,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
     }
 
     #[Then('the season is saved')]
+    #[Then('the id of the season :season is returned')]
     public function theSeasonIsSaved(): void
     {
         Assert::assertNotNull($this->seasonId);

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -22,18 +25,15 @@ final class StepTypeContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given the stepType :label exists
-     *
      * @throws Exception
      */
+    #[Given('the stepType :label exists')]
     public function theStepTypeExists(string $label): void
     {
         self::container()->coreFixtureLoader()->loadFixture("motorsport.event.stepType.{$this->format($label)}");
     }
 
-    /**
-     * @When a client searches for the stepType with label :label
-     */
+    #[When('a client searches for the stepType with label :label')]
     public function aClientSearchesForTheStepType(string $label): void
     {
         $this->stepTypeId      = null;
@@ -51,9 +51,7 @@ final class StepTypeContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then /^the step type is saved$/
-     */
+    #[Then('the step type is saved')]
     public function theStepTypeIsSaved(): void
     {
         Assert::assertNotNull($this->stepTypeId);
@@ -62,9 +60,7 @@ final class StepTypeContext extends MotorsportTrackerContext
         Assert::assertTrue(self::container()->stepTypeRepositorySpy()->has($this->stepTypeId));
     }
 
-    /**
-     * @Then /^the step type is not recreated$/
-     */
+    #[Then('the step type is not recreated')]
     public function theNewStepTypeWasNotRecreated(): void
     {
         $this->theStepTypeIsSaved();

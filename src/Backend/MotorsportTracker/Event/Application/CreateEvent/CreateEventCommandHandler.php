@@ -13,7 +13,7 @@ use Throwable;
 final class CreateEventCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly EventGateway $eventGateway,
+        private readonly SaveEventGateway $eventGateway,
         private readonly UuidGenerator $uuidGenerator,
     ) {
     }

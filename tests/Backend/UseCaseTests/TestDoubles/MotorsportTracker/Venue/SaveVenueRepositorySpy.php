@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue;
 
-use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenue\VenueCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\VenueCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SaveVenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;

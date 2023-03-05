@@ -13,7 +13,7 @@ use Throwable;
 final class CreateDriverCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly DriverGateway $gateway,
+        private readonly SaveDriverGateway $gateway,
         private readonly UuidGenerator $uuidGenerator,
     ) {
     }

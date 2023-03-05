@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -22,10 +25,9 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
     }
 
     /**
-     * @Given the championship presentation :championshipPresentation exists
-     *
      * @throws Throwable
      */
+    #[Given('the championship presentation :championshipPresentation exists')]
     public function theChampionshipPresentationExists(string $championshipPresentation): void
     {
         self::container()->coreFixtureLoader()->loadFixture(
@@ -33,9 +35,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
         );
     }
 
-    /**
-     * @When a client creates a championship presentation for :championship with icon :icon and color :color
-     */
+    #[When('a client creates a championship presentation for :championship with icon :icon and color :color')]
     public function aClientCreatesAChampionshipPresentation(string $championship, string $icon, string $color): void
     {
         $this->championshipPresentationId = null;
@@ -55,9 +55,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
         }
     }
 
-    /**
-     * @Then /^the championship presentation is saved$/
-     */
+    #[Then('the championship presentation is saved')]
     public function theChampionshipPresentationIsSaved(): void
     {
         Assert::assertNull($this->thrownException);
@@ -68,9 +66,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
         );
     }
 
-    /**
-     * @Then the latest championship presentation for :championship has icon :icon and color :color
-     */
+    #[Then('the latest championship presentation for :championship has icon :icon and color :color')]
     public function theLatestChampionshipPresentationIs(string $championship, string $icon, string $color): void
     {
         $championshipId = $this->fixtureId("motorsport.championship.championship.{$this->format($championship)}");

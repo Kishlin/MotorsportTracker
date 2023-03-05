@@ -6,7 +6,6 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep;
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventStep;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\Gateway\EventStepGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
@@ -18,7 +17,7 @@ final class CreateEventStepCommandHandler implements CommandHandler
     public function __construct(
         private EventHasStepAtTheSameTimeGateway $eventHasStepAtTheSameTimeGateway,
         private EventHasStepWithTypeGateway $eventHasStepWithTypeGateway,
-        private EventStepGateway $eventStepGateway,
+        private SaveEventStepGateway $eventStepGateway,
         private UuidGenerator $uuidGenerator,
         private EventDispatcher $eventDispatcher,
     ) {

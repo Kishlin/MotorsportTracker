@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 final class SearchDriverQueryHandler implements QueryHandler
 {
     public function __construct(
-        private readonly SearchDriverViewer $driverViewer,
+        private readonly SearchDriverGateway $driverViewer,
     ) {
     }
 

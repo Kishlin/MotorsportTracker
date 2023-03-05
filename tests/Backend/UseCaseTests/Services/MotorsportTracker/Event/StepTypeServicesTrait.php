@@ -5,24 +5,18 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event;
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommandHandler;
-use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
-use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\StepTypeRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\SaveStepTypeRepositorySpy;
 
 trait StepTypeServicesTrait
 {
-    private ?StepTypeRepositorySpy $stepTypeRepositorySpy = null;
+    private ?SaveStepTypeRepositorySpy $stepTypeRepositorySpy = null;
 
     private ?CreateStepTypeIfNotExistsCommandHandler $createStepTypeIfNotExistsCommandHandler = null;
 
-    abstract public function eventDispatcher(): EventDispatcher;
-
-    abstract public function uuidGenerator(): UuidGenerator;
-
-    public function stepTypeRepositorySpy(): StepTypeRepositorySpy
+    public function stepTypeRepositorySpy(): SaveStepTypeRepositorySpy
     {
         if (null === $this->stepTypeRepositorySpy) {
-            $this->stepTypeRepositorySpy = new StepTypeRepositorySpy();
+            $this->stepTypeRepositorySpy = new SaveStepTypeRepositorySpy();
         }
 
         return $this->stepTypeRepositorySpy;

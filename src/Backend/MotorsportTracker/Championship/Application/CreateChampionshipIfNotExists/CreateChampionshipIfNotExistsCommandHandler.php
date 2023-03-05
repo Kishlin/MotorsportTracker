@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;

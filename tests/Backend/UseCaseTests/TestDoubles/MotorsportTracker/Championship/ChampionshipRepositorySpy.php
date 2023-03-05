@@ -6,10 +6,8 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Champ
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SaveChampionshipGateway;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ChampionshipPOPO;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\ViewAllChampionships\ViewAllChampionshipsGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SearchChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -20,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Championship get(UuidValueObject $id)
  * @method Championship      safeGet(UuidValueObject $id)
  */
-final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements SaveChampionshipGateway, SearchChampionshipGateway, ViewAllChampionshipsGateway
+final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements SaveChampionshipGateway, SearchChampionshipGateway
 {
     /**
      * @throws Exception
@@ -43,16 +41,6 @@ final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements S
         }
 
         return null;
-    }
-
-    public function viewAllChampionships(): array
-    {
-        return array_map(
-            static function (Championship $championship) {
-                return ChampionshipPOPO::fromScalars($championship->id()->value(), $championship->name()->value());
-            },
-            $this->objects,
-        );
     }
 
     private function nameOrSlugIsAlreadyTaken(Championship $championship): bool

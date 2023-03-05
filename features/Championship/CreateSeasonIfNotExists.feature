@@ -8,3 +8,4 @@ Feature: It can create Seasons
   Scenario: It cannot duplicate seasons
     Given the season "Formula One 2022" exists
     When a client creates a season for the same championship and year
+    Then the id of the season "Formula One 2022" is returned

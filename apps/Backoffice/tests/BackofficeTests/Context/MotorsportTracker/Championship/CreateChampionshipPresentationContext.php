@@ -57,6 +57,10 @@ SQL;
         $this->icon  = $icon;
         $this->color = $color;
 
+        $championship = self::coreDatabase()->fixtureId(
+            "motorsport.championship.championship.{$this->format($championship)}",
+        );
+
         $commandTester = new CommandTester(
             self::application()->find(AddChampionshipPresentationCommand::NAME),
         );
@@ -64,7 +68,7 @@ SQL;
         // This guaranties time uniqueness in database, when multiple presentations are created in one test
         self::application()->advanceInTime(new DateInterval('PT1S'));
 
-        $commandTester->execute(['icon' => $icon, 'color' => $color]);
+        $commandTester->execute(['championship' => $championship, 'icon' => $icon, 'color' => $color]);
 
         $this->commandStatus = $commandTester->getStatusCode();
     }

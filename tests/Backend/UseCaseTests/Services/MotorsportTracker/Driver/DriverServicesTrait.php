@@ -6,29 +6,20 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver;
 
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommandHandler;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQueryHandler;
-use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
-use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\SaveDriverRepositorySpy;
 
 trait DriverServicesTrait
 {
-    private ?DriverRepositorySpy $driverRepositorySpy = null;
+    private ?SaveDriverRepositorySpy $driverRepositorySpy = null;
 
     private ?CreateDriverCommandHandler $createDriverCommandHandler = null;
 
     private ?SearchDriverQueryHandler $searchDriverQueryHandler = null;
 
-    abstract public function eventDispatcher(): EventDispatcher;
-
-    abstract public function uuidGenerator(): UuidGenerator;
-
-    abstract public function countryRepositorySpy(): SaveSearchCountryRepositorySpy;
-
-    public function driverRepositorySpy(): DriverRepositorySpy
+    public function driverRepositorySpy(): SaveDriverRepositorySpy
     {
         if (null === $this->driverRepositorySpy) {
-            $this->driverRepositorySpy = new DriverRepositorySpy($this->countryRepositorySpy());
+            $this->driverRepositorySpy = new SaveDriverRepositorySpy($this->countryRepositorySpy());
         }
 
         return $this->driverRepositorySpy;
