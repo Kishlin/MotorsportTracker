@@ -18,10 +18,6 @@
         <field name="startDate" type="nullable_date_time_value_object" column="start_date" nullable="true" />
 
         <field name="endDate" type="nullable_date_time_value_object" column="end_date" nullable="true" />
-
-        <unique-constraints>
-            <unique-constraint columns="event,type" name="event_session_event_type_idx" />
-        </unique-constraints>
     </entity>
 
 </doctrine-mapping>

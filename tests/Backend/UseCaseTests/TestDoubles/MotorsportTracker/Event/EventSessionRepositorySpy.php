@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\EventSessionCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SaveEventSessionGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SearchEventSessionGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
@@ -26,16 +25,6 @@ final class EventSessionRepositorySpy extends AbstractRepositorySpy implements S
      */
     public function save(EventSession $eventSession): void
     {
-        foreach ($this->objects as $saved) {
-            if (false === $saved->eventId()->equals($eventSession->eventId())) {
-                continue;
-            }
-
-            if ($saved->typeId()->equals($eventSession->typeId())) {
-                throw new EventSessionCreationFailureException();
-            }
-        }
-
         $this->objects[$eventSession->id()->value()] = $eventSession;
     }
 
