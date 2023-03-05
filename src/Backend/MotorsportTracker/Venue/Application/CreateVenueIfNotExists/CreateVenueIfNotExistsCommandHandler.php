@@ -29,7 +29,7 @@ final class CreateVenueIfNotExistsCommandHandler implements CommandHandler
         }
 
         $newId = new UuidValueObject($this->uuidGenerator->uuid4());
-        $venue = Venue::create($newId, $command->slug(), $command->name(), $command->countryId());
+        $venue = Venue::create($newId, $command->name(), $command->slug(), $command->countryId());
 
         $this->saveGateway->save($venue);
 
