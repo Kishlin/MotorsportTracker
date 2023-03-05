@@ -104,8 +104,8 @@ CREATE TABLE public.event_sessions (
     type character varying(36) NOT NULL,
     slug character varying(255) NOT NULL,
     has_result boolean NOT NULL,
-    start_date timestamp(0) without time zone NOT NULL,
-    end_date timestamp(0) without time zone NOT NULL
+    start_date timestamp(0) without time zone,
+    end_date timestamp(0) without time zone
 );
 
 
@@ -265,6 +265,7 @@ COPY public.doctrine_migration_versions (version, executed_at, execution_time) F
 Kishlin\\Migrations\\Core\\Version0	2023-03-04 23:29:52	55
 Kishlin\\Migrations\\Core\\Version20230305015621	2023-03-05 01:57:03	19
 Kishlin\\Migrations\\Core\\Version20230305024031	2023-03-05 02:41:09	17
+Kishlin\\Migrations\\Core\\Version20230305131002	2023-03-05 13:10:58	15
 \.
 
 
