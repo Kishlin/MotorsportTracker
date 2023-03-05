@@ -6,8 +6,8 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Champ
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SaveChampionshipGateway;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SearchChampionshipGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 

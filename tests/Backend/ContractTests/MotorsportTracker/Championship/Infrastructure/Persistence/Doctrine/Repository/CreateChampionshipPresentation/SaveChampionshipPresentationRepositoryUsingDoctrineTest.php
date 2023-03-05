@@ -6,12 +6,10 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Inf
 
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationColor;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationCreatedOn;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationIcon;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateChampionshipPresentation\SaveChampionshipPresentationRepositoryUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
@@ -23,11 +21,11 @@ final class SaveChampionshipPresentationRepositoryUsingDoctrineTest extends Core
     public function testItCanSaveAChampionshipPresentation(): void
     {
         $championshipPresentation = ChampionshipPresentation::instance(
-            new ChampionshipPresentationId(self::uuid()),
-            new ChampionshipPresentationChampionshipId(self::uuid()),
-            new ChampionshipPresentationIcon('f1.png'),
-            new ChampionshipPresentationColor('#fff'),
-            new ChampionshipPresentationCreatedOn(new DateTimeImmutable()),
+            new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::uuid()),
+            new StringValueObject('f1.png'),
+            new StringValueObject('#fff'),
+            new DateTimeValueObject(new DateTimeImmutable()),
         );
 
         $repository = new SaveChampionshipPresentationRepositoryUsingDoctrine(self::entityManager());

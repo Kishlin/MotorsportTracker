@@ -4,37 +4,35 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationColor;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationIcon;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 
 final class CreateChampionshipPresentationCommand implements Command
 {
     private function __construct(
-        private string $championshipId,
-        private string $icon,
-        private string $color,
+        private readonly string $championshipSlug,
+        private readonly string $icon,
+        private readonly string $color,
     ) {
     }
 
-    public function championshipId(): ChampionshipPresentationChampionshipId
+    public function championshipSlug(): StringValueObject
     {
-        return new ChampionshipPresentationChampionshipId($this->championshipId);
+        return new StringValueObject($this->championshipSlug);
     }
 
-    public function icon(): ChampionshipPresentationIcon
+    public function icon(): StringValueObject
     {
-        return new ChampionshipPresentationIcon($this->icon);
+        return new StringValueObject($this->icon);
     }
 
-    public function color(): ChampionshipPresentationColor
+    public function color(): StringValueObject
     {
-        return new ChampionshipPresentationColor($this->color);
+        return new StringValueObject($this->color);
     }
 
-    public static function fromScalars(string $championshipId, string $icon, string $color): self
+    public static function fromScalars(string $championshipSlug, string $icon, string $color): self
     {
-        return new self($championshipId, $icon, $color);
+        return new self($championshipSlug, $icon, $color);
     }
 }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateChampionshipIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\SearchChampionshipGateway;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 

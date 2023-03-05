@@ -57,10 +57,6 @@ SQL;
         $this->icon  = $icon;
         $this->color = $color;
 
-        $championship = self::coreDatabase()->fixtureId(
-            "motorsport.championship.championship.{$this->format($championship)}",
-        );
-
         $commandTester = new CommandTester(
             self::application()->find(AddChampionshipPresentationCommand::NAME),
         );

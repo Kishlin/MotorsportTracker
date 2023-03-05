@@ -67,6 +67,7 @@ trait ChampionshipServicesTrait
         if (null === $this->createChampionshipPresentationCommandHandler) {
             $this->createChampionshipPresentationCommandHandler = new CreateChampionshipPresentationCommandHandler(
                 $this->championshipPresentationRepositorySpy(),
+                $this->championshipRepositorySpy(),
                 $this->uuidGenerator(),
                 $this->eventDispatcher(),
                 $this->clock(),

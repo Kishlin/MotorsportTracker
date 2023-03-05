@@ -7,11 +7,9 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Championship\Dom
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipPresentationCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationColor;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationCreatedOn;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationIcon;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
+use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -29,16 +27,16 @@ final class ChampionshipPresentationTest extends AggregateRootIsolatedTestCase
         $createdOn      = new DateTimeImmutable();
 
         $entity = ChampionshipPresentation::create(
-            new ChampionshipPresentationId($id),
-            new ChampionshipPresentationChampionshipId($championshipId),
-            new ChampionshipPresentationIcon($icon),
-            new ChampionshipPresentationColor($color),
-            new ChampionshipPresentationCreatedOn($createdOn),
+            new UuidValueObject($id),
+            new UuidValueObject($championshipId),
+            new StringValueObject($icon),
+            new StringValueObject($color),
+            new DateTimeValueObject($createdOn),
         );
 
         self::assertItRecordedDomainEvents(
             $entity,
-            new ChampionshipPresentationCreatedDomainEvent(new ChampionshipPresentationId($id)),
+            new ChampionshipPresentationCreatedDomainEvent(new UuidValueObject($id)),
         );
 
         self::assertValueObjectSame($id, $entity->id());

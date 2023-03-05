@@ -5,15 +5,15 @@
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation" table="championship_presentations">
-        <id name="id" type="championship_presentation_id" column="id" length="36" />
+        <id name="id" type="uuid_value_object" column="id" length="36" />
 
-        <field name="championshipId" type="championship_presentation_championship_id" column="championship" length="36" />
+        <field name="championshipId" type="uuid_value_object" column="championship" length="36" />
 
-        <field name="icon" type="championship_presentation_icon" column="icon" />
+        <field name="icon" type="string_value_object" column="icon" />
 
-        <field name="color" type="championship_presentation_color" column="color" />
+        <field name="color" type="string_value_object" column="color" />
 
-        <field name="createdOn" type="championship_presentation_created_on" column="created_on" />
+        <field name="createdOn" type="date_time_value_object" column="created_on" />
 
         <unique-constraints>
             <unique-constraint columns="championship,created_on" name="championship_created_on_idx" />

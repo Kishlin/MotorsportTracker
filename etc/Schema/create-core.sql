@@ -39,7 +39,7 @@ ALTER TABLE public.championship_presentations OWNER TO motorsporttracker;
 -- Name: COLUMN championship_presentations.created_on; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.championship_presentations.created_on IS '(DC2Type:championship_presentation_created_on)';
+COMMENT ON COLUMN public.championship_presentations.created_on IS '(DC2Type:date_time_value_object)';
 
 
 --
@@ -267,6 +267,7 @@ Kishlin\\Migrations\\Core\\Version20230305015621	2023-03-05 01:57:03	19
 Kishlin\\Migrations\\Core\\Version20230305024031	2023-03-05 02:41:09	17
 Kishlin\\Migrations\\Core\\Version20230305131002	2023-03-05 13:10:58	15
 Kishlin\\Migrations\\Core\\Version20230305133147	2023-03-05 13:37:15	11
+Kishlin\\Migrations\\Core\\Version20230305142808	2023-03-05 14:29:26	11
 \.
 
 

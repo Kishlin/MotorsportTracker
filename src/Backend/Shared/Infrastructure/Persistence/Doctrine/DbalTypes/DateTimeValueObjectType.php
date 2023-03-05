@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
 use ReflectionException;
 
-class DatetimeValueObjectType extends DateTimeImmutableType
+class DateTimeValueObjectType extends DateTimeImmutableType
 {
     /**
      * @throws ReflectionException

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Championship\Command;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,7 +20,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
     public const NAME = 'kishlin:motorsport:championship-presentation:add';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
-    private const QUESTION_CHAMPIONSHIP = "Please enter the id of the championship:\n";
+    private const QUESTION_CHAMPIONSHIP = "Please enter the slug of the championship:\n";
 
     private const ARGUMENT_ICON = 'icon';
     private const QUESTION_ICON = "Please enter an icon for the championship presentation:\n";
@@ -39,7 +39,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
         $this
             ->setName(self::NAME)
             ->setDescription('Adds a new championship presentation.')
-            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The id of the championship')
+            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The slug of the championship')
             ->addArgument(self::ARGUMENT_ICON, InputArgument::OPTIONAL, 'The icon of the championship presentation')
             ->addArgument(self::ARGUMENT_COLOR, InputArgument::OPTIONAL, 'The color of the championship presentation')
         ;
@@ -54,7 +54,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
         $color        = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_COLOR, self::QUESTION_COLOR);
 
         try {
-            /** @var ChampionshipPresentationId $uuid */
+            /** @var UuidValueObject $uuid */
             $uuid = $this->commandBus->execute(
                 CreateChampionshipPresentationCommand::fromScalars($championship, $icon, $color),
             );

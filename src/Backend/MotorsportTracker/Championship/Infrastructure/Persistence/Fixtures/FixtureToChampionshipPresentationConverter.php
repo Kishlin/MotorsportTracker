@@ -6,12 +6,10 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationColor;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationCreatedOn;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationIcon;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
 
@@ -23,11 +21,11 @@ final class FixtureToChampionshipPresentationConverter implements FixtureConvert
     public function convert(Fixture $fixture): AggregateRoot
     {
         return ChampionshipPresentation::create(
-            new ChampionshipPresentationId($fixture->identifier()),
-            new ChampionshipPresentationChampionshipId($fixture->getString('championshipId')),
-            new ChampionshipPresentationIcon($fixture->getString('icon')),
-            new ChampionshipPresentationColor($fixture->getString('color')),
-            new ChampionshipPresentationCreatedOn($fixture->getDateTime('createdOn')),
+            new UuidValueObject($fixture->identifier()),
+            new UuidValueObject($fixture->getString('championshipId')),
+            new StringValueObject($fixture->getString('icon')),
+            new StringValueObject($fixture->getString('color')),
+            new DateTimeValueObject($fixture->getDateTime('createdOn')),
         );
     }
 }

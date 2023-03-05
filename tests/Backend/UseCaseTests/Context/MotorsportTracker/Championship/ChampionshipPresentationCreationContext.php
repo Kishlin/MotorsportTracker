@@ -8,7 +8,6 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -16,8 +15,8 @@ use Throwable;
 
 final class ChampionshipPresentationCreationContext extends MotorsportTrackerContext
 {
-    private ?ChampionshipPresentationId $championshipPresentationId = null;
-    private ?Throwable $thrownException                             = null;
+    private ?UuidValueObject $championshipPresentationId = null;
+    private ?Throwable $thrownException                  = null;
 
     public function clearGatewaySpies(): void
     {
@@ -41,12 +40,10 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
         $this->championshipPresentationId = null;
         $this->thrownException            = null;
 
-        $championshipId = $this->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
-
         try {
-            /** @var ChampionshipPresentationId $championshipPresentationId */
+            /** @var UuidValueObject $championshipPresentationId */
             $championshipPresentationId = self::container()->commandBus()->execute(
-                CreateChampionshipPresentationCommand::fromScalars($championshipId, $icon, $color),
+                CreateChampionshipPresentationCommand::fromScalars($championship, $icon, $color),
             );
 
             $this->championshipPresentationId = $championshipPresentationId;

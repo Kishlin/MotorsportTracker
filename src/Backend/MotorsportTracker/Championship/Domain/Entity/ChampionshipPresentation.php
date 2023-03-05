@@ -5,30 +5,28 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipPresentationCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationChampionshipId;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationColor;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationCreatedOn;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationIcon;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\ValueObject\ChampionshipPresentationId;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class ChampionshipPresentation extends AggregateRoot
 {
     private function __construct(
-        private readonly ChampionshipPresentationId $id,
-        private readonly ChampionshipPresentationChampionshipId $championshipId,
-        private readonly ChampionshipPresentationIcon $icon,
-        private readonly ChampionshipPresentationColor $color,
-        private readonly ChampionshipPresentationCreatedOn $createdOn,
+        private readonly UuidValueObject $id,
+        private readonly UuidValueObject $championshipId,
+        private readonly StringValueObject $icon,
+        private readonly StringValueObject $color,
+        private readonly DateTimeValueObject $createdOn,
     ) {
     }
 
     public static function create(
-        ChampionshipPresentationId $id,
-        ChampionshipPresentationChampionshipId $championshipId,
-        ChampionshipPresentationIcon $icon,
-        ChampionshipPresentationColor $color,
-        ChampionshipPresentationCreatedOn $createdOn,
+        UuidValueObject $id,
+        UuidValueObject $championshipId,
+        StringValueObject $icon,
+        StringValueObject $color,
+        DateTimeValueObject $createdOn,
     ): self {
         $championshipIcon = new self($id, $championshipId, $icon, $color, $createdOn);
 
@@ -38,36 +36,36 @@ final class ChampionshipPresentation extends AggregateRoot
     }
 
     public static function instance(
-        ChampionshipPresentationId $id,
-        ChampionshipPresentationChampionshipId $championshipId,
-        ChampionshipPresentationIcon $icon,
-        ChampionshipPresentationColor $color,
-        ChampionshipPresentationCreatedOn $createdOn,
+        UuidValueObject $id,
+        UuidValueObject $championshipId,
+        StringValueObject $icon,
+        StringValueObject $color,
+        DateTimeValueObject $createdOn,
     ): self {
         return new self($id, $championshipId, $icon, $color, $createdOn);
     }
 
-    public function id(): ChampionshipPresentationId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function championshipId(): ChampionshipPresentationChampionshipId
+    public function championshipId(): UuidValueObject
     {
         return $this->championshipId;
     }
 
-    public function icon(): ChampionshipPresentationIcon
+    public function icon(): StringValueObject
     {
         return $this->icon;
     }
 
-    public function color(): ChampionshipPresentationColor
+    public function color(): StringValueObject
     {
         return $this->color;
     }
 
-    public function createdOn(): ChampionshipPresentationCreatedOn
+    public function createdOn(): DateTimeValueObject
     {
         return $this->createdOn;
     }
