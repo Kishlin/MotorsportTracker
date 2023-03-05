@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\SaveEventGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SaveEventGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SearchEventGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -17,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Event get(UuidValueObject $id)
  * @method Event      safeGet(UuidValueObject $id)
  */
-final class SaveEventRepositorySpy extends AbstractRepositorySpy implements SaveEventGateway
+final class SaveEventRepositorySpy extends AbstractRepositorySpy implements SaveEventGateway, SearchEventGateway
 {
     /**
      * @throws Exception
@@ -39,5 +40,16 @@ final class SaveEventRepositorySpy extends AbstractRepositorySpy implements Save
         }
 
         $this->objects[$event->id()->value()] = $event;
+    }
+
+    public function find(string $slug): ?UuidValueObject
+    {
+        foreach ($this->objects as $event) {
+            if ($slug === $event->slug()->value()) {
+                return $event->id();
+            }
+        }
+
+        return null;
     }
 }

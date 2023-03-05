@@ -10,7 +10,7 @@ use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshi
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventStep\CreateEventStepCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateStepTypeIfNotExists\CreateStepTypeIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;

@@ -8,8 +8,8 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\CreateEventCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEvent\EventCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventCommand;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\EventCreationFailureException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -34,11 +34,11 @@ final class EventContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
-    #[When('a client creates the event :label of index :index for the season :season and venue :venue')]
-    #[When('a client creates an event for the same season and index with label :label')]
-    #[When('a client creates an event for the same season and label with index :index')]
+    #[When('a client creates the event :slug of index :index for the season :season and venue :venue')]
+    #[When('a client creates an event for the same season and index with slug :slug')]
+    #[When('a client creates an event for the same season and slug with index :index')]
     public function aClientCreatesAnEvent(
-        string $label = 'Dutch GP',
+        string $slug = 'Dutch GP',
         int $index = 14,
         string $season = 'formulaOne2022',
         string $venue = 'Zandvoort',
@@ -52,7 +52,7 @@ final class EventContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $label, $label, $label, null, null),
+                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $slug, $slug, $slug, null, null),
             );
 
             $this->eventId = $eventId;
@@ -62,6 +62,7 @@ final class EventContext extends MotorsportTrackerContext
     }
 
     #[Then('the event is saved')]
+    #[Then('the id of the event is returned')]
     public function theEventIsSaved(): void
     {
         Assert::assertNotNull($this->eventId);
@@ -70,7 +71,7 @@ final class EventContext extends MotorsportTrackerContext
     }
 
     #[Then('the event creation with the same index is declined')]
-    #[Then('the event creation with the same label is declined')]
+    #[Then('the event creation with the same slug is declined')]
     public function theEventCreationIsDeclined(): void
     {
         Assert::assertNull($this->eventId);
