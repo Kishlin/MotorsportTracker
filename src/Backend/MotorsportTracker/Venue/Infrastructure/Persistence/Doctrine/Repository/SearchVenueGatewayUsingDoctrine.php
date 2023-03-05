@@ -6,7 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Doc
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 

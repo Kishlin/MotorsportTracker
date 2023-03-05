@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SaveVenueGateway;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;

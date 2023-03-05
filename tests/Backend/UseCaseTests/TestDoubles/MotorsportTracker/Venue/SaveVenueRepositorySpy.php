@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue;
 
+use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\SaveVenueGateway;
+use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\SearchVenueGateway;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\VenueCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SaveVenueGateway;
-use Kishlin\Backend\MotorsportTracker\Venue\Domain\Gateway\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
