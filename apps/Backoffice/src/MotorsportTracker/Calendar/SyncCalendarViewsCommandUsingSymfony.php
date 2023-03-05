@@ -6,9 +6,9 @@ namespace Kishlin\Apps\Backoffice\MotorsportTracker\Calendar;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventStepCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Event\Domain\ValueObject\EventStepId;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventSessionCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ final class SyncCalendarViewsCommandUsingSymfony extends SymfonyCommand
 
     private const QUERY = <<<'SQL'
 SELECT es.id
-FROM event_steps es
+FROM event_sessions es
 WHERE es.id NOT IN (
     SELECT cv.reference
     FROM calendar_event_step_views cv
@@ -60,7 +60,7 @@ SQL;
         }
 
         foreach ($result as $eventStep) {
-            $this->eventDispatcher->dispatch(new EventStepCreatedDomainEvent(new EventStepId($eventStep['id'])));
+            $this->eventDispatcher->dispatch(new EventSessionCreatedDomainEvent(new UuidValueObject($eventStep['id'])));
 
             $ui->info("Synced presentation for event {$eventStep['id']}");
         }

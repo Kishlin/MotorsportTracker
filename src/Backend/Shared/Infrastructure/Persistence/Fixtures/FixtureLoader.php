@@ -7,11 +7,12 @@ namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures;
 use Exception;
 use InvalidArgumentException;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
+use RuntimeException;
 use Symfony\Component\Yaml\Parser as YamlParser;
 
 final class FixtureLoader
 {
-    /** @var array<string, array<string, array<string, float|int|string>>> */
+    /** @var array<string, array<string, array<string, bool|float|int|string>>> */
     private array $loadedFilesData = [];
 
     /** @var array<string, string> */
@@ -20,9 +21,9 @@ final class FixtureLoader
     private ?YamlParser $yamlParser = null;
 
     public function __construct(
-        private UuidGenerator $uuidGenerator,
-        private FixtureSaver $fixtureSaver,
-        private string $pathToFixtures,
+        private readonly UuidGenerator $uuidGenerator,
+        private readonly FixtureSaver $fixtureSaver,
+        private readonly string $pathToFixtures,
     ) {
     }
 
@@ -39,9 +40,13 @@ final class FixtureLoader
         $this->identifiers = [];
     }
 
-    public function identifier(string $fixture): ?string
+    public function identifier(string $fixture): string
     {
-        return array_key_exists($fixture, $this->identifiers) ? $this->identifiers[$fixture] : null;
+        if (false === array_key_exists($fixture, $this->identifiers)) {
+            throw new RuntimeException("Fixture {$fixture} appears to not have been loaded.");
+        }
+
+        return $this->identifiers[$fixture];
     }
 
     private function loadFixtureIfNotLoaded(string $fixture): void
@@ -86,7 +91,7 @@ final class FixtureLoader
             return;
         }
 
-        /** @var array<string, array<string, float|int|string>> $content */
+        /** @var array<string, array<string, bool|float|int|string>> $content */
         $content = $this->yamlParser()->parseFile("{$this->pathToFixtures}/{$class}.yaml");
 
         $this->loadedFilesData[$class] = $content;

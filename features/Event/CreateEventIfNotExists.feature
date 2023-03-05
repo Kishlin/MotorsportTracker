@@ -3,7 +3,7 @@ Feature: It can create Events
   Scenario: It saves a new event
     Given the season "Formula One 2022" exists
     And the venue "Zandvoort" exists
-    When a client creates the event "Dutch GP" of index 16 for the season "Formula One 2022" and venue "circuit-zandvoort"
+    When a client creates the event "Dutch GP" of index 16 for the season "Formula One 2022" and venue "Zandvoort"
     Then the event is saved
 
   Scenario: It cannot create two events with the same index in a championship
@@ -18,5 +18,5 @@ Feature: It can create Events
 
   Scenario: It retrieves the id if it already exist
     Given the event "Dutch Grand Prix 2022" exists
-    When a client creates the event "Dutch-gp" of index 16 for the season "Formula One 2022" and venue "circuit-zandvoort"
+    When a client creates the event "Dutch-gp" of index 16 for the season "Formula One 2022" and venue "Zandvoort"
     Then the id of the event is returned

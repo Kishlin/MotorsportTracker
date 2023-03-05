@@ -9,7 +9,3 @@ Feature: It can create Drivers
     Given the driver "Max Verstappen" exists
     When a client creates a driver with same name
     Then the driver creation is declined
-
-  Scenario: It cannot create drivers for a missing country
-    When a client creates a driver for a missing country
-    Then the driver creation is declined

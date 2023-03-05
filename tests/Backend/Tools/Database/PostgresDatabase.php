@@ -8,7 +8,6 @@ use Doctrine\DBAL\Exception as DoctrineException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
-use RuntimeException;
 
 final class PostgresDatabase implements DatabaseInterface
 {
@@ -49,13 +48,7 @@ final class PostgresDatabase implements DatabaseInterface
 
     public function fixtureId(string $fixture): string
     {
-        $identifier = $this->fixtureLoader->identifier($fixture);
-
-        if (null === $identifier) {
-            throw new RuntimeException("Fixture {$fixture} appears to not have been loaded.");
-        }
-
-        return $identifier;
+        return $this->fixtureLoader->identifier($fixture);
     }
 
     /**

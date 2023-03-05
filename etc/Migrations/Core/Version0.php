@@ -29,7 +29,6 @@ final class Version0 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_E410C3075E237E06 ON drivers (name)');
         $this->addSql('CREATE TABLE event_steps (id VARCHAR(36) NOT NULL, event VARCHAR(36) NOT NULL, type VARCHAR(36) NOT NULL, date_time TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX event_step_event_type_idx ON event_steps (event, type)');
-        $this->addSql('COMMENT ON COLUMN event_steps.date_time IS \'(DC2Type:event_step_date_time)\'');
         $this->addSql('CREATE TABLE events (id VARCHAR(36) NOT NULL, season VARCHAR(36) NOT NULL, venue VARCHAR(36) NOT NULL, index INT NOT NULL, slug VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, short_name VARCHAR(255) DEFAULT NULL, start_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, end_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5387574A989D9B62 ON events (slug)');
         $this->addSql('CREATE UNIQUE INDEX event_season_name_idx ON events (season, name)');

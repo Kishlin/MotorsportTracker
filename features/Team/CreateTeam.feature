@@ -9,7 +9,3 @@ Feature: It can create Teams
     Given the "Red Bull Racing" team exists
     When a client creates a team with the same name
     Then the team creation is declined
-
-  Scenario: It cannot create teams for a missing country
-    When a client creates a team for a missing country
-    Then the team creation is declined

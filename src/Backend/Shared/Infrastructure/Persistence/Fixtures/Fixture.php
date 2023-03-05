@@ -10,11 +10,11 @@ use Exception;
 final class Fixture
 {
     /**
-     * @param array<string, float|int|string> $data
+     * @param array<string, bool|float|int|string> $data
      */
     private function __construct(
-        private string $identifier,
-        private array $data,
+        private readonly string $identifier,
+        private readonly array $data,
     ) {
     }
 
@@ -38,6 +38,11 @@ final class Fixture
         return (float) $this->data[$key];
     }
 
+    public function getBool(string $key): bool
+    {
+        return (bool) $this->data[$key];
+    }
+
     /**
      * @throws Exception
      */
@@ -47,7 +52,7 @@ final class Fixture
     }
 
     /**
-     * @param array<string, float|int|string> $data
+     * @param array<string, bool|float|int|string> $data
      */
     public static function fromScalars(string $identifier, array $data): self
     {

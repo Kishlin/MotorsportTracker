@@ -95,24 +95,34 @@ CREATE TABLE public.drivers (
 ALTER TABLE public.drivers OWNER TO motorsporttracker;
 
 --
--- Name: event_steps; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: event_sessions; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.event_steps (
+CREATE TABLE public.event_sessions (
     id character varying(36) NOT NULL,
     event character varying(36) NOT NULL,
     type character varying(36) NOT NULL,
-    date_time timestamp(0) without time zone NOT NULL
+    slug character varying(255) NOT NULL,
+    has_result boolean NOT NULL,
+    start_date timestamp(0) without time zone NOT NULL,
+    end_date timestamp(0) without time zone NOT NULL
 );
 
 
-ALTER TABLE public.event_steps OWNER TO motorsporttracker;
+ALTER TABLE public.event_sessions OWNER TO motorsporttracker;
 
 --
--- Name: COLUMN event_steps.date_time; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN event_sessions.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.event_steps.date_time IS '(DC2Type:event_step_date_time)';
+COMMENT ON COLUMN public.event_sessions.start_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: COLUMN event_sessions.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.event_sessions.end_date IS '(DC2Type:nullable_date_time_value_object)';
 
 
 --
@@ -253,6 +263,7 @@ COPY public.countries (id, code, name) FROM stdin;
 
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
 Kishlin\\Migrations\\Core\\Version0	2023-03-04 23:29:52	55
+Kishlin\\Migrations\\Core\\Version20230305015621	2023-03-05 01:57:03	19
 \.
 
 
@@ -265,10 +276,10 @@ COPY public.drivers (id, name, country) FROM stdin;
 
 
 --
--- Data for Name: event_steps; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: event_sessions; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.event_steps (id, event, type, date_time) FROM stdin;
+COPY public.event_sessions (id, event, type, slug, has_result, start_date, end_date) FROM stdin;
 \.
 
 
@@ -361,11 +372,11 @@ ALTER TABLE ONLY public.drivers
 
 
 --
--- Name: event_steps event_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: event_sessions event_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.event_steps
-    ADD CONSTRAINT event_steps_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.event_sessions
+    ADD CONSTRAINT event_sessions_pkey PRIMARY KEY (id);
 
 
 --
@@ -445,10 +456,10 @@ CREATE UNIQUE INDEX event_season_name_idx ON public.events USING btree (season, 
 
 
 --
--- Name: event_step_event_type_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+-- Name: event_session_event_type_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX event_step_event_type_idx ON public.event_steps USING btree (event, type);
+CREATE UNIQUE INDEX event_session_event_type_idx ON public.event_sessions USING btree (event, type);
 
 
 --
@@ -519,6 +530,13 @@ CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (n
 --
 
 CREATE UNIQUE INDEX uniq_b682ea93989d9b62 ON public.championships USING btree (slug);
+
+
+--
+-- Name: uniq_dc8c74c3989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_dc8c74c3989d9b62 ON public.event_sessions USING btree (slug);
 
 
 --
