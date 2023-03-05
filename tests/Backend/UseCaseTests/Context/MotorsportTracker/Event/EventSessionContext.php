@@ -9,7 +9,7 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use DateTimeImmutable;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionCommand;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\EventSessionCreationFailureException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
@@ -47,7 +47,7 @@ final class EventSessionContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $eventSessionId */
             $eventSessionId = self::container()->commandBus()->execute(
-                CreateEventSessionCommand::fromScalars(
+                CreateEventSessionIfNotExistsCommand::fromScalars(
                     $eventId,
                     $stepTypeId,
                     $slug,

@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEventSessionCommand implements Command
+final class CreateEventSessionIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $eventId,

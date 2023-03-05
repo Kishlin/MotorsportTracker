@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateEventSessionCommandHandler implements CommandHandler
+final class CreateEventSessionIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
         private readonly SearchEventSessionGateway $searchGateway,
@@ -25,7 +25,7 @@ final class CreateEventSessionCommandHandler implements CommandHandler
     /**
      * @throws Exception
      */
-    public function __invoke(CreateEventSessionCommand $command): UuidValueObject
+    public function __invoke(CreateEventSessionIfNotExistsCommand $command): UuidValueObject
     {
         $id = $this->searchGateway->search($command->slug()->value());
         if (null !== $id) {

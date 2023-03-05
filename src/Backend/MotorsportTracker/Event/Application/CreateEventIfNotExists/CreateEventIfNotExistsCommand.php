@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEventCommand implements Command
+final class CreateEventIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $seasonId,

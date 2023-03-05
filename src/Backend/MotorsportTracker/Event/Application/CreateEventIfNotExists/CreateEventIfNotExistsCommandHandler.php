@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateEventCommandHandler implements CommandHandler
+final class CreateEventIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
         private readonly SearchEventGateway $searchGateway,
@@ -21,7 +21,7 @@ final class CreateEventCommandHandler implements CommandHandler
     ) {
     }
 
-    public function __invoke(CreateEventCommand $command): UuidValueObject
+    public function __invoke(CreateEventIfNotExistsCommand $command): UuidValueObject
     {
         $id = $this->searchGateway->find($command->slug()->value());
         if (null !== $id) {
@@ -41,7 +41,7 @@ final class CreateEventCommandHandler implements CommandHandler
         return $event->id();
     }
 
-    private function createEventFromCommand(CreateEventCommand $command): Event
+    private function createEventFromCommand(CreateEventIfNotExistsCommand $command): Event
     {
         return Event::create(
             new UuidValueObject($this->uuidGenerator->uuid4()),

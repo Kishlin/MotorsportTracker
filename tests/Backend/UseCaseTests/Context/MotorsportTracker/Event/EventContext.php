@@ -8,7 +8,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventCommand;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\EventCreationFailureException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
@@ -52,7 +52,7 @@ final class EventContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventCommand::fromScalars($seasonId, $venueId, $index, $slug, $slug, $slug, null, null),
+                CreateEventIfNotExistsCommand::fromScalars($seasonId, $venueId, $index, $slug, $slug, $slug, null, null),
             );
 
             $this->eventId = $eventId;
