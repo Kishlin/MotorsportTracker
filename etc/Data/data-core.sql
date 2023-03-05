@@ -20,6 +20,19 @@ SET row_security = off;
 -- Data for Name: championship_presentations; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('ebdf182d-5e38-4fa9-b5b3-c9c93415cb81', '503c6d1b-0ab8-45e1-ad8f-f11519fa1e25', 'f1.svg', '#e00000', '2023-03-05 18:08:58');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('ec1c4822-9201-4ceb-8636-d11c31a4574f', '9e086e0d-fecb-4a89-aa05-e3079711746c', 'f2.svg', '#043961', '2023-03-05 18:10:16');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('1245d027-d4be-44f3-8668-777e58b8cecd', '18cd0649-35ef-4230-9dc0-d84359b385d9', 'f3.svg', '#d02402', '2023-03-05 18:10:45');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('c40db0bf-107f-4960-8793-6ad1a76cdda9', '7f18551d-4306-4c20-bb27-7c20654c38ac', 'fe.svg', '#019dcb', '2023-03-05 18:10:55');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('10d7ebb7-332e-47a9-a4f1-30d87cc930cd', '1018a758-857c-4736-938e-02b7699015df', 'motogp.svg', '#e07000', '2023-03-05 18:11:06');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('a4ad9444-2864-4333-8ca4-c940da1edbdd', '7a99bd83-0ce3-475e-aa34-0a8b17505532', 'imsa.svg', '#fefffe', '2023-03-05 18:11:27');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('99345132-0769-42f8-8bbc-7113ec3340de', 'ac09a8d0-6843-4f2d-9728-bfc557aeff8f', 'wec.svg', '#0649a1', '2023-03-05 18:11:36');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('a2e7ba3a-10d4-48bf-a963-a151c789a05a', '4793b48b-9442-47f1-b11f-e0a84fb00344', 'gt-world-challenge-europe.svg', '#ffcc00', '2023-03-05 18:11:47');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('d3997450-aa83-4234-a7ed-0bc2df0ab625', 'ee8127f2-e31f-4936-9bc0-16a25f0cf903', 'gt-world-challenge-europe.svg', '#ffcc00', '2023-03-05 18:11:52');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('ea255265-f04d-482f-be1a-3ef9d23ca8b7', 'e9bba59a-d215-48d9-baea-3ebd06e54a6e', 'adac.svg', '#ffcf00', '2023-03-05 18:12:15');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('17c510d3-a55a-4d71-8e7a-9f0c650f591c', 'e5f9a8c5-6074-42b9-b037-0a1a87eea29d', 'f4.svg', '#4a4a4a', '2023-03-05 18:12:24');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('a57d4b75-621e-4112-9eb2-927190f3e6f4', '6a70c07f-026c-4ebd-8628-35ca31abbca0', 'gt4.svg', '#9a9a9a', '2023-03-05 18:12:31');
+INSERT INTO public.championship_presentations (id, championship, icon, color, created_on) VALUES ('84883ac6-cb46-4b08-a718-b3e263fcea8f', '268e3196-f6e1-4edf-8d53-ac7c4468c38a', 'W-series.svg', '#440099', '2023-03-05 18:12:41');
 
 
 --
@@ -90,6 +103,7 @@ INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Core\Version20230305024031', '2023-03-05 02:41:09', 17);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Core\Version20230305131002', '2023-03-05 13:10:58', 15);
 INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Core\Version20230305133147', '2023-03-05 13:37:15', 11);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('Kishlin\Migrations\Core\Version20230305142808', '2023-03-05 14:29:26', 11);
 
 
 --
