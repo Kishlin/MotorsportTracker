@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportTracker\Calendar\Controller;
 
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarQuery;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarResponse;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarQuery;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarResponse;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
     ],
     methods: [Request::METHOD_GET],
 )]
-final class CalendarController extends AbstractController
+final class DeprecatedCalendarController extends AbstractController
 {
     public function __invoke(QueryBus $queryBus, string $start, string $end): JsonResponse
     {

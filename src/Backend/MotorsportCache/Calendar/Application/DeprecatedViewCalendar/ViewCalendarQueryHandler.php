@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar;
 
 use Exception;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;

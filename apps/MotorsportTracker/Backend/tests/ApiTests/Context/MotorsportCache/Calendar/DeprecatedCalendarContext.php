@@ -2,39 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar;
+namespace Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Calendar;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarQuery;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarResponse;
-use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
+use Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\BackendApiContext;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-final class CalendarContext extends MotorsportTrackerContext
+final class DeprecatedCalendarContext extends BackendApiContext
 {
-    private ?ViewCalendarResponse $response;
-
-    public function clearGatewaySpies(): void
-    {
-        self::container()->calendarEventStepViewRepositorySpy()->clear();
-    }
+    private Response $response;
 
     #[Given('there are no events planned')]
     public function thereAreNoEventsPlanned(): void
     {
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Given('the calendar event view :name exists')]
-    public function theCalendarEventViewExists(string $name): void
+    #[Given('the calendar event view :view exists')]
+    public function theCalendarEventViewExists(string $view): void
     {
-        self::container()->cacheFixtureLoader()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($name)}");
+        self::cacheDatabase()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($view)}");
     }
 
     /**
@@ -43,22 +35,29 @@ final class CalendarContext extends MotorsportTrackerContext
     #[When('a client views the calendar from :start to :end')]
     public function aClientViewsTheCalendar(string $start, string $end): void
     {
-        $response = self::container()->queryBus()->ask(ViewCalendarQuery::fromScalars($start, $end));
+        $this->response = self::handle(Request::create("/api/v1/calendar/view/{$start}/{$end}", 'GET'));
+    }
 
-        assert($response instanceof ViewCalendarResponse);
+    #[Then('an empty calendar is viewed')]
+    public function anEmptyCalendarIsViewed(): void
+    {
+        $responseContent = $this->response->getContent();
 
-        $this->response = $response;
+        Assert::assertNotFalse($responseContent);
+        Assert::assertSame([], json_decode($responseContent, true));
     }
 
     #[Then('a calendar is viewed with events')]
     public function aCalendarIsViewedWithEvents(TableNode $expectedCalendar): void
     {
-        Assert::assertNotNull($this->response);
+        $responseContent = $this->response->getContent();
+        Assert::assertNotFalse($responseContent);
 
         /** @var array<array{championship: string, color: string, icon: string, name: string, venue: string, type: string, dateTime: string, reference: string}> $expected */
         $expected = $expectedCalendar;
 
-        $actual = $this->response->calendarView()->toArray();
+        $actual = json_decode($responseContent, true);
+        Assert::assertIsArray($actual);
 
         foreach ($expected as $expectedCalendarEntry) {
             $date = substr($expectedCalendarEntry['dateTime'], 0, 10);
@@ -97,12 +96,5 @@ final class CalendarContext extends MotorsportTrackerContext
 
             Assert::assertArrayHasKey($expectedCalendarEntry['dateTime'], $actual[$date]);
         }
-    }
-
-    #[Then('an empty calendar is viewed')]
-    public function anEmptyCalendarIsViewed(): void
-    {
-        Assert::assertNotNull($this->response);
-        Assert::assertEmpty($this->response->calendarView()->toArray());
     }
 }

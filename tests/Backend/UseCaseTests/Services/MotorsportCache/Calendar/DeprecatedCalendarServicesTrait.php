@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar;
 
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarQueryHandler;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\CalendarEventStepViewRepositorySpy;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarQueryHandler;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\DeprecatedCalendarEventStepViewRepositorySpy;
 
-trait CalendarServicesTrait
+trait DeprecatedCalendarServicesTrait
 {
-    private ?CalendarEventStepViewRepositorySpy $calendarEventStepViewRepositorySpy = null;
+    private ?DeprecatedCalendarEventStepViewRepositorySpy $calendarEventStepViewRepositorySpy = null;
 
     private ?ViewCalendarQueryHandler $viewCalendarQueryHandler = null;
 
-    public function calendarEventStepViewRepositorySpy(): CalendarEventStepViewRepositorySpy
+    public function calendarEventStepViewRepositorySpy(): DeprecatedCalendarEventStepViewRepositorySpy
     {
         if (null === $this->calendarEventStepViewRepositorySpy) {
-            $this->calendarEventStepViewRepositorySpy = new CalendarEventStepViewRepositorySpy();
+            $this->calendarEventStepViewRepositorySpy = new DeprecatedCalendarEventStepViewRepositorySpy();
         }
 
         return $this->calendarEventStepViewRepositorySpy;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar;
 
 use DateTimeImmutable;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\JsonableCalendarView;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarGateway;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\JsonableCalendarView;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEventStepView;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -18,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|CalendarEventStepView get(UuidValueObject $id)
  * @method CalendarEventStepView      safeGet(UuidValueObject $id)
  */
-final class CalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements ViewCalendarGateway
+final class DeprecatedCalendarEventStepViewRepositorySpy extends AbstractRepositorySpy implements ViewCalendarGateway
 {
     public function save(CalendarEventStepView $calendarEventStepView): void
     {

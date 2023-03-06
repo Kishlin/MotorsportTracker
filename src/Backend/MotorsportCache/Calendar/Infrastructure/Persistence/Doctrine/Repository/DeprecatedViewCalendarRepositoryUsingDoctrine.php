@@ -6,11 +6,11 @@ namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Do
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\JsonableCalendarView;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendar\ViewCalendarGateway;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\JsonableCalendarView;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository;
 
-final class ViewCalendarRepositoryUsingDoctrine extends CacheRepository implements ViewCalendarGateway
+final class DeprecatedViewCalendarRepositoryUsingDoctrine extends CacheRepository implements ViewCalendarGateway
 {
     /**
      * @throws Exception

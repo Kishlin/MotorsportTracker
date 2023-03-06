@@ -6,21 +6,21 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastru
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\DeprecatedViewCalendarRepositoryUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\DeprecatedViewCalendarRepositoryUsingDoctrine
  */
-final class ViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
+final class DeprecatedViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContractTestCase
 {
     /**
      * @throws Exception
      */
     public function testItReturnsAnEmptyCalendarWhenThereIsNoData(): void
     {
-        $repository = new ViewCalendarRepositoryUsingDoctrine(self::entityManager());
+        $repository = new DeprecatedViewCalendarRepositoryUsingDoctrine(self::entityManager());
 
         $jsonableCalendarView = $repository->view(new DateTimeImmutable(), new DateTimeImmutable());
 
@@ -39,7 +39,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContr
         assert($startDate instanceof DateTimeImmutable);
         assert($endDate instanceof DateTimeImmutable);
 
-        $repository = new ViewCalendarRepositoryUsingDoctrine(self::entityManager());
+        $repository = new DeprecatedViewCalendarRepositoryUsingDoctrine(self::entityManager());
 
         $actual = $repository->view($startDate, $endDate)->toArray();
 
@@ -78,7 +78,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContr
         assert($startDate instanceof DateTimeImmutable);
         assert($endDate instanceof DateTimeImmutable);
 
-        $repository = new ViewCalendarRepositoryUsingDoctrine(self::entityManager());
+        $repository = new DeprecatedViewCalendarRepositoryUsingDoctrine(self::entityManager());
 
         $actual = $repository->view($startDate, $endDate)->toArray();
 
@@ -150,7 +150,7 @@ final class ViewCalendarRepositoryUsingDoctrineTest extends CacheRepositoryContr
         assert($startDate instanceof DateTimeImmutable);
         assert($endDate instanceof DateTimeImmutable);
 
-        $repository = new ViewCalendarRepositoryUsingDoctrine(self::entityManager());
+        $repository = new DeprecatedViewCalendarRepositoryUsingDoctrine(self::entityManager());
 
         $actual = $repository->view($startDate, $endDate)->toArray();
 
