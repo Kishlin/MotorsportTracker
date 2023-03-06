@@ -115,7 +115,7 @@ services:
     Symfony\Component\Console\Command\Command:
       tags: ['console.command']
 
-    Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber:
+    Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber:
       tags: ['kishlin.application_service']
 
     Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:

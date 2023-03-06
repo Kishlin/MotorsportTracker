@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
-use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
+use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 
@@ -22,7 +22,7 @@ final class TestEventDispatcher implements EventDispatcher
     /**
      * @throws Exception
      */
-    public function dispatch(DomainEvent ...$domainEvents): void
+    public function dispatch(Event ...$domainEvents): void
     {
         foreach ($domainEvents as $event) {
             $this->handleEvent($event);
@@ -32,7 +32,7 @@ final class TestEventDispatcher implements EventDispatcher
     /**
      * @throws Exception
      */
-    private function handleEvent(DomainEvent $event): void
+    private function handleEvent(Event $event): void
     {
     }
 }

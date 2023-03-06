@@ -6,10 +6,10 @@ namespace Kishlin\Backend\Shared\Infrastructure\Logging\OnAggregateRootCreation;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEventSubscriber;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-abstract class AggregateRootCreationLogger implements DomainEventSubscriber
+abstract class AggregateRootCreationLogger implements EventSubscriber
 {
     public function __construct(
         private readonly EntityManagerInterface $em,

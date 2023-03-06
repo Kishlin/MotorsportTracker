@@ -21,9 +21,9 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Time\TimeServicesTrait;
 
 final class TestServiceContainer
 {
-    use DeprecatedCalendarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;
+    use DeprecatedCalendarServicesTrait;
     use DriverServicesTrait;
     use EventServicesTrait;
     use EventSessionServicesTrait;
