@@ -14,7 +14,7 @@ use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class DeprecatedCalendarContext extends BackendApiContext
+final class ViewCalendarEventsContext extends BackendApiContext
 {
     private Response $response;
 
@@ -23,10 +23,10 @@ final class DeprecatedCalendarContext extends BackendApiContext
     {
     }
 
-    #[Given('the calendar event view :view exists')]
+    #[Given('the calendar event :view exists')]
     public function theCalendarEventViewExists(string $view): void
     {
-        self::cacheDatabase()->loadFixture("motorsport.calendar.calendarEventStepView.{$this->format($view)}");
+        self::cacheDatabase()->loadFixture("motorsport.calendar.calendarEvent.{$this->format($view)}");
     }
 
     /**
@@ -53,48 +53,20 @@ final class DeprecatedCalendarContext extends BackendApiContext
         $responseContent = $this->response->getContent();
         Assert::assertNotFalse($responseContent);
 
-        /** @var array<array{championship: string, color: string, icon: string, name: string, venue: string, type: string, dateTime: string, reference: string}> $expected */
+        /** @var array<array{key: string, count: int, slug: string}> $expected */
         $expected = $expectedCalendar;
 
         $actual = json_decode($responseContent, true);
         Assert::assertIsArray($actual);
 
         foreach ($expected as $expectedCalendarEntry) {
-            $date = substr($expectedCalendarEntry['dateTime'], 0, 10);
+            $key = $expectedCalendarEntry['key'];
 
-            Assert::assertArrayHasKey($date, $actual);
+            Assert::assertArrayHasKey($key, $actual);
 
-            Assert::assertSame(
-                $expectedCalendarEntry['championship'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['championship_slug'],
-            );
+            Assert::assertCount((int) $expectedCalendarEntry['count'], $actual[$key]);
 
-            Assert::assertSame(
-                $expectedCalendarEntry['color'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['color'],
-            );
-
-            Assert::assertSame(
-                $expectedCalendarEntry['icon'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['icon'],
-            );
-
-            Assert::assertSame(
-                $expectedCalendarEntry['name'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['name'],
-            );
-
-            Assert::assertSame(
-                $expectedCalendarEntry['venue'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['venue_label'],
-            );
-
-            Assert::assertSame(
-                $expectedCalendarEntry['type'],
-                $actual[$date][$expectedCalendarEntry['dateTime']]['type'],
-            );
-
-            Assert::assertArrayHasKey($expectedCalendarEntry['dateTime'], $actual[$date]);
+            Assert::assertSame($expectedCalendarEntry['slug'], $actual[$key][0]['slug']);
         }
     }
 }

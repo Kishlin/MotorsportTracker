@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportTracker\Calendar\Controller;
+namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportCache\Calendar\Controller;
 
-use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarQuery;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarResponse;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsQuery;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsResponse;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,12 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
     ],
     methods: [Request::METHOD_GET],
 )]
-final class DeprecatedCalendarController extends AbstractController
+final class ViewCalendarEventsController extends AbstractController
 {
     public function __invoke(QueryBus $queryBus, string $start, string $end): JsonResponse
     {
-        /** @var ViewCalendarResponse $calendarResponse */
-        $calendarResponse = $queryBus->ask(ViewCalendarQuery::fromScalars("{$start} 00:00:00", "{$end} 23:59:59"));
+        /** @var ViewCalendarEventsResponse $calendarResponse */
+        $calendarResponse = $queryBus->ask(ViewCalendarEventsQuery::fromScalars("{$start} 00:00:00", "{$end} 23:59:59"));
 
         return new JsonResponse($calendarResponse->calendarView()->toArray());
     }

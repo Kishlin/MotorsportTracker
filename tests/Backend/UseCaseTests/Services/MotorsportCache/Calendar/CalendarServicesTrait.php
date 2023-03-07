@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar;
 
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\SyncCalendarEventsCommandHandler;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsQueryHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\CalendarEventRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\FindEventsRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\FindSeriesRepositorySpy;
@@ -16,6 +17,8 @@ trait CalendarServicesTrait
     private ?FindSeriesRepositorySpy $findSeriesRepositorySpy = null;
 
     private ?CalendarEventRepositorySpy $calendarEventRepositorySpy = null;
+
+    private ?ViewCalendarEventsQueryHandler $viewCalendarEventsQueryHandler = null;
 
     private ?SyncCalendarEventsCommandHandler $syncCalendarEventsCommandHandler = null;
 
@@ -56,6 +59,17 @@ trait CalendarServicesTrait
         }
 
         return $this->calendarEventRepositorySpy;
+    }
+
+    public function viewCalendarEventsQueryHandler(): ViewCalendarEventsQueryHandler
+    {
+        if (null === $this->viewCalendarEventsQueryHandler) {
+            $this->viewCalendarEventsQueryHandler = new ViewCalendarEventsQueryHandler(
+                $this->calendarEventRepositorySpy(),
+            );
+        }
+
+        return $this->viewCalendarEventsQueryHandler;
     }
 
     public function syncCalendarEventsCommandHandler(): SyncCalendarEventsCommandHandler

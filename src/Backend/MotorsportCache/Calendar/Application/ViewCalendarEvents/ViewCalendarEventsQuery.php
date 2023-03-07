@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents;
 
 use DateTimeImmutable;
 use Exception;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 
-final class ViewCalendarQuery implements Query
+final class ViewCalendarEventsQuery implements Query
 {
     private function __construct(
         private readonly string $start,

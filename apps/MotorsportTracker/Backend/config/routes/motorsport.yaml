@@ -1,5 +1,5 @@
 calendar:
-  resource: ../../src/MotorsportTracker/Calendar/Controller/
+  resource: ../../src/MotorsportCache/Calendar/Controller/
   prefix: /api/v1/calendar
   type: annotation
   stateless: true

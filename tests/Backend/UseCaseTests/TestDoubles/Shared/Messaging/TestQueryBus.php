@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\DeprecatedViewCalendar\ViewCalendarQuery;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsQuery;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
@@ -25,8 +25,8 @@ final class TestQueryBus implements QueryBus
      */
     public function ask(Query $query): Response
     {
-        if ($query instanceof ViewCalendarQuery) {
-            return $this->testServiceContainer->viewCalendarQueryHandler()($query);
+        if ($query instanceof ViewCalendarEventsQuery) {
+            return $this->testServiceContainer->viewCalendarEventsQueryHandler()($query);
         }
 
         if ($query instanceof SearchDriverQuery) {
