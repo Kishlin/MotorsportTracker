@@ -47,6 +47,47 @@ COMMENT ON COLUMN public.calendar_event_step_views.date_time IS '(DC2Type:calend
 
 
 --
+-- Name: calendar_events; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.calendar_events (
+    id character varying(36) NOT NULL,
+    slug character varying(255) NOT NULL,
+    index integer NOT NULL,
+    name character varying(255) NOT NULL,
+    short_name character varying(255) DEFAULT NULL::character varying,
+    start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    series text NOT NULL,
+    venue json NOT NULL,
+    sessions json NOT NULL
+);
+
+
+ALTER TABLE public.calendar_events OWNER TO motorsporttracker;
+
+--
+-- Name: COLUMN calendar_events.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.calendar_events.start_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: COLUMN calendar_events.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.calendar_events.end_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: COLUMN calendar_events.series; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.calendar_events.series IS '(DC2Type:calendar_event_series)';
+
+
+--
 -- Name: doctrine_migration_versions; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -112,6 +153,14 @@ COPY public.calendar_event_step_views (id, championship_slug, color, icon, name,
 
 
 --
+-- Data for Name: calendar_events; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+--
+
+COPY public.calendar_events (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions) FROM stdin;
+\.
+
+
+--
 -- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
@@ -119,6 +168,7 @@ COPY public.doctrine_migration_versions (version, executed_at, execution_time) F
 Kishlin\\Migrations\\Cache\\Version20230204042827	2023-03-03 15:05:03	14
 Kishlin\\Migrations\\Cache\\Version20230218154951	2023-03-03 15:05:03	1
 Kishlin\\Migrations\\Cache\\Version20230226141240	2023-03-03 15:05:03	8
+Kishlin\\Migrations\\Cache\\Version20230306173718	2023-03-06 17:38:04	19
 \.
 
 
@@ -144,6 +194,14 @@ COPY public.team_standings_views (id, championship_slug, year, events, standings
 
 ALTER TABLE ONLY public.calendar_event_step_views
     ADD CONSTRAINT calendar_event_step_views_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: calendar_events calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.calendar_events
+    ADD CONSTRAINT calendar_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -196,6 +254,13 @@ CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.drive
 --
 
 CREATE UNIQUE INDEX team_standings_views_championship_year_idx ON public.team_standings_views USING btree (championship_slug, year);
+
+
+--
+-- Name: uniq_f9e14f16989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_f9e14f16989d9b62 ON public.calendar_events USING btree (slug);
 
 
 --

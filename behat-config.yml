@@ -15,6 +15,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SessionTypeContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\DeprecatedCalendarContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\Shared\FixturesContext
     api_tests:
@@ -27,6 +28,9 @@ default:
     backoffice_tests:
       paths: [ features ]
       contexts:
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\EventSessionContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Shared\FixturesContext
       filters:
         tags: '@backoffice'

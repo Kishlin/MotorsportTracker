@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests;
 
 use Kishlin\Tests\Backend\UseCaseTests\Services\Country\CountryServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar\CalendarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar\DeprecatedCalendarServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver\DriverServicesTrait;
@@ -21,6 +22,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Time\TimeServicesTrait;
 
 final class TestServiceContainer
 {
+    use CalendarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;
     use DeprecatedCalendarServicesTrait;

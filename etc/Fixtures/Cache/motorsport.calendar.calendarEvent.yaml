@@ -1,0 +1,21 @@
+formulaOne2022DutchGP:
+  series: '{"name":"Formula One","slug":"formula-one","year":2023,"icon":"f1.svg","color":"#fff"}'
+  venue: '{"name":"Circuit Zandvoort","slug":"circuit-zandvoort","country":{"code":"nl","name":"Netherlands"}}'
+  index: 0
+  slug: 'formula-one_0_dutch-gp'
+  name: 'Dutch Grand Prix'
+  shortName: 'Dutch GP'
+  startDate: '2022-11-22 01:00:00'
+  endDate: '2022-11-22 01:00:00'
+  sessions: '[{"type":"race","slug":"dutchGrandPrix2022Race","hasResult":false,"startDate":"2022-11-22 01:00:00","enDate":"2022-11-22 01:00:00"}]'
+
+formulaOne2022EmiliaRomagnaGP:
+  series: '{"name":"Formula One","slug":"formula-one","year":2023,"icon":"f1.svg","color":"#fff"}'
+  venue: '{"name":"Autodromo Internazionale Enzo e Dino Ferrari","slug":"autodromo-internazionale-enzo-e-dino-ferrari","country":{"code":"it","name":"Italia"}}'
+  index: 3
+  slug: 'Emilia Romagna-gp'
+  name: 'Emilia Romagna GP'
+  shortName: 'Emilia Romagna GP'
+  startDate: '2022-04-23 14:30:00'
+  endDate: '2022-04-24 13:00:00'
+  sessions: '[{"type":"sprint qualifying","slug":"emiliaRomagnaGrandPrix2022Sprint","hasResult":false,"startDate":"2022-04-23T14:30:00","enDate":"2022-04-23T15:30:00"},{"type":"race","slug":"emiliaRomagnaGrandPrix2022Race","hasResult":false,"startDate":"2022-04-24T13:00:00","enDate":"2022-04-24T14:00:00"}]'

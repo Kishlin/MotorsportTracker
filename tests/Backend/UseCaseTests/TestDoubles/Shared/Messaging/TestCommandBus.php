@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\SyncCalendarEventsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
@@ -33,6 +34,16 @@ final class TestCommandBus implements CommandBus
      */
     public function execute(Command $command): mixed
     {
+        // Cache
+
+        if ($command instanceof SyncCalendarEventsCommand) {
+            $this->testServiceContainer->syncCalendarEventsCommandHandler()($command);
+
+            return null;
+        }
+
+        // Core
+
         if ($command instanceof CreateCountryIfNotExistsCommand) {
             return $this->testServiceContainer->createCountryIfNotExistsCommandHandler()($command);
         }
