@@ -11,7 +11,7 @@ declare type ScheduleEventProps = {
 };
 
 const ScheduleEvent: React.FunctionComponent<ScheduleEventProps> = ({ event }) => {
-    const [showTimetable, setShowTimetable] = useState<boolean>(true);
+    const [showTimetable, setShowTimetable] = useState<boolean>(false);
 
     const toggleTimetable = () => setShowTimetable(!showTimetable);
 
