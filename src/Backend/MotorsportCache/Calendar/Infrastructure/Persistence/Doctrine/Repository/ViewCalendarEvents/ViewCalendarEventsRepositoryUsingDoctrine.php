@@ -23,6 +23,7 @@ final class ViewCalendarEventsRepositoryUsingDoctrine extends CacheRepository im
             ->from('calendar_events', 'ce')
             ->where('ce.start_date >= :firstDay')
             ->andWhere('ce.end_date <= :lastDay')
+            ->orderBy('ce.start_date', 'ASC')
             ->setParameter('lastDay', $end->format('Y-m-d H:i:s'))
             ->setParameter('firstDay', $start->format('Y-m-d H:i:s'))
         ;
