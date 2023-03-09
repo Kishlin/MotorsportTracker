@@ -1,3 +1,11 @@
+export type MotorsportSession = {
+    type: string,
+    slug: string,
+    has_result: false,
+    start_date: null|string,
+    end_date: null|string,
+};
+
 export type MotorsportEvent = {
     id: string,
     slug: string,
@@ -21,13 +29,7 @@ export type MotorsportEvent = {
             name: string,
         },
     },
-    sessions: Array<{
-        type: string,
-        slug: string,
-        has_result: false,
-        start_date: null|string,
-        end_date: null|string,
-    }>
+    sessions: Array<MotorsportSession>,
 };
 
 export type EventsSchedule = {
