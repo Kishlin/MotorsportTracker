@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [ $# -ne 1 ]
+if [ $# -lt 1 ]
 then
     echo "Usage: $(basename "$0") PREFIX"
     echo "Example: $(basename "$0") \"docker-compose exec backoffice bin/console\""
