@@ -7,6 +7,10 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportStatsScrapper\Infrastruc
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship\SessionTypePatcher;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @covers \Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship\SessionTypePatcher
+ */
 final class SessionTypePatcherTest extends TestCase
 {
     public function testItChangesWordsToUppercase(): void
@@ -190,7 +194,7 @@ final class SessionTypePatcherTest extends TestCase
                                         'code'      => null,
                                     ],
                                     'status'       => null,
-                                    'hasResults'    => false,
+                                    'hasResults'   => false,
                                     'startTimeUtc' => null,
                                     'endTimeUtc'   => null,
                                 ],
