@@ -8,7 +8,7 @@ import firstMondayBeforeOrAtDate from '../../../../src/MotorsportTracker/Schedul
 import listOfAllMonths from '../../../../src/MotorsportTracker/Schedule/Utils/Date/listOfAllMonths';
 import { EventsSchedule } from '../../../../src/MotorsportTracker/Shared/Types';
 import Schedule from '../../../../src/MotorsportTracker/Schedule/Ui/Schedule';
-import calendarApi from '../../../../src/MotorsportTracker/Api/CalendarApi';
+import calendarApi from '../../../../src/MotorsportTracker/Schedule/Api/CalendarApi';
 import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 
 declare type SchedulePathParams = {

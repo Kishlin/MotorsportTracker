@@ -1,4 +1,4 @@
-import { EventsSchedule } from '../Shared/Types';
+import { EventsSchedule } from '../../Shared/Types';
 
 export type CalendarApi = (firstDay: Date, lastDay: Date) => Promise<EventsSchedule>;
 

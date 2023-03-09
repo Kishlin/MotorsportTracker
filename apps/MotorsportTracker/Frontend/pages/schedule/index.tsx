@@ -5,7 +5,7 @@ import MotorsportTrackerMenu from '../../src/MotorsportTracker/Menu/Ui/Motorspor
 import previousMonday from '../../src/MotorsportTracker/Schedule/Utils/Date/previousMonday';
 import ScheduleScrollable from '../../src/MotorsportTracker/Schedule/Ui/ScheduleScrollable';
 import { EventsSchedule } from '../../src/MotorsportTracker/Shared/Types';
-import calendarApi from '../../src/MotorsportTracker/Api/CalendarApi';
+import calendarApi from '../../src/MotorsportTracker/Schedule/Api/CalendarApi';
 import Layout from '../../src/Shared/Ui/Layout/Layout';
 
 declare type SchedulePageProps = {

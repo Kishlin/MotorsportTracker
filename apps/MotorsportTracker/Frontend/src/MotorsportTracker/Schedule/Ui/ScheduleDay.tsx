@@ -1,16 +1,16 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 
-import { DailyEventsSchedule, MotorsportEvent } from '../../Shared/Types';
+import { MotorsportEvent } from '../../Shared/Types';
 import ScheduleEvent from './ScheduleEvent';
 
 declare type ScheduleDayProps = {
-    events: DailyEventsSchedule,
+    events: MotorsportEvent[],
 };
 
 const ScheduleDay: React.FunctionComponent<ScheduleDayProps> = ({ events }) => {
     const eventsJSX = Object.values(events).map(
-        (event: MotorsportEvent) => <ScheduleEvent key={event.reference} event={event} />,
+        (event: MotorsportEvent) => <ScheduleEvent key={event.id} event={event} />,
     );
 
     return (
