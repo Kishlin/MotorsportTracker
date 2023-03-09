@@ -46,18 +46,6 @@ final class Event
         }
     }
 
-    public function removeSessionsCancelledOrPostponed(): void
-    {
-        $filteredSessions = array_filter(
-            $this->sessions,
-            static function (Session $session) {
-                return 'Cancelled' !== $session->status() && 'Postponed' !== $session->status();
-            },
-        );
-
-        $this->sessions = $filteredSessions;
-    }
-
     public function slug(): string
     {
         return $this->slug;

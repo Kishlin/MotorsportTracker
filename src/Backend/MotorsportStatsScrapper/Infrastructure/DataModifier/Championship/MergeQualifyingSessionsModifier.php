@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Mutator\Championship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity\Championship;
 
-final class SessionsFilter extends ChampionshipMutator
+final class MergeQualifyingSessionsModifier extends AbstractChampionshipModifier
 {
     public function apply(Championship $championship): void
     {
         foreach ($championship->events() as $event) {
-            $event->removeSessionsCancelledOrPostponed();
             $event->mergeQualifyingSessions();
         }
     }

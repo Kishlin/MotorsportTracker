@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Mutator\Championship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship;
 
-final class CancelledOrPostponedEventsFilter extends ChampionshipMutator
+final class CancelledOrPostponedEventsFilter extends AbstractChampionshipModifier
 {
     private const CANCELLED = 'Cancelled';
     private const POSTPONED = 'Postponed';

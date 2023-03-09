@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Mutator\Championship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity\Championship;
 
-abstract class ChampionshipMutator
+abstract class AbstractChampionshipModifier
 {
     public function apply(Championship $championship): void
     {

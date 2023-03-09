@@ -131,8 +131,8 @@ services:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
       tags: ['kishlin.shared.infrastructure.monitoring.probe']
 
-    Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Mutator\Championship\ChampionshipMutator:
-      tags: ['kishlin.motorsportcache.infrastructure.mutator.championship']
+    Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\DataModifier\Championship\AbstractChampionshipModifier:
+      tags: ['kishlin.motorsportcache.infrastructure.data-mutator.championship']
 
 
 ##> Make some services public to override them in tests
