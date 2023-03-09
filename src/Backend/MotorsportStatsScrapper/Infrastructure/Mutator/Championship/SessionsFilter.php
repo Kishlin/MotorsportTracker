@@ -6,7 +6,7 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Mutator\Champio
 
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity\Championship;
 
-final class SessionsFilter implements ChampionshipMutator
+final class SessionsFilter extends ChampionshipMutator
 {
     public function apply(Championship $championship): void
     {

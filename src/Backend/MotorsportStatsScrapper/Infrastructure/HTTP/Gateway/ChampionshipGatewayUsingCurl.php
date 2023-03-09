@@ -35,7 +35,59 @@ final class ChampionshipGatewayUsingCurl implements ChampionshipGateway
 
         $result = $this->client->fetch($url);
 
-        $championship = Championship::fromResponse($result);
+        /** @var array{
+         *      pageProps: array{
+         *          lastChampions: array{
+         *              series: array{
+         *                  name: string,
+         *                  slug: string,
+         *                  name: string,
+         *              },
+         *          },
+         *          calendar: array{
+         *              season: array{
+         *                  slug: string,
+         *              },
+         *              events: array{
+         *                  slug: string,
+         *                  name: string,
+         *                  shortName: string,
+         *                  status: null|string,
+         *                  startTimeUtc: int,
+         *                  endTimeUtc: int,
+         *                  venue: array{
+         *                      name: string,
+         *                      slug: string,
+         *                  },
+         *                  country: array{
+         *                      name: string,
+         *                      slug: string,
+         *                      picture: string,
+         *                  },
+         *                  sessions: array{
+         *                      session: array{
+         *                          name: string,
+         *                          shortName: null|string,
+         *                          slug: string,
+         *                          code: null|string,
+         *                      },
+         *                      status: null|string,
+         *                      hasResults: bool,
+         *                      startTimeUtc: null|int,
+         *                      endTimeUtc: null|int,
+         *                  }[],
+         *              }[],
+         *          }
+         *      }
+         *  } $data
+         */
+        $data = json_decode($result, true);
+
+        foreach ($this->mutators as $mutator) {
+            $data = $mutator->preFilter($data);
+        }
+
+        $championship = Championship::fromResponse($data);
 
         foreach ($this->mutators as $mutator) {
             $mutator->apply($championship);

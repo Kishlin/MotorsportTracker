@@ -6,15 +6,10 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity;
 
 final class Event
 {
-    private const QUALIFYING_1 = 'Qualifying 1';
-    private const QUALIFYING_3 = 'Qualifying 3';
-    private const QUALIFYING_2 = 'Qualifying 2';
-    private const QUALIFYING   = 'Qualifying';
-
-    private const FIRST_QUALIFYING    = '1st Qualifying';
-    private const SECOND_QUALIFYING   = '2nd Qualifying';
-    private const THIRD_QUALIFYING    = '3rd Qualifying';
-    private const COMBINED_QUALIFYING = 'Combined Qualifying';
+    private const QUALIFYING         = 'Qualifying';
+    private const QUALIFYING_1       = 'Qualifying 1';
+    private const FIRST_QUALIFYING   = '1st Qualifying';
+    private const QUALIFYING_GROUP_A = 'Qualifying Group A';
 
     /**
      * @param array<string, Session> $sessions
@@ -40,17 +35,15 @@ final class Event
             $this->createQualifyingSessionFrom(self::QUALIFYING_1);
         } elseif (array_key_exists(self::FIRST_QUALIFYING, $this->sessions)) {
             $this->createQualifyingSessionFrom(self::FIRST_QUALIFYING);
+        } elseif (array_key_exists(self::QUALIFYING_GROUP_A, $this->sessions)) {
+            $this->createQualifyingSessionFrom(self::QUALIFYING_GROUP_A);
         }
 
-        unset(
-            $this->sessions[self::COMBINED_QUALIFYING],
-            $this->sessions[self::THIRD_QUALIFYING],
-            $this->sessions[self::SECOND_QUALIFYING],
-            $this->sessions[self::FIRST_QUALIFYING],
-            $this->sessions[self::QUALIFYING_3],
-            $this->sessions[self::QUALIFYING_2],
-            $this->sessions[self::QUALIFYING_1],
-        );
+        foreach (array_keys($this->sessions) as $sessionKey) {
+            if (str_starts_with($sessionKey, 'Qualifying ') || str_ends_with($sessionKey, ' Qualifying') || 'Super Pole' === $sessionKey) {
+                unset($this->sessions[$sessionKey]);
+            }
+        }
     }
 
     public function removeSessionsCancelledOrPostponed(): void
