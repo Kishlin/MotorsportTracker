@@ -24,7 +24,7 @@
         <field name="endDate" type="nullable_date_time_value_object" column="end_date" nullable="true" />
 
         <unique-constraints>
-            <unique-constraint columns="season,name" name="event_season_name_idx" />
+            <unique-constraint columns="season,slug" name="event_season_slug_idx" />
             <unique-constraint columns="season,index" name="event_season_index_idx" />
         </unique-constraints>
     </entity>

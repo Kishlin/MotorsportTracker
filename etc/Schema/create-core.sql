@@ -268,6 +268,7 @@ Kishlin\\Migrations\\Core\\Version20230305024031	2023-03-05 02:41:09	17
 Kishlin\\Migrations\\Core\\Version20230305131002	2023-03-05 13:10:58	15
 Kishlin\\Migrations\\Core\\Version20230305133147	2023-03-05 13:37:15	11
 Kishlin\\Migrations\\Core\\Version20230305142808	2023-03-05 14:29:26	11
+Kishlin\\Migrations\\Core\\Version20230309161602	2023-03-09 16:17:09	11
 \.
 
 
@@ -453,10 +454,10 @@ CREATE UNIQUE INDEX event_season_index_idx ON public.events USING btree (season,
 
 
 --
--- Name: event_season_name_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+-- Name: event_season_slug_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX event_season_name_idx ON public.events USING btree (season, name);
+CREATE UNIQUE INDEX event_season_slug_idx ON public.events USING btree (season, slug);
 
 
 --
