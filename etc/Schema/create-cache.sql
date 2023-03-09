@@ -21,32 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: calendar_event_step_views; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.calendar_event_step_views (
-    id character varying(36) NOT NULL,
-    championship_slug character varying(255) NOT NULL,
-    color character varying(255) NOT NULL,
-    icon character varying(255) NOT NULL,
-    name character varying(255) NOT NULL,
-    type character varying(255) NOT NULL,
-    venue_label character varying(255) NOT NULL,
-    date_time timestamp(0) without time zone NOT NULL,
-    reference character varying(36) NOT NULL
-);
-
-
-ALTER TABLE public.calendar_event_step_views OWNER TO motorsporttracker;
-
---
--- Name: COLUMN calendar_event_step_views.date_time; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.calendar_event_step_views.date_time IS '(DC2Type:calendar_event_step_view_date_time)';
-
-
---
 -- Name: calendar_events; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -145,14 +119,6 @@ COMMENT ON COLUMN public.team_standings_views.events IS '(DC2Type:standings_view
 
 
 --
--- Data for Name: calendar_event_step_views; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.calendar_event_step_views (id, championship_slug, color, icon, name, type, venue_label, date_time, reference) FROM stdin;
-\.
-
-
---
 -- Data for Name: calendar_events; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
@@ -169,6 +135,7 @@ Kishlin\\Migrations\\Cache\\Version20230204042827	2023-03-03 15:05:03	14
 Kishlin\\Migrations\\Cache\\Version20230218154951	2023-03-03 15:05:03	1
 Kishlin\\Migrations\\Cache\\Version20230226141240	2023-03-03 15:05:03	8
 Kishlin\\Migrations\\Cache\\Version20230306173718	2023-03-06 17:38:04	19
+Kishlin\\Migrations\\Cache\\Version20230309123246	2023-03-09 12:33:25	11
 \.
 
 
@@ -186,14 +153,6 @@ COPY public.driver_standings_views (id, championship_slug, year, events, standin
 
 COPY public.team_standings_views (id, championship_slug, year, events, standings) FROM stdin;
 \.
-
-
---
--- Name: calendar_event_step_views calendar_event_step_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.calendar_event_step_views
-    ADD CONSTRAINT calendar_event_step_views_pkey PRIMARY KEY (id);
 
 
 --
@@ -226,20 +185,6 @@ ALTER TABLE ONLY public.driver_standings_views
 
 ALTER TABLE ONLY public.team_standings_views
     ADD CONSTRAINT team_standings_views_pkey PRIMARY KEY (id);
-
-
---
--- Name: calendar_event_step_championship_datetime_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX calendar_event_step_championship_datetime_idx ON public.calendar_event_step_views USING btree (championship_slug, date_time);
-
-
---
--- Name: calendar_event_step_reference_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX calendar_event_step_reference_idx ON public.calendar_event_step_views USING btree (reference);
 
 
 --
