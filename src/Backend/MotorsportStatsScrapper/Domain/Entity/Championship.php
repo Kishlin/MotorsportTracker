@@ -2,26 +2,38 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\SyncChampionship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity;
 
-final class SyncChampionshipHTTPResponse
+final class Championship
 {
     /**
-     * @param EventDTO[] $events
+     * @param Event[] $events
      */
     private function __construct(
-        private readonly SeriesDTO $series,
-        private readonly array $events,
+        private readonly Series $series,
+        private array $events,
     ) {
     }
 
-    public function series(): SeriesDTO
+    public function removeEventsCancelledOrPostponed(): void
+    {
+        $filteredEvents = array_filter(
+            $this->events,
+            static function (Event $event) {
+                return 'Cancelled' !== $event->status() && 'Postponed' !== $event->status();
+            },
+        );
+
+        $this->events = $filteredEvents;
+    }
+
+    public function series(): Series
     {
         return $this->series;
     }
 
     /**
-     * @return EventDTO[]
+     * @return Event[]
      */
     public function events(): array
     {
@@ -44,6 +56,7 @@ final class SyncChampionshipHTTPResponse
          *                  slug: string,
          *                  name: string,
          *                  shortName: string,
+         *                  status: null|string,
          *                  startTimeUtc: int,
          *                  endTimeUtc: int,
          *                  venue: array{
@@ -62,6 +75,7 @@ final class SyncChampionshipHTTPResponse
          *                          slug: string,
          *                          code: null|string,
          *                      },
+         *                      status: null|string,
          *                      hasResults: bool,
          *                      startTimeUtc: null|int,
          *                      endTimeUtc: null|int,
@@ -74,9 +88,9 @@ final class SyncChampionshipHTTPResponse
         $content = json_decode($response, true);
 
         return new self(
-            SeriesDTO::fromData($content['pageProps']['lastChampions']['series']),
+            Series::fromData($content['pageProps']['lastChampions']['series']),
             array_map(
-                static function ($data) { return EventDTO::fromData($data); },
+                static function ($data) { return Event::fromData($data); },
                 $content['pageProps']['calendar']['events'],
             ),
         );

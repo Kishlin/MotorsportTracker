@@ -2,19 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\SyncChampionship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity;
 
-final class SessionDTO
+final class Session
 {
     private function __construct(
         private readonly string $name,
         private readonly ?string $shortName,
         private readonly string $slug,
         private readonly ?string $code,
+        private readonly ?string $status,
         private readonly bool $hasResults,
-        private readonly ?int $startTimeUtc,
-        private readonly ?int $endTimeUtc,
+        private ?int $startTimeUtc,
+        private ?int $endTimeUtc,
     ) {
+    }
+
+    public function copyDateTimes(self $other): void
+    {
+        $this->startTimeUtc = $other->startTimeUtc;
+        $this->endTimeUtc   = $other->endTimeUtc;
     }
 
     public function name(): string
@@ -35,6 +42,11 @@ final class SessionDTO
     public function code(): ?string
     {
         return $this->code;
+    }
+
+    public function status(): ?string
+    {
+        return $this->status;
     }
 
     public function hasResults(): bool
@@ -60,6 +72,7 @@ final class SessionDTO
      *         slug: string,
      *         code: null|string,
      *     },
+     *     status: null|string,
      *     hasResults: bool,
      *     startTimeUtc: null|int,
      *     endTimeUtc: null|int,
@@ -72,6 +85,7 @@ final class SessionDTO
             $data['session']['shortName'],
             $data['session']['slug'],
             $data['session']['code'],
+            $data['status'],
             $data['hasResults'],
             $data['startTimeUtc'],
             $data['endTimeUtc'],

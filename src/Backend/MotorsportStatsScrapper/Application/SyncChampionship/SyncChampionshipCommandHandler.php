@@ -20,14 +20,14 @@ use RuntimeException;
 final class SyncChampionshipCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly ChampionshipGateway $client,
+        private readonly ChampionshipGateway $gateway,
         private readonly CommandBus $commandBus,
     ) {
     }
 
     public function __invoke(SyncChampionshipCommand $command): void
     {
-        $response = $this->client->fetch($command->seriesSlug(), $command->year());
+        $response = $this->gateway->fetch($command->seriesSlug(), $command->year());
 
         /** @var UuidValueObject $championshipId */
         $championshipId = $this->commandBus->execute(

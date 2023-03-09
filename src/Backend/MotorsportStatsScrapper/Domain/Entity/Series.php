@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\SyncChampionship;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Domain\Entity;
 
-final class SeriesDTO
+final class Series
 {
     private function __construct(
         private readonly string $name,
