@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Drive
 
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\DriverCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\SaveDriverGateway;
-use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
@@ -19,7 +18,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Driver get(UuidValueObject $id)
  * @method Driver      safeGet(UuidValueObject $id)
  */
-final class SaveDriverRepositorySpy extends AbstractRepositorySpy implements SaveDriverGateway, SearchDriverGateway
+final class SaveDriverRepositorySpy extends AbstractRepositorySpy implements SaveDriverGateway
 {
     public function __construct(
         private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,
@@ -34,17 +33,6 @@ final class SaveDriverRepositorySpy extends AbstractRepositorySpy implements Sav
         }
 
         $this->objects[$driver->id()->value()] = $driver;
-    }
-
-    public function search(string $name): ?UuidValueObject
-    {
-        foreach ($this->objects as $driver) {
-            if (str_contains($driver->name()->value(), $name)) {
-                return $driver->id();
-            }
-        }
-
-        return null;
     }
 
     private function firstnameAndNameIsAlreadyTaken(Driver $driver): bool

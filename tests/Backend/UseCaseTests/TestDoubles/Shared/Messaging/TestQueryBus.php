@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
 use Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsQuery;
-use Kishlin\Backend\MotorsportTracker\Driver\Application\SearchDriver\SearchDriverQuery;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Query;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
@@ -27,10 +26,6 @@ final class TestQueryBus implements QueryBus
     {
         if ($query instanceof ViewCalendarEventsQuery) {
             return $this->testServiceContainer->viewCalendarEventsQueryHandler()($query);
-        }
-
-        if ($query instanceof SearchDriverQuery) {
-            return $this->testServiceContainer->searchDriverQueryHandler()($query);
         }
 
         throw new RuntimeException('Unknown query type: ' . get_class($query));
