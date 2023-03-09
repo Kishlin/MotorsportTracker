@@ -62,13 +62,11 @@ const ScheduleEventTimetable: React.FunctionComponent<ScheduleEventTimetableProp
     ));
 
     return (
-        <Grid container direction="row" justifyContent="center">
-            <Grid item container>
-                <Grid item xs={1} />
-                <Grid item xs={11} sx={{ backgroundColor: 'divider', borderLeft: leftHandleWidth, borderColor: event.series.color }}>
-                    <Grid container direction="row">
-                        {timetableJSX}
-                    </Grid>
+        <Grid item container sx={{ mb: '-40px' }}>
+            <Grid item xs={1} />
+            <Grid item xs={11} sx={{ backgroundColor: 'divider', borderLeft: leftHandleWidth, borderColor: event.series.color }}>
+                <Grid container direction="row">
+                    {timetableJSX}
                 </Grid>
             </Grid>
         </Grid>
