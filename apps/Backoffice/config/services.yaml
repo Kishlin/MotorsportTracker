@@ -104,6 +104,10 @@ services:
 
   Doctrine\ORM\EntityManagerInterface: '@kishlin.app.infrastructure.entity_manager.core'
 
+  Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\MigrationFix\FixPostgresqlDefaultSchemaListener:
+    tags:
+      - { name: doctrine.event_listener, event: postGenerateSchema }
+
 
   _instanceof:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
