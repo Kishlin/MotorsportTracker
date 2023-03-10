@@ -96,6 +96,25 @@ CREATE TABLE public.drivers (
 ALTER TABLE public.drivers OWNER TO motorsporttracker;
 
 --
+-- Name: entries; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.entries (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    team character varying(36) DEFAULT NULL::character varying,
+    chassis character varying(255) NOT NULL,
+    engine character varying(255) NOT NULL,
+    series_name character varying(255) DEFAULT NULL::character varying,
+    series_slug character varying(255) DEFAULT NULL::character varying,
+    car_number character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.entries OWNER TO motorsporttracker;
+
+--
 -- Name: event_sessions; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -273,6 +292,7 @@ Kishlin\\Migrations\\Core\\Version20230305142808	2023-03-05 14:29:26	11
 Kishlin\\Migrations\\Core\\Version20230309161602	2023-03-09 16:17:09	11
 Kishlin\\Migrations\\Core\\Version20230310002647	2023-03-10 00:27:54	17
 Kishlin\\Migrations\\Core\\Version20230310092338	2023-03-10 09:24:52	16
+Kishlin\\Migrations\\Core\\Version20230310132931	2023-03-10 13:31:21	19
 \.
 
 
@@ -281,6 +301,14 @@ Kishlin\\Migrations\\Core\\Version20230310092338	2023-03-10 09:24:52	16
 --
 
 COPY public.drivers (id, slug, name, country) FROM stdin;
+\.
+
+
+--
+-- Data for Name: entries; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+--
+
+COPY public.entries (id, event, driver, team, chassis, engine, series_name, series_slug, car_number) FROM stdin;
 \.
 
 
@@ -381,6 +409,14 @@ ALTER TABLE ONLY public.drivers
 
 
 --
+-- Name: entries entries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.entries
+    ADD CONSTRAINT entries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: event_sessions event_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -448,6 +484,13 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
+
+
+--
+-- Name: entry_event_driver_car_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX entry_event_driver_car_idx ON public.entries USING btree (event, driver, car_number);
 
 
 --

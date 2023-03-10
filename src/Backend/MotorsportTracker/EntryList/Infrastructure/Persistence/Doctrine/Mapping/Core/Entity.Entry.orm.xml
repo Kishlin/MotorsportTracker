@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Kishlin\Backend\MotorsportTracker\EntryList\Domain\Entity\Entry" table="entries">
+        <id name="id" type="uuid_value_object" column="id" length="36" />
+
+        <field name="event" type="uuid_value_object" column="event" length="36" />
+
+        <field name="driver" type="uuid_value_object" column="driver" length="36" />
+
+        <field name="team" type="nullable_uuid_value_object" column="team" length="36" nullable="true" />
+
+        <field name="chassis" type="string_value_object" column="chassis" />
+
+        <field name="engine" type="string_value_object" column="engine" />
+
+        <field name="seriesName" type="nullable_string_value_object" column="series_name" nullable="true" />
+
+        <field name="seriesSlug" type="nullable_string_value_object" column="series_slug" nullable="true" />
+
+        <field name="carNumber" type="string_value_object" column="car_number" />
+
+        <unique-constraints>
+            <unique-constraint columns="event,driver,car_number" name="entry_event_driver_car_idx" />
+        </unique-constraints>
+    </entity>
+
+</doctrine-mapping>
