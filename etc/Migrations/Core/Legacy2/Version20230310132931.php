@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Migrations\Core;
+namespace Kishlin\Migrations\Core\Legacy2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
