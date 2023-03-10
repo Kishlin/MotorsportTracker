@@ -11,6 +11,8 @@
 
         <field name="year" type="strictly_positive_int_value_object" column="year" />
 
+        <field name="ref" type="nullable_uuid_value_object" column="ref" length="36" nullable="true" />
+
         <unique-constraints>
             <unique-constraint columns="championship,year" name="championship_season_idx" />
         </unique-constraints>

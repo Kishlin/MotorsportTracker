@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\SeasonCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -15,6 +16,7 @@ final class Season extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly StrictlyPositiveIntValueObject $year,
         private readonly UuidValueObject $championshipId,
+        private readonly NullableUuidValueObject $ref,
     ) {
     }
 
@@ -22,8 +24,9 @@ final class Season extends AggregateRoot
         UuidValueObject $id,
         StrictlyPositiveIntValueObject $year,
         UuidValueObject $championshipId,
+        NullableUuidValueObject $ref,
     ): self {
-        $season = new self($id, $year, $championshipId);
+        $season = new self($id, $year, $championshipId, $ref);
 
         $season->record(new SeasonCreatedDomainEvent($id));
 
@@ -37,8 +40,9 @@ final class Season extends AggregateRoot
         UuidValueObject $id,
         StrictlyPositiveIntValueObject $year,
         UuidValueObject $championshipId,
+        NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $year, $championshipId);
+        return new self($id, $year, $championshipId, $ref);
     }
 
     public function id(): UuidValueObject
@@ -54,5 +58,10 @@ final class Season extends AggregateRoot
     public function championshipId(): UuidValueObject
     {
         return $this->championshipId;
+    }
+
+    public function ref(): NullableUuidValueObject
+    {
+        return $this->ref;
     }
 }

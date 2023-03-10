@@ -45,7 +45,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $seasonId */
             $seasonId = self::container()->commandBus()->execute(
-                CreateSeasonIfNotExistsCommand::fromScalars($championshipId, $year),
+                CreateSeasonIfNotExistsCommand::fromScalars($championshipId, $year, null),
             );
 
             $this->seasonId = $seasonId;

@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Inf
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateSeasonIfNotExists\SaveSeasonRepositoryUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
@@ -23,7 +24,8 @@ final class SaveSeasonRepositoryUsingDoctrineTest extends CoreRepositoryContract
         $season = Season::instance(
             new UuidValueObject(self::uuid()),
             new StrictlyPositiveIntValueObject(2022),
-            new UuidValueObject(self::fixtureId('motorsport.championship.championship.formulaOne'))
+            new UuidValueObject(self::fixtureId('motorsport.championship.championship.formulaOne')),
+            new NullableUuidValueObject(self::uuid()),
         );
 
         $repository = new SaveSeasonRepositoryUsingDoctrine(self::entityManager());

@@ -62,6 +62,20 @@ CREATE TABLE public.doctrine_migration_versions (
 ALTER TABLE public.doctrine_migration_versions OWNER TO motorsporttracker;
 
 --
+-- Name: seasons; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.seasons (
+    id character varying(36) NOT NULL,
+    championship character varying(255) NOT NULL,
+    year integer NOT NULL,
+    ref character varying(36) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public.seasons OWNER TO motorsporttracker;
+
+--
 -- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
@@ -84,6 +98,15 @@ COPY public.countries (id, code, name) FROM stdin;
 COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
 Kishlin\\Migrations\\Core\\Version20230310180755	2023-03-10 18:13:37	20
 Kishlin\\Migrations\\Core\\Version20230310191126	2023-03-10 18:13:37	5
+Kishlin\\Migrations\\Core\\Version20230310193038	2023-03-10 18:31:39	17
+\.
+
+
+--
+-- Data for Name: seasons; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+--
+
+COPY public.seasons (id, championship, year, ref) FROM stdin;
 \.
 
 
@@ -109,6 +132,21 @@ ALTER TABLE ONLY public.countries
 
 ALTER TABLE ONLY public.doctrine_migration_versions
     ADD CONSTRAINT doctrine_migration_versions_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.seasons
+    ADD CONSTRAINT seasons_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: championship_season_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
 
 
 --

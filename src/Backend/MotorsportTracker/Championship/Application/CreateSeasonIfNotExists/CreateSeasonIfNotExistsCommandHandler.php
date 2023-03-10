@@ -30,7 +30,7 @@ final class CreateSeasonIfNotExistsCommandHandler implements CommandHandler
         }
 
         $id     = new UuidValueObject($this->uuidGenerator->uuid4());
-        $season = Season::create($id, $command->year(), $command->championshipId());
+        $season = Season::create($id, $command->year(), $command->championshipId(), $command->ref());
 
         try {
             $this->saveGateway->save($season);

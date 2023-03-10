@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -19,6 +20,7 @@ final class FixtureToSeasonConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new StrictlyPositiveIntValueObject($fixture->getInt('year')),
             new UuidValueObject($fixture->getString('championshipId')),
+            new NullableUuidValueObject(null),
         );
     }
 }
