@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\CreateTeam;
+namespace Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doctrine\Repository\CreateTeamIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\SaveTeamGateway;
+use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\SaveTeamGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 

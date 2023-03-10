@@ -14,7 +14,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\CreateSessionTypeIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;
+use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\CreateTeamIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentation\CreateTeamPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\CreateVenueIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
@@ -84,8 +84,8 @@ final class TestCommandBus implements CommandBus
             return $this->testServiceContainer->createTeamPresentationCommandHandler()($command);
         }
 
-        if ($command instanceof CreateTeamCommand) {
-            return $this->testServiceContainer->createTeamCommandHandler()($command);
+        if ($command instanceof CreateTeamIfNotExistsCommand) {
+            return $this->testServiceContainer->createTeamIfNotExistsCommandHandler()($command);
         }
 
         throw new RuntimeException('Unknown command type: ' . get_class($command));

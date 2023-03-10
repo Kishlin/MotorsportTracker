@@ -213,8 +213,9 @@ COMMENT ON COLUMN public.team_presentations.created_on IS '(DC2Type:team_present
 CREATE TABLE public.teams (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    image character varying(255) NOT NULL,
-    country character varying(36) NOT NULL
+    country character varying(36) NOT NULL,
+    slug character varying(255) NOT NULL,
+    code character varying(255) NOT NULL
 );
 
 
@@ -271,6 +272,7 @@ Kishlin\\Migrations\\Core\\Version20230305133147	2023-03-05 13:37:15	11
 Kishlin\\Migrations\\Core\\Version20230305142808	2023-03-05 14:29:26	11
 Kishlin\\Migrations\\Core\\Version20230309161602	2023-03-09 16:17:09	11
 Kishlin\\Migrations\\Core\\Version20230310002647	2023-03-10 00:27:54	17
+Kishlin\\Migrations\\Core\\Version20230310092338	2023-03-10 09:24:52	16
 \.
 
 
@@ -278,7 +280,7 @@ Kishlin\\Migrations\\Core\\Version20230310002647	2023-03-10 00:27:54	17
 -- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.drivers (id, name, country, slug) FROM stdin;
+COPY public.drivers (id, slug, name, country) FROM stdin;
 \.
 
 
@@ -326,7 +328,7 @@ COPY public.team_presentations (id, team, name, image, created_on) FROM stdin;
 -- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.teams (id, name, image, country) FROM stdin;
+COPY public.teams (id, name, country, slug, code) FROM stdin;
 \.
 
 
@@ -470,13 +472,6 @@ CREATE UNIQUE INDEX session_type_label_idx ON public.session_types USING btree (
 
 
 --
--- Name: team_name_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX team_name_idx ON public.teams USING btree (name);
-
-
---
 -- Name: team_presentation_team_created_on_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -516,6 +511,13 @@ CREATE UNIQUE INDEX uniq_652e22ad5e237e06 ON public.venues USING btree (name);
 --
 
 CREATE UNIQUE INDEX uniq_652e22ad989d9b62 ON public.venues USING btree (slug);
+
+
+--
+-- Name: uniq_96c22258989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_96c22258989d9b62 ON public.teams USING btree (slug);
 
 
 --

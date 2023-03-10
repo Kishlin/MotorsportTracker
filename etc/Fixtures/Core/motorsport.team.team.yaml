@@ -1,19 +1,23 @@
 redBullRacing:
-  name: 'Red Bull Racing'
-  image: 'https://example.com/redbullracing.webp'
   countryId: '@country.country.austria'
+  slug: 'red-bull-racing'
+  name: 'Red Bull Racing'
+  code: 'RBR'
 
 mercedes:
-  name: 'Mercedes'
-  image: 'https://cdn.motorsporttracker.com/teams/mercedesf1.png'
   countryId: '@country.country.germany'
+  slug: 'mercedes'
+  name: 'Mercedes'
+  code: 'M'
 
 toroRosso:
-  name: 'Toro Rosso'
-  image: 'https://cdn.motorsporttracker.com/teams/tororosso.png'
   countryId: '@country.country.italia'
+  slug: 'toro-rosso'
+  name: 'Toro Rosso'
+  code: 'TR'
 
 williams:
-  name: 'Williams'
-  image: 'https://cdn.motorsporttracker.com/teams/williams.png'
   countryId: '@country.country.unitedKingdom'
+  slug: 'williams'
+  name: 'Williams'
+  code: 'W'

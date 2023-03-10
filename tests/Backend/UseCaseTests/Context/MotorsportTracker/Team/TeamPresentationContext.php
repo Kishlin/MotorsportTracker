@@ -7,9 +7,10 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Exception;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentation\CreateTeamPresentationCommand;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamPresentationId;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
@@ -24,6 +25,9 @@ final class TeamPresentationContext extends MotorsportTrackerContext
         self::container()->teamPresentationRepositorySpy()->clear();
     }
 
+    /**
+     * @throws Exception
+     */
     #[Given('the team presentation :teamPresentation exists')]
     public function theTeamPresentationExists(string $teamPresentation): void
     {
@@ -68,7 +72,7 @@ final class TeamPresentationContext extends MotorsportTrackerContext
     {
         $teamId = $this->fixtureId("motorsport.team.team.{$this->format($team)}");
 
-        $teamPresentation = self::container()->teamPresentationRepositorySpy()->latest(new TeamId($teamId));
+        $teamPresentation = self::container()->teamPresentationRepositorySpy()->latest(new UuidValueObject($teamId));
 
         Assert::assertNotNull($teamPresentation);
 

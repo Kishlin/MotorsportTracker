@@ -5,25 +5,29 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Team\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\DomainEvent\TeamCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamCountryId;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamImage;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamName;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Team extends AggregateRoot
 {
     public function __construct(
-        private TeamId $id,
-        private TeamName $name,
-        private TeamImage $image,
-        private TeamCountryId $countryId,
+        private readonly UuidValueObject $id,
+        private readonly UuidValueObject $country,
+        private readonly StringValueObject $slug,
+        private readonly StringValueObject $name,
+        private readonly StringValueObject $code,
     ) {
     }
 
-    public static function create(TeamId $id, TeamName $name, TeamImage $image, TeamCountryId $countryId): self
-    {
-        $team = new self($id, $name, $image, $countryId);
+    public static function create(
+        UuidValueObject $id,
+        UuidValueObject $country,
+        StringValueObject $slug,
+        StringValueObject $name,
+        StringValueObject $code,
+    ): self {
+        $team = new self($id, $country, $slug, $name, $code);
 
         $team->record(new TeamCreatedDomainEvent($id));
 
@@ -33,28 +37,38 @@ final class Team extends AggregateRoot
     /**
      * @internal only use to get a test object
      */
-    public static function instance(TeamId $id, TeamName $name, TeamImage $image, TeamCountryId $countryId): self
-    {
-        return new self($id, $name, $image, $countryId);
+    public static function instance(
+        UuidValueObject $id,
+        UuidValueObject $country,
+        StringValueObject $slug,
+        StringValueObject $name,
+        StringValueObject $code,
+    ): self {
+        return new self($id, $country, $slug, $name, $code);
     }
 
-    public function id(): TeamId
+    public function id(): UuidValueObject
     {
         return $this->id;
     }
 
-    public function name(): TeamName
+    public function country(): UuidValueObject
+    {
+        return $this->country;
+    }
+
+    public function slug(): StringValueObject
+    {
+        return $this->slug;
+    }
+
+    public function name(): StringValueObject
     {
         return $this->name;
     }
 
-    public function image(): TeamImage
+    public function code(): StringValueObject
     {
-        return $this->image;
-    }
-
-    public function countryId(): TeamCountryId
-    {
-        return $this->countryId;
+        return $this->code;
     }
 }

@@ -4,34 +4,35 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team;
 
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommandHandler;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\SaveTeamRepositorySpy;
+use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\CreateTeamIfNotExistsCommandHandler;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
 trait TeamServicesTrait
 {
-    private ?SaveTeamRepositorySpy $teamRepositorySpy = null;
+    private ?TeamRepositorySpy $teamRepositorySpy = null;
 
-    private ?CreateTeamCommandHandler $createTeamCommandHandler = null;
+    private ?CreateTeamIfNotExistsCommandHandler $createTeamIfNotExistsCommandHandler = null;
 
-    public function teamRepositorySpy(): SaveTeamRepositorySpy
+    public function teamRepositorySpy(): TeamRepositorySpy
     {
         if (null === $this->teamRepositorySpy) {
-            $this->teamRepositorySpy = new SaveTeamRepositorySpy($this->countryRepositorySpy());
+            $this->teamRepositorySpy = new TeamRepositorySpy($this->countryRepositorySpy());
         }
 
         return $this->teamRepositorySpy;
     }
 
-    public function createTeamCommandHandler(): CreateTeamCommandHandler
+    public function createTeamIfNotExistsCommandHandler(): CreateTeamIfNotExistsCommandHandler
     {
-        if (null === $this->createTeamCommandHandler) {
-            $this->createTeamCommandHandler = new CreateTeamCommandHandler(
+        if (null === $this->createTeamIfNotExistsCommandHandler) {
+            $this->createTeamIfNotExistsCommandHandler = new CreateTeamIfNotExistsCommandHandler(
+                $this->teamRepositorySpy(),
+                $this->teamRepositorySpy(),
                 $this->eventDispatcher(),
                 $this->uuidGenerator(),
-                $this->teamRepositorySpy(),
             );
         }
 
-        return $this->createTeamCommandHandler;
+        return $this->createTeamIfNotExistsCommandHandler;
     }
 }

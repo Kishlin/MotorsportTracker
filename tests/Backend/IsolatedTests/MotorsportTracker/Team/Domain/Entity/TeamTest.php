@@ -6,10 +6,8 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Team\Domain\Enti
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\DomainEvent\TeamCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamCountryId;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamImage;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamName;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
 /**
@@ -21,17 +19,25 @@ final class TeamTest extends AggregateRootIsolatedTestCase
     public function testItCanBeCreated(): void
     {
         $id        = '4f56cfcc-defa-4f9f-a65c-d4758303a706';
-        $name      = 'Team';
-        $image     = 'https://cdn.example.com/image.webp';
         $countryId = 'bd4f36e3-d11f-4e8a-8380-6a492f6bdf07';
+        $slug      = 'team';
+        $name      = 'Team';
+        $code      = 'T';
 
-        $entity = Team::create(new TeamId($id), new TeamName($name), new TeamImage($image), new TeamCountryId($countryId));
+        $entity = Team::create(
+            new UuidValueObject($id),
+            new UuidValueObject($countryId),
+            new StringValueObject($slug),
+            new StringValueObject($name),
+            new StringValueObject($code),
+        );
 
-        self::assertItRecordedDomainEvents($entity, new TeamCreatedDomainEvent(new TeamId($id)));
+        self::assertItRecordedDomainEvents($entity, new TeamCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
+        self::assertValueObjectSame($countryId, $entity->country());
+        self::assertValueObjectSame($slug, $entity->slug());
         self::assertValueObjectSame($name, $entity->name());
-        self::assertValueObjectSame($image, $entity->image());
-        self::assertValueObjectSame($countryId, $entity->countryId());
+        self::assertValueObjectSame($code, $entity->code());
     }
 }

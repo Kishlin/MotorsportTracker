@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team;
 
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\CreateTeamCommand;
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeam\TeamCreationFailureException;
-use Kishlin\Backend\MotorsportTracker\Team\Domain\ValueObject\TeamId;
+use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\CreateTeamIfNotExistsCommand;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
 final class TeamCreationContext extends MotorsportTrackerContext
 {
-    private ?TeamId $teamId             = null;
+    private ?UuidValueObject $teamId    = null;
     private ?Throwable $thrownException = null;
 
     public function clearGatewaySpies(): void
@@ -23,33 +25,31 @@ final class TeamCreationContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given the :teamName team exists
-     * @Given the team :teamName exists
-     *
      * @throws Exception
      */
+    #[Given('the :teamName team exists')]
     public function theTeamExists(string $teamName): void
     {
         self::container()->coreFixtureLoader()->loadFixture("motorsport.team.team.{$this->format($teamName)}");
     }
 
-    /**
-     * @When a client creates the team :team for the country :country
-     * @When /^a client creates a team with the same name$/
-     * @When /^a client creates a team for a missing country$/
-     */
+    #[When('a client creates a team with the same name')]
+    #[When('a client creates the team :team for the country :country')]
     public function aClientCreatesTheTeam(string $team = 'Red Bull Racing', string $country = 'Austria'): void
     {
         $this->teamId          = null;
         $this->thrownException = null;
 
+        $slug = strtolower(str_replace(' ', '-', $team));
+
         try {
-            /** @var TeamId $teamId */
+            /** @var UuidValueObject $teamId */
             $teamId = self::container()->commandBus()->execute(
-                CreateTeamCommand::fromScalars(
+                CreateTeamIfNotExistsCommand::fromScalars(
                     $this->fixtureId("country.country.{$this->format($country)}"),
-                    'https://example.com/team.webp',
+                    $slug,
                     $team,
+                    $slug,
                 ),
             );
 
@@ -59,21 +59,23 @@ final class TeamCreationContext extends MotorsportTrackerContext
         }
     }
 
-    /**
-     * @Then /^the team is saved$/
-     */
+    #[Then('the team is saved')]
+    #[Then('the team is not duplicated')]
     public function theTeamIsSaved(): void
     {
+        Assert::assertCount(1, self::container()->teamRepositorySpy()->all());
+
         Assert::assertNotNull($this->teamId);
+        Assert::assertNull($this->thrownException);
         Assert::assertTrue(self::container()->teamRepositorySpy()->has($this->teamId));
     }
 
-    /**
-     * @Then /^the team creation is declined$/
-     */
-    public function theTeamCreationIsDeclined(): void
+    #[Then('the id of the team :team is returned')]
+    public function theIdOfTheTeamIsReturned(string $team): void
     {
-        Assert::assertNull($this->teamId);
-        Assert::assertInstanceOf(TeamCreationFailureException::class, $this->thrownException);
+        Assert::assertNotNull($this->teamId);
+        Assert::assertNull($this->thrownException);
+
+        Assert::assertSame($team, self::container()->teamRepositorySpy()->safeGet($this->teamId)->name()->value());
     }
 }
