@@ -18,6 +18,7 @@ final class FixtureToDriverConverter implements FixtureConverter
         return Driver::instance(
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
+            new StringValueObject($fixture->getString('slug')),
             new UuidValueObject($fixture->getString('countryId')),
         );
     }

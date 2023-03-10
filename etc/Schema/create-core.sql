@@ -87,6 +87,7 @@ ALTER TABLE public.doctrine_migration_versions OWNER TO motorsporttracker;
 
 CREATE TABLE public.drivers (
     id character varying(36) NOT NULL,
+    slug character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     country character varying(36) NOT NULL
 );
@@ -269,6 +270,7 @@ Kishlin\\Migrations\\Core\\Version20230305131002	2023-03-05 13:10:58	15
 Kishlin\\Migrations\\Core\\Version20230305133147	2023-03-05 13:37:15	11
 Kishlin\\Migrations\\Core\\Version20230305142808	2023-03-05 14:29:26	11
 Kishlin\\Migrations\\Core\\Version20230309161602	2023-03-09 16:17:09	11
+Kishlin\\Migrations\\Core\\Version20230310002647	2023-03-10 00:27:54	17
 \.
 
 
@@ -276,7 +278,7 @@ Kishlin\\Migrations\\Core\\Version20230309161602	2023-03-09 16:17:09	11
 -- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.drivers (id, name, country) FROM stdin;
+COPY public.drivers (id, name, country, slug) FROM stdin;
 \.
 
 
@@ -542,6 +544,13 @@ CREATE UNIQUE INDEX uniq_dc8c74c3989d9b62 ON public.event_sessions USING btree (
 --
 
 CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.drivers USING btree (name);
+
+
+--
+-- Name: uniq_e410c307989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX uniq_e410c307989d9b62 ON public.drivers USING btree (slug);
 
 
 --

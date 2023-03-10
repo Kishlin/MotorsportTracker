@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity;
 
+use Kishlin\Backend\MotorsportTracker\Driver\Domain\DomainEvent\DriverCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -13,6 +14,7 @@ final class Driver extends AggregateRoot
     public function __construct(
         private readonly UuidValueObject $id,
         private readonly StringValueObject $name,
+        private readonly StringValueObject $slug,
         private readonly UuidValueObject $countryId,
     ) {
     }
@@ -20,9 +22,14 @@ final class Driver extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         StringValueObject $name,
+        StringValueObject $slug,
         UuidValueObject $countryId,
     ): self {
-        return new self($id, $name, $countryId);
+        $driver = new self($id, $name, $slug, $countryId);
+
+        $driver->record(new DriverCreatedDomainEvent($id));
+
+        return $driver;
     }
 
     /**
@@ -31,9 +38,10 @@ final class Driver extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         StringValueObject $name,
+        StringValueObject $slug,
         UuidValueObject $countryId,
     ): self {
-        return new self($id, $name, $countryId);
+        return new self($id, $name, $slug, $countryId);
     }
 
     public function id(): UuidValueObject
@@ -44,6 +52,11 @@ final class Driver extends AggregateRoot
     public function name(): StringValueObject
     {
         return $this->name;
+    }
+
+    public function slug(): StringValueObject
+    {
+        return $this->slug;
     }
 
     public function countryId(): UuidValueObject

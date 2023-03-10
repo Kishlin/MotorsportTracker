@@ -8,8 +8,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommand;
-use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\DriverCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\CreateDriverIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -45,9 +44,11 @@ final class DriverCreationContext extends MotorsportTrackerContext
         try {
             $countryId = $this->fixtureId("country.country.{$this->format($country)}");
 
+            $slug = strtolower(str_replace(' ', '-', $name));
+
             /** @var UuidValueObject $driverId */
             $driverId = self::container()->commandBus()->execute(
-                CreateDriverCommand::fromScalars($name, $countryId),
+                CreateDriverIfNotExistsCommand::fromScalars($name, $slug, $countryId),
             );
 
             $this->driverId = $driverId;
@@ -57,16 +58,26 @@ final class DriverCreationContext extends MotorsportTrackerContext
     }
 
     #[Then('the driver is saved')]
+    #[Then('the driver is not duplicated')]
     public function theDriverIsSaved(): void
     {
+        Assert::assertCount(1, self::container()->driverRepositorySpy()->all());
+
         Assert::assertNotNull($this->driverId);
+        Assert::assertNull($this->thrownException);
         Assert::assertTrue(self::container()->driverRepositorySpy()->has($this->driverId));
     }
 
-    #[Then('the driver creation is declined')]
-    public function theDriverCreationIsDeclined(): void
+    #[Then('the id :driver is returned')]
+    #[Then('the id of :driver is returned')]
+    public function theIdOfTheDriverIsReturned(string $driver): void
     {
-        Assert::assertNull($this->driverId);
-        Assert::assertInstanceOf(DriverCreationFailureException::class, $this->thrownException);
+        Assert::assertNotNull($this->driverId);
+        Assert::assertNull($this->thrownException);
+
+        Assert::assertSame(
+            $driver,
+            self::container()->driverRepositorySpy()->safeGet($this->driverId)->name()->value(),
+        );
     }
 }

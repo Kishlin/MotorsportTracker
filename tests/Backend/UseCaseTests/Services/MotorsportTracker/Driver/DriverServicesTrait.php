@@ -4,33 +4,35 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver;
 
-use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriver\CreateDriverCommandHandler;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\SaveDriverRepositorySpy;
+use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\CreateDriverIfNotExistsCommandHandler;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
 
 trait DriverServicesTrait
 {
-    private ?SaveDriverRepositorySpy $driverRepositorySpy = null;
+    private ?DriverRepositorySpy $driverRepositorySpy = null;
 
-    private ?CreateDriverCommandHandler $createDriverCommandHandler = null;
+    private ?CreateDriverIfNotExistsCommandHandler $createDriverIfNotExistsCommandHandler = null;
 
-    public function driverRepositorySpy(): SaveDriverRepositorySpy
+    public function driverRepositorySpy(): DriverRepositorySpy
     {
         if (null === $this->driverRepositorySpy) {
-            $this->driverRepositorySpy = new SaveDriverRepositorySpy($this->countryRepositorySpy());
+            $this->driverRepositorySpy = new DriverRepositorySpy($this->countryRepositorySpy());
         }
 
         return $this->driverRepositorySpy;
     }
 
-    public function createDriverCommandHandler(): CreateDriverCommandHandler
+    public function createDriverIfNotExistsCommandHandler(): CreateDriverIfNotExistsCommandHandler
     {
-        if (null === $this->createDriverCommandHandler) {
-            $this->createDriverCommandHandler = new CreateDriverCommandHandler(
+        if (null === $this->createDriverIfNotExistsCommandHandler) {
+            $this->createDriverIfNotExistsCommandHandler = new CreateDriverIfNotExistsCommandHandler(
+                $this->driverRepositorySpy(),
                 $this->driverRepositorySpy(),
                 $this->uuidGenerator(),
+                $this->eventDispatcher(),
             );
         }
 
-        return $this->createDriverCommandHandler;
+        return $this->createDriverIfNotExistsCommandHandler;
     }
 }

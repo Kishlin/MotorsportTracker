@@ -9,6 +9,8 @@
 
         <field name="name" type="string_value_object" column="name" unique="true" />
 
+        <field name="slug" type="string_value_object" column="slug" unique="true" />
+
         <field name="countryId" type="uuid_value_object" column="country" length="36" />
     </entity>
 
