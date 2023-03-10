@@ -22,7 +22,7 @@ final class CreateChampionshipIfNotExistsCommandHandler implements CommandHandle
 
     public function __invoke(CreateChampionshipIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->findBySlug($command->slug()->value());
+        $id = $this->searchGateway->findIfExists($command->shortCode(), $command->ref());
 
         if (null !== $id) {
             return $id;
@@ -30,7 +30,7 @@ final class CreateChampionshipIfNotExistsCommandHandler implements CommandHandle
 
         $id = new UuidValueObject($this->uuidGenerator->uuid4());
 
-        $championship = Championship::create($id, $command->name(), $command->slug());
+        $championship = Championship::create($id, $command->name(), $command->shortName(), $command->shortCode(), $command->ref());
 
         try {
             $this->saveGateway->save($championship);

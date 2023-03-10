@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent\ChampionshipCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -14,13 +16,20 @@ final class Championship extends AggregateRoot
     private function __construct(
         private readonly UuidValueObject $id,
         private readonly StringValueObject $name,
-        private readonly StringValueObject $slug,
+        private readonly NullableStringValueObject $shortName,
+        private readonly StringValueObject $shortCode,
+        private readonly NullableUuidValueObject $ref,
     ) {
     }
 
-    public static function create(UuidValueObject $id, StringValueObject $name, StringValueObject $slug): self
-    {
-        $championship = new self($id, $name, $slug);
+    public static function create(
+        UuidValueObject $id,
+        StringValueObject $name,
+        NullableStringValueObject $shortName,
+        StringValueObject $shortCode,
+        NullableUuidValueObject $ref,
+    ): self {
+        $championship = new self($id, $name, $shortName, $shortCode, $ref);
 
         $championship->record(new ChampionshipCreatedDomainEvent($id));
 
@@ -30,9 +39,14 @@ final class Championship extends AggregateRoot
     /**
      * @internal only use to get a test object
      */
-    public static function instance(UuidValueObject $id, StringValueObject $name, StringValueObject $slug): self
-    {
-        return new self($id, $name, $slug);
+    public static function instance(
+        UuidValueObject $id,
+        StringValueObject $name,
+        NullableStringValueObject $shortName,
+        StringValueObject $shortCode,
+        NullableUuidValueObject $ref,
+    ): self {
+        return new self($id, $name, $shortName, $shortCode, $ref);
     }
 
     public function id(): UuidValueObject
@@ -45,8 +59,18 @@ final class Championship extends AggregateRoot
         return $this->name;
     }
 
-    public function slug(): StringValueObject
+    public function shortName(): NullableStringValueObject
     {
-        return $this->slug;
+        return $this->shortName;
+    }
+
+    public function shortCode(): StringValueObject
+    {
+        return $this->shortCode;
+    }
+
+    public function ref(): NullableUuidValueObject
+    {
+        return $this->ref;
     }
 }

@@ -7,6 +7,8 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
 
@@ -15,15 +17,19 @@ final class SearchChampionshipRepositoryUsingDoctrine extends CoreRepository imp
     /**
      * @throws Exception|NonUniqueResultException
      */
-    public function findBySlug(string $slug): ?UuidValueObject
+    public function findIfExists(StringValueObject $shortCode, NullableUuidValueObject $ref): ?UuidValueObject
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
         $qb->select('c.id')
             ->from('championships', 'c')
-            ->where('c.slug = :slug')
-            ->setParameter('slug', $slug)
+            ->where('c.code = :code')
+            ->setParameter('code', $shortCode->value())
         ;
+
+        if (null !== $ref->value()) {
+            $qb->andWhere('c.ref = :ref')->setParameter('ref', $ref->value());
+        }
 
         /** @var array<array{id: string}> $result */
         $result = $qb->executeQuery()->fetchAllAssociative();

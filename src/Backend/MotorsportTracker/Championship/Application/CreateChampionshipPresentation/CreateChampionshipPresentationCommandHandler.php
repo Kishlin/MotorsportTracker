@@ -11,6 +11,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\Time\Clock;
 use Kishlin\Backend\Shared\Domain\ValueObject\DateTimeValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CreateChampionshipPresentationCommandHandler implements CommandHandler
@@ -26,7 +27,7 @@ final class CreateChampionshipPresentationCommandHandler implements CommandHandl
 
     public function __invoke(CreateChampionshipPresentationCommand $command): UuidValueObject
     {
-        $championshipId = $this->searchGateway->findBySlug($command->championshipSlug()->value());
+        $championshipId = $this->searchGateway->findIfExists($command->championshipSlug(), new NullableUuidValueObject(null));
         if (null === $championshipId) {
             throw new ChampionshipNotFoundDomainException();
         }

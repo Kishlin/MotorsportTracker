@@ -24,7 +24,7 @@ trait CreateChampionshipDrivingTestCaseTrait
             ->method('execute')
             ->with(
                 $this->callback(static function (CreateChampionshipIfNotExistsCommand $parameter) use ($name, $slug) {
-                    return $slug === $parameter->slug()->value() && $name === $parameter->name()->value();
+                    return $slug === $parameter->shortCode()->value() && $name === $parameter->name()->value();
                 }),
             )
             ->willReturnCallback(

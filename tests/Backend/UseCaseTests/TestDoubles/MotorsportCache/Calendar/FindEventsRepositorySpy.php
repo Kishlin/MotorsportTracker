@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calenda
 
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\FindEventsGateway;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -35,7 +36,7 @@ final class FindEventsRepositorySpy implements FindEventsGateway
 
     public function findAll(StringValueObject $seriesSlug, PositiveIntValueObject $year): array
     {
-        $championshipId = $this->championshipRepositorySpy->findBySlug($seriesSlug->value());
+        $championshipId = $this->championshipRepositorySpy->findIfExists($seriesSlug, new NullableUuidValueObject(null));
         if (null === $championshipId) {
             return [];
         }

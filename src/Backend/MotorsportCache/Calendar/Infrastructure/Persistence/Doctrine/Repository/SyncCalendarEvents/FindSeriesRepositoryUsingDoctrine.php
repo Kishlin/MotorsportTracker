@@ -16,7 +16,7 @@ final class FindSeriesRepositoryUsingDoctrine extends CoreRepository implements 
     /**
      * @throws Exception
      */
-    public function findForSlug(StringValueObject $seriesSlug, PositiveIntValueObject $year): ?CalendarEventSeries
+    public function findForSlug(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
     {
         $qb = $this->entityManager->getConnection()->createQueryBuilder();
 
@@ -27,7 +27,7 @@ final class FindSeriesRepositoryUsingDoctrine extends CoreRepository implements 
             ->leftJoin('c', 'championship_presentations', 'cp', 'c.id = cp.championship')
             ->where('c.slug = :seriesSlug')
             ->andWhere('s.year = :year')
-            ->setParameter('seriesSlug', $seriesSlug->value())
+            ->setParameter('seriesSlug', $seriesCode->value())
             ->setParameter('year', $year->value())
         ;
 

@@ -33,9 +33,9 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
     }
 
+    #[When('a client creates the championship :name with code :code')]
     #[When('a client creates a championship with the same name')]
-    #[When('a client creates the championship :name with slug :slug')]
-    public function aClientCreatesTheChampionship(string $name = 'Formula On', string $slug = 'formula1'): void
+    public function aClientCreatesTheChampionship(string $name = 'Formula On', string $code = 'formula1'): void
     {
         $this->championshipId  = null;
         $this->thrownException = null;
@@ -43,7 +43,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
         try {
             /** @var UuidValueObject $championshipId */
             $championshipId = self::container()->commandBus()->execute(
-                CreateChampionshipIfNotExistsCommand::fromScalars($name, $slug),
+                CreateChampionshipIfNotExistsCommand::fromScalars($name, null, $code, null),
             );
 
             $this->championshipId = $championshipId;

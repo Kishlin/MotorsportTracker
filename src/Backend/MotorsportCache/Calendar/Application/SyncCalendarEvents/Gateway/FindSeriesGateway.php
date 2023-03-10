@@ -10,5 +10,5 @@ use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 
 interface FindSeriesGateway
 {
-    public function findForSlug(StringValueObject $seriesSlug, PositiveIntValueObject $year): ?CalendarEventSeries;
+    public function findForSlug(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries;
 }

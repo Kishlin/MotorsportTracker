@@ -1,11 +1,11 @@
 formulaOne:
   name: 'Formula One'
-  slug: 'formula1'
+  shortCode: 'formula1'
 
 motoGp:
   name: 'Moto GP'
-  slug: 'motogp'
+  shortCode: 'motogp'
 
 wec:
   name: 'FIA World Endurance Championship'
-  slug: 'wec'
+  shortCode: 'wec'

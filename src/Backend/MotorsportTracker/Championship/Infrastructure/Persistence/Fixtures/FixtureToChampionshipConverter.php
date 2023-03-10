@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -18,7 +20,9 @@ final class FixtureToChampionshipConverter implements FixtureConverter
         return Championship::instance(
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
-            new StringValueObject($fixture->getString('slug')),
+            new NullableStringValueObject(null),
+            new StringValueObject($fixture->getString('shortCode')),
+            new NullableUuidValueObject(null),
         );
     }
 }

@@ -22,10 +22,10 @@ final class FindSeriesRepositorySpy implements FindSeriesGateway
     ) {
     }
 
-    public function findForSlug(StringValueObject $seriesSlug, PositiveIntValueObject $year): ?CalendarEventSeries
+    public function findForSlug(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
     {
         foreach ($this->championshipRepositorySpy->all() as $championship) {
-            if (false === $championship->slug()->equals($seriesSlug)) {
+            if (false === $championship->shortCode()->equals($seriesCode)) {
                 continue;
             }
 
@@ -41,7 +41,7 @@ final class FindSeriesRepositorySpy implements FindSeriesGateway
 
                 return CalendarEventSeries::fromData([
                     'name'  => $championship->name()->value(),
-                    'slug'  => $championship->slug()->value(),
+                    'slug'  => $championship->shortCode()->value(),
                     'year'  => $season->year()->value(),
                     'icon'  => $presentation->icon()->value(),
                     'color' => $presentation->color()->value(),

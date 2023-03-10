@@ -7,6 +7,8 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Inf
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\SearchChampionshipRepositoryUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
@@ -26,7 +28,7 @@ final class SearchChampionshipRepositoryUsingDoctrineTest extends CoreRepository
 
         self::assertSame(
             self::fixtureId('motorsport.championship.championship.formulaOne'),
-            $repository->findBySlug('formula1')?->value(),
+            $repository->findIfExists(new StringValueObject('formula1'), new NullableUuidValueObject(null))?->value(),
         );
     }
 
@@ -37,6 +39,6 @@ final class SearchChampionshipRepositoryUsingDoctrineTest extends CoreRepository
     {
         $repository = new SearchChampionshipRepositoryUsingDoctrine(self::entityManager());
 
-        self::assertNull($repository->findBySlug('formula1'));
+        self::assertNull($repository->findIfExists(new StringValueObject('formula1'), new NullableUuidValueObject(null)));
     }
 }

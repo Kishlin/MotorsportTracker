@@ -31,7 +31,7 @@ final class SyncChampionshipCommandHandler implements CommandHandler
 
         /** @var UuidValueObject $championshipId */
         $championshipId = $this->commandBus->execute(
-            CreateChampionshipIfNotExistsCommand::fromScalars($response->series()->name(), $response->series()->slug()),
+            CreateChampionshipIfNotExistsCommand::fromScalars($response->series()->name(), null, $response->series()->slug(), null),
         );
 
         /** @var UuidValueObject $seasonId */
