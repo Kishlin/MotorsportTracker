@@ -27,70 +27,70 @@ final class SyncChampionshipCommandHandler implements CommandHandler
 
     public function __invoke(SyncChampionshipCommand $command): void
     {
-        $response = $this->gateway->fetch($command->seriesSlug(), $command->year());
-
-        /** @var UuidValueObject $championshipId */
-        $championshipId = $this->commandBus->execute(
-            CreateChampionshipIfNotExistsCommand::fromScalars($response->series()->name(), null, $response->series()->slug(), null),
-        );
-
-        /** @var UuidValueObject $seasonId */
-        $seasonId = $this->commandBus->execute(
-            CreateSeasonIfNotExistsCommand::fromScalars($championshipId->value(), $command->year()),
-        );
-
-        foreach ($response->events() as $index => $eventDTO) {
-            /** @var UuidValueObject $countryId */
-            $countryId = $this->commandBus->execute(
-                CreateCountryIfNotExistsCommand::fromScalars(
-                    $this->countryCodeFromPicture($eventDTO->countryPicture()),
-                    $eventDTO->countryName(),
-                ),
-            );
-
-            /** @var UuidValueObject $venueId */
-            $venueId = $this->commandBus->execute(
-                CreateVenueIfNotExistsCommand::fromScalars(
-                    $eventDTO->venueName(),
-                    $eventDTO->venueSlug(),
-                    $countryId->value(),
-                ),
-            );
-
-            /** @var UuidValueObject $eventId */
-            $eventId = $this->commandBus->execute(
-                CreateEventIfNotExistsCommand::fromScalars(
-                    $seasonId->value(),
-                    $venueId->value(),
-                    $index,
-                    $eventDTO->slug(),
-                    $eventDTO->name(),
-                    $eventDTO->shortName(),
-                    DateTimeImmutableHelper::fromNullableTimestamp($eventDTO->startTimeUtc()),
-                    DateTimeImmutableHelper::fromNullableTimestamp($eventDTO->endTimeUtc()),
-                ),
-            );
-
-            foreach ($eventDTO->sessions() as $sessionDTO) {
-                /** @var UuidValueObject $sessionTypeId */
-                $sessionTypeId = $this->commandBus->execute(
-                    CreateSessionTypeIfNotExistsCommand::fromScalars(
-                        $sessionDTO->name(),
-                    ),
-                );
-
-                $this->commandBus->execute(
-                    CreateEventSessionIfNotExistsCommand::fromScalars(
-                        $eventId->value(),
-                        $sessionTypeId->value(),
-                        $sessionDTO->slug(),
-                        $sessionDTO->hasResults(),
-                        DateTimeImmutableHelper::fromNullableTimestamp($sessionDTO->startTimeUtc()),
-                        DateTimeImmutableHelper::fromNullableTimestamp($sessionDTO->endTimeUtc()),
-                    ),
-                );
-            }
-        }
+//        $response = $this->gateway->fetch($command->seriesSlug(), $command->year());
+//
+//        /** @var UuidValueObject $championshipId */
+//        $championshipId = $this->commandBus->execute(
+//            CreateChampionshipIfNotExistsCommand::fromScalars($response->series()->name(), null, $response->series()->slug(), null),
+//        );
+//
+//        /** @var UuidValueObject $seasonId */
+//        $seasonId = $this->commandBus->execute(
+//            CreateSeasonIfNotExistsCommand::fromScalars($championshipId->value(), $command->year()),
+//        );
+//
+//        foreach ($response->events() as $index => $eventDTO) {
+//            /** @var UuidValueObject $countryId */
+//            $countryId = $this->commandBus->execute(
+//                CreateCountryIfNotExistsCommand::fromScalars(
+//                    $this->countryCodeFromPicture($eventDTO->countryPicture()),
+//                    $eventDTO->countryName(),
+//                ),
+//            );
+//
+//            /** @var UuidValueObject $venueId */
+//            $venueId = $this->commandBus->execute(
+//                CreateVenueIfNotExistsCommand::fromScalars(
+//                    $eventDTO->venueName(),
+//                    $eventDTO->venueSlug(),
+//                    $countryId->value(),
+//                ),
+//            );
+//
+//            /** @var UuidValueObject $eventId */
+//            $eventId = $this->commandBus->execute(
+//                CreateEventIfNotExistsCommand::fromScalars(
+//                    $seasonId->value(),
+//                    $venueId->value(),
+//                    $index,
+//                    $eventDTO->slug(),
+//                    $eventDTO->name(),
+//                    $eventDTO->shortName(),
+//                    DateTimeImmutableHelper::fromNullableTimestamp($eventDTO->startTimeUtc()),
+//                    DateTimeImmutableHelper::fromNullableTimestamp($eventDTO->endTimeUtc()),
+//                ),
+//            );
+//
+//            foreach ($eventDTO->sessions() as $sessionDTO) {
+//                /** @var UuidValueObject $sessionTypeId */
+//                $sessionTypeId = $this->commandBus->execute(
+//                    CreateSessionTypeIfNotExistsCommand::fromScalars(
+//                        $sessionDTO->name(),
+//                    ),
+//                );
+//
+//                $this->commandBus->execute(
+//                    CreateEventSessionIfNotExistsCommand::fromScalars(
+//                        $eventId->value(),
+//                        $sessionTypeId->value(),
+//                        $sessionDTO->slug(),
+//                        $sessionDTO->hasResults(),
+//                        DateTimeImmutableHelper::fromNullableTimestamp($sessionDTO->startTimeUtc()),
+//                        DateTimeImmutableHelper::fromNullableTimestamp($sessionDTO->endTimeUtc()),
+//                    ),
+//                );
+//            }
+//        }
     }
 
     private function countryCodeFromPicture(string $countryPicture): string
