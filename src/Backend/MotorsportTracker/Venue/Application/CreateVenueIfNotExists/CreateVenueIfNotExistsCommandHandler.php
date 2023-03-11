@@ -22,14 +22,14 @@ final class CreateVenueIfNotExistsCommandHandler implements CommandHandler
 
     public function __invoke(CreateVenueIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->search($command->slug()->value());
+        $id = $this->searchGateway->search($command->name());
 
         if (null !== $id) {
             return $id;
         }
 
         $newId = new UuidValueObject($this->uuidGenerator->uuid4());
-        $venue = Venue::create($newId, $command->name(), $command->slug(), $command->countryId());
+        $venue = Venue::create($newId, $command->name(), $command->countryId(), $command->ref());
 
         $this->saveGateway->save($venue);
 

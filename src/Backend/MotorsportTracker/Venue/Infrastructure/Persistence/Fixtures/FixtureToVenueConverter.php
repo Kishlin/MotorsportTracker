@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Fix
 
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -18,8 +19,8 @@ final class FixtureToVenueConverter implements FixtureConverter
         return Venue::instance(
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
-            new StringValueObject($fixture->getString('slug')),
             new UuidValueObject($fixture->getString('countryId')),
+            new NullableUuidValueObject(null),
         );
     }
 }

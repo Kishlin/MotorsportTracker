@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -12,8 +13,8 @@ final class CreateVenueIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $name,
-        private readonly string $slug,
         private readonly string $countryId,
+        private readonly ?string $ref,
     ) {
     }
 
@@ -22,18 +23,18 @@ final class CreateVenueIfNotExistsCommand implements Command
         return new StringValueObject($this->name);
     }
 
-    public function slug(): StringValueObject
-    {
-        return new StringValueObject($this->slug);
-    }
-
     public function countryId(): UuidValueObject
     {
         return new UuidValueObject($this->countryId);
     }
 
-    public static function fromScalars(string $name, string $slug, string $countryId): self
+    public function ref(): NullableUuidValueObject
     {
-        return new self($name, $slug, $countryId);
+        return new NullableUuidValueObject($this->ref);
+    }
+
+    public static function fromScalars(string $name, string $countryId, ?string $ref): self
+    {
+        return new self($name, $countryId, $ref);
     }
 }

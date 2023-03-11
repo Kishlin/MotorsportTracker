@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Venue\Domain\Ent
 
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\DomainEvent\VenueCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
@@ -19,22 +20,22 @@ final class VenueTest extends AggregateRootIsolatedTestCase
     public function testItCanBeCreated(): void
     {
         $id        = '024ceb5a-ae39-44e4-99d9-5713004b8a4b';
-        $countryId = 'fee5ddb6-d528-48d2-aa7d-901728a84d70';
         $name      = 'Venue Track';
-        $slug      = 'venue-track';
+        $countryId = 'fee5ddb6-d528-48d2-aa7d-901728a84d70';
+        $ref       = 'fe88a1ff-7758-49d6-982b-575c6b8cb1cc';
 
         $entity = Venue::create(
             new UuidValueObject($id),
             new StringValueObject($name),
-            new StringValueObject($slug),
             new UuidValueObject($countryId),
+            new NullableUuidValueObject($ref),
         );
 
         self::assertItRecordedDomainEvents($entity, new VenueCreatedDomainEvent(new UuidValueObject($id)));
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($name, $entity->name());
-        self::assertValueObjectSame($slug, $entity->slug());
         self::assertValueObjectSame($countryId, $entity->countryId());
+        self::assertValueObjectSame($ref, $entity->ref());
     }
 }

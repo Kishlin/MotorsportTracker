@@ -33,8 +33,8 @@ final class VenueCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.venue.venue.{$this->format($name)}");
     }
 
-    #[When('a client creates the venue :name for the :country if it does not exist with slug :slug')]
-    public function aClientCreatesTheVenueIfItDoesNotExist(string $name, string $country, string $slug): void
+    #[When('a client creates the venue :name for the :country if it does not exist')]
+    public function aClientCreatesTheVenueIfItDoesNotExist(string $name, string $country): void
     {
         $this->venueId         = null;
         $this->thrownException = null;
@@ -44,8 +44,8 @@ final class VenueCreationContext extends MotorsportTrackerContext
             $venueId = self::container()->commandBus()->execute(
                 CreateVenueIfNotExistsCommand::fromScalars(
                     $name,
-                    $slug,
                     $this->fixtureId("country.country.{$this->format($country)}"),
+                    null,
                 ),
             );
 

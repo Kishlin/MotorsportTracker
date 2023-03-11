@@ -1,39 +1,31 @@
 zandvoort:
   countryId: '@country.country.netherlands'
   name: 'Circuit Zandvoort'
-  slug: 'circuit-zandvoort'
 
 melbourne:
   countryId: '@country.country.australia'
   name: 'Melbourne Grand Prix Circuit'
-  slug: 'melbourne-grand-prix-circuit'
 
 emiliaRomagna:
   countryId: '@country.country.italia'
   name: 'Autodromo Internazionale Enzo e Dino Ferrari'
-  slug: 'autodromo-internazionale-enzo-e-dino-ferrari'
 
 circuitOfTheAmericas:
   countryId: '@country.country.usa'
   name: 'Circuit of the Americas'
-  slug: 'circuit-of-the-americas'
 
 monza:
   countryId: '@country.country.italia'
   name: 'Autodromo Nazionale Monza'
-  slug: 'autodromo-nazionale-monza'
 
 singapore:
   countryId: '@country.country.singapore'
   name: 'Marina Bay Street Circuit'
-  slug: 'marina-bay-street-circuit'
 
 hungaroring:
   countryId: '@country.country.hungary'
   name: 'Hungaroring'
-  slug: 'hungaroring'
 
 spaFrancorchamps:
   countryId: '@country.country.belgium'
   name: 'Circuit de Spa Francorchamps'
-  slug: 'circuit-de-spa-francorchamps'

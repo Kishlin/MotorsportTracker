@@ -58,7 +58,7 @@ final class FindEventsRepositorySpy implements FindEventsGateway
             $eventsList[$event->id()->value()] = [
                 'venue' => [
                     'name'    => $venue->name()->value(),
-                    'slug'    => $venue->slug()->value(),
+                    'slug'    => $venue->name()->value(),
                     'country' => [
                         'code' => $country->code()->value(),
                         'name' => $country->name()->value(),
