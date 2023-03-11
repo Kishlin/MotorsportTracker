@@ -1,29 +1,29 @@
 maxVerstappen:
   name: 'Max Verstappen'
-  slug: 'max-verstappen'
+  shortCode: 'VER'
   countryId: '@country.country.netherlands'
 
 sergioPerez:
   name: 'Sergio Perez'
-  slug: 'sergio-perez'
+  shortCode: 'PER'
   countryId: '@country.country.mexico'
 
 pierreGasly:
   name: 'Pierre Gasly'
-  slug: 'pierre-gasly'
+  shortCode: 'GAS'
   countryId: '@country.country.france'
 
 lewisHamilton:
   name: 'Lewis Hamilton'
-  slug: 'lewis-hamilton'
+  shortCode: 'HAM'
   countryId: '@country.country.unitedKingdom'
 
 nicholasLatifi:
   name: 'Nicholas Latifi'
-  slug: 'nicholas-latifi'
+  shortCode: 'LAT'
   countryId: '@country.country.canada'
 
 nyckDeVries:
   name: 'Nick de Vries'
-  slug: 'nick-de-vries'
+  shortCode: 'VRI'
   countryId: '@country.country.netherlands'

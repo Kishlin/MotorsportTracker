@@ -8,6 +8,8 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\SaveDriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\SearchDriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -30,17 +32,17 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDri
     {
         if (false === $this->countryRepositorySpy->has($driver->countryId())
             || $this->nameIsAlreadyTaken($driver)
-            || $this->slugIsAlreadyTaken($driver)) {
+            || $this->refIsAlreadyTaken($driver)) {
             throw new DriverCreationFailureException();
         }
 
         $this->objects[$driver->id()->value()] = $driver;
     }
 
-    public function findBySlug(string $slug): ?UuidValueObject
+    public function findByNameOrRef(StringValueObject $name, NullableUuidValueObject $ref): ?UuidValueObject
     {
         foreach ($this->objects as $savedDriver) {
-            if ($slug === $savedDriver->slug()->value()) {
+            if ($savedDriver->name()->equals($name) && $savedDriver->ref()->equals($ref)) {
                 return $savedDriver->id();
             }
         }
@@ -48,10 +50,10 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDri
         return null;
     }
 
-    private function slugIsAlreadyTaken(Driver $driver): bool
+    private function refIsAlreadyTaken(Driver $driver): bool
     {
         foreach ($this->objects as $savedDriver) {
-            if ($savedDriver->slug()->equals($driver->slug())) {
+            if ($savedDriver->ref()->equals($driver->ref())) {
                 return true;
             }
         }

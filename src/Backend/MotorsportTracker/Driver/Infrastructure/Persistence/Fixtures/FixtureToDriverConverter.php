@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Fi
 
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -18,8 +19,9 @@ final class FixtureToDriverConverter implements FixtureConverter
         return Driver::instance(
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
-            new StringValueObject($fixture->getString('slug')),
+            new StringValueObject($fixture->getString('shortCode')),
             new UuidValueObject($fixture->getString('countryId')),
+            new NullableUuidValueObject(null),
         );
     }
 }

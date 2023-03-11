@@ -33,10 +33,10 @@ final class DriverCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.driver.driver.{$this->format($name)}");
     }
 
-    #[When('a client creates the driver :name for the country :country')]
+    #[When('a client creates the driver :name with code :code for the country :country')]
     #[When('a client creates a driver with same name')]
     #[When('a client creates a driver for a missing country')]
-    public function aClientCreatesADriver(string $name = 'Max Verstappen', string $country = 'Netherlands'): void
+    public function aClientCreatesADriver(string $name = 'Max Verstappen', string $code = 'VER', string $country = 'Netherlands'): void
     {
         $this->driverId        = null;
         $this->thrownException = null;
@@ -44,11 +44,9 @@ final class DriverCreationContext extends MotorsportTrackerContext
         try {
             $countryId = $this->fixtureId("country.country.{$this->format($country)}");
 
-            $slug = strtolower(str_replace(' ', '-', $name));
-
             /** @var UuidValueObject $driverId */
             $driverId = self::container()->commandBus()->execute(
-                CreateDriverIfNotExistsCommand::fromScalars($name, $slug, $countryId),
+                CreateDriverIfNotExistsCommand::fromScalars($name, $code, $countryId, null),
             );
 
             $this->driverId = $driverId;

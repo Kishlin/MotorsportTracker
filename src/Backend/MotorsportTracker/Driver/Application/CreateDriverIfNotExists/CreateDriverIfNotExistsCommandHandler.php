@@ -23,14 +23,14 @@ final class CreateDriverIfNotExistsCommandHandler implements CommandHandler
 
     public function __invoke(CreateDriverIfNotExistsCommand $command): UuidValueObject
     {
-        $driverId = $this->searchGateway->findBySlug($command->slug()->value());
+        $driverId = $this->searchGateway->findByNameOrRef($command->name(), $command->ref());
 
         if (null !== $driverId) {
             return $driverId;
         }
 
         $driverId = new UuidValueObject($this->uuidGenerator->uuid4());
-        $driver   = Driver::create($driverId, $command->name(), $command->slug(), $command->countryId());
+        $driver   = Driver::create($driverId, $command->name(), $command->shortCode(), $command->countryId(), $command->ref());
 
         try {
             $this->saveGateway->save($driver);

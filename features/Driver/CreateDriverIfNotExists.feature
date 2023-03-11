@@ -2,7 +2,7 @@ Feature: It can create Drivers
 
   Scenario: It saves a new driver
     Given the country "Netherlands" exists
-    When a client creates the driver "Max Verstappen" for the country "Netherlands"
+    When a client creates the driver "Max Verstappen" with code "VER" for the country "Netherlands"
     Then the driver is saved
     And the id of "Max Verstappen" is returned
 
