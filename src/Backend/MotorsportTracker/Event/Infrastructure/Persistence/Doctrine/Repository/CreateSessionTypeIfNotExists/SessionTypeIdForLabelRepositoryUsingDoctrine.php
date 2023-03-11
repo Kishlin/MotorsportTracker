@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotEx
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SessionTypeIdForLabelRepositoryUsingDoctrine extends CoreRepository implements SessionTypeIdForLabelGateway
+final class SessionTypeIdForLabelRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SessionTypeIdForLabelGateway
 {
     /**
      * @throws NonUniqueResultException

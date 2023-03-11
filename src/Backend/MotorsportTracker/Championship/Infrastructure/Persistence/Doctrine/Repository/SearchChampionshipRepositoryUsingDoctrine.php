@@ -10,9 +10,9 @@ use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampion
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchChampionshipRepositoryUsingDoctrine extends CoreRepository implements SearchChampionshipGateway
+final class SearchChampionshipRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SearchChampionshipGateway
 {
     /**
      * @throws Exception|NonUniqueResultException

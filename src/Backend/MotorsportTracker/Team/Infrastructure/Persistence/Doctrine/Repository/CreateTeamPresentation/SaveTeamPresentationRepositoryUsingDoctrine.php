@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Doct
 
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentation\SaveTeamPresentationGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SaveTeamPresentationRepositoryUsingDoctrine extends CoreRepository implements SaveTeamPresentationGateway
+final class SaveTeamPresentationRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SaveTeamPresentationGateway
 {
     public function save(TeamPresentation $teamPresentation): void
     {

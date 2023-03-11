@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\FindSeasonGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class FindSeasonRepositoryUsingDoctrine extends CoreRepository implements FindSeasonGateway
+final class FindSeasonRepositoryUsingDoctrine extends CoreRepositoryLegacy implements FindSeasonGateway
 {
     /**
      * @throws Exception

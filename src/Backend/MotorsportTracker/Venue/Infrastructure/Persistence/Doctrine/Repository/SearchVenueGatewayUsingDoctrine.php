@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\SearchVenueGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchVenueGatewayUsingDoctrine extends CoreRepository implements SearchVenueGateway
+final class SearchVenueGatewayUsingDoctrine extends CoreRepositoryLegacy implements SearchVenueGateway
 {
     /**
      * @throws Exception|NonUniqueResultException

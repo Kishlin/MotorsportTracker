@@ -9,9 +9,9 @@ use Doctrine\ORM\NoResultException;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SearchEventGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchEventRepositoryUsingDoctrine extends CoreRepository implements SearchEventGateway
+final class SearchEventRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SearchEventGateway
 {
     /**
      * @throws NonUniqueResultException

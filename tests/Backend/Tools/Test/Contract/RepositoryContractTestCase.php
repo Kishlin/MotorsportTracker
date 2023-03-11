@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingDoctrine;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingConnection;
 use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;
 use Kishlin\Tests\Backend\Tools\Test\Contract\Constraint\AggregateRootWasSavedConstraint;
 use PHPUnit\Framework\TestCase;
-use Throwable;
 
 /**
  * Abstract TestCase for Contract Tests of Repositories, child classes of \Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository.
@@ -23,7 +22,7 @@ use Throwable;
  */
 abstract class RepositoryContractTestCase extends TestCase
 {
-    private static ?EntityManagerInterface $entityManager = null;
+    private static ?Connection $connection = null;
 
     private static ?FixtureLoader $fixtureLoader = null;
     private static ?FixtureSaver $fixtureSaver   = null;
@@ -44,34 +43,34 @@ abstract class RepositoryContractTestCase extends TestCase
             self::$uuidGenerator = null;
         }
 
-        if (null !== self::$entityManager) {
-            self::$entityManager->close();
+        if (null !== self::$connection) {
+            self::$connection->close();
 
-            self::$entityManager = null;
+            self::$connection = null;
         }
     }
 
     protected function setUp(): void
     {
-        self::entityManager()->beginTransaction();
+        self::connection()->beginTransaction();
     }
 
     protected function tearDown(): void
     {
-        self::$entityManager?->rollback();
+        self::$connection?->rollback();
         self::$fixtureLoader?->reset();
     }
 
     public static function assertAggregateRootWasSaved(AggregateRoot $aggregateRoot): void
     {
-        self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::entityManager()));
+        self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::connection()));
     }
 
     abstract protected static function fixturesFolder(): string;
 
     abstract protected static function configureFixtureSaver(FixtureSaver $fixtureSaver): void;
 
-    abstract protected static function createEntityManager(): EntityManagerInterface;
+    abstract protected static function createConnection(): Connection;
 
     protected static function uuid(): string
     {
@@ -99,28 +98,19 @@ abstract class RepositoryContractTestCase extends TestCase
         return self::fixtureLoader()->identifier($fixture);
     }
 
-    protected static function execute(string $sql): void
+    protected static function connection(): Connection
     {
-        try {
-            self::entityManager()->getConnection()->executeStatement($sql);
-        } catch (Throwable $e) {
-            self::fail($e->getMessage());
-        }
-    }
-
-    protected static function entityManager(): EntityManagerInterface
-    {
-        if (null === self::$entityManager) {
-            self::$entityManager = static::createEntityManager();
+        if (null === self::$connection) {
+            self::$connection = static::createConnection();
         }
 
-        return self::$entityManager;
+        return self::$connection;
     }
 
     private static function fixtureSaver(): FixtureSaver
     {
         if (null === self::$fixtureSaver) {
-            self::$fixtureSaver = new FixtureSaverUsingDoctrine(self::entityManager());
+            self::$fixtureSaver = new FixtureSaverUsingConnection(self::connection());
 
             static::configureFixtureSaver(self::$fixtureSaver);
         }

@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persiste
 
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\SaveSeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SaveSeasonRepositoryUsingDoctrine extends CoreRepository implements SaveSeasonGateway
+final class SaveSeasonRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SaveSeasonGateway
 {
     public function save(Season $season): void
     {

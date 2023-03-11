@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doc
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SaveEventGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SaveEventRepositoryUsingDoctrine extends CoreRepository implements SaveEventGateway
+final class SaveEventRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SaveEventGateway
 {
     public function save(Event $event): void
     {

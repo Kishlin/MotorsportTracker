@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Test\Contract\Constraint;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
+use Kishlin\Backend\Persistence\SQL\SQLQuery;
+use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\Tools;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionException;
+use RuntimeException;
 
 final class AggregateRootWasSavedConstraint extends Constraint
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private readonly Connection $connection,
     ) {
     }
 
@@ -22,21 +26,34 @@ final class AggregateRootWasSavedConstraint extends Constraint
 
     /**
      * @param object $other
+     *
+     * @throws ReflectionException
      */
     protected function matches($other): bool
     {
+        assert($other instanceof AggregateRoot);
+
         if (false === method_exists($other, 'id')) {
             return false;
         }
 
         $id = $other->id();
 
-        if (false === $id instanceof UuidValueObject) {
-            return false;
+        $table = $this->computeLocation($other);
+
+        $result = $this->connection->execute(SQLQuery::create("SELECT count(id) as count FROM {$table} WHERE id = '{$id}';"));
+        if ($result->isFail()) {
+            throw new RuntimeException("Failed to count ids in table {$table}.");
         }
 
-        $repository = $this->entityManager->getRepository($other::class);
+        return 1 === $result->fetchAllAssociative()[0]['count'];
+    }
 
-        return 1 === $repository->count(['id' => $id]);
+    /**
+     * @throws ReflectionException
+     */
+    protected function computeLocation(AggregateRoot $entity): string
+    {
+        return Tools::fromPascalToSnakeCase(Tools::shortClassName($entity));
     }
 }

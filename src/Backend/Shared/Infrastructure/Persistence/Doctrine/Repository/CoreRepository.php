@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository;
 
-abstract class CoreRepository extends DoctrineRepository
+abstract class CoreRepository extends Repository
 {
 }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory;
 use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
+use Kishlin\Backend\Persistence\PDO\PDOConnection;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
-use Throwable;
 
 abstract class CoreRepositoryContractTestCase extends RepositoryContractTestCase
 {
@@ -24,16 +23,14 @@ abstract class CoreRepositoryContractTestCase extends RepositoryContractTestCase
         MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
     }
 
-    protected static function createEntityManager(): EntityManagerInterface
+    protected static function createConnection(): Connection
     {
-        try {
-            return MotorsportTrackerEntityManagerFactory::create(
-                ['url' => $_ENV['DATABASE_CORE_URL']],
-                'core',
-                'test'
-            );
-        } catch (Throwable $e) {
-            self::fail('Failed to create an entity manager: ' . $e->getMessage());
-        }
+        return PDOConnection::create(
+            $_ENV['DB_HOST'],
+            (int) $_ENV['DB_PORT'],
+            $_ENV['DB_CORE_TEST'],
+            $_ENV['DB_USER'],
+            $_ENV['DB_PASSWORD'],
+        );
     }
 }

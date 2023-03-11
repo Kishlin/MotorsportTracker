@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Kishlin\Backend\MotorsportCache\Shared\Infrastructure\Persistence\Fixtures\MotorsportCacheFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
+use Kishlin\Backend\Persistence\PDO\PDOConnection;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
-use Throwable;
 
 abstract class CacheRepositoryContractTestCase extends RepositoryContractTestCase
 {
@@ -22,16 +21,14 @@ abstract class CacheRepositoryContractTestCase extends RepositoryContractTestCas
         MotorsportCacheFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
     }
 
-    protected static function createEntityManager(): EntityManagerInterface
+    protected static function createConnection(): Connection
     {
-        try {
-            return MotorsportTrackerEntityManagerFactory::create(
-                ['url' => $_ENV['DATABASE_CACHE_URL']],
-                'cache',
-                'test'
-            );
-        } catch (Throwable $e) {
-            self::fail('Failed to create an entity manager: ' . $e->getMessage());
-        }
+        return PDOConnection::create(
+            $_ENV['DB_HOST'],
+            (int) $_ENV['DB_PORT'],
+            $_ENV['DB_CACHE_TEST'],
+            $_ENV['DB_USER'],
+            $_ENV['DB_PASSWORD'],
+        );
     }
 }

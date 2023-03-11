@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\EntryList\Infrastructure\Persistence
 
 use Kishlin\Backend\MotorsportTracker\EntryList\Application\CreateEntryIfNotExists\SaveEntryGateway;
 use Kishlin\Backend\MotorsportTracker\EntryList\Domain\Entity\Entry;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SaveEntryRepositoryUsingDoctrine extends CoreRepository implements SaveEntryGateway
+final class SaveEntryRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SaveEntryGateway
 {
     public function save(Entry $entry): void
     {

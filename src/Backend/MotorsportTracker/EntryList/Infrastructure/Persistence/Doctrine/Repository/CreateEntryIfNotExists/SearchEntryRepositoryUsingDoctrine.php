@@ -9,9 +9,9 @@ use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\EntryList\Application\CreateEntryIfNotExists\SearchEntryGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchEntryRepositoryUsingDoctrine extends CoreRepository implements SearchEntryGateway
+final class SearchEntryRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SearchEntryGateway
 {
     /**
      * @throws Exception|NonUniqueResultException

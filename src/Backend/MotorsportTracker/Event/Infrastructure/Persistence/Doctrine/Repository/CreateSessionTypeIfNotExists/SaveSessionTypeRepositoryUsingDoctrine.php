@@ -6,9 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doc
 
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\SaveSessionTypeGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SaveSessionTypeRepositoryUsingDoctrine extends CoreRepository implements SaveSessionTypeGateway
+final class SaveSessionTypeRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SaveSessionTypeGateway
 {
     public function save(SessionType $sessionType): void
     {

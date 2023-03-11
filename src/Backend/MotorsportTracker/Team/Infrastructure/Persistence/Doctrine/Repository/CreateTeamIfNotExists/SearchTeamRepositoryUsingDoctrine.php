@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\SearchTeamGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchTeamRepositoryUsingDoctrine extends CoreRepository implements SearchTeamGateway
+final class SearchTeamRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SearchTeamGateway
 {
     /**
      * @throws Exception|NonUniqueResultException

@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\SearchDriverGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class SearchDriverRepositoryUsingDoctrine extends CoreRepository implements SearchDriverGateway
+final class SearchDriverRepositoryUsingDoctrine extends CoreRepositoryLegacy implements SearchDriverGateway
 {
     /**
      * @throws Exception|NonUniqueResultException
