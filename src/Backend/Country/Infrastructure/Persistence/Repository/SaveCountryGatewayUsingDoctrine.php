@@ -6,7 +6,7 @@ namespace Kishlin\Backend\Country\Infrastructure\Persistence\Repository;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\SaveCountryGateway;
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class SaveCountryGatewayUsingDoctrine extends CoreRepository implements SaveCountryGateway
 {

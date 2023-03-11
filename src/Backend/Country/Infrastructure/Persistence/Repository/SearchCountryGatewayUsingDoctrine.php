@@ -7,7 +7,7 @@ namespace Kishlin\Backend\Country\Infrastructure\Persistence\Repository;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\SearchCountryGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 use RuntimeException;
 
 final class SearchCountryGatewayUsingDoctrine extends CoreRepository implements SearchCountryGateway
