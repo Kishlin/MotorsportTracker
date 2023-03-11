@@ -50,4 +50,16 @@ final class Country extends AggregateRoot
     {
         return $this->name;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function mappedData(): array
+    {
+        return [
+            'id'   => $this->id()->value(),
+            'code' => $this->code()->value(),
+            'name' => $this->name()->value(),
+        ];
+    }
 }
