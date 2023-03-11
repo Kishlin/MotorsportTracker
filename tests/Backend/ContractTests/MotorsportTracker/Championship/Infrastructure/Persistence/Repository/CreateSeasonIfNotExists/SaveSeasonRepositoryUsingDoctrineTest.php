@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateSeasonIfNotExists;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateSeasonIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateSeasonIfNotExists\SaveSeasonRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateSeasonIfNotExists\SaveSeasonRepositoryUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CoreLegacyRepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateSeasonIfNotExists\SaveSeasonRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateSeasonIfNotExists\SaveSeasonRepositoryUsingDoctrine
  */
-final class SaveSeasonRepositoryUsingDoctrineTest extends CoreLegacyRepositoryContractTestCase
+final class SaveSeasonRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveASeason(): void
     {
@@ -28,7 +28,7 @@ final class SaveSeasonRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
             new NullableUuidValueObject(self::uuid()),
         );
 
-        $repository = new SaveSeasonRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveSeasonRepositoryUsingDoctrine(self::connection());
 
         $repository->save($season);
 
