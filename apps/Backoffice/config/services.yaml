@@ -82,31 +82,27 @@ services:
 
   ##> Persistence
 
-  kishlin.app.infrastructure.entity_manager.core:
-    class: Doctrine\ORM\EntityManagerInterface
-    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+  kishlin.app.infrastructure.connection.core:
+    class: Kishlin\Backend\Persistence\Core\Connection\Connection
+    factory: [ Kishlin\Backend\Persistence\PDO\PDOConnection, create ]
     arguments:
-      $parameters:
-        url: '%kishlin.database.core.url%'
-      $database: 'core'
-      $environment: '%kishlin.app.environment%'
+      $host: '%env(DB_HOST)%'
+      $port: '%env(DB_PORT)%'
+      $dbName: '%env(DB_CORE)%'
+      $user: '%env(DB_USER)%'
+      $password: '%env(DB_PASSWORD)%'
     public: true
 
-  kishlin.app.infrastructure.entity_manager.cache:
-    class: Doctrine\ORM\EntityManagerInterface
-    factory: [ Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory\MotorsportTrackerEntityManagerFactory, create ]
+  kishlin.app.infrastructure.connection.cache:
+    class: Kishlin\Backend\Persistence\Core\Connection\Connection
+    factory: [ Kishlin\Backend\Persistence\PDO\PDOConnection, create ]
     arguments:
-      $parameters:
-        url: '%kishlin.database.cache.url%'
-      $database: 'cache'
-      $environment: '%kishlin.app.environment%'
+      $host: '%env(DB_HOST)%'
+      $port: '%env(DB_PORT)%'
+      $dbName: '%env(DB_CACHE)%'
+      $user: '%env(DB_USER)%'
+      $password: '%env(DB_PASSWORD)%'
     public: true
-
-  Doctrine\ORM\EntityManagerInterface: '@kishlin.app.infrastructure.entity_manager.core'
-
-  Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\MigrationFix\FixPostgresqlDefaultSchemaListener:
-    tags:
-      - { name: doctrine.event_listener, event: postGenerateSchema }
 
 
   _instanceof:
@@ -130,7 +126,11 @@ services:
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository:
       bind:
-        $entityManager: '@kishlin.app.infrastructure.entity_manager.cache'
+        $entityManager: '@kishlin.app.infrastructure.connection.cache'
+
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository:
+      bind:
+        $entityManager: '@kishlin.app.infrastructure.connection.core'
 
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
       tags: ['kishlin.shared.infrastructure.monitoring.probe']

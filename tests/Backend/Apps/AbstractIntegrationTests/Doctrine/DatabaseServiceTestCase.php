@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Apps\AbstractIntegrationTests\Doctrine;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityManagerInterface;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -17,26 +16,28 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @internal
  * @coversNothing
  */
-abstract class CoreDatabaseServiceTestCase extends WebTestCase
+abstract class DatabaseServiceTestCase extends WebTestCase
 {
     /**
      * @param ContainerInterface $container The service container which should hold an active database service
      * @param string             $serviceId The id of the service. Defaults to \Doctrine\ORM\EntityManagerInterface if auto-wired.
      *
-     * @throws ContainerExceptionInterface|Exception|NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface|NotFoundExceptionInterface
      */
     protected static function assertItHasAnActiveDatabaseConnection(
         ContainerInterface $container,
-        string $serviceId = EntityManagerInterface::class
+        string $serviceId = Connection::class
     ): void {
-        /** @var ?EntityManagerInterface $entityManager */
-        $entityManager = $container->get($serviceId);
+        $connection = $container->get($serviceId);
 
-        if (null === $entityManager) {
+        if (null === $connection) {
             self::fail('Failed to get the database service from the container.');
         }
 
-        $connection = $entityManager->getConnection();
+        if (false === $connection instanceof Connection) {
+            self::fail('The service is not an instance of ' . Connection::class);
+        }
+
         $connection->connect();
 
         self::assertTrue($connection->isConnected());
