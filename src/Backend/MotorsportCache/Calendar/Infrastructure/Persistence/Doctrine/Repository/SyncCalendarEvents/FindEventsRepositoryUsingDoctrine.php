@@ -9,9 +9,9 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\FindEventsGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class FindEventsRepositoryUsingDoctrine extends CoreRepository implements FindEventsGateway
+final class FindEventsRepositoryUsingDoctrine extends CoreRepositoryLegacy implements FindEventsGateway
 {
     private const QUERY = <<<'SQL'
 SELECT

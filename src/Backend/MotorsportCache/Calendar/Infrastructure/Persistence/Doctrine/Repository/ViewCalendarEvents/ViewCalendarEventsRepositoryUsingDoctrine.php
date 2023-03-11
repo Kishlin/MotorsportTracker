@@ -8,9 +8,9 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\JsonableCalendarEventsView;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepositoryLegacy;
 
-final class ViewCalendarEventsRepositoryUsingDoctrine extends CacheRepository implements ViewCalendarEventsGateway
+final class ViewCalendarEventsRepositoryUsingDoctrine extends CacheRepositoryLegacy implements ViewCalendarEventsGateway
 {
     /**
      * @throws Exception

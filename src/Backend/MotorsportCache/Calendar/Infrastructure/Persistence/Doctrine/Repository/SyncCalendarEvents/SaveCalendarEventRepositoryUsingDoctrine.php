@@ -8,9 +8,9 @@ use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventUpsert;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\SaveCalendarEventGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepositoryLegacy;
 
-final class SaveCalendarEventRepositoryUsingDoctrine extends CacheRepository implements SaveCalendarEventGateway
+final class SaveCalendarEventRepositoryUsingDoctrine extends CacheRepositoryLegacy implements SaveCalendarEventGateway
 {
     private const DELETE_QUERY = 'DELETE FROM calendar_events WHERE calendar_events.slug = :slug';
 

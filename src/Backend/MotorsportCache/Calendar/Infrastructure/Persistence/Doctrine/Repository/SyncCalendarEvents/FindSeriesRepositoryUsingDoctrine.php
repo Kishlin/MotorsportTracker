@@ -9,9 +9,9 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
 
-final class FindSeriesRepositoryUsingDoctrine extends CoreRepository implements FindSeriesGateway
+final class FindSeriesRepositoryUsingDoctrine extends CoreRepositoryLegacy implements FindSeriesGateway
 {
     /**
      * @throws Exception

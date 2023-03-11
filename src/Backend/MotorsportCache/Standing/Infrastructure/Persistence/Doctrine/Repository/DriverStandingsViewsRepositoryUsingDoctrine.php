@@ -9,9 +9,9 @@ use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\DriverStandingsView;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Gateway\DriverStandingsViewsGateway;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewChampionshipSlug;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewYear;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepositoryLegacy;
 
-final class DriverStandingsViewsRepositoryUsingDoctrine extends CacheRepository implements DriverStandingsViewsGateway
+final class DriverStandingsViewsRepositoryUsingDoctrine extends CacheRepositoryLegacy implements DriverStandingsViewsGateway
 {
     public function save(DriverStandingsView $view): void
     {
