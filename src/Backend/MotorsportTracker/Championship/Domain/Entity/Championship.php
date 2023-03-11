@@ -73,4 +73,15 @@ final class Championship extends AggregateRoot
     {
         return $this->ref;
     }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'         => $this->id->value(),
+            'name'       => $this->name->value(),
+            'short_name' => $this->shortCode->value(),
+            'short_code' => $this->shortCode->value(),
+            'ref'        => $this->ref->value(),
+        ];
+    }
 }

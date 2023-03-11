@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateChampionshipIfNotExists;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateChampionshipIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
-use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Doctrine\Repository\CreateChampionshipIfNotExists\SaveChampionshipRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateChampionshipIfNotExists\SaveChampionshipRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CoreLegacyRepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship
+ * @covers \Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateChampionshipIfNotExists\SaveChampionshipRepository
  */
-final class SaveChampionshipRepositoryUsingDoctrineTest extends CoreLegacyRepositoryContractTestCase
+final class SaveChampionshipRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAChampionship(): void
     {
@@ -28,7 +28,7 @@ final class SaveChampionshipRepositoryUsingDoctrineTest extends CoreLegacyReposi
             new NullableUuidValueObject(self::uuid()),
         );
 
-        $repository = new SaveChampionshipRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveChampionshipRepository(self::connection());
 
         $repository->save($championship);
 
@@ -45,7 +45,7 @@ final class SaveChampionshipRepositoryUsingDoctrineTest extends CoreLegacyReposi
             new NullableUuidValueObject(null),
         );
 
-        $repository = new SaveChampionshipRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveChampionshipRepository(self::connection());
 
         $repository->save($championship);
 
