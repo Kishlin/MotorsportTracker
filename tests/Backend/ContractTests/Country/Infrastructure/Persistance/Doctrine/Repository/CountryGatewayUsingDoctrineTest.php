@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance\Doctrine\Repository;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
-use Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\SaveCountryGatewayUsingDoctrine;
+use Kishlin\Backend\Country\Infrastructure\Persistence\Repository\SaveCountryGatewayUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Doctrine\Repository\SaveCountryGatewayUsingDoctrine
+ * @covers \Kishlin\Backend\Country\Infrastructure\Persistence\Repository\SaveCountryGatewayUsingDoctrine
  */
 final class CountryGatewayUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
@@ -24,7 +24,7 @@ final class CountryGatewayUsingDoctrineTest extends CoreRepositoryContractTestCa
             new StringValueObject('France'),
         );
 
-        $repository = new SaveCountryGatewayUsingDoctrine(self::entityManager());
+        $repository = new SaveCountryGatewayUsingDoctrine(self::connection());
 
         $repository->save($country);
 
