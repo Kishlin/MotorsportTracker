@@ -60,6 +60,7 @@ final class PDOResult implements Result
             throw new ResultIsNotASuccessException();
         }
 
+        /** @var array<string, null|float|int|string>|false $ret */
         $ret = $this->statement->fetch(PDO::FETCH_ASSOC);
         if (false === $ret) {
             return [];

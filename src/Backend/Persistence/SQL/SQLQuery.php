@@ -8,6 +8,9 @@ use Kishlin\Backend\Persistence\Core\Query\Query;
 
 final class SQLQuery implements Query
 {
+    /**
+     * @param array<string, null|float|int|string> $parameters
+     */
     private function __construct(
         private readonly string $query,
         private readonly array $parameters,
