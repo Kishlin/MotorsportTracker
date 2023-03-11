@@ -69,4 +69,15 @@ final class ChampionshipPresentation extends AggregateRoot
     {
         return $this->createdOn;
     }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'           => $this->id->value(),
+            'championship' => $this->championshipId->value(),
+            'icon'         => $this->icon->value(),
+            'color'        => $this->color->value(),
+            'created_on'   => $this->createdOn->value()->format('Y-m-d H:i:s'),
+        ];
+    }
 }
