@@ -42,7 +42,7 @@ final class CountryContext extends MotorsportTrackerContext
         try {
             /** @var UuidValueObject $countryId */
             $countryId = self::container()->commandBus()->execute(
-                CreateCountryIfNotExistsCommand::fromScalars($code, $name),
+                CreateCountryIfNotExistsCommand::fromScalars($code, $name, null),
             );
 
             $this->countryId = $countryId;

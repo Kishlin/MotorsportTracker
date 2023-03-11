@@ -6,6 +6,7 @@ namespace Kishlin\Backend\Country\Infrastructure\Persistence\Fixtures;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -19,6 +20,7 @@ final class FixtureToCountryConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('code')),
             new StringValueObject($fixture->getString('name')),
+            new NullableUuidValueObject(null),
         );
     }
 }

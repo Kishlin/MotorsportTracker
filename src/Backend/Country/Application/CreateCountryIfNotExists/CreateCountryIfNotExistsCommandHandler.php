@@ -27,7 +27,7 @@ final class CreateCountryIfNotExistsCommandHandler implements CommandHandler
         }
 
         $newId   = new UuidValueObject($this->uuidGenerator->uuid4());
-        $country = Country::create($newId, $command->code(), $command->name());
+        $country = Country::create($newId, $command->code(), $command->name(), $command->ref());
 
         $this->saveGateway->save($country);
 

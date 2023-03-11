@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Infrastructure\Persistence\Repository\SaveCountryGatewayUsingDoctrine;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
@@ -22,6 +23,7 @@ final class CountryGatewayUsingDoctrineTest extends CoreRepositoryContractTestCa
             new UuidValueObject(self::uuid()),
             new StringValueObject('fr'),
             new StringValueObject('France'),
+            new NullableUuidValueObject(null),
         );
 
         $repository = new SaveCountryGatewayUsingDoctrine(self::connection());

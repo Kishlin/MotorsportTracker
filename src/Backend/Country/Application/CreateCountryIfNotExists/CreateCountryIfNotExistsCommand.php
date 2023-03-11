@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Country\Application\CreateCountryIfNotExists;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 
 final class CreateCountryIfNotExistsCommand implements Command
@@ -12,6 +13,7 @@ final class CreateCountryIfNotExistsCommand implements Command
     private function __construct(
         private readonly string $code,
         private readonly string $name,
+        private readonly ?string $ref,
     ) {
     }
 
@@ -25,8 +27,13 @@ final class CreateCountryIfNotExistsCommand implements Command
         return new StringValueObject($this->name);
     }
 
-    public static function fromScalars(string $keyword, string $name): self
+    public function ref(): NullableUuidValueObject
     {
-        return new self($keyword, $name);
+        return new NullableUuidValueObject($this->ref);
+    }
+
+    public static function fromScalars(string $keyword, string $name, ?string $ref): self
+    {
+        return new self($keyword, $name, $ref);
     }
 }
