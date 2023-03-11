@@ -8,7 +8,6 @@ use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fi
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToChampionshipPresentationConverter;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures\FixtureToSeasonConverter;
 use Kishlin\Backend\MotorsportTracker\Driver\Infrastructure\Persistence\Fixtures\FixtureToDriverConverter;
-use Kishlin\Backend\MotorsportTracker\EntryList\Infrastructure\Persistence\Fixtures\FixtureToEntryConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventSessionConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToSessionTypeConverter;
@@ -30,8 +29,6 @@ final class MotorsportTrackerFixtureConverterConfigurator
         $fixtureSaver->addConverter('motorsport.championship.season', new FixtureToSeasonConverter());
 
         $fixtureSaver->addConverter('motorsport.driver.driver', new FixtureToDriverConverter());
-
-        $fixtureSaver->addConverter('motorsport.entrylist.entry', new FixtureToEntryConverter());
 
         $fixtureSaver->addConverter('motorsport.event.event', new FixtureToEventConverter());
         $fixtureSaver->addConverter('motorsport.event.eventSession', new FixtureToEventSessionConverter());

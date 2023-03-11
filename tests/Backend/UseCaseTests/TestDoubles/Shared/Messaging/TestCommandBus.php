@@ -11,7 +11,6 @@ use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshi
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipPresentation\CreateChampionshipPresentationCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateSeasonIfNotExists\CreateSeasonIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\CreateDriverIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\EntryList\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\CreateSessionTypeIfNotExistsCommand;
@@ -63,10 +62,6 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof CreateDriverIfNotExistsCommand) {
             return $this->testServiceContainer->createDriverIfNotExistsCommandHandler()($command);
-        }
-
-        if ($command instanceof CreateEntryIfNotExistsCommand) {
-            return $this->testServiceContainer->createEntryIfNotExistsCommandHandler()($command);
         }
 
         if ($command instanceof CreateEventIfNotExistsCommand) {
