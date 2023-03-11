@@ -126,11 +126,11 @@ services:
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository:
       bind:
-        $entityManager: '@kishlin.app.infrastructure.connection.cache'
+        $connection: '@kishlin.app.infrastructure.connection.cache'
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository:
       bind:
-        $entityManager: '@kishlin.app.infrastructure.connection.core'
+        $connection: '@kishlin.app.infrastructure.connection.core'
 
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
       tags: ['kishlin.shared.infrastructure.monitoring.probe']
