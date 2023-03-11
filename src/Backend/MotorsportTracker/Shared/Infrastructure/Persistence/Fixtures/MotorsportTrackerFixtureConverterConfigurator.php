@@ -12,7 +12,6 @@ use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToEventSessionConverter;
 use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Fixtures\FixtureToSessionTypeConverter;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixtures\FixtureToTeamConverter;
-use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixtures\FixtureToTeamPresentationConverter;
 use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Fixtures\FixtureToVenueConverter;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
 
@@ -35,7 +34,6 @@ final class MotorsportTrackerFixtureConverterConfigurator
         $fixtureSaver->addConverter('motorsport.event.sessionType', new FixtureToSessionTypeConverter());
 
         $fixtureSaver->addConverter('motorsport.team.team', new FixtureToTeamConverter());
-        $fixtureSaver->addConverter('motorsport.team.teamPresentation', new FixtureToTeamPresentationConverter());
 
         $fixtureSaver->addConverter('motorsport.venue.venue', new FixtureToVenueConverter());
     }
