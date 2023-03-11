@@ -22,7 +22,12 @@ final class AggregateRootTest extends TestCase
      */
     public function testItCanRecordAndPullEvents(): void
     {
-        $root = new class() extends AggregateRoot {};
+        $root = new class() extends AggregateRoot {
+            public function id(): UuidValueObject
+            {
+                return new UuidValueObject('51cefa3e-c223-469e-a23c-61a32e4bf048');
+            }
+        };
         $uuid = new class('51cefa3e-c223-469e-a23c-61a32e4bf048') extends UuidValueObject {};
 
         $event = new class($uuid) extends DomainEvent {};
