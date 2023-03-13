@@ -35,7 +35,7 @@ final class SQLQueryBuilder implements QueryBuilder
 
     private ?int $limit = null;
 
-    /** @var array<string, null|float|int|string> */
+    /** @var array<string, null|bool|float|int|string> */
     private array $params = [];
 
     public function __construct()
@@ -135,7 +135,7 @@ final class SQLQueryBuilder implements QueryBuilder
         return $this;
     }
 
-    public function withParam(string $key, float|int|string|null $param): self
+    public function withParam(string $key, null|float|bool|int|string $param): self
     {
         $this->params[$key] = $param;
 

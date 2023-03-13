@@ -9,7 +9,7 @@ interface Query
     public function query(): string;
 
     /**
-     * @return array<string, null|float|int|string>
+     * @return array<string, null|bool|float|int|string>
      */
     public function parameters(): array;
 }

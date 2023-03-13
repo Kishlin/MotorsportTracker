@@ -9,7 +9,7 @@ use Kishlin\Backend\Persistence\Core\Query\Query;
 final class SQLQuery implements Query
 {
     /**
-     * @param array<string, null|float|int|string> $parameters
+     * @param array<string, null|bool|float|int|string> $parameters
      */
     private function __construct(
         private readonly string $query,
@@ -31,7 +31,7 @@ final class SQLQuery implements Query
     }
 
     /**
-     * @param array<string, null|float|int|string> $parameters
+     * @param array<string, null|bool|float|int|string> $parameters
      */
     public static function create(string $query, array $parameters = []): self
     {

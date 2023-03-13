@@ -13,7 +13,7 @@ interface Connection
     public function createQueryBuilder(): QueryBuilder;
 
     /**
-     * @param array<string, null|float|int|string> $data
+     * @param array<string, null|bool|float|int|string> $data
      */
     public function insert(string $table, array $data): Result;
 

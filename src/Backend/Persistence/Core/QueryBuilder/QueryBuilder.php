@@ -39,7 +39,7 @@ interface QueryBuilder
 
     public function limit(int $limit): self;
 
-    public function withParam(string $key, null|float|int|string $param): self;
+    public function withParam(string $key, null|bool|float|int|string $param): self;
 
     public function buildQuery(): Query;
 }

@@ -13,12 +13,12 @@ interface Result
     public function failMessage(): ResultFailure;
 
     /**
-     * @return array<int, array<string, null|float|int|string>>
+     * @return array<int, array<string, null|bool|float|int|string>>
      */
     public function fetchAllAssociative(): array;
 
     /**
-     * @return array<string, null|float|int|string>
+     * @return array<string, null|bool|float|int|string>
      */
     public function fetchAssociative(): array;
 }
