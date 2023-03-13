@@ -21,32 +21,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: championship_presentations; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: championship; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.championship_presentations (
-    id character varying(36) NOT NULL,
-    championship character varying(36) NOT NULL,
-    icon character varying(255) NOT NULL,
-    color character varying(255) NOT NULL,
-    created_on timestamp(0) without time zone NOT NULL
-);
-
-
-ALTER TABLE public.championship_presentations OWNER TO motorsporttracker;
-
---
--- Name: COLUMN championship_presentations.created_on; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.championship_presentations.created_on IS '(DC2Type:date_time_value_object)';
-
-
---
--- Name: championships; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.championships (
+CREATE TABLE public.championship (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
     short_name character varying(255) DEFAULT NULL::character varying,
@@ -55,136 +33,129 @@ CREATE TABLE public.championships (
 );
 
 
-ALTER TABLE public.championships OWNER TO motorsporttracker;
+ALTER TABLE public.championship OWNER TO motorsporttracker;
 
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: championship_presentation; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.countries (
+CREATE TABLE public.championship_presentation (
+    id character varying(36) NOT NULL,
+    championship character varying(36) NOT NULL,
+    icon character varying(255) NOT NULL,
+    color character varying(255) NOT NULL,
+    created_on timestamp(0) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.championship_presentation OWNER TO motorsporttracker;
+
+--
+-- Name: COLUMN championship_presentation.created_on; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.championship_presentation.created_on IS '(DC2Type:date_time_value_object)';
+
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.country (
     id character varying(36) NOT NULL,
     code character varying(255) NOT NULL,
-    name character varying(255) NOT NULL
+    name character varying(255) NOT NULL,
+    ref character varying(36) DEFAULT NULL::character varying
 );
 
 
-ALTER TABLE public.countries OWNER TO motorsporttracker;
+ALTER TABLE public.country OWNER TO motorsporttracker;
 
 --
--- Name: doctrine_migration_versions; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: driver; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.doctrine_migration_versions (
-    version character varying(191) NOT NULL,
-    executed_at timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
-    execution_time integer
-);
-
-
-ALTER TABLE public.doctrine_migration_versions OWNER TO motorsporttracker;
-
---
--- Name: drivers; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.drivers (
+CREATE TABLE public.driver (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    slug character varying(255) NOT NULL,
-    country character varying(36) NOT NULL
+    short_code character varying(255) NOT NULL,
+    country character varying(36) NOT NULL,
+    ref character varying(36) DEFAULT NULL::character varying
 );
 
 
-ALTER TABLE public.drivers OWNER TO motorsporttracker;
+ALTER TABLE public.driver OWNER TO motorsporttracker;
 
 --
--- Name: entries; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: event; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.entries (
-    id character varying(36) NOT NULL,
-    event character varying(36) NOT NULL,
-    driver character varying(36) NOT NULL,
-    team character varying(36) DEFAULT NULL::character varying,
-    chassis character varying(255) NOT NULL,
-    engine character varying(255) NOT NULL,
-    series_name character varying(255) DEFAULT NULL::character varying,
-    series_slug character varying(255) DEFAULT NULL::character varying,
-    car_number character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.entries OWNER TO motorsporttracker;
-
---
--- Name: event_sessions; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.event_sessions (
-    id character varying(36) NOT NULL,
-    event character varying(36) NOT NULL,
-    type character varying(36) NOT NULL,
-    slug character varying(255) NOT NULL,
-    has_result boolean NOT NULL,
-    start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
-    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone
-);
-
-
-ALTER TABLE public.event_sessions OWNER TO motorsporttracker;
-
---
--- Name: COLUMN event_sessions.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.event_sessions.start_date IS '(DC2Type:nullable_date_time_value_object)';
-
-
---
--- Name: COLUMN event_sessions.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.event_sessions.end_date IS '(DC2Type:nullable_date_time_value_object)';
-
-
---
--- Name: events; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.events (
+CREATE TABLE public.event (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
     venue character varying(36) NOT NULL,
     index integer NOT NULL,
-    slug character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     short_name character varying(255) DEFAULT NULL::character varying,
     start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
-    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone
+    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    short_code character varying(255) DEFAULT NULL::character varying,
+    ref character varying(36) DEFAULT NULL::character varying
 );
 
 
-ALTER TABLE public.events OWNER TO motorsporttracker;
+ALTER TABLE public.event OWNER TO motorsporttracker;
 
 --
--- Name: COLUMN events.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN event.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.events.start_date IS '(DC2Type:nullable_date_time_value_object)';
-
-
---
--- Name: COLUMN events.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.events.end_date IS '(DC2Type:nullable_date_time_value_object)';
+COMMENT ON COLUMN public.event.start_date IS '(DC2Type:nullable_date_time_value_object)';
 
 
 --
--- Name: seasons; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN event.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.seasons (
+COMMENT ON COLUMN public.event.end_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: event_session; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.event_session (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    type character varying(36) NOT NULL,
+    has_result boolean NOT NULL,
+    start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
+    ref character varying(36) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public.event_session OWNER TO motorsporttracker;
+
+--
+-- Name: COLUMN event_session.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.event_session.start_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: COLUMN event_session.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+--
+
+COMMENT ON COLUMN public.event_session.end_date IS '(DC2Type:nullable_date_time_value_object)';
+
+
+--
+-- Name: season; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.season (
     id character varying(36) NOT NULL,
     championship character varying(255) NOT NULL,
     year integer NOT NULL,
@@ -192,280 +163,206 @@ CREATE TABLE public.seasons (
 );
 
 
-ALTER TABLE public.seasons OWNER TO motorsporttracker;
+ALTER TABLE public.season OWNER TO motorsporttracker;
 
 --
--- Name: session_types; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: session_type; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.session_types (
+CREATE TABLE public.session_type (
     id character varying(36) NOT NULL,
     label character varying(255) NOT NULL
 );
 
 
-ALTER TABLE public.session_types OWNER TO motorsporttracker;
+ALTER TABLE public.session_type OWNER TO motorsporttracker;
 
 --
--- Name: team_presentations; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: team; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.team_presentations (
-    id character varying(36) NOT NULL,
-    team character varying(36) NOT NULL,
-    name character varying(255) NOT NULL,
-    image character varying(255) NOT NULL,
-    created_on timestamp(0) without time zone NOT NULL
-);
-
-
-ALTER TABLE public.team_presentations OWNER TO motorsporttracker;
-
---
--- Name: COLUMN team_presentations.created_on; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.team_presentations.created_on IS '(DC2Type:team_presentation_created_on)';
-
-
---
--- Name: teams; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.teams (
+CREATE TABLE public.team (
     id character varying(36) NOT NULL,
     country character varying(36) NOT NULL,
-    slug character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
-    code character varying(255) NOT NULL
+    color character varying(255) DEFAULT NULL::character varying,
+    ref character varying(36) DEFAULT NULL::character varying
 );
 
 
-ALTER TABLE public.teams OWNER TO motorsporttracker;
+ALTER TABLE public.team OWNER TO motorsporttracker;
 
 --
--- Name: venues; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: venue; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.venues (
+CREATE TABLE public.venue (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
-    slug character varying(255) NOT NULL,
-    country character varying(36) NOT NULL
+    country character varying(36) NOT NULL,
+    ref character varying(36) DEFAULT NULL::character varying
 );
 
 
-ALTER TABLE public.venues OWNER TO motorsporttracker;
+ALTER TABLE public.venue OWNER TO motorsporttracker;
 
 --
--- Data for Name: championship_presentations; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: championship; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.championship_presentations (id, championship, icon, color, created_on) FROM stdin;
+COPY public.championship (id, name, short_name, short_code, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: championships; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: championship_presentation; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.championships (id, name, short_name, short_code, ref) FROM stdin;
+COPY public.championship_presentation (id, championship, icon, color, created_on) FROM stdin;
 \.
 
 
 --
--- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.countries (id, code, name) FROM stdin;
+COPY public.country (id, code, name, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: driver; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
-Kishlin\\Migrations\\Core\\Version20230310180755	2023-03-10 18:13:37	20
-Kishlin\\Migrations\\Core\\Version20230310191126	2023-03-10 18:13:37	5
-Kishlin\\Migrations\\Core\\Version20230310193038	2023-03-10 18:31:39	17
-Kishlin\\Migrations\\Core\\Version20230311160030	2023-03-11 16:00:55	52
+COPY public.driver (id, name, short_code, country, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: drivers; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.drivers (id, name, slug, country) FROM stdin;
+COPY public.event (id, season, venue, index, name, short_name, start_date, end_date, short_code, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: entries; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: event_session; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.entries (id, event, driver, team, chassis, engine, series_name, series_slug, car_number) FROM stdin;
+COPY public.event_session (id, event, type, has_result, start_date, end_date, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: event_sessions; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: season; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.event_sessions (id, event, type, slug, has_result, start_date, end_date) FROM stdin;
+COPY public.season (id, championship, year, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: session_type; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.events (id, season, venue, index, slug, name, short_name, start_date, end_date) FROM stdin;
+COPY public.session_type (id, label) FROM stdin;
 \.
 
 
 --
--- Data for Name: seasons; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.seasons (id, championship, year, ref) FROM stdin;
+COPY public.team (id, country, name, color, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: session_types; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: venue; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.session_types (id, label) FROM stdin;
+COPY public.venue (id, name, country, ref) FROM stdin;
 \.
 
 
 --
--- Data for Name: team_presentations; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Name: championship_presentation championship_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.team_presentations (id, team, name, image, created_on) FROM stdin;
-\.
-
-
---
--- Data for Name: teams; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.teams (id, country, slug, name, code) FROM stdin;
-\.
-
-
---
--- Data for Name: venues; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.venues (id, name, slug, country) FROM stdin;
-\.
-
-
---
--- Name: championship_presentations championship_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.championship_presentations
+ALTER TABLE ONLY public.championship_presentation
     ADD CONSTRAINT championship_presentations_pkey PRIMARY KEY (id);
 
 
 --
--- Name: championships championships_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: championship championships_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.championships
+ALTER TABLE ONLY public.championship
     ADD CONSTRAINT championships_pkey PRIMARY KEY (id);
 
 
 --
--- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: country countries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.countries
+ALTER TABLE ONLY public.country
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
 
 
 --
--- Name: doctrine_migration_versions doctrine_migration_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: driver drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.doctrine_migration_versions
-    ADD CONSTRAINT doctrine_migration_versions_pkey PRIMARY KEY (version);
-
-
---
--- Name: drivers drivers_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.drivers
+ALTER TABLE ONLY public.driver
     ADD CONSTRAINT drivers_pkey PRIMARY KEY (id);
 
 
 --
--- Name: entries entries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: event_session event_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.entries
-    ADD CONSTRAINT entries_pkey PRIMARY KEY (id);
-
-
---
--- Name: event_sessions event_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.event_sessions
+ALTER TABLE ONLY public.event_session
     ADD CONSTRAINT event_sessions_pkey PRIMARY KEY (id);
 
 
 --
--- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: event events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.events
+ALTER TABLE ONLY public.event
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
 
 
 --
--- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: season seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.seasons
+ALTER TABLE ONLY public.season
     ADD CONSTRAINT seasons_pkey PRIMARY KEY (id);
 
 
 --
--- Name: session_types session_types_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: session_type session_types_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.session_types
+ALTER TABLE ONLY public.session_type
     ADD CONSTRAINT session_types_pkey PRIMARY KEY (id);
 
 
 --
--- Name: team_presentations team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: team teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.team_presentations
-    ADD CONSTRAINT team_presentations_pkey PRIMARY KEY (id);
-
-
---
--- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.teams
+ALTER TABLE ONLY public.team
     ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
 
 
 --
--- Name: venues venues_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: venue venues_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.venues
+ALTER TABLE ONLY public.venue
     ADD CONSTRAINT venues_pkey PRIMARY KEY (id);
 
 
@@ -473,126 +370,77 @@ ALTER TABLE ONLY public.venues
 -- Name: championship_created_on_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentations USING btree (championship, created_on);
+CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentation USING btree (championship, created_on);
 
 
 --
 -- Name: championship_season_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX championship_season_idx ON public.seasons USING btree (championship, year);
-
-
---
--- Name: entry_event_driver_car_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX entry_event_driver_car_idx ON public.entries USING btree (event, driver, car_number);
+CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (championship, year);
 
 
 --
 -- Name: event_season_index_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX event_season_index_idx ON public.events USING btree (season, index);
-
-
---
--- Name: event_season_slug_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX event_season_slug_idx ON public.events USING btree (season, slug);
+CREATE UNIQUE INDEX event_season_index_idx ON public.event USING btree (season, index);
 
 
 --
 -- Name: session_type_label_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX session_type_label_idx ON public.session_types USING btree (label);
-
-
---
--- Name: team_presentation_team_created_on_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX team_presentation_team_created_on_idx ON public.team_presentations USING btree (team, created_on);
-
-
---
--- Name: uniq_5387574a989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX uniq_5387574a989d9b62 ON public.events USING btree (slug);
+CREATE UNIQUE INDEX session_type_label_idx ON public.session_type USING btree (label);
 
 
 --
 -- Name: uniq_5d66ebad5e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_5d66ebad5e237e06 ON public.countries USING btree (name);
+CREATE UNIQUE INDEX uniq_5d66ebad5e237e06 ON public.country USING btree (name);
 
 
 --
 -- Name: uniq_5d66ebad77153098; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_5d66ebad77153098 ON public.countries USING btree (code);
+CREATE UNIQUE INDEX uniq_5d66ebad77153098 ON public.country USING btree (code);
 
 
 --
 -- Name: uniq_652e22ad5e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_652e22ad5e237e06 ON public.venues USING btree (name);
-
-
---
--- Name: uniq_652e22ad989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX uniq_652e22ad989d9b62 ON public.venues USING btree (slug);
-
-
---
--- Name: uniq_96c22258989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX uniq_96c22258989d9b62 ON public.teams USING btree (slug);
+CREATE UNIQUE INDEX uniq_652e22ad5e237e06 ON public.venue USING btree (name);
 
 
 --
 -- Name: uniq_b682ea9317d2fe0d; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_b682ea9317d2fe0d ON public.championships USING btree (short_code);
+CREATE UNIQUE INDEX uniq_b682ea9317d2fe0d ON public.championship USING btree (short_code);
 
 
 --
 -- Name: uniq_b682ea935e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championships USING btree (name);
-
-
---
--- Name: uniq_dc8c74c3989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX uniq_dc8c74c3989d9b62 ON public.event_sessions USING btree (slug);
+CREATE UNIQUE INDEX uniq_b682ea935e237e06 ON public.championship USING btree (name);
 
 
 --
 -- Name: uniq_e410c3075e237e06; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.drivers USING btree (name);
+CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.driver USING btree (name);
 
 
 --
 -- Name: uniq_e410c307989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_e410c307989d9b62 ON public.drivers USING btree (slug);
+CREATE UNIQUE INDEX uniq_e410c307989d9b62 ON public.driver USING btree (short_code);
 
 
 --
