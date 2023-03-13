@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 declare(strict_types=1);
 
@@ -6,6 +6,8 @@ namespace Kishlin\Backend\Persistence\Core\QueryBuilder;
 
 use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\Comparison;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\ComparisonComparator;
+use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\OrX;
+use Stringable;
 
 final class Expression
 {
@@ -37,5 +39,10 @@ final class Expression
     public function gte(string $left, string $right): Comparison
     {
         return Comparison::build($left, ComparisonComparator::GTE, $right);
+    }
+
+    public function orX(Stringable $left, Stringable $right): OrX
+    {
+        return OrX::build($left, $right);
     }
 }
