@@ -47,13 +47,13 @@ final class SyncCalendarContext extends MotorsportTrackerContext
     public function thereIsACalendarEventCached(string $session): void
     {
         $sessionId = self::fixtureId("motorsport.event.event.{$this->format($session)}");
-        $eventSlug = self::container()->eventRepositorySpy()->safeGet(new UuidValueObject($sessionId))->slug();
+        $eventName = self::container()->eventRepositorySpy()->safeGet(new UuidValueObject($sessionId))->name();
 
         $total = count(
             array_filter(
                 self::container()->calendarEventRepositorySpy()->all(),
-                static function (CalendarEvent $calendarEvent) use ($eventSlug) {
-                    return $calendarEvent->slug()->equals($eventSlug);
+                static function (CalendarEvent $calendarEvent) use ($eventName) {
+                    return $calendarEvent->slug()->equals($eventName);
                 }
             )
         );

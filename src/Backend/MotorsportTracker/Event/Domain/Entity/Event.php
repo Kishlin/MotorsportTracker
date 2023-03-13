@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventCreatedDomai
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -19,11 +20,12 @@ final class Event extends AggregateRoot
         private readonly UuidValueObject $seasonId,
         private readonly UuidValueObject $venueId,
         private readonly PositiveIntValueObject $index,
-        private readonly StringValueObject $slug,
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $shortName,
+        private readonly NullableStringValueObject $shortCode,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
+        private readonly NullableUuidValueObject $ref,
     ) {
     }
 
@@ -32,13 +34,14 @@ final class Event extends AggregateRoot
         UuidValueObject $seasonId,
         UuidValueObject $venueId,
         PositiveIntValueObject $index,
-        StringValueObject $slug,
         StringValueObject $name,
         NullableStringValueObject $shortName,
+        NullableStringValueObject $shortCode,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
+        NullableUuidValueObject $ref,
     ): self {
-        $event = new self($id, $seasonId, $venueId, $index, $slug, $name, $shortName, $startDate, $endDate);
+        $event = new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $startDate, $endDate, $ref);
 
         $event->record(new EventCreatedDomainEvent($id));
 
@@ -53,13 +56,14 @@ final class Event extends AggregateRoot
         UuidValueObject $seasonId,
         UuidValueObject $venueId,
         PositiveIntValueObject $index,
-        StringValueObject $slug,
         StringValueObject $name,
         NullableStringValueObject $shortName,
+        NullableStringValueObject $shortCode,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
+        NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $seasonId, $venueId, $index, $slug, $name, $shortName, $startDate, $endDate);
+        return new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $startDate, $endDate, $ref);
     }
 
     public function id(): UuidValueObject
@@ -82,11 +86,6 @@ final class Event extends AggregateRoot
         return $this->index;
     }
 
-    public function slug(): StringValueObject
-    {
-        return $this->slug;
-    }
-
     public function name(): StringValueObject
     {
         return $this->name;
@@ -97,6 +96,11 @@ final class Event extends AggregateRoot
         return $this->shortName;
     }
 
+    public function shortCode(): NullableStringValueObject
+    {
+        return $this->shortCode;
+    }
+
     public function startDate(): NullableDateTimeValueObject
     {
         return $this->startDate;
@@ -105,5 +109,26 @@ final class Event extends AggregateRoot
     public function endDate(): NullableDateTimeValueObject
     {
         return $this->endDate;
+    }
+
+    public function ref(): NullableUuidValueObject
+    {
+        return $this->ref;
+    }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'         => $this->id->value(),
+            'season'     => $this->seasonId->value(),
+            'venue'      => $this->venueId->value(),
+            'index'      => $this->index->value(),
+            'name'       => $this->name->value(),
+            'short_name' => $this->shortName->value(),
+            'short_code' => $this->shortCode->value(),
+            'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
+            'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
+            'ref'        => $this->ref->value(),
+        ];
     }
 }

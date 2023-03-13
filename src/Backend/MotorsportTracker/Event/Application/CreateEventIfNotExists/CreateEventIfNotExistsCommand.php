@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -18,11 +19,12 @@ final class CreateEventIfNotExistsCommand implements Command
         private readonly string $seasonId,
         private readonly string $venueId,
         private readonly int $index,
-        private readonly string $slug,
         private readonly string $name,
         private readonly ?string $shortName,
+        private readonly ?string $shortCode,
         private readonly ?DateTimeImmutable $startTime,
         private readonly ?DateTimeImmutable $endTime,
+        private readonly ?string $ref,
     ) {
     }
 
@@ -41,11 +43,6 @@ final class CreateEventIfNotExistsCommand implements Command
         return new PositiveIntValueObject($this->index);
     }
 
-    public function slug(): StringValueObject
-    {
-        return new StringValueObject($this->slug);
-    }
-
     public function name(): StringValueObject
     {
         return new StringValueObject($this->name);
@@ -54,6 +51,11 @@ final class CreateEventIfNotExistsCommand implements Command
     public function shortName(): NullableStringValueObject
     {
         return new NullableStringValueObject($this->shortName);
+    }
+
+    public function shortCode(): NullableStringValueObject
+    {
+        return new NullableStringValueObject($this->shortCode);
     }
 
     public function startTime(): NullableDateTimeValueObject
@@ -66,16 +68,22 @@ final class CreateEventIfNotExistsCommand implements Command
         return new NullableDateTimeValueObject($this->endTime);
     }
 
+    public function ref(): NullableUuidValueObject
+    {
+        return new NullableUuidValueObject($this->ref);
+    }
+
     public static function fromScalars(
         string $seasonId,
         string $venueId,
         int $index,
-        string $slug,
         string $name,
         ?string $shortName,
+        ?string $shortCode,
         ?DateTimeImmutable $startTime,
         ?DateTimeImmutable $endTime,
+        ?string $ref,
     ): self {
-        return new self($seasonId, $venueId, $index, $slug, $name, $shortName, $startTime, $endTime);
+        return new self($seasonId, $venueId, $index, $name, $shortName, $shortCode, $startTime, $endTime, $ref);
     }
 }

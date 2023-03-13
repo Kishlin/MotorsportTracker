@@ -23,7 +23,7 @@ final class CreateEventIfNotExistsCommandHandler implements CommandHandler
 
     public function __invoke(CreateEventIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->find($command->slug()->value());
+        $id = $this->searchGateway->find($command->seasonId(), $command->name(), $command->index());
         if (null !== $id) {
             return $id;
         }
@@ -48,11 +48,12 @@ final class CreateEventIfNotExistsCommandHandler implements CommandHandler
             $command->seasonId(),
             $command->venueId(),
             $command->index(),
-            $command->slug(),
             $command->name(),
             $command->shortName(),
+            $command->shortCode(),
             $command->startTime(),
             $command->endTime(),
+            $command->ref(),
         );
     }
 }

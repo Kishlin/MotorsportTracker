@@ -9,7 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
@@ -25,10 +25,10 @@ final class FixtureToEventSessionConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('eventId')),
             new UuidValueObject($fixture->getString('sessionTypeId')),
-            new StringValueObject($fixture->getString('slug')),
             new BoolValueObject($fixture->getBool('hasResult')),
             new NullableDateTimeValueObject($fixture->getDateTime('startDate')),
             new NullableDateTimeValueObject($fixture->getDateTime('endDate')),
+            new NullableUuidValueObject(null),
         );
     }
 }

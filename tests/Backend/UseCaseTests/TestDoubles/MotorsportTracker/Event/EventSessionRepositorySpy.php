@@ -28,10 +28,10 @@ final class EventSessionRepositorySpy extends AbstractRepositorySpy implements S
         $this->objects[$eventSession->id()->value()] = $eventSession;
     }
 
-    public function search(string $slug): ?UuidValueObject
+    public function search(UuidValueObject $event, UuidValueObject $type): ?UuidValueObject
     {
         foreach ($this->objects as $eventSession) {
-            if ($slug === $eventSession->slug()->value()) {
+            if ($eventSession->eventId()->equals($event) || $eventSession->typeId()->equals($type)) {
                 return $eventSession->id();
             }
         }

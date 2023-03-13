@@ -8,6 +8,8 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SaveEventGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\SearchEventGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -42,10 +44,14 @@ final class SaveEventRepositorySpy extends AbstractRepositorySpy implements Save
         $this->objects[$event->id()->value()] = $event;
     }
 
-    public function find(string $slug): ?UuidValueObject
+    public function find(UuidValueObject $season, StringValueObject $name, PositiveIntValueObject $index): ?UuidValueObject
     {
         foreach ($this->objects as $event) {
-            if ($slug === $event->slug()->value()) {
+            if (false === $event->seasonId()->equals($season)) {
+                continue;
+            }
+
+            if ($event->index()->equals($index) || $event->name()->equals($name)) {
                 return $event->id();
             }
         }

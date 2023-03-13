@@ -5,18 +5,16 @@ Feature: It can create Events
     And the venue "Zandvoort" exists
     When a client creates the event "Dutch GP" of index 16 for the season "Formula One 2022" and venue "Zandvoort"
     Then the event is saved
+    And the id of the new event is returned
 
   Scenario: It cannot create two events with the same index in a championship
     Given the event "Dutch Grand Prix 2022" exists
-    When a client creates an event for the same season and index with slug "Dutch GP 2"
-    Then the event creation with the same index is declined
+    When a client creates an event for the same season and index with name "Dutch GP 2"
+    Then it does not recreate the existing event
+    And the id of the existing event is returned
 
-  Scenario: It cannot create two events with the same slug in a championship
+  Scenario: It cannot create two events with the same name in a championship
     Given the event "Dutch Grand Prix 2022" exists
-    When a client creates an event for the same season and slug with index 0
-    Then the event creation with the same slug is declined
-
-  Scenario: It retrieves the id if it already exist
-    Given the event "Dutch Grand Prix 2022" exists
-    When a client creates the event "Dutch-gp" of index 16 for the season "Formula One 2022" and venue "Zandvoort"
-    Then the id of the event is returned
+    When a client creates an event for the same season and name with index 0
+    Then it does not recreate the existing event
+    And the id of the existing event is returned

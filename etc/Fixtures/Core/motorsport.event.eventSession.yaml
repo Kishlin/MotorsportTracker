@@ -1,7 +1,6 @@
 dutchGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.dutchGrandPrix2022'
-  slug: 'dutchGrandPrix2022Race'
   hasResult: false
   startDate: '2022-09-04 13:00:00'
   endDate: '2022-09-04 14:00:00'
@@ -9,7 +8,6 @@ dutchGrandPrix2022Race:
 australianGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.australianGrandPrix2022'
-  slug: 'australianGrandPrix2022Race'
   hasResult: false
   startDate: '2022-04-10 05:00:00'
   endDate: '2022-04-10 06:00:00'
@@ -17,7 +15,6 @@ australianGrandPrix2022Race:
 emiliaRomagnaGrandPrix2022SprintQualifying:
   sessionTypeId: '@motorsport.event.sessionType.sprintQualifying'
   eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
-  slug: 'emiliaRomagnaGrandPrix2022Sprint'
   hasResult: false
   startDate: '2022-04-23 14:30:00'
   endDate: '2022-04-23 15:30:00'
@@ -25,7 +22,6 @@ emiliaRomagnaGrandPrix2022SprintQualifying:
 emiliaRomagnaGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.emiliaRomagnaGrandPrix2022'
-  slug: 'emiliaRomagnaGrandPrix2022Race'
   hasResult: false
   startDate: '2022-04-24 13:00:00'
   endDate: '2022-04-24 14:00:00'
@@ -33,7 +29,6 @@ emiliaRomagnaGrandPrix2022Race:
 americasMotoGP2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.americasMotoGP2022'
-  slug: 'americasMotoGP2022Race'
   hasResult: false
   startDate: '2022-04-10 18:00:00'
   endDate: '2022-04-10 19:00:00'
@@ -41,7 +36,6 @@ americasMotoGP2022Race:
 italianGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.italianGrandPrix2022'
-  slug: 'italianGrandPrix2022Race'
   hasResult: false
   startDate: '2022-09-11 13:00:00'
   endDate: '2022-09-11 14:00:00'
@@ -49,7 +43,6 @@ italianGrandPrix2022Race:
 singaporeGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.singaporeGrandPrix2022'
-  slug: 'singaporeGrandPrix2022Race'
   hasResult: false
   startDate: '2022-10-02 12:00:00'
   endDate: '2022-10-02 13:00:00'
@@ -57,7 +50,6 @@ singaporeGrandPrix2022Race:
 hungarianGrandPrix2022Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.hungarianGrandPrix2022'
-  slug: 'hungarianGrandPrix2022Race'
   hasResult: false
   startDate: '2022-07-31 13:00:00'
   endDate: '2022-07-31 14:00:00'
@@ -65,7 +57,6 @@ hungarianGrandPrix2022Race:
 hungarianGrandPrix2019Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.hungarianGrandPrix2019'
-  slug: 'hungarianGrandPrix2019Race'
   hasResult: false
   startDate: '2019-08-04 13:10:00'
   endDate: '2019-08-04 14:10:00'
@@ -73,7 +64,6 @@ hungarianGrandPrix2019Race:
 belgianGrandPrix2019Race:
   sessionTypeId: '@motorsport.event.sessionType.race'
   eventId: '@motorsport.event.event.belgianGrandPrix2019'
-  slug: 'belgianGrandPrix2019Race'
   hasResult: false
   startDate: '2019-09-01 13:10:00'
   endDate: '2019-09-01 14:10:00'

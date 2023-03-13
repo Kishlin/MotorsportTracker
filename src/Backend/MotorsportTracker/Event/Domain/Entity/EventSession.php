@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventSessionCreat
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class EventSession extends AggregateRoot
@@ -17,10 +17,10 @@ final class EventSession extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $eventId,
         private readonly UuidValueObject $typeId,
-        private readonly StringValueObject $slug,
         private readonly BoolValueObject $hasResult,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
+        private readonly NullableUuidValueObject $ref,
     ) {
     }
 
@@ -28,12 +28,12 @@ final class EventSession extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $eventId,
         UuidValueObject $typeId,
-        StringValueObject $slug,
         BoolValueObject $hasResult,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
+        NullableUuidValueObject $ref,
     ): self {
-        $eventSession = new self($id, $eventId, $typeId, $slug, $hasResult, $startDate, $endDate);
+        $eventSession = new self($id, $eventId, $typeId, $hasResult, $startDate, $endDate, $ref);
 
         $eventSession->record(new EventSessionCreatedDomainEvent($id));
 
@@ -47,12 +47,12 @@ final class EventSession extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $eventId,
         UuidValueObject $typeId,
-        StringValueObject $slug,
         BoolValueObject $hasResult,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
+        NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $eventId, $typeId, $slug, $hasResult, $startDate, $endDate);
+        return new self($id, $eventId, $typeId, $hasResult, $startDate, $endDate, $ref);
     }
 
     public function id(): UuidValueObject
@@ -70,11 +70,6 @@ final class EventSession extends AggregateRoot
         return $this->eventId;
     }
 
-    public function slug(): StringValueObject
-    {
-        return $this->slug;
-    }
-
     public function hasResult(): BoolValueObject
     {
         return $this->hasResult;
@@ -88,5 +83,23 @@ final class EventSession extends AggregateRoot
     public function endDate(): NullableDateTimeValueObject
     {
         return $this->endDate;
+    }
+
+    public function ref(): NullableUuidValueObject
+    {
+        return $this->ref;
+    }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'         => $this->id->value(),
+            'type'       => $this->typeId->value(),
+            'event'      => $this->eventId->value(),
+            'has_result' => $this->hasResult->value() ? 1 : 0,
+            'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
+            'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
+            'ref'        => $this->ref->value(),
+        ];
     }
 }

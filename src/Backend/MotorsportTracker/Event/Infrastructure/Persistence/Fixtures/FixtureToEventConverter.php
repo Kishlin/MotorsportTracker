@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -27,11 +28,12 @@ final class FixtureToEventConverter implements FixtureConverter
             new UuidValueObject($fixture->getString('seasonId')),
             new UuidValueObject($fixture->getString('venueId')),
             new PositiveIntValueObject($fixture->getInt('index')),
-            new StringValueObject($fixture->getString('slug')),
             new StringValueObject($fixture->getString('name')),
             new NullableStringValueObject($fixture->getString('shortName')),
+            new NullableStringValueObject(null),
             new NullableDateTimeValueObject($fixture->getDateTime('startTime')),
             new NullableDateTimeValueObject($fixture->getDateTime('endTime')),
+            new NullableUuidValueObject(null),
         );
     }
 }

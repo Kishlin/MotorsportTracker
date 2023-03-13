@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventSessionCreat
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
@@ -24,19 +24,19 @@ final class EventSessionTest extends AggregateRootIsolatedTestCase
         $id        = '57140f2c-12ab-433c-a81b-3608c8dfc7c7';
         $typeId    = 'e91b6d7c-6b22-429c-8eb9-3700a711e774';
         $eventId   = 'dc2d323f-9129-48b2-828f-7254e013a9f9';
-        $slug      = 'session';
         $hasResult = false;
         $startDate = new \DateTimeImmutable();
         $endDate   = new \DateTimeImmutable();
+        $ref       = '5e3549d0-d48c-4d01-8916-7ac647967942';
 
         $entity = EventSession::create(
             new UuidValueObject($id),
             new UuidValueObject($eventId),
             new UuidValueObject($typeId),
-            new StringValueObject($slug),
             new BoolValueObject($hasResult),
             new NullableDateTimeValueObject($startDate),
             new NullableDateTimeValueObject($endDate),
+            new NullableUuidValueObject($ref),
         );
 
         self::assertItRecordedDomainEvents($entity, new EventSessionCreatedDomainEvent(new UuidValueObject($id)));
@@ -44,9 +44,9 @@ final class EventSessionTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($eventId, $entity->eventId());
         self::assertValueObjectSame($typeId, $entity->typeId());
-        self::assertValueObjectSame($slug, $entity->slug());
         self::assertValueObjectSame($hasResult, $entity->hasResult());
         self::assertValueObjectSame($startDate, $entity->startDate());
         self::assertValueObjectSame($endDate, $entity->endDate());
+        self::assertValueObjectSame($ref, $entity->ref());
     }
 }

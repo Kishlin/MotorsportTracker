@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CreateEventIfNotExists;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventIfNotExists;
 
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
-use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CreateEventIfNotExists\SaveEventRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventIfNotExists\SaveEventRepositoryUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CoreLegacyRepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Doctrine\Repository\CreateEventIfNotExists\SaveEventRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventIfNotExists\SaveEventRepositoryUsingDoctrine
  */
-final class SaveEventRepositoryUsingDoctrineTest extends CoreLegacyRepositoryContractTestCase
+final class SaveEventRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAnEvent(): void
     {
@@ -33,13 +34,14 @@ final class SaveEventRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCon
             new UuidValueObject(self::fixtureId('motorsport.venue.venue.zandvoort')),
             new PositiveIntValueObject(14),
             new StringValueObject('Dutch Grand Prix'),
-            new StringValueObject('dutch-gp'),
             new NullableStringValueObject('Dutch GP'),
+            new NullableStringValueObject('DUT'),
             new NullableDateTimeValueObject(new DateTimeImmutable('2022-11-22 01:00:00')),
             new NullableDateTimeValueObject(new DateTimeImmutable('2022-11-22 02:00:00')),
+            new NullableUuidValueObject('df14cf1a-5724-48a1-a46b-02c1cc1e4405'),
         );
 
-        $repository = new SaveEventRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveEventRepositoryUsingDoctrine(self::connection());
 
         $repository->save($event);
 
@@ -61,24 +63,17 @@ final class SaveEventRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCon
             new UuidValueObject(self::fixtureId('motorsport.venue.venue.zandvoort')),
             new PositiveIntValueObject(14),
             new StringValueObject('Dutch Grand Prix'),
-            new StringValueObject('dutch-gp'),
+            new NullableStringValueObject(null),
             new NullableStringValueObject(null),
             new NullableDateTimeValueObject(null),
             new NullableDateTimeValueObject(null),
+            new NullableUuidValueObject(null),
         );
 
-        $repository = new SaveEventRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveEventRepositoryUsingDoctrine(self::connection());
 
         $repository->save($event);
 
         self::assertAggregateRootWasSaved($event);
-
-        $saved = self::entityManager()->getRepository(Event::class)->find($id);
-
-        self::assertInstanceOf(Event::class, $saved);
-
-        self::assertNull($saved->shortName()->value());
-        self::assertNull($saved->startDate()->value());
-        self::assertNull($saved->endDate()->value());
     }
 }

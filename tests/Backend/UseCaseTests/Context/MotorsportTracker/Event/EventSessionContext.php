@@ -50,10 +50,10 @@ final class EventSessionContext extends MotorsportTrackerContext
                 CreateEventSessionIfNotExistsCommand::fromScalars(
                     $eventId,
                     $stepTypeId,
-                    $slug,
                     false,
                     new DateTimeImmutable($dateTime),
                     new DateTimeImmutable($dateTime),
+                    null,
                 ),
             );
 

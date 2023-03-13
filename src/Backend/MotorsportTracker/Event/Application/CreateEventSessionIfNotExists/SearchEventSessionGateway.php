@@ -8,5 +8,5 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface SearchEventSessionGateway
 {
-    public function search(string $slug): ?UuidValueObject;
+    public function search(UuidValueObject $event, UuidValueObject $type): ?UuidValueObject;
 }

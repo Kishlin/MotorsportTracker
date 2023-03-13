@@ -65,7 +65,7 @@ final class FindEventsRepositorySpy implements FindEventsGateway
                     ],
                 ],
                 'index'      => $event->index()->value(),
-                'slug'       => $event->slug()->value(),
+                'slug'       => $event->name()->value(),
                 'name'       => $event->name()->value(),
                 'short_name' => $event->shortName()->value(),
                 'start_date' => $event->startDate()->value()?->format('Y-m-d H:i:s'),
@@ -82,7 +82,7 @@ final class FindEventsRepositorySpy implements FindEventsGateway
 
             $eventsList[$eventId]['sessions'][] = [
                 'type'       => $this->memoizedType($eventSession->typeId()),
-                'slug'       => $eventSession->slug()->value(),
+                'slug'       => $eventId . '-' . $eventSession->typeId(),
                 'has_result' => $eventSession->hasResult()->value(),
                 'start_date' => $eventSession->startDate()->value()?->format('Y-m-d H:i:s'),
                 'end_date'   => $eventSession->endDate()->value()?->format('Y-m-d H:i:s'),

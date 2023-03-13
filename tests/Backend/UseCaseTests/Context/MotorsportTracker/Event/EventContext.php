@@ -9,7 +9,6 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\EventCreationFailureException;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -34,11 +33,11 @@ final class EventContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.event.event.{$this->format($event)}");
     }
 
-    #[When('a client creates the event :slug of index :index for the season :season and venue :venue')]
-    #[When('a client creates an event for the same season and index with slug :slug')]
-    #[When('a client creates an event for the same season and slug with index :index')]
+    #[When('a client creates the event :name of index :index for the season :season and venue :venue')]
+    #[When('a client creates an event for the same season and index with name :name')]
+    #[When('a client creates an event for the same season and name with index :index')]
     public function aClientCreatesAnEvent(
-        string $slug = 'Dutch GP',
+        string $name = 'Dutch GP',
         int $index = 14,
         string $season = 'formulaOne2022',
         string $venue = 'Zandvoort',
@@ -52,7 +51,7 @@ final class EventContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventIfNotExistsCommand::fromScalars($seasonId, $venueId, $index, $slug, $slug, $slug, null, null),
+                CreateEventIfNotExistsCommand::fromScalars($seasonId, $venueId, $index, $name, null, null, null, null, null),
             );
 
             $this->eventId = $eventId;
@@ -62,19 +61,18 @@ final class EventContext extends MotorsportTrackerContext
     }
 
     #[Then('the event is saved')]
-    #[Then('the id of the event is returned')]
+    #[Then('it does not recreate the existing event')]
     public function theEventIsSaved(): void
     {
-        Assert::assertNotNull($this->eventId);
         Assert::assertNull($this->thrownException);
-        Assert::assertTrue(self::container()->eventRepositorySpy()->has($this->eventId));
+        Assert::assertCount(1, self::container()->eventRepositorySpy()->all());
     }
 
-    #[Then('the event creation with the same index is declined')]
-    #[Then('the event creation with the same slug is declined')]
+    #[Then('the id of the new event is returned')]
+    #[Then('the id of the existing event is returned')]
     public function theEventCreationIsDeclined(): void
     {
-        Assert::assertNull($this->eventId);
-        Assert::assertInstanceOf(EventCreationFailureException::class, $this->thrownException);
+        Assert::assertNotNull($this->eventId);
+        Assert::assertTrue(self::container()->eventRepositorySpy()->has($this->eventId));
     }
 }

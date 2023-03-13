@@ -43,4 +43,12 @@ final class SessionType extends AggregateRoot
     {
         return $this->label;
     }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'    => $this->id->value(),
+            'label' => $this->label->value(),
+        ];
+    }
 }
