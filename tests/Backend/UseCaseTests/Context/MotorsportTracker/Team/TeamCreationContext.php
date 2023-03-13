@@ -40,17 +40,12 @@ final class TeamCreationContext extends MotorsportTrackerContext
         $this->teamId          = null;
         $this->thrownException = null;
 
-        $slug = strtolower(str_replace(' ', '-', $team));
+        $country = $this->fixtureId("country.country.{$this->format($country)}");
 
         try {
             /** @var UuidValueObject $teamId */
             $teamId = self::container()->commandBus()->execute(
-                CreateTeamIfNotExistsCommand::fromScalars(
-                    $this->fixtureId("country.country.{$this->format($country)}"),
-                    $slug,
-                    $team,
-                    $slug,
-                ),
+                CreateTeamIfNotExistsCommand::fromScalars($country, $team, null, null),
             );
 
             $this->teamId = $teamId;

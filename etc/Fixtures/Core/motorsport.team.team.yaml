@@ -1,23 +1,19 @@
 redBullRacing:
   countryId: '@country.country.austria'
-  slug: 'red-bull-racing'
   name: 'Red Bull Racing'
-  code: 'RBR'
+  color: '#0600EF'
 
 mercedes:
   countryId: '@country.country.germany'
-  slug: 'mercedes'
   name: 'Mercedes'
-  code: 'M'
+  color: '#00D2BE'
 
 toroRosso:
   countryId: '@country.country.italia'
-  slug: 'toro-rosso'
   name: 'Toro Rosso'
-  code: 'TR'
+  color: '#2B4562'
 
 williams:
   countryId: '@country.country.unitedKingdom'
-  slug: 'williams'
   name: 'Williams'
-  code: 'W'
+  color: '#005AFF'

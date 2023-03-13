@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -12,9 +14,9 @@ final class CreateTeamIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $countryId,
-        private readonly string $slug,
         private readonly string $name,
-        private readonly string $code,
+        private readonly ?string $color,
+        private readonly ?string $ref,
     ) {
     }
 
@@ -23,23 +25,23 @@ final class CreateTeamIfNotExistsCommand implements Command
         return new UuidValueObject($this->countryId);
     }
 
-    public function slug(): StringValueObject
-    {
-        return new StringValueObject($this->slug);
-    }
-
     public function name(): StringValueObject
     {
         return new StringValueObject($this->name);
     }
 
-    public function code(): StringValueObject
+    public function color(): NullableStringValueObject
     {
-        return new StringValueObject($this->code);
+        return new NullableStringValueObject($this->color);
     }
 
-    public static function fromScalars(string $countryId, string $slug, string $name, string $code): self
+    public function ref(): NullableUuidValueObject
     {
-        return new self($countryId, $slug, $name, $code);
+        return new NullableUuidValueObject($this->ref);
+    }
+
+    public static function fromScalars(string $countryId, string $name, ?string $color, ?string $ref): self
+    {
+        return new self($countryId, $name, $color, $ref);
     }
 }

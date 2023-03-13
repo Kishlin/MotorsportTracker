@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTracker\Team\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\DomainEvent\TeamCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -14,20 +16,20 @@ final class Team extends AggregateRoot
     public function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $country,
-        private readonly StringValueObject $slug,
         private readonly StringValueObject $name,
-        private readonly StringValueObject $code,
+        private readonly NullableStringValueObject $color,
+        private readonly NullableUuidValueObject $ref,
     ) {
     }
 
     public static function create(
         UuidValueObject $id,
         UuidValueObject $country,
-        StringValueObject $slug,
         StringValueObject $name,
-        StringValueObject $code,
+        NullableStringValueObject $color,
+        NullableUuidValueObject $ref,
     ): self {
-        $team = new self($id, $country, $slug, $name, $code);
+        $team = new self($id, $country, $name, $color, $ref);
 
         $team->record(new TeamCreatedDomainEvent($id));
 
@@ -40,11 +42,11 @@ final class Team extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $country,
-        StringValueObject $slug,
         StringValueObject $name,
-        StringValueObject $code,
+        NullableStringValueObject $color,
+        NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $country, $slug, $name, $code);
+        return new self($id, $country, $name, $color, $ref);
     }
 
     public function id(): UuidValueObject
@@ -57,18 +59,29 @@ final class Team extends AggregateRoot
         return $this->country;
     }
 
-    public function slug(): StringValueObject
-    {
-        return $this->slug;
-    }
-
     public function name(): StringValueObject
     {
         return $this->name;
     }
 
-    public function code(): StringValueObject
+    public function color(): NullableStringValueObject
     {
-        return $this->code;
+        return $this->color;
+    }
+
+    public function ref(): NullableUuidValueObject
+    {
+        return $this->ref;
+    }
+
+    public function mappedData(): array
+    {
+        return [
+            'id'      => $this->id->value(),
+            'country' => $this->country->value(),
+            'name'    => $this->name->value(),
+            'color'   => $this->color->value(),
+            'ref'     => $this->ref->value(),
+        ];
     }
 }
