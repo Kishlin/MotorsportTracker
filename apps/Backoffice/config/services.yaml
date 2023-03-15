@@ -124,11 +124,11 @@ services:
     Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
       tags: ['kishlin.application_service']
 
-    Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepository:
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.cache'
 
-    Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepository:
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.core'
 
