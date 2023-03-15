@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Standing\Command\PerSeason;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityManagerInterface;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\DriverStandingsView;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\TeamStandingsView;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Gateway\DriverStandingsViewsGateway;
@@ -31,7 +29,6 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
         private readonly UuidGenerator $uuidGenerator,
         private readonly TeamStandingsViewsGateway $teamStandingsViewsGateway,
         private readonly DriverStandingsViewsGateway $driverStandingsViewsGateway,
-        private readonly EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
     }
@@ -51,9 +48,6 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
         ;
     }
 
-    /**
-     * @throws Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $ui = new SymfonyStyle($input, $output);
@@ -145,8 +139,6 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
     /**
      * @param array<string, array{name: string, color: string, data: int[]}> $teamsStandings
      * @param array<string, array{name: string, color: string, data: int[]}> $driversStandings
-     *
-     * @throws Exception
      */
     private function saveStandings(SymfonyStyle $ui, array $teamsStandings, array $driversStandings): void
     {
@@ -185,16 +177,11 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
     }
 
     /**
-     * @throws Exception
-     *
      * @noinspection SqlResolve
      */
     private function clearDataIfTheyAlreadyExist(string $championship, int $year): void
     {
-        foreach (['driver_standings_views', 'team_standings_views'] as $table) {
-            $this->entityManager->getConnection()->executeQuery(
-                "DELETE FROM {$table} WHERE championship_slug = '{$championship}' AND year = {$year};",
-            );
-        }
+        $this->driverStandingsViewsGateway->deleteIfExists($championship, $year);
+        $this->teamStandingsViewsGateway->deleteIfExists($championship, $year);
     }
 }
