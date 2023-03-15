@@ -2,39 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarEvents;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents;
 
 use DateTimeImmutable;
-use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepository;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepository
  */
-final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
+final class ViewCalendarEventsRepositoryTest extends CacheRepositoryContractTestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testItReturnsAnEmptyCalendarWhenThereIsNoData(): void
     {
-        $repository = new ViewCalendarEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new ViewCalendarEventsRepository(self::connection());
 
         $jsonableCalendarView = $repository->view(new DateTimeImmutable(), new DateTimeImmutable());
 
         self::assertEmpty($jsonableCalendarView->toArray());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testItCanViewACalendarOfOneEvent(): void
     {
         self::loadFixture('motorsport.calendar.calendarEvent.formulaOne2022DutchGP');
 
-        $repository = new ViewCalendarEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new ViewCalendarEventsRepository(self::connection());
 
         $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-01-01');
         $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-12-31');
@@ -49,9 +42,6 @@ final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRep
         self::assertSame('formula-one_0_dutch-gp', $view['2022-11-22'][0]['slug']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testItCanViewAComplexCalendar(): void
     {
         self::loadFixtures(
@@ -59,7 +49,7 @@ final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRep
             'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
         );
 
-        $repository = new ViewCalendarEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new ViewCalendarEventsRepository(self::connection());
 
         $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-01-01');
         $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-12-31');
@@ -78,9 +68,6 @@ final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRep
         self::assertSame('Emilia Romagna-gp', $view['2022-04-23'][0]['slug']);
     }
 
-    /**
-     * @throws Exception
-     */
     public function testItCanFilterOnSpecificDate(): void
     {
         self::loadFixtures(
@@ -88,7 +75,7 @@ final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRep
             'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
         );
 
-        $repository = new ViewCalendarEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new ViewCalendarEventsRepository(self::connection());
 
         $startDate = DateTimeImmutable::createFromFormat('Y-m-d', '2022-11-01');
         $endDate   = DateTimeImmutable::createFromFormat('Y-m-d', '2022-11-30');

@@ -2,50 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents;
 
-use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CoreLegacyRepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepository
  */
-final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryContractTestCase
+final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
 {
-    /**
-     * @throws Exception
-     */
     public function testItIsEmptyWhenThereAreNoSessions(): void
     {
-        $repository = new FindEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new FindEventsRepository(self::connection());
 
-        self::assertEmpty($repository->findAll(new StringValueObject('formula1'), new PositiveIntValueObject(2022)));
+        self::assertEmpty($repository->findAll(new StringValueObject('Formula One'), new PositiveIntValueObject(2022)));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testItHasAnEmptySessionsArrayWhenThereAreNone(): void
     {
         // We are loading the event but not its sessions
         self::loadFixtures('motorsport.event.event.dutchGrandPrix2022');
 
-        $repository = new FindEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new FindEventsRepository(self::connection());
 
-        $entries = $repository->findAll(new StringValueObject('formula1'), new PositiveIntValueObject(2022));
+        $entries = $repository->findAll(new StringValueObject('Formula One'), new PositiveIntValueObject(2022));
 
         self::assertIsArray($entries[0]->sessions()->data());
         self::assertEmpty($entries[0]->sessions()->data());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testItFindsAllEventsWithSessions(): void
     {
         self::loadFixtures(
@@ -54,9 +44,9 @@ final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
             'motorsport.event.eventSession.emiliaRomagnaGrandPrix2022Race',
         );
 
-        $repository = new FindEventsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new FindEventsRepository(self::connection());
 
-        $entries = $repository->findAll(new StringValueObject('formula1'), new PositiveIntValueObject(2022));
+        $entries = $repository->findAll(new StringValueObject('Formula One'), new PositiveIntValueObject(2022));
 
         self::assertEqualsCanonicalizing(
             [$this->dutchGPCalendarEntry(), $this->emiliaRomagnaGPCalendarEntry()],
@@ -69,14 +59,14 @@ final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
         return CalendarEventEntry::fromData([
             'venue' => [
                 'name'    => 'Circuit Zandvoort',
-                'slug'    => 'circuit-zandvoort',
+                'slug'    => 'Circuit Zandvoort',
                 'country' => [
                     'code' => 'nl',
                     'name' => 'Netherlands',
                 ],
             ],
             'index'      => 14,
-            'slug'       => 'Dutch-gp',
+            'slug'       => 'Dutch GP',
             'name'       => 'Dutch GP',
             'short_name' => 'Dutch GP',
             'start_date' => '2022-09-04 13:00:00',
@@ -84,7 +74,7 @@ final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
             'sessions'   => [
                 [
                     'type'       => 'race',
-                    'slug'       => 'dutchGrandPrix2022Race',
+                    'slug'       => 'Dutch GP race',
                     'has_result' => false,
                     'start_date' => '2022-09-04T13:00:00',
                     'end_date'   => '2022-09-04T14:00:00',
@@ -98,14 +88,14 @@ final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
         return CalendarEventEntry::fromData([
             'venue' => [
                 'name'    => 'Autodromo Internazionale Enzo e Dino Ferrari',
-                'slug'    => 'autodromo-internazionale-enzo-e-dino-ferrari',
+                'slug'    => 'Autodromo Internazionale Enzo e Dino Ferrari',
                 'country' => [
                     'code' => 'it',
                     'name' => 'Italia',
                 ],
             ],
             'index'      => 3,
-            'slug'       => 'Emilia Romagna-gp',
+            'slug'       => 'Emilia Romagna GP',
             'name'       => 'Emilia Romagna GP',
             'short_name' => 'Emilia Romagna GP',
             'start_date' => '2022-04-23 14:30:00',
@@ -113,14 +103,14 @@ final class FindEventsRepositoryUsingDoctrineTest extends CoreLegacyRepositoryCo
             'sessions'   => [
                 [
                     'type'       => 'sprint qualifying',
-                    'slug'       => 'emiliaRomagnaGrandPrix2022Sprint',
+                    'slug'       => 'Emilia Romagna GP sprint qualifying',
                     'has_result' => false,
                     'start_date' => '2022-04-23T14:30:00',
                     'end_date'   => '2022-04-23T15:30:00',
                 ],
                 [
                     'type'       => 'race',
-                    'slug'       => 'emiliaRomagnaGrandPrix2022Race',
+                    'slug'       => 'Emilia Romagna GP race',
                     'has_result' => false,
                     'start_date' => '2022-04-24T13:00:00',
                     'end_date'   => '2022-04-24T14:00:00',

@@ -2,36 +2,37 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents;
 
 use Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventUpsert;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepository;
+use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepository
  */
-final class SaveCalendarEventRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
+final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestCase
 {
     /**
      * @throws Exception
      */
     public function testItCreatesTheEventIfItDoesNotExist(): void
     {
-        $repository = new SaveCalendarEventRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveCalendarEventRepository(self::connection());
 
         $entity = $this->dutchGPCalendarEvent();
 
         $response = $repository->save($entity);
 
         self::assertSame(CalendarEventUpsert::CREATED, $response);
-        self::assertCount(1, self::entityManager()->getRepository(CalendarEvent::class)->findAll());
+        self::assertCount(1, self::connection()->execute(SQLQuery::create('SELECT * FROM calendar_event'))->fetchAllAssociative());
     }
 
     /**
@@ -44,14 +45,14 @@ final class SaveCalendarEventRepositoryUsingDoctrineTest extends CacheLegacyRepo
             'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
         );
 
-        $repository = new SaveCalendarEventRepositoryUsingDoctrine(self::entityManager());
+        $repository = new SaveCalendarEventRepository(self::connection());
 
         $entity = $this->dutchGPCalendarEvent();
 
         $response = $repository->save($entity);
 
         self::assertSame(CalendarEventUpsert::UPDATED, $response);
-        self::assertCount(2, self::entityManager()->getRepository(CalendarEvent::class)->findAll());
+        self::assertCount(2, self::connection()->execute(SQLQuery::create('SELECT * FROM calendar_event'))->fetchAllAssociative());
     }
 
     /**

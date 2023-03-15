@@ -9,7 +9,6 @@ use Kishlin\Backend\Shared\Domain\ValueObject\ArrayValueObject;
 /**
  * @property array{
  *     name: string,
- *     slug: string,
  *     year: int,
  *     icon: string,
  *     color: string,
@@ -20,7 +19,6 @@ final class CalendarEventSeries extends ArrayValueObject
     /**
      * @return array{
      *     name: string,
-     *     slug: string,
      *     year: int,
      *     icon: string,
      *     color: string,
@@ -34,7 +32,6 @@ final class CalendarEventSeries extends ArrayValueObject
     /**
      * @param array{
      *     name: string,
-     *     slug: string,
      *     year: int,
      *     icon: string,
      *     color: string,

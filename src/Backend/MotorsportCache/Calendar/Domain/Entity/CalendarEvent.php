@@ -1,10 +1,11 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity;
 
 use Exception;
+use JsonException;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSessions;
@@ -114,5 +115,24 @@ final class CalendarEvent extends AggregateRoot
     public function endDate(): NullableDateTimeValueObject
     {
         return $this->endDate;
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function mappedData(): array
+    {
+        return [
+            'id'         => $this->id->value(),
+            'series'     => $this->series->asString(),
+            'venue'      => $this->venue->asString(),
+            'sessions'   => $this->sessions->asString(),
+            'index'      => $this->index->value(),
+            'slug'       => $this->slug->value(),
+            'name'       => $this->name->value(),
+            'short_name' => $this->shortName->value(),
+            'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
+            'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
+        ];
     }
 }
