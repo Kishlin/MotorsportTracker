@@ -104,6 +104,9 @@ services:
       $password: '%env(DB_PASSWORD)%'
     public: true
 
+  Kishlin\Backend\Persistence\Core\Connection\Connection:
+    alias: 'kishlin.app.infrastructure.connection.core'
+
 
   _instanceof:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
