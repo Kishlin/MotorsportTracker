@@ -6,9 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Team\Infrastruct
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SaveTeamRepositoryUsingDoctrine;
-use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
@@ -20,15 +18,7 @@ final class SaveTeamRepositoryUsingDoctrineTest extends CoreRepositoryContractTe
 {
     public function testItCanSaveATeam(): void
     {
-        self::loadFixture('country.country.austria');
-
-        $team = Team::instance(
-            new UuidValueObject(self::uuid()),
-            new UuidValueObject(self::fixtureId('country.country.austria')),
-            new StringValueObject('Red Bull Racing'),
-            new NullableStringValueObject('#0600EF'),
-            new NullableUuidValueObject('42ff413f-91b2-416b-b53f-cbfa77220a8a'),
-        );
+        $team = Team::instance(new UuidValueObject(self::uuid()), new NullableUuidValueObject(self::uuid()));
 
         $repository = new SaveTeamRepositoryUsingDoctrine(self::connection());
 
@@ -39,15 +29,7 @@ final class SaveTeamRepositoryUsingDoctrineTest extends CoreRepositoryContractTe
 
     public function testItCanSaveATeamWithNullValues(): void
     {
-        self::loadFixture('country.country.austria');
-
-        $team = Team::instance(
-            new UuidValueObject(self::uuid()),
-            new UuidValueObject(self::fixtureId('country.country.austria')),
-            new StringValueObject('Red Bull Racing'),
-            new NullableStringValueObject(null),
-            new NullableUuidValueObject(null),
-        );
+        $team = Team::instance(new UuidValueObject(self::uuid()), new NullableUuidValueObject(null));
 
         $repository = new SaveTeamRepositoryUsingDoctrine(self::connection());
 

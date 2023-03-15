@@ -1,5 +1,6 @@
-redBullRacing:
+redBullRacing2022:
   teamId: '@motorsport.team.team.redBullRacing'
+  seasonId: '@motorsport.championship.season.formulaOne2022'
+  countryId: '@country.country.austria'
   name: 'Red Bull Racing'
-  image: 'https://example.com/redbullracing.webp'
-  createdOn: '1993-11-22 01:00:00'
+  color: '#0600EF'

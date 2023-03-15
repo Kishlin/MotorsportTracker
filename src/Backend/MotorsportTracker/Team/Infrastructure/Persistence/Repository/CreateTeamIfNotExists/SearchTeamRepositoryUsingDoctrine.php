@@ -6,26 +6,25 @@ namespace Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repo
 
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\SearchTeamGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 use RuntimeException;
 
 final class SearchTeamRepositoryUsingDoctrine extends CoreRepository implements SearchTeamGateway
 {
-    public function findByNameOrRef(StringValueObject $name, NullableUuidValueObject $ref): ?UuidValueObject
+    public function findForRef(NullableUuidValueObject $ref): ?UuidValueObject
     {
+        if (null === $ref->value()) {
+            return null;
+        }
+
         $qb = $this->connection->createQueryBuilder();
 
         $qb->select('t.id')
             ->from('team', 't')
+            ->where($qb->expr()->eq('t.ref', ':ref'))
+            ->withParam('ref', $ref->value())
         ;
-
-        if (null !== $ref->value()) {
-            $qb->where($qb->expr()->eq('t.ref', ':ref'))->withParam('ref', $ref->value());
-        } else {
-            $qb->where($qb->expr()->eq('t.name', ':name'))->withParam('name', $name->value());
-        }
 
         /** @var array<array{id: string}> $result */
         $result = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();

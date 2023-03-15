@@ -33,19 +33,17 @@ final class TeamCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.team.team.{$this->format($teamName)}");
     }
 
-    #[When('a client creates a team with the same name')]
-    #[When('a client creates the team :team for the country :country')]
-    public function aClientCreatesTheTeam(string $team = 'Red Bull Racing', string $country = 'Austria'): void
+    #[When('a client creates a team with the ref :ref')]
+    #[When('a client creates a team with the same ref')]
+    public function aClientCreatesTheTeam(string $ref = '41be2072-17ab-455f-8522-8b96bc315e47'): void
     {
         $this->teamId          = null;
         $this->thrownException = null;
 
-        $country = $this->fixtureId("country.country.{$this->format($country)}");
-
         try {
             /** @var UuidValueObject $teamId */
             $teamId = self::container()->commandBus()->execute(
-                CreateTeamIfNotExistsCommand::fromScalars($country, $team, null, null),
+                CreateTeamIfNotExistsCommand::fromScalars($ref),
             );
 
             $this->teamId = $teamId;
@@ -65,12 +63,10 @@ final class TeamCreationContext extends MotorsportTrackerContext
         Assert::assertTrue(self::container()->teamRepositorySpy()->has($this->teamId));
     }
 
-    #[Then('the id of the team :team is returned')]
-    public function theIdOfTheTeamIsReturned(string $team): void
+    #[Then('the id of the team with ref :ref is returned')]
+    public function theIdOfTheTeamWithRefIsReturned(string $ref): void
     {
         Assert::assertNotNull($this->teamId);
-        Assert::assertNull($this->thrownException);
-
-        Assert::assertSame($team, self::container()->teamRepositorySpy()->safeGet($this->teamId)->name()->value());
+        Assert::assertSame($ref, self::container()->teamRepositorySpy()->safeGet($this->teamId)->ref()->value());
     }
 }

@@ -9,9 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\Sea
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\TeamCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -23,39 +21,23 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  */
 final class TeamRepositorySpy extends AbstractRepositorySpy implements SaveTeamGateway, SearchTeamGateway
 {
-    public function __construct(
-        private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,
-    ) {
-    }
-
     public function save(Team $team): void
     {
-        if (false === $this->countryRepositorySpy->has($team->country()) || $this->nameIsAlreadyTaken($team)) {
+        if (null !== $this->findForRef($team->ref())) {
             throw new TeamCreationFailureException();
         }
 
         $this->objects[$team->id()->value()] = $team;
     }
 
-    public function findByNameOrRef(StringValueObject $name, NullableUuidValueObject $ref): ?UuidValueObject
+    public function findForRef(NullableUuidValueObject $ref): ?UuidValueObject
     {
         foreach ($this->objects as $savedTeam) {
-            if ($savedTeam->ref()->equals($ref) || $savedTeam->name()->equals($name)) {
+            if ($savedTeam->ref()->equals($ref)) {
                 return $savedTeam->id();
             }
         }
 
         return null;
-    }
-
-    private function nameIsAlreadyTaken(Team $team): bool
-    {
-        foreach ($this->objects as $savedTeam) {
-            if ($savedTeam->name()->equals($team->name())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -23,20 +23,14 @@ final class CreateTeamIfNotExistsCommandHandler implements CommandHandler
 
     public function __invoke(CreateTeamIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->findByNameOrRef($command->name(), $command->ref());
+        $id = $this->searchGateway->findForRef($command->ref());
 
         if (null !== $id) {
             return $id;
         }
 
         $id   = new UuidValueObject($this->uuidGenerator->uuid4());
-        $team = Team::create(
-            $id,
-            $command->countryId(),
-            $command->name(),
-            $command->color(),
-            $command->ref(),
-        );
+        $team = Team::create($id, $command->ref());
 
         try {
             $this->saveGateway->save($team);

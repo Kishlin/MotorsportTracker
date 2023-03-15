@@ -6,12 +6,11 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Team\Infrastruct
 
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SearchTeamRepositoryUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SearchTeamRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamPresentationIfNotExists\SearchTeamRepositoryUsingDoctrine
  */
 final class SearchTeamRepositoryUsingDoctrineTest extends CoreRepositoryContractTestCase
 {
@@ -23,7 +22,7 @@ final class SearchTeamRepositoryUsingDoctrineTest extends CoreRepositoryContract
 
         self::assertSame(
             self::fixtureId('motorsport.team.team.redBullRacing'),
-            $repository->findByNameOrRef(new StringValueObject('Red Bull Racing'), new NullableUuidValueObject(null))?->value(),
+            $repository->findForRef(new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47'))?->value(),
         );
     }
 
@@ -31,6 +30,13 @@ final class SearchTeamRepositoryUsingDoctrineTest extends CoreRepositoryContract
     {
         $repository = new SearchTeamRepositoryUsingDoctrine(self::connection());
 
-        self::assertNull($repository->findByNameOrRef(new StringValueObject('Red Bull Racing'), new NullableUuidValueObject(null)));
+        self::assertNull($repository->findForRef(new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47')));
+    }
+
+    public function testItReturnsNullWhenTheRefIsNull(): void
+    {
+        $repository = new SearchTeamRepositoryUsingDoctrine(self::connection());
+
+        self::assertNull($repository->findForRef(new NullableUuidValueObject(null)));
     }
 }
