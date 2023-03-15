@@ -1,24 +1,30 @@
 <?php
 
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Standing\Infrastructure\Persistence\Repository;
 
+use JsonException;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\TeamStandingsView;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewChampionshipSlug;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewEvents;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewId;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewStandings;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewYear;
-use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsViewsRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
+use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\TeamStandingsViewsRepository;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\TeamStandingsViewsRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\TeamStandingsViewsRepository
  */
-final class TeamStandingsViewsRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
+final class TeamStandingsViewsRepositoryTest extends CacheRepositoryContractTestCase
 {
+    /**
+     * @throws JsonException
+     */
     public function testItCanSaveAndRetrieveAnEntity(): void
     {
         $events    = StandingsViewEvents::with('fr', 'gb', 'es', 'en');
@@ -36,13 +42,15 @@ final class TeamStandingsViewsRepositoryUsingDoctrineTest extends CacheLegacyRep
             $standings,
         );
 
-        $repository = new TeamStandingsViewsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new TeamStandingsViewsRepository(self::connection());
 
         $repository->save($view);
 
         self::assertAggregateRootWasSaved($view);
 
         $saved = $repository->findOne('formula1', 2023);
+
+        self::assertNotNull($saved);
 
         self::assertEqualsCanonicalizing(['fr', 'gb', 'es', 'en'], $saved->events()->value());
 

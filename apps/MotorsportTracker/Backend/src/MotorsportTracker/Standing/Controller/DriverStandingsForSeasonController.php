@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportTracker\Standing\Controller;
 
 use Kishlin\Apps\MotorsportTracker\Backend\Shared\Exception\ErrorJsonResponseBuilder;
-use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\DriverStandingsViewsRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\DriverStandingsViewsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ use Throwable;
 )]
 final class DriverStandingsForSeasonController extends AbstractController
 {
-    public function __invoke(DriverStandingsViewsRepositoryUsingDoctrine $gateway, string $championship, int $year): Response
+    public function __invoke(DriverStandingsViewsRepository $gateway, string $championship, int $year): Response
     {
         try {
             $standings = $gateway->findOne($championship, $year);
@@ -31,6 +31,10 @@ final class DriverStandingsForSeasonController extends AbstractController
                 ->withCode(Response::HTTP_NOT_FOUND)
                 ->build()
                 ;
+        }
+
+        if (null === $standings) {
+            return new JsonResponse([], Response::HTTP_NOT_FOUND);
         }
 
         return new JsonResponse([

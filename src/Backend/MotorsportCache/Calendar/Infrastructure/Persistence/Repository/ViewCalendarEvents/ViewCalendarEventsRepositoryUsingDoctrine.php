@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarEvents;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\JsonableCalendarEventsView;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsGateway;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CacheRepositoryLegacy;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository;
 
-final class ViewCalendarEventsRepositoryUsingDoctrine extends CacheRepositoryLegacy implements ViewCalendarEventsGateway
+final class ViewCalendarEventsRepositoryUsingDoctrine extends CacheRepository implements ViewCalendarEventsGateway
 {
     /**
      * @throws Exception

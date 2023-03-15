@@ -6,12 +6,12 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastru
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents\ViewCalendarEventsRepositoryUsingDoctrine
  */
 final class ViewCalendarEventsRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
 {

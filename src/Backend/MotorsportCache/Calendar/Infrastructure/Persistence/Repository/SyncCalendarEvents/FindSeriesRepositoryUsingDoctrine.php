@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents;
 
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\FindSeriesGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
-final class FindSeriesRepositoryUsingDoctrine extends CoreRepositoryLegacy implements FindSeriesGateway
+final class FindSeriesRepositoryUsingDoctrine extends CoreRepository implements FindSeriesGateway
 {
     /**
      * @throws Exception

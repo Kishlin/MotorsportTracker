@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents;
 
 use Doctrine\DBAL\Exception;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents\FindSeriesRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindSeriesRepositoryUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreLegacyRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents\FindSeriesRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindSeriesRepositoryUsingDoctrine
  */
 final class FindSeriesRepositoryUsingDoctrineTest extends CoreLegacyRepositoryContractTestCase
 {

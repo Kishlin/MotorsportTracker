@@ -9,13 +9,13 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventUpsert;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
-use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine;
+use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepositoryUsingDoctrine
  */
 final class SaveCalendarEventRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
 {

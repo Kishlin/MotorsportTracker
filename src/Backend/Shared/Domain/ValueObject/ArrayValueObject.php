@@ -9,7 +9,7 @@ class ArrayValueObject
     /**
      * @param array<int|string, float|integer|string> $value
      */
-    public function __construct(
+    final public function __construct(
         protected readonly array $value
     ) {
     }
@@ -25,5 +25,19 @@ class ArrayValueObject
     public function equals(self $other): bool
     {
         return $other->value() === $this->value;
+    }
+
+    public function asString(): string
+    {
+        return serialize($this->value);
+    }
+
+    public static function fromString(string $value): static
+    {
+        /** @var array<int|string, float|integer|string> $unserialized */
+        $unserialized = unserialize($value);
+        assert(is_array($unserialized));
+
+        return new static($unserialized);
     }
 }

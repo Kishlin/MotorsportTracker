@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Doctrine\Repository\SyncCalendarEvents;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents;
 
 use Doctrine\DBAL\Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\FindEventsGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\CoreRepositoryLegacy;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
-final class FindEventsRepositoryUsingDoctrine extends CoreRepositoryLegacy implements FindEventsGateway
+final class FindEventsRepositoryUsingDoctrine extends CoreRepository implements FindEventsGateway
 {
     private const QUERY = <<<'SQL'
 SELECT

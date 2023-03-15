@@ -1,24 +1,30 @@
 <?php
 
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Standing\Infrastructure\Persistence\Repository;
 
+use JsonException;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\DriverStandingsView;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewChampionshipSlug;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewEvents;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewId;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewStandings;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\ValueObject\StandingsViewYear;
-use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\DriverStandingsViewsRepositoryUsingDoctrine;
-use Kishlin\Tests\Backend\Tools\Test\Contract\CacheLegacyRepositoryContractTestCase;
+use Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\DriverStandingsViewsRepository;
+use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Doctrine\Repository\DriverStandingsViewsRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\DriverStandingsViewsRepository
  */
-final class DriverStandingsViewsRepositoryUsingDoctrineTest extends CacheLegacyRepositoryContractTestCase
+final class DriverStandingsViewsRepositoryTest extends CacheRepositoryContractTestCase
 {
+    /**
+     * @throws JsonException
+     */
     public function testItCanSaveAndRetrieveAnEntity(): void
     {
         $events    = StandingsViewEvents::with('fr', 'gb', 'es', 'en');
@@ -36,13 +42,15 @@ final class DriverStandingsViewsRepositoryUsingDoctrineTest extends CacheLegacyR
             $standings,
         );
 
-        $repository = new DriverStandingsViewsRepositoryUsingDoctrine(self::entityManager());
+        $repository = new DriverStandingsViewsRepository(self::connection());
 
         $repository->save($view);
 
         self::assertAggregateRootWasSaved($view);
 
         $saved = $repository->findOne('formula1', 2023);
+
+        self::assertNotNull($saved);
 
         self::assertEqualsCanonicalizing(['fr', 'gb', 'es', 'en'], $saved->events()->value());
 
