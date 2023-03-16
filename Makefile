@@ -87,8 +87,8 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
-.PHONY: db.core.connect db.core.reload db.core.reload.test db.core.migrations.diff db.core.migrations.migrate
-.PHONY: db.cache.connect db.cache.reload db.cache.reload.test db.cache.migrations.diff db.cache.migrations.migrate
+.PHONY: db.core.connect db.core.reload db.core.reload.test
+.PHONY: db.cache.connect db.cache.reload db.cache.reload.test
 
 xdebug.on:
 	@docker-compose exec php sudo mv /usr/local/etc/php/conf.d/xdebug.ini.dis /usr/local/etc/php/conf.d/xdebug.ini
@@ -99,15 +99,10 @@ xdebug.off:
 db.core.reload db.cache.reload: ENV=dev
 db.core.reload.test db.cache.reload.test: ENV=test
 
-db.core.migrations.diff db.cache.migrations.diff: CMD=diff
-db.core.migrations.migrate db.cache.migrations.migrate: CMD=migrate
-
 db.core.reload db.core.reload.test: DB=core
-db.core.migrations.diff db.core.migrations.migrate: DB=core
 db.core.connect db.core.dump db.core.dump.data db.core.fill: DB=core
 
 db.cache.reload db.cache.reload.test: DB=cache
-db.cache.migrations.diff db.cache.migrations.migrate: DB=cache
 db.cache.connect db.cache.dump db.cache.dump.data db.cache.fill: DB=cache
 
 db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test:
@@ -131,9 +126,6 @@ db.core.dump.data db.cache.dump.data:
 db.core.fill db.cache.fill:
 	@echo "Filling DB $(DB) with data from dump"
 	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d $(DB)-dev -f /app/etc/Data/data-$(DB).sql &>/dev/null'
-
-db.core.migrations.diff db.core.migrations.migrate db.cache.migrations.diff db.cache.migrations.migrate:
-	@docker-compose exec backend php /app/vendor/bin/doctrine-migrations $(CMD) --conn=$(DB)
 
 frontend.sh:
 	@docker-compose exec node sh

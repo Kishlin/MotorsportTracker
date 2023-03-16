@@ -372,19 +372,19 @@ ALTER TABLE ONLY public.session_type
 
 
 --
--- Name: team teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.team
-    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
-
-
---
 -- Name: team_presentation team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
 ALTER TABLE ONLY public.team_presentation
     ADD CONSTRAINT team_presentations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: team teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
 
 
 --

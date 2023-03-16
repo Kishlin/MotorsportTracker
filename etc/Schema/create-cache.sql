@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.3 (Debian 13.3-1.pgdg100+1)
--- Dumped by pg_dump version 13.3 (Debian 13.3-1.pgdg100+1)
+-- Dumped from database version 14.6 (Debian 14.6-1.pgdg110+1)
+-- Dumped by pg_dump version 14.6 (Debian 14.6-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,10 +21,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: calendar_events; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: calendar_event; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.calendar_events (
+CREATE TABLE public.calendar_event (
     id character varying(36) NOT NULL,
     slug character varying(255) NOT NULL,
     index integer NOT NULL,
@@ -38,47 +38,34 @@ CREATE TABLE public.calendar_events (
 );
 
 
-ALTER TABLE public.calendar_events OWNER TO motorsporttracker;
+ALTER TABLE public.calendar_event OWNER TO motorsporttracker;
 
 --
--- Name: COLUMN calendar_events.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN calendar_event.start_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.calendar_events.start_date IS '(DC2Type:nullable_date_time_value_object)';
-
-
---
--- Name: COLUMN calendar_events.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.calendar_events.end_date IS '(DC2Type:nullable_date_time_value_object)';
+COMMENT ON COLUMN public.calendar_event.start_date IS '(DC2Type:nullable_date_time_value_object)';
 
 
 --
--- Name: COLUMN calendar_events.series; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN calendar_event.end_date; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.calendar_events.series IS '(DC2Type:calendar_event_series)';
+COMMENT ON COLUMN public.calendar_event.end_date IS '(DC2Type:nullable_date_time_value_object)';
 
 
 --
--- Name: doctrine_migration_versions; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN calendar_event.series; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.doctrine_migration_versions (
-    version character varying(191) NOT NULL,
-    executed_at timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
-    execution_time integer
-);
+COMMENT ON COLUMN public.calendar_event.series IS '(DC2Type:calendar_event_series)';
 
-
-ALTER TABLE public.doctrine_migration_versions OWNER TO motorsporttracker;
 
 --
--- Name: driver_standings_views; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: driver_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.driver_standings_views (
+CREATE TABLE public.driver_standings_view (
     id character varying(36) NOT NULL,
     championship_slug character varying(255) NOT NULL,
     year integer NOT NULL,
@@ -87,20 +74,20 @@ CREATE TABLE public.driver_standings_views (
 );
 
 
-ALTER TABLE public.driver_standings_views OWNER TO motorsporttracker;
+ALTER TABLE public.driver_standings_view OWNER TO motorsporttracker;
 
 --
--- Name: COLUMN driver_standings_views.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN driver_standings_view.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.driver_standings_views.events IS '(DC2Type:standings_view_events)';
+COMMENT ON COLUMN public.driver_standings_view.events IS '(DC2Type:standings_view_events)';
 
 
 --
--- Name: team_standings_views; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: team_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.team_standings_views (
+CREATE TABLE public.team_standings_view (
     id character varying(36) NOT NULL,
     championship_slug character varying(255) NOT NULL,
     year integer NOT NULL,
@@ -109,81 +96,60 @@ CREATE TABLE public.team_standings_views (
 );
 
 
-ALTER TABLE public.team_standings_views OWNER TO motorsporttracker;
+ALTER TABLE public.team_standings_view OWNER TO motorsporttracker;
 
 --
--- Name: COLUMN team_standings_views.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
+-- Name: COLUMN team_standings_view.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
 --
 
-COMMENT ON COLUMN public.team_standings_views.events IS '(DC2Type:standings_view_events)';
+COMMENT ON COLUMN public.team_standings_view.events IS '(DC2Type:standings_view_events)';
 
 
 --
--- Data for Name: calendar_events; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: calendar_event; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.calendar_events (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions) FROM stdin;
+COPY public.calendar_event (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions) FROM stdin;
 \.
 
 
 --
--- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: driver_standings_view; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.doctrine_migration_versions (version, executed_at, execution_time) FROM stdin;
-Kishlin\\Migrations\\Cache\\Version20230204042827	2023-03-03 15:05:03	14
-Kishlin\\Migrations\\Cache\\Version20230218154951	2023-03-03 15:05:03	1
-Kishlin\\Migrations\\Cache\\Version20230226141240	2023-03-03 15:05:03	8
-Kishlin\\Migrations\\Cache\\Version20230306173718	2023-03-06 17:38:04	19
-Kishlin\\Migrations\\Cache\\Version20230309123246	2023-03-09 12:33:25	11
+COPY public.driver_standings_view (id, championship_slug, year, events, standings) FROM stdin;
 \.
 
 
 --
--- Data for Name: driver_standings_views; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Data for Name: team_standings_view; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.driver_standings_views (id, championship_slug, year, events, standings) FROM stdin;
+COPY public.team_standings_view (id, championship_slug, year, events, standings) FROM stdin;
 \.
 
 
 --
--- Data for Name: team_standings_views; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Name: calendar_event calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.team_standings_views (id, championship_slug, year, events, standings) FROM stdin;
-\.
-
-
---
--- Name: calendar_events calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.calendar_events
+ALTER TABLE ONLY public.calendar_event
     ADD CONSTRAINT calendar_events_pkey PRIMARY KEY (id);
 
 
 --
--- Name: doctrine_migration_versions doctrine_migration_versions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: driver_standings_view driver_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.doctrine_migration_versions
-    ADD CONSTRAINT doctrine_migration_versions_pkey PRIMARY KEY (version);
-
-
---
--- Name: driver_standings_views driver_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.driver_standings_views
+ALTER TABLE ONLY public.driver_standings_view
     ADD CONSTRAINT driver_standings_views_pkey PRIMARY KEY (id);
 
 
 --
--- Name: team_standings_views team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: team_standings_view team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.team_standings_views
+ALTER TABLE ONLY public.team_standings_view
     ADD CONSTRAINT team_standings_views_pkey PRIMARY KEY (id);
 
 
@@ -191,21 +157,21 @@ ALTER TABLE ONLY public.team_standings_views
 -- Name: driver_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_views USING btree (championship_slug, year);
+CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_view USING btree (championship_slug, year);
 
 
 --
 -- Name: team_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX team_standings_views_championship_year_idx ON public.team_standings_views USING btree (championship_slug, year);
+CREATE UNIQUE INDEX team_standings_views_championship_year_idx ON public.team_standings_view USING btree (championship_slug, year);
 
 
 --
 -- Name: uniq_f9e14f16989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX uniq_f9e14f16989d9b62 ON public.calendar_events USING btree (slug);
+CREATE UNIQUE INDEX uniq_f9e14f16989d9b62 ON public.calendar_event USING btree (slug);
 
 
 --

@@ -26,11 +26,11 @@ abstract class CoreRepositoryContractTestCase extends RepositoryContractTestCase
     protected static function createConnection(): Connection
     {
         return PDOConnection::create(
-            $_ENV['DB_HOST'],
-            (int) $_ENV['DB_PORT'],
-            $_ENV['DB_CORE_TEST'],
-            $_ENV['DB_USER'],
-            $_ENV['DB_PASSWORD'],
+            $_ENV['DB_CORE_HOST'],
+            (int) $_ENV['DB_CORE_PORT'],
+            $_ENV['DB_CORE_NAME'],
+            $_ENV['DB_CORE_USER'],
+            $_ENV['DB_CORE_PASSWORD'],
         );
     }
 }

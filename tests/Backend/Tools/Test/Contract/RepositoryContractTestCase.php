@@ -15,10 +15,12 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\Constraint\AggregateRootWasSavedCo
 use PHPUnit\Framework\TestCase;
 
 /**
- * Abstract TestCase for Contract Tests of Repositories, child classes of \Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository.
+ * Abstract TestCase for Contract Tests of Repositories, child classes of \Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\Repository.
  *
  * @internal
- * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Doctrine\Repository\DoctrineRepository
+ * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository
+ * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository
+ * @covers \Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\Repository
  */
 abstract class RepositoryContractTestCase extends TestCase
 {

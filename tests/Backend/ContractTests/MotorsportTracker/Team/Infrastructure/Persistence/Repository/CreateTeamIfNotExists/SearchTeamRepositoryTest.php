@@ -10,7 +10,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamPresentationIfNotExists\SearchTeamRepositoryUsingDoctrine
+ * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamPresentationIfNotExists\SearchTeamRepository
  */
 final class SearchTeamRepositoryTest extends CoreRepositoryContractTestCase
 {
