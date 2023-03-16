@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Environment;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
 use Kishlin\Backend\MotorsportCache\Shared\Infrastructure\Persistence\Fixtures\MotorsportCacheFixtureConverterConfigurator;
 use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
+use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingDoctrine;
+use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingConnection;
 use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;
 use Kishlin\Tests\Backend\Tools\ConsoleApplication\ConsoleApplicationInterface;
 use Kishlin\Tests\Backend\Tools\ConsoleApplication\SymfonyConsoleApplication;
@@ -64,12 +64,12 @@ final class SymfonyApplication
     public function database(string $database = 'core'): DatabaseInterface
     {
         if (false === array_key_exists($database, $this->databases)) {
-            $service = "kishlin.app.infrastructure.entity_manager.{$database}";
+            $service = "kishlin.app.infrastructure.connection.{$database}";
 
-            $entityManager = self::kernel()->getContainer()->get($service);
-            assert($entityManager instanceof EntityManagerInterface);
+            $connection = self::kernel()->getContainer()->get($service);
+            assert($connection instanceof Connection);
 
-            $fixtureSaver = new FixtureSaverUsingDoctrine($entityManager);
+            $fixtureSaver = new FixtureSaverUsingConnection($connection);
 
             CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
             MotorsportCacheFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
@@ -77,7 +77,7 @@ final class SymfonyApplication
 
             $fixtureLoader = new FixtureLoader(new UuidGeneratorUsingRamsey(), $fixtureSaver, '/app/etc/Fixtures/' . ucfirst($database));
 
-            $this->databases[$database] = new PostgresDatabase($entityManager, $fixtureLoader);
+            $this->databases[$database] = new PostgresDatabase($connection, $fixtureLoader);
         }
 
         return $this->databases[$database];

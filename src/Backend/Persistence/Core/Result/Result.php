@@ -21,4 +21,6 @@ interface Result
      * @return array<string, null|bool|float|int|string>
      */
     public function fetchAssociative(): array;
+
+    public function fetchOne(): null|bool|float|int|string;
 }

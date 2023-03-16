@@ -69,6 +69,21 @@ final class PDOResult implements Result
         return $ret;
     }
 
+    public function fetchOne(): null|bool|float|int|string
+    {
+        if (null === $this->statement) {
+            throw new ResultIsNotASuccessException();
+        }
+
+        /** @var null|bool|false|float|int|string $ret */
+        $ret = $this->statement->fetch(PDO::FETCH_COLUMN);
+        if (false === $ret) {
+            return null;
+        }
+
+        return $ret;
+    }
+
     public static function ok(PDOStatement $statement): self
     {
         return new self($statement, true, null);

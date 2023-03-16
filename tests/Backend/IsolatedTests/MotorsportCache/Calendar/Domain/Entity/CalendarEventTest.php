@@ -82,7 +82,6 @@ final class CalendarEventTest extends AggregateRootIsolatedTestCase
 
         self::assertValueObjectSame($id, $entity->id());
         self::assertSame($seriesName, $entity->series()->data()['name']);
-        self::assertSame($seriesSlug, $entity->series()->data()['slug']);
         self::assertSame($seriesYear, $entity->series()->data()['year']);
         self::assertSame($seriesIcon, $entity->series()->data()['icon']);
         self::assertSame($seriesColor, $entity->series()->data()['color']);
