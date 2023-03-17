@@ -19,9 +19,9 @@ final class CalendarResponse
      *         shortName: string,
      *         shortCode: string,
      *         status: string,
-     *         startTime: ?int,
+     *         startDate: ?int,
      *         startTimeUtc: ?int,
-     *         endTime: ?int,
+     *         endDate: ?int,
      *         endTimeUtc: ?int,
      *         venue: array{
      *             name: string,
@@ -68,10 +68,10 @@ final class CalendarResponse
      *         shortName: string,
      *         shortCode: string,
      *         status: string,
-     *         startDate: int,
-     *         startTimeUtc: int,
-     *         endDate: int,
-     *         endTimeUtc: int,
+     *         startDate: ?int,
+     *         startTimeUtc: ?int,
+     *         endDate: ?int,
+     *         endTimeUtc: ?int,
      *         venue: array{
      *             name: string,
      *             uuid: string,
@@ -91,10 +91,10 @@ final class CalendarResponse
      *             shortCode: string,
      *             status: string,
      *             hasResults: bool,
-     *             startTime: int,
-     *             startTimeUtc: int,
-     *             endTime: int,
-     *             endTimeUtc: int,
+     *             startTime: ?int,
+     *             startTimeUtc: ?int,
+     *             endTime: ?int,
+     *             endTimeUtc: ?int,
      *         }>
      *     }>
      * }
@@ -117,10 +117,10 @@ final class CalendarResponse
      *         shortName: string,
      *         shortCode: string,
      *         status: string,
-     *         startDate: int,
-     *         startTimeUtc: int,
-     *         endDate: int,
-     *         endTimeUtc: int,
+     *         startDate: ?int,
+     *         startTimeUtc: ?int,
+     *         endDate: ?int,
+     *         endTimeUtc: ?int,
      *         venue: array{
      *             name: string,
      *             uuid: string,
@@ -140,10 +140,10 @@ final class CalendarResponse
      *             shortCode: string,
      *             status: string,
      *             hasResults: bool,
-     *             startTime: int,
-     *             startTimeUtc: int,
-     *             endTime: int,
-     *             endTimeUtc: int,
+     *             startTime: ?int,
+     *             startTimeUtc: ?int,
+     *             endTime: ?int,
+     *             endTimeUtc: ?int,
      *         }>
      *     }>
      * } $data
