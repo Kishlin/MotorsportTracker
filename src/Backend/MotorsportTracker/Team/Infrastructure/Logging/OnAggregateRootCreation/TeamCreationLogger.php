@@ -12,7 +12,7 @@ final class TeamCreationLogger extends AggregateRootCreationLogger
     public function __invoke(DriverCreatedDomainEvent $event): void
     {
         $this->logCreation(
-            'teams',
+            'team',
             $event->aggregateUuid()->value(),
             'MotorsportTracker::Team::Team',
         );

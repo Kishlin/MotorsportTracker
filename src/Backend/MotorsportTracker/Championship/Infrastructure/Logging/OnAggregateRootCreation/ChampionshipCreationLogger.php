@@ -12,7 +12,7 @@ final class ChampionshipCreationLogger extends AggregateRootCreationLogger
     public function __invoke(ChampionshipCreatedDomainEvent $event): void
     {
         $this->logCreation(
-            'championships',
+            'championship',
             $event->aggregateUuid()->value(),
             'MotorsportTracker::Championship::Championship',
         );

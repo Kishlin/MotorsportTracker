@@ -12,7 +12,7 @@ final class EventSessionCreationLogger extends AggregateRootCreationLogger
     public function __invoke(EventSessionCreatedDomainEvent $event): void
     {
         $this->logCreation(
-            'event_sessions',
+            'event_session',
             $event->aggregateUuid()->value(),
             'MotorsportTracker::Event::EventSession',
         );
