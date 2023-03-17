@@ -32,8 +32,8 @@ final class CreateCountryIfNotExistsCommand implements Command
         return new NullableUuidValueObject($this->ref);
     }
 
-    public static function fromScalars(string $keyword, string $name, ?string $ref): self
+    public static function fromScalars(string $code, string $name, ?string $ref): self
     {
-        return new self($keyword, $name, $ref);
+        return new self($code, $name, $ref);
     }
 }
