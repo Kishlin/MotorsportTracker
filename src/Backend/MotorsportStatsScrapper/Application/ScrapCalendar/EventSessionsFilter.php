@@ -80,7 +80,7 @@ final class EventSessionsFilter
         ;
     }
 
-    public function shouldBeUsedToBuildQualifying(string $name): bool
+    private function shouldBeUsedToBuildQualifying(string $name): bool
     {
         return self::QUALIFYING_1 === $name || self::FIRST_QUALIFYING === $name || self::QUALIFYING_GROUP_A === $name;
     }
