@@ -49,8 +49,8 @@ final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements S
     {
         foreach ($this->objects as $savedChampionship) {
             if ($savedChampionship->name()->equals($championship->name())
-                || $savedChampionship->ref()->equals($championship->ref())
-                || $savedChampionship->shortCode()->equals($championship->shortCode())) {
+                || $savedChampionship->shortCode()->equals($championship->shortCode())
+                || (null !== $savedChampionship->ref()->value() && $savedChampionship->ref()->equals($championship->ref()))) {
                 return true;
             }
         }
