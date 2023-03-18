@@ -23,7 +23,7 @@ final class SearchChampionshipRepositoryTest extends CoreRepositoryContractTestC
 
         self::assertSame(
             self::fixtureId('motorsport.championship.championship.formulaOne'),
-            $repository->findIfExists(new StringValueObject('formula1'), new NullableUuidValueObject(null))?->value(),
+            $repository->findIfExists(new StringValueObject('Formula One'), new NullableUuidValueObject(null))?->value(),
         );
     }
 
@@ -31,6 +31,6 @@ final class SearchChampionshipRepositoryTest extends CoreRepositoryContractTestC
     {
         $repository = new SearchChampionshipRepository(self::connection());
 
-        self::assertNull($repository->findIfExists(new StringValueObject('formula1'), new NullableUuidValueObject(null)));
+        self::assertNull($repository->findIfExists(new StringValueObject('Formula One'), new NullableUuidValueObject(null)));
     }
 }

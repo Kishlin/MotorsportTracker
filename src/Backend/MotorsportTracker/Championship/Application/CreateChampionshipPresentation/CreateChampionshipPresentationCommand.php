@@ -10,15 +10,15 @@ use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 final class CreateChampionshipPresentationCommand implements Command
 {
     private function __construct(
-        private readonly string $championshipSlug,
+        private readonly string $championship,
         private readonly string $icon,
         private readonly string $color,
     ) {
     }
 
-    public function championshipSlug(): StringValueObject
+    public function championship(): StringValueObject
     {
-        return new StringValueObject($this->championshipSlug);
+        return new StringValueObject($this->championship);
     }
 
     public function icon(): StringValueObject
@@ -31,8 +31,8 @@ final class CreateChampionshipPresentationCommand implements Command
         return new StringValueObject($this->color);
     }
 
-    public static function fromScalars(string $championshipSlug, string $icon, string $color): self
+    public static function fromScalars(string $championship, string $icon, string $color): self
     {
-        return new self($championshipSlug, $icon, $color);
+        return new self($championship, $icon, $color);
     }
 }

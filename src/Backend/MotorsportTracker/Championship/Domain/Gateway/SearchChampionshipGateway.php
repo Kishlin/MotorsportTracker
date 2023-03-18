@@ -10,5 +10,5 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface SearchChampionshipGateway
 {
-    public function findIfExists(StringValueObject $shortCode, NullableUuidValueObject $ref): ?UuidValueObject;
+    public function findIfExists(StringValueObject $championship, NullableUuidValueObject $ref): ?UuidValueObject;
 }

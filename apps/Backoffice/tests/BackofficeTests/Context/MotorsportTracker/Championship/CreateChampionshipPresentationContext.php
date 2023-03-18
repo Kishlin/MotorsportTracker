@@ -19,7 +19,7 @@ final class CreateChampionshipPresentationContext extends BackofficeContext
 {
     private const QUERY = <<<'SQL'
 SELECT icon, color
-FROM championship_presentations
+FROM championship_presentation
 WHERE championship = :championship
 ORDER BY created_on DESC;
 SQL;
@@ -76,7 +76,7 @@ SQL;
 
         /** @var array<array{id: string, championshipId: string, icon: string, color: string}> $championshipPresentationData */
         $championshipPresentationData = self::database()->fetchAllAssociative(
-            'SELECT * FROM championship_presentations ORDER BY created_on DESC LIMIT 1;'
+            'SELECT * FROM championship_presentation ORDER BY created_on DESC LIMIT 1;'
         );
 
         Assert::assertCount(1, $championshipPresentationData);

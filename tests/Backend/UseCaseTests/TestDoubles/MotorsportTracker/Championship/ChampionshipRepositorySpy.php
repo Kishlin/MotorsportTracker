@@ -34,11 +34,11 @@ final class ChampionshipRepositorySpy extends AbstractRepositorySpy implements S
         $this->objects[$championship->id()->value()] = $championship;
     }
 
-    public function findIfExists(StringValueObject $shortCode, NullableUuidValueObject $ref): ?UuidValueObject
+    public function findIfExists(StringValueObject $championship, NullableUuidValueObject $ref): ?UuidValueObject
     {
-        foreach ($this->objects as $championship) {
-            if ($championship->shortCode()->equals($shortCode) || $championship->ref()->equals($ref)) {
-                return $championship->id();
+        foreach ($this->objects as $savedChampionship) {
+            if ($savedChampionship->name()->equals($championship) || $savedChampionship->ref()->equals($ref)) {
+                return $savedChampionship->id();
             }
         }
 

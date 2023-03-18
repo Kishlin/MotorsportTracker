@@ -27,7 +27,7 @@ final class CreateChampionshipPresentationCommandHandler implements CommandHandl
 
     public function __invoke(CreateChampionshipPresentationCommand $command): UuidValueObject
     {
-        $championshipId = $this->searchGateway->findIfExists($command->championshipSlug(), new NullableUuidValueObject(null));
+        $championshipId = $this->searchGateway->findIfExists($command->championship(), new NullableUuidValueObject(null));
         if (null === $championshipId) {
             throw new ChampionshipNotFoundDomainException();
         }

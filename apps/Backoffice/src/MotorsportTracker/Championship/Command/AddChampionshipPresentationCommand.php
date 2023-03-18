@@ -20,7 +20,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
     public const NAME = 'kishlin:motorsport:championship-presentation:add';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
-    private const QUESTION_CHAMPIONSHIP = "Please enter the slug of the championship:\n";
+    private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
 
     private const ARGUMENT_ICON = 'icon';
     private const QUESTION_ICON = "Please enter an icon for the championship presentation:\n";
@@ -39,7 +39,7 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
         $this
             ->setName(self::NAME)
             ->setDescription('Adds a new championship presentation.')
-            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The slug of the championship')
+            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The name of the championship')
             ->addArgument(self::ARGUMENT_ICON, InputArgument::OPTIONAL, 'The icon of the championship presentation')
             ->addArgument(self::ARGUMENT_COLOR, InputArgument::OPTIONAL, 'The color of the championship presentation')
         ;

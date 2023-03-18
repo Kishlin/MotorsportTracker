@@ -13,14 +13,14 @@ use RuntimeException;
 
 final class SearchChampionshipRepository extends CoreRepository implements SearchChampionshipGateway
 {
-    public function findIfExists(StringValueObject $shortCode, NullableUuidValueObject $ref): ?UuidValueObject
+    public function findIfExists(StringValueObject $championship, NullableUuidValueObject $ref): ?UuidValueObject
     {
         $qb = $this->connection->createQueryBuilder();
 
         $qb->select('c.id')
             ->from('championship', 'c')
-            ->where($qb->expr()->eq('c.short_code', ':short_code'))
-            ->withParam('short_code', $shortCode->value())
+            ->where($qb->expr()->eq('c.name', ':name'))
+            ->withParam('name', $championship->value())
         ;
 
         if (null !== $ref->value()) {
