@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class FindSeriesRepository extends CoreRepository implements FindSeriesGateway
 {
-    public function findForSlug(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
+    public function findForChampionship(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
     {
         $qb = $this->connection->createQueryBuilder();
 

@@ -6,10 +6,12 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calenda
 
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\FindEventsGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
@@ -20,7 +22,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Venue\SaveV
 
 final class FindEventsRepositorySpy implements FindEventsGateway
 {
-    /** @var array<string, string> */
+    /** @var array<string, SessionType> */
     private array $typeCache = [];
 
     public function __construct(
@@ -34,9 +36,9 @@ final class FindEventsRepositorySpy implements FindEventsGateway
     ) {
     }
 
-    public function findAll(StringValueObject $seriesSlug, PositiveIntValueObject $year): array
+    public function findAll(StringValueObject $championship, PositiveIntValueObject $year): array
     {
-        $championshipId = $this->championshipRepositorySpy->findIfExists($seriesSlug, new NullableUuidValueObject(null));
+        $championshipId = $this->championshipRepositorySpy->findIfExists($championship, new NullableUuidValueObject(null));
         if (null === $championshipId) {
             return [];
         }
@@ -57,17 +59,21 @@ final class FindEventsRepositorySpy implements FindEventsGateway
 
             $eventsList[$event->id()->value()] = [
                 'venue' => [
+                    'id'      => $venue->id()->value(),
                     'name'    => $venue->name()->value(),
-                    'slug'    => $venue->name()->value(),
+                    'slug'    => StringHelper::slugify($venue->name()->value()),
                     'country' => [
+                        'id'   => $country->id()->value(),
                         'code' => $country->code()->value(),
                         'name' => $country->name()->value(),
                     ],
                 ],
+                'reference'  => $event->id()->value(),
                 'index'      => $event->index()->value(),
-                'slug'       => $event->name()->value(),
                 'name'       => $event->name()->value(),
+                'slug'       => StringHelper::slugify($event->name()->value()),
                 'short_name' => $event->shortName()->value(),
+                'short_code' => $event->shortCode()->value(),
                 'start_date' => $event->startDate()->value()?->format('Y-m-d H:i:s'),
                 'end_date'   => $event->endDate()->value()?->format('Y-m-d H:i:s'),
                 'sessions'   => [],
@@ -81,8 +87,9 @@ final class FindEventsRepositorySpy implements FindEventsGateway
             }
 
             $eventsList[$eventId]['sessions'][] = [
-                'type'       => $this->memoizedType($eventSession->typeId()),
-                'slug'       => $eventId . '-' . $eventSession->typeId(),
+                'id'         => $eventSession->id()->value(),
+                'type'       => $this->memoizedType($eventSession->typeId())->label()->value(),
+                'slug'       => $this->memoizedType($eventSession->typeId())->label()->value(),
                 'has_result' => $eventSession->hasResult()->value(),
                 'start_date' => $eventSession->startDate()->value()?->format('Y-m-d H:i:s'),
                 'end_date'   => $eventSession->endDate()->value()?->format('Y-m-d H:i:s'),
@@ -95,10 +102,10 @@ final class FindEventsRepositorySpy implements FindEventsGateway
         );
     }
 
-    private function memoizedType(UuidValueObject $typeId): string
+    private function memoizedType(UuidValueObject $typeId): SessionType
     {
         if (false === array_key_exists($typeId->value(), $this->typeCache)) {
-            $this->typeCache[$typeId->value()] = $this->sessionTypeRepositorySpy->safeGet($typeId)->label()->value();
+            $this->typeCache[$typeId->value()] = $this->sessionTypeRepositorySpy->safeGet($typeId);
         }
 
         return $this->typeCache[$typeId->value()];

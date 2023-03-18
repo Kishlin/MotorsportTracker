@@ -12,5 +12,5 @@ interface FindEventsGateway
     /**
      * @return CalendarEventEntry[]
      */
-    public function findAll(StringValueObject $seriesSlug, PositiveIntValueObject $year): array;
+    public function findAll(StringValueObject $championship, PositiveIntValueObject $year): array;
 }

@@ -12,11 +12,11 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository
 
 final class SaveCalendarEventRepository extends CacheRepository implements SaveCalendarEventGateway
 {
-    private const DELETE_QUERY = 'DELETE FROM calendar_event WHERE calendar_event.name = :name';
+    private const DELETE_QUERY = 'DELETE FROM calendar_event WHERE calendar_event.reference = :reference';
 
     public function save(CalendarEvent $event): CalendarEventUpsert
     {
-        $params = ['name' => $event->name()->value()];
+        $params = ['reference' => $event->reference()->value()];
         $ret    = $this->connection->execute(SQLQuery::create(self::DELETE_QUERY, $params))->fetchAllAssociative();
 
         $this->persist($event);

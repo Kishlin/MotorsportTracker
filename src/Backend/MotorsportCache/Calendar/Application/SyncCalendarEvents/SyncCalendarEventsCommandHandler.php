@@ -34,15 +34,15 @@ final class SyncCalendarEventsCommandHandler implements CommandHandler
      */
     public function __invoke(SyncCalendarEventsCommand $command): void
     {
-        $series = $this->seriesGateway->findForSlug($command->seasonSlug(), $command->year());
+        $series = $this->seriesGateway->findForChampionship($command->championship(), $command->year());
 
         if (null === $series) {
-            $this->eventDispatcher->dispatch(SeriesIsMissingApplicationEvent::forSlug($command->seasonSlug()->value()));
+            $this->eventDispatcher->dispatch(SeriesIsMissingApplicationEvent::forSlug($command->championship()->value()));
 
             return;
         }
 
-        foreach ($this->eventsGateway->findAll($command->seasonSlug(), $command->year()) as $eventEntry) {
+        foreach ($this->eventsGateway->findAll($command->championship(), $command->year()) as $eventEntry) {
             $id    = new UuidValueObject($this->uuidGenerator->uuid4());
             $event = CalendarEvent::withEntry($id, $series, $eventEntry);
 

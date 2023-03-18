@@ -26,10 +26,12 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.calendar_event (
     id character varying(36) NOT NULL,
+    reference character varying(36),
     slug character varying(255) NOT NULL,
     index integer NOT NULL,
     name character varying(255) NOT NULL,
     short_name character varying(255) DEFAULT NULL::character varying,
+    short_code character varying(255) DEFAULT NULL::character varying,
     start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     series text NOT NULL,
@@ -109,7 +111,7 @@ COMMENT ON COLUMN public.team_standings_view.events IS '(DC2Type:standings_view_
 -- Data for Name: calendar_event; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.calendar_event (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions) FROM stdin;
+COPY public.calendar_event (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions, short_code, reference) FROM stdin;
 \.
 
 

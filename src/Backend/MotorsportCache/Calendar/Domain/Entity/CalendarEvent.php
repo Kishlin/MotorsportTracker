@@ -26,10 +26,12 @@ final class CalendarEvent extends AggregateRoot
         private readonly CalendarEventSeries $series,
         private readonly CalendarEventVenue $venue,
         private readonly CalendarEventSessions $sessions,
+        private readonly UuidValueObject $reference,
         private readonly PositiveIntValueObject $index,
         private readonly StringValueObject $slug,
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $shortName,
+        private readonly NullableStringValueObject $shortCode,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
     ) {
@@ -45,10 +47,12 @@ final class CalendarEvent extends AggregateRoot
             $series,
             $entry->venue(),
             $entry->sessions(),
+            $entry->reference(),
             $entry->index(),
             $entry->slug(),
             $entry->name(),
             $entry->shortName(),
+            $entry->shortCode(),
             $entry->startDate(),
             $entry->endDate(),
         );
@@ -59,14 +63,16 @@ final class CalendarEvent extends AggregateRoot
         CalendarEventSeries $series,
         CalendarEventVenue $venue,
         CalendarEventSessions $sessions,
+        UuidValueObject $reference,
         PositiveIntValueObject $index,
         StringValueObject $slug,
         StringValueObject $name,
         NullableStringValueObject $shortName,
+        NullableStringValueObject $shortCode,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
     ): self {
-        return new self($id, $series, $venue, $sessions, $index, $slug, $name, $shortName, $startDate, $endDate);
+        return new self($id, $series, $venue, $sessions, $reference, $index, $slug, $name, $shortName, $shortCode, $startDate, $endDate);
     }
 
     public function id(): UuidValueObject
@@ -89,6 +95,11 @@ final class CalendarEvent extends AggregateRoot
         return $this->sessions;
     }
 
+    public function reference(): UuidValueObject
+    {
+        return $this->reference;
+    }
+
     public function index(): PositiveIntValueObject
     {
         return $this->index;
@@ -107,6 +118,11 @@ final class CalendarEvent extends AggregateRoot
     public function shortName(): NullableStringValueObject
     {
         return $this->shortName;
+    }
+
+    public function shortCode(): NullableStringValueObject
+    {
+        return $this->shortCode;
     }
 
     public function startDate(): NullableDateTimeValueObject
@@ -129,10 +145,12 @@ final class CalendarEvent extends AggregateRoot
             'series'     => $this->series->asString(),
             'venue'      => $this->venue->asString(),
             'sessions'   => $this->sessions->asString(),
+            'reference'  => $this->reference->value(),
             'index'      => $this->index->value(),
             'slug'       => $this->slug->value(),
             'name'       => $this->name->value(),
             'short_name' => $this->shortName->value(),
+            'short_code' => $this->shortCode->value(),
             'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
             'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
         ];

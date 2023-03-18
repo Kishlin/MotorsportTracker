@@ -30,10 +30,12 @@ final class FixtureToCalendarEventConverter implements FixtureConverter
             CalendarEventSeries::fromData($this->decodeSeries($fixture->getString('series'))),
             CalendarEventVenue::fromData($this->decodeVenue($fixture->getString('venue'))),
             CalendarEventSessions::fromData($this->decodeSessions($fixture->getString('sessions'))),
+            new UuidValueObject($fixture->getString('reference')),
             new PositiveIntValueObject($fixture->getInt('index')),
             new StringValueObject($fixture->getString('slug')),
             new StringValueObject($fixture->getString('name')),
             new NullableStringValueObject($fixture->getString('shortName')),
+            new NullableStringValueObject($fixture->getString('shortCode')),
             new NullableDateTimeValueObject($fixture->getDateTime('startDate')),
             new NullableDateTimeValueObject($fixture->getDateTime('endDate')),
         );
@@ -67,9 +69,11 @@ final class FixtureToCalendarEventConverter implements FixtureConverter
 
     /**
      * @return array{
+     *     id: string,
      *     name: string,
      *     slug: string,
      *     country: array{
+     *         id: string,
      *         code: string,
      *         name: string,
      *     }
@@ -79,9 +83,11 @@ final class FixtureToCalendarEventConverter implements FixtureConverter
     {
         /**
          * @var array{
+         *     id: string,
          *     name: string,
          *     slug: string,
          *     country: array{
+         *         id: string,
          *         code: string,
          *         name: string,
          *     }
@@ -95,6 +101,7 @@ final class FixtureToCalendarEventConverter implements FixtureConverter
 
     /**
      * @return array{
+     *     id: string,
      *     type: string,
      *     slug: string,
      *     has_result: bool,
@@ -106,6 +113,7 @@ final class FixtureToCalendarEventConverter implements FixtureConverter
     {
         /**
          * @var array{
+         *     id: string,
          *     type: string,
          *     slug: string,
          *     has_result: bool,

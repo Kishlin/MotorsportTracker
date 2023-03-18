@@ -46,14 +46,13 @@ final class SyncCalendarContext extends MotorsportTrackerContext
     #[Then('there is a calendar event cached for :session')]
     public function thereIsACalendarEventCached(string $session): void
     {
-        $sessionId = self::fixtureId("motorsport.event.event.{$this->format($session)}");
-        $eventName = self::container()->eventRepositorySpy()->safeGet(new UuidValueObject($sessionId))->name();
+        $sessionId = new UuidValueObject(self::fixtureId("motorsport.event.event.{$this->format($session)}"));
 
         $total = count(
             array_filter(
                 self::container()->calendarEventRepositorySpy()->all(),
-                static function (CalendarEvent $calendarEvent) use ($eventName) {
-                    return $calendarEvent->slug()->equals($eventName);
+                static function (CalendarEvent $calendarEvent) use ($sessionId) {
+                    return $calendarEvent->reference()->equals($sessionId);
                 }
             )
         );

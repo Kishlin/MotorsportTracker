@@ -8,6 +8,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\JsonValueObject;
 
 /**
  * @property array{
+ *     id: string,
  *     type: string,
  *     slug: string,
  *     has_result: bool,
@@ -19,6 +20,7 @@ final class CalendarEventSessions extends JsonValueObject
 {
     /**
      * @return array{
+     *     id: string,
      *     type: string,
      *     slug: string,
      *     has_result: bool,
@@ -33,6 +35,7 @@ final class CalendarEventSessions extends JsonValueObject
 
     /**
      * @param array{
+     *     id: string,
      *     type: string,
      *     slug: string,
      *     has_result: bool,

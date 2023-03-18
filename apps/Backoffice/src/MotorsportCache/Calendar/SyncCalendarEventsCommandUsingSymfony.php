@@ -19,7 +19,7 @@ final class SyncCalendarEventsCommandUsingSymfony extends SymfonyCommand
     public const NAME = 'kishlin:motorsport-cache:calendar:sync';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
-    private const QUESTION_CHAMPIONSHIP = "Please enter the slug of the championship:\n";
+    private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
 
     private const ARGUMENT_YEAR = 'year';
     private const QUESTION_YEAR = "Please enter the year of the championship:\n";
@@ -35,7 +35,7 @@ final class SyncCalendarEventsCommandUsingSymfony extends SymfonyCommand
         $this
             ->setName(self::NAME)
             ->setDescription('Adds a new championship presentation.')
-            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The slug of the championship')
+            ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The name of the championship')
             ->addArgument(self::ARGUMENT_YEAR, InputArgument::OPTIONAL, 'The year of the championship')
         ;
     }
@@ -52,10 +52,6 @@ final class SyncCalendarEventsCommandUsingSymfony extends SymfonyCommand
                 SyncCalendarEventsCommand::fromScalars($championship, $year),
             );
         } catch (Throwable $e) {
-            var_dump($e->getMessage());
-            var_dump($e->getFile());
-            var_dump($e->getLine());
-
             $ui->error('Failed to sync events for this championship.');
 
             return Command::FAILURE;

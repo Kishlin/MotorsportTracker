@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipPresentationRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\ChampionshipRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Championship\SaveSeasonRepositorySpy;
@@ -22,10 +23,10 @@ final class FindSeriesRepositorySpy implements FindSeriesGateway
     ) {
     }
 
-    public function findForSlug(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
+    public function findForChampionship(StringValueObject $seriesCode, PositiveIntValueObject $year): ?CalendarEventSeries
     {
         foreach ($this->championshipRepositorySpy->all() as $championship) {
-            if (false === $championship->shortCode()->equals($seriesCode)) {
+            if (false === $championship->name()->equals($seriesCode)) {
                 continue;
             }
 
@@ -41,7 +42,7 @@ final class FindSeriesRepositorySpy implements FindSeriesGateway
 
                 return CalendarEventSeries::fromData([
                     'name'  => $championship->name()->value(),
-                    'slug'  => $championship->shortCode()->value(),
+                    'slug'  => StringHelper::slugify($championship->name()->value()),
                     'year'  => $season->year()->value(),
                     'icon'  => $presentation->icon()->value(),
                     'color' => $presentation->color()->value(),

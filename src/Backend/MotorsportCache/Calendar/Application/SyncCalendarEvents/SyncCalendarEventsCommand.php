@@ -11,14 +11,14 @@ use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 final class SyncCalendarEventsCommand implements Command
 {
     private function __construct(
-        private readonly string $seasonSlug,
+        private readonly string $championship,
         private readonly int $year,
     ) {
     }
 
-    public function seasonSlug(): StringValueObject
+    public function championship(): StringValueObject
     {
-        return new StringValueObject($this->seasonSlug);
+        return new StringValueObject($this->championship);
     }
 
     public function year(): PositiveIntValueObject
@@ -26,8 +26,8 @@ final class SyncCalendarEventsCommand implements Command
         return new PositiveIntValueObject($this->year);
     }
 
-    public static function fromScalars(string $seasonSlug, int $year): self
+    public static function fromScalars(string $championship, int $year): self
     {
-        return new self($seasonSlug, $year);
+        return new self($championship, $year);
     }
 }

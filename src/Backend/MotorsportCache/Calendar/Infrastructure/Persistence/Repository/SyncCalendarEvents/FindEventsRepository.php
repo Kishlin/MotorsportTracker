@@ -10,22 +10,27 @@ use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 
 final class FindEventsRepository extends CoreRepository implements FindEventsGateway
 {
     private const QUERY = <<<'SQL'
 SELECT
     json_build_object(
+        'id', v.id,
         'name', v.name,
         'slug', v.name,
         'country', json_build_object(
+            'id', c.id,
             'code', c.code,
             'name', c.name
         )
     ) as venue,
+    e.id as reference,
     e.index as index,
-    e.short_name as slug,
     e.name as name,
+    CONCAT(cs.name, '_', s.year, '_', e.name) as slug,
+    e.short_code as short_code,
     e.short_name as short_name,
     e.start_date as start_date,
     e.end_date as end_date,
@@ -36,8 +41,9 @@ SELECT
             ELSE
                 json_agg(
                     json_build_object(
+                        'id', es.id,
                         'type', t.label,
-                        'slug', CONCAT(e.name, ' ', t.label),
+                        'slug', CONCAT(cs.name, '_', s.year, '_', e.name, '_', t.label),
                         'has_result', es.has_result,
                         'start_date', es.start_date,
                         'end_date', es.end_date
@@ -53,22 +59,24 @@ LEFT JOIN country c on v.country = c.id
 LEFT JOIN season s on e.season = s.id
 LEFT JOIN championship cs on cs.id = s.championship
 WHERE s.year = :year
-AND cs.name = :slug
-GROUP BY e.id, v.name, c.name, c.code
+AND cs.name = :championship
+GROUP BY e.id, v.id, v.name, c.id, c.name, c.code, cs.name, s.year
 SQL;
 
-    public function findAll(StringValueObject $seriesSlug, PositiveIntValueObject $year): array
+    public function findAll(StringValueObject $championship, PositiveIntValueObject $year): array
     {
-        $params = ['slug' => $seriesSlug->value(), 'year' => $year->value()];
+        $params = ['championship' => $championship->value(), 'year' => $year->value()];
         $query  = SQLQuery::create(self::QUERY, $params);
 
         /**
          * @var array{
          *     venue: string,
+         *     reference: string,
          *     index: int,
-         *     slug: string,
          *     name: string,
+         *     slug: string,
          *     short_name: ?string,
+         *     short_code: ?string,
          *     start_date: ?string,
          *     end_date: ?string,
          *     sessions: string
@@ -78,11 +86,23 @@ SQL;
 
         return array_map(
             static function ($eventData): CalendarEventEntry {
-                /** @var array{name: string, slug: string, country: array{code: string, name: string}} $venue */
-                $venue = json_decode($eventData['venue'], true);
+                /** @var array{id: string, name: string, slug: string, country: array{id: string, code: string, name: string}} $venue */
+                $venue         = json_decode($eventData['venue'], true);
+                $venue['slug'] = StringHelper::slugify($venue['slug']);
 
-                /** @var array{type: string, slug: string, has_result: bool, start_date: ?string, end_date: ?string}[] $sessions */
-                $sessions = json_decode($eventData['sessions'], true);
+                /** @var array{id: string, type: string, slug: string, has_result: bool, start_date: ?string, end_date: ?string}[] $rawSessions */
+                $rawSessions = json_decode($eventData['sessions'], true);
+
+                $eventData['slug'] = StringHelper::slugify($eventData['slug']);
+
+                $sessions = array_map(
+                    static function (array $session) {
+                        $session['slug'] = StringHelper::slugify($session['slug']);
+
+                        return $session;
+                    },
+                    $rawSessions,
+                );
 
                 $eventData['venue']    = $venue;
                 $eventData['sessions'] = $sessions;

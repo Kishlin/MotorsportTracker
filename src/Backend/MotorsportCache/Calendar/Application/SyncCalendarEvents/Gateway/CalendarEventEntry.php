@@ -12,19 +12,23 @@ use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class CalendarEventEntry
 {
     /**
      * @param array{
+     *     id: string,
      *     name: string,
      *     slug: string,
      *     country: array{
+     *         id: string,
      *         code: string,
      *         name: string,
      *     }
      * } $venue
      * @param array{
+     *     id: string,
      *     type: string,
      *     slug: string,
      *     has_result: bool,
@@ -34,10 +38,12 @@ final class CalendarEventEntry
      */
     private function __construct(
         private readonly array $venue,
+        private readonly string $reference,
         private readonly int $index,
         private readonly string $slug,
         private readonly string $name,
         private readonly ?string $shortName,
+        private readonly ?string $shortCode,
         private readonly ?string $startDate,
         private readonly ?string $endDate,
         private readonly array $sessions,
@@ -47,6 +53,11 @@ final class CalendarEventEntry
     public function venue(): CalendarEventVenue
     {
         return new CalendarEventVenue($this->venue);
+    }
+
+    public function reference(): UuidValueObject
+    {
+        return new UuidValueObject($this->reference);
     }
 
     public function index(): PositiveIntValueObject
@@ -67,6 +78,11 @@ final class CalendarEventEntry
     public function shortName(): NullableStringValueObject
     {
         return new NullableStringValueObject($this->shortName);
+    }
+
+    public function shortCode(): NullableStringValueObject
+    {
+        return new NullableStringValueObject($this->shortCode);
     }
 
     /**
@@ -101,22 +117,27 @@ final class CalendarEventEntry
     /**
      * @param array{
      *     venue: array{
+     *         id: string,
      *         name: string,
      *         slug: string,
      *         country: array{
+     *             id: string,
      *             code: string,
      *             name: string,
      *         }
      *     },
+     *     reference: string,
      *     index: int,
-     *     slug: string,
      *     name: string,
+     *     slug: string,
      *     short_name: ?string,
+     *     short_code: ?string,
      *     start_date: ?string,
      *     end_date: ?string,
      *     sessions: array{
-     *         type: string,
+     *         id: string,
      *         slug: string,
+     *         type: string,
      *         has_result: bool,
      *         start_date: ?string,
      *         end_date: ?string,
@@ -127,10 +148,12 @@ final class CalendarEventEntry
     {
         return new self(
             $data['venue'],
+            $data['reference'],
             $data['index'],
             $data['slug'],
             $data['name'],
             $data['short_name'],
+            $data['short_code'],
             $data['start_date'],
             $data['end_date'],
             $data['sessions'],

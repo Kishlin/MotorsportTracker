@@ -11,6 +11,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries
  * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindSeriesRepository
  */
 final class FindSeriesRepositoryTest extends CoreRepositoryContractTestCase
@@ -24,11 +25,12 @@ final class FindSeriesRepositoryTest extends CoreRepositoryContractTestCase
 
         $repository = new FindSeriesRepository(self::connection());
 
-        $series = $repository->findForSlug(new StringValueObject('Formula One'), new PositiveIntValueObject(2022));
+        $series = $repository->findForChampionship(new StringValueObject('Formula One'), new PositiveIntValueObject(2022));
 
         self::assertNotNull($series);
 
         self::assertSame('Formula One', $series->data()['name']);
+        self::assertSame('formula-one', $series->data()['slug']);
         self::assertSame(2022, $series->data()['year']);
         self::assertSame('#fff', $series->data()['color']);
         self::assertSame('f1.png', $series->data()['icon']);
@@ -38,6 +40,6 @@ final class FindSeriesRepositoryTest extends CoreRepositoryContractTestCase
     {
         $repository = new FindSeriesRepository(self::connection());
 
-        self::assertNull($repository->findForSlug(new StringValueObject('not-exist'), new PositiveIntValueObject(2022)));
+        self::assertNull($repository->findForChampionship(new StringValueObject('Not Exist'), new PositiveIntValueObject(2022)));
     }
 }

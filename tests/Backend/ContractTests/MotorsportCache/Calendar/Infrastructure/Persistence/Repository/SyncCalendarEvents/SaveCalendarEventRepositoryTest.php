@@ -71,23 +71,28 @@ final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestC
             ]),
             CalendarEventEntry::fromData([
                 'venue' => [
+                    'id'      => 'e3147d3f-8c19-479c-8621-51e6a58e8ecc',
                     'name'    => 'Circuit Zandvoort',
                     'slug'    => 'circuit-zandvoort',
                     'country' => [
+                        'id'   => '234fc618-1705-44e0-97a2-13307b70a088',
                         'code' => 'nl',
                         'name' => 'Netherlands',
                     ],
                 ],
+                'reference'  => '4404f2d2-410b-46d7-8b62-75e0f6c15d7b',
                 'index'      => 0,
                 'slug'       => 'formula-one_0_dutch-gp',
                 'name'       => 'Dutch Grand Prix',
                 'short_name' => 'Dutch GP',
+                'short_code' => 'ZAN',
                 'start_date' => '2022-11-22 01:00:00',
                 'end_date'   => '2022-11-22 01:00:00',
                 'sessions'   => [
                     [
-                        'type'       => 'race',
+                        'id'         => '5de05512-4749-4dbb-9bea-30b9a990063e',
                         'slug'       => 'dutchGrandPrix2022Race',
+                        'type'       => 'race',
                         'has_result' => false,
                         'start_date' => '2022-11-22 01:00:00',
                         'end_date'   => '2022-11-22 01:00:00',

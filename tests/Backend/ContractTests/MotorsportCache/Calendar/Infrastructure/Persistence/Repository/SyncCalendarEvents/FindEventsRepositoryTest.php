@@ -8,10 +8,12 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
+ * @covers \Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventEntry
  * @covers \Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\FindEventsRepository
  */
 final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
@@ -58,23 +60,28 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     {
         return CalendarEventEntry::fromData([
             'venue' => [
+                'id'      => self::fixtureId('motorsport.venue.venue.zandvoort'),
                 'name'    => 'Circuit Zandvoort',
-                'slug'    => 'Circuit Zandvoort',
+                'slug'    => StringHelper::slugify('Circuit Zandvoort'),
                 'country' => [
+                    'id'   => self::fixtureId('country.country.netherlands'),
                     'code' => 'nl',
                     'name' => 'Netherlands',
                 ],
             ],
+            'reference'  => self::fixtureId('motorsport.event.event.dutchGrandPrix2022'),
             'index'      => 14,
-            'slug'       => 'Dutch GP',
             'name'       => 'Dutch GP',
+            'slug'       => StringHelper::slugify('Formula One', '2022', 'Dutch GP'),
             'short_name' => 'Dutch GP',
+            'short_code' => null,
             'start_date' => '2022-09-04 13:00:00',
             'end_date'   => '2022-09-04 13:00:00',
             'sessions'   => [
                 [
+                    'id'         => self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'),
+                    'slug'       => StringHelper::slugify('Formula One', '2022', 'Dutch GP', 'Race'),
                     'type'       => 'race',
-                    'slug'       => 'Dutch GP race',
                     'has_result' => false,
                     'start_date' => '2022-09-04T13:00:00',
                     'end_date'   => '2022-09-04T14:00:00',
@@ -87,30 +94,36 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     {
         return CalendarEventEntry::fromData([
             'venue' => [
+                'id'      => self::fixtureId('motorsport.venue.venue.emiliaRomagna'),
                 'name'    => 'Autodromo Internazionale Enzo e Dino Ferrari',
-                'slug'    => 'Autodromo Internazionale Enzo e Dino Ferrari',
+                'slug'    => StringHelper::slugify('Autodromo Internazionale Enzo e Dino Ferrari'),
                 'country' => [
+                    'id'   => self::fixtureId('country.country.italia'),
                     'code' => 'it',
                     'name' => 'Italia',
                 ],
             ],
+            'reference'  => self::fixtureId('motorsport.event.event.emiliaRomagnaGrandPrix2022'),
             'index'      => 3,
-            'slug'       => 'Emilia Romagna GP',
             'name'       => 'Emilia Romagna GP',
+            'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP'),
             'short_name' => 'Emilia Romagna GP',
+            'short_code' => null,
             'start_date' => '2022-04-23 14:30:00',
             'end_date'   => '2022-04-24 13:00:00',
             'sessions'   => [
                 [
+                    'id'         => self::fixtureId('motorsport.event.eventSession.emiliaRomagnaGrandPrix2022SprintQualifying'),
+                    'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP', 'Sprint Qualifying'),
                     'type'       => 'sprint qualifying',
-                    'slug'       => 'Emilia Romagna GP sprint qualifying',
                     'has_result' => false,
                     'start_date' => '2022-04-23T14:30:00',
                     'end_date'   => '2022-04-23T15:30:00',
                 ],
                 [
+                    'id'         => self::fixtureId('motorsport.event.eventSession.emiliaRomagnaGrandPrix2022Race'),
+                    'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP', 'Race'),
                     'type'       => 'race',
-                    'slug'       => 'Emilia Romagna GP race',
                     'has_result' => false,
                     'start_date' => '2022-04-24T13:00:00',
                     'end_date'   => '2022-04-24T14:00:00',

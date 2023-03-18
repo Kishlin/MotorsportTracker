@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class SyncCalendarContext extends BackofficeContext
 {
-    private const COUNT_EVENTS_QUERY = 'SELECT count(id) FROM calendar_events WHERE slug = :slug;';
+    private const COUNT_EVENTS_QUERY = 'SELECT count(id) FROM calendar_event WHERE reference = :reference;';
 
     private ?int $commandStatus = null;
 
@@ -43,16 +43,15 @@ final class SyncCalendarContext extends BackofficeContext
     {
         Assert::assertSame(Command::SUCCESS, $this->commandStatus);
 
-        Assert::assertSame($count, self::cacheDatabase()->fetchOne('SELECT count(id) FROM calendar_events;'));
+        Assert::assertSame($count, self::cacheDatabase()->fetchOne('SELECT count(id) FROM calendar_event;'));
     }
 
     #[Then('there is a calendar event cached for :event')]
     public function thereIsACalendarEventCached(string $event): void
     {
-        $eventId   = self::coreDatabase()->fixtureId("motorsport.event.event.{$this->format($event)}");
-        $eventSlug = self::coreDatabase()->fetchOne('SELECT slug FROM events WHERE id = :eventId;', ['eventId' => $eventId]);
+        $eventId = self::coreDatabase()->fixtureId("motorsport.event.event.{$this->format($event)}");
 
-        $calendarEvents = self::cacheDatabase()->fetchOne(self::COUNT_EVENTS_QUERY, ['slug' => $eventSlug]);
+        $calendarEvents = self::cacheDatabase()->fetchOne(self::COUNT_EVENTS_QUERY, ['reference' => $eventId]);
         Assert::assertSame(1, $calendarEvents);
     }
 }
