@@ -11,10 +11,12 @@ final class JsonableCalendarEventsView extends JsonableView
     /**
      * @var array<string, array<int, array{
      *     id: string,
+     *     reference: string,
      *     slug: string,
      *     index: int,
      *     name: string,
      *     short_name: ?string,
+     *     short_code: ?string,
      *     start_date: string,
      *     end_date: string,
      *     series: array<string, int|string>,
@@ -27,10 +29,12 @@ final class JsonableCalendarEventsView extends JsonableView
     /**
      * @return array<string, array<int, array{
      *     id: string,
+     *     reference: string,
      *     slug: string,
      *     index: int,
      *     name: string,
      *     short_name: ?string,
+     *     short_code: ?string,
      *     start_date: string,
      *     end_date: string,
      *     series: array<string, int|string>,
@@ -44,14 +48,14 @@ final class JsonableCalendarEventsView extends JsonableView
     }
 
     /**
-     * @param array<array{id: string, slug: string, index: int, name: string, short_name: ?string, start_date: string, end_date: string, series: string, venue: string, sessions: string}> $source
+     * @param array<array{id: string, reference: string, slug: string, index: int, name: string, short_name: ?string, short_code: ?string, start_date: string, end_date: string, series: string, venue: string, sessions: string}> $source
      */
     public static function fromSource(array $source): self
     {
         $formattedData = [];
 
         foreach ($source as $item) {
-            /** @var array{id: string, slug: string, index: int, name: string, short_name: ?string, start_date: string, end_date: string, series: array<string, int|string>, sessions: array<array<string, int|string>>,venue: array<string, array<string, string>|string>} $formatted */
+            /** @var array{id: string, reference: string, slug: string, index: int, name: string, short_name: ?string, short_code: ?string, start_date: string, end_date: string, series: array<string, int|string>, sessions: array<array<string, int|string>>,venue: array<string, array<string, string>|string>} $formatted */
             $formatted = [
                 ...$item,
                 'sessions' => json_decode($item['sessions'], true),
