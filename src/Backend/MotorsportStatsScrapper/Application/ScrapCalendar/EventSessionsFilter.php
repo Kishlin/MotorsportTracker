@@ -6,6 +6,9 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
 
 final class EventSessionsFilter
 {
+    private const CANCELLED = 'Cancelled';
+    private const POSTPONED = 'Postponed';
+
     private const QUALIFYING         = 'Qualifying';
     private const QUALIFYING_1       = 'Qualifying 1';
     private const FIRST_QUALIFYING   = '1st Qualifying';
@@ -44,6 +47,10 @@ final class EventSessionsFilter
         $filteredSessions          = [];
 
         foreach ($sessions as $session) {
+            if ($this->isCancelledOrPostponed($session['status'])) {
+                continue;
+            }
+
             if (false === $hasBuiltQualifyingSession && $this->shouldBeUsedToBuildQualifying($session['name'])) {
                 $filteredSessions[] = [
                     ...$session,
@@ -104,5 +111,10 @@ final class EventSessionsFilter
         }
 
         return ucwords($source);
+    }
+
+    private function isCancelledOrPostponed(?string $status): bool
+    {
+        return self::CANCELLED === $status || self::POSTPONED === $status;
     }
 }
