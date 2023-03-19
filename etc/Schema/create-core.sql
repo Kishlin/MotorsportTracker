@@ -425,13 +425,6 @@ CREATE UNIQUE INDEX uniq_e410c3075e237e06 ON public.driver USING btree (name);
 
 
 --
--- Name: uniq_e410c307989d9b62; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX uniq_e410c307989d9b62 ON public.driver USING btree (short_code);
-
-
---
 -- PostgreSQL database dump complete
 --
 
