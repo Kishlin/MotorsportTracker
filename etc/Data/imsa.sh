@@ -19,14 +19,16 @@ fi
 
 prefix=$1
 
+$prefix kishlin:motorsport-stats:season:scrap "IMSA SportsCar Championship"
+
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-stats:championship:sync imsa-sportscar-championship "$year"
+  $prefix kishlin:motorsport-stats:calendar:scrap "IMSA SportsCar Championship" "$year"
 done
 
-$prefix kishlin:motorsport:championship-presentation:add imsa-sportscar-championship "imsa.svg" "#fefffe"
+$prefix kishlin:motorsport:championship-presentation:add "IMSA SportsCar Championship" "imsa.svg" "#fefffe"
 
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-cache:calendar:sync imsa-sportscar-championship "$year"
+  $prefix kishlin:motorsport-cache:calendar:sync "IMSA SportsCar Championship" "$year"
 done

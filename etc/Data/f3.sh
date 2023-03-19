@@ -19,14 +19,16 @@ fi
 
 prefix=$1
 
+$prefix kishlin:motorsport-stats:season:scrap "FIA Formula 3 Championship"
+
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-stats:championship:sync fia-formula-3-championship "$year"
+  $prefix kishlin:motorsport-stats:calendar:scrap "FIA Formula 3 Championship" "$year"
 done
 
-$prefix kishlin:motorsport:championship-presentation:add fia-formula-3-championship "f3.svg" "#d02402"
+$prefix kishlin:motorsport:championship-presentation:add "FIA Formula 3 Championship" "f3.svg" "#d02402"
 
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-cache:calendar:sync fia-formula-3-championship "$year"
+  $prefix kishlin:motorsport-cache:calendar:sync "FIA Formula 3 Championship" "$year"
 done

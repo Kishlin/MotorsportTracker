@@ -19,14 +19,16 @@ fi
 
 prefix=$1
 
+$prefix kishlin:motorsport-stats:season:scrap "GT World Challenge Europe Sprint Cup"
+
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-stats:championship:sync gt-world-challenge-europe-sprint-cup "$year"
+  $prefix kishlin:motorsport-stats:calendar:scrap "GT World Challenge Europe Sprint Cup" "$year"
 done
 
-$prefix kishlin:motorsport:championship-presentation:add gt-world-challenge-europe-sprint-cup "gt-world-challenge-europe.svg" "#ffcc00"
+$prefix kishlin:motorsport:championship-presentation:add "GT World Challenge Europe Sprint Cup" "gt-world-challenge-europe.svg" "#ffcc00"
 
 for year in $(seq "$start" "$end")
 do
-  $prefix kishlin:motorsport-cache:calendar:sync gt-world-challenge-europe-sprint-cup "$year"
+  $prefix kishlin:motorsport-cache:calendar:sync "GT World Challenge Europe Sprint Cup" "$year"
 done
