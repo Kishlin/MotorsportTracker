@@ -8,6 +8,7 @@ use Exception;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SaveEventSessionGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SearchEventSessionGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -28,10 +29,11 @@ final class EventSessionRepositorySpy extends AbstractRepositorySpy implements S
         $this->objects[$eventSession->id()->value()] = $eventSession;
     }
 
-    public function search(UuidValueObject $event, UuidValueObject $type): ?UuidValueObject
+    public function search(UuidValueObject $event, NullableDateTimeValueObject $startDate): ?UuidValueObject
     {
         foreach ($this->objects as $eventSession) {
-            if ($eventSession->eventId()->equals($event) || $eventSession->typeId()->equals($type)) {
+            if ($eventSession->eventId()->equals($event)
+                || (null !== $startDate->value() && $startDate->equals($eventSession->startDate()))) {
                 return $eventSession->id();
             }
         }
