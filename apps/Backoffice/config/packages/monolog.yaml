@@ -9,7 +9,17 @@ when@dev:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event"]
+                channels: ["!event", "!messenger", "!app"]
+            messenger:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.messenger.log"
+                level: debug
+                channels: ["messenger"]
+            app:
+                type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%.app.log"
+                level: debug
+                channels: ["app"]
             # uncomment to get logging in your browser
             # you may have to allow bigger header sizes in your Web server configuration
             #firephp:
