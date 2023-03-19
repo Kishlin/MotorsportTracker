@@ -21,6 +21,38 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: analytics; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.analytics (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL,
+    avg_finish_position double precision DEFAULT 0.0 NOT NULL,
+    class_wins integer DEFAULT 0 NOT NULL,
+    fastest_laps integer DEFAULT 0 NOT NULL,
+    final_appearances integer DEFAULT 0 NOT NULL,
+    hat_tricks integer DEFAULT 0 NOT NULL,
+    podiums integer DEFAULT 0 NOT NULL,
+    poles integer DEFAULT 0 NOT NULL,
+    races_led integer DEFAULT 0 NOT NULL,
+    rallies_led integer DEFAULT 0 NOT NULL,
+    retirements integer DEFAULT 0 NOT NULL,
+    semi_final_appearances integer DEFAULT 0 NOT NULL,
+    stage_wins integer DEFAULT 0 NOT NULL,
+    starts integer DEFAULT 0 NOT NULL,
+    top10s integer DEFAULT 0 NOT NULL,
+    top5s integer DEFAULT 0 NOT NULL,
+    wins integer DEFAULT 0 NOT NULL,
+    wins_percentage double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.analytics OWNER TO motorsporttracker;
+
+--
 -- Name: championship; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -220,91 +252,11 @@ CREATE TABLE public.venue (
 ALTER TABLE public.venue OWNER TO motorsporttracker;
 
 --
--- Data for Name: championship; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
+-- Name: analytics analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-COPY public.championship (id, name, short_name, short_code, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: championship_presentation; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.championship_presentation (id, championship, icon, color, created_on) FROM stdin;
-\.
-
-
---
--- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.country (id, code, name, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: driver; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.driver (id, name, short_code, country, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.event (id, season, venue, index, name, short_name, start_date, end_date, short_code, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: event_session; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.event_session (id, event, type, has_result, start_date, end_date, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: season; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.season (id, championship, year, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: session_type; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.session_type (id, label) FROM stdin;
-\.
-
-
---
--- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.team (id, ref) FROM stdin;
-\.
-
-
---
--- Data for Name: team_presentation; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.team_presentation (id, team, season, country, name, color) FROM stdin;
-\.
-
-
---
--- Data for Name: venue; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.venue (id, name, country, ref) FROM stdin;
-\.
+ALTER TABLE ONLY public.analytics
+    ADD CONSTRAINT analytics_pkey PRIMARY KEY (id);
 
 
 --
@@ -393,6 +345,13 @@ ALTER TABLE ONLY public.team
 
 ALTER TABLE ONLY public.venue
     ADD CONSTRAINT venues_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analytics_season_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX analytics_season_driver_idx ON public.analytics USING btree (season, driver);
 
 
 --

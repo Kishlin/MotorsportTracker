@@ -11,6 +11,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Driver\DriverS
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\EventServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\EventSessionServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event\SessionTypeServicesTrait;
+use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Standing\AnalyticsServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Team\TeamServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\venue\VenueServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Messaging\MessagingServicesTrait;
@@ -20,6 +21,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Time\TimeServicesTrait;
 
 final class TestServiceContainer
 {
+    use AnalyticsServicesTrait;
     use CalendarServicesTrait;
     use ChampionshipServicesTrait;
     use CountryServicesTrait;

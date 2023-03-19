@@ -117,7 +117,7 @@ db.core.connect db.cache.connect:
 
 db.core.dump db.cache.dump:
 	@echo "Dump DB schema to file"
-	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d $(DB)-dev > /app/etc/Schema/create-$(DB).sql'
+	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d $(DB)-dev --schema-only > /app/etc/Schema/create-$(DB).sql'
 
 db.core.dump.data db.cache.dump.data:
 	@echo "Dump DB data to file"

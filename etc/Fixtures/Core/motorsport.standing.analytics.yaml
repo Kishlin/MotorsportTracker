@@ -1,0 +1,22 @@
+maxVerstappen2022:
+  season: '@motorsport.championship.season.formulaOne2022'
+  driver: '@motorsport.driver.driver.maxVerstappen'
+  position: 1
+  points: 454.0
+  avgFinishPosition: 2.81
+  classWins: 0
+  fastestLaps: 5
+  finalAppearances: 0
+  hatTricks: 2
+  podiums: 17
+  poles: 7
+  racesLed: 17
+  ralliesLed: 0
+  retirements: 2
+  semiFinalAppearances: 0
+  stageWins: 0
+  starts: 22
+  top10s: 20
+  top5s: 17
+  wins: 15
+  winsPercentage: 68.18
