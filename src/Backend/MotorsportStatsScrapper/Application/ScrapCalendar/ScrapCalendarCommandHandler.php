@@ -13,6 +13,7 @@ use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotEx
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\CreateVenueIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Helpers\DateTimeImmutableHelper;
 use Throwable;
@@ -29,6 +30,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
         private readonly CalendarGateway $calendarGateway,
         private readonly SeasonGateway $seasonGateway,
         private readonly CommandBus $commandBus,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -53,7 +55,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
 
                 $this->createEventSessionsIfNotExists($event['sessions'], $eventId);
             } catch (Throwable) {
-                var_dump($event);
+                $this->eventDispatcher->dispatch(CalendarEventScrappingFailureEvent::forEvent($event));
             }
         }
     }
