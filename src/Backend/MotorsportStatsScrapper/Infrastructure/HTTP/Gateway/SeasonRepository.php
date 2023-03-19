@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway\ScrapCalendar;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\SeasonDTO;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\SeasonGateway;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SeasonDTO;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class SeasonRepository extends CoreRepository implements SeasonGateway

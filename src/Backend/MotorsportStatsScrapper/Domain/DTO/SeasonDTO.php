@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO;
 
 final class SeasonDTO
 {

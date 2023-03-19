@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
 
 use DateTimeImmutable;
-use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\CreateSessionTypeIfNotExistsCommand;
@@ -14,11 +15,12 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Helpers\DateTimeImmutableHelper;
-use RuntimeException;
 use Throwable;
 
 final class ScrapCalendarCommandHandler implements CommandHandler
 {
+    use CountryCreatorTrait;
+
     private const CANCELLED = 'Cancelled';
     private const POSTPONED = 'Postponed';
 
@@ -59,24 +61,6 @@ final class ScrapCalendarCommandHandler implements CommandHandler
     private static function isCancelledOrPostponed(?string $status): bool
     {
         return self::CANCELLED === $status || self::POSTPONED === $status;
-    }
-
-    /**
-     * @param array{name: string, uuid: string, picture: string} $country
-     */
-    private function createCountryIfNotExists(array $country): UuidValueObject
-    {
-        if ('/' === $country['picture'][-6]) {
-            throw new RuntimeException("Unexpected Country Picture format: {$country['picture']}");
-        }
-
-        $countryCode = substr($country['picture'], -6, 2);
-        $command     = CreateCountryIfNotExistsCommand::fromScalars($countryCode, $country['name'], $country['uuid']);
-        $countryId   = $this->commandBus->execute($command);
-
-        assert($countryId instanceof UuidValueObject);
-
-        return $countryId;
     }
 
     /**
