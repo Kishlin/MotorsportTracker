@@ -14,6 +14,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\Event;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\SessionType;
+use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Entry;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
@@ -93,6 +94,12 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
             return;
         }
 
+        if ($aggregateRoot instanceof Entry) {
+            $this->testServiceContainer->entryRepositorySpy()->save($aggregateRoot);
+
+            return;
+        }
+
         if ($aggregateRoot instanceof Analytics) {
             $this->testServiceContainer->analyticsRepositorySpy()->save($aggregateRoot);
 
@@ -117,6 +124,6 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
             return;
         }
 
-        throw new RuntimeException('Unable to save aggregate root of class: ' . get_class($aggregateRoot));
+        throw new RuntimeException('Found no repository spy to handle fixture of class: ' . get_class($aggregateRoot));
     }
 }

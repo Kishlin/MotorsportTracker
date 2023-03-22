@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\SaveDriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\SearchDriverGateway;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
+use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\DriverByNameGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -21,7 +22,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|Driver get(UuidValueObject $id)
  * @method Driver      safeGet(UuidValueObject $id)
  */
-final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDriverGateway, SearchDriverGateway
+final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDriverGateway, SearchDriverGateway, DriverByNameGateway
 {
     public function __construct(
         private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,
@@ -31,7 +32,7 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDri
     public function save(Driver $driver): void
     {
         if (false === $this->countryRepositorySpy->has($driver->countryId())
-            || $this->nameIsAlreadyTaken($driver)
+            || null !== $this->find($driver->name())
             || $this->refIsAlreadyTaken($driver)) {
             throw new DriverCreationFailureException();
         }
@@ -50,21 +51,25 @@ final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDri
         return null;
     }
 
-    private function refIsAlreadyTaken(Driver $driver): bool
+    public function find(StringValueObject $name): ?UuidValueObject
     {
         foreach ($this->objects as $savedDriver) {
-            if ($savedDriver->ref()->equals($driver->ref())) {
-                return true;
+            if ($savedDriver->name()->equals($name)) {
+                return $savedDriver->id();
             }
         }
 
-        return false;
+        return null;
     }
 
-    private function nameIsAlreadyTaken(Driver $driver): bool
+    private function refIsAlreadyTaken(Driver $driver): bool
     {
+        if (null === $driver->ref()->value()) {
+            return false;
+        }
+
         foreach ($this->objects as $savedDriver) {
-            if ($savedDriver->name()->equals($driver->name())) {
+            if ($savedDriver->ref()->equals($driver->ref())) {
                 return true;
             }
         }

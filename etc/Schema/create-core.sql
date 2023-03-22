@@ -119,6 +119,21 @@ CREATE TABLE public.driver (
 ALTER TABLE public.driver OWNER TO motorsporttracker;
 
 --
+-- Name: entry; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.entry (
+    id character varying(36) NOT NULL,
+    session character varying(36) NOT NULL,
+    driver character varying(36) NOT NULL,
+    team character varying(36) NOT NULL,
+    car_number integer NOT NULL
+);
+
+
+ALTER TABLE public.entry OWNER TO motorsporttracker;
+
+--
 -- Name: event; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -292,6 +307,14 @@ ALTER TABLE ONLY public.driver
 
 
 --
+-- Name: entry entry_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.entry
+    ADD CONSTRAINT entry_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: event_session event_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -366,6 +389,20 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (championship, year);
+
+
+--
+-- Name: entry_session_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX entry_session_driver_idx ON public.entry USING btree (session, driver);
+
+
+--
+-- Name: entry_session_car_number_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX entry_session_car_number_idx ON public.entry USING btree (session, car_number);
 
 
 --
