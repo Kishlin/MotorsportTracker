@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Result;
 
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberQueryHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Result\EntryRepositorySpy;
 
 trait EntryServicesTrait
@@ -12,6 +13,8 @@ trait EntryServicesTrait
     private ?EntryRepositorySpy $entryRepositorySpy = null;
 
     private ?CreateEntryIfNotExistsCommandHandler $createEntryIfNotExistsCommandHandler = null;
+
+    private ?FindEntryForSessionAndNumberQueryHandler $findEntryForSessionAndNumberQueryHandler = null;
 
     public function entryRepositorySpy(): EntryRepositorySpy
     {
@@ -35,5 +38,16 @@ trait EntryServicesTrait
         }
 
         return $this->createEntryIfNotExistsCommandHandler;
+    }
+
+    public function findEntryForSessionAndNumberQueryHandler(): FindEntryForSessionAndNumberQueryHandler
+    {
+        if (null === $this->findEntryForSessionAndNumberQueryHandler) {
+            $this->findEntryForSessionAndNumberQueryHandler = new FindEntryForSessionAndNumberQueryHandler(
+                $this->entryRepositorySpy(),
+            );
+        }
+
+        return $this->findEntryForSessionAndNumberQueryHandler;
     }
 }

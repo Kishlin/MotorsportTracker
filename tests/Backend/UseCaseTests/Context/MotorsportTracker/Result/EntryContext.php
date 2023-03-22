@@ -10,12 +10,15 @@ use Behat\Step\When;
 use Exception;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\EntryCreationFailureException;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\EntryNotFoundException;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberQuery;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberResponse;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
 use Throwable;
 
-final class EntryCreationContext extends MotorsportTrackerContext
+final class EntryContext extends MotorsportTrackerContext
 {
     private ?UuidValueObject $entryId   = null;
     private ?Throwable $thrownException = null;
@@ -57,6 +60,26 @@ final class EntryCreationContext extends MotorsportTrackerContext
             );
 
             $this->entryId = $entryId;
+        } catch (Throwable $e) {
+            $this->thrownException = $e;
+        }
+    }
+
+    #[When('a client searches for the entry at :session with number :number')]
+    public function aClientSearchesForAnEntry(string $session, int $carNumber = 33): void
+    {
+        $this->entryId         = null;
+        $this->thrownException = null;
+
+        try {
+            $sessionId = $this->fixtureId("motorsport.event.eventSession.{$this->format($session)}");
+
+            /** @var FindEntryForSessionAndNumberResponse $response */
+            $response = self::container()->queryBus()->ask(
+                FindEntryForSessionAndNumberQuery::fromScalars($sessionId, $carNumber),
+            );
+
+            $this->entryId = $response->id();
         } catch (Throwable $e) {
             $this->thrownException = $e;
         }
@@ -106,5 +129,14 @@ final class EntryCreationContext extends MotorsportTrackerContext
         );
 
         Assert::assertSame($carNumber, $entry->carNumber()->value());
+    }
+
+    #[Then('it does not find the entry')]
+    public function itDoesNotFindTheEntry(): void
+    {
+        Assert::assertNull($this->entryId);
+        Assert::assertNotNull($this->thrownException);
+
+        Assert::assertInstanceOf(EntryNotFoundException::class, $this->thrownException);
     }
 }
