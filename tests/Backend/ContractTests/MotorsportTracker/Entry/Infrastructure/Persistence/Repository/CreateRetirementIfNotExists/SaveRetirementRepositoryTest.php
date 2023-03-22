@@ -18,7 +18,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
  */
 final class SaveRetirementRepositoryTest extends CoreRepositoryContractTestCase
 {
-    public function testItCanFindRetirement(): void
+    public function testItCanSaveARetirement(): void
     {
         self::loadFixture('motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race');
 

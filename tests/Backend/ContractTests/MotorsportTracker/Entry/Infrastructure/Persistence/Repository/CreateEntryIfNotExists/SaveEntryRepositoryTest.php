@@ -16,7 +16,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
  */
 final class SaveEntryRepositoryTest extends CoreRepositoryContractTestCase
 {
-    public function testItCanSaveADriver(): void
+    public function testItCanSaveAnEntry(): void
     {
         self::loadFixture('motorsport.team.team.redBullRacing');
         self::loadFixture('motorsport.driver.driver.maxVerstappen');

@@ -18,7 +18,7 @@ final class SearchEntryRepositoryTest extends CoreRepositoryContractTestCase
     /**
      * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\CreateEntryIfNotExists\SearchEntryRepositoryTest::entrySearchProvider()
      */
-    public function testItCanFindADriverByName(string $fixture, string $session, string $driver, string $team, int $carNumber): void
+    public function testItCanFindAnEntry(string $fixture, string $session, string $driver, string $team, int $carNumber): void
     {
         self::loadFixture($fixture);
 

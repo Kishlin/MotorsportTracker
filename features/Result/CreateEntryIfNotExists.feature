@@ -8,7 +8,7 @@ Feature: It can create Drivers
     Then the entry is saved
     And the id of the entry of "Max Verstappen" for "Red Bull Racing" at "Dutch Grand Prix 2022 Race" with number "33" is returned
 
-  Scenario: It tries to create an existing driver
+  Scenario: It tries to create an existing entry
     Given the entry "Max Verstappen For Red Bull Racing At Dutch GP 2022 Race" exists
     When a client creates the entry with the same driver team session and number
     Then the entry is not duplicated
