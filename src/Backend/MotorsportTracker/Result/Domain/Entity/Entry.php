@@ -34,6 +34,9 @@ final class Entry extends AggregateRoot
         return $entry;
     }
 
+    /**
+     * @internal only use to get a test object
+     */
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $session,
