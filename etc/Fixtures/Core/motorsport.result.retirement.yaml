@@ -1,0 +1,6 @@
+maxVerstappenAtAustralianGP2022Race:
+  entry: '@motorsport.result.entry.maxVerstappenForRedBullRacingAtAustralianGP2022Race'
+  reason: 'Power Unit'
+  type: 'Mechanical'
+  dns: false,
+  lap: 38

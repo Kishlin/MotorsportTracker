@@ -199,6 +199,22 @@ COMMENT ON COLUMN public.event_session.end_date IS '(DC2Type:nullable_date_time_
 
 
 --
+-- Name: retirement; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.retirement (
+    id character varying(36) NOT NULL,
+    entry character varying(36) NOT NULL,
+    reason character varying(255) NOT NULL,
+    type character varying(255) NOT NULL,
+    dns boolean NOT NULL,
+    lap integer NOT NULL
+);
+
+
+ALTER TABLE public.retirement OWNER TO motorsporttracker;
+
+--
 -- Name: season; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -331,6 +347,14 @@ ALTER TABLE ONLY public.event
 
 
 --
+-- Name: retirement retirement_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.retirement
+    ADD CONSTRAINT retirement_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: season seasons_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -392,13 +416,6 @@ CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (champi
 
 
 --
--- Name: entry_session_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX entry_session_driver_idx ON public.entry USING btree (session, driver);
-
-
---
 -- Name: entry_session_car_number_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
@@ -406,10 +423,24 @@ CREATE UNIQUE INDEX entry_session_car_number_idx ON public.entry USING btree (se
 
 
 --
+-- Name: entry_session_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX entry_session_driver_idx ON public.entry USING btree (session, driver);
+
+
+--
 -- Name: event_season_index_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
 CREATE UNIQUE INDEX event_season_index_idx ON public.event USING btree (season, index);
+
+
+--
+-- Name: retirement_entry_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX retirement_entry_idx ON public.retirement USING btree (entry);
 
 
 --

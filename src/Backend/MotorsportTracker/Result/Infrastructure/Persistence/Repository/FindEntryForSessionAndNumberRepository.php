@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber;
+namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository;
 
-use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberGateway;
+use Kishlin\Backend\MotorsportTracker\Result\Domain\Gateway\FindEntryForSessionAndNumberGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;

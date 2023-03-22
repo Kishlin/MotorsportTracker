@@ -4,6 +4,12 @@ maxVerstappenForRedBullRacingAtDutchGP2022Race:
   team: '@motorsport.team.team.redBullRacing'
   carNumber: 33
 
+maxVerstappenForRedBullRacingAtAustralianGP2022Race:
+  session: '@motorsport.event.eventSession.australianGrandPrix2022Race'
+  driver: '@motorsport.driver.driver.maxVerstappen'
+  team: '@motorsport.team.team.redBullRacing'
+  carNumber: 33
+
 lewisHamiltonForMercedesAtAustralianGP2022Race:
   session: '@motorsport.event.eventSession.australianGrandPrix2022Race'
   driver: '@motorsport.driver.driver.lewisHamilton'

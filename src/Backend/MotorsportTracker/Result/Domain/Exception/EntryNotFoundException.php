@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber;
+namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Exception;
 
 use Kishlin\Backend\Shared\Domain\Exception\DomainException;
 

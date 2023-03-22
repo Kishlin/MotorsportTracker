@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository;
 
-use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepository;
+use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepository
  */
 final class FindEntryForSessionAndNumberRepositoryTest extends CoreRepositoryContractTestCase
 {
     /**
-     * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepositoryTest::entrySearchProvider()
+     * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepositoryTest::entrySearchProvider()
      */
     public function testItCanFindForSessionAndNumber(string $fixture, string $session, int $carNumber): void
     {
