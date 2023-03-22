@@ -1,6 +1,5 @@
 Feature: It can create Drivers
 
-  @current
   Scenario: It saves a new driver
     Given the driver "Max Verstappen" exists
     And the season "Formula One 2022" exists
@@ -27,7 +26,6 @@ Feature: It can create Drivers
     Then the analytics are saved
     And the id of the analytics for "Max Verstappen" during "Formula One 2022" is returned
 
-  @current
   Scenario: It tries to create an existing driver
     Given the analytics for "Max Verstappen 2022" exist
     When a client creates the analytics for the same driver and season
