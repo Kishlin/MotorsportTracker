@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapTeamsForSeason;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\CreateTeamIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentationIfNotExists\CreateTeamPresentationIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class ScrapTeamsForSeasonCommandHandler implements CommandHandler
 {
     use CountryCreatorTrait;
+    use TeamCreatorTrait;
 
     public function __construct(
         private readonly SeasonGateway $seasonGateway,
@@ -36,9 +36,7 @@ final class ScrapTeamsForSeasonCommandHandler implements CommandHandler
             try {
                 $countryId = $this->createCountryIfNotExists($standing['countryRepresenting']);
 
-                $teamId = $this->commandBus->execute(CreateTeamIfNotExistsCommand::fromScalars($standing['team']['uuid']));
-
-                assert($teamId instanceof UuidValueObject);
+                $teamId = $this->createTeamIfNotExists($standing['team']['uuid']);
 
                 $this->commandBus->execute(
                     CreateTeamPresentationIfNotExistsCommand::fromScalars(
@@ -54,4 +52,5 @@ final class ScrapTeamsForSeasonCommandHandler implements CommandHandler
             }
         }
     }
+
 }
