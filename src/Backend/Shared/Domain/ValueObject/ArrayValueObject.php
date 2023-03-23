@@ -7,7 +7,7 @@ namespace Kishlin\Backend\Shared\Domain\ValueObject;
 class ArrayValueObject
 {
     /**
-     * @param array<int|string, float|integer|string> $value
+     * @param array<int|string, bool|float|integer|string> $value
      */
     final public function __construct(
         protected readonly array $value
@@ -15,7 +15,7 @@ class ArrayValueObject
     }
 
     /**
-     * @return array<int|string, float|integer|string>
+     * @return array<int|string, bool|float|integer|string>
      */
     public function value(): array
     {
@@ -34,7 +34,7 @@ class ArrayValueObject
 
     public static function fromString(string $value): static
     {
-        /** @var array<int|string, float|integer|string> $unserialized */
+        /** @var array<int|string, bool|float|integer|string> $unserialized */
         $unserialized = unserialize($value);
         assert(is_array($unserialized));
 

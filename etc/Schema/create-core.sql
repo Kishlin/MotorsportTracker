@@ -90,6 +90,33 @@ COMMENT ON COLUMN public.championship_presentation.created_on IS '(DC2Type:date_
 
 
 --
+-- Name: classification; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.classification (
+    id character varying(36) NOT NULL,
+    entry character varying(36) NOT NULL,
+    finish_position integer NOT NULL,
+    grid_position integer NOT NULL,
+    laps integer NOT NULL,
+    points double precision NOT NULL,
+    lap_time double precision NOT NULL,
+    classified_status character varying(255) NOT NULL,
+    average_lap_speed double precision NOT NULL,
+    fastest_lap_time double precision NOT NULL,
+    gap_time_to_lead double precision NOT NULL,
+    gap_time_to_next double precision NOT NULL,
+    gap_laps_to_lead integer NOT NULL,
+    gap_laps_to_next integer NOT NULL,
+    best_lap integer NOT NULL,
+    best_time double precision NOT NULL,
+    best_is_fastest boolean NOT NULL
+);
+
+
+ALTER TABLE public.classification OWNER TO motorsporttracker;
+
+--
 -- Name: country; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -307,6 +334,14 @@ ALTER TABLE ONLY public.championship
 
 
 --
+-- Name: classification classification_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.classification
+    ADD CONSTRAINT classification_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: country countries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -413,6 +448,13 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (championship, year);
+
+
+--
+-- Name: classification_entry_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX classification_entry_idx ON public.classification USING btree (entry);
 
 
 --

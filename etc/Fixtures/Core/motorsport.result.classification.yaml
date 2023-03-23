@@ -1,0 +1,17 @@
+maxVerstappenAtDutchGP2022Race:
+  entry: '@motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race'
+  finishPosition: 9
+  gridPosition: 20
+  laps: 57
+  points: 2.0
+  time: 5710489.0
+  classifiedStatus: 'CLA'
+  averageLapSpeed: 194.319
+  fastestLapTime: 95068.0
+  gapTimeToLead: 73753.0
+  gapTimeToNext: 1106.0
+  gapLapsToLead: 0
+  gapLapsToNext: 0
+  bestLap: 42
+  bestTime: 95068.0
+  bestIsFastest: false
