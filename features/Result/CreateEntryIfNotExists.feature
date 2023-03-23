@@ -1,4 +1,4 @@
-Feature: It can create Drivers
+Feature: It can create Entries
 
   Scenario: It saves a new entry
     Given the "Red Bull Racing" team exists

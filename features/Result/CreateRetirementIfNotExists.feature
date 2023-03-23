@@ -1,4 +1,4 @@
-Feature: It can create Drivers
+Feature: It can create Retirements
 
   Scenario: It saves a new retirement
     Given the entry "Max Verstappen For Red Bull Racing At Australian GP 2022 Race" exists

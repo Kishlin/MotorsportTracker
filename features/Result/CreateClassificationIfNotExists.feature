@@ -1,4 +1,4 @@
-Feature: It can create Drivers
+Feature: It can create Classifications
 
   Scenario: It saves a new classification
     Given the entry "Max Verstappen For Red Bull Racing At Dutch GP 2022 Race" exists

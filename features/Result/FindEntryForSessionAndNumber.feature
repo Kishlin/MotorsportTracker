@@ -1,4 +1,4 @@
-Feature: It can create Drivers
+Feature: It can find entries by session and name
 
   Scenario: It finds an entry by session and name
     Given the entry "Max Verstappen For Red Bull Racing At Dutch GP 2022 Race" exists
