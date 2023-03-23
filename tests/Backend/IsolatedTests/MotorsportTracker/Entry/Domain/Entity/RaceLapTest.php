@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\RaceLapCreatedDo
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\RaceLap;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
@@ -39,10 +39,10 @@ final class RaceLapTest extends AggregateRootIsolatedTestCase
             new StrictlyPositiveIntValueObject($position),
             new BoolValueObject(false),
             new StrictlyPositiveIntValueObject($time),
-            new StrictlyPositiveIntValueObject($timeToLead),
-            new PositiveIntValueObject($lapsToLead),
-            new StrictlyPositiveIntValueObject($timeToNext),
-            new PositiveIntValueObject($lapsToNext),
+            new NullableIntValueObject($timeToLead),
+            new NullableIntValueObject($lapsToLead),
+            new NullableIntValueObject($timeToNext),
+            new NullableIntValueObject($lapsToNext),
             new TyreDetailsValueObject($tyreDetails),
         );
 

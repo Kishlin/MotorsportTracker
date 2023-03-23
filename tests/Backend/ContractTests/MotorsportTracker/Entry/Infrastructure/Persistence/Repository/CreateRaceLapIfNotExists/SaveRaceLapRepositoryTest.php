@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\RaceLap;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValueObject;
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\CreateRaceLapIfNotExists\SaveRaceLapRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
@@ -30,10 +30,10 @@ final class SaveRaceLapRepositoryTest extends CoreRepositoryContractTestCase
             new StrictlyPositiveIntValueObject(9),
             new BoolValueObject(false),
             new StrictlyPositiveIntValueObject(99745),
-            new StrictlyPositiveIntValueObject(10957),
-            new PositiveIntValueObject(0),
-            new StrictlyPositiveIntValueObject(602),
-            new PositiveIntValueObject(0),
+            new NullableIntValueObject(10957),
+            new NullableIntValueObject(0),
+            new NullableIntValueObject(602),
+            new NullableIntValueObject(0),
             new TyreDetailsValueObject([['type' => 'S', 'wear' => 'u', 'laps' => 6]]),
         );
 

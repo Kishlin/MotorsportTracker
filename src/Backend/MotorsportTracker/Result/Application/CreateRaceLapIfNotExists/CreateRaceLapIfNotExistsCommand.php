@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNo
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValueObject;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -26,10 +26,10 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         private readonly int $position,
         private readonly bool $pit,
         private readonly int $time,
-        private readonly int $timeToLead,
-        private readonly int $lapsToLead,
-        private readonly int $timeToNext,
-        private readonly int $lapsToNext,
+        private readonly ?int $timeToLead,
+        private readonly ?int $lapsToLead,
+        private readonly ?int $timeToNext,
+        private readonly ?int $lapsToNext,
         private readonly array $tyreDetails,
     ) {
     }
@@ -59,24 +59,24 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         return new StrictlyPositiveIntValueObject($this->time);
     }
 
-    public function timeToLead(): StrictlyPositiveIntValueObject
+    public function timeToLead(): NullableIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->timeToLead);
+        return new NullableIntValueObject($this->timeToLead);
     }
 
-    public function lapsToLead(): PositiveIntValueObject
+    public function lapsToLead(): NullableIntValueObject
     {
-        return new PositiveIntValueObject($this->lapsToLead);
+        return new NullableIntValueObject($this->lapsToLead);
     }
 
-    public function timeToNext(): StrictlyPositiveIntValueObject
+    public function timeToNext(): NullableIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->timeToNext);
+        return new NullableIntValueObject($this->timeToNext);
     }
 
-    public function lapsToNext(): PositiveIntValueObject
+    public function lapsToNext(): NullableIntValueObject
     {
-        return new PositiveIntValueObject($this->lapsToNext);
+        return new NullableIntValueObject($this->lapsToNext);
     }
 
     public function tyreDetails(): TyreDetailsValueObject
@@ -97,10 +97,10 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         int $position,
         bool $pit,
         int $time,
-        int $timeToLead,
-        int $lapsToLead,
-        int $timeToNext,
-        int $lapsToNext,
+        ?int $timeToLead,
+        ?int $lapsToLead,
+        ?int $timeToNext,
+        ?int $lapsToNext,
         array $tyreDetails,
     ): self {
         return new self(

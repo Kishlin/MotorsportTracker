@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\RaceLap;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValueObject;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -25,10 +25,10 @@ final class FixtureToRaceLapConverter implements FixtureConverter
             new StrictlyPositiveIntValueObject($fixture->getInt('position')),
             new BoolValueObject($fixture->getBool('pit')),
             new StrictlyPositiveIntValueObject($fixture->getInt('time')),
-            new StrictlyPositiveIntValueObject($fixture->getInt('timeToLead')),
-            new PositiveIntValueObject($fixture->getInt('lapsToLead')),
-            new StrictlyPositiveIntValueObject($fixture->getInt('timeToNext')),
-            new PositiveIntValueObject($fixture->getInt('lapsToNext')),
+            new NullableIntValueObject($fixture->getInt('timeToLead')),
+            new NullableIntValueObject($fixture->getInt('lapsToLead')),
+            new NullableIntValueObject($fixture->getInt('timeToNext')),
+            new NullableIntValueObject($fixture->getInt('lapsToNext')),
             new TyreDetailsValueObject($this->decodeTypeDetails($fixture->getString('tyreDetails'))),
         );
     }
