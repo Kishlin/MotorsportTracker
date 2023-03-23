@@ -226,6 +226,27 @@ COMMENT ON COLUMN public.event_session.end_date IS '(DC2Type:nullable_date_time_
 
 
 --
+-- Name: race_lap; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.race_lap (
+    id character varying(36) NOT NULL,
+    entry character varying(36) NOT NULL,
+    lap integer NOT NULL,
+    "position" integer NOT NULL,
+    pit boolean NOT NULL,
+    "time" integer NOT NULL,
+    time_to_lead integer NOT NULL,
+    laps_to_lead integer NOT NULL,
+    time_to_next integer NOT NULL,
+    laps_to_next integer NOT NULL,
+    tyre_details json NOT NULL
+);
+
+
+ALTER TABLE public.race_lap OWNER TO motorsporttracker;
+
+--
 -- Name: retirement; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -382,6 +403,14 @@ ALTER TABLE ONLY public.event
 
 
 --
+-- Name: race_lap race_lap_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.race_lap
+    ADD CONSTRAINT race_lap_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: retirement retirement_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -476,6 +505,13 @@ CREATE UNIQUE INDEX entry_session_driver_idx ON public.entry USING btree (sessio
 --
 
 CREATE UNIQUE INDEX event_season_index_idx ON public.event USING btree (season, index);
+
+
+--
+-- Name: race_lap_entry_lap_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX race_lap_entry_lap_idx ON public.race_lap USING btree (entry, lap);
 
 
 --

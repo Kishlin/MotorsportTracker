@@ -15,6 +15,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\ClassificationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\EntryContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RaceLapContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RetirementContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\AnalyticsCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationCreationContext
