@@ -34,21 +34,19 @@ final class RetirementContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.result.retirement.{$this->format($name)}");
     }
 
-    #[When('a client creates the retirement of car number :number in session :session')]
-    #[When('a client creates the retirement for the same number and session')]
-    public function aClientCreatesARetirement(
-        int $number = 33,
-        string $session = 'motorsport.event.eventSession.australianGrandPrix2022Race'
-    ): void {
+    #[When('a client creates the retirement for entry :entry')]
+    #[When('a client creates the retirement for the same entry')]
+    public function aClientCreatesARetirement(string $entry = 'maxVerstappenForRedBullRacingAtAustralianGP2022Race'): void
+    {
         $this->retirementId    = null;
         $this->thrownException = null;
 
         try {
-            $sessionId = $this->fixtureId("motorsport.event.eventSession.{$this->format($session)}");
+            $entryId = $this->fixtureId("motorsport.result.entry.{$this->format($entry)}");
 
             /** @var UuidValueObject $retirementId */
             $retirementId = self::container()->commandBus()->execute(
-                CreateRetirementIfNotExistsCommand::fromScalars($sessionId, $number, 'Power Unit', 'Mechanical', false, 38),
+                CreateRetirementIfNotExistsCommand::fromScalars($entryId, 'Power Unit', 'Mechanical', false, 38),
             );
 
             $this->retirementId = $retirementId;

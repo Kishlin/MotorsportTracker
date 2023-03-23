@@ -34,10 +34,8 @@ final class RaceLapContext extends MotorsportTrackerContext
     }
 
     #[When('a client creates the race lap for the entry :entry at lap :lap')]
-    public function aClientCreatesARaceLap(
-        string $entry = 'motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race',
-        int $lap = 10,
-    ): void {
+    public function aClientCreatesARaceLap(string $entry = 'maxVerstappenForRedBullRacingAtDutchGP2022Race', int $lap = 10): void
+    {
         $this->raceLapId       = null;
         $this->thrownException = null;
 

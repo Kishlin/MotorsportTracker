@@ -13,8 +13,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 final class CreateRetirementIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $session,
-        private readonly int $number,
+        private readonly string $entry,
         private readonly string $reason,
         private readonly string $type,
         private readonly bool $dns,
@@ -22,14 +21,9 @@ final class CreateRetirementIfNotExistsCommand implements Command
     ) {
     }
 
-    public function session(): UuidValueObject
+    public function entry(): UuidValueObject
     {
-        return new UuidValueObject($this->session);
-    }
-
-    public function number(): PositiveIntValueObject
-    {
-        return new PositiveIntValueObject($this->number);
+        return new UuidValueObject($this->entry);
     }
 
     public function reason(): StringValueObject
@@ -52,8 +46,8 @@ final class CreateRetirementIfNotExistsCommand implements Command
         return new PositiveIntValueObject($this->lap);
     }
 
-    public static function fromScalars(string $session, int $number, string $reason, string $type, bool $dns, int $lap): self
+    public static function fromScalars(string $entry, string $reason, string $type, bool $dns, int $lap): self
     {
-        return new self($session, $number, $reason, $type, $dns, $lap);
+        return new self($entry, $reason, $type, $dns, $lap);
     }
 }

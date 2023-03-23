@@ -7,8 +7,8 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Resul
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\EntryCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\SaveEntryGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\SearchEntryGateway;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Entry;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\Gateway\FindEntryForSessionAndNumberGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;

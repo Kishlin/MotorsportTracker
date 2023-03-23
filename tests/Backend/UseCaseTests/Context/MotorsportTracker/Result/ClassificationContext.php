@@ -33,23 +33,20 @@ final class ClassificationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.result.classification.{$this->format($name)}");
     }
 
-    #[When('a client creates the classification of car number :number in session :session')]
-    #[When('a client creates the classification for the same number and session')]
-    public function aClientCreatesAClassification(
-        int $number = 33,
-        string $session = 'motorsport.event.eventSession.australianGrandPrix2022Race'
-    ): void {
+    #[When('a client creates the classification for entry :entry')]
+    #[When('a client creates the classification for the same entry')]
+    public function aClientCreatesAClassification(string $entry = 'maxVerstappenForRedBullRacingAtDutchGP2022Race'): void
+    {
         $this->classificationId = null;
         $this->thrownException  = null;
 
         try {
-            $sessionId = $this->fixtureId("motorsport.event.eventSession.{$this->format($session)}");
+            $entryId = $this->fixtureId("motorsport.result.entry.{$this->format($entry)}");
 
             /** @var UuidValueObject $classificationId */
             $classificationId = self::container()->commandBus()->execute(
                 CreateClassificationIfNotExistsCommand::fromScalars(
-                    $sessionId,
-                    $number,
+                    $entryId,
                     9,
                     20,
                     57,

@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository;
+namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber;
 
-use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepository;
+use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepository
  */
 final class FindEntryForSessionAndNumberRepositoryTest extends CoreRepositoryContractTestCase
 {
     /**
-     * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumberRepositoryTest::entrySearchProvider()
+     * @dataProvider \Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberRepositoryTest::entrySearchProvider()
      */
     public function testItCanFindForSessionAndNumber(string $fixture, string $session, int $carNumber): void
     {
@@ -55,9 +55,11 @@ final class FindEntryForSessionAndNumberRepositoryTest extends CoreRepositoryCon
 
         $repository = new FindEntryForSessionAndNumberRepository(self::connection());
 
-        $id = $repository->findForSessionAndNumber(
-            new UuidValueObject($this->fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race')),
-            new PositiveIntValueObject(42),
+        self::assertNull(
+            $repository->findForSessionAndNumber(
+                new UuidValueObject($this->fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race')),
+                new PositiveIntValueObject(42),
+            ),
         );
     }
 
@@ -67,9 +69,11 @@ final class FindEntryForSessionAndNumberRepositoryTest extends CoreRepositoryCon
 
         $repository = new FindEntryForSessionAndNumberRepository(self::connection());
 
-        $id = $repository->findForSessionAndNumber(
-            new UuidValueObject('22e9a680-6f8c-499a-87de-4ba0971a2a48'),
-            new PositiveIntValueObject(33),
+        self::assertNull(
+            $repository->findForSessionAndNumber(
+                new UuidValueObject('22e9a680-6f8c-499a-87de-4ba0971a2a48'),
+                new PositiveIntValueObject(33),
+            ),
         );
     }
 }

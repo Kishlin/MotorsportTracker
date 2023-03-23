@@ -15,8 +15,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 final class CreateClassificationIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $session,
-        private readonly int $number,
+        private readonly string $entry,
         private readonly int $finishPosition,
         private readonly int $gridPosition,
         private readonly int $laps,
@@ -35,14 +34,9 @@ final class CreateClassificationIfNotExistsCommand implements Command
     ) {
     }
 
-    public function session(): UuidValueObject
+    public function entry(): UuidValueObject
     {
-        return new UuidValueObject($this->session);
-    }
-
-    public function number(): PositiveIntValueObject
-    {
-        return new PositiveIntValueObject($this->number);
+        return new UuidValueObject($this->entry);
     }
 
     public function finishPosition(): StrictlyPositiveIntValueObject
@@ -121,8 +115,7 @@ final class CreateClassificationIfNotExistsCommand implements Command
     }
 
     public static function fromScalars(
-        string $session,
-        int $number,
+        string $entry,
         int $finishPosition,
         int $gridPosition,
         int $laps,
@@ -140,8 +133,7 @@ final class CreateClassificationIfNotExistsCommand implements Command
         bool $bestIsFastest,
     ): self {
         return new self(
-            $session,
-            $number,
+            $entry,
             $finishPosition,
             $gridPosition,
             $laps,

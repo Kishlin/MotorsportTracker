@@ -26,7 +26,6 @@ trait RetirementServicesTrait
     {
         if (null === $this->createRetirementIfNotExistsCommandHandler) {
             $this->createRetirementIfNotExistsCommandHandler = new CreateRetirementIfNotExistsCommandHandler(
-                $this->entryRepositorySpy(),
                 $this->retirementRepositorySpy(),
                 $this->retirementRepositorySpy(),
                 $this->eventDispatcher(),

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber;
 
-use Kishlin\Backend\MotorsportTracker\Result\Domain\Exception\EntryNotFoundException;
-use Kishlin\Backend\MotorsportTracker\Result\Domain\Gateway\FindEntryForSessionAndNumberGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 
 final class FindEntryForSessionAndNumberQueryHandler implements QueryHandler

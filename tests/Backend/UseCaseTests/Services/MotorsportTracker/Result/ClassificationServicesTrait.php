@@ -26,7 +26,6 @@ trait ClassificationServicesTrait
     {
         if (null === $this->createClassificationIfNotExistsCommandHandler) {
             $this->createClassificationIfNotExistsCommandHandler = new CreateClassificationIfNotExistsCommandHandler(
-                $this->entryRepositorySpy(),
                 $this->classificationRepositorySpy(),
                 $this->classificationRepositorySpy(),
                 $this->eventDispatcher(),
