@@ -89,7 +89,7 @@ final class Retirement extends AggregateRoot
             'entry'  => $this->entry->value(),
             'reason' => $this->reason->value(),
             'type'   => $this->type->value(),
-            'dns'    => $this->dns->value(),
+            'dns'    => $this->dns->value() ? 1 : 0,
             'lap'    => $this->lap->value(),
         ];
     }
