@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 trait DriverCreatorTrait
 {
     /**
-     * @param array{name: string, uuid: string, shortCode: string, colour: string, picture: string} $driver
+     * @param array{name: string, uuid: string, shortCode: string, colour: null|string, picture: string} $driver
      */
     private function createDriverIfNotExists(array $driver, UuidValueObject $countryId): UuidValueObject
     {

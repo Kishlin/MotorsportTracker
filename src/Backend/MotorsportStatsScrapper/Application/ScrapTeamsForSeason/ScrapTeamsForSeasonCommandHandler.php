@@ -52,5 +52,4 @@ final class ScrapTeamsForSeasonCommandHandler implements CommandHandler
             }
         }
     }
-
 }
