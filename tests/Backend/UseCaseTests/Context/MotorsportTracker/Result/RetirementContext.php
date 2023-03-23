@@ -61,8 +61,6 @@ final class RetirementContext extends MotorsportTrackerContext
     #[Then('the retirement is not duplicated')]
     public function theRetirementIsSaved(): void
     {
-        var_dump($this->thrownException);
-
         Assert::assertCount(1, self::container()->retirementRepositorySpy()->all());
 
         Assert::assertNotNull($this->retirementId);
