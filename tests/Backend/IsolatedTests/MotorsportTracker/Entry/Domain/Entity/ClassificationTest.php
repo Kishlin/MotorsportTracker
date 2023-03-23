@@ -42,7 +42,7 @@ final class ClassificationTest extends AggregateRootIsolatedTestCase
         $entity = Classification::create(
             new UuidValueObject($id),
             new UuidValueObject($entry),
-            new StrictlyPositiveIntValueObject($finishPosition),
+            new PositiveIntValueObject($finishPosition),
             new StrictlyPositiveIntValueObject($gridPosition),
             new PositiveIntValueObject($laps),
             new PositiveFloatValueObject($points),

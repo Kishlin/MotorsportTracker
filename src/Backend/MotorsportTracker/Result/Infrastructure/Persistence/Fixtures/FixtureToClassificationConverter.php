@@ -22,7 +22,7 @@ final class FixtureToClassificationConverter implements FixtureConverter
         return Classification::instance(
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('entry')),
-            new StrictlyPositiveIntValueObject($fixture->getInt('finishPosition')),
+            new PositiveIntValueObject($fixture->getInt('finishPosition')),
             new StrictlyPositiveIntValueObject($fixture->getInt('gridPosition')),
             new PositiveIntValueObject($fixture->getInt('laps')),
             new PositiveFloatValueObject($fixture->getFloat('points')),

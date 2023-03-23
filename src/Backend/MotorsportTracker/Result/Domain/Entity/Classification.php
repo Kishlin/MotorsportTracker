@@ -18,7 +18,7 @@ final class Classification extends AggregateRoot
     private function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $entry,
-        private readonly StrictlyPositiveIntValueObject $finishPosition,
+        private readonly PositiveIntValueObject $finishPosition,
         private readonly StrictlyPositiveIntValueObject $gridPosition,
         private readonly PositiveIntValueObject $laps,
         private readonly PositiveFloatValueObject $points,
@@ -39,7 +39,7 @@ final class Classification extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $entry,
-        StrictlyPositiveIntValueObject $finishPosition,
+        PositiveIntValueObject $finishPosition,
         StrictlyPositiveIntValueObject $gridPosition,
         PositiveIntValueObject $laps,
         PositiveFloatValueObject $points,
@@ -86,7 +86,7 @@ final class Classification extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $entry,
-        StrictlyPositiveIntValueObject $finishPosition,
+        PositiveIntValueObject $finishPosition,
         StrictlyPositiveIntValueObject $gridPosition,
         PositiveIntValueObject $laps,
         PositiveFloatValueObject $points,
@@ -133,7 +133,7 @@ final class Classification extends AggregateRoot
         return $this->entry;
     }
 
-    public function finishPosition(): StrictlyPositiveIntValueObject
+    public function finishPosition(): PositiveIntValueObject
     {
         return $this->finishPosition;
     }

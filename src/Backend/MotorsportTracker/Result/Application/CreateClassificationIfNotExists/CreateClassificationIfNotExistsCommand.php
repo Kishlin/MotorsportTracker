@@ -39,9 +39,9 @@ final class CreateClassificationIfNotExistsCommand implements Command
         return new UuidValueObject($this->entry);
     }
 
-    public function finishPosition(): StrictlyPositiveIntValueObject
+    public function finishPosition(): PositiveIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->finishPosition);
+        return new PositiveIntValueObject($this->finishPosition);
     }
 
     public function gridPosition(): StrictlyPositiveIntValueObject
