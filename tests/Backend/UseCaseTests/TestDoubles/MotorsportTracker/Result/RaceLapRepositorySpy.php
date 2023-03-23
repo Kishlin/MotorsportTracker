@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Resul
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNotExists\SaveRaceLapGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNotExists\SearchRaceLapGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\RaceLap;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 use RuntimeException;
@@ -30,7 +30,7 @@ final class RaceLapRepositorySpy extends AbstractRepositorySpy implements SaveRa
         $this->add($raceLap);
     }
 
-    public function findForEntryAndLap(UuidValueObject $entry, StrictlyPositiveIntValueObject $lap): ?UuidValueObject
+    public function findForEntryAndLap(UuidValueObject $entry, PositiveIntValueObject $lap): ?UuidValueObject
     {
         foreach ($this->objects as $raceLap) {
             if ($raceLap->entry()->equals($entry) && $raceLap->lap()->equals($lap)) {

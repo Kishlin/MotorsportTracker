@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\CreateRaceLapIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNotExists\SearchRaceLapGateway;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 use RuntimeException;
 
 final class SearchRaceLapRepository extends CoreRepository implements SearchRaceLapGateway
 {
-    public function findForEntryAndLap(UuidValueObject $entry, StrictlyPositiveIntValueObject $lap): ?UuidValueObject
+    public function findForEntryAndLap(UuidValueObject $entry, PositiveIntValueObject $lap): ?UuidValueObject
     {
         $qb = $this->connection->createQueryBuilder();
 

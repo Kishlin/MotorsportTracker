@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValue
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -39,9 +40,9 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         return new UuidValueObject($this->entry);
     }
 
-    public function lap(): StrictlyPositiveIntValueObject
+    public function lap(): PositiveIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->lap);
+        return new PositiveIntValueObject($this->lap);
     }
 
     public function position(): StrictlyPositiveIntValueObject
@@ -54,9 +55,9 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         return new BoolValueObject($this->pit);
     }
 
-    public function time(): StrictlyPositiveIntValueObject
+    public function time(): PositiveIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->time);
+        return new PositiveIntValueObject($this->time);
     }
 
     public function timeToLead(): NullableIntValueObject

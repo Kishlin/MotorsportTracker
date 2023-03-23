@@ -12,6 +12,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValue
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -20,10 +21,10 @@ final class RaceLap extends AggregateRoot
     private function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $entry,
-        private readonly StrictlyPositiveIntValueObject $lap,
+        private readonly PositiveIntValueObject $lap,
         private readonly StrictlyPositiveIntValueObject $position,
         private readonly BoolValueObject $pit,
-        private readonly StrictlyPositiveIntValueObject $time,
+        private readonly PositiveIntValueObject $time,
         private readonly NullableIntValueObject $timeToLead,
         private readonly NullableIntValueObject $lapsToLead,
         private readonly NullableIntValueObject $timeToNext,
@@ -35,10 +36,10 @@ final class RaceLap extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $entry,
-        StrictlyPositiveIntValueObject $lap,
+        PositiveIntValueObject $lap,
         StrictlyPositiveIntValueObject $position,
         BoolValueObject $pit,
-        StrictlyPositiveIntValueObject $time,
+        PositiveIntValueObject $time,
         NullableIntValueObject $timeToLead,
         NullableIntValueObject $lapsToLead,
         NullableIntValueObject $timeToNext,
@@ -70,10 +71,10 @@ final class RaceLap extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $entry,
-        StrictlyPositiveIntValueObject $lap,
+        PositiveIntValueObject $lap,
         StrictlyPositiveIntValueObject $position,
         BoolValueObject $pit,
-        StrictlyPositiveIntValueObject $time,
+        PositiveIntValueObject $time,
         NullableIntValueObject $timeToLead,
         NullableIntValueObject $lapsToLead,
         NullableIntValueObject $timeToNext,
@@ -105,7 +106,7 @@ final class RaceLap extends AggregateRoot
         return $this->entry;
     }
 
-    public function lap(): StrictlyPositiveIntValueObject
+    public function lap(): PositiveIntValueObject
     {
         return $this->lap;
     }
@@ -120,7 +121,7 @@ final class RaceLap extends AggregateRoot
         return $this->pit;
     }
 
-    public function time(): StrictlyPositiveIntValueObject
+    public function time(): PositiveIntValueObject
     {
         return $this->time;
     }
