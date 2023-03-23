@@ -236,10 +236,10 @@ CREATE TABLE public.race_lap (
     "position" integer NOT NULL,
     pit boolean NOT NULL,
     "time" integer NOT NULL,
-    time_to_lead integer NOT NULL,
-    laps_to_lead integer NOT NULL,
-    time_to_next integer NOT NULL,
-    laps_to_next integer NOT NULL,
+    time_to_lead integer DEFAULT NULL,
+    laps_to_lead integer DEFAULT NULL,
+    time_to_next integer DEFAULT NULL,
+    laps_to_next integer DEFAULT NULL,
     tyre_details json NOT NULL
 );
 
