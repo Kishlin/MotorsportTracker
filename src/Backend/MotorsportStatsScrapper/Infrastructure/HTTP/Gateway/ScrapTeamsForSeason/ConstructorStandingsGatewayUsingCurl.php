@@ -75,8 +75,6 @@ final class ConstructorStandingsGatewayUsingCurl implements ConstructorStandings
      */
     public function fetch(string $seasonRef): ConstructorStandingsResponse
     {
-        var_dump($seasonRef);
-
         $url = sprintf(self::url, $seasonRef);
 
         $response = $this->client->fetch($url, $this->headers());
@@ -228,8 +226,6 @@ final class ConstructorStandingsGatewayUsingCurl implements ConstructorStandings
                 ];
             }
         }
-
-        var_dump($standing);
 
         throw new RuntimeException('Incomplete data.');
     }

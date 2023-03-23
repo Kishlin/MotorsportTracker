@@ -59,7 +59,6 @@ final class AddChampionshipPresentationCommand extends SymfonyCommand
                 CreateChampionshipPresentationCommand::fromScalars($championship, $icon, $color),
             );
         } catch (Throwable $e) {
-            var_dump($e->getMessage());
             $ui->error('Failed to save the championship presentation.');
 
             return Command::FAILURE;
