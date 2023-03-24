@@ -35,3 +35,14 @@ export type MotorsportEvent = {
 export type EventsSchedule = {
     [key: `${string}-${string}-${string}`]: MotorsportEvent[]
 };
+
+export type Championship = {
+    name: string,
+    shortName: string,
+    slug: string,
+    years: number[],
+};
+
+export type ChampionshipList = {
+    [key: string]: Championship,
+};

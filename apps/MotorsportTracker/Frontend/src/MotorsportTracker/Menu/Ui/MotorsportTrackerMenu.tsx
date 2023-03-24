@@ -12,16 +12,17 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 
+import championships from '../../Config/Championships';
+
 declare type MenuOpenType = {
     schedule: boolean,
-    formula1: boolean,
 }
 
 const MotorsportTrackerMenu: React.FunctionComponent = () => {
-    const [menuOpen, setMenuOpen] = useState<MenuOpenType>({ schedule: true, formula1: true });
+    const [menuOpen, setMenuOpen] = useState<MenuOpenType>({ schedule: true });
     const router = useRouter();
 
-    const toggleMenu = (key: 'schedule'|'formula1') => () => setMenuOpen({
+    const toggleMenu = (key: 'schedule') => () => setMenuOpen({
         ...menuOpen,
         [key]: !(menuOpen[key]),
     });
@@ -30,6 +31,17 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
 
     const now = new Date();
     const schedulePath = now.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toLowerCase().replace(' ', '/');
+
+    const championshipsMenu = Object.keys(championships).map((championshipSlug: string) => (
+        <ListItem key={championshipSlug} disablePadding>
+            <ListItemButton>
+                <ListItemIcon>
+                    <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
+                </ListItemIcon>
+                <ListItemText sx={{ ml: 1 }} primary={championships[championshipSlug].shortName} />
+            </ListItemButton>
+        </ListItem>
+    ));
 
     return (
         <List>
@@ -61,117 +73,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                 </List>
             </Collapse>
             <Divider />
-            <ListItem>
-                <ListItemText primary="Standings" />
-            </ListItem>
-            <List component="div" disablePadding>
-                <ListItem disablePadding>
-                    <ListItemButton onClick={toggleMenu('formula1')}>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/f1.svg" alt="f1" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Formula 1" />
-                        {menuOpen.formula1 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                </ListItem>
-                <Collapse in={menuOpen.formula1} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem disablePadding>
-                            <ListItemButton sx={{ pl: 9 }} onClick={navigate('/standings/formula1/2022')}>
-                                <ListItemText primary="2022" />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </Collapse>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/f2.svg" alt="f2" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Formula 2" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/f3.svg" alt="f3" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Formula 3" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/f4.svg" alt="f4" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Formula 4" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/fe.svg" alt="fe" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Formula E" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/w-series.svg" alt="w" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="W Series" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/wec.svg" alt="wec" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="WEC" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/gt-world-challenge-europe.svg" alt="gte" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="GT Europe" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/gt4.svg" alt="gt4" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="GT4 France" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/imsa.svg" alt="imsa" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="IMSA" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/adac.svg" alt="adac" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="ADAC" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <img src="/assets/championships/logos/motogp.svg" alt="f2" height={24} />
-                        </ListItemIcon>
-                        <ListItemText sx={{ ml: 1 }} primary="Moto GP" />
-                    </ListItemButton>
-                </ListItem>
-            </List>
+            {championshipsMenu}
         </List>
     );
 };
