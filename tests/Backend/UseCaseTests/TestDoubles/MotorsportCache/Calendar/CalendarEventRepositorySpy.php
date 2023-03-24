@@ -7,11 +7,10 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calenda
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\CalendarEventUpsert;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gateway\SaveCalendarEventGateway;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\JsonableCalendarEventsView;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsGateway;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonSchedule\JsonableScheduleView;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonSchedule\ViewSeasonScheduleGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
+use Kishlin\Backend\MotorsportCache\Calendar\Domain\View\JsonableEventsView;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -36,9 +35,9 @@ final class CalendarEventRepositorySpy extends AbstractRepositorySpy implements 
         return $ret;
     }
 
-    public function view(DateTimeImmutable $start, DateTimeImmutable $end): JsonableCalendarEventsView
+    public function view(DateTimeImmutable $start, DateTimeImmutable $end): JsonableEventsView
     {
-        return JsonableCalendarEventsView::fromSource(
+        return JsonableEventsView::fromSource(
             array_map(
                 [$this, 'mapCalendarEventToData'],
                 array_filter(
@@ -60,9 +59,9 @@ final class CalendarEventRepositorySpy extends AbstractRepositorySpy implements 
         );
     }
 
-    public function viewSchedule(string $championship, int $year): JsonableScheduleView
+    public function viewSchedule(string $championship, int $year): JsonableEventsView
     {
-        return JsonableScheduleView::fromSource(
+        return JsonableEventsView::fromSource(
             array_map(
                 [$this, 'mapCalendarEventToData'],
                 array_filter(

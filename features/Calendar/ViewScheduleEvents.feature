@@ -11,8 +11,8 @@ Feature: It can view a schedule
     Given the calendar event "Moto GP 1949 Tourist Trophy" exists
     When a client views the schedule for "MotoGP" "1949"
     Then a schedule is viewed with events
-      | index | slug                       |
-      | 0     | motogp_1949_tourist-trophy |
+      | key        | count | slug                       |
+      | 1949-06-16 | 1     | motogp_1949_tourist-trophy |
 
   @api
   Scenario: It views a complex schedule
@@ -20,9 +20,9 @@ Feature: It can view a schedule
     And the calendar event "Moto GP 1949 Switzerland Grand Prix" exists
     When a client views the schedule for "MotoGP" "1949"
     Then a schedule is viewed with events
-      | index | slug                               |
-      | 0     | motogp_1949_tourist-trophy         |
-      | 1     | motogp_1949_switzerland-grand-prix |
+      | key        | count | slug                               |
+      | 1949-06-16 | 1     | motogp_1949_tourist-trophy         |
+      | 1949-07-03 | 1     | motogp_1949_switzerland-grand-prix |
 
   @api
   Scenario: It views a schedule for a specific championship
@@ -31,5 +31,5 @@ Feature: It can view a schedule
     And the calendar event "Formula One 1950 Swiss Grand Prix" exists
     When a client views the schedule for "Formula One" "1950"
     Then a schedule is viewed with events
-      | index | slug                              |
-      | 0     | formula-one_1950_swiss-grand-prix |
+      | key        | count | slug                              |
+      | 1950-06-03 | 1     | formula-one_1950_swiss-grand-prix |

@@ -32,17 +32,20 @@ final class ViewSeasonScheduleContext extends BackendApiContext
         $responseContent = $this->response->getContent();
         Assert::assertNotFalse($responseContent);
 
-        /** @var array<array{0: int, 1: string}> $expected */
-        $expected = $expectedSchedule->getTable();
-        array_shift($expected);
+        /** @var array<array{key: string, count: int, slug: string}> $expected */
+        $expected = $expectedSchedule;
 
         $actual = json_decode($responseContent, true);
         Assert::assertIsArray($actual);
 
-        Assert::assertCount(count($expected), $actual);
-
         foreach ($expected as $expectedScheduleEntry) {
-            Assert::assertSame($expectedScheduleEntry[1], $actual[$expectedScheduleEntry[0]]['slug']);
+            $key = $expectedScheduleEntry['key'];
+
+            Assert::assertArrayHasKey($key, $actual);
+
+            Assert::assertCount((int) $expectedScheduleEntry['count'], $actual[$key]);
+
+            Assert::assertSame($expectedScheduleEntry['slug'], $actual[$key][0]['slug']);
         }
     }
 

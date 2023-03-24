@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents;
+namespace Kishlin\Backend\MotorsportCache\Calendar\Domain\View;
 
 use Kishlin\Backend\Shared\Domain\View\JsonableView;
 
-final class JsonableCalendarEventsView extends JsonableView
+final class JsonableEventsView extends JsonableView
 {
     /**
      * @var array<string, array<int, array{

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\ViewCalendarEvents;
 
 use DateTimeImmutable;
-use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\JsonableCalendarEventsView;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsGateway;
+use Kishlin\Backend\MotorsportCache\Calendar\Domain\View\JsonableEventsView;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository;
 
 final class ViewCalendarEventsRepository extends CacheRepository implements ViewCalendarEventsGateway
 {
-    public function view(DateTimeImmutable $start, DateTimeImmutable $end): JsonableCalendarEventsView
+    public function view(DateTimeImmutable $start, DateTimeImmutable $end): JsonableEventsView
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -28,6 +28,6 @@ final class ViewCalendarEventsRepository extends CacheRepository implements View
         /** @var array<array{id: string, reference: string, slug: string, index: int, name: string, short_name: ?string, short_code: ?string, start_date: string, end_date: string, series: string, venue: string, sessions: string}> $result */
         $result = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();
 
-        return JsonableCalendarEventsView::fromSource($result);
+        return JsonableEventsView::fromSource($result);
     }
 }

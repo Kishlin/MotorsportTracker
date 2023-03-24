@@ -30,8 +30,10 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
 
         $view = $repository->viewSchedule('MotoGP', 1949)->toArray();
 
-        self::assertCount(1, $view);
-        self::assertSame('motogp_1949_tourist-trophy', $view[0]['slug']);
+        self::assertArrayHasKey('1949-06-16', $view);
+
+        self::assertCount(1, $view['1949-06-16']);
+        self::assertSame('motogp_1949_tourist-trophy', $view['1949-06-16'][0]['slug']);
     }
 
     public function testItCanViewAComplexCalendar(): void
@@ -45,10 +47,14 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
 
         $view = $repository->viewSchedule('MotoGP', 1949)->toArray();
 
-        self::assertCount(2, $view);
+        self::assertArrayHasKey('1949-06-16', $view);
+        self::assertArrayHasKey('1949-07-03', $view);
 
-        self::assertSame('motogp_1949_tourist-trophy', $view[0]['slug']);
-        self::assertSame('motogp_1949_switzerland-grand-prix', $view[1]['slug']);
+        self::assertCount(1, $view['1949-06-16']);
+        self::assertSame('motogp_1949_tourist-trophy', $view['1949-06-16'][0]['slug']);
+
+        self::assertCount(1, $view['1949-07-03']);
+        self::assertSame('motogp_1949_switzerland-grand-prix', $view['1949-07-03'][0]['slug']);
     }
 
     public function testItCanFilterOnSpecificDate(): void
@@ -63,7 +69,8 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
 
         $view = $repository->viewSchedule('Formula One', 1950)->toArray();
 
+        self::assertArrayNotHasKey('1949-07-03', $view);
+        self::assertArrayHasKey('1950-06-03', $view);
         self::assertCount(1, $view);
-        self::assertSame('formula-one_1950_swiss-grand-prix', $view[0]['slug']);
     }
 }
