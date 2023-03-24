@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastructure\Persistence\Repository\CreateRaceLapIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\CreateRaceLapIfNotExists\SearchRaceLapRepository;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
@@ -23,7 +23,7 @@ final class SearchRaceLapRepositoryTest extends CoreRepositoryContractTestCase
 
         $entryId = self::fixtureId('motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race');
 
-        $id = $repository->findForEntryAndLap(new UuidValueObject($entryId), new StrictlyPositiveIntValueObject(10));
+        $id = $repository->findForEntryAndLap(new UuidValueObject($entryId), new PositiveIntValueObject(10));
 
         self::assertNotNull($id);
         self::assertSame(self::fixtureId('motorsport.result.raceLap.maxVerstappenAtDutchGP2022RaceLap10'), $id->value());
@@ -36,7 +36,7 @@ final class SearchRaceLapRepositoryTest extends CoreRepositoryContractTestCase
         self::assertNull(
             $repository->findForEntryAndLap(
                 new UuidValueObject('4fadbc00-944c-4612-bd87-c8592455d787'),
-                new StrictlyPositiveIntValueObject(10),
+                new PositiveIntValueObject(10),
             ),
         );
     }
