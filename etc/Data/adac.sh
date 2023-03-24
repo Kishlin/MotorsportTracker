@@ -21,12 +21,12 @@ prefix=$1
 
 $prefix kishlin:motorsport-stats:season:scrap "ADAC GT Masters"
 
-for year in $(seq "$start" "$end")
-do
-  $prefix kishlin:motorsport-stats:calendar:scrap "ADAC GT Masters" "$year"
-done
-
-$prefix kishlin:motorsport:championship-presentation:add "ADAC GT Masters" "adac.svg" "#ffcf00"
+#for year in $(seq "$start" "$end")
+#do
+#  $prefix kishlin:motorsport-stats:calendar:scrap "ADAC GT Masters" "$year"
+#done
+#
+#$prefix kishlin:motorsport:championship-presentation:add "ADAC GT Masters" "adac-gt-masters.svg" "#ffcf00"
 
 for year in $(seq "$start" "$end")
 do
