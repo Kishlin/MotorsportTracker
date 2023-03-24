@@ -32,16 +32,20 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
     const now = new Date();
     const schedulePath = now.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toLowerCase().replace(' ', '/');
 
-    const championshipsMenu = Object.keys(championships).map((championshipSlug: string) => (
-        <ListItem key={championshipSlug} disablePadding>
-            <ListItemButton>
-                <ListItemIcon>
-                    <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
-                </ListItemIcon>
-                <ListItemText sx={{ ml: 1 }} primary={championships[championshipSlug].shortName} />
-            </ListItemButton>
-        </ListItem>
-    ));
+    const championshipsMenu = Object.keys(championships).map((championshipSlug: string) => {
+        const year = championships[championshipSlug].years[championships[championshipSlug].years.length - 1];
+
+        return (
+            <ListItem key={championshipSlug} disablePadding>
+                <ListItemButton onClick={navigate(`/${championshipSlug}/${year}/schedule`)}>
+                    <ListItemIcon>
+                        <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
+                    </ListItemIcon>
+                    <ListItemText sx={{ ml: 1 }} primary={championships[championshipSlug].shortName} />
+                </ListItemButton>
+            </ListItem>
+        );
+    });
 
     return (
         <List>
