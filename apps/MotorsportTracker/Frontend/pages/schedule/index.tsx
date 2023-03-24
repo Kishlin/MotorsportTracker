@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 
 import MotorsportTrackerMenu from '../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 import previousMonday from '../../src/MotorsportTracker/Schedule/Utils/Date/previousMonday';
-import ScheduleScrollable from '../../src/MotorsportTracker/Schedule/Ui/ScheduleScrollable';
 import { EventsSchedule } from '../../src/MotorsportTracker/Shared/Types';
 import calendarApi from '../../src/MotorsportTracker/Schedule/Api/CalendarApi';
 import Layout from '../../src/Shared/Ui/Layout/Layout';
+import ScheduleContainer from '../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
+import ScheduleTitleUpcoming from '../../src/MotorsportTracker/Schedule/Ui/ScheduleTitleUpcoming';
+import ScheduleEventsList from '../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
 
 declare type SchedulePageProps = {
     events: EventsSchedule,
@@ -21,7 +23,12 @@ const SchedulePage: React.FunctionComponent<SchedulePageProps> = ({ firstDayStri
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
-            content={<ScheduleScrollable events={events} firstDay={firstDay} lastDay={lastDay} />}
+            content={(
+                <ScheduleContainer>
+                    <ScheduleTitleUpcoming />
+                    <ScheduleEventsList events={events} firstDay={firstDay} lastDay={lastDay} />
+                </ScheduleContainer>
+            )}
         />
     );
 };

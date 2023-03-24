@@ -4,10 +4,11 @@ import React from 'react';
 import Layout from '../../../src/Shared/Ui/Layout/Layout';
 
 import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import ScheduleScrollable from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleScrollable';
 import scheduleApi from '../../../src/MotorsportTracker/Schedule/Api/ScheduleApi';
 import championships from '../../../src/MotorsportTracker/Config/Championships';
 import { EventsSchedule } from '../../../src/MotorsportTracker/Shared/Types';
+import ScheduleContainer from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
+import ScheduleEventsList from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
 
 declare type ChampionshipSchedulePathParams = {
     params: {
@@ -29,7 +30,11 @@ const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipSchedulePage
 }) => (
     <Layout
         menu={<MotorsportTrackerMenu />}
-        content={<ScheduleScrollable events={events} firstDay={new Date(firstDay)} lastDay={new Date(lastDay)} />}
+        content={(
+            <ScheduleContainer>
+                <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />
+            </ScheduleContainer>
+        )}
     />
 );
 

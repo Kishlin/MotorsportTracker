@@ -7,9 +7,12 @@ import firstSundayAfterEndOfMonthDate from '../../../../src/MotorsportTracker/Sc
 import firstMondayBeforeOrAtDate from '../../../../src/MotorsportTracker/Schedule/Utils/Date/firstMondayBeforeOrAtDate';
 import listOfAllMonths from '../../../../src/MotorsportTracker/Schedule/Utils/Date/listOfAllMonths';
 import { EventsSchedule } from '../../../../src/MotorsportTracker/Shared/Types';
-import Schedule from '../../../../src/MotorsportTracker/Schedule/Ui/Schedule';
 import calendarApi from '../../../../src/MotorsportTracker/Schedule/Api/CalendarApi';
 import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import ScheduleContainer from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
+import ScheduleNavigation from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleNavigation';
+import ScheduleEventsList from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
+import ScheduleTitle from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleTitle';
 
 declare type SchedulePathParams = {
     params: {
@@ -33,9 +36,13 @@ const MonthlySchedulePage: React.FunctionComponent<MonthlySchedulePageProps> = (
 }) => (
     <Layout
         menu={<MotorsportTrackerMenu />}
-        content={
-            <Schedule firstDay={new Date(firstDay)} lastDay={new Date(lastDay)} date={new Date(date)} events={events} />
-        }
+        content={(
+            <ScheduleContainer>
+                <ScheduleTitle />
+                <ScheduleNavigation date={new Date(date)} />
+                <ScheduleEventsList firstDay={new Date(firstDay)} lastDay={new Date(lastDay)} events={events} />
+            </ScheduleContainer>
+        )}
     />
 );
 
