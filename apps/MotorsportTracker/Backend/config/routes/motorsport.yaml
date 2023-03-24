@@ -4,6 +4,12 @@ calendar:
   type: annotation
   stateless: true
 
+schedule:
+  resource: ../../src/MotorsportCache/Schedule/Controller/
+  prefix: /api/v1/schedule
+  type: annotation
+  stateless: true
+
 standings:
   resource: ../../src/MotorsportTracker/Standing/Controller/
   prefix: /api/v1/standings

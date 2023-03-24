@@ -5,6 +5,7 @@ default:
       contexts:
         - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewSeasonScheduleContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
@@ -27,6 +28,7 @@ default:
       contexts:
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Championship\SeasonContext
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
+        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Schedule\ViewSeasonScheduleContext
       filters:
         tags: '@api'
     backoffice_tests:
