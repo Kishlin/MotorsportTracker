@@ -8,7 +8,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNotExists\CreateRaceLapIfNotExistsCommand;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;
@@ -83,7 +83,7 @@ final class RaceLapContext extends MotorsportTrackerContext
 
         $raceLapId = self::container()->raceLapRepositorySpy()->findForEntryAndLap(
             new UuidValueObject(self::fixtureId("motorsport.result.entry.{$this->format($entry)}")),
-            new StrictlyPositiveIntValueObject($lap),
+            new PositiveIntValueObject($lap),
         );
 
         Assert::assertNotNull($raceLapId);
