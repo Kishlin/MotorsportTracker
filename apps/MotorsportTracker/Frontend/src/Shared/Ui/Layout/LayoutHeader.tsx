@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -32,13 +32,19 @@ const StyledAppBar = styled(
 );
 
 declare type LayoutHeaderPropsType = {
-    drawerWidth: number,
     handleDrawerOpen: () => void,
+    subHeader : ReactNode,
+    drawerWidth: number,
     open: boolean,
 }
 
-const Layout: React.FunctionComponent<LayoutHeaderPropsType> = ({ drawerWidth, handleDrawerOpen, open }) => (
-    <StyledAppBar drawerwidth={drawerWidth} open={open} position="fixed" sx={{ backgroundColor: 'background.paper' }}>
+const LayoutHeader: React.FunctionComponent<LayoutHeaderPropsType> = ({
+    handleDrawerOpen,
+    drawerWidth,
+    subHeader,
+    open,
+}) => (
+    <StyledAppBar drawerwidth={drawerWidth} open={open} position="fixed" sx={{ backgroundColor: '#232323' }}>
         <Toolbar>
             <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                 Motorsport Tracker
@@ -53,7 +59,8 @@ const Layout: React.FunctionComponent<LayoutHeaderPropsType> = ({ drawerWidth, h
                 <MenuIcon />
             </IconButton>
         </Toolbar>
+        {undefined === subHeader ? <noscript /> : <Toolbar disableGutters>{subHeader}</Toolbar>}
     </StyledAppBar>
 );
 
-export default Layout;
+export default LayoutHeader;

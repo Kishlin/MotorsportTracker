@@ -1,16 +1,27 @@
 // @ts-ignore
 import React from 'react';
 import { AppProps } from 'next/app';
-import {
-    createTheme,
-    CssBaseline,
-    ThemeOptions,
-    ThemeProvider,
-} from '@mui/material';
+import { CssBaseline } from '@mui/material';
+import { createTheme, ThemeProvider, ThemeOptions } from '@mui/material/styles';
 
 import { HydrationProvider } from '../src/Shared/Contexts/HydrationContext';
 
+declare module '@mui/material/styles' {
+    interface ThemeOptions {
+        layout?: {
+            header?: {
+                base?: string,
+            },
+        };
+    }
+}
+
 const paletteOptions: ThemeOptions = {
+    layout: {
+        header: {
+            base: '#232323',
+        },
+    },
     palette: {
         mode: 'dark',
         primary: {

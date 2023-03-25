@@ -7,7 +7,13 @@ import LayoutHeader from './LayoutHeader';
 
 const drawerWidth = 240;
 
-const Layout: React.FunctionComponent<{ menu: ReactNode, content: ReactNode }> = ({ menu, content }) => {
+declare type LayoutProps = {
+    content: ReactNode,
+    menu: ReactNode,
+    subHeader?: ReactNode,
+};
+
+const Layout: React.FunctionComponent<LayoutProps> = ({ menu, content, subHeader }) => {
     const [open, setOpen] = React.useState(true);
 
     const handleDrawerOpen = () => {
@@ -20,11 +26,25 @@ const Layout: React.FunctionComponent<{ menu: ReactNode, content: ReactNode }> =
 
     return (
         <Box sx={{ display: 'flex', width: '100%', height: '100%' }}>
-            <LayoutHeader drawerWidth={drawerWidth} handleDrawerOpen={handleDrawerOpen} open={open} />
-            <LayoutContent content={content} drawerWidth={drawerWidth} open={open} />
+            <LayoutHeader
+                handleDrawerOpen={handleDrawerOpen}
+                drawerWidth={drawerWidth}
+                subHeader={subHeader}
+                open={open}
+            />
+            <LayoutContent
+                hasSubHeader={undefined !== subHeader}
+                drawerWidth={drawerWidth}
+                content={content}
+                open={open}
+            />
             <LayoutMenu menu={menu} drawerWidth={drawerWidth} handleDrawerClose={handleDrawerClose} open={open} />
         </Box>
     );
+};
+
+Layout.defaultProps = {
+    subHeader: undefined,
 };
 
 export default Layout;

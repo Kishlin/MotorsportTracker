@@ -12,7 +12,6 @@ const Main = styled(
 )<MainProps>(
     ({ theme, open, drawerwidth }) => ({
         flexGrow: 1,
-        padding: theme.spacing(3),
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -38,14 +37,21 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 declare type LayoutContentProps = {
+    hasSubHeader: boolean,
     drawerWidth: number,
     content: ReactNode,
     open: boolean,
 }
 
-const LayoutContent: React.FunctionComponent<LayoutContentProps> = ({ content, open, drawerWidth }) => (
+const LayoutContent: React.FunctionComponent<LayoutContentProps> = ({
+    hasSubHeader,
+    drawerWidth,
+    content,
+    open,
+}) => (
     <Main open={open} drawerwidth={drawerWidth}>
         <DrawerHeader />
+        {hasSubHeader ? <DrawerHeader /> : <noscript />}
         { content }
     </Main>
 );

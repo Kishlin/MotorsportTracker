@@ -39,10 +39,10 @@ const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipSchedulePage
         menu={<MotorsportTrackerMenu />}
         content={(
             <ChampionshipContainer>
-                <ChampionshipNavbar championship={championship} year={year} page={page} />
                 <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />
             </ChampionshipContainer>
         )}
+        subHeader={<ChampionshipNavbar championship={championship} year={year} page={page} />}
     />
 );
 
