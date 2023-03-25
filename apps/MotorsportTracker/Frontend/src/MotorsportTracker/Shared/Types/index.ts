@@ -38,6 +38,7 @@ export type EventsSchedule = {
 
 export type Championship = {
     name: string,
+    displayName: string,
     shortName: string,
     slug: string,
     years: number[],

@@ -7,8 +7,9 @@ import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/Motors
 import scheduleApi from '../../../src/MotorsportTracker/Schedule/Api/ScheduleApi';
 import championships from '../../../src/MotorsportTracker/Config/Championships';
 import { EventsSchedule } from '../../../src/MotorsportTracker/Shared/Types';
-import ScheduleContainer from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
 import ScheduleEventsList from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
+import ChampionshipContainer from '../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
+import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
 
 declare type ChampionshipSchedulePathParams = {
     params: {
@@ -19,6 +20,9 @@ declare type ChampionshipSchedulePathParams = {
 
 declare type ChampionshipSchedulePageProps = {
     events: EventsSchedule,
+    championship: string,
+    year: string,
+    page: string,
     firstDay: number,
     lastDay: number,
 }
@@ -27,13 +31,17 @@ const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipSchedulePage
     events,
     firstDay,
     lastDay,
+    championship,
+    year,
+    page,
 }) => (
     <Layout
         menu={<MotorsportTrackerMenu />}
         content={(
-            <ScheduleContainer>
+            <ChampionshipContainer>
+                <ChampionshipNavbar championship={championship} year={year} page={page} />
                 <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />
-            </ScheduleContainer>
+            </ChampionshipContainer>
         )}
     />
 );
@@ -46,7 +54,16 @@ export const getStaticProps = async ({ params: { championship, year } }: Champio
     const firstDay = (new Date(yearAsInt, 0, 1)).getTime();
     const lastDay = (new Date(yearAsInt, 11, 31)).getTime();
 
-    return { props: { events, firstDay, lastDay } };
+    const props = {
+        events,
+        firstDay,
+        lastDay,
+        championship,
+        year,
+        page: 'schedule',
+    };
+
+    return { props };
 };
 
 export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipSchedulePathParams>, fallback: boolean }> {
