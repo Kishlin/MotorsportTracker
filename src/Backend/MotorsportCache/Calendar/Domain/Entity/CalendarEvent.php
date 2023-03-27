@@ -58,6 +58,9 @@ final class CalendarEvent extends AggregateRoot
         );
     }
 
+    /**
+     * @internal only use to get a test object
+     */
     public static function instance(
         UuidValueObject $id,
         CalendarEventSeries $series,
