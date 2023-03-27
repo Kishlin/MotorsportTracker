@@ -56,4 +56,25 @@ final class ExpressionTest extends TestCase
 
         self::assertSame('a >= b', $sut->__toString());
     }
+
+    public function testItCanBeLike(): void
+    {
+        $sut = (new Expression())->like('a', 'b');
+
+        self::assertSame('a LIKE b', $sut->__toString());
+    }
+
+    public function testItCanBeOrX(): void
+    {
+        $sut = (new Expression())->orX('a', 'b');
+
+        self::assertSame('(a OR b)', $sut->__toString());
+    }
+
+    public function testItCanBeAnd(): void
+    {
+        $sut = (new Expression())->andX('a', 'b');
+
+        self::assertSame('(a AND b)', $sut->__toString());
+    }
 }

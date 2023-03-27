@@ -31,6 +31,10 @@ final class SQLQueryBuilderTest extends TestCase
             ->innerJoin('table_three', 't3', $qb->expr()->eq('t1.t3', 't3.id'))
             ->where($qb->expr()->gt('t2.foo', ':foo'))
             ->andWhere($qb->expr()->lte('t2.bar', ':bar'))
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->orX('t3.a', 't3.b'),
+                $qb->expr()->like('t3.string', ':like'),
+            ))
             ->groupBy('t1.f')
             ->addGroupBy('t1.b')
             ->addOrderBy('t1.f, t1.b', OrderBy::DESC)
@@ -306,6 +310,7 @@ LEFT JOIN table_two AS t2 ON t1.t2 = t2.id
 INNER JOIN table_three AS t3 ON t1.t3 = t3.id
 WHERE (t2.foo > :foo)
 AND (t2.bar <= :bar)
+AND (((t3.a OR t3.b) AND t3.string LIKE :like))
 GROUP BY t1.f, t1.b
 ORDER BY t1.f, t1.b DESC
 LIMIT 5;

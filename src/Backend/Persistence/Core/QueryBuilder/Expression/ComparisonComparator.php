@@ -17,4 +17,6 @@ enum ComparisonComparator: String
     case GT = '>';
 
     case GTE = '>=';
+
+    case LIKE = 'LIKE';
 }

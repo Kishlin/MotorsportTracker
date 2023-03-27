@@ -11,9 +11,9 @@ use Stringable;
 final class Comparison implements Stringable
 {
     private function __construct(
-        private readonly string $left,
+        private readonly string|Stringable $left,
         private readonly ComparisonComparator $comparison,
-        private readonly string $right,
+        private readonly string|Stringable $right,
     ) {
     }
 
@@ -24,7 +24,7 @@ final class Comparison implements Stringable
 
     public function left(): string
     {
-        return $this->left;
+        return is_string($this->left) ? $this->left : $this->left->__toString();
     }
 
     public function comparison(): ComparisonComparator
@@ -34,10 +34,10 @@ final class Comparison implements Stringable
 
     public function right(): string
     {
-        return $this->right;
+        return is_string($this->right) ? $this->right : $this->right->__toString();
     }
 
-    public static function build(string $left, ComparisonComparator $comparison, string $right): self
+    public static function build(string|Stringable $left, ComparisonComparator $comparison, string|Stringable $right): self
     {
         return new self($left, $comparison, $right);
     }

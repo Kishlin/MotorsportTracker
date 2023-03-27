@@ -8,7 +8,7 @@ namespace Kishlin\Backend\Persistence\Core\QueryBuilder\Expression;
 
 use Stringable;
 
-final class OrX implements Stringable
+final class AndX implements Stringable
 {
     private function __construct(
         private readonly string|Stringable $left,
@@ -18,7 +18,7 @@ final class OrX implements Stringable
 
     public function __toString()
     {
-        return "({$this->left} OR {$this->right})";
+        return "({$this->left} AND {$this->right})";
     }
 
     public function left(): string
