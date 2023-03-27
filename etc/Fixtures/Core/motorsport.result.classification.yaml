@@ -15,3 +15,39 @@ maxVerstappenAtDutchGP2022Race:
   bestLap: 42
   bestTime: 95068.0
   bestIsFastest: false
+
+ralphBoschungAtAustralianGP2023FormulaTwoRaceOne:
+  entry: '@motorsport.result.entry.ralphBoschungForCamposRacingAtAustralianGP2023FormulaTwoRaceOne'
+  finishPosition: 1
+  gridPosition: 1
+  laps: 23
+  points: 10.0
+  time: 2510597.0
+  classifiedStatus: 'CLA'
+  averageLapSpeed: 178.136
+  fastestLapTime: 107857.0
+  gapTimeToLead: 0.0
+  gapTimeToNext: 0.0
+  gapLapsToLead: 0
+  gapLapsToNext: 0
+  bestLap: 4
+  bestTime: 107857.0
+  bestIsFastest: false
+
+theoPourchaireAtAustralianGP2023FormulaTwoRaceTwo:
+  entry: '@motorsport.result.entry.theoPourchaireForArtGrandPrixAtAustralianGP2023FormulaTwoRaceTwo'
+  finishPosition: 1
+  gridPosition: 1
+  laps: 32
+  points: 27.0
+  time: 3670926.0
+  classifiedStatus: 'CLA'
+  averageLapSpeed: 169.596
+  fastestLapTime: 107689.0
+  gapTimeToLead: 0.0
+  gapTimeToNext: 0.0
+  gapLapsToLead: 0
+  gapLapsToNext: 0
+  bestLap: 17
+  bestTime: 107689.0
+  bestIsFastest: false

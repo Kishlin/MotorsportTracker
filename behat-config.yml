@@ -4,9 +4,10 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Result\ResultContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewSeasonScheduleContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
@@ -35,8 +36,11 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Calendar\SyncCalendarContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Result\ComputeResultContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\EventSessionContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Result\ClassificationContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Shared\FixturesContext
       filters:
         tags: '@backoffice'

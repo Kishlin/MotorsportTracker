@@ -4,3 +4,17 @@ redBullRacing2022:
   countryId: '@country.country.austria'
   name: 'Red Bull Racing'
   color: '#0600EF'
+
+camposRacing2023:
+  teamId: '@motorsport.team.team.camposRacing'
+  seasonId: '@motorsport.championship.season.formulaTwo2023'
+  countryId: '@country.country.spain'
+  name: 'Campos Racing'
+  color: '#0600EF'
+
+artGrandPrix2023:
+  teamId: '@motorsport.team.team.artGrandPrix'
+  seasonId: '@motorsport.championship.season.formulaTwo2023'
+  countryId: '@country.country.france'
+  name: 'ART Grand Prix'
+  color: '#0600EF'

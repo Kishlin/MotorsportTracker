@@ -6,11 +6,11 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team;
 
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentationIfNotExists\SaveTeamPresentationGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentationIfNotExists\SearchTeamPresentationGateway;
-use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentationIfNotExists\TeamPresentationCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
+use RuntimeException;
 
 /**
  * @property TeamPresentation[] $objects
@@ -32,7 +32,7 @@ final class TeamPresentationRepositorySpy extends AbstractRepositorySpy implemen
             false === $this->countryRepositorySpy->has($teamPresentation->country())
             || null !== $this->findByTeamAndSeason($teamPresentation->team(), $teamPresentation->season())
         ) {
-            throw new TeamPresentationCreationFailureException();
+            throw new RuntimeException('Team Presentation is a duplicate.');
         }
 
         $this->objects[$teamPresentation->id()->value()] = $teamPresentation;
@@ -41,7 +41,7 @@ final class TeamPresentationRepositorySpy extends AbstractRepositorySpy implemen
     public function findByTeamAndSeason(UuidValueObject $team, UuidValueObject $season): ?UuidValueObject
     {
         foreach ($this->objects as $savedTeamPresentation) {
-            if ($savedTeamPresentation->team()->equals($team) || $savedTeamPresentation->season()->equals($season)) {
+            if ($savedTeamPresentation->team()->equals($team) && $savedTeamPresentation->season()->equals($season)) {
                 return $savedTeamPresentation->id();
             }
         }

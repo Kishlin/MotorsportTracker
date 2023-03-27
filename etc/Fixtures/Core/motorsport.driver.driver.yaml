@@ -27,3 +27,13 @@ nyckDeVries:
   name: 'Nick de Vries'
   shortCode: 'VRI'
   countryId: '@country.country.netherlands'
+
+theoPourchaire:
+  name: 'Theo Pourchaire'
+  shortCode: 'POU'
+  countryId: '@country.country.france'
+
+ralphBoschung:
+  name: 'Ralph Boschung'
+  shortCode: 'BOSR'
+  countryId: '@country.country.switzerland'

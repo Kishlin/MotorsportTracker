@@ -49,3 +49,11 @@ hungary:
 belgium:
   code: 'be'
   name: 'Belgium'
+
+switzerland:
+  code: 'ch'
+  name: 'Switzerland'
+
+spain:
+  code: 'sp'
+  name: 'Spain'

@@ -86,6 +86,19 @@ COMMENT ON COLUMN public.driver_standings_view.events IS '(DC2Type:standings_vie
 
 
 --
+-- Name: event_results_by_race; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.event_results_by_race (
+    id character varying(36) NOT NULL,
+    event character varying(36),
+    results_by_race json NOT NULL
+);
+
+
+ALTER TABLE public.event_results_by_race OWNER TO motorsporttracker;
+
+--
 -- Name: team_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -108,30 +121,6 @@ COMMENT ON COLUMN public.team_standings_view.events IS '(DC2Type:standings_view_
 
 
 --
--- Data for Name: calendar_event; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.calendar_event (id, slug, index, name, short_name, start_date, end_date, series, venue, sessions, short_code, reference) FROM stdin;
-\.
-
-
---
--- Data for Name: driver_standings_view; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.driver_standings_view (id, championship_slug, year, events, standings) FROM stdin;
-\.
-
-
---
--- Data for Name: team_standings_view; Type: TABLE DATA; Schema: public; Owner: motorsporttracker
---
-
-COPY public.team_standings_view (id, championship_slug, year, events, standings) FROM stdin;
-\.
-
-
---
 -- Name: calendar_event calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -148,6 +137,14 @@ ALTER TABLE ONLY public.driver_standings_view
 
 
 --
+-- Name: event_results_by_race event_results_by_races_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.event_results_by_race
+    ADD CONSTRAINT event_results_by_races_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: team_standings_view team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -160,6 +157,20 @@ ALTER TABLE ONLY public.team_standings_view
 --
 
 CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_view USING btree (championship_slug, year);
+
+
+--
+-- Name: event_results_by_race_event_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_results_by_race_event_idx ON public.event_results_by_race USING btree (event);
+
+
+--
+-- Name: event_results_by_race_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_results_by_race_id_idx ON public.event_results_by_race USING btree (id);
 
 
 --

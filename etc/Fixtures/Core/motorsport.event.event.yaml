@@ -87,3 +87,13 @@ belgianGrandPrix2019:
   shortName: 'Belgian GP'
   startTime: '2019-09-01 13:10:00'
   endTime: '2019-09-01 13:10:00'
+
+australianGP2023FormulaTwo:
+  seasonId: '@motorsport.championship.season.formulaTwo2023'
+  venueId: '@motorsport.venue.venue.melbourne'
+  index: '3'
+  slug: 'australian-gp'
+  name: 'Australian GP'
+  shortName: 'Australian GP'
+  startTime: '2023-03-31 2:00:00'
+  endTime: '2023-04-02 6:00:00'

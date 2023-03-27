@@ -9,3 +9,7 @@ motoGp:
 wec:
   name: 'FIA World Endurance Championship'
   shortCode: 'wec'
+
+formulaTwo:
+  name: 'Formula Two'
+  shortCode: 'formula2'

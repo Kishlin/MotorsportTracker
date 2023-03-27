@@ -9,3 +9,7 @@ formulaOne2019:
 motoGP2022:
   championshipId: '@motorsport.championship.championship.motoGp'
   year: 2022
+
+formulaTwo2023:
+  championshipId: '@motorsport.championship.championship.formulaTwo'
+  year: 2023

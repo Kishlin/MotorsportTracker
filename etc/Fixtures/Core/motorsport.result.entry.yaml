@@ -15,3 +15,15 @@ lewisHamiltonForMercedesAtAustralianGP2022Race:
   driver: '@motorsport.driver.driver.lewisHamilton'
   team: '@motorsport.team.team.mercedes'
   carNumber: 44
+
+ralphBoschungForCamposRacingAtAustralianGP2023FormulaTwoRaceOne:
+  session: '@motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceOne'
+  driver: '@motorsport.driver.driver.ralphBoschung'
+  team: '@motorsport.team.team.camposRacing'
+  carNumber: 25
+
+theoPourchaireForArtGrandPrixAtAustralianGP2023FormulaTwoRaceTwo:
+  session: '@motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo'
+  driver: '@motorsport.driver.driver.theoPourchaire'
+  team: '@motorsport.team.team.artGrandPrix'
+  carNumber: 5
