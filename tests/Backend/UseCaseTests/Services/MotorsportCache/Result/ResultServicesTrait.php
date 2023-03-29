@@ -64,6 +64,7 @@ trait ResultServicesTrait
         if (null === $this->computeRaceResultForEventCommandHandler) {
             $this->computeRaceResultForEventCommandHandler = new ComputeEventResultsByRaceCommandHandler(
                 $this->eventResultsByRaceRepositorySpy(),
+                $this->eventResultsByRaceRepositorySpy(),
                 $this->racesToComputeRepositorySpy(),
                 $this->raceResultRepositorySpy(),
                 $this->eventDispatcher(),

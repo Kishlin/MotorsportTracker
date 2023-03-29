@@ -15,6 +15,7 @@ use Throwable;
 final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
 {
     public function __construct(
+        private readonly DeleteEventResultsByRaceIfExistsGateway $deleteEventResultsByRaceGateway,
         private readonly EventResultsByRaceGateway $eventResultsByRaceGateway,
         private readonly RacesToComputeGateway $racesToComputeGateway,
         private readonly RaceResultGateway $raceResultGateway,
@@ -65,6 +66,11 @@ final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
             new UuidValueObject($eventId),
             ResultsByRaceValueObject::fromData($raceResultList),
         );
+
+        $itDeletedSomething = $this->deleteEventResultsByRaceGateway->deleteIfExists($eventId);
+        if ($itDeletedSomething) {
+            $this->eventDispatcher->dispatch(PreviousEventResultsByRaceDeletedEvent::forEvent($eventId));
+        }
 
         $this->eventResultsByRaceGateway->save($eventResultsByRace);
 

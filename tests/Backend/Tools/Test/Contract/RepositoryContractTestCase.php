@@ -12,6 +12,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingConnection;
 use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;
 use Kishlin\Tests\Backend\Tools\Test\Contract\Constraint\AggregateRootWasSavedConstraint;
+use Kishlin\Tests\Backend\Tools\Test\Contract\Constraint\TableIsEmptyConstraint;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -66,6 +67,14 @@ abstract class RepositoryContractTestCase extends TestCase
     public static function assertAggregateRootWasSaved(AggregateRoot $aggregateRoot): void
     {
         self::assertThat($aggregateRoot, new AggregateRootWasSavedConstraint(self::connection()));
+    }
+
+    /**
+     * @param class-string<object>|object $entity
+     */
+    public static function assertTableIsEmpty(string|object $entity): void
+    {
+        self::assertThat($entity, new TableIsEmptyConstraint(self::connection()));
     }
 
     abstract protected static function fixturesFolder(): string;
