@@ -10,6 +10,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Throwable;
 
 final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
 {
@@ -32,6 +33,20 @@ final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
             return null;
         }
 
+        try {
+            return $this->createEventResultsByRaceForEvent($racesToCompute, $command->eventId());
+        } catch (Throwable $e) {
+            $this->eventDispatcher->dispatch(EventResultsByRaceCreationFailedEvent::withScalars($command->eventId(), $e));
+
+            return null;
+        }
+    }
+
+    /**
+     * @param array<array{id: string, type: string}> $racesToCompute
+     */
+    private function createEventResultsByRaceForEvent(array $racesToCompute, string $eventId): UuidValueObject
+    {
         $raceResultList = [];
         foreach ($racesToCompute as $raceToCompute) {
             $raceResult = $this->raceResultGateway->findResult($raceToCompute['id']);
@@ -47,7 +62,7 @@ final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
 
         $eventResultsByRace = EventResultsByRace::create(
             new UuidValueObject($this->uuidGenerator->uuid4()),
-            new UuidValueObject($command->eventId()),
+            new UuidValueObject($eventId),
             ResultsByRaceValueObject::fromData($raceResultList),
         );
 
