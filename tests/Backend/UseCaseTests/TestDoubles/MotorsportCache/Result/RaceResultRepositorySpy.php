@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RaceResultDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RaceResultGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RaceResultDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\TeamPresentation;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RacesToComputeDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RacesToComputeGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RacesToComputeDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RacesToComputeGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class RacesToComputeRepository extends CoreRepository implements RacesToComputeGateway

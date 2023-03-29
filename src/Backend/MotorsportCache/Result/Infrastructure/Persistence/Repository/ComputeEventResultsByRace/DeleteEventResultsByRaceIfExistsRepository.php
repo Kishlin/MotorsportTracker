@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DeleteEventResultsByRaceIfExistsGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\DeleteEventResultsByRaceIfExistsGateway;
 use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository;
 

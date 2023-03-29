@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Logging\OnEventResultsByRaceCreationFailed;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\EventResultsByRaceCreationFailedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\EventResultsByRaceCreationFailedEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 

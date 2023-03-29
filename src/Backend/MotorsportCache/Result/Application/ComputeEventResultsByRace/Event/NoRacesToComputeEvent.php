@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace;
+namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event;
 
 use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
-final class PreviousEventResultsByRaceDeletedEvent implements ApplicationEvent
+final class NoRacesToComputeEvent implements ApplicationEvent
 {
     private function __construct(
         private readonly string $eventId,

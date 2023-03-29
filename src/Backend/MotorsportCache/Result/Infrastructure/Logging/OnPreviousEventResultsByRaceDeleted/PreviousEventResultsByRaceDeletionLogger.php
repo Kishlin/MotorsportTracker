@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Logging\OnPreviousEventResultsByRaceDeleted;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\PreviousEventResultsByRaceDeletedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\PreviousEventResultsByRaceDeletedEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 

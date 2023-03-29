@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
 use JsonException;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RaceResultDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\RaceResultGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RaceResultDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class RaceResultRepository extends CoreRepository implements RaceResultGateway
