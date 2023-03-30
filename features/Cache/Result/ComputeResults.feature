@@ -1,6 +1,6 @@
 Feature: It can compute results for an event
 
-  @current @backoffice
+  @backoffice
   Scenario: It can compute results for a single race event
     Given the classification "Max Verstappen At Dutch GP 2022 Race" exists
     And the team presentation "Red Bull Racing 2022" exists
@@ -8,7 +8,7 @@ Feature: It can compute results for an event
     Then the race results for event "Dutch Grand Prix 2022" are computed
     And there is a result for "Max Verstappen" in race "1" position "1"
 
-  @current @backoffice
+  @backoffice
   Scenario: It can compute results for an event with two races
     Given the classification "Ralph Boschung At Australian GP 2023 Formula Two Race One" exists
     And the classification "Theo Pourchaire At Australian GP 2023 Formula Two Race Two" exists
