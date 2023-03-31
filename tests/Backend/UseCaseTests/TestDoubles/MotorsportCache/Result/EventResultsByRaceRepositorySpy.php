@@ -6,6 +6,8 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\DeleteEventResultsByRaceIfExistsGateway;
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\EventResultsByRaceGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\EventResultsByRaceJsonableView;
+use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceGateway;
 use Kishlin\Backend\MotorsportCache\Result\Domain\Entity\EventResultsByRace;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
@@ -17,7 +19,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|EventResultsByRace get(UuidValueObject $id)
  * @method EventResultsByRace      safeGet(UuidValueObject $id)
  */
-final class EventResultsByRaceRepositorySpy extends AbstractRepositorySpy implements EventResultsByRaceGateway, DeleteEventResultsByRaceIfExistsGateway
+final class EventResultsByRaceRepositorySpy extends AbstractRepositorySpy implements EventResultsByRaceGateway, DeleteEventResultsByRaceIfExistsGateway, ViewEventResultsByRaceGateway
 {
     public function save(EventResultsByRace $eventResultsByRace): void
     {
@@ -35,5 +37,19 @@ final class EventResultsByRaceRepositorySpy extends AbstractRepositorySpy implem
         }
 
         return false;
+    }
+
+    public function viewForEvent(string $event): EventResultsByRaceJsonableView
+    {
+        foreach ($this->objects as $eventResultsByRace) {
+            if ($event !== $eventResultsByRace->event()->value()) {
+                return EventResultsByRaceJsonableView::fromSource([
+                    'resultsByRace' => $eventResultsByRace->resultsByRace()->data(),
+                    'event'         => $event,
+                ]);
+            }
+        }
+
+        return EventResultsByRaceJsonableView::fromSource(['event' => $event, 'resultsByRace' => []]);
     }
 }

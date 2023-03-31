@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Result;
 
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\ComputeEventResultsByRaceCommandHandler;
+use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceQueryHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\EventResultsByRaceRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\RaceResultRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\RacesToComputeRepositorySpy;
@@ -18,6 +19,8 @@ trait ResultServicesTrait
     private ?RacesToComputeRepositorySpy $racesToComputeRepositorySpy = null;
 
     private ?ComputeEventResultsByRaceCommandHandler $computeRaceResultForEventCommandHandler = null;
+
+    private ?ViewEventResultsByRaceQueryHandler $viewEventResultsByRaceQueryHandler = null;
 
     public function eventResultsByRaceRepositorySpy(): EventResultsByRaceRepositorySpy
     {
@@ -73,5 +76,16 @@ trait ResultServicesTrait
         }
 
         return $this->computeRaceResultForEventCommandHandler;
+    }
+
+    public function viewEventResultsByRaceQueryHandler(): ViewEventResultsByRaceQueryHandler
+    {
+        if (null === $this->viewEventResultsByRaceQueryHandler) {
+            $this->viewEventResultsByRaceQueryHandler = new ViewEventResultsByRaceQueryHandler(
+                $this->eventResultsByRaceRepositorySpy(),
+            );
+        }
+
+        return $this->viewEventResultsByRaceQueryHandler;
     }
 }

@@ -9,6 +9,7 @@ use Exception;
 use Kishlin\Apps\MotorsportTracker\Backend\Kernel as BackendKernel;
 use Kishlin\Tests\Backend\Tools\Database\DatabaseInterface;
 use Kishlin\Tests\Backend\Tools\Environment\SymfonyApplication;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,7 +41,11 @@ abstract class BackendApiContext implements Context
 
     public function fixtureId(string $fixture): string
     {
-        return self::database()->fixtureId($fixture);
+        try {
+            return self::database()->fixtureId($fixture);
+        } catch (RuntimeException) {
+            return self::cacheDatabase()->fixtureId($fixture);
+        }
     }
 
     protected function format(string $fixture): string

@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context;
 
 use Behat\Behat\Context\Context;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
+use RuntimeException;
 
 abstract class MotorsportTrackerContext implements Context
 {
@@ -23,7 +24,11 @@ abstract class MotorsportTrackerContext implements Context
 
     public function fixtureId(string $fixture): string
     {
-        return self::container()->coreFixtureLoader()->identifier($fixture);
+        try {
+            return self::container()->coreFixtureLoader()->identifier($fixture);
+        } catch (RuntimeException) {
+            return self::container()->cacheFixtureLoader()->identifier($fixture);
+        }
     }
 
     protected static function container(): TestServiceContainer
