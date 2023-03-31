@@ -23,6 +23,7 @@ final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
     {
         self::loadFixtures(
             'motorsport.result.classification.maxVerstappenAtDutchGP2022Race',
+            'motorsport.result.classification.sergioPerezAtDutchGP2022Race',
             'motorsport.team.teamPresentation.redBullRacing2022'
         );
 
@@ -31,10 +32,13 @@ final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
         $results = $repository->findResult(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'))->results();
 
         self::assertIsArray($results);
-        self::assertCount(1, $results);
+        self::assertCount(2, $results);
 
-        self::assertSame(33, $results[0]['car_number']);
-        self::assertSame('Max Verstappen', $results[0]['driver']['name']);
+        self::assertSame(11, $results[0]['car_number']);
+        self::assertSame('Sergio Perez', $results[0]['driver']['name']);
+
+        self::assertSame(33, $results[1]['car_number']);
+        self::assertSame('Max Verstappen', $results[1]['driver']['name']);
     }
 
     /**

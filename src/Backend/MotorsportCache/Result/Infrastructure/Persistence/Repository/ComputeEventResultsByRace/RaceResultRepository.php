@@ -67,7 +67,6 @@ TXT;
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')
             ->withParam('session', $eventSessionId)
-            ->limit(1)
             ->buildQuery()
         ;
 

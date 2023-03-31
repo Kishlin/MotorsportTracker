@@ -16,6 +16,24 @@ maxVerstappenAtDutchGP2022Race:
   bestTime: 95068.0
   bestIsFastest: false
 
+sergioPerezAtDutchGP2022Race:
+  entry: '@motorsport.result.entry.sergioPerezForRedBullRacingAtDutchGP2022Race'
+  finishPosition: 2
+  gridPosition: 7
+  laps: 57
+  points: 18.0
+  time: 5710489.0
+  classifiedStatus: 'CLA'
+  averageLapSpeed: 195.319
+  fastestLapTime: 95048.0
+  gapTimeToLead: 4753.0
+  gapTimeToNext: 2106.0
+  gapLapsToLead: 0
+  gapLapsToNext: 0
+  bestLap: 38
+  bestTime: 95048.0
+  bestIsFastest: false
+
 ralphBoschungAtAustralianGP2023FormulaTwoRaceOne:
   entry: '@motorsport.result.entry.ralphBoschungForCamposRacingAtAustralianGP2023FormulaTwoRaceOne'
   finishPosition: 1

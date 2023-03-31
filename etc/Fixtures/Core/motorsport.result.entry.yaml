@@ -4,6 +4,12 @@ maxVerstappenForRedBullRacingAtDutchGP2022Race:
   team: '@motorsport.team.team.redBullRacing'
   carNumber: 33
 
+sergioPerezForRedBullRacingAtDutchGP2022Race:
+  session: '@motorsport.event.eventSession.dutchGrandPrix2022Race'
+  driver: '@motorsport.driver.driver.sergioPerez'
+  team: '@motorsport.team.team.redBullRacing'
+  carNumber: 11
+
 maxVerstappenForRedBullRacingAtAustralianGP2022Race:
   session: '@motorsport.event.eventSession.australianGrandPrix2022Race'
   driver: '@motorsport.driver.driver.maxVerstappen'
