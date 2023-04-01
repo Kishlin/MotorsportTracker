@@ -47,7 +47,7 @@ const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipSchedulePage
 );
 
 export const getStaticProps = async ({ params: { championship, year } }: ChampionshipSchedulePathParams) => {
-    const events = await scheduleApi(championships[championship].name, year);
+    const events = await scheduleApi(championships[championship].slug, year);
 
     const yearAsInt = parseInt(year, 10);
 
