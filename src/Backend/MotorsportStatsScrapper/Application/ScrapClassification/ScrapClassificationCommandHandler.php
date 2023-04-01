@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SessionNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\TeamCreatorTrait;
@@ -44,6 +45,13 @@ final class ScrapClassificationCommandHandler implements CommandHandler
         );
 
         if (null === $session) {
+            $this->eventDispatcher->dispatch(SessionNotFoundEvent::forSession(
+                $command->championship(),
+                $command->year(),
+                $command->event(),
+                $command->sessionType(),
+            ));
+
             return;
         }
 

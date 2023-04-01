@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
 
 use DateTimeImmutable;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
@@ -38,6 +39,8 @@ final class ScrapCalendarCommandHandler implements CommandHandler
     {
         $season = $this->seasonGateway->find($command->championshipName(), $command->year());
         if (null === $season) {
+            $this->eventDispatcher->dispatch(SeasonNotFoundEvent::forSeason($command->championshipName(), $command->year()));
+
             return;
         }
 

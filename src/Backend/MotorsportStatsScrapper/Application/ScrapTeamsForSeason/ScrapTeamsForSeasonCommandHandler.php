@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapTeamsForSeason;
 
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
@@ -29,6 +30,8 @@ final class ScrapTeamsForSeasonCommandHandler implements CommandHandler
     {
         $season = $this->seasonGateway->find($command->championshipName(), $command->year());
         if (null === $season) {
+            $this->eventDispatcher->dispatch(SeasonNotFoundEvent::forSeason($command->championshipName(), $command->year()));
+
             return;
         }
 
