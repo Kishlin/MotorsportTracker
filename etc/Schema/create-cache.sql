@@ -99,6 +99,20 @@ CREATE TABLE public.event_results_by_race (
 ALTER TABLE public.event_results_by_race OWNER TO motorsporttracker;
 
 --
+-- Name: season_events; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.season_events (
+    id character varying(36) NOT NULL,
+    championship character varying(255) NOT NULL,
+    year integer NOT NULL,
+    events json NOT NULL
+);
+
+
+ALTER TABLE public.season_events OWNER TO motorsporttracker;
+
+--
 -- Name: team_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -145,6 +159,14 @@ ALTER TABLE ONLY public.event_results_by_race
 
 
 --
+-- Name: season_events season_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.season_events
+    ADD CONSTRAINT season_events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: team_standings_view team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -171,6 +193,20 @@ CREATE UNIQUE INDEX event_results_by_race_event_idx ON public.event_results_by_r
 --
 
 CREATE UNIQUE INDEX event_results_by_race_id_idx ON public.event_results_by_race USING btree (id);
+
+
+--
+-- Name: season_events_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX season_events_championship_year_idx ON public.season_events USING btree (championship, year);
+
+
+--
+-- Name: season_events_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX season_events_id_idx ON public.season_events USING btree (id);
 
 
 --
