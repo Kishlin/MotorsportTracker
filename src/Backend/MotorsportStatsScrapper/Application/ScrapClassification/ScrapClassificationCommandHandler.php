@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SessionNotFoundEvent;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\DriverCreatorTrait;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\TeamCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;

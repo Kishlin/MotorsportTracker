@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\Traits;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits;
 
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;

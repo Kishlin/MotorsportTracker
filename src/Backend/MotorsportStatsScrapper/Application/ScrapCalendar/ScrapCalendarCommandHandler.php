@@ -6,7 +6,7 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
 
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;

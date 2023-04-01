@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapTeamsForSeason;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\CountryCreatorTrait;
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Traits\TeamCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamPresentationIfNotExists\CreateTeamPresentationIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;

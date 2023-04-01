@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Application\Traits;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits;
 
 use Kishlin\Backend\MotorsportTracker\Driver\Application\CreateDriverIfNotExists\CreateDriverIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
