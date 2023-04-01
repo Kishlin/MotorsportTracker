@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
     '/view/{championship}/{year}',
     name: 'events_schedule',
     requirements: [
-        'start' => '[\w]+',
-        'end'   => '[\d]{4}',
+        'championship' => '[\w\-]+',
+        'year'         => '[\d]{4}',
     ],
     methods: [Request::METHOD_GET],
 )]

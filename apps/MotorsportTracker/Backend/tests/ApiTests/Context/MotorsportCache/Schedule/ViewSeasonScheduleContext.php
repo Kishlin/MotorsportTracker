@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\BackendApiContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,9 @@ final class ViewSeasonScheduleContext extends BackendApiContext
     #[When('a client views the schedule for :championship :year')]
     public function aClientViewsTheCalendar(string $championship, int $year): void
     {
-        $this->response = self::handle(Request::create("/api/v1/schedule/view/{$championship}/{$year}", 'GET'));
+        $slug = StringHelper::slugify($championship);
+
+        $this->response = self::handle(Request::create("/api/v1/schedule/view/{$slug}/{$year}", 'GET'));
     }
 
     #[Then('a schedule is viewed with events')]
