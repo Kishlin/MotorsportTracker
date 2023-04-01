@@ -10,6 +10,7 @@ use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\SeasonEvents;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -41,7 +42,8 @@ final class SeasonEventsRepositorySpy extends AbstractRepositorySpy implements S
     public function find(StringValueObject $championship, StrictlyPositiveIntValueObject $year): ?SeasonEvents
     {
         foreach ($this->objects as $seasonEvents) {
-            if ($seasonEvents->championship()->equals($championship) && $seasonEvents->year()->equals($year)) {
+            if (StringHelper::slugify($championship->value()) === $seasonEvents->championship()->value()
+                && $seasonEvents->year()->equals($year)) {
                 return $seasonEvents;
             }
         }

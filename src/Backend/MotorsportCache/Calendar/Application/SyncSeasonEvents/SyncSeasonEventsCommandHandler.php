@@ -14,7 +14,9 @@ use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\SeasonEventList;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Throwable;
 
 final class SyncSeasonEventsCommandHandler implements CommandHandler
@@ -36,7 +38,9 @@ final class SyncSeasonEventsCommandHandler implements CommandHandler
 
         $id = new UuidValueObject($this->uuidGenerator->uuid4());
 
-        $seasonEvents = SeasonEvents::create($id, $command->championship(), $command->year(), $events);
+        $slug = new StringValueObject(StringHelper::slugify($command->championship()->value()));
+
+        $seasonEvents = SeasonEvents::create($id, $slug, $command->year(), $events);
 
         if ($this->deleteGateway->deleteIfExists($command->championship(), $command->year())) {
             $this->eventDispatcher->dispatch(PreviousSeasonEventsDeletedEvent::forSeason($command->championship(), $command->year()));

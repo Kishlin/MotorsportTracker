@@ -10,6 +10,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Kishlin\Apps\Backoffice\MotorsportCache\Calendar\SyncSeasonEventsCommandUsingSymfony;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Command\Command;
@@ -116,6 +117,8 @@ final class SeasonEventsContext extends BackofficeContext
      */
     private function fetchCachedSeasonEvents(string $championship, int $year): ?array
     {
-        return self::cacheDatabase()->fetchAllAssociative(self::FIND_QUERY, ['c' => $championship, 'y' => $year]);
+        $params = ['c' => StringHelper::slugify($championship), 'y' => $year];
+
+        return self::cacheDatabase()->fetchAllAssociative(self::FIND_QUERY, $params);
     }
 }
