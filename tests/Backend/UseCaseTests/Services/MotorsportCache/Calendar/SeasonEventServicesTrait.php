@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar;
 
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncSeasonEvents\SyncSeasonEventsCommandHandler;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonEvents\ViewSeasonEventsQueryHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\SyncSeasonEvents\SeasonEventListRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calendar\SyncSeasonEvents\SeasonEventsRepositorySpy;
 
@@ -15,6 +16,8 @@ trait SeasonEventServicesTrait
     private ?SeasonEventListRepositorySpy $seasonEventListRepositorySpy = null;
 
     private ?SyncSeasonEventsCommandHandler $syncSeasonEventsCommandHandler = null;
+
+    private ?ViewSeasonEventsQueryHandler $viewSeasonEventsQueryHandler = null;
 
     public function seasonEventsRepositorySpy(): SeasonEventsRepositorySpy
     {
@@ -51,5 +54,16 @@ trait SeasonEventServicesTrait
         }
 
         return $this->syncSeasonEventsCommandHandler;
+    }
+
+    public function viewSeasonEventsQueryHandler(): ViewSeasonEventsQueryHandler
+    {
+        if (null === $this->viewSeasonEventsQueryHandler) {
+            $this->viewSeasonEventsQueryHandler = new ViewSeasonEventsQueryHandler(
+                $this->seasonEventsRepositorySpy(),
+            );
+        }
+
+        return $this->viewSeasonEventsQueryHandler;
     }
 }

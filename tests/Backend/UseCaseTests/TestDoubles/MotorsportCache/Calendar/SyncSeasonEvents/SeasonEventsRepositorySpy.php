@@ -6,6 +6,9 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Calenda
 
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncSeasonEvents\Gateway\DeleteSeasonEventsGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncSeasonEvents\Gateway\SaveSeasonEventsGateway;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonEvents\SeasonEventsJsonableView;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonEvents\SeasonEventsNotFoundException;
+use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonEvents\ViewSeasonEventsGateway;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\SeasonEvents;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
@@ -20,7 +23,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|SeasonEvents get(UuidValueObject $id)
  * @method SeasonEvents      safeGet(UuidValueObject $id)
  */
-final class SeasonEventsRepositorySpy extends AbstractRepositorySpy implements SaveSeasonEventsGateway, DeleteSeasonEventsGateway
+final class SeasonEventsRepositorySpy extends AbstractRepositorySpy implements SaveSeasonEventsGateway, DeleteSeasonEventsGateway, ViewSeasonEventsGateway
 {
     public function save(SeasonEvents $seasonEvents): void
     {
@@ -29,7 +32,7 @@ final class SeasonEventsRepositorySpy extends AbstractRepositorySpy implements S
 
     public function deleteIfExists(StringValueObject $championship, StrictlyPositiveIntValueObject $year): bool
     {
-        $toDelete = $this->find($championship, $year);
+        $toDelete = $this->find(StringHelper::slugify($championship->value()), $year->value());
         if (null === $toDelete) {
             return false;
         }
@@ -39,11 +42,20 @@ final class SeasonEventsRepositorySpy extends AbstractRepositorySpy implements S
         return true;
     }
 
-    public function find(StringValueObject $championship, StrictlyPositiveIntValueObject $year): ?SeasonEvents
+    public function viewForSeason(string $championshipSlug, int $year): SeasonEventsJsonableView
+    {
+        $seasonEvents = $this->find($championshipSlug, $year);
+        if (null === $seasonEvents) {
+            throw new SeasonEventsNotFoundException();
+        }
+
+        return SeasonEventsJsonableView::fromData($seasonEvents->events()->data());
+    }
+
+    public function find(string $championship, int $year): ?SeasonEvents
     {
         foreach ($this->objects as $seasonEvents) {
-            if (StringHelper::slugify($championship->value()) === $seasonEvents->championship()->value()
-                && $seasonEvents->year()->equals($year)) {
+            if ($championship === $seasonEvents->championship()->value() && $year === $seasonEvents->year()->value()) {
                 return $seasonEvents;
             }
         }

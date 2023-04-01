@@ -23,7 +23,7 @@ final class DeleteSeasonEventsRepositoryTest extends CacheRepositoryContractTest
         $repository = new DeleteSeasonEventsRepository(self::connection());
 
         self::assertTrue(
-            $repository->deleteIfExists(new StringValueObject('Formula One'), new StrictlyPositiveIntValueObject(2022)),
+            $repository->deleteIfExists(new StringValueObject('formula-one'), new StrictlyPositiveIntValueObject(2022)),
         );
 
         self::assertEmpty(
@@ -38,7 +38,7 @@ final class DeleteSeasonEventsRepositoryTest extends CacheRepositoryContractTest
         $repository = new DeleteSeasonEventsRepository(self::connection());
 
         self::assertFalse(
-            $repository->deleteIfExists(new StringValueObject('Formula One'), new StrictlyPositiveIntValueObject(2022)),
+            $repository->deleteIfExists(new StringValueObject('formula-one'), new StrictlyPositiveIntValueObject(2022)),
         );
     }
 }

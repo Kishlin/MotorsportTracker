@@ -16,6 +16,12 @@ schedule:
   type: annotation
   stateless: true
 
+season:
+  resource: ../../src/MotorsportCache/Season/Controller/
+  prefix: /api/v1/season
+  type: annotation
+  stateless: true
+
 standings:
   resource: ../../src/MotorsportTracker/Standing/Controller/
   prefix: /api/v1/standings
