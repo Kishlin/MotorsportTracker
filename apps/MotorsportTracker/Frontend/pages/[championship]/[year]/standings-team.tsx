@@ -3,25 +3,25 @@ import React from 'react';
 
 import Layout from '../../../src/Shared/Ui/Layout/Layout';
 
-import ChampionshipContainer from '../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
-import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
 import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 import championships from '../../../src/MotorsportTracker/Config/Championships';
+import ChampionshipContainer from '../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
+import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
 
-declare type ChampionshipResultsPathParams = {
+declare type ChampionshipTeamStandingsPathParams = {
     params: {
         championship: string,
         year: string,
     },
 };
 
-declare type ChampionshipResultsPageProps = {
+declare type ChampionshipTeamStandingsPageProps = {
     championship: string,
     year: string,
     page: string,
 }
 
-const ChampionshipResultsPage: React.FunctionComponent<ChampionshipResultsPageProps> = ({
+const ChampionshipStandingsPage: React.FunctionComponent<ChampionshipTeamStandingsPageProps> = ({
     championship,
     year,
     page,
@@ -30,19 +30,22 @@ const ChampionshipResultsPage: React.FunctionComponent<ChampionshipResultsPagePr
         menu={<MotorsportTrackerMenu />}
         content={(
             <ChampionshipContainer>
-                <ChampionshipNavbar championship={championship} year={year} page={page} />
-                <p style={{ textAlign: 'center' }}>No results available at this time.</p>
+                <p style={{ textAlign: 'center' }}>No Team Standings available at this time.</p>
             </ChampionshipContainer>
         )}
+        subHeader={<ChampionshipNavbar championship={championship} year={year} page={page} />}
     />
 );
 
-export const getStaticProps = async ({ params: { championship, year } }: ChampionshipResultsPathParams) => (
+export const getStaticProps = async ({ params: { championship, year } }: ChampionshipTeamStandingsPathParams) => (
     { props: { championship, year, page: 'results' } }
 );
 
-export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipResultsPathParams>, fallback: boolean }> {
-    const paths: Array<ChampionshipResultsPathParams> = [];
+export async function getStaticPaths(): Promise<{
+    paths: Array<ChampionshipTeamStandingsPathParams>,
+    fallback: boolean,
+}> {
+    const paths: Array<ChampionshipTeamStandingsPathParams> = [];
 
     Object.keys(championships).forEach((slug: string) => {
         championships[slug].years.forEach((year: number) => {
@@ -53,4 +56,4 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipResul
     return { paths, fallback: false };
 }
 
-export default ChampionshipResultsPage;
+export default ChampionshipStandingsPage;

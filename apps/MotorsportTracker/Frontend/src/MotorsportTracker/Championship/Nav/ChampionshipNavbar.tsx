@@ -75,20 +75,20 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({ 
                         Calendar
                     </Typography>
                     <Typography
-                        onClick={redirectionTo(`/${championship}/${year}/standings`)}
+                        onClick={redirectionTo(`/${championship}/${year}/standings-driver`)}
                         sx={{ mx: 2, cursor: 'pointer' }}
                         variant="h6"
                         noWrap
                     >
-                        Standings
+                        Driver Standings
                     </Typography>
                     <Typography
-                        onClick={redirectionTo(`/${championship}/${year}/results`)}
+                        onClick={redirectionTo(`/${championship}/${year}/standings-team`)}
                         sx={{ mx: 2, cursor: 'pointer' }}
                         variant="h6"
                         noWrap
                     >
-                        Results
+                        Team Standings
                     </Typography>
                 </Toolbar>
             </Grid>
