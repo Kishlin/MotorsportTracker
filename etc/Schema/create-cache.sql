@@ -86,6 +86,20 @@ COMMENT ON COLUMN public.driver_standings_view.events IS '(DC2Type:standings_vie
 
 
 --
+-- Name: event_cached; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.event_cached (
+    id character varying(36) NOT NULL,
+    championship character varying(255) NOT NULL,
+    year integer NOT NULL,
+    event character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.event_cached OWNER TO motorsporttracker;
+
+--
 -- Name: event_results_by_race; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -151,6 +165,14 @@ ALTER TABLE ONLY public.driver_standings_view
 
 
 --
+-- Name: event_cached event_cached_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.event_cached
+    ADD CONSTRAINT event_cached_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: event_results_by_race event_results_by_races_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -179,6 +201,20 @@ ALTER TABLE ONLY public.team_standings_view
 --
 
 CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_view USING btree (championship_slug, year);
+
+
+--
+-- Name: event_cached_championship_year_event_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_cached_championship_year_event_idx ON public.event_cached USING btree (championship, year, event);
+
+
+--
+-- Name: event_cached_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_cached_id_idx ON public.event_cached USING btree (id);
 
 
 --
