@@ -32,9 +32,27 @@ export type MotorsportEvent = {
     sessions: Array<MotorsportSession>,
 };
 
+export type SeasonEvent = {
+    id: string,
+    slug: string,
+    name: string,
+    index: number,
+};
+
+export type EventShort = {
+    championship: string,
+    year: number,
+    event: string,
+};
+
 export type EventsSchedule = {
     [key: `${string}-${string}-${string}`]: MotorsportEvent[]
 };
+
+export type SeasonEvents = {
+    [key: string]: SeasonEvent,
+};
+export type EventsList = EventShort[];
 
 export type Championship = {
     name: string,
