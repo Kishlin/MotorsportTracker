@@ -48,7 +48,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'World Endurance Championship',
         shortName: 'WEC',
         slug: 'world-endurance-championship',
-        years: Array.from({ length: 11 }, (x, i) => 2021 + i),
+        years: Array.from({ length: 12 }, (x, i) => 2012 + i),
     },
     'gt-world-challenge-europe': {
         name: 'GT World Challenge Europe',
