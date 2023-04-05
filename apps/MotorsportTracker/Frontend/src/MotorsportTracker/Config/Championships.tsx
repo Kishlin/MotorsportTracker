@@ -41,7 +41,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'W Series',
         shortName: 'W Series',
         slug: 'w-series',
-        years: Array.from({ length: 3 }, (x, i) => 2019 + i),
+        years: [2019, 2021, 2022], // No championship in 2020
     },
     'world-endurance-championship': {
         name: 'World Endurance Championship',
