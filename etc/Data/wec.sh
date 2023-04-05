@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "World Endurance Champi
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "World Endurance Championship" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "World Endurance Championship" "$year"
 done

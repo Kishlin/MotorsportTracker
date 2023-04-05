@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "GT World Challenge Eur
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "GT World Challenge Europe" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "GT World Challenge Europe" "$year"
 done

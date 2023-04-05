@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "MotoGP" "motogp.svg" "
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "MotoGP" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "MotoGP" "$year"
 done

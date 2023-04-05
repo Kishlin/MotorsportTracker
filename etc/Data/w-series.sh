@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "W Series" "w-series.sv
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "W Series" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "W Series" "$year"
 done

@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "F4 France" "f4-france.
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "F4 France" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "F4 France" "$year"
 done

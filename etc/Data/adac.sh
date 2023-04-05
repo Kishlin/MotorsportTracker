@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "ADAC GT Masters" "adac
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "ADAC GT Masters" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "ADAC GT Masters" "$year"
 done

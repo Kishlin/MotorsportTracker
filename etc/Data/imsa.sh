@@ -31,4 +31,5 @@ $prefix kishlin:motorsport:championship-presentation:add "IMSA SportsCar Champio
 for year in $(seq "$start" "$end")
 do
   $prefix kishlin:motorsport-cache:calendar:sync "IMSA SportsCar Championship" "$year"
+  $prefix kishlin:motorsport-cache:season-events:sync "IMSA SportsCar Championship" "$year"
 done
