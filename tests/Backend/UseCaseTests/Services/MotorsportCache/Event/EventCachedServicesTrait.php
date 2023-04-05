@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Event;
 
 use Kishlin\Backend\MotorsportCache\Event\Application\SyncEventCache\SyncEventCacheCommandHandler;
+use Kishlin\Backend\MotorsportCache\Event\Application\ViewCachedEvents\ViewCachedEventsQueryHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Event\EventCachedRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Event\EventDataRepositorySpy;
 
@@ -15,6 +16,8 @@ trait EventCachedServicesTrait
     private ?EventCachedRepositorySpy $eventCachedRepositorySpy = null;
 
     private ?SyncEventCacheCommandHandler $syncEventCacheCommandHandler = null;
+
+    private ?ViewCachedEventsQueryHandler $viewCachedEventsQueryHandler = null;
 
     public function eventDataRepositorySpy(): EventDataRepositorySpy
     {
@@ -50,5 +53,16 @@ trait EventCachedServicesTrait
         }
 
         return $this->syncEventCacheCommandHandler;
+    }
+
+    public function viewCachedEventsQueryHandler(): ViewCachedEventsQueryHandler
+    {
+        if (null === $this->viewCachedEventsQueryHandler) {
+            $this->viewCachedEventsQueryHandler = new ViewCachedEventsQueryHandler(
+                $this->eventCachedRepositorySpy(),
+            );
+        }
+
+        return $this->viewCachedEventsQueryHandler;
     }
 }

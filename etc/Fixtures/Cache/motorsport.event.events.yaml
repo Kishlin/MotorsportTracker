@@ -12,3 +12,13 @@ australianGrandPrix:
   championship: 'formula-one'
   year: 2022
   eventSlug: 'australian-grand-prix'
+
+hungarianGrandPrix:
+  championship: 'formula-one'
+  year: 2019
+  eventSlug: 'hungarian-grand-prix'
+
+motoGPAmericasGrandPrix:
+  championship: 'motogp'
+  year: 2022
+  eventSlug: 'americas-grand-prix'

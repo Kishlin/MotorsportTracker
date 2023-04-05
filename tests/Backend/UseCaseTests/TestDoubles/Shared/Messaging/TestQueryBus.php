@@ -7,6 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 use Exception;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvents\ViewCalendarEventsQuery;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\ViewSeasonSchedule\ViewSeasonScheduleQuery;
+use Kishlin\Backend\MotorsportCache\Event\Application\ViewCachedEvents\ViewCachedEventsQuery;
 use Kishlin\Backend\MotorsportCache\Event\Application\ViewSeasonEvents\ViewSeasonEventsQuery;
 use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceQuery;
 use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberQuery;
@@ -38,6 +39,10 @@ final class TestQueryBus implements QueryBus
 
         if ($query instanceof ViewSeasonEventsQuery) {
             return $this->testServiceContainer->viewSeasonEventsQueryHandler()($query);
+        }
+
+        if ($query instanceof ViewCachedEventsQuery) {
+            return $this->testServiceContainer->viewCachedEventsQueryHandler()($query);
         }
 
         if ($query instanceof ViewEventResultsByRaceQuery) {
