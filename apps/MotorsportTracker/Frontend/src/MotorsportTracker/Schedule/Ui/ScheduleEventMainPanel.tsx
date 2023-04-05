@@ -2,8 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
+import { SvgIconProps } from '@mui/material/SvgIcon/SvgIcon';
 
 import { MotorsportEvent } from '../../Shared/Types';
+import useNavigate from '../../../Shared/Hooks/useNavigate';
 
 declare type ScheduleEventMainPanelProps = {
     toggleTimetable: () => void,
@@ -16,7 +21,10 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
     handleWidth,
     event,
 }) => {
+    const { redirectionTo } = useNavigate();
+
     const [dateLabels, setDateLabels] = useState<{ start: string, end: string}>({ start: '', end: '' });
+    const [eventIcons, setEventIcons] = useState<React.ReactNode>(<noscript />);
 
     useEffect(
         () => {
@@ -27,13 +35,27 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                 start: startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }),
                 end: endDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }),
             });
+
+            if (startDate <= new Date()) {
+                const eventUri = event.slug.replaceAll('_', '/');
+
+                const props: Partial<SvgIconProps> = { color: 'action', sx: { cursor: 'pointer', mr: 1 } };
+
+                setEventIcons((
+                    <>
+                        <LeaderboardIcon onClick={redirectionTo(`/${eventUri}/results`)} {...props} />
+                        <SlowMotionVideoIcon onClick={redirectionTo(`/${eventUri}/histories`)} {...props} />
+                        <QueryStatsIcon onClick={redirectionTo(`/${eventUri}/graphs`)} {...props} />
+                    </>
+                ));
+            }
         },
         [],
     );
 
     const dateWidth = 100;
 
-    const iconProps: { color: 'action'|'disabled', sx: { cursor: 'pointer'|'not-allowed' } } = 0 === event.sessions.length
+    const iconProps: Partial<SvgIconProps> = 0 === event.sessions.length
         ? { color: 'disabled', sx: { cursor: 'not-allowed' } }
         : { color: 'action', sx: { cursor: 'pointer' } };
 
@@ -66,6 +88,7 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                         </Grid>
                     </Grid>
                     <Grid item sx={{ height: '24px', mx: 4 }}>
+                        {eventIcons}
                         <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
                     </Grid>
                 </Grid>
