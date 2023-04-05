@@ -26,7 +26,7 @@ do
   $prefix kishlin:motorsport-stats:calendar:scrap "FIA Formula 2 Championship" "$year"
 done
 
-$prefix kishlin:motorsport:championship-presentation:add "FIA Formula 2 Championship" "formula-2.svg" "#043961"
+$prefix kishlin:motorsport:championship-presentation:add "FIA Formula 2 Championship" "fia-formula-2-championship.svg" "#043961"
 
 for year in $(seq "$start" "$end")
 do

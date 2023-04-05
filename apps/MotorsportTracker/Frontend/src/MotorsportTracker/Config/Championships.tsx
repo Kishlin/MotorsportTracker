@@ -8,26 +8,19 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'formula-one',
         years: Array.from({ length: 74 }, (x, i) => 1950 + i),
     },
-    'formula-2': {
+    'fia-formula-2-championship': {
         name: 'FIA Formula 2 Championship',
         displayName: 'Formula 2',
         shortName: 'Formula 2',
-        slug: 'formula-2',
+        slug: 'fia-formula-2-championship',
         years: Array.from({ length: 7 }, (x, i) => 2017 + i),
     },
-    'formula-3': {
+    'fia-formula-3-championship': {
         name: 'FIA Formula 3 Championship',
         displayName: 'Formula 3',
         shortName: 'Formula 3',
-        slug: 'formula-3',
+        slug: 'fia-formula-3-championship',
         years: Array.from({ length: 5 }, (x, i) => 2019 + i),
-    },
-    'f4-france': {
-        name: 'F4 France',
-        displayName: 'F4 France',
-        shortName: 'F4 France',
-        slug: 'f4-france',
-        years: Array.from({ length: 3 }, (x, i) => 2021 + i),
     },
     'formula-e': {
         name: 'Formula E',
@@ -35,6 +28,13 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'Formula E',
         slug: 'formula-e',
         years: [2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023], // No championship in 2020
+    },
+    'f4-france': {
+        name: 'F4 France',
+        displayName: 'F4 France',
+        shortName: 'F4 France',
+        slug: 'f4-france',
+        years: Array.from({ length: 3 }, (x, i) => 2021 + i),
     },
     'w-series': {
         name: 'W Series',
