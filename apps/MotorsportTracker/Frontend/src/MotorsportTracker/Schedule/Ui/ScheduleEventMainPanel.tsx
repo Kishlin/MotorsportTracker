@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
@@ -43,9 +44,15 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
 
                 setEventIcons((
                     <>
-                        <LeaderboardIcon onClick={redirectionTo(`/${eventUri}/results`)} {...props} />
-                        <SlowMotionVideoIcon onClick={redirectionTo(`/${eventUri}/histories`)} {...props} />
-                        <QueryStatsIcon onClick={redirectionTo(`/${eventUri}/graphs`)} {...props} />
+                        <Tooltip title="Results">
+                            <LeaderboardIcon onClick={redirectionTo(`/${eventUri}/results`)} {...props} />
+                        </Tooltip>
+                        <Tooltip title="Histories">
+                            <SlowMotionVideoIcon onClick={redirectionTo(`/${eventUri}/histories`)} {...props} />
+                        </Tooltip>
+                        <Tooltip title="Graphs">
+                            <QueryStatsIcon onClick={redirectionTo(`/${eventUri}/graphs`)} {...props} />
+                        </Tooltip>
                     </>
                 ));
             }
@@ -89,7 +96,9 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                     </Grid>
                     <Grid item sx={{ height: '24px', mx: 4 }}>
                         {eventIcons}
-                        <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
+                        <Tooltip title="Timetable">
+                            <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
+                        </Tooltip>
                     </Grid>
                 </Grid>
             </Grid>
