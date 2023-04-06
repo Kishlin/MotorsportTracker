@@ -28,13 +28,14 @@ TXT;
 
     private const TEAM_SELECT = <<<'TXT'
 json_build_object(
-    'id', d.id,
-    'short_code', d.short_code,
-    'name', d.name,
+    'id', t.id,
+    'presentation_id', tp.id,
+    'name', tp.name,
+    'color', tp.color,
     'country', json_build_object(
-        'id', c_d.id,
-        'code', c_d.code,
-        'name', c_d.name
+        'id', c_t.id,
+        'code', c_t.code,
+        'name', c_t.name
     )
 )
 TXT;
@@ -62,7 +63,7 @@ TXT;
             ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
             ->innerJoin('team_presentation', 'tp', $qb->expr()->andX($qb->expr()->eq('tp.team', 't.id'), $qb->expr()->eq('tp.season', 's.id')))
             ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'd.country'))
-            ->innerJoin('country', 't_c', $qb->expr()->eq('t_c.id', 'tp.country'))
+            ->innerJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 'tp.country'))
             ->where($qb->expr()->eq('e.session', ':session'))
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')
