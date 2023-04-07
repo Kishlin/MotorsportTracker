@@ -4,13 +4,13 @@ import React from 'react';
 import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
 import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import ResultsContainer from '../../../../src/MotorsportTracker/Result/Ui/ResultsContainer';
 import { EventShort, SeasonEvents } from '../../../../src/MotorsportTracker/Shared/Types';
 import ResultsContent from '../../../../src/MotorsportTracker/Result/Ui/ResultsContent';
+import EventContainer from '../../../../src/MotorsportTracker/Event/Ui/EventContainer';
 import { ResultsByRace } from '../../../../src/MotorsportTracker/Result/Types/Index';
-import ResultsTitle from '../../../../src/MotorsportTracker/Result/Ui/ResultsTitle';
 import EventNavbar from '../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import resultsApi from '../../../../src/MotorsportTracker/Result/Api/ResultsApi';
+import EventTitle from '../../../../src/MotorsportTracker/Event/Ui/EventTitle';
 import seasonApi from '../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import eventsApi from '../../../../src/MotorsportTracker/Event/Api/EventsApi';
 
@@ -45,10 +45,10 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
         <Layout
             menu={<MotorsportTrackerMenu />}
             content={(
-                <ResultsContainer>
-                    <ResultsTitle event={season[event]} />
+                <EventContainer>
+                    <EventTitle event={season[event]} page={page} />
                     <ResultsContent results={results} withTitle={withTitle} event={season[event]} />
-                </ResultsContainer>
+                </EventContainer>
             )}
             subHeader={(
                 <EventNavbar championship={championship} year={year} event={event} season={season} page={page} />
