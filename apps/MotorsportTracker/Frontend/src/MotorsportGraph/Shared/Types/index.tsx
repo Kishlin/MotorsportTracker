@@ -1,3 +1,12 @@
+export type LapByLapSeries = {
+    color: string,
+    label: string,
+    dashed: boolean,
+    lapTimes: {
+        [key: string]: number,
+    },
+};
+
 export type LapByLapGraphData = {
     session: {
         id: string,
@@ -8,12 +17,7 @@ export type LapByLapGraphData = {
         fastest: number,
         slowest: number,
     },
-    series: Array<{
-        color: string,
-        label: string,
-        dashed: boolean,
-        lapTimes: number[],
-    }>,
+    series: Array<LapByLapSeries>,
 };
 
 export type EventGraphList<T> = {

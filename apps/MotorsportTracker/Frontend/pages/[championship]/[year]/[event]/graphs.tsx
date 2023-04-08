@@ -10,8 +10,8 @@ import seasonApi from '../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import eventsApi from '../../../../src/MotorsportTracker/Event/Api/EventsApi';
 import GraphTitle from '../../../../src/MotorsportGraph/Shared/Ui/GraphTitle';
 import { EventGraphs } from '../../../../src/MotorsportGraph/Shared/Types';
-import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 import Graphs from '../../../../src/MotorsportGraph/Shared/Ui/Graphs';
+import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
 declare type EventGraphsPathParams = {
     params: {

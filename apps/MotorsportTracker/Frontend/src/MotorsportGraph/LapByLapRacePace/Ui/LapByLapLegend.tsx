@@ -3,13 +3,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Grid from '@mui/material/Grid';
 import React from 'react';
 
+import { LapByLapSeries } from '../../Shared/Types';
+
 declare type LapByLapLegendProps = {
-    series: Array<{
-        color: string,
-        label: string,
-        dashed: boolean,
-        lapTimes: number[],
-    }>,
+    series: Array<LapByLapSeries>,
 };
 
 const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({ series }) => {

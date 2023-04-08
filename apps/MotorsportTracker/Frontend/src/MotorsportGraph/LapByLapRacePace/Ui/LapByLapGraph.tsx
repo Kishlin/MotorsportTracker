@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GraphContainer from '../../Shared/Ui/GraphContainer';
-import { LapByLapGraphData } from '../../Shared/Types';
+import { LapByLapGraphData, LapByLapSeries } from '../../Shared/Types';
 import Canvas from '../../../Canvas/Ui/Canvas';
 import LapByLapLegend from './LapByLapLegend';
 import LapByLapTitle from './LapByLapTitle';
@@ -86,25 +86,32 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
     };
 
     const drawSeries = (ctx: CanvasRenderingContext2D, pixelToMilliRatio: number, pixelToLapsRatio: number) => {
-        series.forEach((currentSeries: { color:string, label: string, dashed: boolean, lapTimes: number[] }) => {
+        series.forEach((currentSeries: LapByLapSeries) => {
             ctx.save();
             ctx.beginPath();
             ctx.setLineDash(currentSeries.dashed ? lineDash : []);
 
             ctx.strokeStyle = currentSeries.color;
 
-            ctx.moveTo(
-                axisMargin + pixelToLapsRatio,
-                (highest - currentSeries.lapTimes[0]) * pixelToMilliRatio,
-            );
+            let previous: number|undefined;
 
-            const max = currentSeries.lapTimes.length;
-            for (let i = 2; i < max; i += 1) {
-                ctx.lineTo(
-                    axisMargin + i * pixelToLapsRatio,
-                    (highest - currentSeries.lapTimes[i - 1]) * pixelToMilliRatio,
-                );
-            }
+            Object.keys(currentSeries.lapTimes).forEach((key: string) => {
+                const lap = parseInt(key, 10);
+
+                if (undefined === previous || previous !== lap - 1) {
+                    ctx.moveTo(
+                        axisMargin + lap * pixelToLapsRatio,
+                        (highest - currentSeries.lapTimes[lap]) * pixelToMilliRatio,
+                    );
+                } else {
+                    ctx.lineTo(
+                        axisMargin + lap * pixelToLapsRatio,
+                        (highest - currentSeries.lapTimes[lap]) * pixelToMilliRatio,
+                    );
+                }
+
+                previous = lap;
+            });
 
             ctx.stroke();
             ctx.restore();
@@ -129,7 +136,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
     };
 
     return (
-        <GraphContainer maxWidth={1000}>
+        <GraphContainer>
             <LapByLapTitle type={data.session.type} />
             <Canvas draw={drawLapByLapGraph} aspectRatio={2} />
             <LapByLapLegend series={series} />
