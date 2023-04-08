@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import GraphContainer from '../../Shared/Ui/GraphContainer';
 import { LapByLapGraphData, LapByLapSeries } from '../../Shared/Types';
@@ -20,6 +20,18 @@ const axisNameMargin = 10;
 const lineDash = [3, 3];
 
 const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) => {
+    const showSeries: {[key: string]: boolean} = {};
+
+    data.series.forEach((series: LapByLapSeries) => {
+        showSeries[series.label] = true;
+    });
+
+    const [seriesShowStatus, setSeriesShowStatus] = useState<{[key: string]: boolean}>(showSeries);
+
+    const toggleSeries = (label: string) => {
+        setSeriesShowStatus({ ...seriesShowStatus, [label]: !seriesShowStatus[label] });
+    };
+
     const { laps, lapTimes, series } = data;
 
     const highest = (lapTimes.slowest + lapTimeSpace);
@@ -87,6 +99,10 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
 
     const drawSeries = (ctx: CanvasRenderingContext2D, pixelToMilliRatio: number, pixelToLapsRatio: number) => {
         series.forEach((currentSeries: LapByLapSeries) => {
+            if (false === seriesShowStatus[currentSeries.label]) {
+                return;
+            }
+
             ctx.save();
             ctx.beginPath();
             ctx.setLineDash(currentSeries.dashed ? lineDash : []);
@@ -139,7 +155,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
         <GraphContainer>
             <LapByLapTitle type={data.session.type} />
             <Canvas draw={drawLapByLapGraph} aspectRatio={2} />
-            <LapByLapLegend series={series} />
+            <LapByLapLegend series={series} toggleSeries={toggleSeries} seriesShowStatus={seriesShowStatus} />
         </GraphContainer>
     );
 };

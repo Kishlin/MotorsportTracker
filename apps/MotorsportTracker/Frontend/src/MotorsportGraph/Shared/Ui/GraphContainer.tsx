@@ -6,7 +6,7 @@ declare type GraphContainerProps = {
 };
 
 const GraphContainer: React.FunctionComponent<GraphContainerProps> = ({ children }) => (
-    <Grid container spacing={0} direction="column" sx={{ px: 8, py: 2 }}>
+    <Grid container spacing={0} direction="column" sx={{ px: 16, py: 2 }}>
         {children}
     </Grid>
 );
