@@ -1,24 +1,13 @@
 import React from 'react';
 
-import Canvas from '../../../Canvas/Ui/Canvas';
 import GraphContainer from '../../Shared/Ui/GraphContainer';
-import GraphTitle from '../../Shared/Ui/GraphTitle';
+import { LapByLapGraphData } from '../../Shared/Types';
+import Canvas from '../../../Canvas/Ui/Canvas';
 import LapByLapLegend from './LapByLapLegend';
+import LapByLapTitle from './LapByLapTitle';
 
 declare type LapByLapGraphProps = {
-    data: {
-        laps: number,
-        lapTimes: {
-            fastest: number,
-            slowest: number,
-        },
-        series: Array<{
-            color: string,
-            label: string,
-            dashed: boolean,
-            lapTimes: number[],
-        }>,
-    },
+    data: LapByLapGraphData,
 };
 
 const axisColor = '#ffffff';
@@ -30,7 +19,9 @@ const labelsMargin = 25;
 const axisNameMargin = 10;
 const lineDash = [3, 3];
 
-const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data: { laps, lapTimes, series } }) => {
+const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) => {
+    const { laps, lapTimes, series } = data;
+
     const highest = (lapTimes.slowest + lapTimeSpace);
     const lowest = (lapTimes.fastest - lapTimeSpace);
     const lapsTotal = laps + 5;
@@ -107,7 +98,8 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data: { la
                 (highest - currentSeries.lapTimes[0]) * pixelToMilliRatio,
             );
 
-            for (let i = 2; i <= laps; i += 1) {
+            const max = currentSeries.lapTimes.length;
+            for (let i = 2; i < max; i += 1) {
                 ctx.lineTo(
                     axisMargin + i * pixelToLapsRatio,
                     (highest - currentSeries.lapTimes[i - 1]) * pixelToMilliRatio,
@@ -138,7 +130,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data: { la
 
     return (
         <GraphContainer maxWidth={1000}>
-            <GraphTitle title="Race Pace" />
+            <LapByLapTitle type={data.session.type} />
             <Canvas draw={drawLapByLapGraph} aspectRatio={2} />
             <LapByLapLegend series={series} />
         </GraphContainer>

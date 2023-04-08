@@ -22,7 +22,7 @@ const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({ series }
     });
 
     const legend = series.map((entry) => (
-        <Grid item xs={1} sx={{ px: 1 }}>
+        <Grid key={entry.label} item xs={1} sx={{ px: 1 }}>
             <Grid container>
                 <Grid item sx={{ mt: '-1px', mr: 1 }}>
                     {legendIcon(entry)}
@@ -35,7 +35,7 @@ const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({ series }
     ));
 
     return (
-        <Grid container columns={{ xs: series.length / 2 }} justifyContent="center">
+        <Grid container columns={{ xs: (series.length + 2) / 3 }} justifyContent="center">
             {legend}
         </Grid>
     );
