@@ -100,12 +100,27 @@ CREATE TABLE public.event_cached (
 ALTER TABLE public.event_cached OWNER TO motorsporttracker;
 
 --
+-- Name: event_graph; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.event_graph (
+    id character varying(36) NOT NULL,
+    event character varying(36) NOT NULL,
+    "order" integer NOT NULL,
+    type character varying(255) NOT NULL,
+    data json NOT NULL
+);
+
+
+ALTER TABLE public.event_graph OWNER TO motorsporttracker;
+
+--
 -- Name: event_results_by_race; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
 CREATE TABLE public.event_results_by_race (
     id character varying(36) NOT NULL,
-    event character varying(36),
+    event character varying(36) NOT NULL,
     results_by_race json NOT NULL
 );
 
@@ -173,6 +188,14 @@ ALTER TABLE ONLY public.event_cached
 
 
 --
+-- Name: event_graph event_graph_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.event_graph
+    ADD CONSTRAINT event_graph_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: event_results_by_race event_results_by_races_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -215,6 +238,20 @@ CREATE UNIQUE INDEX event_cached_championship_year_event_idx ON public.event_cac
 --
 
 CREATE UNIQUE INDEX event_cached_id_idx ON public.event_cached USING btree (id);
+
+
+--
+-- Name: event_graph_event_type_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_graph_event_type_idx ON public.event_graph USING btree (event, type);
+
+
+--
+-- Name: event_graph_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX event_graph_id_idx ON public.event_graph USING btree (id);
 
 
 --
