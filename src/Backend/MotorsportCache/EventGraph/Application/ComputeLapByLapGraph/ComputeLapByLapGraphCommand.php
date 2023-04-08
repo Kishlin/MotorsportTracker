@@ -11,6 +11,7 @@ final class ComputeLapByLapGraphCommand implements Command
     private function __construct(
         private readonly string $eventId,
         private readonly int $maximumLapTime,
+        private readonly int $minimumLapTime,
     ) {
     }
 
@@ -24,8 +25,13 @@ final class ComputeLapByLapGraphCommand implements Command
         return $this->maximumLapTime;
     }
 
-    public static function fromScalars(string $eventId, int $maximumLapTime): self
+    public function minimumLapTime(): int
     {
-        return new self($eventId, $maximumLapTime);
+        return $this->minimumLapTime;
+    }
+
+    public static function fromScalars(string $eventId, int $maximumLapTime, int $minimumLapTime): self
+    {
+        return new self($eventId, $maximumLapTime, $minimumLapTime);
     }
 }

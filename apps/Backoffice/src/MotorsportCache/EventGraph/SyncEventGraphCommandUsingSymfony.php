@@ -25,6 +25,9 @@ final class SyncEventGraphCommandUsingSymfony extends SymfonyCommand
     private const ARGUMENT_MAX_LAP_TIME = 'max-laptime';
     private const QUESTION_MAX_LAP_TIME = "Please enter the maximum lap time:\n";
 
+    private const ARGUMENT_MIN_LAP_TIME = 'min-laptime';
+    private const QUESTION_MIN_LAP_TIME = "Please enter the minimum lap time:\n";
+
     public function __construct(
         private readonly CommandBus $commandBus,
     ) {
@@ -38,6 +41,7 @@ final class SyncEventGraphCommandUsingSymfony extends SymfonyCommand
             ->setDescription('Computes results for all races of an event.')
             ->addArgument(self::ARGUMENT_EVENT, InputArgument::OPTIONAL, 'The id of the event')
             ->addArgument(self::ARGUMENT_MAX_LAP_TIME, InputArgument::OPTIONAL, 'The maximum lap time')
+            ->addArgument(self::ARGUMENT_MIN_LAP_TIME, InputArgument::OPTIONAL, 'The minimum lap time')
         ;
     }
 
@@ -47,9 +51,10 @@ final class SyncEventGraphCommandUsingSymfony extends SymfonyCommand
 
         $event = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_EVENT, self::QUESTION_EVENT);
         $max   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_MAX_LAP_TIME, self::QUESTION_MAX_LAP_TIME);
+        $min   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_MIN_LAP_TIME, self::QUESTION_MIN_LAP_TIME);
 
         try {
-            $graphId = $this->commandBus->execute(ComputeLapByLapGraphCommand::fromScalars($event, $max));
+            $graphId = $this->commandBus->execute(ComputeLapByLapGraphCommand::fromScalars($event, $max, $min));
 
             assert(null === $graphId || $graphId instanceof UuidValueObject);
         } catch (Throwable $e) {

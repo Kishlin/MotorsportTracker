@@ -57,7 +57,7 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
                 continue;
             }
 
-            $graphsData[$session['session']] = $this->buildGraphDataForSession($session, $history, $command->maximumLapTime());
+            $graphsData[$session['session']] = $this->buildGraphDataForSession($session, $history, $command);
         }
 
         $eventGraph = EventGraph::lapByLap(
@@ -112,7 +112,7 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
      *     laps: number,
      * }
      */
-    private function buildGraphDataForSession(array $session, LapByLapData $history, int $maximumLapTime): array
+    private function buildGraphDataForSession(array $session, LapByLapData $history, ComputeLapByLapGraphCommand $command): array
     {
         $seriesList = [];
 
@@ -127,7 +127,7 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
             foreach ($lapTimesAsString as $key => $lapTimeAsString) {
                 $lapTime = (int) $lapTimeAsString;
 
-                if ($lapTime > $maximumLapTime) {
+                if ($lapTime < $command->minimumLapTime() || $lapTime > $command->maximumLapTime()) {
                     continue;
                 }
 
