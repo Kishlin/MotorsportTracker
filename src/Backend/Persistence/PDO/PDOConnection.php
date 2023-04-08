@@ -37,9 +37,9 @@ final class PDOConnection implements Connection
             return PDOResult::fail(ResultFailure::CONNECTION_ERROR);
         }
 
-        $query = "INSERT INTO {$table} ("
-            . implode(', ', array_keys($data))
-            . ') VALUES (:'
+        $query = "INSERT INTO {$table} (\""
+            . implode('", "', array_keys($data))
+            . '") VALUES (:'
             . implode(', :', array_keys($data))
             . ');'
         ;
