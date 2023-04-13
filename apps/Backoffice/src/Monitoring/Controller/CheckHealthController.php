@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
     '/check-health',
     name: 'monitoring_status',
     methods: [Request::METHOD_GET],
-    condition: "'%kishlin.app.environment%' in ['dev', 'test']",
 )]
 final class CheckHealthController extends AbstractCheckHealthController
 {

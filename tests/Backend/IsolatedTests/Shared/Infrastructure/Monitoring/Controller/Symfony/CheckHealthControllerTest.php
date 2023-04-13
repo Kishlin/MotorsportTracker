@@ -18,9 +18,10 @@ final class CheckHealthControllerTest extends TestCase
     public function testCheckHealthController(): void
     {
         $probesData = [
-            'probeOne'  => true,
-            'probTwo'   => true,
-            'probThree' => false,
+            'probeOne'    => true,
+            'probTwo'     => true,
+            'probThree'   => false,
+            'Environment' => 'test',
         ];
 
         $controller = $this->controller($probesData);
@@ -37,13 +38,13 @@ final class CheckHealthControllerTest extends TestCase
     }
 
     /**
-     * @param array<string, bool> $probesData
+     * @param array<string, bool|string> $probesData
      */
     private function controller(array $probesData): AbstractCheckHealthController
     {
         $probes = array_map([$this, 'probeMock'], array_keys($probesData), $probesData);
 
-        return new class($probes) extends AbstractCheckHealthController {};
+        return new class($probes, 'test') extends AbstractCheckHealthController {};
     }
 
     private function probeMock(string $name, bool $isAlive): Probe

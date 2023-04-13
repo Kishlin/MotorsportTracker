@@ -10,13 +10,14 @@ use Throwable;
 final class DatabaseProbe implements Probe
 {
     public function __construct(
-        private readonly Connection $connection
+        private readonly Connection $connection,
+        private readonly string $dbName,
     ) {
     }
 
     public function name(): string
     {
-        return 'database';
+        return $this->dbName;
     }
 
     public function isAlive(): bool

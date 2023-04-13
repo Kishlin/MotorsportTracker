@@ -30,14 +30,6 @@ services:
       - '../../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
 
 
-  ##> Monitoring
-
-  Kishlin\Backend\Shared\Infrastructure\Monitoring\:
-    resource: '../../../../src/Backend/Shared/Infrastructure/Monitoring'
-    bind:
-      $appName: '%kishlin.app.name%'
-
-
   ##> Messaging
 
   Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus:
@@ -105,6 +97,29 @@ services:
 
   Kishlin\Backend\Persistence\Core\Connection\Connection:
     alias: 'kishlin.app.infrastructure.connection.core'
+
+
+  ##> Monitoring
+
+  Kishlin\Apps\MotorsportTracker\Backend\Monitoring\Controller\CheckHealthController:
+    bind:
+      $env: '%kishlin.app.environment%'
+
+  Kishlin\Backend\Shared\Infrastructure\Monitoring\:
+    resource: '../../../../src/Backend/Shared/Infrastructure/Monitoring'
+    bind:
+      $appName: '%kishlin.app.name%'
+
+  Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe:
+    bind:
+      $dbName: 'Database Core'
+      $connection: '@kishlin.app.infrastructure.connection.core'
+
+  kishlin.monitoring.probe.database.cache:
+    class: Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe
+    bind:
+      $dbName: 'Database Cache'
+      $connection: '@kishlin.app.infrastructure.connection.cache'
 
   _instanceof:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:

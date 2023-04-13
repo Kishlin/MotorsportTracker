@@ -26,7 +26,9 @@ final class CheckHealthControllerTest extends CheckHealthControllerTestCase
 
         $expectedServices = [
             'Backoffice',
-            'database',
+            'Database Core',
+            'Database Cache',
+            'Environment',
         ];
 
         self::assertTheAPIShowsStatusForAllServices($client, $endpointUri, $expectedServices);

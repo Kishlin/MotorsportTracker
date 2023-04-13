@@ -20,7 +20,7 @@ final class DatabaseProbeTest extends TestCase
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
         $connection->method('isConnected')->willReturn(true);
 
-        $probe = new DatabaseProbe($connection);
+        $probe = new DatabaseProbe($connection, 'core');
 
         self::assertTrue($probe->isAlive());
     }
@@ -30,7 +30,7 @@ final class DatabaseProbeTest extends TestCase
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
         $connection->method('connect')->willThrowException(new Exception());
 
-        $probe = new DatabaseProbe($connection);
+        $probe = new DatabaseProbe($connection, 'core');
 
         self::assertFalse($probe->isAlive());
     }
