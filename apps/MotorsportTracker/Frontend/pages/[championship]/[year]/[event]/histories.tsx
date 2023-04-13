@@ -1,5 +1,6 @@
 // @ts-ignore
 import React from 'react';
+import Typography from '@mui/material/Typography';
 
 import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
@@ -37,7 +38,8 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
         menu={<MotorsportTrackerMenu />}
         content={(
             <EventContainer>
-                <p style={{ textAlign: 'center' }}>{`${championship} ${year} ${event} ${page}`}</p>
+                <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Graphs`}</Typography>
+                <Typography align="center">There are no histories available at this time.</Typography>
             </EventContainer>
         )}
         subHeader={<EventNavbar championship={championship} year={year} event={event} season={season} page={page} />}
