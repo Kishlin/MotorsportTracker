@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Command\Symfony;
+namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory\ScrapRaceHistoryCommand;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\ScrapClassificationCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
@@ -13,9 +13,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapRaceHistoryCommandUsingSymfony extends SymfonyCommand
+final class ScrapClassificationCommandUsingSymfony extends SymfonyCommand
 {
-    public const NAME = 'kishlin:motorsport-stats:race-history:scrap';
+    public const NAME = 'kishlin:motorsport-stats:classification:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
@@ -39,7 +39,7 @@ final class ScrapRaceHistoryCommandUsingSymfony extends SymfonyCommand
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Scrap race history for a session.')
+            ->setDescription('Scrap classification for a session.')
             ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The series name')
             ->addArgument(self::ARGUMENT_YEAR, InputArgument::OPTIONAL, 'The season year')
             ->addArgument(self::ARGUMENT_EVENT, InputArgument::OPTIONAL, 'The event name')
@@ -56,9 +56,9 @@ final class ScrapRaceHistoryCommandUsingSymfony extends SymfonyCommand
         $event   = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_EVENT, self::QUESTION_EVENT);
         $session = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_TYPE, self::QUESTION_TYPE);
 
-        $this->commandBus->execute(ScrapRaceHistoryCommand::fromScalars($series, $year, $event, $session));
+        $this->commandBus->execute(ScrapClassificationCommand::fromScalars($series, $year, $event, $session));
 
-        $ui->success("Finished scrapping race history for {$series} #{$year} {$event} {$session}.");
+        $ui->success("Finished scrapping classifications for {$series} #{$year} {$event} {$session}.");
 
         return Command::SUCCESS;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Command\Symfony;
+namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapSeasons\ScrapSeasonsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;

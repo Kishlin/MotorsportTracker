@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Command\Symfony;
+namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapSeasonAnalytics\ScrapSeasonAnalyticsCommand;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapTeamsForSeason\ScrapTeamsForSeasonCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
@@ -13,9 +13,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapSeasonsAnalyticsCommandUsingSymfony extends SymfonyCommand
+final class ScrapTeamsForSeasonCommandUsingSymfony extends SymfonyCommand
 {
-    public const NAME = 'kishlin:motorsport-stats:analytics:scrap';
+    public const NAME = 'kishlin:motorsport-stats:teams:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
@@ -33,7 +33,7 @@ final class ScrapSeasonsAnalyticsCommandUsingSymfony extends SymfonyCommand
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Scrap calendar for a championship season.')
+            ->setDescription('Scrap teams for a championship season.')
             ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The series name')
             ->addArgument(self::ARGUMENT_YEAR, InputArgument::OPTIONAL, 'The season year')
         ;
@@ -46,9 +46,9 @@ final class ScrapSeasonsAnalyticsCommandUsingSymfony extends SymfonyCommand
         $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
         $year   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
 
-        $this->commandBus->execute(ScrapSeasonAnalyticsCommand::fromScalars($series, $year));
+        $this->commandBus->execute(ScrapTeamsForSeasonCommand::fromScalars($series, $year));
 
-        $ui->success("Finished scrapping analytics for {$series} #{$year}.");
+        $ui->success("Finished scrapping teams for {$series} #{$year}.");
 
         return Command::SUCCESS;
     }
