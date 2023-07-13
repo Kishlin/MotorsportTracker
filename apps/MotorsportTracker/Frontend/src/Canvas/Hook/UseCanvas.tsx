@@ -16,7 +16,7 @@ const useCanvas = (draw: Draw, aspectRatio: number, containerRef: MutableRefObje
 
                 const { width } = containerRef.current.getBoundingClientRect();
 
-                canvas.width = width - 2;
+                canvas.width = width - 1;
                 canvas.height = canvas.width / aspectRatio;
 
                 frameCount += 1;
