@@ -70,6 +70,8 @@ function a11yProps(index: number) {
 }
 
 const StandingsPage: React.FunctionComponent<StandingsPageProps> = ({ events, drivers, teams }) => {
+    return <p>Unimplemented.</p>;
+
     const [tabIndex, setTabIndex] = React.useState<number>(0);
 
     const renderTooltip = ({ w }) => {
@@ -192,28 +194,28 @@ const StandingsPage: React.FunctionComponent<StandingsPageProps> = ({ events, dr
     );
 };
 
-export async function getStaticProps({ params: { championship, year } }): Promise<{ props: StandingsPageProps }> {
-    const driversResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/drivers/${championship}/${year}`);
-    const teamsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/teams/${championship}/${year}`);
-
-    const driversData = await driversResponse.json() as StandingsAPIType;
-    const teamsData = await teamsResponse.json() as StandingsAPIType;
-
-    return {
-        props: {
-            events: driversData.events,
-            drivers: driversData.standings,
-            teams: teamsData.standings,
-        },
-    };
-}
-
-export async function getStaticPaths(): Promise<{ paths: Array<StandingsPathParams>, fallback: boolean }> {
-    const paths: Array<StandingsPathParams> = [
-        { params: { championship: 'formula1', year: '2022' } },
-    ];
-
-    return { paths, fallback: false };
-}
+// export async function getStaticProps({ params: { championship, year } }): Promise<{ props: StandingsPageProps }> {
+//     const driversResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/drivers/${championship}/${year}`);
+//     const teamsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/teams/${championship}/${year}`);
+//
+//     const driversData = await driversResponse.json() as StandingsAPIType;
+//     const teamsData = await teamsResponse.json() as StandingsAPIType;
+//
+//     return {
+//         props: {
+//             events: driversData.events,
+//             drivers: driversData.standings,
+//             teams: teamsData.standings,
+//         },
+//     };
+// }
+//
+// export async function getStaticPaths(): Promise<{ paths: Array<StandingsPathParams>, fallback: boolean }> {
+//     const paths: Array<StandingsPathParams> = [
+//         { params: { championship: 'formula1', year: '2022' } },
+//     ];
+//
+//     return { paths, fallback: false };
+// }
 
 export default StandingsPage;
