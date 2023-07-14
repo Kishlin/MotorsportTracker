@@ -1,8 +1,6 @@
 parameters:
   kishlin.app.name: 'MotorsportTracker'
   kishlin.app.environment: '%env(APP_ENV)%'
-  kishlin.database.core.url: '%env(DATABASE_CORE_URL)%'
-  kishlin.database.cache.url: '%env(DATABASE_CACHE_URL)%'
   kishlin.src.dir: '/app'
   kishlin.jwt.secretKey: '%env(JWT_SECRET_KEY)%'
   kishlin.jwt.algorithm: '%env(JWT_ALGORITHM)%'
@@ -11,7 +9,6 @@ parameters:
   kishlin.jwt.expire_refresh_token: '%env(default:kishlin.jwt.expire_refresh_token_default:JWT_EXP_REFRESH_TOKEN)%'
   kishlin.jwt.expire_refresh_token_default: '+1 month'
   kishlin.jwt.exp_claim_is_required: '%env(bool:JWT_EXP_CLAIM_IS_REQUIRED)%'
-  kishlin.hostname: '%env(HOSTNAME)%'
 
 services:
   _defaults:
