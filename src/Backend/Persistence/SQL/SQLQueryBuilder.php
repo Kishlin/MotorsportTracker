@@ -10,6 +10,7 @@ use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\Join;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\QueryBuilder;
+use RuntimeException;
 use Stringable;
 
 final class SQLQueryBuilder implements QueryBuilder
@@ -23,6 +24,11 @@ final class SQLQueryBuilder implements QueryBuilder
 
     /** @var array<int, string> */
     private array $joins = [];
+
+    private ?string $update = null;
+
+    /** @var array<int, string> */
+    private array $sets = [];
 
     /** @var array<int, string> */
     private array $wheres = [];
@@ -92,6 +98,20 @@ final class SQLQueryBuilder implements QueryBuilder
         return $this->join(Join::LEFT, $key, $alias, $criterion);
     }
 
+    public function update(string $key, ?string $alias = null): self
+    {
+        $this->update = null === $alias ? $key : "{$key} AS {$alias}";
+
+        return $this;
+    }
+
+    public function set(string $key, string $parameter): self
+    {
+        $this->sets[] = "{$key} = {$parameter}";
+
+        return $this;
+    }
+
     public function where(Stringable|string $expression): self
     {
         return $this->andWhere($expression);
@@ -144,11 +164,17 @@ final class SQLQueryBuilder implements QueryBuilder
 
     public function buildQuery(): SQLQuery
     {
-        $query = 'SELECT '
-            . implode(', ', $this->selects)
-            . ' FROM '
-            . $this->from
-        ;
+        if (null !== $this->update) {
+            $query = 'UPDATE ' . $this->update . ' SET ' . implode(', ', $this->sets);
+        } else if (false === empty($this->selects)) {
+            $query = 'SELECT ' . implode(', ', $this->selects);
+        } else {
+            throw new RuntimeException('Query must either be a select or an update.');
+        }
+
+        if (null !== $this->from) {
+            $query .= ' FROM ' . $this->from;
+        }
 
         $query .= implode('', $this->joins);
 

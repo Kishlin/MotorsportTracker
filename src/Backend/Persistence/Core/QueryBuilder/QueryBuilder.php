@@ -19,6 +19,10 @@ interface QueryBuilder
 
     public function from(string $key, ?string $alias = null): self;
 
+    public function update(string $key, ?string $alias = null): self;
+
+    public function set(string $key, string $parameter): self;
+
     public function join(Join $join, string $key, ?string $alias, Stringable|string $criterion): self;
 
     public function innerJoin(string $key, ?string $alias, Stringable|string $criterion): self;

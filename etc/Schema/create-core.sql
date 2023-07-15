@@ -236,10 +236,9 @@ CREATE TABLE public.race_lap (
     "position" integer NOT NULL,
     pit boolean NOT NULL,
     "time" integer NOT NULL,
-    time_to_lead integer DEFAULT NULL,
-    laps_to_lead integer DEFAULT NULL,
-    time_to_next integer DEFAULT NULL,
-    laps_to_next integer DEFAULT NULL,
+    laps_to_lead integer,
+    time_to_next integer,
+    laps_to_next integer,
     tyre_details json NOT NULL
 );
 
@@ -287,6 +286,54 @@ CREATE TABLE public.session_type (
 
 
 ALTER TABLE public.session_type OWNER TO motorsporttracker;
+
+--
+-- Name: standing_constructor; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.standing_constructor (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    series_class character varying(255) DEFAULT NULL::character varying,
+    standee character varying(36) NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.standing_constructor OWNER TO motorsporttracker;
+
+--
+-- Name: standing_driver; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.standing_driver (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    series_class character varying(255) DEFAULT NULL::character varying,
+    standee character varying(36) NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.standing_driver OWNER TO motorsporttracker;
+
+--
+-- Name: standing_team; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.standing_team (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    series_class character varying(255) DEFAULT NULL::character varying,
+    standee character varying(36) NOT NULL,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.standing_team OWNER TO motorsporttracker;
 
 --
 -- Name: team; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -435,6 +482,30 @@ ALTER TABLE ONLY public.session_type
 
 
 --
+-- Name: standing_constructor standing_constructor_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.standing_constructor
+    ADD CONSTRAINT standing_constructor_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: standing_driver standing_driver_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.standing_driver
+    ADD CONSTRAINT standing_driver_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: standing_team standing_team_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.standing_team
+    ADD CONSTRAINT standing_team_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: team_presentation team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -526,6 +597,27 @@ CREATE UNIQUE INDEX retirement_entry_idx ON public.retirement USING btree (entry
 --
 
 CREATE UNIQUE INDEX session_type_label_idx ON public.session_type USING btree (label);
+
+
+--
+-- Name: standing_constructor_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX standing_constructor_season_team_idx ON public.standing_constructor USING btree (season, series_class, standee);
+
+
+--
+-- Name: standing_driver_season_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX standing_driver_season_driver_idx ON public.standing_driver USING btree (season, series_class, standee);
+
+
+--
+-- Name: standing_team_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX standing_team_season_team_idx ON public.standing_team USING btree (season, series_class, standee);
 
 
 --
