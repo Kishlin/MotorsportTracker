@@ -19,8 +19,6 @@ final class ServiceStatusIsShowingConstraint extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param array<string, bool> $data
      *
      * @noinspection PhpParameterNameChangedDuringInheritanceInspection
@@ -31,8 +29,6 @@ final class ServiceStatusIsShowingConstraint extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param array<string, bool> $data
      *
      * @noinspection PhpParameterNameChangedDuringInheritanceInspection
@@ -43,8 +39,6 @@ final class ServiceStatusIsShowingConstraint extends Constraint
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param array<string, bool> $data
      *
      * @noinspection PhpParameterNameChangedDuringInheritanceInspection

@@ -39,9 +39,6 @@ final class PDOResult implements Result
         return $this->failure;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchAllAssociative(): array
     {
         if (null === $this->statement) {
@@ -51,9 +48,6 @@ final class PDOResult implements Result
         return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchAssociative(): array
     {
         if (null === $this->statement) {

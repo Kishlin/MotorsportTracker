@@ -71,8 +71,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                 $seriesUuid = $driverStanding['uuid'];
             }
 
-
-            $standings   = $this->standingDriverGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
+            $standings = $this->standingDriverGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
                 $countryId = $this->createCountryIfNotExists($standing['nationality']);
@@ -149,7 +148,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                 $seriesUuid = $teamStanding['uuid'];
             }
 
-            $standings   = $this->standingTeamGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
+            $standings = $this->standingTeamGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
                 $teamId = $this->createTeamIfNotExists($standing['team']['uuid']);

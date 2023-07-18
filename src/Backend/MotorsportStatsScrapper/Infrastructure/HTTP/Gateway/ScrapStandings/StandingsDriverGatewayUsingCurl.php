@@ -22,7 +22,7 @@ final readonly class StandingsDriverGatewayUsingCurl implements StandingDriverGa
 
     public function __construct(
         private Client $client,
-    )  {
+    ) {
     }
 
     /**

@@ -9,6 +9,7 @@ use Firebase\JWT\Key;
 use Kishlin\Backend\Shared\Domain\Security\ParsingTokenFailedException;
 use Kishlin\Backend\Shared\Domain\Security\RefreshTokenParser;
 use Kishlin\Backend\Shared\Domain\Security\RefreshTokenPayload;
+use Throwable;
 
 final class RefreshTokenParserUsingFirebase implements RefreshTokenParser
 {
@@ -28,7 +29,7 @@ final class RefreshTokenParserUsingFirebase implements RefreshTokenParser
             // 'iat' and 'exp' claims are verified by JWT::decode(). We do not have to make the checks ourselves.
             /** @var array{user: string, salt: string} $token */
             $token = (array) JWT::decode($refreshToken, new Key($this->secretKey, $this->algorithm));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new ParsingTokenFailedException();
         }
 

@@ -30,7 +30,7 @@ final class DriverStandingsForSeasonController extends AbstractController
                 ->withMessage('Season was not found with these parameters.')
                 ->withCode(Response::HTTP_NOT_FOUND)
                 ->build()
-                ;
+            ;
         }
 
         if (null === $standings) {

@@ -81,8 +81,7 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
 
                 $teamsStandings[$result['team']]['data'][$index] = false === $firstDriverOfTeam
                     ? $sum + $teamsStandings[$result['team']]['data'][$index]
-                    : $sum
-                ;
+                    : $sum;
 
                 $driversStandings[$result['driver']]['data'][$index] = $sum;
             }

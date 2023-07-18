@@ -49,33 +49,21 @@ final class PostgresDatabase implements DatabaseInterface
         return $this->fixtureLoader->identifier($fixture);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchOne(string $query, array $params = []): mixed
     {
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchOne();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchAssociative(string $query, array $params = []): array|null
     {
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchAssociative() ?: null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function fetchAllAssociative(string $query, array $params = []): array|null
     {
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchAllAssociative() ?: null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function exec(string $query, array $params = []): void
     {
         $this->connection->execute(SQLQuery::create($query, $params));

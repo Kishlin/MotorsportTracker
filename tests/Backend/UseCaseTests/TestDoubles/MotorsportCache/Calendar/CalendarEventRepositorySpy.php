@@ -14,7 +14,6 @@ use Kishlin\Backend\MotorsportCache\Calendar\Domain\View\JsonableEventsView;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Tools\Helpers\StringHelper;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
-use function PHPUnit\Framework\assertNotFalse;
 
 /**
  * @property CalendarEvent[] $objects
@@ -51,8 +50,7 @@ final class CalendarEventRepositorySpy extends AbstractRepositorySpy implements 
                                     && $calendarEvent->startDate()->value() < $end
                                 )
                                 || $calendarEvent->endDate()->value() < $end
-                            )
-                        ;
+                            );
                     }
                 ),
             ),
@@ -103,8 +101,8 @@ final class CalendarEventRepositorySpy extends AbstractRepositorySpy implements 
         $venue   = json_encode($calendarEvent->venue()->data());
         $session = json_encode($calendarEvent->sessions()->data());
 
-        assertNotFalse($session);
-        assertNotFalse($venue);
+        assert(false !== $session);
+        assert(false !== $venue);
 
         return [
             'series'     => serialize($calendarEvent->series()->data()),

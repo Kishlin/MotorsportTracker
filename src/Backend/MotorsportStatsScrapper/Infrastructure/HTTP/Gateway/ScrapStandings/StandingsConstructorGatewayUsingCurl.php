@@ -22,7 +22,7 @@ final readonly class StandingsConstructorGatewayUsingCurl implements StandingCon
 
     public function __construct(
         private Client $client,
-    )  {
+    ) {
     }
 
     /**

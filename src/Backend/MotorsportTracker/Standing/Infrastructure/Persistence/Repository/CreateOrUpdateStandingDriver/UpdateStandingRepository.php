@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateOrUpdateStandingDriver;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\StandingUpdateFailureEvent;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\UpdateStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;

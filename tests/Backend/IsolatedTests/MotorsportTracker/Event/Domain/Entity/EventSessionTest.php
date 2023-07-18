@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Event\Domain\Entity;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\DomainEvent\EventSessionCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
@@ -25,8 +26,8 @@ final class EventSessionTest extends AggregateRootIsolatedTestCase
         $typeId    = 'e91b6d7c-6b22-429c-8eb9-3700a711e774';
         $eventId   = 'dc2d323f-9129-48b2-828f-7254e013a9f9';
         $hasResult = false;
-        $startDate = new \DateTimeImmutable();
-        $endDate   = new \DateTimeImmutable();
+        $startDate = new DateTimeImmutable();
+        $endDate   = new DateTimeImmutable();
         $ref       = '5e3549d0-d48c-4d01-8916-7ac647967942';
 
         $entity = EventSession::create(

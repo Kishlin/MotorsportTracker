@@ -60,9 +60,6 @@ final class Country extends AggregateRoot
         return $this->ref;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function mappedData(): array
     {
         return [

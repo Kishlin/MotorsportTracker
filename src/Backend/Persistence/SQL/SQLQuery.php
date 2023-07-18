@@ -22,9 +22,6 @@ final class SQLQuery implements Query
         return $this->query;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function parameters(): array
     {
         return $this->parameters;

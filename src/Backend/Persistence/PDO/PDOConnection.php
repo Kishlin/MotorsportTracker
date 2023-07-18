@@ -41,8 +41,7 @@ final class PDOConnection implements Connection
             . implode('", "', array_keys($data))
             . '") VALUES (:'
             . implode(', :', array_keys($data))
-            . ');'
-        ;
+            . ');';
 
         $statement = $connection->prepare($query);
 

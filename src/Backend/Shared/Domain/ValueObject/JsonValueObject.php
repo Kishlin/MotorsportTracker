@@ -50,9 +50,9 @@ class JsonValueObject
     }
 
     /**
-     * @throws JsonException
-     *
      * @return array<int|string, mixed>
+     *
+     * @throws JsonException
      */
     protected static function decode(string $value): array
     {

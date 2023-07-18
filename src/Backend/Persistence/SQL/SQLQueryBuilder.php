@@ -166,7 +166,7 @@ final class SQLQueryBuilder implements QueryBuilder
     {
         if (null !== $this->update) {
             $query = 'UPDATE ' . $this->update . ' SET ' . implode(', ', $this->sets);
-        } else if (false === empty($this->selects)) {
+        } elseif (false === empty($this->selects)) {
             $query = 'SELECT ' . implode(', ', $this->selects);
         } else {
             throw new RuntimeException('Query must either be a select or an update.');

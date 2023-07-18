@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
+use Exception;
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
@@ -99,7 +100,7 @@ abstract class RepositoryContractTestCase extends TestCase
     {
         try {
             self::fixtureLoader()->loadFixture($fixture);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             self::fail("Failed to load fixture: {$e->getMessage()}");
         }
     }

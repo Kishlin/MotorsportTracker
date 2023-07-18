@@ -25,8 +25,7 @@ trait CreateSeasonDrivingTestCaseTrait
             ->with(
                 $this->callback(static function (CreateSeasonIfNotExistsCommand $parameter) use ($year, $championship) {
                     return $year         === $parameter->year()->value()
-                        && $championship === $parameter->championshipId()->value()
-                    ;
+                        && $championship === $parameter->championshipId()->value();
                 }),
             )
             ->willReturnCallback(

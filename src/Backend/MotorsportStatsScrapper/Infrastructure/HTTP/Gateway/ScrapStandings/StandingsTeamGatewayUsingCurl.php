@@ -22,7 +22,7 @@ final readonly class StandingsTeamGatewayUsingCurl implements StandingTeamGatewa
 
     public function __construct(
         private Client $client,
-    )  {
+    ) {
     }
 
     /**

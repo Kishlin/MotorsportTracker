@@ -1,8 +1,9 @@
 <?php
+
 /**
-* @noinspection PhpMultipleClassDeclarationsInspection
-* @noinspection DuplicatedCode
-*/
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ * @noinspection DuplicatedCode
+ */
 
 declare(strict_types=1);
 

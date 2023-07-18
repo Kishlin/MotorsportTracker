@@ -16,7 +16,7 @@ enum StandingType
 
     public function toString(): string
     {
-        return match($this) {
+        return match ($this) {
             StandingType::TEAM        => 'team',
             StandingType::DRIVER      => 'driver',
             StandingType::CONSTRUCTOR => 'constructor',

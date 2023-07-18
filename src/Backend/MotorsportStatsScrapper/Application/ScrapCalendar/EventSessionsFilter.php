@@ -83,8 +83,7 @@ final class EventSessionsFilter
             || str_starts_with($name, 'Pre-')
             || str_starts_with($name, 'Qualifying ')
             || str_ends_with($name, ' Qualifying')
-            || 'Super Pole' === $name
-        ;
+            || 'Super Pole' === $name;
     }
 
     private function shouldBeUsedToBuildQualifying(string $name): bool

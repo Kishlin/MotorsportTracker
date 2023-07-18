@@ -6,9 +6,6 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client;
 
 final class ClientUsingCurl implements Client
 {
-    /**
-     * {@inheritDoc}
-     */
     public function fetch(string $url, array $headers = []): string
     {
         $ch = curl_init();
