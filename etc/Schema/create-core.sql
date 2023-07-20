@@ -117,6 +117,19 @@ CREATE TABLE public.classification (
 ALTER TABLE public.classification OWNER TO motorsporttracker;
 
 --
+-- Name: constructor; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.constructor (
+    id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    ref character varying(36) DEFAULT NULL::character varying
+);
+
+
+ALTER TABLE public.constructor OWNER TO motorsporttracker;
+
+--
 -- Name: country; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -410,6 +423,14 @@ ALTER TABLE ONLY public.classification
 
 
 --
+-- Name: constructor constructors_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.constructor
+    ADD CONSTRAINT constructors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: country countries_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -555,6 +576,13 @@ CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (champi
 --
 
 CREATE UNIQUE INDEX classification_entry_idx ON public.classification USING btree (entry);
+
+
+--
+-- Name: constructor_name_ref_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX constructor_name_ref_idx ON public.constructor USING btree (name, ref);
 
 
 --
