@@ -15,7 +15,7 @@ final class SymfonyConsoleApplication extends Application implements ConsoleAppl
     {
         $clock = $this->getKernel()->getContainer()->get(Clock::class);
 
-        assert($clock instanceof FrozenClock); // @phpstan-ignore-line
+        assert($clock instanceof FrozenClock);
 
         $clock->set($clock->now()->add($dateInterval));
     }
