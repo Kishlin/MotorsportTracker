@@ -16,7 +16,7 @@ final class BasicAuthorization
     {
         sscanf($header, 'Basic %s', $encodedCredentials);
 
-        if (null === $encodedCredentials) {
+        if (false === is_string($encodedCredentials)) {
             throw new FailedToReadCookieException('Failed to read encoded credentials.');
         }
 
