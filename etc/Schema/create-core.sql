@@ -250,6 +250,7 @@ CREATE TABLE public.race_lap (
     pit boolean NOT NULL,
     "time" integer NOT NULL,
     laps_to_lead integer,
+    time_to_lead integer,
     time_to_next integer,
     laps_to_next integer,
     tyre_details json NOT NULL
