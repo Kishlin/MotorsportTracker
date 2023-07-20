@@ -174,13 +174,4 @@ abstract class AbstractPerSeasonStandingsCommand extends SymfonyCommand
             "Saved DriverStandingsView: {$driverStandingsViewId}.",
         ]);
     }
-
-    /**
-     * @noinspection SqlResolve
-     */
-    private function clearDataIfTheyAlreadyExist(string $championship, int $year): void
-    {
-        $this->driverStandingsViewsGateway->deleteIfExists($championship, $year);
-        $this->teamStandingsViewsGateway->deleteIfExists($championship, $year);
-    }
 }
