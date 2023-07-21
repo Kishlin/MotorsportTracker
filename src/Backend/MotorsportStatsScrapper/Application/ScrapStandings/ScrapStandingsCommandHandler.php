@@ -10,6 +10,7 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\Gateway\S
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\Gateway\StandingTeamGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\ConstructorCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\ConstructorTeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
@@ -24,6 +25,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 final readonly class ScrapStandingsCommandHandler implements CommandHandler
 {
     use ConstructorCreatorTrait;
+    use ConstructorTeamCreatorTrait;
     use CountryCreatorTrait;
     use DriverCreatorTrait;
     use TeamCreatorTrait;
@@ -121,6 +123,20 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                     $standing['constructor']['name'],
                     $standing['constructor']['uuid'],
                 );
+
+                if (null !== $standing['team'] && null !== $standing['countryRepresenting']) {
+                    $countryId = $this->createCountryIfNotExists($standing['countryRepresenting']);
+
+                    $teamId = $this->createTeamIfNotExists(
+                        $season->id(),
+                        $countryId->value(),
+                        $standing['team']['name'],
+                        $standing['team']['colour'],
+                        $standing['team']['uuid'],
+                    );
+
+                    $this->createConstructorTeamIfNotExists($constructorId, $teamId);
+                }
 
                 $this->commandBus->execute(
                     CreateOrUpdateStandingCommand::fromScalars(

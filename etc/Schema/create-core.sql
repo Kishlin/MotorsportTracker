@@ -130,6 +130,19 @@ CREATE TABLE public.constructor (
 ALTER TABLE public.constructor OWNER TO motorsporttracker;
 
 --
+-- Name: constructor_team; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.constructor_team (
+    id character varying(36) NOT NULL,
+    constructor character varying(36) NOT NULL,
+    team character varying(36) NOT NULL
+);
+
+
+ALTER TABLE public.constructor_team OWNER TO motorsporttracker;
+
+--
 -- Name: country; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -365,7 +378,6 @@ CREATE TABLE public.team (
 
 ALTER TABLE public.team OWNER TO motorsporttracker;
 
-
 --
 -- Name: venue; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
@@ -410,6 +422,14 @@ ALTER TABLE ONLY public.championship
 
 ALTER TABLE ONLY public.classification
     ADD CONSTRAINT classification_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: constructor_team constructor_teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.constructor_team
+    ADD CONSTRAINT constructor_teams_pkey PRIMARY KEY (id);
 
 
 --
@@ -517,11 +537,6 @@ ALTER TABLE ONLY public.standing_team
 
 
 --
--- Name: team_presentation team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-
---
 -- Name: team teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -558,14 +573,18 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (championship, year);
 
 
-CREATE UNIQUE INDEX team_season_name_idx ON public.season USING btree (season, name);
-
-
 --
 -- Name: classification_entry_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
 CREATE UNIQUE INDEX classification_entry_idx ON public.classification USING btree (entry);
+
+
+--
+-- Name: constructor_constructor_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX constructor_constructor_team_idx ON public.constructor_team USING btree (constructor, team);
 
 
 --
