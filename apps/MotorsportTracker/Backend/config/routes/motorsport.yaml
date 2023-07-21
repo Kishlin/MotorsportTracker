@@ -29,7 +29,7 @@ schedule:
   stateless: true
 
 standings:
-  resource: ../../src/MotorsportTracker/Standing/Controller/
+  resource: ../../src/MotorsportCache/Standings/Controller/
   prefix: /api/v1/standings
   type: annotation
   stateless: true
