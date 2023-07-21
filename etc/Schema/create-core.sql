@@ -369,7 +369,7 @@ ALTER TABLE public.standing_team OWNER TO motorsporttracker;
 CREATE TABLE public.team (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
-    country character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL,
     name character varying(255) NOT NULL,
     color character varying(255) DEFAULT NULL::character varying,
     ref character varying(36) DEFAULT NULL::character varying

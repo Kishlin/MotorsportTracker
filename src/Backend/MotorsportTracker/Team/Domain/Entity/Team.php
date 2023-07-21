@@ -16,7 +16,7 @@ final class Team extends AggregateRoot
     public function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $season,
-        private readonly UuidValueObject $country,
+        private readonly NullableUuidValueObject $country,
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $color,
         private readonly NullableUuidValueObject $ref,
@@ -26,7 +26,7 @@ final class Team extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $season,
-        UuidValueObject $country,
+        NullableUuidValueObject $country,
         StringValueObject $name,
         NullableStringValueObject $color,
         NullableUuidValueObject $ref,
@@ -44,7 +44,7 @@ final class Team extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $season,
-        UuidValueObject $country,
+        NullableUuidValueObject $country,
         StringValueObject $name,
         NullableStringValueObject $color,
         NullableUuidValueObject $ref,
@@ -62,7 +62,7 @@ final class Team extends AggregateRoot
         return $this->season;
     }
 
-    public function country(): UuidValueObject
+    public function country(): NullableUuidValueObject
     {
         return $this->country;
     }

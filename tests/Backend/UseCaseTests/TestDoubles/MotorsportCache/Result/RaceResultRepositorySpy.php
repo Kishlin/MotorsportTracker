@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RaceResultDTO;
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Result\ClassificationRepositorySpy;
@@ -36,9 +37,8 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
             $driver  = $this->driverRepositorySpy->safeGet($entry->driver());
             $team    = $this->teamRepositorySpy->safeGet($entry->team());
             $driverC = $this->countryRepositorySpy->safeGet($driver->countryId());
-            $teamC   = $this->countryRepositorySpy->safeGet($team->country());
 
-            $results[] = [
+            $result = [
                 'driver' => [
                     'id'         => $driver->id()->value(),
                     'short_code' => $driver->shortCode()->value(),
@@ -53,11 +53,7 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
                     'id'      => $team->id()->value(),
                     'name'    => $team->name()->value(),
                     'color'   => $team->color()->value(),
-                    'country' => [
-                        'id'   => $teamC->id()->value(),
-                        'code' => $teamC->code()->value(),
-                        'name' => $teamC->name()->value(),
-                    ],
+                    'country' => null,
                 ],
                 'car_number'        => $entry->carNumber()->value(),
                 'finish_position'   => $classification->finishPosition()->value(),
@@ -75,6 +71,18 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
                 'gap_laps'          => $classification->gapLapsToLead()->value(),
                 'interval_laps'     => $classification->gapLapsToNext()->value(),
             ];
+
+            if (null !== $team->country()->value()) {
+                $teamC = $this->countryRepositorySpy->safeGet(new UuidValueObject($team->country()->value()));
+
+                $result['team']['country'] = [
+                    'id'   => $teamC->id()->value(),
+                    'code' => $teamC->code()->value(),
+                    'name' => $teamC->name()->value(),
+                ];
+            }
+
+            $results[] = $result;
         }
 
         return RaceResultDTO::fromResults($results);

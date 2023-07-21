@@ -124,12 +124,14 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                     $standing['constructor']['uuid'],
                 );
 
-                if (null !== $standing['team'] && null !== $standing['countryRepresenting']) {
-                    $countryId = $this->createCountryIfNotExists($standing['countryRepresenting']);
+                if (null !== $standing['team']) {
+                    $countryId = null !== $standing['countryRepresenting']
+                        ? $this->createCountryIfNotExists($standing['countryRepresenting'])->value()
+                        : null;
 
                     $teamId = $this->createTeamIfNotExists(
                         $season->id(),
-                        $countryId->value(),
+                        $countryId,
                         $standing['team']['name'],
                         $standing['team']['colour'],
                         $standing['team']['uuid'],
@@ -172,11 +174,13 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
             $standings = $this->standingTeamGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
-                $countryId = $this->createCountryIfNotExists($standing['countryRepresenting']);
+                $countryId = null !== $standing['countryRepresenting']
+                    ? $this->createCountryIfNotExists($standing['countryRepresenting'])->value()
+                    : null;
 
                 $teamId = $this->createTeamIfNotExists(
                     $season->id(),
-                    $countryId->value(),
+                    $countryId,
                     $standing['team']['name'],
                     $standing['team']['colour'],
                     $standing['team']['uuid'],

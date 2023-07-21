@@ -31,11 +31,13 @@ json_build_object(
     'id', t.id,
     'name', t.name,
     'color', t.color,
-    'country', json_build_object(
-        'id', c_t.id,
-        'code', c_t.code,
-        'name', c_t.name
-    )
+    'country', case when c_t is not null
+        then json_build_object(
+            'id', c_t.id,
+            'code', c_t.code,
+            'name', c_t.name
+        )
+    end
 )
 TXT;
 
@@ -61,7 +63,7 @@ TXT;
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
             ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
             ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'd.country'))
-            ->innerJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 't.country'))
+            ->leftJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 't.country'))
             ->where($qb->expr()->eq('e.session', ':session'))
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')
@@ -98,7 +100,7 @@ TXT;
                     /** @var array{id: string, short_code: string, name: string, country: array{id: string, code: string, name: string}} $driver */
                     $driver = json_decode($raceResult['driver'], true, 512, JSON_THROW_ON_ERROR);
 
-                    /** @var array{id: string, name: string, color: string, country: array{id: string, code: string, name: string}} $team */
+                    /** @var array{id: string, name: string, color: string, country: null|array{id: string, code: string, name: string}} $team */
                     $team = json_decode($raceResult['team'], true, 512, JSON_THROW_ON_ERROR);
 
                     return [

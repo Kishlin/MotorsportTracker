@@ -61,7 +61,7 @@ final class ViewEventResultsByRaceRepository extends CacheRepository implements 
          *                 id: string,
          *                 code: string,
          *                 name: string,
-         *             },
+         *             }|null,
          *         },
          *         car_number: int,
          *         finish_position: int,

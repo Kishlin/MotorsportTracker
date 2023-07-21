@@ -14,7 +14,7 @@ final readonly class CreateTeamIfNotExistsCommand implements Command
 {
     private function __construct(
         private readonly string $seasonId,
-        private readonly string $countryId,
+        private readonly ?string $countryId,
         private readonly string $name,
         private readonly ?string $color,
         private readonly ?string $ref,
@@ -26,9 +26,9 @@ final readonly class CreateTeamIfNotExistsCommand implements Command
         return new UuidValueObject($this->seasonId);
     }
 
-    public function countryId(): UuidValueObject
+    public function countryId(): NullableUuidValueObject
     {
-        return new UuidValueObject($this->countryId);
+        return new NullableUuidValueObject($this->countryId);
     }
 
     public function name(): StringValueObject
@@ -48,7 +48,7 @@ final readonly class CreateTeamIfNotExistsCommand implements Command
 
     public static function fromScalars(
         string $seasonId,
-        string $countryId,
+        ?string $countryId,
         string $name,
         ?string $color,
         ?string $ref,
