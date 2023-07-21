@@ -6,11 +6,13 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Team\Infrastruct
 
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SearchTeamRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamPresentationIfNotExists\SearchTeamRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SearchTeamRepository
  */
 final class SearchTeamRepositoryTest extends CoreRepositoryContractTestCase
 {
@@ -22,21 +24,25 @@ final class SearchTeamRepositoryTest extends CoreRepositoryContractTestCase
 
         self::assertSame(
             self::fixtureId('motorsport.team.team.redBullRacing'),
-            $repository->findForRef(new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47'))?->value(),
+            $repository->findForSeasonNameAndRef(
+                new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+                new StringValueObject('Red Bull Racing'),
+                new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47'),
+            )?->value(),
         );
     }
 
     public function testItReturnsNullWhenTeamIsNotFound(): void
     {
+        self::loadFixture('motorsport.championship.season.formulaOne2022');
+
+
         $repository = new SearchTeamRepository(self::connection());
 
-        self::assertNull($repository->findForRef(new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47')));
-    }
-
-    public function testItReturnsNullWhenTheRefIsNull(): void
-    {
-        $repository = new SearchTeamRepository(self::connection());
-
-        self::assertNull($repository->findForRef(new NullableUuidValueObject(null)));
+        self::assertNull($repository->findForSeasonNameAndRef(
+            new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+            new StringValueObject('Red Bull Racing'),
+            new NullableUuidValueObject('41be2072-17ab-455f-8522-8b96bc315e47'),
+        ));
     }
 }

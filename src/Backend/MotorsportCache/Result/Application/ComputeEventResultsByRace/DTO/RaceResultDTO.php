@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO;
 
-final class RaceResultDTO
+final readonly class RaceResultDTO
 {
     /**
      * @param array<array{
@@ -20,7 +20,6 @@ final class RaceResultDTO
      *     },
      *     team: array{
      *         id: string,
-     *         presentation_id: string,
      *         name: string,
      *         color: ?string,
      *         country: array{
@@ -47,7 +46,7 @@ final class RaceResultDTO
      * }> $result
      */
     private function __construct(
-        private readonly array $result,
+        private array $result,
     ) {
     }
 
@@ -65,7 +64,6 @@ final class RaceResultDTO
      *     },
      *     team: array{
      *         id: string,
-     *         presentation_id: string,
      *         name: string,
      *         color: ?string,
      *         country: array{
@@ -110,7 +108,6 @@ final class RaceResultDTO
      *     },
      *     team: array{
      *         id: string,
-     *         presentation_id: string,
      *         name: string,
      *         color: ?string,
      *         country: array{

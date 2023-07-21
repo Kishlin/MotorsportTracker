@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\Sea
 use Kishlin\Backend\MotorsportTracker\Team\Application\CreateTeamIfNotExists\TeamCreationFailureException;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
@@ -23,17 +24,23 @@ final class TeamRepositorySpy extends AbstractRepositorySpy implements SaveTeamG
 {
     public function save(Team $team): void
     {
-        if (null !== $this->findForRef($team->ref())) {
+        if (null !== $this->findForSeasonNameAndRef($team->season(), $team->name(), $team->ref())) {
             throw new TeamCreationFailureException();
         }
 
         $this->objects[$team->id()->value()] = $team;
     }
 
-    public function findForRef(NullableUuidValueObject $ref): ?UuidValueObject
-    {
+    public function findForSeasonNameAndRef(
+        UuidValueObject $season,
+        StringValueObject $name,
+        NullableUuidValueObject $ref,
+    ): ?UuidValueObject {
         foreach ($this->objects as $savedTeam) {
-            if ($savedTeam->ref()->equals($ref)) {
+            if ($savedTeam->season()->equals($season)
+                && $savedTeam->name()->equals($name)
+                && $savedTeam->ref()->equals($ref)
+            ) {
                 return $savedTeam->id();
             }
         }

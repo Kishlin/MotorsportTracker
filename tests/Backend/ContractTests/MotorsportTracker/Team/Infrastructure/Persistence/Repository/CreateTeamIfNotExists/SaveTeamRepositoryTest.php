@@ -6,7 +6,9 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Team\Infrastruct
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Repository\CreateTeamIfNotExists\SaveTeamRepository;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
@@ -18,7 +20,20 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveATeam(): void
     {
-        $team = Team::instance(new UuidValueObject(self::uuid()), new NullableUuidValueObject(self::uuid()));
+        self::loadFixtures(
+            'country.country.austria',
+            'motorsport.team.team.redBullRacing',
+            'motorsport.championship.season.formulaOne2022',
+        );
+
+        $team = Team::instance(
+            new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+            new UuidValueObject(self::fixtureId('country.country.austria')),
+            new StringValueObject('Red Bull Racing'),
+            new NullableStringValueObject('#0600EF'),
+            new NullableUuidValueObject(self::uuid()),
+        );
 
         $repository = new SaveTeamRepository(self::connection());
 
@@ -29,7 +44,20 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
 
     public function testItCanSaveATeamWithNullValues(): void
     {
-        $team = Team::instance(new UuidValueObject(self::uuid()), new NullableUuidValueObject(null));
+        self::loadFixtures(
+            'country.country.austria',
+            'motorsport.team.team.redBullRacing',
+            'motorsport.championship.season.formulaOne2022',
+        );
+
+        $team = Team::instance(
+            new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
+            new UuidValueObject(self::fixtureId('country.country.austria')),
+            new StringValueObject('Red Bull Racing'),
+            new NullableStringValueObject('#0600EF'),
+            new NullableUuidValueObject(null),
+        );
 
         $repository = new SaveTeamRepository(self::connection());
 

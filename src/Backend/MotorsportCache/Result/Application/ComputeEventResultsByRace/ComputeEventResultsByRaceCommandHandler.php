@@ -19,15 +19,15 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class ComputeEventResultsByRaceCommandHandler implements CommandHandler
+final readonly class ComputeEventResultsByRaceCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly DeleteEventResultsByRaceIfExistsGateway $deleteEventResultsByRaceGateway,
-        private readonly EventResultsByRaceGateway $eventResultsByRaceGateway,
-        private readonly RacesToComputeGateway $racesToComputeGateway,
-        private readonly RaceResultGateway $raceResultGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private DeleteEventResultsByRaceIfExistsGateway $deleteEventResultsByRaceGateway,
+        private EventResultsByRaceGateway $eventResultsByRaceGateway,
+        private RacesToComputeGateway $racesToComputeGateway,
+        private RaceResultGateway $raceResultGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 

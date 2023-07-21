@@ -355,27 +355,16 @@ ALTER TABLE public.standing_team OWNER TO motorsporttracker;
 
 CREATE TABLE public.team (
     id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    country character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    color character varying(255) DEFAULT NULL::character varying,
     ref character varying(36) DEFAULT NULL::character varying
 );
 
 
 ALTER TABLE public.team OWNER TO motorsporttracker;
 
---
--- Name: team_presentation; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.team_presentation (
-    id character varying(36) NOT NULL,
-    team character varying(36) NOT NULL,
-    season character varying(36) NOT NULL,
-    country character varying(36) NOT NULL,
-    name character varying(255) NOT NULL,
-    color character varying(255) DEFAULT NULL::character varying
-);
-
-
-ALTER TABLE public.team_presentation OWNER TO motorsporttracker;
 
 --
 -- Name: venue; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -531,9 +520,6 @@ ALTER TABLE ONLY public.standing_team
 -- Name: team_presentation team_presentations_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.team_presentation
-    ADD CONSTRAINT team_presentations_pkey PRIMARY KEY (id);
-
 
 --
 -- Name: team teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
@@ -570,6 +556,9 @@ CREATE UNIQUE INDEX championship_created_on_idx ON public.championship_presentat
 --
 
 CREATE UNIQUE INDEX championship_season_idx ON public.season USING btree (championship, year);
+
+
+CREATE UNIQUE INDEX team_season_name_idx ON public.season USING btree (season, name);
 
 
 --

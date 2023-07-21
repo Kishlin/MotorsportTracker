@@ -7,11 +7,11 @@ namespace Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracke
 use Behat\Step\Given;
 use Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\BackofficeContext;
 
-final class TeamPresentationContext extends BackofficeContext
+final class TeamContext extends BackofficeContext
 {
-    #[Given('the team presentation :name exists')]
+    #[Given('the :name team exists')]
     public function theTeamExists(string $name): void
     {
-        self::database()->loadFixture("motorsport.team.teamPresentation.{$this->format($name)}");
+        self::database()->loadFixture("motorsport.team.team.{$this->format($name)}");
     }
 }

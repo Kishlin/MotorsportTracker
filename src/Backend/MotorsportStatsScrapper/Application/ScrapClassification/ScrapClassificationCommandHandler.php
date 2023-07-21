@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
+use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SessionNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
@@ -30,6 +32,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
     public function __construct(
         private readonly ClassificationGateway $classificationGateway,
         private readonly SessionGateway $sessionGateway,
+        private readonly SeasonGateway $seasonGateway,
         private readonly CommandBus $commandBus,
         private readonly EventDispatcher $eventDispatcher,
     ) {
@@ -37,6 +40,14 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
     public function __invoke(ScrapClassificationCommand $command): void
     {
+        $season = $this->seasonGateway->find($command->championship(), $command->year());
+
+        if (null === $season) {
+            $this->eventDispatcher->dispatch(SeasonNotFoundEvent::forSeason($command->championship(), $command->year()));
+
+            return;
+        }
+
         $session = $this->sessionGateway->find(
             $command->championship(),
             $command->year(),
@@ -59,8 +70,15 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
         foreach ($classificationData['details'] as $details) {
             try {
-                $teamId    = $this->createTeamIfNotExists($details['team']['uuid']);
                 $countryId = $this->createCountryIfNotExists($details['nationality']);
+                $teamId    = $this->createTeamIfNotExists(
+                    $season->id(),
+                    $countryId->value(),
+                    $details['team']['name'],
+                    $details['team']['colour'],
+                    $details['team']['uuid'],
+                );
+
                 $this->createDriverIfNotExists($details['drivers'][0], $countryId);
 
                 $entryId = $this->commandBus->execute(

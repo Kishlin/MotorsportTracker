@@ -11,26 +11,33 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateTeamIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateTeamIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchTeamGateway $searchGateway,
-        private readonly SaveTeamGateway $saveGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchTeamGateway $searchGateway,
+        private SaveTeamGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
     public function __invoke(CreateTeamIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->findForRef($command->ref());
+        $id = $this->searchGateway->findForSeasonNameAndRef($command->seasonId(), $command->name(), $command->ref());
 
         if (null !== $id) {
             return $id;
         }
 
         $id   = new UuidValueObject($this->uuidGenerator->uuid4());
-        $team = Team::create($id, $command->ref());
+        $team = Team::create(
+            $id,
+            $command->seasonId(),
+            $command->countryId(),
+            $command->name(),
+            $command->color(),
+            $command->ref(),
+        );
 
         try {
             $this->saveGateway->save($team);

@@ -35,12 +35,8 @@ trait ResultServicesTrait
     {
         if (null === $this->raceResultRepositorySpy) {
             $this->raceResultRepositorySpy = new RaceResultRepositorySpy(
-                $this->teamPresentationRepositorySpy(),
                 $this->classificationRepositorySpy(),
-                $this->eventSessionRepositorySpy(),
                 $this->countryRepositorySpy(),
-                $this->seasonRepositorySpy(),
-                $this->eventRepositorySpy(),
                 $this->driverRepositorySpy(),
                 $this->entryRepositorySpy(),
                 $this->teamRepositorySpy(),

@@ -6,7 +6,9 @@ namespace Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixt
 
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
@@ -17,6 +19,10 @@ final class FixtureToTeamConverter implements FixtureConverter
     {
         return Team::instance(
             new UuidValueObject($fixture->identifier()),
+            new UuidValueObject($fixture->getString('seasonId')),
+            new UuidValueObject($fixture->getString('countryId')),
+            new StringValueObject($fixture->getString('name')),
+            new NullableStringValueObject($fixture->getString('color')),
             new NullableUuidValueObject($fixture->getString('ref')),
         );
     }

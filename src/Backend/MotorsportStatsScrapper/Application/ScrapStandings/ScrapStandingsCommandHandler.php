@@ -156,7 +156,15 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
             $standings = $this->standingTeamGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
-                $teamId = $this->createTeamIfNotExists($standing['team']['uuid']);
+                $countryId = $this->createCountryIfNotExists($standing['countryRepresenting']);
+
+                $teamId = $this->createTeamIfNotExists(
+                    $season->id(),
+                    $countryId->value(),
+                    $standing['team']['name'],
+                    $standing['team']['colour'],
+                    $standing['team']['uuid'],
+                );
 
                 $this->commandBus->execute(
                     CreateOrUpdateStandingCommand::fromScalars(

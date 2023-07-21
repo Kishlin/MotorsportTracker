@@ -24,7 +24,7 @@ final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
         self::loadFixtures(
             'motorsport.result.classification.maxVerstappenAtDutchGP2022Race',
             'motorsport.result.classification.sergioPerezAtDutchGP2022Race',
-            'motorsport.team.teamPresentation.redBullRacing2022'
+            'motorsport.team.team.redBullRacing'
         );
 
         $repository = new RaceResultRepository(self::connection());

@@ -33,17 +33,23 @@ final class TeamCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.team.team.{$this->format($teamName)}");
     }
 
-    #[When('a client creates a team with the ref :ref')]
-    #[When('a client creates a team with the same ref')]
-    public function aClientCreatesTheTeam(string $ref = '41be2072-17ab-455f-8522-8b96bc315e47'): void
-    {
+    #[When('a client creates a team with name :name and color :color and ref :ref')]
+    #[When('a client creates a team with the same name color and ref')]
+    public function aClientCreatesTheTeam(
+        string $name = 'Red Bull Racing',
+        string $color = '#0000c6',
+        string $ref = '41be2072-17ab-455f-8522-8b96bc315e47',
+    ): void {
         $this->teamId          = null;
         $this->thrownException = null;
+
+        $season  = array_keys(self::container()->seasonRepositorySpy()->all())[0];
+        $country = array_keys(self::container()->countryRepositorySpy()->all())[0];
 
         try {
             /** @var UuidValueObject $teamId */
             $teamId = self::container()->commandBus()->execute(
-                CreateTeamIfNotExistsCommand::fromScalars($ref),
+                CreateTeamIfNotExistsCommand::fromScalars($season, $country, $name, $color, $ref),
             );
 
             $this->teamId = $teamId;

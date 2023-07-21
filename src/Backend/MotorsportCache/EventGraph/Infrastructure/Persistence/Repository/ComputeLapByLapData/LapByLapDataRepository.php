@@ -14,14 +14,9 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $teamPresentationJoinCondition = $qb->expr()->andX(
-            $qb->expr()->eq('tp.team', 't.id'),
-            $qb->expr()->eq('tp.season', 'ev.season'),
-        );
-
         $query = $qb
             ->select('d.short_code', 'label')
-            ->addSelect('tp.color', 'color')
+            ->addSelect('t.color', 'color')
             ->addSelect('c.laps', 'laps')
             ->addSelect('array_agg(rl.time ORDER BY rl.lap ASC)', 'lapTimes')
             ->from('race_lap', 'rl')
@@ -31,11 +26,10 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
             ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
             ->innerJoin('classification', 'c', $qb->expr()->eq('c.entry', 'e.id'))
-            ->innerJoin('team_presentation', 'tp', $teamPresentationJoinCondition)
             ->where($qb->expr()->eq('e.session', ':session'))
             ->withParam('session', $session)
             ->addGroupBy('d.short_code')
-            ->addGroupBy('tp.color')
+            ->addGroupBy('t.color')
             ->addGroupBy('c.laps')
             ->addGroupBy('c.finish_position')
             ->orderBy('(c.finish_position+99)%100')

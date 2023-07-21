@@ -55,7 +55,6 @@ final class ViewEventResultsByRaceRepository extends CacheRepository implements 
          *         },
          *         team: array{
          *             id: string,
-         *             presentation_id: string,
          *             name: string,
          *             color: ?string,
          *             country: array{

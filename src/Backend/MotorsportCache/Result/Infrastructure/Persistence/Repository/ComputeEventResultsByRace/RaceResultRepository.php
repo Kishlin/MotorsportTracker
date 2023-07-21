@@ -29,9 +29,8 @@ TXT;
     private const TEAM_SELECT = <<<'TXT'
 json_build_object(
     'id', t.id,
-    'presentation_id', tp.id,
-    'name', tp.name,
-    'color', tp.color,
+    'name', t.name,
+    'color', t.color,
     'country', json_build_object(
         'id', c_t.id,
         'code', c_t.code,
@@ -61,9 +60,8 @@ TXT;
             ->innerJoin('season', 's', $qb->expr()->eq('ev.season', 's.id'))
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
             ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
-            ->innerJoin('team_presentation', 'tp', $qb->expr()->andX($qb->expr()->eq('tp.team', 't.id'), $qb->expr()->eq('tp.season', 's.id')))
             ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'd.country'))
-            ->innerJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 'tp.country'))
+            ->innerJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 't.country'))
             ->where($qb->expr()->eq('e.session', ':session'))
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')
@@ -100,7 +98,7 @@ TXT;
                     /** @var array{id: string, short_code: string, name: string, country: array{id: string, code: string, name: string}} $driver */
                     $driver = json_decode($raceResult['driver'], true, 512, JSON_THROW_ON_ERROR);
 
-                    /** @var array{id: string, presentation_id: string, name: string, color: string, country: array{id: string, code: string, name: string}} $team */
+                    /** @var array{id: string, name: string, color: string, country: array{id: string, code: string, name: string}} $team */
                     $team = json_decode($raceResult['team'], true, 512, JSON_THROW_ON_ERROR);
 
                     return [

@@ -29,7 +29,6 @@ final class EventResultsByRaceJsonableView extends JsonableView
      *             },
      *             team: array{
      *                 id: string,
-     *                 presentation_id: string,
      *                 name: string,
      *                 color: ?string,
      *                 country: array{
@@ -83,7 +82,6 @@ final class EventResultsByRaceJsonableView extends JsonableView
      *             },
      *             team: array{
      *                 id: string,
-     *                 presentation_id: string,
      *                 name: string,
      *                 color: ?string,
      *                 country: array{
@@ -137,7 +135,6 @@ final class EventResultsByRaceJsonableView extends JsonableView
      *             },
      *             team: array{
      *                 id: string,
-     *                 presentation_id: string,
      *                 name: string,
      *                 color: ?string,
      *                 country: array{

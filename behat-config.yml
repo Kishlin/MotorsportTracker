@@ -23,7 +23,6 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RaceLapContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RetirementContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\AnalyticsCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\Shared\FixturesContext
@@ -51,7 +50,7 @@ default:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\EventSessionContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Event\EventContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Result\ClassificationContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamPresentationContext
+        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Team\TeamContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\Shared\FixturesContext
       filters:
         tags: '@backoffice'

@@ -25,7 +25,6 @@ use Kishlin\Backend\Shared\Domain\ValueObject\JsonValueObject;
  *         },
  *         team: array{
  *             id: string,
- *             presentation_id: string,
  *             name: string,
  *             color: ?string,
  *             country: array{
@@ -73,7 +72,6 @@ final class ResultsByRaceValueObject extends JsonValueObject
      *         },
      *         team: array{
      *             id: string,
-     *             presentation_id: string,
      *             name: string,
      *             color: ?string,
      *             country: array{
@@ -124,7 +122,6 @@ final class ResultsByRaceValueObject extends JsonValueObject
      *         },
      *         team: array{
      *             id: string,
-     *             presentation_id: string,
      *             name: string,
      *             color: ?string,
      *             country: array{
