@@ -19,7 +19,7 @@ abstract class BackendApiContext implements Context
 
     /**
      * @BeforeSuite
-     * @BeforeSuite
+     * @BeforeScenario
      */
     public static function reloadDatabase(): void
     {
