@@ -36,7 +36,6 @@ final class SearchTeamRepositoryTest extends CoreRepositoryContractTestCase
     {
         self::loadFixture('motorsport.championship.season.formulaOne2022');
 
-
         $repository = new SearchTeamRepository(self::connection());
 
         self::assertNull($repository->findForSeasonNameAndRef(
