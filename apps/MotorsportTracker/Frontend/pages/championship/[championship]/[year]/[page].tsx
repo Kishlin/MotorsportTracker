@@ -1,20 +1,21 @@
 // @ts-ignore
 import React from 'react';
 
-import Layout from '../../../src/Shared/Ui/Layout/Layout';
+import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
-import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import scheduleApi from '../../../src/MotorsportTracker/Schedule/Api/ScheduleApi';
-import championships from '../../../src/MotorsportTracker/Config/Championships';
-import { EventsSchedule } from '../../../src/MotorsportTracker/Shared/Types';
-import ScheduleEventsList from '../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
-import ChampionshipContainer from '../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
-import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
+import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import scheduleApi from '../../../../src/MotorsportTracker/Schedule/Api/ScheduleApi';
+import championships from '../../../../src/MotorsportTracker/Config/Championships';
+import { EventsSchedule } from '../../../../src/MotorsportTracker/Shared/Types';
+import ScheduleEventsList from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
+import ChampionshipContainer from '../../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
+import ChampionshipNavbar from '../../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
 
 declare type ChampionshipSchedulePathParams = {
     params: {
         championship: string,
         year: string,
+        page: 'schedule',
     },
 };
 
@@ -71,7 +72,7 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipSched
 
     Object.keys(championships).forEach((slug: string) => {
         championships[slug].years.forEach((year: number) => {
-            paths.push({ params: { championship: slug, year: year.toString() } });
+            paths.push({ params: { championship: slug, year: year.toString(), page: 'schedule' } });
         });
     });
 

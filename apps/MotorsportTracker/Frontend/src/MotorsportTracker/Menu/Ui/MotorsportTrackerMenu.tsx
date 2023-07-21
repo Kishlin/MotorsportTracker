@@ -36,7 +36,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
 
         return (
             <ListItem key={championshipSlug} disablePadding>
-                <ListItemButton onClick={redirectionTo(`/${championshipSlug}/${year}/schedule`)}>
+                <ListItemButton onClick={redirectionTo(`/championship/${championshipSlug}/${year}/schedule`)}>
                     <ListItemIcon>
                         <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
                     </ListItemIcon>

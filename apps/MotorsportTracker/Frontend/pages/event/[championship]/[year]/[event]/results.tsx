@@ -1,18 +1,18 @@
 // @ts-ignore
 import React from 'react';
 
-import Layout from '../../../../src/Shared/Ui/Layout/Layout';
+import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 
-import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import { EventShort, SeasonEvents } from '../../../../src/MotorsportTracker/Shared/Types';
-import ResultsContent from '../../../../src/MotorsportTracker/Result/Ui/ResultsContent';
-import EventContainer from '../../../../src/MotorsportTracker/Event/Ui/EventContainer';
-import { ResultsByRace } from '../../../../src/MotorsportTracker/Result/Types/Index';
-import EventNavbar from '../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
-import resultsApi from '../../../../src/MotorsportTracker/Result/Api/ResultsApi';
-import EventTitle from '../../../../src/MotorsportTracker/Event/Ui/EventTitle';
-import seasonApi from '../../../../src/MotorsportTracker/Event/Api/SeasonApi';
-import eventsApi from '../../../../src/MotorsportTracker/Event/Api/EventsApi';
+import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import { EventShort, SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
+import ResultsContent from '../../../../../src/MotorsportTracker/Result/Ui/ResultsContent';
+import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
+import { ResultsByRace } from '../../../../../src/MotorsportTracker/Result/Types/Index';
+import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
+import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
+import EventTitle from '../../../../../src/MotorsportTracker/Event/Ui/EventTitle';
+import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
+import eventsApi from '../../../../../src/MotorsportTracker/Event/Api/EventsApi';
 
 declare type EventResultsPathParams = {
     params: {
@@ -39,6 +39,10 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
     year,
     page,
 }) => {
+    if (undefined === results) {
+        return null;
+    }
+
     const withTitle = 1 < results.resultsByRace.length;
 
     return (

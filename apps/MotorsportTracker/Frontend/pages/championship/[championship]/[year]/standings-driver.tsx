@@ -1,12 +1,12 @@
 // @ts-ignore
 import React from 'react';
 
-import Layout from '../../../src/Shared/Ui/Layout/Layout';
+import Layout from '../../../../src/Shared/Ui/Layout/Layout';
 
-import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import championships from '../../../src/MotorsportTracker/Config/Championships';
-import ChampionshipContainer from '../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
-import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
+import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import championships from '../../../../src/MotorsportTracker/Config/Championships';
+import ChampionshipContainer from '../../../../src/MotorsportTracker/Championship/Ui/ChampionshipContainer';
+import ChampionshipNavbar from '../../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
 
 declare type ChampionshipDriverStandingsPathParams = {
     params: {

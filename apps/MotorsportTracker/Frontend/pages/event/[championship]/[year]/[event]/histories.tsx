@@ -2,14 +2,14 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
-import Layout from '../../../../src/Shared/Ui/Layout/Layout';
+import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 
-import MotorsportTrackerMenu from '../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import { EventShort, SeasonEvents } from '../../../../src/MotorsportTracker/Shared/Types';
-import EventContainer from '../../../../src/MotorsportTracker/Event/Ui/EventContainer';
-import EventNavbar from '../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
-import seasonApi from '../../../../src/MotorsportTracker/Event/Api/SeasonApi';
-import eventsApi from '../../../../src/MotorsportTracker/Event/Api/EventsApi';
+import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import { EventShort, SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
+import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
+import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
+import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
+import eventsApi from '../../../../../src/MotorsportTracker/Event/Api/EventsApi';
 
 declare type EventHistoriesPathParams = {
     params: {
@@ -33,18 +33,26 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
     event,
     year,
     page,
-}) => (
-    <Layout
-        menu={<MotorsportTrackerMenu />}
-        content={(
-            <EventContainer>
-                <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Graphs`}</Typography>
-                <Typography align="center">There are no histories available at this time.</Typography>
-            </EventContainer>
-        )}
-        subHeader={<EventNavbar championship={championship} year={year} event={event} season={season} page={page} />}
-    />
-);
+}) => {
+    if (undefined === season) {
+        return null;
+    }
+
+    return (
+        <Layout
+            menu={<MotorsportTrackerMenu />}
+            content={(
+                <EventContainer>
+                    <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Graphs`}</Typography>
+                    <Typography align="center">There are no histories available at this time.</Typography>
+                </EventContainer>
+            )}
+            subHeader={
+                <EventNavbar championship={championship} year={year} event={event} season={season} page={page} />
+            }
+        />
+    );
+};
 
 export const getStaticProps = async ({ params: { championship, year, event } }: EventHistoriesPathParams) => {
     const season = await seasonApi(championship, parseInt(year, 10));

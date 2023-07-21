@@ -34,15 +34,15 @@ const EventNavbar: React.FunctionComponent<EventNavbarProps> = ({
 
         const targetYear = years.includes(parseInt(year, 10)) ? year : years[0];
 
-        navigate(`/${targetChampionship}/${targetYear}/schedule`);
+        navigate(`/event/${targetChampionship}/${targetYear}/schedule`);
     };
 
     const handleYearChange = (newYear: string) => {
-        navigate(`/${championship}/${newYear}/schedule`);
+        navigate(`/event/${championship}/${newYear}/schedule`);
     };
 
     const handleEventChange = (newEvent: string) => {
-        navigate(`/${championship}/${year}/${newEvent}/${page}`);
+        navigate(`/event/${championship}/${year}/${newEvent}/${page}`);
     };
 
     const championshipSelectItems = Object.keys(championships).map((championshipSlug: string) => (
@@ -62,13 +62,13 @@ const EventNavbar: React.FunctionComponent<EventNavbarProps> = ({
     return (
         <NavContainer>
             <NavMainMenu>
-                <Link to={`/${championship}/${year}/${event}/results`}>
+                <Link to={`/event/${championship}/${year}/${event}/results`}>
                     Results
                 </Link>
-                <Link to={`/${championship}/${year}/${event}/histories`}>
+                <Link to={`/event/${championship}/${year}/${event}/histories`}>
                     Histories
                 </Link>
-                <Link to={`/${championship}/${year}/${event}/graphs`}>
+                <Link to={`/event/${championship}/${year}/${event}/graphs`}>
                     Graphs
                 </Link>
             </NavMainMenu>

@@ -45,13 +45,13 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                 setEventIcons((
                     <>
                         <Tooltip title="Results">
-                            <LeaderboardIcon onClick={redirectionTo(`/${eventUri}/results`)} {...props} />
+                            <LeaderboardIcon onClick={redirectionTo(`/event/${eventUri}/results`)} {...props} />
                         </Tooltip>
                         <Tooltip title="Histories">
-                            <SlowMotionVideoIcon onClick={redirectionTo(`/${eventUri}/histories`)} {...props} />
+                            <SlowMotionVideoIcon onClick={redirectionTo(`/event/${eventUri}/histories`)} {...props} />
                         </Tooltip>
                         <Tooltip title="Graphs">
-                            <QueryStatsIcon onClick={redirectionTo(`/${eventUri}/graphs`)} {...props} />
+                            <QueryStatsIcon onClick={redirectionTo(`/event/${eventUri}/graphs`)} {...props} />
                         </Tooltip>
                     </>
                 ));
