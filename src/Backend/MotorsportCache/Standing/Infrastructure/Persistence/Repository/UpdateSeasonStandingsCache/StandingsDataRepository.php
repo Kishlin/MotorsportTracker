@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Re
 
 use Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache\StandingsDataDTO;
 use Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache\StandingsDataGateway;
+use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class StandingsDataRepository extends CoreRepository implements StandingsDataGateway
@@ -66,7 +67,7 @@ TXT;
             ->leftJoin('country', 'co', $qb->expr()->eq('co.id', 't.country'))
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
-            ->orderBy('sc.position')
+            ->orderBy('sc.points', OrderBy::DESC)
             ->withParam('championship', $championship)
             ->withParam('year', $year)
         ;
@@ -118,7 +119,7 @@ TXT;
             ->leftJoin('country', 'co', $qb->expr()->eq('co.id', 't.country'))
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
-            ->orderBy('st.position')
+            ->orderBy('st.points', OrderBy::DESC)
             ->withParam('championship', $championship)
             ->withParam('year', $year)
         ;
@@ -172,7 +173,7 @@ TXT;
             ->leftJoin('country', 'co', $qb->expr()->eq('co.id', 'd.country'))
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
-            ->orderBy('sd.position')
+            ->orderBy('sd.points', OrderBy::DESC)
             ->withParam('championship', $championship)
             ->withParam('year', $year)
         ;
