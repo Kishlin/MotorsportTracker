@@ -27,11 +27,18 @@ final class SearchStandingRepository extends CoreRepository implements SearchSta
             ->from($table, 'sd')
             ->where($qb->expr()->eq('sd.season', ':season'))
             ->andWhere($qb->expr()->eq('sd.standee', ':standee'))
-            ->andWhere($qb->expr()->eq('sd.series_class', ':seriesClass'))
-            ->withParam('seriesClass', $seriesClass->value())
             ->withParam('season', $season->value())
             ->withParam('standee', $standee->value())
         ;
+
+        if (null === $seriesClass->value()) {
+            $qb->andWhere('sd.series_class is null');
+        } else {
+            $qb
+                ->andWhere($qb->expr()->eq('sd.series_class', ':seriesClass'))
+                ->withParam('seriesClass', $seriesClass->value())
+            ;
+        }
 
         /** @var array<array{id: string}> $result */
         $result = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();
