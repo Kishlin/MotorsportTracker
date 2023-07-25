@@ -1,8 +1,8 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import SessionTableCell from '../Table/SessionTableCell';
 import { ResultClassification } from '../../Types/Index';
+import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
 declare type ResultPositionProps = {
     classifiedStatus: ResultClassification,
@@ -10,9 +10,9 @@ declare type ResultPositionProps = {
 };
 
 const ResultPositionCell: React.FunctionComponent<ResultPositionProps> = ({ position, classifiedStatus }) => (
-    <SessionTableCell>
+    <StyledTableCell>
         <Typography>{0 === position ? classifiedStatus : position.toString()}</Typography>
-    </SessionTableCell>
+    </StyledTableCell>
 );
 
 export default ResultPositionCell;

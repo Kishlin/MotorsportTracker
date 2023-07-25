@@ -2,7 +2,7 @@ import TableCell, { tableCellClasses, TableCellProps } from '@mui/material/Table
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledComponent = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
@@ -16,8 +16,8 @@ declare type SessionTableCellProps = TableCellProps & {
     children: React.ReactNode | string,
 };
 
-const SessionTableCell: React.FunctionComponent<SessionTableCellProps> = ({ children }) => (
-    <StyledTableCell>{children}</StyledTableCell>
+const StyledTableCell: React.FunctionComponent<SessionTableCellProps> = ({ children }) => (
+    <StyledComponent>{children}</StyledComponent>
 );
 
-export default SessionTableCell;
+export default StyledTableCell;

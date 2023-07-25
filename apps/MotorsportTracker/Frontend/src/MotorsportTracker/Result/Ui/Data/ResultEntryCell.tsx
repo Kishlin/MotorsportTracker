@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import SessionTableCell from '../Table/SessionTableCell';
+import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
 declare type ResultEntryProps = {
     countryCode: string,
@@ -9,7 +9,7 @@ declare type ResultEntryProps = {
 };
 
 const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ countryCode, name }) => (
-    <SessionTableCell>
+    <StyledTableCell>
         <Typography noWrap>
             <img
                 src={`/assets/flags/1x1/${countryCode}.svg`}
@@ -19,7 +19,7 @@ const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ countryCod
             />
             <span style={{ marginLeft: '5px' }}>{name}</span>
         </Typography>
-    </SessionTableCell>
+    </StyledTableCell>
 );
 
 export default ResultEntryCell;

@@ -1,17 +1,17 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import SessionTableCell from '../Table/SessionTableCell';
 import formatTime from '../../Utils/FormatTime';
+import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
 declare type ResultTimeProps = {
     time: string,
 };
 
 const ResultTimeCell: React.FunctionComponent<ResultTimeProps> = ({ time }) => (
-    <SessionTableCell>
+    <StyledTableCell>
         <Typography noWrap>{formatTime(time)}</Typography>
-    </SessionTableCell>
+    </StyledTableCell>
 );
 
 export default ResultTimeCell;
