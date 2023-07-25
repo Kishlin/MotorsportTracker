@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Standing\Application\ComputeSeasonStandings;
+namespace Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache;
 
 final readonly class StandingsDataDTO
 {

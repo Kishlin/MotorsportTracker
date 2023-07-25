@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Standing\Application\ComputeSeasonStandings;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings;
 
-use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
-final readonly class ComputeSeasonStandingsCommand implements Command
+final readonly class StandingsScrappedEvent implements ApplicationEvent
 {
     private function __construct(
         private string $championshipName,

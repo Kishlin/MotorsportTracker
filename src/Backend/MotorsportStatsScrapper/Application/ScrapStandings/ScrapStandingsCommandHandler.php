@@ -56,6 +56,10 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
         $this->scrapDriverStandings($season, $standings['driverStandings']);
         $this->scrapConstructorStandings($season, $standings['constructorStandings']);
         $this->scrapTeamStandings($season, $standings['teamStandings']);
+
+        $this->eventDispatcher->dispatch(
+            StandingsScrappedEvent::fromScalars($command->championshipName(), $command->year()),
+        );
     }
 
     /**

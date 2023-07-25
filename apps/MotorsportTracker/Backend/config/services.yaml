@@ -101,6 +101,11 @@ services:
     alias: 'kishlin.app.infrastructure.connection.core'
 
 
+  ##> Cache
+
+  Kishlin\Backend\Shared\Domain\Cache\CachePersister:
+    class: Kishlin\Backend\Shared\Infrastructure\Cache\CachePersisterUsingSymfony
+
   ##> Monitoring
 
   Kishlin\Apps\MotorsportTracker\Backend\Monitoring\Controller\CheckHealthController:

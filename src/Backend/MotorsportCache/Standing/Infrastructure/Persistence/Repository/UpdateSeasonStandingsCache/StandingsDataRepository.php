@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\ComputeSeasonStandings;
+namespace Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Persistence\Repository\UpdateSeasonStandingsCache;
 
-use Kishlin\Backend\MotorsportCache\Standing\Application\ComputeSeasonStandings\Gateway\StandingsDataGateway;
-use Kishlin\Backend\MotorsportCache\Standing\Application\ComputeSeasonStandings\StandingsDataDTO;
+use Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache\StandingsDataDTO;
+use Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache\StandingsDataGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class StandingsDataRepository extends CoreRepository implements StandingsDataGateway
