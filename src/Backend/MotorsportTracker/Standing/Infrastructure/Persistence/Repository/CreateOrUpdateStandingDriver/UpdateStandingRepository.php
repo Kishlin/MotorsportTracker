@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\UpdateStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
@@ -16,7 +16,7 @@ final class UpdateStandingRepository extends CoreRepository implements UpdateSta
     public function update(
         UuidValueObject $record,
         StandingType $standingType,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         FloatValueObject $points,
     ): bool {
         $qb = $this->connection->createQueryBuilder();

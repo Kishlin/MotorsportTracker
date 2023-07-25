@@ -8,7 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final readonly class CreateOrUpdateStandingCommand implements Command
@@ -38,9 +38,9 @@ final readonly class CreateOrUpdateStandingCommand implements Command
         return new UuidValueObject($this->standee);
     }
 
-    public function position(): StrictlyPositiveIntValueObject
+    public function position(): PositiveIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->position);
+        return new PositiveIntValueObject($this->position);
     }
 
     public function points(): FloatValueObject

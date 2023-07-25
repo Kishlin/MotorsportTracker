@@ -6,7 +6,7 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateS
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface UpdateStandingGateway
@@ -14,7 +14,7 @@ interface UpdateStandingGateway
     public function update(
         UuidValueObject $record,
         StandingType $standingType,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         FloatValueObject $points,
     ): bool;
 }

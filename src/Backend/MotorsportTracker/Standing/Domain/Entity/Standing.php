@@ -9,7 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Standing extends AggregateRoot
@@ -19,7 +19,7 @@ final class Standing extends AggregateRoot
         private readonly UuidValueObject $season,
         private readonly UuidValueObject $standee,
         private readonly NullableStringValueObject $seriesClass,
-        private readonly StrictlyPositiveIntValueObject $position,
+        private readonly PositiveIntValueObject $position,
         private readonly FloatValueObject $points,
         private readonly StandingType $standingType,
     ) {
@@ -30,7 +30,7 @@ final class Standing extends AggregateRoot
         UuidValueObject $season,
         UuidValueObject $standee,
         NullableStringValueObject $seriesClass,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         FloatValueObject $points,
         StandingType $standingType,
     ): self {
@@ -49,7 +49,7 @@ final class Standing extends AggregateRoot
         UuidValueObject $season,
         UuidValueObject $standee,
         NullableStringValueObject $seriesClass,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         FloatValueObject $points,
         StandingType $standingType,
     ): self {
@@ -76,7 +76,7 @@ final class Standing extends AggregateRoot
         return $this->seriesClass;
     }
 
-    public function position(): StrictlyPositiveIntValueObject
+    public function position(): PositiveIntValueObject
     {
         return $this->position;
     }
