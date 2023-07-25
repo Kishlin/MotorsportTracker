@@ -2,6 +2,7 @@ parameters:
   kishlin.app.name: 'Backoffice'
   kishlin.app.environment: '%env(APP_ENV)%'
   kishlin.src.dir: '/app'
+  kishlin.memcached: '%env(MEMCACHED_DSN)%'
   kishlin.jwt.secretKey: '%env(JWT_SECRET_KEY)%'
   kishlin.jwt.algorithm: '%env(JWT_ALGORITHM)%'
   kishlin.jwt.expire_token: '%env(default:kishlin.jwt.expire_token_default:JWT_EXP_TOKEN)%'
@@ -25,6 +26,11 @@ services:
       - '../../../src/Backend/**/Application/*/*Exception.php'
       - '../../../src/Backend/**/Infrastructure/Persistence/Fixtures'
       - '../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
+
+
+  ##> Cache
+
+  Psr\Cache\CacheItemPoolInterface: '@app.cache.memcached'
 
 
   ##> Messaging
@@ -106,6 +112,10 @@ services:
     resource: '../../../src/Backend/Shared/Infrastructure/Monitoring'
     bind:
       $appName: '%kishlin.app.name%'
+
+  Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\MemcachedProbe:
+    bind:
+      $server: '%kishlin.memcached%'
 
   Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe:
     bind:

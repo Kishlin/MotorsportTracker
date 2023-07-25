@@ -2,6 +2,17 @@ version: '3'
 
 services:
 
+  memcached:
+    container_name: memcached-${PROJECT}
+    image: ${PROJECT}-memcached:${MEMCACHED_VERSION}
+    build:
+      context: ./.docker/memcached/${MEMCACHED_VERSION}
+    restart: on-failure
+    ports:
+      - "${MEMCACHED_PORT_EXTERNAL}:11211"
+    networks:
+      - "docker-app"
+
   postgres:
     container_name: postgres-${PROJECT}
     image: ${PROJECT}-postgres:${DB_VERSION}

@@ -5,6 +5,13 @@ VOLUME /srv/cache
 ARG DOCKER_USER
 ARG DOCKER_USER_ID
 
+# Install Memcached extension
+#RUN apt-get install -y php-memcached
+RUN apt-get install -y libmemcached-dev
+RUN pecl install memcached
+
+RUN docker-php-ext-enable memcached
+
 # Add local user
 RUN useradd --shell /bin/bash -u ${DOCKER_USER_ID} -o -c "" -m ${DOCKER_USER} \
     && adduser ${DOCKER_USER} sudo \
