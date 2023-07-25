@@ -3,3 +3,7 @@ export type Country = {
     code: string,
     name: string,
 };
+
+export type List<T> = {
+    [key: string]: T,
+};

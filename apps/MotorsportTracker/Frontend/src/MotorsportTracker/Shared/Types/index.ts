@@ -1,3 +1,5 @@
+import { Country } from '../../../Shared/Types/Index';
+
 export type MotorsportSession = {
     type: string,
     slug: string,
@@ -65,3 +67,31 @@ export type Championship = {
 export type ChampionshipList = {
     [key: string]: Championship,
 };
+
+export interface Standing {
+    id: string,
+    name: string,
+    position: number,
+    points: number,
+    color: null|string,
+    country: null|Country,
+}
+
+export interface ConstructorStanding extends Standing {}
+
+export interface TeamStanding extends Standing {
+    color: string,
+}
+
+export interface DriverStanding extends Standing {
+    short_code: null|string,
+    color: null|string,
+}
+
+export type AvailableStandings = {
+    constructor: boolean,
+    team: boolean,
+    driver: boolean,
+};
+
+export type StandingType = 'constructor'|'team'|'driver';

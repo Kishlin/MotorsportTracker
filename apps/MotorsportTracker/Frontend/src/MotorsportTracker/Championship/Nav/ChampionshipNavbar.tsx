@@ -6,17 +6,24 @@ import useNavigate from '../../../Shared/Hooks/useNavigate';
 import SelectorYear from '../../Shared/Nav/SelectorYear';
 import NavSearchBar from '../../Shared/Nav/NavSearchBar';
 import NavContainer from '../../Shared/Nav/NavContainer';
+import { AvailableStandings, StandingType } from '../../Shared/Types';
 import NavMainMenu from '../../Shared/Nav/NavMainMenu';
 import championships from '../../Config/Championships';
 import Link from '../../Shared/Nav/Link';
 
 declare type ChampionshipNavbarProps = {
+    availableStandings: AvailableStandings,
     championship: string,
     year: string,
     page: string,
 };
 
-const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({ championship, year, page }) => {
+const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
+    availableStandings,
+    championship,
+    year,
+page,
+}) => {
     const { navigate } = useNavigate();
 
     const handleYearChange = (newYear: string) => {
@@ -41,18 +48,21 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({ 
         <MenuItem key={seasonYear} value={seasonYear}>{seasonYear}</MenuItem>
     ));
 
+    const standingsPages = ['constructor', 'team', 'driver']
+        .filter((type: StandingType) => true === availableStandings[type])
+        .map((type: StandingType) => (
+            <Link to={`/championship/${championship}/${year}/standings-${type}`}>
+                {`${type.slice(0, 1).toUpperCase()}${type.slice(1)} Standings`}
+            </Link>
+        ));
+
     return (
         <NavContainer>
             <NavMainMenu>
                 <Link to={`/championship/${championship}/${year}/schedule`}>
                     Calendar
                 </Link>
-                <Link to={`/championship/${championship}/${year}/standings-driver`}>
-                    Driver Standings
-                </Link>
-                <Link to={`/championship/${championship}/${year}/standings-team`}>
-                    Team Standings
-                </Link>
+                {standingsPages}
             </NavMainMenu>
             <NavSearchBar>
                 <SelectorChampionship onChange={handleChampionshipChange} championship={championship}>
