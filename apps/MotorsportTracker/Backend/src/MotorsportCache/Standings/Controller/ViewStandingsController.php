@@ -44,8 +44,8 @@ final class ViewStandingsController extends AbstractController
     ): Response {
         $availableStandings = $this->getAvailableStandingsFromCache($cachePool, $commandBus, $championship, $year);
 
-        if (false === $availableStandings->has($type)) {
-            throw new NotFoundHttpException();
+        if (null === $availableStandings || false === $availableStandings->has($type)) {
+            return new JsonResponse(null, 404);
         }
 
         $standingsClass = match ($type) {
@@ -60,7 +60,7 @@ final class ViewStandingsController extends AbstractController
         $item = $cachePool->getItem($key);
 
         if (false === $item->isHit()) {
-            throw new RuntimeException('Standings should not be a miss if scrapping standing succeeded.');
+            throw new RuntimeException('Standings should not be a miss if scrapping standings succeeded.');
         }
 
         $standings = $item->get();

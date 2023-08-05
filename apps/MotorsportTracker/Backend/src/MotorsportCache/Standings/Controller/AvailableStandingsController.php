@@ -37,6 +37,10 @@ final class AvailableStandingsController extends AbstractController
     ): Response {
         $availableStandings = $this->getAvailableStandingsFromCache($cachePool, $commandBus, $championship, $year);
 
+        if (null === $availableStandings) {
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        }
+
         return new JsonResponse($availableStandings->toArray());
     }
 }
