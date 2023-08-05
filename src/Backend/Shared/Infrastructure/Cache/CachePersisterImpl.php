@@ -11,7 +11,7 @@ use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-final readonly class CachePersisterUsingSymfony implements CachePersister
+final readonly class CachePersisterImpl implements CachePersister
 {
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
