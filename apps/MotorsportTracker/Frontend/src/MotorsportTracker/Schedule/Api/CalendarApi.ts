@@ -1,11 +1,9 @@
 import { EventsSchedule } from '../../Shared/Types';
 
-export type CalendarApi = (firstDay: Date, lastDay: Date) => Promise<EventsSchedule>;
+export type CalendarApi = (month: string, year: string) => Promise<EventsSchedule>;
 
-const format = (date: Date) => date.toISOString().split('T')[0];
-
-const calendarApi: CalendarApi = async (firstDay, lastDay) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/calendar/view/${format(firstDay)}/${format(lastDay)}`);
+const calendarApi: CalendarApi = async (month, year) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/calendar/${month}/${year}`);
 
     return await response.json() as EventsSchedule;
 };
