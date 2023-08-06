@@ -49,7 +49,7 @@ export const getStaticProps = async ({ params: { month, year } }: SchedulePathPa
 export async function getStaticPaths(): Promise<{ paths: Array<SchedulePathParams>, fallback: boolean }> {
     const paths: Array<SchedulePathParams> = [];
 
-    for (let year = 1950; 2023 >= year; year += 1) {
+    for (let year = 1950; 2024 >= year; year += 1) {
         paths.push(...listOfAllMonths().map((month: string) => ({ params: { year: year.toString(), month } })));
     }
 
