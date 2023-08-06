@@ -41,9 +41,13 @@ const MonthlySchedulePage: React.FunctionComponent<MonthlySchedulePageProps> = (
 );
 
 export const getStaticProps = async ({ params: { month, year } }: SchedulePathParams) => {
-    const events = await calendarApi(month, year);
+    try {
+        const events = await calendarApi(month, year);
 
-    return { props: { events, date: new Date(Date.parse(`${month} 1, ${year}`)).getTime() } };
+        return { props: { events, date: new Date(Date.parse(`${month} 1, ${year}`)).getTime() } };
+    } catch (err) {
+        return { notFound: true };
+    }
 };
 
 export async function getStaticPaths(): Promise<{ paths: Array<SchedulePathParams>, fallback: boolean }> {
