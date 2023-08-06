@@ -64,28 +64,6 @@ COMMENT ON COLUMN public.calendar_event.series IS '(DC2Type:calendar_event_serie
 
 
 --
--- Name: driver_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.driver_standings_view (
-    id character varying(36) NOT NULL,
-    championship_slug character varying(255) NOT NULL,
-    year integer NOT NULL,
-    events text NOT NULL,
-    standings json NOT NULL
-);
-
-
-ALTER TABLE public.driver_standings_view OWNER TO motorsporttracker;
-
---
--- Name: COLUMN driver_standings_view.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.driver_standings_view.events IS '(DC2Type:standings_view_events)';
-
-
---
 -- Name: event_cached; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -142,57 +120,11 @@ CREATE TABLE public.season_events (
 ALTER TABLE public.season_events OWNER TO motorsporttracker;
 
 --
--- Name: standings; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.standings (
-    id character varying(36) NOT NULL,
-    championship character varying(36) NOT NULL,
-    year integer NOT NULL,
-    constructor json NOT NULL,
-    team json NOT NULL,
-    driver json NOT NULL
-);
-
-
-ALTER TABLE public.standings OWNER TO motorsporttracker;
-
---
--- Name: team_standings_view; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.team_standings_view (
-    id character varying(36) NOT NULL,
-    championship_slug character varying(255) NOT NULL,
-    year integer NOT NULL,
-    events text NOT NULL,
-    standings json NOT NULL
-);
-
-
-ALTER TABLE public.team_standings_view OWNER TO motorsporttracker;
-
---
--- Name: COLUMN team_standings_view.events; Type: COMMENT; Schema: public; Owner: motorsporttracker
---
-
-COMMENT ON COLUMN public.team_standings_view.events IS '(DC2Type:standings_view_events)';
-
-
---
 -- Name: calendar_event calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
 ALTER TABLE ONLY public.calendar_event
     ADD CONSTRAINT calendar_events_pkey PRIMARY KEY (id);
-
-
---
--- Name: driver_standings_view driver_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.driver_standings_view
-    ADD CONSTRAINT driver_standings_views_pkey PRIMARY KEY (id);
 
 
 --
@@ -225,29 +157,6 @@ ALTER TABLE ONLY public.event_results_by_race
 
 ALTER TABLE ONLY public.season_events
     ADD CONSTRAINT season_events_pkey PRIMARY KEY (id);
-
-
---
--- Name: standings standings_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.standings
-    ADD CONSTRAINT standings_pkey PRIMARY KEY (id);
-
-
---
--- Name: team_standings_view team_standings_views_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.team_standings_view
-    ADD CONSTRAINT team_standings_views_pkey PRIMARY KEY (id);
-
-
---
--- Name: driver_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX driver_standings_views_championship_year_idx ON public.driver_standings_view USING btree (championship_slug, year);
 
 
 --
@@ -304,20 +213,6 @@ CREATE UNIQUE INDEX season_events_championship_year_idx ON public.season_events 
 --
 
 CREATE UNIQUE INDEX season_events_id_idx ON public.season_events USING btree (id);
-
-
---
--- Name: standings_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX standings_championship_year_idx ON public.standings USING btree (championship, year);
-
-
---
--- Name: team_standings_views_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX team_standings_views_championship_year_idx ON public.team_standings_view USING btree (championship_slug, year);
 
 
 --
