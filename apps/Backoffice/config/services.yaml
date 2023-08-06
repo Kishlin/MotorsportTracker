@@ -2,7 +2,8 @@ parameters:
   kishlin.app.name: 'Backoffice'
   kishlin.app.environment: '%env(APP_ENV)%'
   kishlin.src.dir: '/app'
-  kishlin.memcached: '%env(MEMCACHED_DSN)%'
+  kishlin.memcached.dsn: '%env(MEMCACHED_DSN)%'
+  kishlin.memcached.namespace: '%env(MEMCACHED_NAMESPACE)%'
   kishlin.jwt.secretKey: '%env(JWT_SECRET_KEY)%'
   kishlin.jwt.algorithm: '%env(JWT_ALGORITHM)%'
   kishlin.jwt.expire_token: '%env(default:kishlin.jwt.expire_token_default:JWT_EXP_TOKEN)%'
@@ -121,7 +122,7 @@ services:
 
   Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\MemcachedProbe:
     bind:
-      $server: '%kishlin.memcached%'
+      $server: '%kishlin.memcached.dsn%'
 
   Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe:
     bind:

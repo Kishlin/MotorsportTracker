@@ -16,7 +16,8 @@ framework:
       symfony.messenger.bus.query: ~
 
   cache:
-    default_memcached_provider: 'memcached://%kishlin.memcached%'
+    default_memcached_provider: 'memcached://%kishlin.memcached.dsn%'
+    prefix_seed: '%kishlin.memcached.namespace%'
     pools:
       app.cache.memcached:
         adapter: cache.adapter.memcached
