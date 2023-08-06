@@ -9,19 +9,25 @@ use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEntryIfNotExistsCommand implements Command
+final readonly class CreateEntryIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $sessionId,
-        private readonly string $driverName,
-        private readonly string $teamId,
-        private readonly int $carNumber,
+        private string $sessionId,
+        private string $countryId,
+        private string $driverName,
+        private string $teamId,
+        private int $carNumber,
     ) {
     }
 
     public function sessionId(): UuidValueObject
     {
         return new UuidValueObject($this->sessionId);
+    }
+
+    public function countryId(): UuidValueObject
+    {
+        return new UuidValueObject($this->countryId);
     }
 
     public function driverName(): StringValueObject
@@ -39,8 +45,13 @@ final class CreateEntryIfNotExistsCommand implements Command
         return new PositiveIntValueObject($this->carNumber);
     }
 
-    public static function fromScalars(string $session, string $driver, string $teamId, int $carNumber): self
-    {
-        return new self($session, $driver, $teamId, $carNumber);
+    public static function fromScalars(
+        string $session,
+        string $countryId,
+        string $driver,
+        string $teamId,
+        int $carNumber,
+    ): self {
+        return new self($session, $countryId, $driver, $teamId, $carNumber);
     }
 }

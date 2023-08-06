@@ -24,6 +24,7 @@ final class AnalyticsTest extends AggregateRootIsolatedTestCase
         $id                   = '8ec5b564-4081-4ebb-af1c-745da345b274';
         $season               = '9d40cce9-7c77-4684-96f0-6765031a2563';
         $driver               = 'ba52366e-9f2e-4233-b41e-d1d4c20002d2';
+        $country              = 'fad6d171-b529-4f41-b2c6-45c926e088d9';
         $position             = 3;
         $points               = 415.2;
         $avgFinishPosition    = 2.71;
@@ -48,6 +49,7 @@ final class AnalyticsTest extends AggregateRootIsolatedTestCase
             new UuidValueObject($id),
             new UuidValueObject($season),
             new UuidValueObject($driver),
+            new UuidValueObject($country),
             new PositiveIntValueObject($position),
             new FloatValueObject($points),
             AnalyticsStatsDTO::fromScalars(
@@ -76,6 +78,7 @@ final class AnalyticsTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($id, $entity->id());
         self::assertValueObjectSame($season, $entity->season());
         self::assertValueObjectSame($driver, $entity->driver());
+        self::assertValueObjectSame($country, $entity->country());
         self::assertValueObjectSame($position, $entity->position());
         self::assertValueObjectSame($points, $entity->points());
         self::assertValueObjectSame($avgFinishPosition, $entity->avgFinishPosition());

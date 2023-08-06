@@ -17,6 +17,7 @@ final class Analytics extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $season,
         private readonly UuidValueObject $driver,
+        private readonly UuidValueObject $country,
         private readonly PositiveIntValueObject $position,
         private readonly FloatValueObject $points,
         private readonly FloatValueObject $avgFinishPosition,
@@ -43,6 +44,7 @@ final class Analytics extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $season,
         UuidValueObject $driver,
+        UuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
         AnalyticsStatsDTO $analytics,
@@ -51,6 +53,7 @@ final class Analytics extends AggregateRoot
             $id,
             $season,
             $driver,
+            $country,
             $position,
             $points,
             $analytics->avgFinishPosition(),
@@ -84,6 +87,7 @@ final class Analytics extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $season,
         UuidValueObject $driver,
+        UuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
         FloatValueObject $avgFinishPosition,
@@ -108,6 +112,7 @@ final class Analytics extends AggregateRoot
             $id,
             $season,
             $driver,
+            $country,
             $position,
             $points,
             $avgFinishPosition,
@@ -147,6 +152,11 @@ final class Analytics extends AggregateRoot
     public function driver(): UuidValueObject
     {
         return $this->driver;
+    }
+
+    public function country(): UuidValueObject
+    {
+        return $this->country;
     }
 
     public function position(): PositiveIntValueObject
@@ -250,6 +260,7 @@ final class Analytics extends AggregateRoot
             'id'                     => $this->id->value(),
             'season'                 => $this->season->value(),
             'driver'                 => $this->driver->value(),
+            'country'                => $this->country->value(),
             'position'               => $this->position->value(),
             'points'                 => $this->points->value(),
             'avg_finish_position'    => $this->avgFinishPosition()->value(),

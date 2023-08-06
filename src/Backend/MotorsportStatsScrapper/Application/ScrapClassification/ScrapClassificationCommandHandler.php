@@ -70,19 +70,24 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
         foreach ($classificationData['details'] as $details) {
             try {
-                $countryId = $this->createCountryIfNotExists($details['nationality']);
-                $teamId    = $this->createTeamIfNotExists(
+                $country = $this->createCountryIfNotExists($details['nationality']);
+                $team    = $this->createTeamIfNotExists(
                     $season->id(),
-                    $countryId->value(),
                     $details['team']['name'],
                     $details['team']['colour'],
                     $details['team']['uuid'],
                 );
 
-                $this->createDriverIfNotExists($details['drivers'][0], $countryId);
+                $this->createDriverIfNotExists($details['drivers'][0]);
 
                 $entryId = $this->commandBus->execute(
-                    CreateEntryIfNotExistsCommand::fromScalars($session->id(), $details['drivers'][0]['name'], $teamId->value(), (int) $details['carNumber']),
+                    CreateEntryIfNotExistsCommand::fromScalars(
+                        $session->id(),
+                        $country->value(),
+                        $details['drivers'][0]['name'],
+                        $team->value(),
+                        (int) $details['carNumber'],
+                    ),
                 );
 
                 assert($entryId instanceof UuidValueObject);

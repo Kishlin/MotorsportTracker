@@ -18,6 +18,7 @@ final class FixtureToEntryConverter implements FixtureConverter
         return Entry::instance(
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('session')),
+            new UuidValueObject($fixture->getString('country')),
             new UuidValueObject($fixture->getString('driver')),
             new UuidValueObject($fixture->getString('team')),
             new PositiveIntValueObject($fixture->getInt('carNumber')),

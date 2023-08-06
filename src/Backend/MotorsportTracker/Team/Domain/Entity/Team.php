@@ -16,7 +16,6 @@ final class Team extends AggregateRoot
     public function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $season,
-        private readonly NullableUuidValueObject $country,
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $color,
         private readonly NullableUuidValueObject $ref,
@@ -26,12 +25,11 @@ final class Team extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $season,
-        NullableUuidValueObject $country,
         StringValueObject $name,
         NullableStringValueObject $color,
         NullableUuidValueObject $ref,
     ): self {
-        $team = new self($id, $season, $country, $name, $color, $ref);
+        $team = new self($id, $season, $name, $color, $ref);
 
         $team->record(new TeamCreatedDomainEvent($id));
 
@@ -44,12 +42,11 @@ final class Team extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $season,
-        NullableUuidValueObject $country,
         StringValueObject $name,
         NullableStringValueObject $color,
         NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $season, $country, $name, $color, $ref);
+        return new self($id, $season, $name, $color, $ref);
     }
 
     public function id(): UuidValueObject
@@ -60,11 +57,6 @@ final class Team extends AggregateRoot
     public function season(): UuidValueObject
     {
         return $this->season;
-    }
-
-    public function country(): NullableUuidValueObject
-    {
-        return $this->country;
     }
 
     public function name(): StringValueObject
@@ -85,12 +77,11 @@ final class Team extends AggregateRoot
     public function mappedData(): array
     {
         return [
-            'id'      => $this->id->value(),
-            'season'  => $this->season->value(),
-            'country' => $this->country->value(),
-            'name'    => $this->name->value(),
-            'color'   => $this->color->value(),
-            'ref'     => $this->ref->value(),
+            'id'     => $this->id->value(),
+            'season' => $this->season->value(),
+            'name'   => $this->name->value(),
+            'color'  => $this->color->value(),
+            'ref'    => $this->ref->value(),
         ];
     }
 }

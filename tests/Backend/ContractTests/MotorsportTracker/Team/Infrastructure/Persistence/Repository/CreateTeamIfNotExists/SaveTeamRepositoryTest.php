@@ -21,7 +21,6 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
     public function testItCanSaveATeam(): void
     {
         self::loadFixtures(
-            'country.country.austria',
             'motorsport.team.team.redBullRacing',
             'motorsport.championship.season.formulaOne2022',
         );
@@ -29,7 +28,6 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
         $team = Team::instance(
             new UuidValueObject(self::uuid()),
             new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
-            new UuidValueObject(self::fixtureId('country.country.austria')),
             new StringValueObject('Red Bull Racing'),
             new NullableStringValueObject('#0600EF'),
             new NullableUuidValueObject(self::uuid()),
@@ -45,7 +43,6 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
     public function testItCanSaveATeamWithNullValues(): void
     {
         self::loadFixtures(
-            'country.country.austria',
             'motorsport.team.team.redBullRacing',
             'motorsport.championship.season.formulaOne2022',
         );
@@ -53,7 +50,6 @@ final class SaveTeamRepositoryTest extends CoreRepositoryContractTestCase
         $team = Team::instance(
             new UuidValueObject(self::uuid()),
             new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
-            new UuidValueObject(self::fixtureId('country.country.austria')),
             new StringValueObject('Red Bull Racing'),
             new NullableStringValueObject('#0600EF'),
             new NullableUuidValueObject(null),

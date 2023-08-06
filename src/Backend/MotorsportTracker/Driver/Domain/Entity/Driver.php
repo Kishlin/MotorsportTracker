@@ -16,7 +16,6 @@ final class Driver extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly StringValueObject $name,
         private readonly StringValueObject $shortCode,
-        private readonly UuidValueObject $countryId,
         private readonly NullableUuidValueObject $ref,
     ) {
     }
@@ -25,10 +24,9 @@ final class Driver extends AggregateRoot
         UuidValueObject $id,
         StringValueObject $name,
         StringValueObject $shortCode,
-        UuidValueObject $countryId,
         NullableUuidValueObject $ref,
     ): self {
-        $driver = new self($id, $name, $shortCode, $countryId, $ref);
+        $driver = new self($id, $name, $shortCode, $ref);
 
         $driver->record(new DriverCreatedDomainEvent($id));
 
@@ -42,10 +40,9 @@ final class Driver extends AggregateRoot
         UuidValueObject $id,
         StringValueObject $name,
         StringValueObject $shortCode,
-        UuidValueObject $countryId,
         NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $name, $shortCode, $countryId, $ref);
+        return new self($id, $name, $shortCode, $ref);
     }
 
     public function id(): UuidValueObject
@@ -63,11 +60,6 @@ final class Driver extends AggregateRoot
         return $this->shortCode;
     }
 
-    public function countryId(): UuidValueObject
-    {
-        return $this->countryId;
-    }
-
     public function ref(): NullableUuidValueObject
     {
         return $this->ref;
@@ -79,7 +71,6 @@ final class Driver extends AggregateRoot
             'id'         => $this->id->value(),
             'name'       => $this->name->value(),
             'short_code' => $this->shortCode->value(),
-            'country'    => $this->countryId->value(),
             'ref'        => $this->ref->value(),
         ];
     }

@@ -11,13 +11,13 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateAnalyticsIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateAnalyticsIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchAnalyticsGateway $searchGateway,
-        private readonly SaveAnalyticsGateway $saveGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchAnalyticsGateway $searchGateway,
+        private SaveAnalyticsGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
@@ -32,6 +32,7 @@ final class CreateAnalyticsIfNotExistsCommandHandler implements CommandHandler
             new UuidValueObject($this->uuidGenerator->uuid4()),
             $command->season(),
             $command->driver(),
+            $command->country(),
             $command->position(),
             $command->points(),
             $command->analyticsStatsDTO(),

@@ -40,13 +40,13 @@ final class ScrapSeasonAnalyticsCommandHandler implements CommandHandler
         foreach ($this->standingsGateway->fetch($season->ref())->data()['standings'] as $standing) {
             try {
                 $countryId = $this->createCountryIfNotExists($standing['nationality']);
-
-                $driverId = $this->createDriverIfNotExists($standing['driver'], $countryId);
+                $driverId  = $this->createDriverIfNotExists($standing['driver']);
 
                 $this->commandBus->execute(
                     CreateAnalyticsIfNotExistsCommand::fromScalars(
                         season: $season->id(),
                         driver: $driverId->value(),
+                        country: $countryId->value(),
                         position: $standing['position'],
                         points: $standing['points'],
                         analyticsStatsDTO: AnalyticsStatsDTO::fromScalars(

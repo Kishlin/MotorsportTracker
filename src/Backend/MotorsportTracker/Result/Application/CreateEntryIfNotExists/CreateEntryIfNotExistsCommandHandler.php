@@ -10,14 +10,14 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEntryIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateEntryIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly DriverByNameGateway $driverByNameGateway,
-        private readonly SearchEntryGateway $searchEntryGateway,
-        private readonly SaveEntryGateway $saveEntryGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private DriverByNameGateway $driverByNameGateway,
+        private SearchEntryGateway $searchEntryGateway,
+        private SaveEntryGateway $saveEntryGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
@@ -36,6 +36,7 @@ final class CreateEntryIfNotExistsCommandHandler implements CommandHandler
         $entry = Entry::create(
             new UuidValueObject($this->uuidGenerator->uuid4()),
             $command->sessionId(),
+            $command->countryId(),
             $driverId,
             $command->teamId(),
             $command->carNumber(),

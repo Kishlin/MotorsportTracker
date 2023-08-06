@@ -16,7 +16,7 @@ trait DriverServicesTrait
     public function driverRepositorySpy(): DriverRepositorySpy
     {
         if (null === $this->driverRepositorySpy) {
-            $this->driverRepositorySpy = new DriverRepositorySpy($this->countryRepositorySpy());
+            $this->driverRepositorySpy = new DriverRepositorySpy();
         }
 
         return $this->driverRepositorySpy;

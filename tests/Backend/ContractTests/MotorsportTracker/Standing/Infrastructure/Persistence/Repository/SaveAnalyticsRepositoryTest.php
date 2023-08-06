@@ -24,6 +24,7 @@ final class SaveAnalyticsRepositoryTest extends CoreRepositoryContractTestCase
             new UuidValueObject(self::uuid()),
             new UuidValueObject(self::uuid()),
             new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::uuid()),
             new PositiveIntValueObject(3),
             new FloatValueObject(415.2),
             AnalyticsStatsDTO::fromScalars(

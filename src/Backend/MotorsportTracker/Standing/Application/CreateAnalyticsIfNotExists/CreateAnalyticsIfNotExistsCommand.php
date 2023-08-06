@@ -10,14 +10,15 @@ use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateAnalyticsIfNotExistsCommand implements Command
+final readonly class CreateAnalyticsIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $season,
-        private readonly string $driver,
-        private readonly int $position,
-        private readonly float $points,
-        private readonly AnalyticsStatsDTO $analyticsStatsDTO,
+        private string $season,
+        private string $driver,
+        private string $country,
+        private int $position,
+        private float $points,
+        private AnalyticsStatsDTO $analyticsStatsDTO,
     ) {
     }
 
@@ -29,6 +30,11 @@ final class CreateAnalyticsIfNotExistsCommand implements Command
     public function driver(): UuidValueObject
     {
         return new UuidValueObject($this->driver);
+    }
+
+    public function country(): UuidValueObject
+    {
+        return new UuidValueObject($this->country);
     }
 
     public function position(): PositiveIntValueObject
@@ -49,10 +55,11 @@ final class CreateAnalyticsIfNotExistsCommand implements Command
     public static function fromScalars(
         string $season,
         string $driver,
+        string $country,
         int $position,
         float $points,
         AnalyticsStatsDTO $analyticsStatsDTO,
     ): self {
-        return new self($season, $driver, $position, $points, $analyticsStatsDTO);
+        return new self($season, $driver, $country, $position, $points, $analyticsStatsDTO);
     }
 }

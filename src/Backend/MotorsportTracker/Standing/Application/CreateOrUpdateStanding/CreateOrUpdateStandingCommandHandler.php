@@ -59,6 +59,7 @@ final readonly class CreateOrUpdateStandingCommandHandler implements CommandHand
             new UuidValueObject($this->uuidGenerator->uuid4()),
             $command->season(),
             $command->standee(),
+            $command->country(),
             $command->seriesClass(),
             $command->position(),
             $command->points(),

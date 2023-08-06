@@ -35,18 +35,15 @@ final class DriverCreationContext extends MotorsportTrackerContext
 
     #[When('a client creates the driver :name with code :code for the country :country')]
     #[When('a client creates a driver with same name')]
-    #[When('a client creates a driver for a missing country')]
-    public function aClientCreatesADriver(string $name = 'Max Verstappen', string $code = 'VER', string $country = 'Netherlands'): void
+    public function aClientCreatesADriver(string $name = 'Max Verstappen', string $code = 'VER'): void
     {
         $this->driverId        = null;
         $this->thrownException = null;
 
         try {
-            $countryId = $this->fixtureId("country.country.{$this->format($country)}");
-
             /** @var UuidValueObject $driverId */
             $driverId = self::container()->commandBus()->execute(
-                CreateDriverIfNotExistsCommand::fromScalars($name, $code, $countryId, null),
+                CreateDriverIfNotExistsCommand::fromScalars($name, $code, null),
             );
 
             $this->driverId = $driverId;

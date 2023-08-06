@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -17,6 +18,7 @@ final readonly class CreateOrUpdateStandingCommand implements Command
         private string $season,
         private ?string $seriesClass,
         private string $standee,
+        private ?string $country,
         private int $position,
         private float $points,
         private StandingType $standingType,
@@ -38,6 +40,11 @@ final readonly class CreateOrUpdateStandingCommand implements Command
         return new UuidValueObject($this->standee);
     }
 
+    public function country(): NullableUuidValueObject
+    {
+        return new NullableUuidValueObject($this->country);
+    }
+
     public function position(): PositiveIntValueObject
     {
         return new PositiveIntValueObject($this->position);
@@ -57,10 +64,11 @@ final readonly class CreateOrUpdateStandingCommand implements Command
         string $season,
         ?string $seriesClass,
         string $standee,
+        ?string $country,
         int $position,
         float $points,
         StandingType $standingType,
     ): self {
-        return new self($season, $seriesClass, $standee, $position, $points, $standingType);
+        return new self($season, $seriesClass, $standee, $country, $position, $points, $standingType);
     }
 }

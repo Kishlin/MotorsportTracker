@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateOrUpdateStandingDriver;
+namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateOrUpdateStanding;
 
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\UpdateStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;

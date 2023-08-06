@@ -34,9 +34,9 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
                 continue;
             }
 
+            $driverC = $this->countryRepositorySpy->safeGet($entry->country());
             $driver  = $this->driverRepositorySpy->safeGet($entry->driver());
             $team    = $this->teamRepositorySpy->safeGet($entry->team());
-            $driverC = $this->countryRepositorySpy->safeGet($driver->countryId());
 
             $result = [
                 'driver' => [

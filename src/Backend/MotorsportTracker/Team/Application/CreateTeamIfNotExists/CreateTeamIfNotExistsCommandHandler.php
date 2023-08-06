@@ -33,7 +33,6 @@ final readonly class CreateTeamIfNotExistsCommandHandler implements CommandHandl
         $team = Team::create(
             $id,
             $command->seasonId(),
-            $command->countryId(),
             $command->name(),
             $command->color(),
             $command->ref(),

@@ -9,6 +9,7 @@ use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -18,6 +19,7 @@ final class Standing extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $season,
         private readonly UuidValueObject $standee,
+        private readonly NullableUuidValueObject $country,
         private readonly NullableStringValueObject $seriesClass,
         private readonly PositiveIntValueObject $position,
         private readonly FloatValueObject $points,
@@ -29,12 +31,13 @@ final class Standing extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $season,
         UuidValueObject $standee,
+        NullableUuidValueObject $country,
         NullableStringValueObject $seriesClass,
         PositiveIntValueObject $position,
         FloatValueObject $points,
         StandingType $standingType,
     ): self {
-        $standeeStanding = new self($id, $season, $standee, $seriesClass, $position, $points, $standingType);
+        $standeeStanding = new self($id, $season, $standee, $country, $seriesClass, $position, $points, $standingType);
 
         $standeeStanding->record(new StandingCreatedDomainEvent($id, $standingType));
 
@@ -48,12 +51,13 @@ final class Standing extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $season,
         UuidValueObject $standee,
+        NullableUuidValueObject $country,
         NullableStringValueObject $seriesClass,
         PositiveIntValueObject $position,
         FloatValueObject $points,
         StandingType $standingType,
     ): self {
-        return new self($id, $season, $standee, $seriesClass, $position, $points, $standingType);
+        return new self($id, $season, $standee, $country, $seriesClass, $position, $points, $standingType);
     }
 
     public function id(): UuidValueObject
@@ -69,6 +73,11 @@ final class Standing extends AggregateRoot
     public function standee(): UuidValueObject
     {
         return $this->standee;
+    }
+
+    public function country(): NullableUuidValueObject
+    {
+        return $this->country;
     }
 
     public function seriesClass(): NullableStringValueObject
@@ -97,6 +106,7 @@ final class Standing extends AggregateRoot
             'id'           => $this->id->value(),
             'season'       => $this->season->value(),
             'standee'      => $this->standee->value(),
+            'country'      => $this->country->value(),
             'series_class' => $this->seriesClass->value(),
             'position'     => $this->position->value(),
             'points'       => $this->points->value(),

@@ -20,7 +20,6 @@ final class FixtureToTeamConverter implements FixtureConverter
         return Team::instance(
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('seasonId')),
-            new UuidValueObject($fixture->getString('countryId')),
             new StringValueObject($fixture->getString('name')),
             new NullableStringValueObject($fixture->getString('color')),
             new NullableUuidValueObject($fixture->getString('ref')),

@@ -83,13 +83,14 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
 
             foreach ($standings as $standing) {
                 $countryId = $this->createCountryIfNotExists($standing['nationality']);
-                $driverId  = $this->createDriverIfNotExists($standing['driver'], $countryId);
+                $driverId  = $this->createDriverIfNotExists($standing['driver']);
 
                 $this->commandBus->execute(
                     CreateOrUpdateStandingCommand::fromScalars(
                         $season->id(),
                         $seriesName,
                         $driverId->value(),
+                        $countryId->value(),
                         $standing['position'],
                         $standing['totalPoints'],
                         StandingType::DRIVER,
@@ -128,6 +129,8 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                     $standing['constructor']['uuid'],
                 );
 
+                $countryId = null;
+
                 if (null !== $standing['team']) {
                     $countryId = null !== $standing['countryRepresenting']
                         ? $this->createCountryIfNotExists($standing['countryRepresenting'])->value()
@@ -135,7 +138,6 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
 
                     $teamId = $this->createTeamIfNotExists(
                         $season->id(),
-                        $countryId,
                         $standing['team']['name'],
                         $standing['team']['colour'],
                         $standing['team']['uuid'],
@@ -149,6 +151,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         $season->id(),
                         $seriesName,
                         $constructorId->value(),
+                        $countryId,
                         $standing['position'],
                         $standing['points'],
                         StandingType::CONSTRUCTOR,
@@ -184,7 +187,6 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
 
                 $teamId = $this->createTeamIfNotExists(
                     $season->id(),
-                    $countryId,
                     $standing['team']['name'],
                     $standing['team']['colour'],
                     $standing['team']['uuid'],
@@ -195,6 +197,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         $season->id(),
                         $seriesName,
                         $teamId->value(),
+                        $countryId,
                         $standing['position'],
                         $standing['points'],
                         StandingType::TEAM,

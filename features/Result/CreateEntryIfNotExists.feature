@@ -3,8 +3,9 @@ Feature: It can create Entries
   Scenario: It saves a new entry
     Given the "Red Bull Racing" team exists
     And the driver "Max Verstappen" exists
+    And the country "Netherlands" exists
     And the eventSession "Dutch Grand Prix 2022 Race" exists
-    When a client creates the entry of "Max Verstappen" for "Red Bull Racing" at "Dutch Grand Prix 2022 Race" with number "33"
+    When a client creates the entry of "Max Verstappen" for "Red Bull Racing" representing "Netherlands" at "Dutch Grand Prix 2022 Race" with number "33"
     Then the entry is saved
     And the id of the entry of "Max Verstappen" for "Red Bull Racing" at "Dutch Grand Prix 2022 Race" with number "33" is returned
 

@@ -1,8 +1,7 @@
 Feature: It can create Teams
 
   Scenario: It saves a new team
-    Given the country "Austria" exists
-    And the season "Formula One 2022" exists
+    Given the season "Formula One 2022" exists
     When a client creates a team with name "Red Bull Racing" and color "#0000c6" and ref "41be2072-17ab-455f-8522-8b96bc315e47"
     Then the team is saved
     And the id of the team with ref "41be2072-17ab-455f-8522-8b96bc315e47" is returned

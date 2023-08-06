@@ -13,22 +13,16 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 final readonly class CreateTeamIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $seasonId,
-        private readonly ?string $countryId,
-        private readonly string $name,
-        private readonly ?string $color,
-        private readonly ?string $ref,
+        private string $seasonId,
+        private string $name,
+        private ?string $color,
+        private ?string $ref,
     ) {
     }
 
     public function seasonId(): UuidValueObject
     {
         return new UuidValueObject($this->seasonId);
-    }
-
-    public function countryId(): NullableUuidValueObject
-    {
-        return new NullableUuidValueObject($this->countryId);
     }
 
     public function name(): StringValueObject
@@ -48,11 +42,10 @@ final readonly class CreateTeamIfNotExistsCommand implements Command
 
     public static function fromScalars(
         string $seasonId,
-        ?string $countryId,
         string $name,
         ?string $color,
         ?string $ref,
     ): self {
-        return new self($seasonId, $countryId, $name, $color, $ref);
+        return new self($seasonId, $name, $color, $ref);
     }
 }

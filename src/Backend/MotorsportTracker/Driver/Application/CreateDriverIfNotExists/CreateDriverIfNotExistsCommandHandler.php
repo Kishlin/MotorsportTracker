@@ -11,13 +11,13 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateDriverIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateDriverIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchDriverGateway $searchGateway,
-        private readonly SaveDriverGateway $saveGateway,
-        private readonly UuidGenerator $uuidGenerator,
-        private readonly EventDispatcher $eventDispatcher,
+        private SearchDriverGateway $searchGateway,
+        private SaveDriverGateway $saveGateway,
+        private UuidGenerator $uuidGenerator,
+        private EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -30,7 +30,7 @@ final class CreateDriverIfNotExistsCommandHandler implements CommandHandler
         }
 
         $driverId = new UuidValueObject($this->uuidGenerator->uuid4());
-        $driver   = Driver::create($driverId, $command->name(), $command->shortCode(), $command->countryId(), $command->ref());
+        $driver   = Driver::create($driverId, $command->name(), $command->shortCode(), $command->ref());
 
         try {
             $this->saveGateway->save($driver);

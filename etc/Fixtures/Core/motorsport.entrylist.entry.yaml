@@ -1,6 +1,7 @@
 maxVerstappenAtDutchGP:
   event: '@motorsport.event.event.dutchGrandPrix2022'
   driver: '@motorsport.driver.driver.maxVerstappen'
+  country: '@country.country.netherlands'
   team: '@motorsport.team.team.redBullRacing'
   chassis: 'Red Bull RB19'
   engine: 'Honda H001'

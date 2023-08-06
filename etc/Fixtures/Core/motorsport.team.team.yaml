@@ -1,41 +1,35 @@
 redBullRacing:
   seasonId: '@motorsport.championship.season.formulaOne2022'
-  countryId: '@country.country.austria'
   name: 'Red Bull Racing'
   color: '#0600EF'
   ref: '41be2072-17ab-455f-8522-8b96bc315e47'
 
 mercedes:
   seasonId: '@motorsport.championship.season.formulaOne2022'
-  countryId: '@country.country.germany'
   name: 'Mercedes AMG Formula One Team'
   color: '#0600EF'
   ref: '71d00c89-0eca-482d-bbce-db161c293e90'
 
 toroRosso:
   seasonId: '@motorsport.championship.season.formulaOne2022'
-  countryId: '@country.country.italia'
   name: 'Toro Rosso'
   color: '#0600EF'
   ref: '054e056f-f15d-412b-a80f-a310275faf81'
 
 williams:
   seasonId: '@motorsport.championship.season.formulaOne2022'
-  countryId: '@country.country.unitedKingdom'
   name: 'Williams'
   color: '#0600EF'
   ref: 'd6f1339e-97d5-4e3a-9fb6-6f7db45e34b7'
 
 camposRacing:
   seasonId: '@motorsport.championship.season.formulaTwo2023'
-  countryId: '@country.country.spain'
   name: 'Campos Racing'
   color: '#0600EF'
   ref: '33bcdaa5-fcbd-4682-bb42-3ec5ef3210ca'
 
 artGrandPrix:
   seasonId: '@motorsport.championship.season.formulaTwo2023'
-  countryId: '@country.country.france'
   name: 'ART Grand Prix'
   color: '#0600EF'
   ref: 'a9885bc3-a8f4-4dbb-9f66-5a383b781cb9'

@@ -35,10 +35,14 @@ final class AnalyticsCreationContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.standing.analytics.{$this->format($name)}");
     }
 
-    #[When('a client creates the analytics for :driver during :season')]
+    #[When('a client creates the analytics for :driver representing :country during :season')]
     #[When('a client creates the analytics for the same driver and season')]
-    public function aClientCreatesAnalytics(TableNode $stats, string $driver = 'Max Verstappen', string $season = 'formulaOne2022'): void
-    {
+    public function aClientCreatesAnalytics(
+        TableNode $stats,
+        string $driver = 'Max Verstappen',
+        string $season = 'formulaOne2022',
+        string $country = 'Netherlands',
+    ): void {
         $this->analyticsId     = null;
         $this->thrownException = null;
 
@@ -46,14 +50,16 @@ final class AnalyticsCreationContext extends MotorsportTrackerContext
         $analytics = $stats->getColumn(1);
 
         try {
-            $seasonId = $this->fixtureId("motorsport.championship.season.{$this->format($season)}");
-            $driverId = $this->fixtureId("motorsport.driver.driver.{$this->format($driver)}");
+            $countryId = $this->fixtureId("country.country.{$this->format($country)}");
+            $seasonId  = $this->fixtureId("motorsport.championship.season.{$this->format($season)}");
+            $driverId  = $this->fixtureId("motorsport.driver.driver.{$this->format($driver)}");
 
             /** @var UuidValueObject $analyticsId */
             $analyticsId = self::container()->commandBus()->execute(
                 CreateAnalyticsIfNotExistsCommand::fromScalars(
                     $seasonId,
                     $driverId,
+                    $countryId,
                     (int) $analytics[0],
                     (float) $analytics[1],
                     AnalyticsStatsDTO::fromScalars(

@@ -19,13 +19,10 @@ final class SaveDriverRepositoryTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveADriver(): void
     {
-        self::loadFixture('country.country.netherlands');
-
         $driver = Driver::instance(
             new UuidValueObject(self::uuid()),
             new StringValueObject('Max Verstappen'),
             new StringValueObject('VER'),
-            new UuidValueObject(self::fixtureId('country.country.netherlands')),
             new NullableUuidValueObject(null),
         );
 

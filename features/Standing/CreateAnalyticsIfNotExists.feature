@@ -3,7 +3,8 @@ Feature: It can create Drivers
   Scenario: It saves a new driver
     Given the driver "Max Verstappen" exists
     And the season "Formula One 2022" exists
-    When a client creates the analytics for "Max Verstappen" during "Formula One 2022"
+    And the country "Netherlands" exists
+    When a client creates the analytics for "Max Verstappen" representing "Netherlands" during "Formula One 2022"
     | position             | 3     |
     | points               | 415.2 |
     | avgFinishPosition    | 2.71  |

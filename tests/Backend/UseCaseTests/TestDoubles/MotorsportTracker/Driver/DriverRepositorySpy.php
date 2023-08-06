@@ -12,7 +12,6 @@ use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 
 /**
@@ -24,16 +23,9 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  */
 final class DriverRepositorySpy extends AbstractRepositorySpy implements SaveDriverGateway, SearchDriverGateway, DriverByNameGateway
 {
-    public function __construct(
-        private readonly SaveSearchCountryRepositorySpy $countryRepositorySpy,
-    ) {
-    }
-
     public function save(Driver $driver): void
     {
-        if (false === $this->countryRepositorySpy->has($driver->countryId())
-            || null !== $this->find($driver->name())
-            || $this->refIsAlreadyTaken($driver)) {
+        if (null !== $this->find($driver->name()) || $this->refIsAlreadyTaken($driver)) {
             throw new DriverCreationFailureException();
         }
 

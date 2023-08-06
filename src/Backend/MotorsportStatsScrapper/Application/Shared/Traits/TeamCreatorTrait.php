@@ -9,10 +9,10 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 trait TeamCreatorTrait
 {
-    private function createTeamIfNotExists(string $season, ?string $country, string $name, ?string $color, string $ref): UuidValueObject
+    private function createTeamIfNotExists(string $season, string $name, ?string $color, string $ref): UuidValueObject
     {
         $teamId = $this->commandBus->execute(
-            CreateTeamIfNotExistsCommand::fromScalars($season, $country, $name, $color, $ref),
+            CreateTeamIfNotExistsCommand::fromScalars($season, $name, $color, $ref),
         );
         assert($teamId instanceof UuidValueObject);
 

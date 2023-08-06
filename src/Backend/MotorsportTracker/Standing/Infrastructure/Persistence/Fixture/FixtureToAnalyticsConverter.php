@@ -20,6 +20,7 @@ final class FixtureToAnalyticsConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('season')),
             new UuidValueObject($fixture->getString('driver')),
+            new UuidValueObject($fixture->getString('country')),
             new PositiveIntValueObject($fixture->getInt('position')),
             new FloatValueObject($fixture->getFloat('points')),
             new FloatValueObject($fixture->getFloat('avgFinishPosition')),

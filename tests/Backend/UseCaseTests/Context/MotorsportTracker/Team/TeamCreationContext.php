@@ -43,13 +43,12 @@ final class TeamCreationContext extends MotorsportTrackerContext
         $this->teamId          = null;
         $this->thrownException = null;
 
-        $season  = array_keys(self::container()->seasonRepositorySpy()->all())[0];
-        $country = array_keys(self::container()->countryRepositorySpy()->all())[0];
+        $season = array_keys(self::container()->seasonRepositorySpy()->all())[0];
 
         try {
             /** @var UuidValueObject $teamId */
             $teamId = self::container()->commandBus()->execute(
-                CreateTeamIfNotExistsCommand::fromScalars($season, $country, $name, $color, $ref),
+                CreateTeamIfNotExistsCommand::fromScalars($season, $name, $color, $ref),
             );
 
             $this->teamId = $teamId;

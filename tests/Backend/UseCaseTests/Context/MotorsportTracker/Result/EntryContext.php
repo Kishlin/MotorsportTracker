@@ -37,7 +37,7 @@ final class EntryContext extends MotorsportTrackerContext
         self::container()->coreFixtureLoader()->loadFixture("motorsport.result.entry.{$this->format($name)}");
     }
 
-    #[When('a client creates the entry of :driverName for :team at :session with number :carNumber')]
+    #[When('a client creates the entry of :driverName for :team representing :country at :session with number :carNumber')]
     #[When('a client creates the entry of the same driver for :team at :session with number :carNumber')]
     #[When('a client creates the entry of :driverName for :team at :session with the same number')]
     #[When('a client creates the entry with the same driver team session and number')]
@@ -45,6 +45,7 @@ final class EntryContext extends MotorsportTrackerContext
         string $driverName = 'Max Verstappen',
         string $team = 'Red Bull Racing',
         string $session = 'dutchGrandPrix2022Race',
+        string $country = 'Netherlands',
         int $carNumber = 33,
     ): void {
         $this->entryId         = null;
@@ -53,10 +54,11 @@ final class EntryContext extends MotorsportTrackerContext
         try {
             $sessionId = $this->fixtureId("motorsport.event.eventSession.{$this->format($session)}");
             $teamId    = $this->fixtureId("motorsport.team.team.{$this->format($team)}");
+            $countryId = $this->fixtureId("country.country.{$this->format($country)}");
 
             /** @var UuidValueObject $entryId */
             $entryId = self::container()->commandBus()->execute(
-                CreateEntryIfNotExistsCommand::fromScalars($sessionId, $driverName, $teamId, $carNumber),
+                CreateEntryIfNotExistsCommand::fromScalars($sessionId, $countryId, $driverName, $teamId, $carNumber),
             );
 
             $this->entryId = $entryId;

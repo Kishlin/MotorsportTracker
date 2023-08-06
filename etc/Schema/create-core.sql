@@ -28,6 +28,7 @@ CREATE TABLE public.analytics (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
     driver character varying(36) NOT NULL,
+    country character varying(36) NOT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     points double precision DEFAULT 0.0 NOT NULL,
     avg_finish_position double precision DEFAULT 0.0 NOT NULL,
@@ -164,7 +165,6 @@ CREATE TABLE public.driver (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
     short_code character varying(255) NOT NULL,
-    country character varying(36) NOT NULL,
     ref character varying(36) DEFAULT NULL::character varying
 );
 
@@ -178,6 +178,7 @@ ALTER TABLE public.driver OWNER TO motorsporttracker;
 CREATE TABLE public.entry (
     id character varying(36) NOT NULL,
     session character varying(36) NOT NULL,
+    country character varying(36) NOT NULL,
     driver character varying(36) NOT NULL,
     team character varying(36) NOT NULL,
     car_number integer NOT NULL
@@ -323,6 +324,7 @@ CREATE TABLE public.standing_constructor (
     season character varying(36) NOT NULL,
     series_class character varying(255) DEFAULT NULL::character varying,
     standee character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     points double precision DEFAULT 0.0 NOT NULL
 );
@@ -339,6 +341,7 @@ CREATE TABLE public.standing_driver (
     season character varying(36) NOT NULL,
     series_class character varying(255) DEFAULT NULL::character varying,
     standee character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     points double precision DEFAULT 0.0 NOT NULL
 );
@@ -355,6 +358,7 @@ CREATE TABLE public.standing_team (
     season character varying(36) NOT NULL,
     series_class character varying(255) DEFAULT NULL::character varying,
     standee character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     points double precision DEFAULT 0.0 NOT NULL
 );
@@ -369,7 +373,6 @@ ALTER TABLE public.standing_team OWNER TO motorsporttracker;
 CREATE TABLE public.team (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
-    country character varying(36) DEFAULT NULL,
     name character varying(255) NOT NULL,
     color character varying(255) DEFAULT NULL::character varying,
     ref character varying(36) DEFAULT NULL::character varying
