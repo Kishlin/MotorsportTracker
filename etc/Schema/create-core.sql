@@ -643,21 +643,21 @@ CREATE UNIQUE INDEX session_type_label_idx ON public.session_type USING btree (l
 -- Name: standing_constructor_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX standing_constructor_season_team_idx ON public.standing_constructor USING btree (season, series_class, standee);
+CREATE UNIQUE INDEX standing_constructor_season_team_position_idx ON public.standing_constructor USING btree (season, series_class, standee, "position");
 
 
 --
 -- Name: standing_driver_season_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX standing_driver_season_driver_idx ON public.standing_driver USING btree (season, series_class, standee);
+CREATE UNIQUE INDEX standing_driver_season_driver_position_idx ON public.standing_driver USING btree (season, series_class, standee, "position");
 
 
 --
 -- Name: standing_team_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX standing_team_season_team_idx ON public.standing_team USING btree (season, series_class, standee);
+CREATE UNIQUE INDEX standing_team_season_team_position_idx ON public.standing_team USING btree (season, series_class, standee, "position");
 
 
 --

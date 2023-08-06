@@ -29,6 +29,7 @@ final readonly class CreateOrUpdateStandingCommandHandler implements CommandHand
             $command->seriesClass(),
             $command->standee(),
             $command->standingType(),
+            $command->position(),
         );
 
         if (null !== $existingId) {

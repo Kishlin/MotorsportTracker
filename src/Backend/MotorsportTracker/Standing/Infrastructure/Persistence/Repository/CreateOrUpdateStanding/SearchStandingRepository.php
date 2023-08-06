@@ -7,6 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\SearchStandingGateway;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 use RuntimeException;
@@ -18,6 +19,7 @@ final class SearchStandingRepository extends CoreRepository implements SearchSta
         NullableStringValueObject $seriesClass,
         UuidValueObject $standee,
         StandingType $standingType,
+        PositiveIntValueObject $position,
     ): ?UuidValueObject {
         $qb = $this->connection->createQueryBuilder();
 
@@ -27,8 +29,10 @@ final class SearchStandingRepository extends CoreRepository implements SearchSta
             ->from($table, 'sd')
             ->where($qb->expr()->eq('sd.season', ':season'))
             ->andWhere($qb->expr()->eq('sd.standee', ':standee'))
+            ->andWhere($qb->expr()->eq('sd.position', ':position'))
             ->withParam('season', $season->value())
             ->withParam('standee', $standee->value())
+            ->withParam('position', $position->value())
         ;
 
         if (null === $seriesClass->value()) {
