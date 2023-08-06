@@ -7,7 +7,6 @@ namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportCache\Standings\Contr
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\ConstructorStandings;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\DriverStandings;
 use Kishlin\Backend\MotorsportCache\Standing\Domain\Entity\TeamStandings;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use RuntimeException;
@@ -35,14 +34,9 @@ final class ViewStandingsController extends AbstractController
     /**
      * @throws InvalidArgumentException
      */
-    public function __invoke(
-        CacheItemPoolInterface $cachePool,
-        CommandBus $commandBus,
-        string $championship,
-        int $year,
-        string $type,
-    ): Response {
-        $availableStandings = $this->getAvailableStandingsFromCache($cachePool, $commandBus, $championship, $year);
+    public function __invoke(CacheItemPoolInterface $cachePool, string $championship, int $year, string $type): Response
+    {
+        $availableStandings = $this->getAvailableStandingsFromCache($cachePool, $championship, $year);
 
         if (null === $availableStandings || false === $availableStandings->has($type)) {
             return new JsonResponse(null, 404);
