@@ -22,7 +22,7 @@ final readonly class AvailableStandings implements CacheItem
 
     public static function computeKey(string $championship, int $year): string
     {
-        return "available-standings-{$championship}-{$year}";
+        return "standings-available-{$championship}-{$year}";
     }
 
     public function has(string $type): bool
