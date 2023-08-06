@@ -105,7 +105,7 @@ services:
   ##> Cache
 
   Kishlin\Backend\Shared\Domain\Cache\CachePersister:
-    class: Kishlin\Backend\Shared\Infrastructure\Cache\CachePersisterUsingSymfony
+    class: Kishlin\Backend\Shared\Infrastructure\Cache\CachePersisterImpl
 
 
   ##> Monitoring
