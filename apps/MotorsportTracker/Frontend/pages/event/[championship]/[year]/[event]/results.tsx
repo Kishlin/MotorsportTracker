@@ -4,7 +4,6 @@ import React from 'react';
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 
 import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import { EventShort, SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 import ResultsContent from '../../../../../src/MotorsportTracker/Result/Ui/ResultsContent';
 import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
 import { ResultsByRace } from '../../../../../src/MotorsportTracker/Result/Types/Index';
@@ -12,7 +11,7 @@ import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNav
 import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
 import EventTitle from '../../../../../src/MotorsportTracker/Event/Ui/EventTitle';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
-import eventsApi from '../../../../../src/MotorsportTracker/Event/Api/EventsApi';
+import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 
 declare type EventResultsPathParams = {
     params: {
@@ -76,27 +75,15 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             season,
             page: 'results',
         },
+        revalidate: 60,
     };
 };
 
 export async function getStaticPaths(): Promise<{
     paths: Array<EventResultsPathParams>,
-    fallback: boolean,
+    fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventResultsPathParams> = [];
-
-    const events = await eventsApi();
-
-    events.forEach((event: EventShort) => {
-        paths.push({
-            params: {
-                ...event,
-                year: event.year.toString(),
-            },
-        });
-    });
-
-    return { paths, fallback: false };
+    return { paths: [], fallback: 'blocking' };
 }
 
 export default ChampionshipStandingsPage;

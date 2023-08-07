@@ -6,7 +6,7 @@ const RedirectToHome = () => {
 
     useEffect(
         () => {
-            router.replace('/schedule');
+            router.replace('/');
         },
         [],
     );

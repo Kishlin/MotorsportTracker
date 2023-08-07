@@ -2,13 +2,12 @@
 import React from 'react';
 
 import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import { EventShort, SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 import eventGraphsApi from '../../../../../src/MotorsportGraph/Shared/Api/EventGraphsApi';
 import GraphContainer from '../../../../../src/MotorsportGraph/Shared/Ui/GraphContainer';
 import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
-import eventsApi from '../../../../../src/MotorsportTracker/Event/Api/EventsApi';
 import GraphTitle from '../../../../../src/MotorsportGraph/Shared/Ui/GraphTitle';
+import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 import { EventGraphs } from '../../../../../src/MotorsportGraph/Shared/Types';
 import Graphs from '../../../../../src/MotorsportGraph/Shared/Ui/Graphs';
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
@@ -72,27 +71,15 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             graphs,
             page: 'graphs',
         },
+        revalidate: 60,
     };
 };
 
 export async function getStaticPaths(): Promise<{
     paths: Array<EventGraphsPathParams>,
-    fallback: boolean,
+    fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventGraphsPathParams> = [];
-
-    const events = await eventsApi();
-
-    events.forEach((event: EventShort) => {
-        paths.push({
-            params: {
-                ...event,
-                year: event.year.toString(),
-            },
-        });
-    });
-
-    return { paths, fallback: false };
+    return { paths: [], fallback: 'blocking' };
 }
 
 export default ChampionshipStandingsPage;

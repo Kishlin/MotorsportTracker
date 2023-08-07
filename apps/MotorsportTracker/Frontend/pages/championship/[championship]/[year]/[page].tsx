@@ -121,35 +121,45 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
                 firstDay,
                 lastDay,
             },
+            revalidate: 60,
         };
     }
 
     if (true === availableStandings.constructor && 'standings-constructor' === page) {
         const constructorStandings = await constructorStandingsApi(championship, year);
 
-        return { props: { availableStandings, standings: constructorStandings.standings, type: 'constructor' } };
+        return {
+            props: { availableStandings, standings: constructorStandings.standings, type: 'constructor' },
+            revalidate: 60,
+        };
     }
 
     if (true === availableStandings.team && 'standings-team' === page) {
         const teamStandings = await teamStandingsApi(championship, year);
 
-        return { props: { availableStandings, standings: teamStandings.standings, type: 'team' } };
+        return {
+            props: { availableStandings, standings: teamStandings.standings, type: 'team' },
+            revalidate: 60,
+        };
     }
 
     if (true === availableStandings.driver && 'standings-driver' === page) {
         const driverStandings = await driverStandingsApi(championship, year);
 
-        return { props: { availableStandings, standings: driverStandings.standings, type: 'driver' } };
+        return {
+            props: { availableStandings, standings: driverStandings.standings, type: 'driver' },
+            revalidate: 60,
+        };
     }
 
     return { notFound: true };
 };
 
-export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathParams>, fallback: boolean }> {
+export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathParams>, fallback: boolean|'blocking' }> {
     const paths: Array<ChampionshipPathParams> = [];
 
     Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.forEach(async (year: number) => {
+        championships[slug].years.slice(-20).forEach(async (year: number) => {
             const availableStandings = await availableStandingsApi(slug, year.toString());
 
             ['constructor', 'team', 'driver'].forEach((type: StandingType) => {
@@ -162,7 +172,7 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathP
         });
     });
 
-    return { paths, fallback: false };
+    return { paths, fallback: 'blocking' };
 }
 
 export default ChampionshipSchedulePage;

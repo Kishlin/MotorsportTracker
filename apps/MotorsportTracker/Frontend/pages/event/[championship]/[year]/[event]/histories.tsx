@@ -5,11 +5,10 @@ import Typography from '@mui/material/Typography';
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 
 import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import { EventShort, SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
 import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
-import eventsApi from '../../../../../src/MotorsportTracker/Event/Api/EventsApi';
+import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 
 declare type EventHistoriesPathParams = {
     params: {
@@ -65,27 +64,15 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             season,
             page: 'histories',
         },
+        revalidate: 60,
     };
 };
 
 export async function getStaticPaths(): Promise<{
     paths: Array<EventHistoriesPathParams>,
-    fallback: boolean,
+    fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventHistoriesPathParams> = [];
-
-    const events = await eventsApi();
-
-    events.forEach((event: EventShort) => {
-        paths.push({
-            params: {
-                ...event,
-                year: event.year.toString(),
-            },
-        });
-    });
-
-    return { paths, fallback: false };
+    return { paths: [], fallback: 'blocking' };
 }
 
 export default ChampionshipStandingsPage;
