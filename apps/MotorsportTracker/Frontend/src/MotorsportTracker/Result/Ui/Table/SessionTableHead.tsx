@@ -4,7 +4,11 @@ import React from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
-const SessionTableHead: React.FunctionComponent = () => (
+declare type SessionTableHeadProps = {
+    withComparison: boolean
+};
+
+const SessionTableHead: React.FunctionComponent<SessionTableHeadProps> = ({ withComparison }) => (
     <TableHead>
         <TableRow>
             <StyledTableCell>Pos</StyledTableCell>
@@ -13,9 +17,13 @@ const SessionTableHead: React.FunctionComponent = () => (
             <StyledTableCell>Team</StyledTableCell>
             <StyledTableCell align="right">Laps</StyledTableCell>
             <StyledTableCell align="right">Time</StyledTableCell>
-            <StyledTableCell align="right">Gap</StyledTableCell>
-            <StyledTableCell align="right">Interval</StyledTableCell>
-            <StyledTableCell align="right">Best</StyledTableCell>
+            {withComparison && (
+                <>
+                    <StyledTableCell align="right">Gap</StyledTableCell>
+                    <StyledTableCell align="right">Interval</StyledTableCell>
+                    <StyledTableCell align="right">Best</StyledTableCell>
+                </>
+            )}
         </TableRow>
     </TableHead>
 );

@@ -41,14 +41,12 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
         return null;
     }
 
-    const withTitle = 1 < Object.keys(results).length;
-
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
             content={(
                 <EventContainer>
-                    <ResultsContent results={results} withTitle={withTitle} />
+                    <ResultsContent results={results} />
                 </EventContainer>
             )}
             subHeader={(
