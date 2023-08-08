@@ -23,11 +23,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
 {
     use CountryCreatorTrait;
 
-    private const CANCELLED = 'Cancelled';
-    private const POSTPONED = 'Postponed';
-
     public function __construct(
-        private readonly EventSessionsFilter $eventSessionsFilter,
         private readonly CalendarGateway $calendarGateway,
         private readonly SeasonGateway $seasonGateway,
         private readonly CommandBus $commandBus,
@@ -45,10 +41,6 @@ final class ScrapCalendarCommandHandler implements CommandHandler
         }
 
         foreach ($this->calendarGateway->fetch($season->ref())->data()['events'] as $key => $event) {
-            if (self::isCancelledOrPostponed($event['status'])) {
-                continue;
-            }
-
             try {
                 $countryId = $this->createCountryIfNotExists($event['country']);
 
@@ -65,11 +57,6 @@ final class ScrapCalendarCommandHandler implements CommandHandler
         $this->eventDispatcher->dispatch(
             CalendarEventScrappingSuccessEvent::forSeason($command->championshipName(), $command->year()),
         );
-    }
-
-    private static function isCancelledOrPostponed(?string $status): bool
-    {
-        return self::CANCELLED === $status || self::POSTPONED === $status;
     }
 
     /**
@@ -135,7 +122,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
      */
     private function createEventSessionsIfNotExists(array $sessions, UuidValueObject $eventId): void
     {
-        foreach ($this->eventSessionsFilter->filterSessions($sessions) as $session) {
+        foreach ($sessions as $session) {
             $sessionTypeId = $this->commandBus->execute(
                 CreateSessionTypeIfNotExistsCommand::fromScalars($session['name']),
             );

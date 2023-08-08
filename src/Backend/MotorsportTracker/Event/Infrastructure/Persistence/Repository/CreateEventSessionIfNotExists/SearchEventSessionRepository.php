@@ -12,15 +12,20 @@ use RuntimeException;
 
 final class SearchEventSessionRepository extends CoreRepository implements SearchEventSessionGateway
 {
-    public function search(UuidValueObject $event, NullableDateTimeValueObject $startDate): ?UuidValueObject
-    {
+    public function search(
+        UuidValueObject $event,
+        UuidValueObject $typeId,
+        NullableDateTimeValueObject $startDate,
+    ): ?UuidValueObject {
         $qb = $this->connection->createQueryBuilder();
 
         $qb
             ->select('es.id')
             ->from('event_session', 'es')
             ->where($qb->expr()->eq('es.event', ':event'))
+            ->andWhere($qb->expr()->eq('es.type', ':type'))
             ->withParam('event', $event->value())
+            ->withParam('type', $typeId->value())
         ;
 
         if (null !== $startDate->value()) {

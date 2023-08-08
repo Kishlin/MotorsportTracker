@@ -27,7 +27,7 @@ final class CreateEventSessionIfNotExistsCommandHandler implements CommandHandle
      */
     public function __invoke(CreateEventSessionIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->search($command->eventId(), $command->startDate());
+        $id = $this->searchGateway->search($command->eventId(), $command->typeId(), $command->startDate());
         if (null !== $id) {
             return $id;
         }

@@ -27,7 +27,11 @@ final class SearchEventSessionRepositoryTest extends CoreRepositoryContractTestC
 
         self::assertSame(
             self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'),
-            $repository->search(new UuidValueObject($eventId), new NullableDateTimeValueObject($startDate))?->value(),
+            $repository->search(
+                new UuidValueObject($eventId),
+                new UuidValueObject(self::fixtureId('motorsport.event.sessionType.race')),
+                new NullableDateTimeValueObject($startDate),
+            )?->value(),
         );
     }
 
@@ -38,6 +42,10 @@ final class SearchEventSessionRepositoryTest extends CoreRepositoryContractTestC
         $eventId = '67d2b99c-c10e-4a8b-a745-617622b632e4';
         $typeId  = 'da4e3e0c-9884-4e14-9a74-d2b7dd80ffc7';
 
-        self::assertNull($repository->search(new UuidValueObject($eventId), new NullableDateTimeValueObject(null)));
+        self::assertNull($repository->search(
+            new UuidValueObject($eventId),
+            new UuidValueObject($typeId),
+            new NullableDateTimeValueObject(null),
+        ));
     }
 }
