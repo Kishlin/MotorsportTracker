@@ -42,7 +42,7 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
             menu={<MotorsportTrackerMenu />}
             content={(
                 <EventContainer>
-                    <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Graphs`}</Typography>
+                    <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Histories`}</Typography>
                     <Typography align="center">There are no histories available at this time.</Typography>
                 </EventContainer>
             )}
