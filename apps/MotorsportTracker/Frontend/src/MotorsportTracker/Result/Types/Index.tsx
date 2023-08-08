@@ -14,14 +14,14 @@ export type ResultDriver = {
     country: Country,
 };
 
-export type ResultClassification = 'CLA' | 'DNF' | 'DNS' | 'WIT';
+export type ResultClassification = null | 'CLA' | 'DNF' | 'DNS' | 'WIT';
 
 export type Result = {
     driver: ResultDriver,
     team: ResultTeam,
     car_number: number,
     finish_position: number,
-    classified_status: null|ResultClassification,
+    classified_status: ResultClassification,
     grid_position: null|number,
     laps: number,
     race_time: string,
