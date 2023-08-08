@@ -51,13 +51,7 @@ final readonly class UpdateEventResultsCacheCommandHandler implements CommandHan
         foreach ($racesToCompute as $raceToCompute) {
             $raceResult = $this->raceResultGateway->findResult($raceToCompute['id']);
 
-            $raceResultList[] = [
-                'session' => [
-                    'id'   => $raceToCompute['id'],
-                    'type' => $raceToCompute['type'],
-                ],
-                'result' => $raceResult->results(),
-            ];
+            $raceResultList[$raceToCompute['type']] = $raceResult->results();
         }
 
         $eventResultsByRace = EventResultsByRace::create(ResultsBySession::fromData($raceResultList));

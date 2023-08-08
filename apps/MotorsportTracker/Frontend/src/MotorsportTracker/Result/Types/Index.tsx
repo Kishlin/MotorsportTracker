@@ -36,12 +36,6 @@ export type Result = {
     interval_laps: number,
 };
 
-export type SessionResult = {
-    session: {
-        id: string,
-        type: string,
-    },
-    result: Result[],
+export type ResultsBySession = {
+    [key: string]: Result[],
 };
-
-export type ResultsBySession = Array<SessionResult>;

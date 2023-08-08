@@ -9,7 +9,6 @@ import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventC
 import { ResultsBySession } from '../../../../../src/MotorsportTracker/Result/Types/Index';
 import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
-import EventTitle from '../../../../../src/MotorsportTracker/Event/Ui/EventTitle';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 
@@ -42,7 +41,7 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
         return null;
     }
 
-    const withTitle = 1 < results.length;
+    const withTitle = 1 < Object.keys(results).length;
 
     return (
         <Layout
