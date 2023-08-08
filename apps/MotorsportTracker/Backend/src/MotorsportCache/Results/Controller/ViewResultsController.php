@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportCache\Results\Controller;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceQuery;
-use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceResponse;
-use Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus;
+use Kishlin\Backend\MotorsportCache\Result\Domain\Entity\EventResultsByRace;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,23 @@ use Symfony\Component\Routing\Annotation\Route;
 )]
 final class ViewResultsController extends AbstractController
 {
-    public function __invoke(QueryBus $queryBus, string $event): JsonResponse
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function __invoke(CacheItemPoolInterface $cachePool, string $event): JsonResponse
     {
-        /** @var ViewEventResultsByRaceResponse $response */
-        $response = $queryBus->ask(ViewEventResultsByRaceQuery::fromScalars($event));
+        $key = EventResultsByRace::computeKey($event);
 
-        return new JsonResponse($response->view()->toArray());
+        $item = $cachePool->getItem($key);
+
+        if (false === $item->isHit()) {
+            return new JsonResponse(null, 404);
+        }
+
+        $schedule = $item->get();
+
+        assert($schedule instanceof EventResultsByRace);
+
+        return new JsonResponse($schedule->toArray());
     }
 }

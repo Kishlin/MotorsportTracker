@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Logging\OnEventResultsByRaceCreationFailed;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event\EventResultsBySessionsCreationFailedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\UpdateEventResultsCache\Event\EventResultsBySessionsCreationFailedEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-final class EventResultsByRaceCreationFailureLogger implements EventSubscriber
+final readonly class EventResultsByRaceCreationFailureLogger implements EventSubscriber
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
     }
 

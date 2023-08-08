@@ -1,67 +1,39 @@
 <?php
 
-/** @noinspection PhpMultipleClassDeclarationsInspection */
-
 declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Domain\Entity;
 
-use JsonException;
-use Kishlin\Backend\MotorsportCache\Result\Domain\DomainEvent\EventResultsByRaceCreatedDomainEvent;
-use Kishlin\Backend\MotorsportCache\Result\Domain\ValueObject\ResultsByRaceValueObject;
-use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
+use Kishlin\Backend\MotorsportCache\Result\Domain\ValueObject\ResultsBySession;
+use Kishlin\Backend\Shared\Domain\Cache\CacheItem;
 
-final class EventResultsByRace extends AggregateRoot
+final readonly class EventResultsByRace implements CacheItem
 {
     private function __construct(
-        private readonly UuidValueObject $id,
-        private readonly UuidValueObject $event,
-        private readonly ResultsByRaceValueObject $resultsByRace,
+        private ResultsBySession $resultsBySession,
     ) {
     }
 
-    public static function create(UuidValueObject $id, UuidValueObject $event, ResultsByRaceValueObject $resultsByRace): self
+    public static function create(ResultsBySession $resultsByRace): self
     {
-        $eventResultsByRace = new self($id, $event, $resultsByRace);
+        return new self($resultsByRace);
+    }
 
-        $eventResultsByRace->record(new EventResultsByRaceCreatedDomainEvent($id));
+    public static function computeKey(string $eventId): string
+    {
+        return "event-results-{$eventId}";
+    }
 
-        return $eventResultsByRace;
+    public function resultsBySession(): ResultsBySession
+    {
+        return $this->resultsBySession;
     }
 
     /**
-     * @internal only use to get a test object
+     * @return array<int|string, mixed>
      */
-    public static function instance(UuidValueObject $id, UuidValueObject $event, ResultsByRaceValueObject $resultsByRace): self
+    public function toArray(): array
     {
-        return new self($id, $event, $resultsByRace);
-    }
-
-    public function id(): UuidValueObject
-    {
-        return $this->id;
-    }
-
-    public function event(): UuidValueObject
-    {
-        return $this->event;
-    }
-
-    public function resultsByRace(): ResultsByRaceValueObject
-    {
-        return $this->resultsByRace;
-    }
-
-    /**
-     * @throws JsonException
-     */
-    public function mappedData(): array
-    {
-        return [
-            'id'              => $this->id->value(),
-            'event'           => $this->event->value(),
-            'results_by_race' => $this->resultsByRace->asString(),
-        ];
+        return $this->resultsBySession->value();
     }
 }

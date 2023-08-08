@@ -80,19 +80,6 @@ CREATE TABLE public.event_graph (
 ALTER TABLE public.event_graph OWNER TO motorsporttracker;
 
 --
--- Name: event_results_by_race; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.event_results_by_race (
-    id character varying(36) NOT NULL,
-    event character varying(36) NOT NULL,
-    results_by_race json NOT NULL
-);
-
-
-ALTER TABLE public.event_results_by_race OWNER TO motorsporttracker;
-
---
 -- Name: migration_version; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -121,14 +108,6 @@ ALTER TABLE ONLY public.event_graph
 
 
 --
--- Name: event_results_by_race event_results_by_races_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.event_results_by_race
-    ADD CONSTRAINT event_results_by_races_pkey PRIMARY KEY (id);
-
-
---
 -- Name: migration_version migration_version_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
@@ -148,20 +127,6 @@ CREATE UNIQUE INDEX event_graph_event_type_idx ON public.event_graph USING btree
 --
 
 CREATE UNIQUE INDEX event_graph_id_idx ON public.event_graph USING btree (id);
-
-
---
--- Name: event_results_by_race_event_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX event_results_by_race_event_idx ON public.event_results_by_race USING btree (event);
-
-
---
--- Name: event_results_by_race_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX event_results_by_race_id_idx ON public.event_results_by_race USING btree (id);
 
 
 --
