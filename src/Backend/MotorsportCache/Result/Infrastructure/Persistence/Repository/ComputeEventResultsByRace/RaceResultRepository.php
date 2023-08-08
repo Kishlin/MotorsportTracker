@@ -62,8 +62,9 @@ TXT;
             ->innerJoin('season', 's', $qb->expr()->eq('ev.season', 's.id'))
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
             ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
-            ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'd.country'))
-            ->leftJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 't.country'))
+            ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'e.country'))
+            // TODO: Caveat, the team's country will always be the driver country
+            ->leftJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 'e.country'))
             ->where($qb->expr()->eq('e.session', ':session'))
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')

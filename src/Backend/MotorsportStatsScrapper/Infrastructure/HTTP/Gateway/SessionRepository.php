@@ -15,7 +15,7 @@ final class SessionRepository extends CoreRepository implements SessionGateway
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $qb->select('es.id, es.ref')
+        $qb->select('es.id, es.ref, e.id as event, s.id as season')
             ->from('event_session', 'es')
             ->innerJoin('event', 'e', $qb->expr()->eq('e.id', 'es.event'))
             ->innerJoin('season', 's', $qb->expr()->eq('s.id', 'e.season'))
@@ -31,7 +31,7 @@ final class SessionRepository extends CoreRepository implements SessionGateway
             ->withParam('year', $year)
         ;
 
-        /** @var array<array{id: string, ref: string}> $result */
+        /** @var array<array{id: string, ref: string, event: string, season: string}> $result */
         $result = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();
 
         if (1 < count($result)) {

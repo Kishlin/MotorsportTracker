@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SessionNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
-use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
@@ -32,7 +30,6 @@ final class ScrapClassificationCommandHandler implements CommandHandler
     public function __construct(
         private readonly ClassificationGateway $classificationGateway,
         private readonly SessionGateway $sessionGateway,
-        private readonly SeasonGateway $seasonGateway,
         private readonly CommandBus $commandBus,
         private readonly EventDispatcher $eventDispatcher,
     ) {
@@ -40,14 +37,6 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
     public function __invoke(ScrapClassificationCommand $command): void
     {
-        $season = $this->seasonGateway->find($command->championship(), $command->year());
-
-        if (null === $season) {
-            $this->eventDispatcher->dispatch(SeasonNotFoundEvent::forSeason($command->championship(), $command->year()));
-
-            return;
-        }
-
         $session = $this->sessionGateway->find(
             $command->championship(),
             $command->year(),
@@ -72,7 +61,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
             try {
                 $country = $this->createCountryIfNotExists($details['nationality']);
                 $team    = $this->createTeamIfNotExists(
-                    $season->id(),
+                    $session->season(),
                     $details['team']['name'],
                     $details['team']['colour'],
                     $details['team']['uuid'],
@@ -134,6 +123,8 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                 $this->eventDispatcher->dispatch(RetirementScrappingFailureEvent::forRetirement($retirement));
             }
         }
+
+        $this->eventDispatcher->dispatch(ClassificationScrappingSuccessEvent::forEvent($session->event()));
     }
 
     /**
