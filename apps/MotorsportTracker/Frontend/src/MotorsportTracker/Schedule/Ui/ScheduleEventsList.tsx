@@ -9,6 +9,8 @@ declare type ScheduleEventsListProps = {
     events: EventsSchedule,
 }
 
+const NO_DATE_KEY = 'no-date';
+
 const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({ events }) => {
     if (0 === Object.keys(events).length) {
         return <Typography align="center">No events available at this time.</Typography>;
@@ -21,8 +23,13 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({ 
             const now = new Date();
             const nextScheduleJSX = [];
 
+            const lastKey = Object.keys(events)[Object.keys(events).length - 1];
+            const lastDayString = NO_DATE_KEY === lastKey
+                ? Object.keys(events)[Object.keys(events).length - 2]
+                : lastKey;
+
             const firstDay = new Date(Object.keys(events)[0]);
-            const lastDay = new Date(Object.keys(events)[Object.keys(events).length - 1]);
+            const lastDay = new Date(lastDayString);
 
             for (let day = firstDay; day <= lastDay; day.setDate(day.getDate() + 1)) {
                 if (now.toLocaleDateString() === day.toLocaleDateString()) {
@@ -31,7 +38,7 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({ 
                     ));
                 }
 
-                const scheduleKey = formatDateAsScheduleKey(day);
+                const scheduleKey = formatDateAsScheduleKey(day) as `${string}-${string}-${string}`;
 
                 if (undefined !== events[scheduleKey]) {
                     nextScheduleJSX.push((
@@ -41,6 +48,12 @@ const ScheduleEventsList: React.FunctionComponent<ScheduleEventsListProps> = ({ 
                         />
                     ));
                 }
+            }
+
+            if (NO_DATE_KEY === lastKey) {
+                nextScheduleJSX.push((
+                    <ScheduleDay key="no-date" events={events[NO_DATE_KEY]} />
+                ));
             }
 
             setScheduleJSX(nextScheduleJSX);

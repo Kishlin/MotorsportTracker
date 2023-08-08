@@ -198,6 +198,7 @@ CREATE TABLE public.event (
     index integer NOT NULL,
     name character varying(255) NOT NULL,
     short_name character varying(255) DEFAULT NULL::character varying,
+    status character varying(255) DEFAULT NULL::character varying,
     start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     short_code character varying(255) DEFAULT NULL::character varying,

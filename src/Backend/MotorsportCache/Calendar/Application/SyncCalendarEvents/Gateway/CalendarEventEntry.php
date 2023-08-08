@@ -14,7 +14,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CalendarEventEntry
+final readonly class CalendarEventEntry
 {
     /**
      * @param array{
@@ -37,16 +37,17 @@ final class CalendarEventEntry
      * }[] $sessions
      */
     private function __construct(
-        private readonly array $venue,
-        private readonly string $reference,
-        private readonly int $index,
-        private readonly string $slug,
-        private readonly string $name,
-        private readonly ?string $shortName,
-        private readonly ?string $shortCode,
-        private readonly ?string $startDate,
-        private readonly ?string $endDate,
-        private readonly array $sessions,
+        private array $venue,
+        private string $reference,
+        private int $index,
+        private string $slug,
+        private string $name,
+        private ?string $shortName,
+        private ?string $shortCode,
+        private ?string $status,
+        private ?string $startDate,
+        private ?string $endDate,
+        private array $sessions,
     ) {
     }
 
@@ -83,6 +84,11 @@ final class CalendarEventEntry
     public function shortCode(): NullableStringValueObject
     {
         return new NullableStringValueObject($this->shortCode);
+    }
+
+    public function status(): NullableStringValueObject
+    {
+        return new NullableStringValueObject($this->status);
     }
 
     /**
@@ -132,6 +138,7 @@ final class CalendarEventEntry
      *     slug: string,
      *     short_name: ?string,
      *     short_code: ?string,
+     *     status: ?string,
      *     start_date: ?string,
      *     end_date: ?string,
      *     sessions: array{
@@ -154,6 +161,7 @@ final class CalendarEventEntry
             $data['name'],
             $data['short_name'],
             $data['short_code'],
+            $data['status'],
             $data['start_date'],
             $data['end_date'],
             $data['sessions'],

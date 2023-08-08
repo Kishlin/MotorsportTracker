@@ -32,6 +32,7 @@ SELECT
     CONCAT(cs.name, '_', s.year, '_', e.name) as slug,
     e.short_code as short_code,
     e.short_name as short_name,
+    e.status as status,
     e.start_date as start_date,
     e.end_date as end_date,
     (
@@ -77,6 +78,7 @@ SQL;
          *     slug: string,
          *     short_name: ?string,
          *     short_code: ?string,
+         *     status: ?string,
          *     start_date: ?string,
          *     end_date: ?string,
          *     sessions: string

@@ -14,8 +14,9 @@ export type MotorsportEvent = {
     index: number,
     name: string,
     short_name: string,
-    start_date: string,
-    end_date: string,
+    status: null|string,
+    start_date: null|string,
+    end_date: null|string,
     series: {
         name: string,
         slug: string,
@@ -48,7 +49,8 @@ export type EventShort = {
 };
 
 export type EventsSchedule = {
-    [key: `${string}-${string}-${string}`]: MotorsportEvent[]
+    [key: `${string}-${string}-${string}`]: MotorsportEvent[],
+    'no-date' ?: MotorsportEvent[],
 };
 
 export type SeasonEvents = {

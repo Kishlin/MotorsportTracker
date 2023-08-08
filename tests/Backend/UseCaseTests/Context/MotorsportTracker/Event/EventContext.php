@@ -51,7 +51,7 @@ final class EventContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $eventId */
             $eventId = self::container()->commandBus()->execute(
-                CreateEventIfNotExistsCommand::fromScalars($seasonId, $venueId, $index, $name, null, null, null, null, null),
+                CreateEventIfNotExistsCommand::fromScalars($seasonId, $venueId, $index, $name, null, null, null, null, null, null),
             );
 
             $this->eventId = $eventId;

@@ -75,6 +75,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
             'slug'       => StringHelper::slugify('Formula One', '2022', 'Dutch GP'),
             'short_name' => 'Dutch GP',
             'short_code' => null,
+            'status'     => null,
             'start_date' => '2022-09-04 13:00:00',
             'end_date'   => '2022-09-04 13:00:00',
             'sessions'   => [
@@ -109,6 +110,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
             'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP'),
             'short_name' => 'Emilia Romagna GP',
             'short_code' => null,
+            'status'     => null,
             'start_date' => '2022-04-23 14:30:00',
             'end_date'   => '2022-04-24 13:00:00',
             'sessions'   => [

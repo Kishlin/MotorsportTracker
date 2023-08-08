@@ -95,6 +95,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
                 name: $event['name'],
                 shortName: $event['shortName'],
                 shortCode: $event['shortCode'],
+                status: empty($event['status']) ? null : $event['status'],
                 startTime: $this->dateTimeOrNull($event['startTimeUtc']),
                 endTime: $this->dateTimeOrNull($event['endTimeUtc']),
                 ref: $event['uuid'],

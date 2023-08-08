@@ -51,6 +51,7 @@ final class CreateEventIfNotExistsCommandHandler implements CommandHandler
             $command->name(),
             $command->shortName(),
             $command->shortCode(),
+            $command->status(),
             $command->startTime(),
             $command->endTime(),
             $command->ref(),

@@ -32,6 +32,7 @@ CREATE TABLE public.calendar_event (
     name character varying(255) NOT NULL,
     short_name character varying(255) DEFAULT NULL::character varying,
     short_code character varying(255) DEFAULT NULL::character varying,
+    status character varying(255) DEFAULT NULL::character varying,
     start_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     end_date timestamp(0) without time zone DEFAULT NULL::timestamp without time zone,
     series text NOT NULL,

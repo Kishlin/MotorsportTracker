@@ -13,18 +13,19 @@ use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEventIfNotExistsCommand implements Command
+final readonly class CreateEventIfNotExistsCommand implements Command
 {
     private function __construct(
-        private readonly string $seasonId,
-        private readonly string $venueId,
-        private readonly int $index,
-        private readonly string $name,
-        private readonly ?string $shortName,
-        private readonly ?string $shortCode,
-        private readonly ?DateTimeImmutable $startTime,
-        private readonly ?DateTimeImmutable $endTime,
-        private readonly ?string $ref,
+        private string $seasonId,
+        private string $venueId,
+        private int $index,
+        private string $name,
+        private ?string $shortName,
+        private ?string $shortCode,
+        private ?string $status,
+        private ?DateTimeImmutable $startTime,
+        private ?DateTimeImmutable $endTime,
+        private ?string $ref,
     ) {
     }
 
@@ -58,6 +59,11 @@ final class CreateEventIfNotExistsCommand implements Command
         return new NullableStringValueObject($this->shortCode);
     }
 
+    public function status(): NullableStringValueObject
+    {
+        return new NullableStringValueObject($this->status);
+    }
+
     public function startTime(): NullableDateTimeValueObject
     {
         return new NullableDateTimeValueObject($this->startTime);
@@ -80,10 +86,11 @@ final class CreateEventIfNotExistsCommand implements Command
         string $name,
         ?string $shortName,
         ?string $shortCode,
+        ?string $status,
         ?DateTimeImmutable $startTime,
         ?DateTimeImmutable $endTime,
         ?string $ref,
     ): self {
-        return new self($seasonId, $venueId, $index, $name, $shortName, $shortCode, $startTime, $endTime, $ref);
+        return new self($seasonId, $venueId, $index, $name, $shortName, $shortCode, $status, $startTime, $endTime, $ref);
     }
 }

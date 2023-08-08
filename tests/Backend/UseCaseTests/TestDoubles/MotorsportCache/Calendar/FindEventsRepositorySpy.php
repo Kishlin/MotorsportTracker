@@ -74,6 +74,7 @@ final class FindEventsRepositorySpy implements FindEventsGateway
                 'slug'       => StringHelper::slugify($event->name()->value()),
                 'short_name' => $event->shortName()->value(),
                 'short_code' => $event->shortCode()->value(),
+                'status'     => $event->status()->value(),
                 'start_date' => $event->startDate()->value()?->format('Y-m-d H:i:s'),
                 'end_date'   => $event->endDate()->value()?->format('Y-m-d H:i:s'),
                 'sessions'   => [],

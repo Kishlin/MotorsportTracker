@@ -29,15 +29,40 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
 
     useEffect(
         () => {
-            const startDate = new Date(event.start_date);
-            const endDate = new Date(event.end_date);
+            let start = '';
+            let end = '';
 
-            setDateLabels({
-                start: startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }),
-                end: endDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' }),
-            });
+            if (null !== event.start_date) {
+                const startDate = new Date(event.start_date);
+                start = startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+            }
 
-            if (startDate <= new Date()) {
+            if (null !== event.end_date) {
+                const endDate = new Date(event.end_date);
+                end = endDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+            }
+
+            setDateLabels({ start, end });
+
+            if (null !== event.status) {
+                setEventIcons((
+                    <Typography sx={{ color: '#d95757' }}>{event.status}</Typography>
+                ));
+
+                return;
+            }
+
+            const iconProps: Partial<SvgIconProps> = 0 === event.sessions.length
+                ? { color: 'disabled', sx: { cursor: 'not-allowed' } }
+                : { color: 'action', sx: { cursor: 'pointer' } };
+
+            const timetableIcon = (
+                <Tooltip title="Timetable">
+                    <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
+                </Tooltip>
+            );
+
+            if (null !== event.start_date && new Date(event.start_date) <= new Date()) {
                 const eventUri = event.slug.replaceAll('_', '/');
 
                 const props: Partial<SvgIconProps> = { color: 'action', sx: { cursor: 'pointer', mr: 1 } };
@@ -53,18 +78,17 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                         <Tooltip title="Graphs">
                             <QueryStatsIcon onClick={redirectionTo(`/event/${eventUri}/graphs`)} {...props} />
                         </Tooltip>
+                        {timetableIcon}
                     </>
                 ));
+            } else {
+                setEventIcons(timetableIcon);
             }
         },
         [],
     );
 
     const dateWidth = 100;
-
-    const iconProps: Partial<SvgIconProps> = 0 === event.sessions.length
-        ? { color: 'disabled', sx: { cursor: 'not-allowed' } }
-        : { color: 'action', sx: { cursor: 'pointer' } };
 
     return (
         <Grid item container direction="row" justifyContent="center">
@@ -96,9 +120,6 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                     </Grid>
                     <Grid item sx={{ height: '24px', mx: 4 }}>
                         {eventIcons}
-                        <Tooltip title="Timetable">
-                            <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
-                        </Tooltip>
                     </Grid>
                 </Grid>
             </Grid>

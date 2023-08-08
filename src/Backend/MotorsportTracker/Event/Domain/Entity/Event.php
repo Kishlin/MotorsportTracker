@@ -23,6 +23,7 @@ final class Event extends AggregateRoot
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $shortName,
         private readonly NullableStringValueObject $shortCode,
+        private readonly NullableStringValueObject $status,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
         private readonly NullableUuidValueObject $ref,
@@ -37,11 +38,12 @@ final class Event extends AggregateRoot
         StringValueObject $name,
         NullableStringValueObject $shortName,
         NullableStringValueObject $shortCode,
+        NullableStringValueObject $status,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
         NullableUuidValueObject $ref,
     ): self {
-        $event = new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $startDate, $endDate, $ref);
+        $event = new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $status, $startDate, $endDate, $ref);
 
         $event->record(new EventCreatedDomainEvent($id));
 
@@ -59,11 +61,12 @@ final class Event extends AggregateRoot
         StringValueObject $name,
         NullableStringValueObject $shortName,
         NullableStringValueObject $shortCode,
+        NullableStringValueObject $status,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
         NullableUuidValueObject $ref,
     ): self {
-        return new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $startDate, $endDate, $ref);
+        return new self($id, $seasonId, $venueId, $index, $name, $shortName, $shortCode, $status, $startDate, $endDate, $ref);
     }
 
     public function id(): UuidValueObject
@@ -101,6 +104,11 @@ final class Event extends AggregateRoot
         return $this->shortCode;
     }
 
+    public function status(): NullableStringValueObject
+    {
+        return $this->status;
+    }
+
     public function startDate(): NullableDateTimeValueObject
     {
         return $this->startDate;
@@ -126,6 +134,7 @@ final class Event extends AggregateRoot
             'name'       => $this->name->value(),
             'short_name' => $this->shortName->value(),
             'short_code' => $this->shortCode->value(),
+            'status'     => $this->status->value(),
             'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
             'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
             'ref'        => $this->ref->value(),

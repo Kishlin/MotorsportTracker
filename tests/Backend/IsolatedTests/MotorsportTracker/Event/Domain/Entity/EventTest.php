@@ -30,6 +30,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
         $name      = 'Dutch Grand Prix';
         $shortName = 'Dutch GP';
         $shortCode = 'DUT';
+        $status    = 'Cancelled';
         $startDate = new DateTimeImmutable('2022-11-22 01:00:00');
         $endDate   = new DateTimeImmutable('2022-11-22 02:00:00');
         $ref       = 'beb030ff-823c-47e9-b208-17e162a6b43d';
@@ -42,6 +43,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
             new StringValueObject($name),
             new NullableStringValueObject($shortName),
             new NullableStringValueObject($shortCode),
+            new NullableStringValueObject($status),
             new NullableDateTimeValueObject($startDate),
             new NullableDateTimeValueObject($endDate),
             new NullableUuidValueObject($ref),
@@ -56,6 +58,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($name, $entity->name());
         self::assertValueObjectSame($shortName, $entity->shortName());
         self::assertValueObjectSame($shortCode, $entity->shortCode());
+        self::assertValueObjectSame($status, $entity->status());
         self::assertValueObjectSame($startDate, $entity->startDate());
         self::assertValueObjectSame($endDate, $entity->endDate());
     }
@@ -76,6 +79,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
             new StringValueObject($name),
             new NullableStringValueObject(null),
             new NullableStringValueObject(null),
+            new NullableStringValueObject(null),
             new NullableDateTimeValueObject(null),
             new NullableDateTimeValueObject(null),
             new NullableUuidValueObject(null),
@@ -87,6 +91,7 @@ final class EventTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($index, $entity->index());
         self::assertValueObjectSame(null, $entity->shortName());
         self::assertValueObjectSame(null, $entity->shortCode());
+        self::assertValueObjectSame(null, $entity->status());
         self::assertValueObjectSame(null, $entity->startDate());
         self::assertValueObjectSame(null, $entity->endDate());
         self::assertValueObjectSame(null, $entity->ref());

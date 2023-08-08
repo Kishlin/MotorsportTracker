@@ -32,6 +32,7 @@ final class CalendarEvent extends AggregateRoot
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $shortName,
         private readonly NullableStringValueObject $shortCode,
+        private readonly NullableStringValueObject $status,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
     ) {
@@ -53,6 +54,7 @@ final class CalendarEvent extends AggregateRoot
             $entry->name(),
             $entry->shortName(),
             $entry->shortCode(),
+            $entry->status(),
             $entry->startDate(),
             $entry->endDate(),
         );
@@ -72,10 +74,11 @@ final class CalendarEvent extends AggregateRoot
         StringValueObject $name,
         NullableStringValueObject $shortName,
         NullableStringValueObject $shortCode,
+        NullableStringValueObject $status,
         NullableDateTimeValueObject $startDate,
         NullableDateTimeValueObject $endDate,
     ): self {
-        return new self($id, $series, $venue, $sessions, $reference, $index, $slug, $name, $shortName, $shortCode, $startDate, $endDate);
+        return new self($id, $series, $venue, $sessions, $reference, $index, $slug, $name, $shortName, $shortCode, $status, $startDate, $endDate);
     }
 
     public function id(): UuidValueObject
@@ -128,6 +131,11 @@ final class CalendarEvent extends AggregateRoot
         return $this->shortCode;
     }
 
+    public function status(): NullableStringValueObject
+    {
+        return $this->status;
+    }
+
     public function startDate(): NullableDateTimeValueObject
     {
         return $this->startDate;
@@ -154,6 +162,7 @@ final class CalendarEvent extends AggregateRoot
             'name'       => $this->name->value(),
             'short_name' => $this->shortName->value(),
             'short_code' => $this->shortCode->value(),
+            'status'     => $this->status->value(),
             'start_date' => $this->startDate->value()?->format('Y-m-d H:i:s'),
             'end_date'   => $this->endDate->value()?->format('Y-m-d H:i:s'),
         ];

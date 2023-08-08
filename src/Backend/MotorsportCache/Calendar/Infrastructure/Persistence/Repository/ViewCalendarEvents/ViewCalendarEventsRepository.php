@@ -25,7 +25,7 @@ final class ViewCalendarEventsRepository extends CacheRepository implements View
             ->withParam('firstDay', $start->format('Y-m-d H:i:s'))
         ;
 
-        /** @var array<array{id: string, reference: string, slug: string, index: int, name: string, short_name: ?string, short_code: ?string, start_date: string, end_date: string, series: string, venue: string, sessions: string}> $result */
+        /** @var array<array{id: string, reference: string, slug: string, index: int, name: string, short_name: ?string, short_code: ?string, status: ?string, start_date: string, end_date: string, series: string, venue: string, sessions: string}> $result */
         $result = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();
 
         return JsonableEventsView::fromSource($result);

@@ -31,6 +31,7 @@ final class FixtureToEventConverter implements FixtureConverter
             new StringValueObject($fixture->getString('name')),
             new NullableStringValueObject($fixture->getString('shortName')),
             new NullableStringValueObject(null),
+            new NullableStringValueObject(null),
             new NullableDateTimeValueObject($fixture->getDateTime('startTime')),
             new NullableDateTimeValueObject($fixture->getDateTime('endTime')),
             new NullableUuidValueObject(null),

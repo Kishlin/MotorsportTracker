@@ -75,6 +75,7 @@ final class CalendarEventTest extends AggregateRootIsolatedTestCase
                 'name'       => $name,
                 'short_name' => $shortName,
                 'short_code' => $shortCode,
+                'status'     => null,
                 'start_date' => $startDate,
                 'end_date'   => $endDate,
                 'sessions'   => [

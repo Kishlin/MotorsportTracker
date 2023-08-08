@@ -86,6 +86,7 @@ final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestC
                 'name'       => 'Dutch Grand Prix',
                 'short_name' => 'Dutch GP',
                 'short_code' => 'ZAN',
+                'status'     => null,
                 'start_date' => '2022-11-22 01:00:00',
                 'end_date'   => '2022-11-22 01:00:00',
                 'sessions'   => [

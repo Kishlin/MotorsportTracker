@@ -7,10 +7,10 @@ namespace Kishlin\Backend\MotorsportCache\Calendar\Application\ViewCalendarEvent
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\View\JsonableEventsView;
 use Kishlin\Backend\Shared\Domain\Bus\Query\Response;
 
-final class ViewCalendarEventsResponse implements Response
+final readonly class ViewCalendarEventsResponse implements Response
 {
     private function __construct(
-        private readonly JsonableEventsView $calendarView,
+        private JsonableEventsView $calendarView,
     ) {
     }
 
