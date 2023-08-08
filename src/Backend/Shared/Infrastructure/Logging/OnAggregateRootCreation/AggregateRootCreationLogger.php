@@ -27,7 +27,7 @@ abstract class AggregateRootCreationLogger implements EventSubscriber
             $data = $this->connection->execute($query)->fetchAllAssociative();
             assert(is_array($data));
 
-            $this->logger->info("Saved {$title}.", $data);
+            $this->logger->debug("Saved {$title}.", $data);
         } catch (Throwable) {
             $this->logger->warning("Unable to log creation of {$title} [{$id}].");
         }
