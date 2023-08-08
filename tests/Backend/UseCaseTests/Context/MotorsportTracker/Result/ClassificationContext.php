@@ -62,6 +62,7 @@ final class ClassificationContext extends MotorsportTrackerContext
                     42,
                     95068.0,
                     false,
+                    284.5,
                 ),
             );
 

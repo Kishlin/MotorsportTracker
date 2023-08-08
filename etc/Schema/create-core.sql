@@ -98,20 +98,21 @@ CREATE TABLE public.classification (
     id character varying(36) NOT NULL,
     entry character varying(36) NOT NULL,
     finish_position integer NOT NULL,
-    grid_position integer NOT NULL,
+    grid_position integer DEFAULT NULL::integer,
     laps integer NOT NULL,
     points double precision NOT NULL,
     lap_time double precision NOT NULL,
-    classified_status character varying(255) NOT NULL,
+    classified_status character varying(255) DEFAULT NULL::character varying,
     average_lap_speed double precision NOT NULL,
-    fastest_lap_time double precision NOT NULL,
+    fastest_lap_time double precision DEFAULT NULL::double precision,
     gap_time_to_lead double precision NOT NULL,
     gap_time_to_next double precision NOT NULL,
     gap_laps_to_lead integer NOT NULL,
     gap_laps_to_next integer NOT NULL,
-    best_lap integer NOT NULL,
-    best_time double precision NOT NULL,
-    best_is_fastest boolean NOT NULL
+    best_lap integer DEFAULT NULL::integer,
+    best_time double precision DEFAULT NULL::double precision,
+    best_is_fastest boolean DEFAULT NULL::boolean,
+    best_speed double precision DEFAULT NULL::double precision
 );
 
 

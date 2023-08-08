@@ -12,14 +12,14 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\Clas
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\Client;
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\MotorsportStatsAPIClient;
 
-final class ClassificationGatewayUsingCurl implements ClassificationGateway
+final readonly class ClassificationGatewayUsingCurl implements ClassificationGateway
 {
     use MotorsportStatsAPIClient;
 
     private const url = 'https://api.motorsportstats.com/widgets/1.0.0/sessions/%s/classification';
 
     public function __construct(
-        private readonly Client $client,
+        private Client $client,
     ) {
     }
 
@@ -36,7 +36,7 @@ final class ClassificationGatewayUsingCurl implements ClassificationGateway
          * @var array{
          *     details: array{
          *         finishPosition: int,
-         *         gridPosition: int,
+         *         gridPosition: ?int,
          *         carNumber: int,
          *         drivers: array<array{
          *             name: string,
@@ -52,11 +52,11 @@ final class ClassificationGatewayUsingCurl implements ClassificationGateway
          *         laps: int,
          *         points: float,
          *         time: float,
-         *         classifiedStatus: string,
+         *         classifiedStatus: ?string,
          *         avgLapSpeed: float,
-         *         fastestLapTime: float,
+         *         fastestLapTime: ?float,
          *         gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-         *         best: array{lap: int, time: float, fastest: bool, speed: null}
+         *         best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
          *     }[],
          *     retirements: array<array{
          *         driver: array{

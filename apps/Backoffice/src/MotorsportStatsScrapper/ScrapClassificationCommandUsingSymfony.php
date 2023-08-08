@@ -26,9 +26,6 @@ final class ScrapClassificationCommandUsingSymfony extends SymfonyCommand
     private const ARGUMENT_EVENT = 'event';
     private const QUESTION_EVENT = "Please enter the name of the event:\n";
 
-    private const ARGUMENT_TYPE = 'type';
-    private const QUESTION_TYPE = "Please enter the type of the session:\n";
-
     public function __construct(
         private readonly CommandBus $commandBus,
     ) {
@@ -43,7 +40,6 @@ final class ScrapClassificationCommandUsingSymfony extends SymfonyCommand
             ->addArgument(self::ARGUMENT_CHAMPIONSHIP, InputArgument::OPTIONAL, 'The series name')
             ->addArgument(self::ARGUMENT_YEAR, InputArgument::OPTIONAL, 'The season year')
             ->addArgument(self::ARGUMENT_EVENT, InputArgument::OPTIONAL, 'The event name')
-            ->addArgument(self::ARGUMENT_TYPE, InputArgument::OPTIONAL, 'The session type')
         ;
     }
 
@@ -51,14 +47,13 @@ final class ScrapClassificationCommandUsingSymfony extends SymfonyCommand
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $series  = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
-        $year    = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
-        $event   = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_EVENT, self::QUESTION_EVENT);
-        $session = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_TYPE, self::QUESTION_TYPE);
+        $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
+        $year   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
+        $event  = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_EVENT, self::QUESTION_EVENT);
 
-        $this->commandBus->execute(ScrapClassificationCommand::fromScalars($series, $year, $event, $session));
+        $this->commandBus->execute(ScrapClassificationCommand::fromScalars($series, $year, $event));
 
-        $ui->success("Finished scrapping classifications for {$series} #{$year} {$event} {$session}.");
+        $ui->success("Finished scrapping classifications for {$series} #{$year} {$event}.");
 
         return Command::SUCCESS;
     }

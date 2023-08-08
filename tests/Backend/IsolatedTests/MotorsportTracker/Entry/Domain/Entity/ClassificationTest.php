@@ -6,11 +6,12 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Entry\Domain\Ent
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\ClassificationCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Classification;
-use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
@@ -38,25 +39,27 @@ final class ClassificationTest extends AggregateRootIsolatedTestCase
         $lapsToNext       = 0;
         $bestLap          = 42;
         $bestTime         = 95068.0;
+        $bestSpeed        = 284.5;
 
         $entity = Classification::create(
             new UuidValueObject($id),
             new UuidValueObject($entry),
             new PositiveIntValueObject($finishPosition),
-            new StrictlyPositiveIntValueObject($gridPosition),
+            new NullableIntValueObject($gridPosition),
             new PositiveIntValueObject($laps),
             new PositiveFloatValueObject($points),
             new PositiveFloatValueObject($time),
-            new StringValueObject($classifiedStatus),
+            new NullableStringValueObject($classifiedStatus),
             new PositiveFloatValueObject($averageLapSpeed),
-            new PositiveFloatValueObject($fastestLapTime),
+            new NullableFloatValueObject($fastestLapTime),
             new PositiveFloatValueObject($timeToLead),
             new PositiveFloatValueObject($timeToNext),
             new PositiveIntValueObject($lapsToLead),
             new PositiveIntValueObject($lapsToNext),
-            new PositiveIntValueObject($bestLap),
-            new PositiveFloatValueObject($bestTime),
-            new BoolValueObject(false),
+            new NullableIntValueObject($bestLap),
+            new NullableFloatValueObject($bestTime),
+            new NullableBoolValueObject(false),
+            new NullableFloatValueObject($bestSpeed),
         );
 
         self::assertItRecordedDomainEvents($entity, new ClassificationCreatedDomainEvent(new UuidValueObject($id)));
@@ -79,5 +82,6 @@ final class ClassificationTest extends AggregateRootIsolatedTestCase
         self::assertValueObjectSame($bestLap, $entity->bestLap());
         self::assertValueObjectSame($bestTime, $entity->bestTime());
         self::assertValueObjectSame(false, $entity->bestIsFastest());
+        self::assertValueObjectSame($bestSpeed, $entity->bestSpeed());
     }
 }

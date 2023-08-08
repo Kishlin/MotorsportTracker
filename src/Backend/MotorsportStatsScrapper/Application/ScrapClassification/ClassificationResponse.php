@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
-final class ClassificationResponse
+final readonly class ClassificationResponse
 {
     /**
      * @param array{
      *     details: array{
      *         finishPosition: int,
-     *         gridPosition: int,
+     *         gridPosition: ?int,
      *         carNumber: int,
      *         drivers: array<array{
      *             name: string,
@@ -26,11 +26,11 @@ final class ClassificationResponse
      *         laps: int,
      *         points: float,
      *         time: float,
-     *         classifiedStatus: string,
+     *         classifiedStatus: ?string,
      *         avgLapSpeed: float,
-     *         fastestLapTime: float,
+     *         fastestLapTime: ?float,
      *         gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *         best: array{lap: int, time: float, fastest: bool, speed: null}
+     *         best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      *     }[],
      *     retirements: array<array{
      *         driver: array{
@@ -52,7 +52,7 @@ final class ClassificationResponse
      * } $data
      */
     private function __construct(
-        private readonly array $data,
+        private array $data,
     ) {
     }
 
@@ -60,7 +60,7 @@ final class ClassificationResponse
      * @return array{
      *     details: array{
      *         finishPosition: int,
-     *         gridPosition: int,
+     *         gridPosition: ?int,
      *         carNumber: int,
      *         drivers: array<array{
      *             name: string,
@@ -76,11 +76,11 @@ final class ClassificationResponse
      *         laps: int,
      *         points: float,
      *         time: float,
-     *         classifiedStatus: string,
+     *         classifiedStatus: ?string,
      *         avgLapSpeed: float,
-     *         fastestLapTime: float,
+     *         fastestLapTime: ?float,
      *         gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *         best: array{lap: int, time: float, fastest: bool, speed: null}
+     *         best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      *     }[],
      *     retirements: array<array{
      *         driver: array{
@@ -110,7 +110,7 @@ final class ClassificationResponse
      * @param array{
      *     details: array{
      *         finishPosition: int,
-     *         gridPosition: int,
+     *         gridPosition: ?int,
      *         carNumber: int,
      *         drivers: array<array{
      *             name: string,
@@ -126,11 +126,11 @@ final class ClassificationResponse
      *         laps: int,
      *         points: float,
      *         time: float,
-     *         classifiedStatus: string,
+     *         classifiedStatus: ?string,
      *         avgLapSpeed: float,
-     *         fastestLapTime: float,
+     *         fastestLapTime: ?float,
      *         gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *         best: array{lap: int, time: float, fastest: bool, speed: null}
+     *         best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      *     }[],
      *     retirements: array<array{
      *         driver: array{

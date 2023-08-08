@@ -15,6 +15,7 @@ maxVerstappenAtDutchGP2022Race:
   bestLap: 42
   bestTime: 95068.0
   bestIsFastest: false
+  bestSpeed: 285.6
 
 sergioPerezAtDutchGP2022Race:
   entry: '@motorsport.result.entry.sergioPerezForRedBullRacingAtDutchGP2022Race'
@@ -33,6 +34,7 @@ sergioPerezAtDutchGP2022Race:
   bestLap: 38
   bestTime: 95048.0
   bestIsFastest: false
+  bestSpeed: 276.5
 
 ralphBoschungAtAustralianGP2023FormulaTwoRaceOne:
   entry: '@motorsport.result.entry.ralphBoschungForCamposRacingAtAustralianGP2023FormulaTwoRaceOne'
@@ -51,6 +53,7 @@ ralphBoschungAtAustralianGP2023FormulaTwoRaceOne:
   bestLap: 4
   bestTime: 107857.0
   bestIsFastest: false
+  bestSpeed: 243.8
 
 theoPourchaireAtAustralianGP2023FormulaTwoRaceTwo:
   entry: '@motorsport.result.entry.theoPourchaireForArtGrandPrixAtAustralianGP2023FormulaTwoRaceTwo'
@@ -69,3 +72,4 @@ theoPourchaireAtAustralianGP2023FormulaTwoRaceTwo:
   bestLap: 17
   bestTime: 107689.0
   bestIsFastest: false
+  bestSpeed: 275.6

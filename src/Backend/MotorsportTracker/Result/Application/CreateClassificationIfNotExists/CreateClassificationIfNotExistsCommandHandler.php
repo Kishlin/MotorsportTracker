@@ -11,13 +11,13 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateClassificationIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateClassificationIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchClassificationGateway $searchGateway,
-        private readonly SaveClassificationGateway $saveGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchClassificationGateway $searchGateway,
+        private SaveClassificationGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
@@ -46,6 +46,7 @@ final class CreateClassificationIfNotExistsCommandHandler implements CommandHand
             $command->bestLap(),
             $command->bestTime(),
             $command->bestIsFastest(),
+            $command->bestSpeed(),
         );
 
         try {

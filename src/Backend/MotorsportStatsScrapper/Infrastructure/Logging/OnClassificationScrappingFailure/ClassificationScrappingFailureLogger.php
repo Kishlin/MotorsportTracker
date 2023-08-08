@@ -8,10 +8,10 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\Clas
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-final class ClassificationScrappingFailureLogger implements EventSubscriber
+final readonly class ClassificationScrappingFailureLogger implements EventSubscriber
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -20,5 +20,6 @@ final class ClassificationScrappingFailureLogger implements EventSubscriber
         $classificationData = $event->classification();
 
         $this->logger->error("Failed to scrap classification for car {$classificationData['carNumber']}.", $classificationData);
+        $this->logger->error($event->e()->getMessage());
     }
 }

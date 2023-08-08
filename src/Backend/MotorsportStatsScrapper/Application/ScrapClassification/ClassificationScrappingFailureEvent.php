@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
+use Throwable;
 
-final class ClassificationScrappingFailureEvent implements Event
+final readonly class ClassificationScrappingFailureEvent implements Event
 {
     /**
      * @param array{
      *     finishPosition: int,
-     *     gridPosition: int,
+     *     gridPosition: ?int,
      *     carNumber: int,
      *     drivers: array<array{
      *         name: string,
@@ -27,22 +28,23 @@ final class ClassificationScrappingFailureEvent implements Event
      *     laps: int,
      *     points: float,
      *     time: float,
-     *     classifiedStatus: string,
+     *     classifiedStatus: ?string,
      *     avgLapSpeed: float,
-     *     fastestLapTime: float,
+     *     fastestLapTime: ?float,
      *     gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *     best: array{lap: int, time: float, fastest: bool, speed: null}
+     *     best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      * } $classification
      */
     private function __construct(
-        private readonly array $classification,
+        private array $classification,
+        private Throwable $e,
     ) {
     }
 
     /**
      * @return array{
      *     finishPosition: int,
-     *     gridPosition: int,
+     *     gridPosition: ?int,
      *     carNumber: int,
      *     drivers: array<array{
      *         name: string,
@@ -58,11 +60,11 @@ final class ClassificationScrappingFailureEvent implements Event
      *     laps: int,
      *     points: float,
      *     time: float,
-     *     classifiedStatus: string,
+     *     classifiedStatus: ?string,
      *     avgLapSpeed: float,
-     *     fastestLapTime: float,
+     *     fastestLapTime: ?float,
      *     gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *     best: array{lap: int, time: float, fastest: bool, speed: null}
+     *     best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      * } $event
      */
     public function classification(): array
@@ -70,10 +72,15 @@ final class ClassificationScrappingFailureEvent implements Event
         return $this->classification;
     }
 
+    public function e(): Throwable
+    {
+        return $this->e;
+    }
+
     /**
      * @param array{
      *     finishPosition: int,
-     *     gridPosition: int,
+     *     gridPosition: ?int,
      *     carNumber: int,
      *     drivers: array<array{
      *         name: string,
@@ -89,15 +96,15 @@ final class ClassificationScrappingFailureEvent implements Event
      *     laps: int,
      *     points: float,
      *     time: float,
-     *     classifiedStatus: string,
+     *     classifiedStatus: ?string,
      *     avgLapSpeed: float,
-     *     fastestLapTime: float,
+     *     fastestLapTime: ?float,
      *     gap: array{timeToLead: float, timeToNext: float, lapsToLead: int, lapsToNext: int},
-     *     best: array{lap: int, time: float, fastest: bool, speed: null}
+     *     best: array{lap: ?int, time: ?float, fastest: ?bool, speed: ?float}
      * } $classification
      */
-    public static function forClassification(array $classification): self
+    public static function forClassification(array $classification, Throwable $e): self
     {
-        return new self($classification);
+        return new self($classification, $e);
     }
 }

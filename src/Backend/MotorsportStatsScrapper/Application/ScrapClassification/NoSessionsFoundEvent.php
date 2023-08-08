@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
-use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
-final readonly class ScrapClassificationCommand implements Command
+final readonly class NoSessionsFoundEvent implements ApplicationEvent
 {
     private function __construct(
         private string $championship,
@@ -28,6 +28,11 @@ final readonly class ScrapClassificationCommand implements Command
     public function event(): string
     {
         return $this->event;
+    }
+
+    public static function forCommand(ScrapClassificationCommand $command): self
+    {
+        return self::fromScalars($command->championship(), $command->year(), $command->event());
     }
 
     public static function fromScalars(string $championship, int $year, string $event): self

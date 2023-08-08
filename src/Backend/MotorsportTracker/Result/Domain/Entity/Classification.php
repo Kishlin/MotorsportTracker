@@ -6,11 +6,12 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\ClassificationCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
-use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class Classification extends AggregateRoot
@@ -19,20 +20,21 @@ final class Classification extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $entry,
         private readonly PositiveIntValueObject $finishPosition,
-        private readonly StrictlyPositiveIntValueObject $gridPosition,
+        private readonly NullableIntValueObject $gridPosition,
         private readonly PositiveIntValueObject $laps,
         private readonly PositiveFloatValueObject $points,
         private readonly PositiveFloatValueObject $time,
-        private readonly StringValueObject $classifiedStatus,
+        private readonly NullableStringValueObject $classifiedStatus,
         private readonly PositiveFloatValueObject $averageLapSpeed,
-        private readonly PositiveFloatValueObject $fastestLapTime,
+        private readonly NullableFloatValueObject $fastestLapTime,
         private readonly PositiveFloatValueObject $gapTimeToLead,
         private readonly PositiveFloatValueObject $gapTimeToNext,
         private readonly PositiveIntValueObject $gapLapsToLead,
         private readonly PositiveIntValueObject $gapLapsToNext,
-        private readonly PositiveIntValueObject $bestLap,
-        private readonly PositiveFloatValueObject $bestTime,
-        private readonly BoolValueObject $bestIsFastest,
+        private readonly NullableIntValueObject $bestLap,
+        private readonly NullableFloatValueObject $bestTime,
+        private readonly NullableBoolValueObject $bestIsFastest,
+        private readonly NullableFloatValueObject $bestSpeed,
     ) {
     }
 
@@ -40,20 +42,21 @@ final class Classification extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $entry,
         PositiveIntValueObject $finishPosition,
-        StrictlyPositiveIntValueObject $gridPosition,
+        NullableIntValueObject $gridPosition,
         PositiveIntValueObject $laps,
         PositiveFloatValueObject $points,
         PositiveFloatValueObject $time,
-        StringValueObject $classifiedStatus,
+        NullableStringValueObject $classifiedStatus,
         PositiveFloatValueObject $averageLapSpeed,
-        PositiveFloatValueObject $fastestLapTime,
+        NullableFloatValueObject $fastestLapTime,
         PositiveFloatValueObject $gapTimeToLead,
         PositiveFloatValueObject $gapTimeToNext,
         PositiveIntValueObject $gapLapsToLead,
         PositiveIntValueObject $gapLapsToNext,
-        PositiveIntValueObject $bestLap,
-        PositiveFloatValueObject $bestTime,
-        BoolValueObject $bestIsFastest,
+        NullableIntValueObject $bestLap,
+        NullableFloatValueObject $bestTime,
+        NullableBoolValueObject $bestIsFastest,
+        NullableFloatValueObject $bestSpeed,
     ): self {
         $classification = new self(
             $id,
@@ -73,6 +76,7 @@ final class Classification extends AggregateRoot
             $bestLap,
             $bestTime,
             $bestIsFastest,
+            $bestSpeed,
         );
 
         $classification->record(new ClassificationCreatedDomainEvent($id));
@@ -87,20 +91,21 @@ final class Classification extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $entry,
         PositiveIntValueObject $finishPosition,
-        StrictlyPositiveIntValueObject $gridPosition,
+        NullableIntValueObject $gridPosition,
         PositiveIntValueObject $laps,
         PositiveFloatValueObject $points,
         PositiveFloatValueObject $time,
-        StringValueObject $classifiedStatus,
+        NullableStringValueObject $classifiedStatus,
         PositiveFloatValueObject $averageLapSpeed,
-        PositiveFloatValueObject $fastestLapTime,
+        NullableFloatValueObject $fastestLapTime,
         PositiveFloatValueObject $gapTimeToLead,
         PositiveFloatValueObject $gapTimeToNext,
         PositiveIntValueObject $gapLapsToLead,
         PositiveIntValueObject $gapLapsToNext,
-        PositiveIntValueObject $bestLap,
-        PositiveFloatValueObject $bestTime,
-        BoolValueObject $bestIsFastest,
+        NullableIntValueObject $bestLap,
+        NullableFloatValueObject $bestTime,
+        NullableBoolValueObject $bestIsFastest,
+        NullableFloatValueObject $bestSpeed,
     ): self {
         return new self(
             $id,
@@ -120,6 +125,7 @@ final class Classification extends AggregateRoot
             $bestLap,
             $bestTime,
             $bestIsFastest,
+            $bestSpeed,
         );
     }
 
@@ -138,7 +144,7 @@ final class Classification extends AggregateRoot
         return $this->finishPosition;
     }
 
-    public function gridPosition(): StrictlyPositiveIntValueObject
+    public function gridPosition(): NullableIntValueObject
     {
         return $this->gridPosition;
     }
@@ -158,7 +164,7 @@ final class Classification extends AggregateRoot
         return $this->time;
     }
 
-    public function classifiedStatus(): StringValueObject
+    public function classifiedStatus(): NullableStringValueObject
     {
         return $this->classifiedStatus;
     }
@@ -168,7 +174,7 @@ final class Classification extends AggregateRoot
         return $this->averageLapSpeed;
     }
 
-    public function fastestLapTime(): PositiveFloatValueObject
+    public function fastestLapTime(): NullableFloatValueObject
     {
         return $this->fastestLapTime;
     }
@@ -193,19 +199,24 @@ final class Classification extends AggregateRoot
         return $this->gapLapsToNext;
     }
 
-    public function bestLap(): PositiveIntValueObject
+    public function bestLap(): NullableIntValueObject
     {
         return $this->bestLap;
     }
 
-    public function bestTime(): PositiveFloatValueObject
+    public function bestTime(): NullableFloatValueObject
     {
         return $this->bestTime;
     }
 
-    public function bestIsFastest(): BoolValueObject
+    public function bestIsFastest(): NullableBoolValueObject
     {
         return $this->bestIsFastest;
+    }
+
+    public function bestSpeed(): NullableFloatValueObject
+    {
+        return $this->bestSpeed;
     }
 
     public function mappedData(): array
@@ -228,6 +239,7 @@ final class Classification extends AggregateRoot
             'best_lap'          => $this->bestLap->value(),
             'best_time'         => $this->bestTime->value(),
             'best_is_fastest'   => $this->bestIsFastest->value() ? 1 : 0,
+            'best_speed'        => $this->bestSpeed->value(),
         ];
     }
 }

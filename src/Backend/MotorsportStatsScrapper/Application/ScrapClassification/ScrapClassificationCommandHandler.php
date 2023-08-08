@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SessionNotFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
-use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SessionDTO;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionsListGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRetirementIfNotExists\CreateRetirementIfNotExistsCommand;
@@ -25,36 +25,36 @@ final class ScrapClassificationCommandHandler implements CommandHandler
     use TeamCreatorTrait;
 
     /** @var array<string, string> */
-    private array $entryIdForDriverIdCache = [];
+    private array $entryIdForDriverIdCache;
 
     public function __construct(
+        private readonly SessionsListGateway $sessionsGateway,
         private readonly ClassificationGateway $classificationGateway,
-        private readonly SessionGateway $sessionGateway,
         private readonly CommandBus $commandBus,
         private readonly EventDispatcher $eventDispatcher,
     ) {
+        $this->entryIdForDriverIdCache = [];
     }
 
     public function __invoke(ScrapClassificationCommand $command): void
     {
-        $session = $this->sessionGateway->find(
-            $command->championship(),
-            $command->year(),
-            $command->event(),
-            $command->sessionType(),
-        );
+        $sessions = $this->sessionsGateway->allSessionsForEvent($command->championship(), $command->year(), $command->event());
 
-        if (null === $session) {
-            $this->eventDispatcher->dispatch(SessionNotFoundEvent::forSession(
-                $command->championship(),
-                $command->year(),
-                $command->event(),
-                $command->sessionType(),
-            ));
+        if (empty($sessions->list())) {
+            $this->eventDispatcher->dispatch(NoSessionsFoundEvent::forCommand($command));
 
             return;
         }
 
+        foreach ($sessions->list() as $session) {
+            $this->scrapClassificationsForSession($session);
+        }
+
+        $this->eventDispatcher->dispatch(ClassificationScrappingSuccessEvent::forEvent($sessions->list()[0]->event()));
+    }
+
+    private function scrapClassificationsForSession(SessionDTO $session): void
+    {
         $classificationData = $this->classificationGateway->fetch($session->ref())->data();
 
         foreach ($classificationData['details'] as $details) {
@@ -101,10 +101,11 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                         $details['best']['lap'],
                         $details['best']['time'],
                         $details['best']['fastest'],
+                        $details['best']['speed'],
                     ),
                 );
-            } catch (Throwable) {
-                $this->eventDispatcher->dispatch(ClassificationScrappingFailureEvent::forClassification($details));
+            } catch (Throwable $e) {
+                $this->eventDispatcher->dispatch(ClassificationScrappingFailureEvent::forClassification($details, $e));
             }
         }
 
@@ -123,8 +124,6 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                 $this->eventDispatcher->dispatch(RetirementScrappingFailureEvent::forRetirement($retirement));
             }
         }
-
-        $this->eventDispatcher->dispatch(ClassificationScrappingSuccessEvent::forEvent($session->event()));
     }
 
     /**
