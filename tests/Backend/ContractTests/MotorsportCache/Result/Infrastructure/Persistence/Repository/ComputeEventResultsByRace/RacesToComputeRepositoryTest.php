@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
-use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\RacesToComputeRepository;
+use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\SessionsToComputeRepository;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\RacesToComputeRepository
+ * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\SessionsToComputeRepository
  */
 final class RacesToComputeRepositoryTest extends CoreRepositoryContractTestCase
 {
@@ -19,9 +19,9 @@ final class RacesToComputeRepositoryTest extends CoreRepositoryContractTestCase
             'motorsport.event.eventSession.dutchGrandPrix2022Race',
         );
 
-        $repository = new RacesToComputeRepository(self::connection());
+        $repository = new SessionsToComputeRepository(self::connection());
 
-        $races = $repository->findRaces(self::fixtureId('motorsport.event.event.dutchGrandPrix2022'))->races();
+        $races = $repository->findSessions(self::fixtureId('motorsport.event.event.dutchGrandPrix2022'))->sessions();
 
         self::assertIsArray($races);
         self::assertCount(1, $races);
@@ -37,9 +37,9 @@ final class RacesToComputeRepositoryTest extends CoreRepositoryContractTestCase
             'motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo',
         );
 
-        $repository = new RacesToComputeRepository(self::connection());
+        $repository = new SessionsToComputeRepository(self::connection());
 
-        $races = $repository->findRaces(self::fixtureId('motorsport.event.event.australianGP2023FormulaTwo'))->races();
+        $races = $repository->findSessions(self::fixtureId('motorsport.event.event.australianGP2023FormulaTwo'))->sessions();
 
         self::assertIsArray($races);
         self::assertCount(2, $races);
@@ -53,8 +53,8 @@ final class RacesToComputeRepositoryTest extends CoreRepositoryContractTestCase
 
     public function testItIsEmptyWhenThereAreNone(): void
     {
-        $repository = new RacesToComputeRepository(self::connection());
+        $repository = new SessionsToComputeRepository(self::connection());
 
-        self::assertEmpty($repository->findRaces(self::uuid())->races());
+        self::assertEmpty($repository->findSessions(self::uuid())->sessions());
     }
 }

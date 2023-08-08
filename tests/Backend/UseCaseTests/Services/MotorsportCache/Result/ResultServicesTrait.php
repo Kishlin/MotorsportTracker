@@ -4,37 +4,37 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Result;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\ComputeEventResultsByRaceCommandHandler;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\ComputeEventResultsByRaceCommandHandler;
 use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceQueryHandler;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\EventResultsByRaceRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\RaceResultRepositorySpy;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\RacesToComputeRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\EventResultsBySessionsRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\SessionClassificationRepositorySpy;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result\SessionsToComputeRepositorySpy;
 
 trait ResultServicesTrait
 {
-    private ?EventResultsByRaceRepositorySpy $eventResultsByRaceRepositorySpy = null;
+    private ?EventResultsBySessionsRepositorySpy $eventResultsByRaceRepositorySpy = null;
 
-    private ?RaceResultRepositorySpy $raceResultRepositorySpy = null;
+    private ?SessionClassificationRepositorySpy $raceResultRepositorySpy = null;
 
-    private ?RacesToComputeRepositorySpy $racesToComputeRepositorySpy = null;
+    private ?SessionsToComputeRepositorySpy $racesToComputeRepositorySpy = null;
 
     private ?ComputeEventResultsByRaceCommandHandler $computeRaceResultForEventCommandHandler = null;
 
     private ?ViewEventResultsByRaceQueryHandler $viewEventResultsByRaceQueryHandler = null;
 
-    public function eventResultsByRaceRepositorySpy(): EventResultsByRaceRepositorySpy
+    public function eventResultsByRaceRepositorySpy(): EventResultsBySessionsRepositorySpy
     {
         if (null === $this->eventResultsByRaceRepositorySpy) {
-            $this->eventResultsByRaceRepositorySpy = new EventResultsByRaceRepositorySpy();
+            $this->eventResultsByRaceRepositorySpy = new EventResultsBySessionsRepositorySpy();
         }
 
         return $this->eventResultsByRaceRepositorySpy;
     }
 
-    public function raceResultRepositorySpy(): RaceResultRepositorySpy
+    public function raceResultRepositorySpy(): SessionClassificationRepositorySpy
     {
         if (null === $this->raceResultRepositorySpy) {
-            $this->raceResultRepositorySpy = new RaceResultRepositorySpy(
+            $this->raceResultRepositorySpy = new SessionClassificationRepositorySpy(
                 $this->classificationRepositorySpy(),
                 $this->countryRepositorySpy(),
                 $this->driverRepositorySpy(),
@@ -46,10 +46,10 @@ trait ResultServicesTrait
         return $this->raceResultRepositorySpy;
     }
 
-    public function racesToComputeRepositorySpy(): RacesToComputeRepositorySpy
+    public function racesToComputeRepositorySpy(): SessionsToComputeRepositorySpy
     {
         if (null === $this->racesToComputeRepositorySpy) {
-            $this->racesToComputeRepositorySpy = new RacesToComputeRepositorySpy(
+            $this->racesToComputeRepositorySpy = new SessionsToComputeRepositorySpy(
                 $this->sessionTypeRepositorySpy(),
                 $this->eventSessionRepositorySpy(),
             );

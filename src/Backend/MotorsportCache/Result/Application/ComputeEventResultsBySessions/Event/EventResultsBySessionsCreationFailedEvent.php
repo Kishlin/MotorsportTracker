@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event;
+namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event;
 
 use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 use Throwable;
 
-final class EventResultsByRaceCreationFailedEvent implements ApplicationEvent
+final class EventResultsBySessionsCreationFailedEvent implements ApplicationEvent
 {
     private function __construct(
         private readonly string $eventId,

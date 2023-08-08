@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace;
+namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\EventResultsByRaceCreationFailedEvent;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\NoRacesToComputeEvent;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\PreviousEventResultsByRaceDeletedEvent;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\DeleteEventResultsByRaceIfExistsGateway;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\EventResultsByRaceGateway;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RacesToComputeGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event\EventResultsBySessionsCreationFailedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event\NoSessionsToComputeEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event\PreviousEventResultsBySessionsDeletedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\DeleteEventResultsBySessionsIfExistsGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\EventResultsBySessionsGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\SessionClassificationGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\SessionsToComputeGateway;
 use Kishlin\Backend\MotorsportCache\Result\Domain\Entity\EventResultsByRace;
 use Kishlin\Backend\MotorsportCache\Result\Domain\ValueObject\ResultsByRaceValueObject;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
@@ -22,10 +22,10 @@ use Throwable;
 final readonly class ComputeEventResultsByRaceCommandHandler implements CommandHandler
 {
     public function __construct(
-        private DeleteEventResultsByRaceIfExistsGateway $deleteEventResultsByRaceGateway,
-        private EventResultsByRaceGateway $eventResultsByRaceGateway,
-        private RacesToComputeGateway $racesToComputeGateway,
-        private RaceResultGateway $raceResultGateway,
+        private DeleteEventResultsBySessionsIfExistsGateway $deleteEventResultsByRaceGateway,
+        private EventResultsBySessionsGateway $eventResultsByRaceGateway,
+        private SessionsToComputeGateway $sessionsToComputeGateway,
+        private SessionClassificationGateway $raceResultGateway,
         private EventDispatcher $eventDispatcher,
         private UuidGenerator $uuidGenerator,
     ) {
@@ -33,18 +33,18 @@ final readonly class ComputeEventResultsByRaceCommandHandler implements CommandH
 
     public function __invoke(ComputeEventResultsByRaceCommand $command): ?UuidValueObject
     {
-        $racesToCompute = $this->racesToComputeGateway->findRaces($command->eventId())->races();
+        $sessionsToCompute = $this->sessionsToComputeGateway->findSessions($command->eventId())->sessions();
 
-        if (empty($racesToCompute)) {
-            $this->eventDispatcher->dispatch(NoRacesToComputeEvent::forEvent($command->eventId()));
+        if (empty($sessionsToCompute)) {
+            $this->eventDispatcher->dispatch(NoSessionsToComputeEvent::forEvent($command->eventId()));
 
             return null;
         }
 
         try {
-            return $this->createEventResultsByRaceForEvent($racesToCompute, $command->eventId());
+            return $this->createEventResultsByRaceForEvent($sessionsToCompute, $command->eventId());
         } catch (Throwable $e) {
-            $this->eventDispatcher->dispatch(EventResultsByRaceCreationFailedEvent::withScalars($command->eventId(), $e));
+            $this->eventDispatcher->dispatch(EventResultsBySessionsCreationFailedEvent::withScalars($command->eventId(), $e));
 
             return null;
         }
@@ -76,7 +76,7 @@ final readonly class ComputeEventResultsByRaceCommandHandler implements CommandH
 
         $itDeletedSomething = $this->deleteEventResultsByRaceGateway->deleteIfExists($eventId);
         if ($itDeletedSomething) {
-            $this->eventDispatcher->dispatch(PreviousEventResultsByRaceDeletedEvent::forEvent($eventId));
+            $this->eventDispatcher->dispatch(PreviousEventResultsBySessionsDeletedEvent::forEvent($eventId));
         }
 
         $this->eventResultsByRaceGateway->save($eventResultsByRace);

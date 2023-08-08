@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Logging\OnPreviousEventResultsByRaceDeleted;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Event\PreviousEventResultsByRaceDeletedEvent;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Event\PreviousEventResultsBySessionsDeletedEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
@@ -15,7 +15,7 @@ final class PreviousEventResultsByRaceDeletionLogger implements EventSubscriber
     ) {
     }
 
-    public function __invoke(PreviousEventResultsByRaceDeletedEvent $event): void
+    public function __invoke(PreviousEventResultsBySessionsDeletedEvent $event): void
     {
         $this->logger->notice("Deleted previous EventResultsByRace for {$event->eventId()}.");
     }

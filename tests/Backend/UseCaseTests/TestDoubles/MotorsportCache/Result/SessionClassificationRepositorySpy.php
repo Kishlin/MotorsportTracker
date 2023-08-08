@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RaceResultDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\DTO\SessionResultDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\SessionClassificationGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Country\SaveSearchCountryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Driver\DriverRepositorySpy;
@@ -13,7 +13,7 @@ use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Result\Clas
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Result\EntryRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Team\TeamRepositorySpy;
 
-final readonly class RaceResultRepositorySpy implements RaceResultGateway
+final readonly class SessionClassificationRepositorySpy implements SessionClassificationGateway
 {
     public function __construct(
         private ClassificationRepositorySpy $classificationRepositorySpy,
@@ -24,7 +24,7 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
     ) {
     }
 
-    public function findResult(string $eventSessionId): RaceResultDTO
+    public function findResult(string $eventSessionId): SessionResultDTO
     {
         $results = [];
 
@@ -85,6 +85,6 @@ final readonly class RaceResultRepositorySpy implements RaceResultGateway
             $results[] = $result;
         }
 
-        return RaceResultDTO::fromResults($results);
+        return SessionResultDTO::fromResults($results);
     }
 }

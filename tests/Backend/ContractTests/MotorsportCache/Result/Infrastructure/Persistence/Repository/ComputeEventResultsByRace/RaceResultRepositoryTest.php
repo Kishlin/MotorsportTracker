@@ -7,12 +7,12 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
 use JsonException;
-use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\RaceResultRepository;
+use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\SessionClassificationRepository;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\RaceResultRepository
+ * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\SessionClassificationRepository
  */
 final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
 {
@@ -27,7 +27,7 @@ final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
             'motorsport.team.team.redBullRacing'
         );
 
-        $repository = new RaceResultRepository(self::connection());
+        $repository = new SessionClassificationRepository(self::connection());
 
         $results = $repository->findResult(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'))->results();
 
@@ -46,7 +46,7 @@ final class RaceResultRepositoryTest extends CoreRepositoryContractTestCase
      */
     public function testItIsEmptyWhenThereAreNone(): void
     {
-        $repository = new RaceResultRepository(self::connection());
+        $repository = new SessionClassificationRepository(self::connection());
 
         self::assertEmpty($repository->findResult(self::uuid())->results());
     }

@@ -6,7 +6,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Result;
 
 use Behat\Step\Then;
 use Behat\Step\When;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\ComputeEventResultsByRaceCommand;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\ComputeEventResultsByRaceCommand;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
 use PHPUnit\Framework\Assert;

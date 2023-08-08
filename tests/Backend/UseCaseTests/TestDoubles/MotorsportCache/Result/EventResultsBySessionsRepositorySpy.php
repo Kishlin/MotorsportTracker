@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\DeleteEventResultsByRaceIfExistsGateway;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\EventResultsByRaceGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\DeleteEventResultsBySessionsIfExistsGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\EventResultsBySessionsGateway;
 use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\EventResultsByRaceJsonableView;
 use Kishlin\Backend\MotorsportCache\Result\Application\ViewEventResultsByRace\ViewEventResultsByRaceGateway;
 use Kishlin\Backend\MotorsportCache\Result\Domain\Entity\EventResultsByRace;
@@ -19,7 +19,7 @@ use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
  * @method null|EventResultsByRace get(UuidValueObject $id)
  * @method EventResultsByRace      safeGet(UuidValueObject $id)
  */
-final class EventResultsByRaceRepositorySpy extends AbstractRepositorySpy implements EventResultsByRaceGateway, DeleteEventResultsByRaceIfExistsGateway, ViewEventResultsByRaceGateway
+final class EventResultsBySessionsRepositorySpy extends AbstractRepositorySpy implements EventResultsBySessionsGateway, DeleteEventResultsBySessionsIfExistsGateway, ViewEventResultsByRaceGateway
 {
     public function save(EventResultsByRace $eventResultsByRace): void
     {

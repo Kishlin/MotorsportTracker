@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\DeleteEventResultsByRaceIfExistsGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\DeleteEventResultsBySessionsIfExistsGateway;
 use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository;
 
-final class DeleteEventResultsByRaceIfExistsRepository extends CacheRepository implements DeleteEventResultsByRaceIfExistsGateway
+final class DeleteEventResultsBySessionsIfExistsRepository extends CacheRepository implements DeleteEventResultsBySessionsIfExistsGateway
 {
     public function deleteIfExists(string $eventId): bool
     {

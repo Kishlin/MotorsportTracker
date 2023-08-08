@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Event;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\ComputeEventResultsByRaceCommand;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\ComputeEventResultsByRaceCommand;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\ClassificationScrappingSuccessEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;

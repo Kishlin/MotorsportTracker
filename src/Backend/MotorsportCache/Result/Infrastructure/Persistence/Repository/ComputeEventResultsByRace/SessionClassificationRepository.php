@@ -7,11 +7,11 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace;
 
 use JsonException;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RaceResultDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RaceResultGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\DTO\SessionResultDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\SessionClassificationGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
-final class RaceResultRepository extends CoreRepository implements RaceResultGateway
+final class SessionClassificationRepository extends CoreRepository implements SessionClassificationGateway
 {
     private const DRIVER_SELECT = <<<'TXT'
 json_build_object(
@@ -44,7 +44,7 @@ TXT;
     /**
      * @throws JsonException
      */
-    public function findResult(string $eventSessionId): RaceResultDTO
+    public function findResult(string $eventSessionId): SessionResultDTO
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -52,7 +52,7 @@ TXT;
             ->select(self::DRIVER_SELECT, 'driver')
             ->select(self::TEAM_SELECT, 'team')
             ->select('e.car_number, c.finish_position, c.classified_status, c.grid_position, c.laps, c.lap_time as race_time')
-            ->select('c.average_lap_speed, c.fastest_lap_time as best_lap_time, c.best_lap, c.best_is_fastest')
+            ->select('c.average_lap_speed, c.fastest_lap_time as best_lap_time, c.best_lap, c.best_is_fastest, c.best_speed')
             ->select('c.gap_time_to_lead as gap_time, c.gap_time_to_next as interval_time')
             ->select('c.gap_laps_to_lead as gap_laps, c.gap_laps_to_next as interval_laps')
             ->from('classification', 'c')
@@ -78,15 +78,16 @@ TXT;
          *     team: string,
          *     car_number: int,
          *     finish_position: int,
-         *     grid_position: int,
-         *     classified_status: string,
+         *     grid_position: ?int,
+         *     classified_status: ?string,
          *     laps: int,
          *     points: float,
          *     race_time: float,
          *     average_lap_speed: float,
-         *     best_lap_time: float,
-         *     best_lap: int,
-         *     best_is_fastest: bool,
+         *     best_lap_time: ?float,
+         *     best_lap: ?int,
+         *     best_is_fastest: ?bool,
+         *     best_speed: ?float,
          *     gap_time: float,
          *     interval_time: float,
          *     gap_laps: int,
@@ -95,7 +96,7 @@ TXT;
          */
         $result = $this->connection->execute($query)->fetchAllAssociative();
 
-        return RaceResultDTO::fromResults(
+        return SessionResultDTO::fromResults(
             array_map(
                 static function ($raceResult) {
                     /** @var array{id: string, short_code: string, name: string, country: array{id: string, code: string, name: string}} $driver */

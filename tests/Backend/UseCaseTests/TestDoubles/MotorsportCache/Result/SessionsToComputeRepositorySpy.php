@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Result;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\DTO\RacesToComputeDTO;
-use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\Gateway\RacesToComputeGateway;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\DTO\SessionsToComputeDTO;
+use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions\Gateway\SessionsToComputeGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventSessionRepositorySpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\SaveSessionTypeRepositorySpy;
 
-final class RacesToComputeRepositorySpy implements RacesToComputeGateway
+final class SessionsToComputeRepositorySpy implements SessionsToComputeGateway
 {
     public function __construct(
         private readonly SaveSessionTypeRepositorySpy $sessionTypeRepositorySpy,
@@ -18,7 +18,7 @@ final class RacesToComputeRepositorySpy implements RacesToComputeGateway
     ) {
     }
 
-    public function findRaces(string $eventId): RacesToComputeDTO
+    public function findSessions(string $eventId): SessionsToComputeDTO
     {
         $typeRepositorySpy = $this->sessionTypeRepositorySpy;
 
@@ -39,6 +39,6 @@ final class RacesToComputeRepositorySpy implements RacesToComputeGateway
             $filteredEventSessions,
         );
 
-        return RacesToComputeDTO::fromList($mappedRaces);
+        return SessionsToComputeDTO::fromList($mappedRaces);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace;
+namespace Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsBySessions;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 

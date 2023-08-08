@@ -6,19 +6,19 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportCache\Result\Infrastruct
 
 use Kishlin\Backend\MotorsportCache\Result\Domain\Entity\EventResultsByRace;
 use Kishlin\Backend\MotorsportCache\Result\Domain\ValueObject\ResultsByRaceValueObject;
-use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\EventResultsByRaceRepository;
+use Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\EventResultsBySessionsRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\EventResultsByRaceRepository
+ * @covers \Kishlin\Backend\MotorsportCache\Result\Infrastructure\Persistence\Repository\ComputeEventResultsByRace\EventResultsBySessionsRepository
  */
 final class EventResultsByRaceRepositoryTest extends CacheRepositoryContractTestCase
 {
     public function testItCaSaveAnEventResultsByRace(): void
     {
-        $repository = new EventResultsByRaceRepository(self::connection());
+        $repository = new EventResultsBySessionsRepository(self::connection());
 
         $results = EventResultsByRace::instance(
             new UuidValueObject(self::uuid()),
@@ -73,6 +73,7 @@ final class EventResultsByRaceRepositoryTest extends CacheRepositoryContractTest
                         'best_lap_time'     => 96236,
                         'best_lap'          => 44,
                         'best_is_fastest'   => false,
+                        'best_speed'        => 284.56,
                         'gap_time'          => 0,
                         'interval_time'     => 0,
                         'gap_laps'          => 0,
