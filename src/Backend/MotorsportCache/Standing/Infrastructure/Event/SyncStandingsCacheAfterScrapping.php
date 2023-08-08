@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Logging\OnStandingsScrapped;
+namespace Kishlin\Backend\MotorsportCache\Standing\Infrastructure\Event;
 
 use Kishlin\Backend\MotorsportCache\Standing\Application\UpdateSeasonStandingsCache\UpdateSeasonStandingsCacheCommand;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\StandingsScrappedEvent;
