@@ -26,7 +26,7 @@ final class ViewSeasonScheduleContext extends BackendApiContext
     {
         $slug = StringHelper::slugify($championship);
 
-        $this->response = self::handle(Request::create("/api/v1/schedule/view/{$slug}/{$year}", 'GET'));
+        $this->response = self::handle(Request::create("/api/v1/schedule/{$slug}/{$year}", 'GET'));
     }
 
     #[Then('a schedule is viewed with events')]
