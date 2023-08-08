@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '/view/{championship}/{year}',
+    '/{championship}/{year}',
     name: 'events_schedule',
     requirements: [
         'championship' => '[\w\-]+',
