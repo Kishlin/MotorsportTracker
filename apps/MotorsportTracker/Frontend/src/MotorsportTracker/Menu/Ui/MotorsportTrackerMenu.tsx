@@ -59,7 +59,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
             </ListItem>
             <Collapse in={menuOpen.schedule} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={redirectionTo('/schedule')}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={redirectionTo('/')}>
                         <ListItemIcon>
                             <CalendarTodayIcon />
                         </ListItemIcon>
