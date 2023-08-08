@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway;
+namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\Persistence;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SessionDTO;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
