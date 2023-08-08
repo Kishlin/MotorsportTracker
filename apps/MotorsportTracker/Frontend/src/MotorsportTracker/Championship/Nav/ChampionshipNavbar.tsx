@@ -51,7 +51,7 @@ page,
     const standingsPages = ['constructor', 'team', 'driver']
         .filter((type: StandingType) => true === availableStandings[type])
         .map((type: StandingType) => (
-            <Link to={`/championship/${championship}/${year}/standings-${type}`}>
+            <Link key={type} to={`/championship/${championship}/${year}/standings-${type}`}>
                 {`${type.slice(0, 1).toUpperCase()}${type.slice(1)} Standings`}
             </Link>
         ));
