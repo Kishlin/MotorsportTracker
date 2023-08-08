@@ -253,6 +253,18 @@ COMMENT ON COLUMN public.event_session.end_date IS '(DC2Type:nullable_date_time_
 
 
 --
+-- Name: migration_version; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.migration_version (
+    version character varying(255) NOT NULL,
+    migrated_on character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.migration_version OWNER TO motorsporttracker;
+
+--
 -- Name: race_lap; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -481,6 +493,14 @@ ALTER TABLE ONLY public.event_session
 
 ALTER TABLE ONLY public.event
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: migration_version migration_version_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.migration_version
+    ADD CONSTRAINT migration_version_pkey PRIMARY KEY (version);
 
 
 --

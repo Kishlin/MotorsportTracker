@@ -102,6 +102,33 @@ services:
   Kishlin\Backend\Persistence\Core\Connection\Connection:
     alias: 'kishlin.app.infrastructure.connection.core'
 
+  Kishlin\Backend\Persistence\Migration\Migrator:
+    class: Kishlin\Backend\Persistence\Migration\Migrator
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.core'
+      $namespace: '\Migrations\Core'
+      $table: 'migration_version'
+      $folder: '%kishlin.src.dir%/etc/Migrations/Core'
+
+  Kishlin\Backend\Persistence\Migration\Migrator.cache:
+    class: Kishlin\Backend\Persistence\Migration\Migrator
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.cache'
+      $namespace: '\Migrations\Cache'
+      $table: 'migration_version'
+      $folder: '%kishlin.src.dir%/etc/Migrations/Cache'
+
+  Kishlin\Apps\Backoffice\Persistence\Command\ApplyMigrationCommandUsingSymfony:
+    class: Kishlin\Apps\Backoffice\Persistence\Command\ApplyMigrationCommandUsingSymfony
+    bind:
+      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator'
+      $database: 'core'
+
+  Kishlin\Apps\Backoffice\Persistence\Command\ApplyMigrationCommandUsingSymfony.cache:
+    class: Kishlin\Apps\Backoffice\Persistence\Command\ApplyMigrationCommandUsingSymfony
+    bind:
+      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.cache'
+      $database: 'cache'
 
   ##> Cache
 
