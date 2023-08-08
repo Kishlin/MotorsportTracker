@@ -1,32 +1,30 @@
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import { RaceResult, Result, ResultsByRace } from '../Types/Index';
+import { SessionResult, Result, ResultsBySession } from '../Types/Index';
 import SessionTableResult from './Table/SessionTableResult';
 import SessionContainer from './Table/SessionContainer';
 import SessionTableHead from './Table/SessionTableHead';
 import SessionTableBody from './Table/SessionTableBody';
-import { SeasonEvent } from '../../Shared/Types';
 import SessionTable from './Table/SessionTable';
 import SessionTitle from './Table/SessionTitle';
 
 declare type ResultsContentProps = {
-    results: ResultsByRace,
+    results: ResultsBySession,
     withTitle: boolean,
-    event: SeasonEvent,
 };
 
-const ResultsContent: React.FunctionComponent<ResultsContentProps> = ({ results, withTitle, event }) => {
-    if (0 === results.resultsByRace.length) {
+const ResultsContent: React.FunctionComponent<ResultsContentProps> = ({ results, withTitle }) => {
+    if (0 === results.length) {
         return <Typography align="center" sx={{ mt: 4 }}>No results are available at this time.</Typography>;
     }
 
     return (
         <>
-            {results.resultsByRace.map(
-                (raceResult: RaceResult) => (
+            {results.map(
+                (raceResult: SessionResult) => (
                     <SessionContainer key={raceResult.session.id}>
-                        {withTitle ? <SessionTitle name={event.name} /> : <noscript />}
+                        {withTitle ? <SessionTitle name={raceResult.session.type} /> : <noscript />}
                         <SessionTable>
                             <SessionTableHead />
                             <SessionTableBody>

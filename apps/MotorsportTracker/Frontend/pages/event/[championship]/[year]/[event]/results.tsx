@@ -6,7 +6,7 @@ import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 import ResultsContent from '../../../../../src/MotorsportTracker/Result/Ui/ResultsContent';
 import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
-import { ResultsByRace } from '../../../../../src/MotorsportTracker/Result/Types/Index';
+import { ResultsBySession } from '../../../../../src/MotorsportTracker/Result/Types/Index';
 import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
 import EventTitle from '../../../../../src/MotorsportTracker/Event/Ui/EventTitle';
@@ -23,7 +23,7 @@ declare type EventResultsPathParams = {
 
 declare type EventResultsPageProps = {
     championship: string,
-    results: ResultsByRace,
+    results: ResultsBySession,
     season: SeasonEvents,
     event: string,
     year: string,
@@ -42,15 +42,14 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
         return null;
     }
 
-    const withTitle = 1 < results.resultsByRace.length;
+    const withTitle = 1 < results.length;
 
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
             content={(
                 <EventContainer>
-                    <EventTitle event={season[event]} page={page} />
-                    <ResultsContent results={results} withTitle={withTitle} event={season[event]} />
+                    <ResultsContent results={results} withTitle={withTitle} />
                 </EventContainer>
             )}
             subHeader={(

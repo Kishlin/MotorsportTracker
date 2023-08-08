@@ -6,7 +6,7 @@ declare type RaceResultTitleProps = {
 };
 
 const SessionTitle: React.FunctionComponent<RaceResultTitleProps> = ({ name }) => (
-    <Typography variant="h3" align="left" sx={{ my: 4 }}>{name}</Typography>
+    <Typography variant="h5" align="left" sx={{ my: 4 }}>{name}</Typography>
 );
 
 export default SessionTitle;

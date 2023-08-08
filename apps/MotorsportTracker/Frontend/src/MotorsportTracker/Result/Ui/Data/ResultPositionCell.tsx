@@ -11,7 +11,7 @@ declare type ResultPositionProps = {
 
 const ResultPositionCell: React.FunctionComponent<ResultPositionProps> = ({ position, classifiedStatus }) => (
     <StyledTableCell>
-        <Typography>{0 === position ? classifiedStatus : position.toString()}</Typography>
+        <Typography>{0 === position || 1000 < position ? classifiedStatus : position.toString()}</Typography>
     </StyledTableCell>
 );
 

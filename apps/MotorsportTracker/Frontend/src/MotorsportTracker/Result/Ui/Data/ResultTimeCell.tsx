@@ -5,12 +5,12 @@ import formatTime from '../../Utils/FormatTime';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
 declare type ResultTimeProps = {
-    time: string,
+    time: null|string,
 };
 
 const ResultTimeCell: React.FunctionComponent<ResultTimeProps> = ({ time }) => (
     <StyledTableCell>
-        <Typography noWrap>{formatTime(time)}</Typography>
+        <Typography noWrap>{null === time ? <noscript /> : formatTime(time)}</Typography>
     </StyledTableCell>
 );
 
