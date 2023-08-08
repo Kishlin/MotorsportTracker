@@ -8,11 +8,11 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 
-final class SyncCalendarEventsCommand implements Command
+final readonly class SyncCalendarEventsCommand implements Command
 {
     private function __construct(
-        private readonly string $championship,
-        private readonly int $year,
+        private string $championship,
+        private int $year,
     ) {
     }
 

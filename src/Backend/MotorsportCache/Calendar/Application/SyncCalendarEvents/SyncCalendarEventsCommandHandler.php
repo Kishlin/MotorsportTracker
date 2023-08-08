@@ -18,14 +18,14 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class SyncCalendarEventsCommandHandler implements CommandHandler
+final readonly class SyncCalendarEventsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SaveCalendarEventGateway $saveGateway,
-        private readonly FindSeriesGateway $seriesGateway,
-        private readonly FindEventsGateway $eventsGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SaveCalendarEventGateway $saveGateway,
+        private FindSeriesGateway $seriesGateway,
+        private FindEventsGateway $eventsGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 

@@ -39,7 +39,6 @@ default:
     backoffice_tests:
       paths: [ features ]
       contexts:
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Event\SeasonEventsContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Result\ComputeResultContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext

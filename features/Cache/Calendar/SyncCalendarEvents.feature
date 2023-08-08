@@ -1,6 +1,5 @@
 Feature: It synchronizes calendar events from core data
 
-  @backoffice
   Scenario: It computes calendar events for planned events
     Given the championship presentation "Formula One White" exists
     And the eventSession "Dutch Grand Prix 2022 Race" exists
@@ -8,7 +7,6 @@ Feature: It synchronizes calendar events from core data
     Then it cached "1" calendar events
     And there is a calendar event cached for "Dutch Grand Prix 2022"
 
-  @backoffice
   Scenario: It merges event sessions into
     Given the championship presentation "Formula One White" exists
     And the eventSession "Emilia Romagna Grand Prix 2022 Race" exists
@@ -17,7 +15,6 @@ Feature: It synchronizes calendar events from core data
     Then it cached "1" calendar events
     And there is a calendar event cached for "Emilia Romagna Grand Prix 2022"
 
-  @backoffice
   Scenario: It targets a specific championship and year
     Given the championship presentation "Formula One White" exists
     And the eventSession "Emilia Romagna Grand Prix 2022 Sprint Qualifying" exists
@@ -30,7 +27,6 @@ Feature: It synchronizes calendar events from core data
     And there is a calendar event cached for "Dutch Grand Prix 2022"
     And there is a calendar event cached for "Emilia Romagna Grand Prix 2022"
 
-  @backoffice
   Scenario: It does nothing when there are no events to synchronize
     Given there are no events planned
     When a client synchronizes calendar events for "Formula One" "2022"
