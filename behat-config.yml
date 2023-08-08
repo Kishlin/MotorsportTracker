@@ -10,7 +10,6 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewSeasonScheduleContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Event\SeasonEventsContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Event\EventCachedContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
@@ -34,7 +33,6 @@ default:
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportTracker\Championship\SeasonContext
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Event\ViewSeasonEventsContext
-        - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Event\ViewCachedEventsContext
         - Kishlin\Tests\Apps\MotorsportTracker\Backend\ApiTests\Context\MotorsportCache\Schedule\ViewSeasonScheduleContext
       filters:
         tags: '@api'
@@ -43,7 +41,6 @@ default:
       contexts:
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Calendar\SyncCalendarContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Event\SeasonEventsContext
-        - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Event\EventsCacheContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportCache\Result\ComputeResultContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\CreateChampionshipPresentationContext
         - Kishlin\Tests\Apps\Backoffice\BackofficeTests\Context\MotorsportTracker\Championship\SeasonContext

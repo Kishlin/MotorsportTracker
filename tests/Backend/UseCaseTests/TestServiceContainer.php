@@ -6,7 +6,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests;
 
 use Kishlin\Tests\Backend\UseCaseTests\Services\Country\CountryServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Calendar\CalendarServicesTrait;
-use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Event\EventCachedServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Event\SeasonEventServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportCache\Result\ResultServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Championship\ChampionshipServicesTrait;
@@ -35,7 +34,6 @@ final class TestServiceContainer
     use CountryServicesTrait;
     use DriverServicesTrait;
     use EntryServicesTrait;
-    use EventCachedServicesTrait;
     use EventServicesTrait;
     use EventSessionServicesTrait;
     use FixturesServicesTrait;

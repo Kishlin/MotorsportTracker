@@ -7,7 +7,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 use Exception;
 use Kishlin\Backend\Country\Application\CreateCountryIfNotExists\CreateCountryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\SyncCalendarEventsCommand;
-use Kishlin\Backend\MotorsportCache\Event\Application\SyncEventCache\SyncEventCacheCommand;
 use Kishlin\Backend\MotorsportCache\Event\Application\SyncSeasonEvents\SyncSeasonEventsCommand;
 use Kishlin\Backend\MotorsportCache\Result\Application\ComputeEventResultsByRace\ComputeEventResultsByRaceCommand;
 use Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists\CreateChampionshipIfNotExistsCommand;
@@ -29,10 +28,10 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Tests\Backend\UseCaseTests\TestServiceContainer;
 use RuntimeException;
 
-final class TestCommandBus implements CommandBus
+final readonly class TestCommandBus implements CommandBus
 {
     public function __construct(
-        private readonly TestServiceContainer $testServiceContainer
+        private TestServiceContainer $testServiceContainer
     ) {
     }
 
@@ -51,12 +50,6 @@ final class TestCommandBus implements CommandBus
 
         if ($command instanceof SyncSeasonEventsCommand) {
             return $this->testServiceContainer->syncSeasonEventsCommandHandler()($command);
-        }
-
-        if ($command instanceof SyncEventCacheCommand) {
-            $this->testServiceContainer->syncEventCacheCommandHandler()($command);
-
-            return null;
         }
 
         if ($command instanceof ComputeEventResultsByRaceCommand) {
