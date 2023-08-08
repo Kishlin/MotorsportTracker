@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
-import SlowMotionVideoIcon from '@mui/icons-material/SlowMotionVideo';
-import { SvgIconProps } from '@mui/material/SvgIcon/SvgIcon';
+import Grid from '@mui/material/Grid';
 
+import ScheduleEventIconList from './ScheduleEventIconList';
 import { MotorsportEvent } from '../../Shared/Types';
-import useNavigate from '../../../Shared/Hooks/useNavigate';
 
 declare type ScheduleEventMainPanelProps = {
     toggleTimetable: () => void,
@@ -22,10 +16,7 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
     handleWidth,
     event,
 }) => {
-    const { redirectionTo } = useNavigate();
-
     const [dateLabels, setDateLabels] = useState<{ start: string, end: string}>({ start: '', end: '' });
-    const [eventIcons, setEventIcons] = useState<React.ReactNode>(<noscript />);
 
     useEffect(
         () => {
@@ -43,47 +34,6 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
             }
 
             setDateLabels({ start, end });
-
-            if (null !== event.status) {
-                setEventIcons((
-                    <Typography sx={{ color: '#d95757' }}>{event.status}</Typography>
-                ));
-
-                return;
-            }
-
-            const iconProps: Partial<SvgIconProps> = 0 === event.sessions.length
-                ? { color: 'disabled', sx: { cursor: 'not-allowed' } }
-                : { color: 'action', sx: { cursor: 'pointer' } };
-
-            const timetableIcon = (
-                <Tooltip title="Timetable">
-                    <ScheduleIcon onClick={toggleTimetable} {...iconProps} />
-                </Tooltip>
-            );
-
-            if (null !== event.start_date && new Date(event.start_date) <= new Date()) {
-                const eventUri = event.slug.replaceAll('_', '/');
-
-                const props: Partial<SvgIconProps> = { color: 'action', sx: { cursor: 'pointer', mr: 1 } };
-
-                setEventIcons((
-                    <>
-                        <Tooltip title="Results">
-                            <LeaderboardIcon onClick={redirectionTo(`/event/${eventUri}/results`)} {...props} />
-                        </Tooltip>
-                        <Tooltip title="Histories">
-                            <SlowMotionVideoIcon onClick={redirectionTo(`/event/${eventUri}/histories`)} {...props} />
-                        </Tooltip>
-                        <Tooltip title="Graphs">
-                            <QueryStatsIcon onClick={redirectionTo(`/event/${eventUri}/graphs`)} {...props} />
-                        </Tooltip>
-                        {timetableIcon}
-                    </>
-                ));
-            } else {
-                setEventIcons(timetableIcon);
-            }
         },
         [],
     );
@@ -119,7 +69,7 @@ const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProp
                         </Grid>
                     </Grid>
                     <Grid item sx={{ height: '24px', mx: 4 }}>
-                        {eventIcons}
+                        <ScheduleEventIconList event={event} toggleTimetable={toggleTimetable} />
                     </Grid>
                 </Grid>
             </Grid>
