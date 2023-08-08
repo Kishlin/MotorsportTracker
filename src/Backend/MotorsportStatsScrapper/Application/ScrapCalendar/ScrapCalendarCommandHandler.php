@@ -61,6 +61,10 @@ final class ScrapCalendarCommandHandler implements CommandHandler
                 $this->eventDispatcher->dispatch(CalendarEventScrappingFailureEvent::forEvent($event));
             }
         }
+
+        $this->eventDispatcher->dispatch(
+            CalendarEventScrappingSuccessEvent::forSeason($command->championshipName(), $command->year()),
+        );
     }
 
     private static function isCancelledOrPostponed(?string $status): bool
