@@ -52,6 +52,7 @@ final class ApplyMigrationCommandUsingSymfony extends SymfonyCommand
         }
 
         $version = $input->getOption(self::OPTION_VERSION);
+        assert(null === $version || is_string($version));
 
         if ($down) {
             empty($version) ? $this->migrator->downALl() : $this->migrator->downOne($version);
