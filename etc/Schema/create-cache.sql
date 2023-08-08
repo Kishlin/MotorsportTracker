@@ -64,20 +64,6 @@ COMMENT ON COLUMN public.calendar_event.series IS '(DC2Type:calendar_event_serie
 
 
 --
--- Name: event_cached; Type: TABLE; Schema: public; Owner: motorsporttracker
---
-
-CREATE TABLE public.event_cached (
-    id character varying(36) NOT NULL,
-    championship character varying(255) NOT NULL,
-    year integer NOT NULL,
-    event character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.event_cached OWNER TO motorsporttracker;
-
---
 -- Name: event_graph; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
@@ -118,19 +104,25 @@ CREATE TABLE public.migration_version (
 ALTER TABLE public.migration_version OWNER TO motorsporttracker;
 
 --
+-- Name: season_events; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.season_events (
+    id character varying(36) NOT NULL,
+    championship character varying(255) NOT NULL,
+    year integer NOT NULL,
+    events json NOT NULL
+);
+
+
+ALTER TABLE public.season_events OWNER TO motorsporttracker;
+
+--
 -- Name: calendar_event calendar_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
 ALTER TABLE ONLY public.calendar_event
     ADD CONSTRAINT calendar_events_pkey PRIMARY KEY (id);
-
-
---
--- Name: event_cached event_cached_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
---
-
-ALTER TABLE ONLY public.event_cached
-    ADD CONSTRAINT event_cached_pkey PRIMARY KEY (id);
 
 
 --
@@ -158,17 +150,11 @@ ALTER TABLE ONLY public.migration_version
 
 
 --
--- Name: event_cached_championship_year_event_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+-- Name: season_events season_events_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX event_cached_championship_year_event_idx ON public.event_cached USING btree (championship, year, event);
-
-
---
--- Name: event_cached_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
---
-
-CREATE UNIQUE INDEX event_cached_id_idx ON public.event_cached USING btree (id);
+ALTER TABLE ONLY public.season_events
+    ADD CONSTRAINT season_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -197,6 +183,20 @@ CREATE UNIQUE INDEX event_results_by_race_event_idx ON public.event_results_by_r
 --
 
 CREATE UNIQUE INDEX event_results_by_race_id_idx ON public.event_results_by_race USING btree (id);
+
+
+--
+-- Name: season_events_championship_year_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX season_events_championship_year_idx ON public.season_events USING btree (championship, year);
+
+
+--
+-- Name: season_events_id_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX season_events_id_idx ON public.season_events USING btree (id);
 
 
 --
