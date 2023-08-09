@@ -16,7 +16,7 @@ final readonly class StandingsDriverGatewayUsingCurl implements StandingDriverGa
 {
     use MotorsportStatsAPIClient;
 
-    private const URL = 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/standings/drivers/details';
+    private const URL = 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/standings/drivers';
 
     private const SERIES_PARAMETER = '?seriesClassUuid=%s';
 
@@ -41,12 +41,30 @@ final readonly class StandingsDriverGatewayUsingCurl implements StandingDriverGa
         /**
          * @var array{
          *     standings: array<int, array{
-         *         driver: array{name: string, firstName: string, lastName: string, shortCode: string, uuid: string},
+         *         driver: array{name: string, shortCode: string, uuid: string},
          *         nationality: array{name: string, uuid: string, picture: string},
          *         team: array{name: string, uuid: string},
          *         position: int,
-         *         totalPoints: float,
-         *         raceResults: array<int, array{points: float, finishPosition: int, seasonPoints: float, seasonPosition: int}>
+         *         points: float,
+         *         analytics: array{
+         *             avgFinishPosition: float,
+         *             classWins: int,
+         *             fastestLaps: int,
+         *             finalAppearances: int,
+         *             hatTricks: int,
+         *             podiums: int,
+         *             poles: int,
+         *             racesLed: int,
+         *             ralliesLed: int,
+         *             retirements: int,
+         *             semiFinalAppearances: int,
+         *             stageWins: int,
+         *             starts: int,
+         *             top10s: int,
+         *             top5s: int,
+         *             wins: int,
+         *             winsPercentage: float,
+         *         },
          *     }>
          * } $data
          */

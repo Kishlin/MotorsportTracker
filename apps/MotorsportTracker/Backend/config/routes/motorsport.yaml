@@ -1,3 +1,9 @@
+analytics:
+  resource: ../../src/MotorsportCache/Analytics/Controller/
+  prefix: /api/v1/analytics
+  type: annotation
+  stateless: true
+
 calendar:
   resource: ../../src/MotorsportCache/Calendar/Controller/
   prefix: /api/v1/calendar

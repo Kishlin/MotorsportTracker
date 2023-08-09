@@ -16,7 +16,9 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCrea
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SeasonDTO;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\CreateAnalyticsIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\CreateOrUpdateStandingCommand;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
@@ -92,8 +94,37 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         $driverId->value(),
                         $countryId->value(),
                         $standing['position'],
-                        $standing['totalPoints'],
+                        $standing['points'],
                         StandingType::DRIVER,
+                    ),
+                );
+
+                $this->commandBus->execute(
+                    CreateAnalyticsIfNotExistsCommand::fromScalars(
+                        season: $season->id(),
+                        driver: $driverId->value(),
+                        country: $countryId->value(),
+                        position: $standing['position'],
+                        points: $standing['points'],
+                        analyticsStatsDTO: AnalyticsStatsDTO::fromScalars(
+                            avgFinishPosition: $standing['analytics']['avgFinishPosition'],
+                            classWins: $standing['analytics']['classWins'],
+                            fastestLaps: $standing['analytics']['fastestLaps'],
+                            finalAppearances: $standing['analytics']['finalAppearances'],
+                            hatTricks: $standing['analytics']['hatTricks'],
+                            podiums: $standing['analytics']['podiums'],
+                            poles: $standing['analytics']['poles'],
+                            racesLed: $standing['analytics']['racesLed'],
+                            ralliesLed: $standing['analytics']['ralliesLed'],
+                            retirements: $standing['analytics']['retirements'],
+                            semiFinalAppearances: $standing['analytics']['semiFinalAppearances'],
+                            stageWins: $standing['analytics']['stageWins'],
+                            starts: $standing['analytics']['starts'],
+                            top10s: $standing['analytics']['top10s'],
+                            top5s: $standing['analytics']['top5s'],
+                            wins: $standing['analytics']['wins'],
+                            winsPercentage: $standing['analytics']['winsPercentage'],
+                        ),
                     ),
                 );
             }

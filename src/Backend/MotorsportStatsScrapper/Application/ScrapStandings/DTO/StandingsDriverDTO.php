@@ -9,12 +9,30 @@ final readonly class StandingsDriverDTO
     /**
      * @param array{
      *     standings: array<int, array{
-     *         driver: array{name: string, firstName: string, lastName: string, shortCode: string, uuid: string},
+     *         driver: array{name: string, shortCode: string, uuid: string},
      *         nationality: array{name: string, uuid: string, picture: string},
      *         team: array{name: string, uuid: string},
      *         position: int,
-     *         totalPoints: float,
-     *         raceResults: array<int, array{points: float, finishPosition: int, seasonPoints: float, seasonPosition: int}>
+     *         points: float,
+     *         analytics: array{
+     *             avgFinishPosition: float,
+     *             classWins: int,
+     *             fastestLaps: int,
+     *             finalAppearances: int,
+     *             hatTricks: int,
+     *             podiums: int,
+     *             poles: int,
+     *             racesLed: int,
+     *             ralliesLed: int,
+     *             retirements: int,
+     *             semiFinalAppearances: int,
+     *             stageWins: int,
+     *             starts: int,
+     *             top10s: int,
+     *             top5s: int,
+     *             wins: int,
+     *             winsPercentage: float,
+     *         },
      *     }>
      * } $data
      */
@@ -26,12 +44,30 @@ final readonly class StandingsDriverDTO
     /**
      * @return array{
      *     standings: array<int, array{
-     *         driver: array{name: string, firstName: string, lastName: string, shortCode: string, uuid: string},
+     *         driver: array{name: string, shortCode: string, uuid: string},
      *         nationality: array{name: string, uuid: string, picture: string},
      *         team: array{name: string, uuid: string},
      *         position: int,
-     *         totalPoints: float,
-     *         raceResults: array<int, array{points: float, finishPosition: int, seasonPoints: float, seasonPosition: int}>
+     *         points: float,
+     *         analytics: array{
+     *             avgFinishPosition: float,
+     *             classWins: int,
+     *             fastestLaps: int,
+     *             finalAppearances: int,
+     *             hatTricks: int,
+     *             podiums: int,
+     *             poles: int,
+     *             racesLed: int,
+     *             ralliesLed: int,
+     *             retirements: int,
+     *             semiFinalAppearances: int,
+     *             stageWins: int,
+     *             starts: int,
+     *             top10s: int,
+     *             top5s: int,
+     *             wins: int,
+     *             winsPercentage: float,
+     *         },
      *     }>
      * }
      */
@@ -43,12 +79,30 @@ final readonly class StandingsDriverDTO
     /**
      * @param array{
      *     standings: array<int, array{
-     *         driver: array{name: string, firstName: string, lastName: string, shortCode: string, uuid: string},
+     *         driver: array{name: string, shortCode: string, uuid: string},
      *         nationality: array{name: string, uuid: string, picture: string},
      *         team: array{name: string, uuid: string},
      *         position: int,
-     *         totalPoints: float,
-     *         raceResults: array<int, array{points: float, finishPosition: int, seasonPoints: float, seasonPosition: int}>
+     *         points: float,
+     *         analytics: array{
+     *             avgFinishPosition: float,
+     *             classWins: int,
+     *             fastestLaps: int,
+     *             finalAppearances: int,
+     *             hatTricks: int,
+     *             podiums: int,
+     *             poles: int,
+     *             racesLed: int,
+     *             ralliesLed: int,
+     *             retirements: int,
+     *             semiFinalAppearances: int,
+     *             stageWins: int,
+     *             starts: int,
+     *             top10s: int,
+     *             top5s: int,
+     *             wins: int,
+     *             winsPercentage: float,
+     *         },
      *     }>
      * } $data
      */
