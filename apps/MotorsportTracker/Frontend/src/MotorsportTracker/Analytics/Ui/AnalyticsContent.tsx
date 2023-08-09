@@ -19,7 +19,7 @@ const AnalyticsContent: React.FunctionComponent<StandingsContentProps> = ({
     teamsAnalytics,
 }) => {
     if (0 === constructorsAnalytics.length && 0 === driversAnalytics.length && 0 === teamsAnalytics.length) {
-        return <Typography>No stats available at this time.</Typography>
+        return <Typography sx={{ mt: 4 }} align="center">No stats available at this time.</Typography>
     }
 
     return (
