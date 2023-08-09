@@ -22,12 +22,21 @@ import {
     Standing,
 } from '../../../../src/MotorsportTracker/Shared/Types';
 import StandingsContent from '../../../../src/MotorsportTracker/Standing/Ui/StandingsContent';
+import driversAnalyticsApi from '../../../../src/MotorsportTracker/Analytics/Api/DriversAnalyticsApi';
+import constructorsAnalyticsApi from '../../../../src/MotorsportTracker/Analytics/Api/ConstructorsAnalyticsApi';
+import teamsAnalyticsApi from '../../../../src/MotorsportTracker/Analytics/Api/TeamsAnalyticsApi';
+import {
+    ConstructorAnalytics,
+    DriverAnalytics,
+    TeamAnalytics,
+} from '../../../../src/MotorsportTracker/Analytics/Types/Index';
+import AnalyticsContent from '../../../../src/MotorsportTracker/Analytics/Ui/AnalyticsContent';
 
 declare type ChampionshipPathParams = {
     params: {
         championship: string,
         year: string,
-        page: 'schedule'|'standings-constructor'|'standings-team'|'standings-driver',
+        page: 'schedule'|'standings-constructor'|'standings-team'|'standings-driver'|'stats',
     },
 };
 
@@ -40,13 +49,19 @@ interface ChampionshipStandingPageProps extends ChampionshipPageProps {
     type: StandingType,
 }
 
+interface ChampionshipStatsPageProps extends ChampionshipPageProps {
+    constructorsAnalytics: Array<ConstructorAnalytics>,
+    driversAnalytics: Array<DriverAnalytics>,
+    teamsAnalytics: Array<TeamAnalytics>,
+}
+
 interface ChampionshipSchedulePageProps extends ChampionshipPageProps {
     events: EventsSchedule,
     firstDay: number,
     lastDay: number,
 }
 
-declare type Props = ChampionshipStandingPageProps | ChampionshipSchedulePageProps;
+declare type Props = ChampionshipStandingPageProps | ChampionshipSchedulePageProps | ChampionshipStatsPageProps;
 
 const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipPageProps> = (props: Props) => {
     const router = useRouter();
@@ -67,6 +82,33 @@ const ChampionshipSchedulePage: React.FunctionComponent<ChampionshipPageProps> =
                 content={(
                     <ChampionshipContainer>
                         <ScheduleEventsList firstDay={firstDay} lastDay={lastDay} events={events} />
+                    </ChampionshipContainer>
+                )}
+                subHeader={(
+                    <ChampionshipNavbar
+                        availableStandings={availableStandings}
+                        championship={championship}
+                        year={year}
+                        page={page}
+                    />
+                )}
+            />
+        );
+    }
+
+    if ('stats' === page) {
+        const { constructorsAnalytics, driversAnalytics, teamsAnalytics } = props as ChampionshipStatsPageProps;
+
+        return (
+            <Layout
+                menu={<MotorsportTrackerMenu />}
+                content={(
+                    <ChampionshipContainer>
+                        <AnalyticsContent
+                            constructorsAnalytics={constructorsAnalytics}
+                            driversAnalytics={driversAnalytics}
+                            teamsAnalytics={teamsAnalytics}
+                        />
                     </ChampionshipContainer>
                 )}
                 subHeader={(
@@ -125,6 +167,22 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
         };
     }
 
+    if ('stats' === page) {
+        const constructorsAnalytics = await constructorsAnalyticsApi(championships[championship].slug, year);
+        const driversAnalytics = await driversAnalyticsApi(championships[championship].slug, year);
+        const teamsAnalytics = await teamsAnalyticsApi(championships[championship].slug, year);
+
+        return {
+            props: {
+                availableStandings,
+                constructorsAnalytics,
+                driversAnalytics,
+                teamsAnalytics,
+            },
+            revalidate: 60,
+        };
+    }
+
     if (true === availableStandings.constructor && 'standings-constructor' === page) {
         const constructorStandings = await constructorStandingsApi(championship, year);
 
@@ -159,7 +217,7 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathP
     const paths: Array<ChampionshipPathParams> = [];
 
     Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.slice(-20).forEach(async (year: number) => {
+        championships[slug].years.slice(-2).forEach(async (year: number) => {
             const availableStandings = await availableStandingsApi(slug, year.toString());
 
             ['constructor', 'team', 'driver'].forEach((type: StandingType) => {
@@ -169,6 +227,7 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathP
             });
 
             paths.push({ params: { championship: slug, year: year.toString(), page: 'schedule' } });
+            paths.push({ params: { championship: slug, year: year.toString(), page: 'stats' } });
         });
     });
 

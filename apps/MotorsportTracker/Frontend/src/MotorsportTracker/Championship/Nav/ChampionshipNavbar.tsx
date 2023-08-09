@@ -22,7 +22,7 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
     availableStandings,
     championship,
     year,
-page,
+    page,
 }) => {
     const { navigate } = useNavigate();
 
@@ -61,6 +61,9 @@ page,
             <NavMainMenu>
                 <Link to={`/championship/${championship}/${year}/schedule`}>
                     Calendar
+                </Link>
+                <Link to={`/championship/${championship}/${year}/stats`}>
+                    Stats
                 </Link>
                 {standingsPages}
             </NavMainMenu>
