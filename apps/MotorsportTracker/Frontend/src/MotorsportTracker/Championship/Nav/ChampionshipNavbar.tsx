@@ -35,7 +35,7 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
 
         const targetYear = years.includes(parseInt(year, 10)) ? year : years[0];
 
-        navigate(`/${targetChampionship}/${targetYear}/${page}`);
+        navigate(`/championship/${targetChampionship}/${targetYear}/${page}`);
     };
 
     const championshipSelectItems = Object.keys(championships).map((championshipSlug: string) => (
