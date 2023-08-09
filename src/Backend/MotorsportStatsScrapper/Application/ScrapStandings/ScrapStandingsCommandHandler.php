@@ -16,7 +16,7 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCrea
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SeasonDTO;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\CreateAnalyticsIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\CreateAnalyticsDriversIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\CreateOrUpdateStandingCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
@@ -100,7 +100,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                 );
 
                 $this->commandBus->execute(
-                    CreateAnalyticsIfNotExistsCommand::fromScalars(
+                    CreateAnalyticsDriversIfNotExistsCommand::fromScalars(
                         season: $season->id(),
                         driver: $driverId->value(),
                         country: $countryId->value(),

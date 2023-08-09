@@ -54,7 +54,7 @@ TXT;
             ->addSelect('a.top5s')
             ->addSelect('a.wins')
             ->addSelect('a.wins_percentage')
-            ->from('analytics', 'a')
+            ->from('analytics_drivers', 'a')
             ->innerJoin('driver', 'd', $qb->expr()->eq('a.driver', 'd.id'))
             ->leftJoin('country', 'c', $qb->expr()->eq('a.country', 'c.id'))
             ->innerJoin('season', 's', $qb->expr()->eq('a.season', 's.id'))

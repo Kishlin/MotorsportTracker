@@ -18,7 +18,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Classification;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Entry;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\RaceLap;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Retirement;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsDrivers;
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportTracker\Venue\Domain\Entity\Venue;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
@@ -120,7 +120,7 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
             return;
         }
 
-        if ($aggregateRoot instanceof Analytics) {
+        if ($aggregateRoot instanceof AnalyticsDrivers) {
             $this->testServiceContainer->analyticsRepositorySpy()->save($aggregateRoot);
 
             return;

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Standing\Infrastructure\Persistence\Repository;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateAnalyticsIfNotExists\SearchAnalyticsRepository;
+use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateAnalyticsIfNotExists\SearchAnalyticsDriversRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateAnalyticsIfNotExists\SearchAnalyticsRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateAnalyticsIfNotExists\SearchAnalyticsDriversRepository
  */
 final class SearchAnalyticsRepositoryTest extends CoreRepositoryContractTestCase
 {
@@ -18,7 +18,7 @@ final class SearchAnalyticsRepositoryTest extends CoreRepositoryContractTestCase
     {
         self::loadFixture('motorsport.standing.analytics.maxVerstappen2022');
 
-        $repository = new SearchAnalyticsRepository(self::connection());
+        $repository = new SearchAnalyticsDriversRepository(self::connection());
 
         $analyticsId = $repository->find(
             new UuidValueObject(self::fixtureId('motorsport.championship.season.formulaOne2022')),
@@ -31,7 +31,7 @@ final class SearchAnalyticsRepositoryTest extends CoreRepositoryContractTestCase
 
     public function testItReturnsNullWhenAnalyticsAreNotFound(): void
     {
-        $repository = new SearchAnalyticsRepository(self::connection());
+        $repository = new SearchAnalyticsDriversRepository(self::connection());
 
         self::assertNull(
             $repository->find(

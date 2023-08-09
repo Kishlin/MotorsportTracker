@@ -6,7 +6,7 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Standing\Domain\
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\DomainEvent\AnalyticsCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsDrivers;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -15,7 +15,7 @@ use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 /**
  * @internal
  * @covers \Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO
- * @covers \Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics
+ * @covers \Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsDrivers
  */
 final class AnalyticsTest extends AggregateRootIsolatedTestCase
 {
@@ -45,7 +45,7 @@ final class AnalyticsTest extends AggregateRootIsolatedTestCase
         $wins                 = 11;
         $winsPercentage       = 50.0;
 
-        $entity = Analytics::create(
+        $entity = AnalyticsDrivers::create(
             new UuidValueObject($id),
             new UuidValueObject($season),
             new UuidValueObject($driver),

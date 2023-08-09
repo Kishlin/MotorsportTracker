@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class Analytics extends AggregateRoot
+final class AnalyticsDrivers extends AggregateRoot
 {
     private function __construct(
         private readonly UuidValueObject $id,

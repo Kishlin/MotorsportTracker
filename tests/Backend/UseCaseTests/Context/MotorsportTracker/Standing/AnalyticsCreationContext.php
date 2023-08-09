@@ -9,7 +9,7 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\CreateAnalyticsIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\CreateAnalyticsDriversIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
@@ -56,7 +56,7 @@ final class AnalyticsCreationContext extends MotorsportTrackerContext
 
             /** @var UuidValueObject $analyticsId */
             $analyticsId = self::container()->commandBus()->execute(
-                CreateAnalyticsIfNotExistsCommand::fromScalars(
+                CreateAnalyticsDriversIfNotExistsCommand::fromScalars(
                     $seasonId,
                     $driverId,
                     $countryId,

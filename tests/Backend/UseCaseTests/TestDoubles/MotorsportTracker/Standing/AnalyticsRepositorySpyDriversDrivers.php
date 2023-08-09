@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\SaveAnalyticsGateway;
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\SearchAnalyticsGateway;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\SaveAnalyticsDriversGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\SearchAnalyticsDriversGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsDrivers;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\UseCaseTests\Utils\AbstractRepositorySpy;
 use RuntimeException;
 
 /**
- * @property Analytics[] $objects
+ * @property AnalyticsDrivers[] $objects
  *
- * @method Analytics[]    all()
- * @method null|Analytics get(UuidValueObject $id)
- * @method Analytics      safeGet(UuidValueObject $id)
+ * @method AnalyticsDrivers[]    all()
+ * @method null|AnalyticsDrivers get(UuidValueObject $id)
+ * @method AnalyticsDrivers      safeGet(UuidValueObject $id)
  */
-final class AnalyticsRepositorySpy extends AbstractRepositorySpy implements SaveAnalyticsGateway, SearchAnalyticsGateway
+final class AnalyticsRepositorySpyDriversDrivers extends AbstractRepositorySpy implements SaveAnalyticsDriversGateway, SearchAnalyticsDriversGateway
 {
-    public function save(Analytics $analytics): void
+    public function save(AnalyticsDrivers $analytics): void
     {
         if (null !== $this->find($analytics->season(), $analytics->driver())) {
             throw new RuntimeException('Duplicate.');

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists;
 
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final readonly class CreateAnalyticsIfNotExistsCommand implements Command
+final readonly class CreateAnalyticsDriversIfNotExistsCommand implements Command
 {
     private function __construct(
         private string $season,

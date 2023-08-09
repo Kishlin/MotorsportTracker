@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Repository\CreateAnalyticsIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\SearchAnalyticsGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\SearchAnalyticsDriversGateway;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 use RuntimeException;
 
-final class SearchAnalyticsRepository extends CoreRepository implements SearchAnalyticsGateway
+final class SearchAnalyticsDriversRepository extends CoreRepository implements SearchAnalyticsDriversGateway
 {
     public function find(UuidValueObject $season, UuidValueObject $driver): ?UuidValueObject
     {
         $qb = $this->connection->createQueryBuilder();
 
         $qb->select('a.id')
-            ->from('analytics', 'a')
+            ->from('analytics_drivers', 'a')
             ->where($qb->expr()->eq('a.season', ':season'))
             ->where($qb->expr()->eq('a.driver', ':driver'))
             ->withParam('season', $season->value())

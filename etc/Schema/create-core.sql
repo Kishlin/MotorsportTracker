@@ -24,7 +24,7 @@ SET default_table_access_method = heap;
 -- Name: analytics; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
-CREATE TABLE public.analytics (
+CREATE TABLE public.analytics_drivers (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
     driver character varying(36) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE public.analytics (
 );
 
 
-ALTER TABLE public.analytics OWNER TO motorsporttracker;
+ALTER TABLE public.analytics_drivers OWNER TO motorsporttracker;
 
 --
 -- Name: championship; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -413,7 +413,7 @@ ALTER TABLE public.venue OWNER TO motorsporttracker;
 -- Name: analytics analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
-ALTER TABLE ONLY public.analytics
+ALTER TABLE ONLY public.analytics_drivers
     ADD CONSTRAINT analytics_pkey PRIMARY KEY (id);
 
 
@@ -581,7 +581,7 @@ ALTER TABLE ONLY public.venue
 -- Name: analytics_season_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
-CREATE UNIQUE INDEX analytics_season_driver_idx ON public.analytics USING btree (season, driver);
+CREATE UNIQUE INDEX analytics_season_driver_idx ON public.analytics_drivers USING btree (season, driver);
 
 
 --

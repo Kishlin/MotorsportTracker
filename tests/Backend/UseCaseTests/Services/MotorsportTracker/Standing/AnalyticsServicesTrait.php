@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Standing;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsIfNotExists\CreateAnalyticsIfNotExistsCommandHandler;
-use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\AnalyticsRepositorySpy;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\CreateAnalyticsDriversIfNotExistsCommandHandler;
+use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Standing\AnalyticsRepositorySpyDriversDrivers;
 
 trait AnalyticsServicesTrait
 {
-    private ?AnalyticsRepositorySpy $analyticsRepositorySpy = null;
+    private ?AnalyticsRepositorySpyDriversDrivers $analyticsRepositorySpy = null;
 
-    private ?CreateAnalyticsIfNotExistsCommandHandler $createAnalyticsIfNotExistsCommandHandler = null;
+    private ?CreateAnalyticsDriversIfNotExistsCommandHandler $createAnalyticsIfNotExistsCommandHandler = null;
 
-    public function analyticsRepositorySpy(): AnalyticsRepositorySpy
+    public function analyticsRepositorySpy(): AnalyticsRepositorySpyDriversDrivers
     {
         if (null === $this->analyticsRepositorySpy) {
-            $this->analyticsRepositorySpy = new AnalyticsRepositorySpy();
+            $this->analyticsRepositorySpy = new AnalyticsRepositorySpyDriversDrivers();
         }
 
         return $this->analyticsRepositorySpy;
     }
 
-    public function createAnalyticsIfNotExistsCommandHandler(): CreateAnalyticsIfNotExistsCommandHandler
+    public function createAnalyticsIfNotExistsCommandHandler(): CreateAnalyticsDriversIfNotExistsCommandHandler
     {
         if (null === $this->createAnalyticsIfNotExistsCommandHandler) {
-            $this->createAnalyticsIfNotExistsCommandHandler = new CreateAnalyticsIfNotExistsCommandHandler(
+            $this->createAnalyticsIfNotExistsCommandHandler = new CreateAnalyticsDriversIfNotExistsCommandHandler(
                 $this->analyticsRepositorySpy(),
                 $this->analyticsRepositorySpy(),
                 $this->eventDispatcher(),

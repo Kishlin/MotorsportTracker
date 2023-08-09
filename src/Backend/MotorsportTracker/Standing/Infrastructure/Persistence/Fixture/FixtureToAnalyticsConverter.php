@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Fixture;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\Analytics;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsDrivers;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
@@ -16,7 +16,7 @@ final class FixtureToAnalyticsConverter implements FixtureConverter
 {
     public function convert(Fixture $fixture): AggregateRoot
     {
-        return Analytics::instance(
+        return AnalyticsDrivers::instance(
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('season')),
             new UuidValueObject($fixture->getString('driver')),
