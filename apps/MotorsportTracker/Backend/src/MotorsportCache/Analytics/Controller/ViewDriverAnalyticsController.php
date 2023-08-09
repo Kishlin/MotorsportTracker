@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\MotorsportTracker\Backend\MotorsportCache\Analytics\Controller;
 
-use Kishlin\Backend\MotorsportCache\Analytics\Domain\Entity\SeasonDriverAnalytics;
+use Kishlin\Backend\MotorsportCache\Analytics\Domain\Entity\SeasonAnalytics;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,11 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '/{championship}/{year}/drivers',
+    '/{championship}/{year}/{type}',
     name: 'season_analytics_driver',
     requirements: [
         'championship' => '[\w\-]+',
         'year'         => '[\d]{4}',
+        'type'         => 'constructors|drivers|teams',
     ],
     methods: [Request::METHOD_GET],
 )]
@@ -26,9 +27,9 @@ final class ViewDriverAnalyticsController extends AbstractController
     /**
      * @throws InvalidArgumentException
      */
-    public function __invoke(CacheItemPoolInterface $cachePool, string $championship, int $year): JsonResponse
+    public function __invoke(CacheItemPoolInterface $cachePool, string $championship, int $year, string $type): JsonResponse
     {
-        $key = SeasonDriverAnalytics::computeKey($championship, $year);
+        $key = SeasonAnalytics::computeKey($type, $championship, $year);
 
         $item = $cachePool->getItem($key);
 
@@ -38,7 +39,7 @@ final class ViewDriverAnalyticsController extends AbstractController
 
         $schedule = $item->get();
 
-        assert($schedule instanceof SeasonDriverAnalytics);
+        assert($schedule instanceof SeasonAnalytics);
 
         return new JsonResponse($schedule->toArray());
     }

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\DomainEvent\AnalyticsDriversCreatedDomainEvent;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsDriversStatsDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DomainEvent\AnalyticsTeamsCreatedDomainEvent;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsTeamsStatsDTO;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class AnalyticsDrivers extends AggregateRoot
+final class AnalyticsTeams extends AggregateRoot
 {
     private function __construct(
         private readonly UuidValueObject $id,
@@ -21,13 +21,13 @@ final class AnalyticsDrivers extends AggregateRoot
         private readonly NullableUuidValueObject $country,
         private readonly PositiveIntValueObject $position,
         private readonly FloatValueObject $points,
-        private readonly FloatValueObject $avgFinishPosition,
         private readonly PositiveIntValueObject $classWins,
         private readonly PositiveIntValueObject $fastestLaps,
         private readonly PositiveIntValueObject $finalAppearances,
-        private readonly PositiveIntValueObject $hatTricks,
+        private readonly PositiveIntValueObject $finishesOneAndTwo,
         private readonly PositiveIntValueObject $podiums,
         private readonly PositiveIntValueObject $poles,
+        private readonly PositiveIntValueObject $qualifiesOneAndTwo,
         private readonly PositiveIntValueObject $racesLed,
         private readonly PositiveIntValueObject $ralliesLed,
         private readonly PositiveIntValueObject $retirements,
@@ -48,7 +48,7 @@ final class AnalyticsDrivers extends AggregateRoot
         NullableUuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
-        AnalyticsDriversStatsDTO $analytics,
+        AnalyticsTeamsStatsDTO $analytics,
     ): self {
         $analytics = new self(
             $id,
@@ -57,13 +57,13 @@ final class AnalyticsDrivers extends AggregateRoot
             $country,
             $position,
             $points,
-            $analytics->avgFinishPosition(),
             $analytics->classWins(),
             $analytics->fastestLaps(),
             $analytics->finalAppearances(),
-            $analytics->hatTricks(),
+            $analytics->finishesOneAndTwo(),
             $analytics->podiums(),
             $analytics->poles(),
+            $analytics->qualifiesOneAndTwo(),
             $analytics->racesLed(),
             $analytics->ralliesLed(),
             $analytics->retirements(),
@@ -76,7 +76,7 @@ final class AnalyticsDrivers extends AggregateRoot
             $analytics->winsPercentage(),
         );
 
-        $analytics->record(new AnalyticsDriversCreatedDomainEvent($id));
+        $analytics->record(new AnalyticsTeamsCreatedDomainEvent($id));
 
         return $analytics;
     }
@@ -91,13 +91,13 @@ final class AnalyticsDrivers extends AggregateRoot
         NullableUuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
-        FloatValueObject $avgFinishPosition,
         PositiveIntValueObject $classWins,
         PositiveIntValueObject $fastestLaps,
         PositiveIntValueObject $finalAppearances,
-        PositiveIntValueObject $hatTricks,
+        PositiveIntValueObject $finishesOneAndTwo,
         PositiveIntValueObject $podiums,
         PositiveIntValueObject $poles,
+        PositiveIntValueObject $qualifiesOneAndTwo,
         PositiveIntValueObject $racesLed,
         PositiveIntValueObject $ralliesLed,
         PositiveIntValueObject $retirements,
@@ -116,13 +116,13 @@ final class AnalyticsDrivers extends AggregateRoot
             $country,
             $position,
             $points,
-            $avgFinishPosition,
             $classWins,
             $fastestLaps,
             $finalAppearances,
-            $hatTricks,
+            $finishesOneAndTwo,
             $podiums,
             $poles,
+            $qualifiesOneAndTwo,
             $racesLed,
             $ralliesLed,
             $retirements,
@@ -135,7 +135,7 @@ final class AnalyticsDrivers extends AggregateRoot
             $winsPercentage,
         );
 
-        $analytics->record(new AnalyticsDriversCreatedDomainEvent($id));
+        $analytics->record(new AnalyticsTeamsCreatedDomainEvent($id));
 
         return $analytics;
     }
@@ -170,11 +170,6 @@ final class AnalyticsDrivers extends AggregateRoot
         return $this->points;
     }
 
-    public function avgFinishPosition(): FloatValueObject
-    {
-        return $this->avgFinishPosition;
-    }
-
     public function classWins(): PositiveIntValueObject
     {
         return $this->classWins;
@@ -190,9 +185,9 @@ final class AnalyticsDrivers extends AggregateRoot
         return $this->finalAppearances;
     }
 
-    public function hatTricks(): PositiveIntValueObject
+    public function finishesOneAndTwo(): PositiveIntValueObject
     {
-        return $this->hatTricks;
+        return $this->finishesOneAndTwo;
     }
 
     public function podiums(): PositiveIntValueObject
@@ -203,6 +198,11 @@ final class AnalyticsDrivers extends AggregateRoot
     public function poles(): PositiveIntValueObject
     {
         return $this->poles;
+    }
+
+    public function qualifiesOneAndTwo(): PositiveIntValueObject
+    {
+        return $this->qualifiesOneAndTwo;
     }
 
     public function racesLed(): PositiveIntValueObject
@@ -260,17 +260,17 @@ final class AnalyticsDrivers extends AggregateRoot
         return [
             'id'                     => $this->id->value(),
             'season'                 => $this->season->value(),
-            'driver'                 => $this->driver->value(),
+            'team'                   => $this->driver->value(),
             'country'                => $this->country->value(),
             'position'               => $this->position->value(),
             'points'                 => $this->points->value(),
-            'avg_finish_position'    => $this->avgFinishPosition()->value(),
             'class_wins'             => $this->classWins->value(),
             'fastest_laps'           => $this->fastestLaps->value(),
             'final_appearances'      => $this->finalAppearances->value(),
-            'hat_tricks'             => $this->hatTricks->value(),
+            'finishes_one_and_two'   => $this->finishesOneAndTwo()->value(),
             'podiums'                => $this->podiums->value(),
             'poles'                  => $this->poles->value(),
+            'qualifies_one_and_two'  => $this->qualifiesOneAndTwo()->value(),
             'races_led'              => $this->racesLed->value(),
             'rallies_led'            => $this->ralliesLed->value(),
             'retirements'            => $this->retirements->value(),

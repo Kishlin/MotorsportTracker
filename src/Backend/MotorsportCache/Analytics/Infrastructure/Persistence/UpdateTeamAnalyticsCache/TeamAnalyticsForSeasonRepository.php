@@ -4,14 +4,14 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Analytics\Infrastructure\Persistence\UpdateDriverAnalyticsCache;
+namespace Kishlin\Backend\MotorsportCache\Analytics\Infrastructure\Persistence\UpdateTeamAnalyticsCache;
 
 use JsonException;
-use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateDriverAnalyticsCache\DriverAnalyticsForSeasonGateway;
+use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateTeamAnalyticsCache\TeamAnalyticsForSeasonGateway;
 use Kishlin\Backend\MotorsportCache\Analytics\Domain\DTO\AnalyticsForSeasonDTO;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
-final class DriverAnalyticsForSeasonRepository extends CoreRepository implements DriverAnalyticsForSeasonGateway
+final class TeamAnalyticsForSeasonRepository extends CoreRepository implements TeamAnalyticsForSeasonGateway
 {
     private const COUNTRY_SELECT = <<<'TXT'
 case when c is not null
@@ -33,17 +33,16 @@ TXT;
         $qb
             ->select('a.id')
             ->addSelect(self::COUNTRY_SELECT, 'country')
-            ->addSelect('d.name')
-            ->addSelect('d.short_code')
+            ->addSelect('t.name')
             ->addSelect('a.position')
             ->addSelect('a.points')
-            ->addSelect('a.avg_finish_position')
             ->addSelect('a.class_wins')
             ->addSelect('a.fastest_laps')
             ->addSelect('a.final_appearances')
-            ->addSelect('a.hat_tricks')
+            ->addSelect('a.finishes_one_and_two')
             ->addSelect('a.podiums')
             ->addSelect('a.poles')
+            ->addSelect('a.qualifies_one_and_two')
             ->addSelect('a.races_led')
             ->addSelect('a.rallies_led')
             ->addSelect('a.retirements')
@@ -54,8 +53,8 @@ TXT;
             ->addSelect('a.top5s')
             ->addSelect('a.wins')
             ->addSelect('a.wins_percentage')
-            ->from('analytics_drivers', 'a')
-            ->innerJoin('driver', 'd', $qb->expr()->eq('a.driver', 'd.id'))
+            ->from('analytics_teams', 'a')
+            ->innerJoin('team', 't', $qb->expr()->eq('a.team', 't.id'))
             ->leftJoin('country', 'c', $qb->expr()->eq('a.country', 'c.id'))
             ->innerJoin('season', 's', $qb->expr()->eq('a.season', 's.id'))
             ->innerJoin('championship', 'ch', $qb->expr()->eq('s.championship', 'ch.id'))

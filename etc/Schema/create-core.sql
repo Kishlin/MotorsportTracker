@@ -21,14 +21,31 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: analytics; Type: TABLE; Schema: public; Owner: motorsporttracker
+-- Name: analytics_constructors; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.analytics_constructors (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    constructor character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL::character varying,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL,
+    wins integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.analytics_constructors OWNER TO motorsporttracker;
+
+--
+-- Name: analytics_drivers; Type: TABLE; Schema: public; Owner: motorsporttracker
 --
 
 CREATE TABLE public.analytics_drivers (
     id character varying(36) NOT NULL,
     season character varying(36) NOT NULL,
     driver character varying(36) NOT NULL,
-    country character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL::character varying,
     "position" integer DEFAULT 0 NOT NULL,
     points double precision DEFAULT 0.0 NOT NULL,
     avg_finish_position double precision DEFAULT 0.0 NOT NULL,
@@ -52,6 +69,39 @@ CREATE TABLE public.analytics_drivers (
 
 
 ALTER TABLE public.analytics_drivers OWNER TO motorsporttracker;
+
+--
+-- Name: analytics_teams; Type: TABLE; Schema: public; Owner: motorsporttracker
+--
+
+CREATE TABLE public.analytics_teams (
+    id character varying(36) NOT NULL,
+    season character varying(36) NOT NULL,
+    team character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL::character varying,
+    "position" integer DEFAULT 0 NOT NULL,
+    points double precision DEFAULT 0.0 NOT NULL,
+    class_wins integer DEFAULT 0 NOT NULL,
+    fastest_laps integer DEFAULT 0 NOT NULL,
+    final_appearances integer DEFAULT 0 NOT NULL,
+    finishes_one_and_two integer DEFAULT 0 NOT NULL,
+    podiums integer DEFAULT 0 NOT NULL,
+    poles integer DEFAULT 0 NOT NULL,
+    qualifies_one_and_two integer DEFAULT 0 NOT NULL,
+    races_led integer DEFAULT 0 NOT NULL,
+    rallies_led integer DEFAULT 0 NOT NULL,
+    retirements integer DEFAULT 0 NOT NULL,
+    semi_final_appearances integer DEFAULT 0 NOT NULL,
+    stage_wins integer DEFAULT 0 NOT NULL,
+    starts integer DEFAULT 0 NOT NULL,
+    top10s integer DEFAULT 0 NOT NULL,
+    top5s integer DEFAULT 0 NOT NULL,
+    wins integer DEFAULT 0 NOT NULL,
+    wins_percentage double precision DEFAULT 0.0 NOT NULL
+);
+
+
+ALTER TABLE public.analytics_teams OWNER TO motorsporttracker;
 
 --
 -- Name: championship; Type: TABLE; Schema: public; Owner: motorsporttracker
@@ -98,21 +148,21 @@ CREATE TABLE public.classification (
     id character varying(36) NOT NULL,
     entry character varying(36) NOT NULL,
     finish_position integer NOT NULL,
-    grid_position integer DEFAULT NULL::integer,
+    grid_position integer,
     laps integer NOT NULL,
     points double precision NOT NULL,
     lap_time double precision NOT NULL,
     classified_status character varying(255) DEFAULT NULL::character varying,
     average_lap_speed double precision NOT NULL,
-    fastest_lap_time double precision DEFAULT NULL::double precision,
+    fastest_lap_time double precision,
     gap_time_to_lead double precision NOT NULL,
     gap_time_to_next double precision NOT NULL,
     gap_laps_to_lead integer NOT NULL,
     gap_laps_to_next integer NOT NULL,
-    best_lap integer DEFAULT NULL::integer,
-    best_time double precision DEFAULT NULL::double precision,
-    best_is_fastest boolean DEFAULT NULL::boolean,
-    best_speed double precision DEFAULT NULL::double precision
+    best_lap integer,
+    best_time double precision,
+    best_is_fastest boolean,
+    best_speed double precision
 );
 
 
@@ -410,11 +460,27 @@ CREATE TABLE public.venue (
 ALTER TABLE public.venue OWNER TO motorsporttracker;
 
 --
--- Name: analytics analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+-- Name: analytics_constructors analytics_constructors_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.analytics_constructors
+    ADD CONSTRAINT analytics_constructors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analytics_drivers analytics_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
 --
 
 ALTER TABLE ONLY public.analytics_drivers
     ADD CONSTRAINT analytics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: analytics_teams analytics_teams_pkey; Type: CONSTRAINT; Schema: public; Owner: motorsporttracker
+--
+
+ALTER TABLE ONLY public.analytics_teams
+    ADD CONSTRAINT analytics_teams_pkey PRIMARY KEY (id);
 
 
 --
@@ -578,10 +644,24 @@ ALTER TABLE ONLY public.venue
 
 
 --
+-- Name: analytics_season_constructor_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX analytics_season_constructor_idx ON public.analytics_constructors USING btree (season, constructor);
+
+
+--
 -- Name: analytics_season_driver_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
 --
 
 CREATE UNIQUE INDEX analytics_season_driver_idx ON public.analytics_drivers USING btree (season, driver);
+
+
+--
+-- Name: analytics_season_team_idx; Type: INDEX; Schema: public; Owner: motorsporttracker
+--
+
+CREATE UNIQUE INDEX analytics_season_team_idx ON public.analytics_teams USING btree (season, team);
 
 
 --

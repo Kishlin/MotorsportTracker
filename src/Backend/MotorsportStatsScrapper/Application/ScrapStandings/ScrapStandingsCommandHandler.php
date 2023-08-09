@@ -16,9 +16,13 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCrea
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SeasonDTO;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsConstructorsIfNotExists\CreateAnalyticsConstructorsIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists\CreateAnalyticsDriversIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsTeamsIfNotExists\CreateAnalyticsTeamsIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Standing\Application\CreateOrUpdateStanding\CreateOrUpdateStandingCommand;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsStatsDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsConstructorsStatsDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsDriversStatsDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsTeamsStatsDTO;
 use Kishlin\Backend\MotorsportTracker\Standing\Domain\Enum\StandingType;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
@@ -106,7 +110,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         country: $countryId->value(),
                         position: $standing['position'],
                         points: $standing['points'],
-                        analyticsStatsDTO: AnalyticsStatsDTO::fromScalars(
+                        analyticsStatsDTO: AnalyticsDriversStatsDTO::fromScalars(
                             avgFinishPosition: $standing['analytics']['avgFinishPosition'],
                             classWins: $standing['analytics']['classWins'],
                             fastestLaps: $standing['analytics']['fastestLaps'],
@@ -188,6 +192,19 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         StandingType::CONSTRUCTOR,
                     ),
                 );
+
+                $this->commandBus->execute(
+                    CreateAnalyticsConstructorsIfNotExistsCommand::fromScalars(
+                        season: $season->id(),
+                        constructor: $constructorId->value(),
+                        country: $countryId,
+                        position: $standing['position'],
+                        points: $standing['points'],
+                        analyticsStatsDTO: AnalyticsConstructorsStatsDTO::fromScalars(
+                            wins: $standing['analytics']['wins'],
+                        ),
+                    ),
+                );
             }
         }
     }
@@ -232,6 +249,35 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                         $standing['position'],
                         $standing['points'],
                         StandingType::TEAM,
+                    ),
+                );
+
+                $this->commandBus->execute(
+                    CreateAnalyticsTeamsIfNotExistsCommand::fromScalars(
+                        season: $season->id(),
+                        team: $teamId->value(),
+                        country: $countryId,
+                        position: $standing['position'],
+                        points: $standing['points'],
+                        analyticsStatsDTO: AnalyticsTeamsStatsDTO::fromScalars(
+                            classWins: $standing['analytics']['classWins'],
+                            fastestLaps: $standing['analytics']['fastestLaps'],
+                            finalAppearances: $standing['analytics']['finalAppearances'],
+                            finishesOneAndTwo: $standing['analytics']['finishes1And2'],
+                            podiums: $standing['analytics']['podiums'],
+                            poles: $standing['analytics']['poles'],
+                            qualifiesOneAndTwo: $standing['analytics']['qualifies1And2'],
+                            racesLed: $standing['analytics']['racesLed'],
+                            ralliesLed: $standing['analytics']['ralliesLed'],
+                            retirements: $standing['analytics']['retirements'],
+                            semiFinalAppearances: $standing['analytics']['semiFinalAppearances'],
+                            stageWins: $standing['analytics']['stageWins'],
+                            starts: $standing['analytics']['starts'],
+                            top10s: $standing['analytics']['top10s'],
+                            top5s: $standing['analytics']['top5s'],
+                            wins: $standing['analytics']['wins'],
+                            winsPercentage: $standing['analytics']['winsPercentage'],
+                        ),
                     ),
                 );
             }

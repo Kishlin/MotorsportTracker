@@ -46,7 +46,25 @@ final readonly class StandingsTeamGatewayUsingCurl implements StandingTeamGatewa
          *         countryRepresenting: array{name: string, uuid: string, picture: string},
          *         position: int,
          *         points: float,
-         *         analytics: array{},
+         *         analytics: array{
+         *             classWins: int,
+         *             fastestLaps: int,
+         *             finalAppearances: int,
+         *             finishes1And2: int,
+         *             podiums: int,
+         *             poles: int,
+         *             qualifies1And2: int,
+         *             racesLed: int,
+         *             ralliesLed: int,
+         *             retirements: int,
+         *             semiFinalAppearances: int,
+         *             stageWins: int,
+         *             starts: int,
+         *             top10s: int,
+         *             top5s: int,
+         *             wins: int,
+         *             winsPercentage: float,
+         *         },
          *     }>
          * } $data
          */

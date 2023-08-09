@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsDriversIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Standing\Application\CreateAnalyticsConstructorsIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsDriversStatsDTO;
+use Kishlin\Backend\MotorsportTracker\Standing\Domain\DTO\AnalyticsConstructorsStatsDTO;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final readonly class CreateAnalyticsDriversIfNotExistsCommand implements Command
+final readonly class CreateAnalyticsConstructorsIfNotExistsCommand implements Command
 {
     private function __construct(
         private string $season,
-        private string $driver,
+        private string $constructor,
         private ?string $country,
         private int $position,
         private float $points,
-        private AnalyticsDriversStatsDTO $analyticsStatsDTO,
+        private AnalyticsConstructorsStatsDTO $analyticsStatsDTO,
     ) {
     }
 
@@ -28,9 +28,9 @@ final readonly class CreateAnalyticsDriversIfNotExistsCommand implements Command
         return new UuidValueObject($this->season);
     }
 
-    public function driver(): UuidValueObject
+    public function constructor(): UuidValueObject
     {
-        return new UuidValueObject($this->driver);
+        return new UuidValueObject($this->constructor);
     }
 
     public function country(): NullableUuidValueObject
@@ -48,19 +48,19 @@ final readonly class CreateAnalyticsDriversIfNotExistsCommand implements Command
         return new FloatValueObject($this->points);
     }
 
-    public function analyticsStatsDTO(): AnalyticsDriversStatsDTO
+    public function analyticsStatsDTO(): AnalyticsConstructorsStatsDTO
     {
         return $this->analyticsStatsDTO;
     }
 
     public static function fromScalars(
         string $season,
-        string $driver,
+        string $constructor,
         ?string $country,
         int $position,
         float $points,
-        AnalyticsDriversStatsDTO $analyticsStatsDTO,
+        AnalyticsConstructorsStatsDTO $analyticsStatsDTO,
     ): self {
-        return new self($season, $driver, $country, $position, $points, $analyticsStatsDTO);
+        return new self($season, $constructor, $country, $position, $points, $analyticsStatsDTO);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateDriverAnalyticsCache;
+namespace Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateConstructorAnalyticsCache;
 
 use Kishlin\Backend\MotorsportCache\Analytics\Domain\Entity\SeasonAnalytics;
 use Kishlin\Backend\MotorsportCache\Analytics\Domain\Enum\AnalyticsType;
@@ -11,28 +11,28 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Cache\CachePersister;
 use Kishlin\Backend\Tools\Helpers\StringHelper;
 
-final readonly class UpdateDriverAnalyticsCacheCommandHandler implements CommandHandler
+final readonly class UpdateConstructorAnalyticsCacheCommandHandler implements CommandHandler
 {
     public function __construct(
-        private DriverAnalyticsForSeasonGateway $gateway,
+        private ConstructorAnalyticsForSeasonGateway $gateway,
         private CachePersister $cachePersister,
     ) {
     }
 
-    public function __invoke(UpdateDriverAnalyticsCacheCommand $command): void
+    public function __invoke(UpdateConstructorAnalyticsCacheCommand $command): void
     {
         $analytics = $this->gateway->find($command->championship(), $command->year())->analytics();
 
-        $seasonDriverAnalytics = SeasonAnalytics::create(
+        $seasonConstructorAnalytics = SeasonAnalytics::create(
             AnalyticsView::with($analytics),
         );
 
         $keyData = [
-            'type'         => AnalyticsType::DRIVERS->toString(),
+            'type'         => AnalyticsType::CONSTRUCTORS->toString(),
             'championship' => StringHelper::slugify($command->championship()),
             'year'         => $command->year(),
         ];
 
-        $this->cachePersister->save($seasonDriverAnalytics, $keyData);
+        $this->cachePersister->save($seasonConstructorAnalytics, $keyData);
     }
 }
