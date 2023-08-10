@@ -6,6 +6,8 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastruc
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Classification;
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\CreateClassificationIfNotExists\SaveClassificationRepository;
+use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
@@ -36,10 +38,10 @@ final class SaveClassificationRepositoryTest extends CoreRepositoryContractTestC
             new NullableStringValueObject('CLA'),
             new PositiveFloatValueObject(194.319),
             new NullableFloatValueObject(95068.0),
-            new PositiveFloatValueObject(73753.0),
-            new PositiveFloatValueObject(1106.0),
-            new PositiveIntValueObject(0),
-            new PositiveIntValueObject(0),
+            new FloatValueObject(73753.0),
+            new FloatValueObject(1106.0),
+            new IntValueObject(0),
+            new IntValueObject(0),
             new NullableIntValueObject(42),
             new NullableFloatValueObject(95068.0),
             new NullableBoolValueObject(false),

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
@@ -81,24 +83,24 @@ final readonly class CreateClassificationIfNotExistsCommand implements Command
         return new NullableFloatValueObject($this->fastestLapTime);
     }
 
-    public function gapTimeToLead(): PositiveFloatValueObject
+    public function gapTimeToLead(): FloatValueObject
     {
-        return new PositiveFloatValueObject($this->gapTimeToLead);
+        return new FloatValueObject($this->gapTimeToLead);
     }
 
-    public function gapTimeToNext(): PositiveFloatValueObject
+    public function gapTimeToNext(): FloatValueObject
     {
-        return new PositiveFloatValueObject($this->gapTimeToNext);
+        return new FloatValueObject($this->gapTimeToNext);
     }
 
-    public function gapLapsToLead(): PositiveIntValueObject
+    public function gapLapsToLead(): IntValueObject
     {
-        return new PositiveIntValueObject($this->gapLapsToLead);
+        return new IntValueObject($this->gapLapsToLead);
     }
 
-    public function gapLapsToNext(): PositiveIntValueObject
+    public function gapLapsToNext(): IntValueObject
     {
-        return new PositiveIntValueObject($this->gapLapsToNext);
+        return new IntValueObject($this->gapLapsToNext);
     }
 
     public function bestLap(): NullableIntValueObject

@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\ClassificationCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
@@ -27,10 +29,10 @@ final class Classification extends AggregateRoot
         private readonly NullableStringValueObject $classifiedStatus,
         private readonly PositiveFloatValueObject $averageLapSpeed,
         private readonly NullableFloatValueObject $fastestLapTime,
-        private readonly PositiveFloatValueObject $gapTimeToLead,
-        private readonly PositiveFloatValueObject $gapTimeToNext,
-        private readonly PositiveIntValueObject $gapLapsToLead,
-        private readonly PositiveIntValueObject $gapLapsToNext,
+        private readonly FloatValueObject $gapTimeToLead,
+        private readonly FloatValueObject $gapTimeToNext,
+        private readonly IntValueObject $gapLapsToLead,
+        private readonly IntValueObject $gapLapsToNext,
         private readonly NullableIntValueObject $bestLap,
         private readonly NullableFloatValueObject $bestTime,
         private readonly NullableBoolValueObject $bestIsFastest,
@@ -49,10 +51,10 @@ final class Classification extends AggregateRoot
         NullableStringValueObject $classifiedStatus,
         PositiveFloatValueObject $averageLapSpeed,
         NullableFloatValueObject $fastestLapTime,
-        PositiveFloatValueObject $gapTimeToLead,
-        PositiveFloatValueObject $gapTimeToNext,
-        PositiveIntValueObject $gapLapsToLead,
-        PositiveIntValueObject $gapLapsToNext,
+        FloatValueObject $gapTimeToLead,
+        FloatValueObject $gapTimeToNext,
+        IntValueObject $gapLapsToLead,
+        IntValueObject $gapLapsToNext,
         NullableIntValueObject $bestLap,
         NullableFloatValueObject $bestTime,
         NullableBoolValueObject $bestIsFastest,
@@ -98,10 +100,10 @@ final class Classification extends AggregateRoot
         NullableStringValueObject $classifiedStatus,
         PositiveFloatValueObject $averageLapSpeed,
         NullableFloatValueObject $fastestLapTime,
-        PositiveFloatValueObject $gapTimeToLead,
-        PositiveFloatValueObject $gapTimeToNext,
-        PositiveIntValueObject $gapLapsToLead,
-        PositiveIntValueObject $gapLapsToNext,
+        FloatValueObject $gapTimeToLead,
+        FloatValueObject $gapTimeToNext,
+        IntValueObject $gapLapsToLead,
+        IntValueObject $gapLapsToNext,
         NullableIntValueObject $bestLap,
         NullableFloatValueObject $bestTime,
         NullableBoolValueObject $bestIsFastest,
@@ -179,22 +181,22 @@ final class Classification extends AggregateRoot
         return $this->fastestLapTime;
     }
 
-    public function gapTimeToLead(): PositiveFloatValueObject
+    public function gapTimeToLead(): FloatValueObject
     {
         return $this->gapTimeToLead;
     }
 
-    public function gapTimeToNext(): PositiveFloatValueObject
+    public function gapTimeToNext(): FloatValueObject
     {
         return $this->gapTimeToNext;
     }
 
-    public function gapLapsToLead(): PositiveIntValueObject
+    public function gapLapsToLead(): IntValueObject
     {
         return $this->gapLapsToLead;
     }
 
-    public function gapLapsToNext(): PositiveIntValueObject
+    public function gapLapsToNext(): IntValueObject
     {
         return $this->gapLapsToNext;
     }

@@ -6,6 +6,8 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Entry\Domain\Ent
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\ClassificationCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Classification;
+use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
@@ -52,10 +54,10 @@ final class ClassificationTest extends AggregateRootIsolatedTestCase
             new NullableStringValueObject($classifiedStatus),
             new PositiveFloatValueObject($averageLapSpeed),
             new NullableFloatValueObject($fastestLapTime),
-            new PositiveFloatValueObject($timeToLead),
-            new PositiveFloatValueObject($timeToNext),
-            new PositiveIntValueObject($lapsToLead),
-            new PositiveIntValueObject($lapsToNext),
+            new FloatValueObject($timeToLead),
+            new FloatValueObject($timeToNext),
+            new IntValueObject($lapsToLead),
+            new IntValueObject($lapsToNext),
             new NullableIntValueObject($bestLap),
             new NullableFloatValueObject($bestTime),
             new NullableBoolValueObject(false),

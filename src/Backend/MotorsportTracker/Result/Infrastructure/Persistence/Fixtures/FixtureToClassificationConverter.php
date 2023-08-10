@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fi
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Classification;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\FloatValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\IntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableBoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableFloatValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
@@ -31,10 +33,10 @@ final class FixtureToClassificationConverter implements FixtureConverter
             new NullableStringValueObject($fixture->getString('classifiedStatus')),
             new PositiveFloatValueObject($fixture->getFloat('averageLapSpeed')),
             new NullableFloatValueObject($fixture->getFloat('fastestLapTime')),
-            new PositiveFloatValueObject($fixture->getFloat('gapTimeToLead')),
-            new PositiveFloatValueObject($fixture->getFloat('gapTimeToNext')),
-            new PositiveIntValueObject($fixture->getInt('gapLapsToLead')),
-            new PositiveIntValueObject($fixture->getInt('gapLapsToNext')),
+            new FloatValueObject($fixture->getFloat('gapTimeToLead')),
+            new FloatValueObject($fixture->getFloat('gapTimeToNext')),
+            new IntValueObject($fixture->getInt('gapLapsToLead')),
+            new IntValueObject($fixture->getInt('gapLapsToNext')),
             new NullableIntValueObject($fixture->getInt('bestLap')),
             new NullableFloatValueObject($fixture->getFloat('bestTime')),
             new NullableBoolValueObject($fixture->getBool('bestIsFastest')),
