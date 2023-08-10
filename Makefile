@@ -109,7 +109,8 @@ db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test:
 	@echo "Creating $(DB) $(ENV) database"
 	@docker-compose exec postgres /bin/bash -c 'dropdb -U $$POSTGRES_USER --if-exists $(DB)-$(ENV) &>/dev/null'
 	@docker-compose exec postgres /bin/bash -c 'createdb -U $$POSTGRES_USER $(DB)-$(ENV)'
-	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d $(DB)-$(ENV) -f /app/etc/Schema/create-$(DB).sql &>/dev/null'
+	@docker-compose exec backoffice /bin/bash -c 'php -d xdebug.mode=off bin/console kishlin:persistence:migration:$(DB):prepare --env=$(ENV) &>/dev/null'
+	@docker-compose exec backoffice /bin/bash -c 'php -d xdebug.mode=off bin/console kishlin:persistence:migration:$(DB):apply --env=$(ENV) --up &>/dev/null'
 	@echo "Done reloading $(DB) $(ENV) database"
 
 db.core.connect db.cache.connect:
