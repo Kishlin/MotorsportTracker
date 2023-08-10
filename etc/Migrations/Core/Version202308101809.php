@@ -46,7 +46,7 @@ CREATE TABLE public.retirement (
     reason character varying(255) NOT NULL,
     type character varying(255) NOT NULL,
     dns boolean NOT NULL,
-    lap integer NOT NULL
+    lap integer DEFAULT NULL::integer
 );
 
 ALTER TABLE ONLY public.retirement

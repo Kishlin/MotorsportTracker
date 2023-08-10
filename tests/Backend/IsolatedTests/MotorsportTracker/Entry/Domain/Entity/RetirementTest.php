@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Entry\Domain\Ent
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\RetirementCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Retirement;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
@@ -32,7 +32,7 @@ final class RetirementTest extends AggregateRootIsolatedTestCase
             new StringValueObject($reason),
             new StringValueObject($type),
             new BoolValueObject(true),
-            new PositiveIntValueObject($lap),
+            new NullableIntValueObject($lap),
         );
 
         self::assertItRecordedDomainEvents($entity, new RetirementCreatedDomainEvent(new UuidValueObject($id)));

@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Entity;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\RetirementCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -19,7 +19,7 @@ final class Retirement extends AggregateRoot
         private readonly StringValueObject $reason,
         private readonly StringValueObject $type,
         private readonly BoolValueObject $dns,
-        private readonly PositiveIntValueObject $lap,
+        private readonly NullableIntValueObject $lap,
     ) {
     }
 
@@ -29,7 +29,7 @@ final class Retirement extends AggregateRoot
         StringValueObject $reason,
         StringValueObject $type,
         BoolValueObject $dns,
-        PositiveIntValueObject $lap,
+        NullableIntValueObject $lap,
     ): self {
         $retirement = new self($id, $entry, $reason, $type, $dns, $lap);
 
@@ -47,7 +47,7 @@ final class Retirement extends AggregateRoot
         StringValueObject $reason,
         StringValueObject $type,
         BoolValueObject $dns,
-        PositiveIntValueObject $lap,
+        NullableIntValueObject $lap,
     ): self {
         return new self($id, $entry, $reason, $type, $dns, $lap);
     }
@@ -77,7 +77,7 @@ final class Retirement extends AggregateRoot
         return $this->dns;
     }
 
-    public function lap(): PositiveIntValueObject
+    public function lap(): NullableIntValueObject
     {
         return $this->lap;
     }

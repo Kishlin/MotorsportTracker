@@ -11,13 +11,13 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateRetirementIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateRetirementIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchRetirementGateway $searchGateway,
-        private readonly SaveRetirementGateway $saveGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchRetirementGateway $searchGateway,
+        private SaveRetirementGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 

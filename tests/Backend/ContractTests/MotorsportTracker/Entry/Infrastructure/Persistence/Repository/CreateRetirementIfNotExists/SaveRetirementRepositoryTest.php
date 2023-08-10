@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Entry\Infrastruc
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Retirement;
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Repository\CreateRetirementIfNotExists\SaveRetirementRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
@@ -28,7 +28,7 @@ final class SaveRetirementRepositoryTest extends CoreRepositoryContractTestCase
             new StringValueObject('reason'),
             new StringValueObject('type'),
             new BoolValueObject(true),
-            new PositiveIntValueObject(35),
+            new NullableIntValueObject(35),
         );
 
         $repository = new SaveRetirementRepository(self::connection());
