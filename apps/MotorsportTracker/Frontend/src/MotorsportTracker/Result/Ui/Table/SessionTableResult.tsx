@@ -28,8 +28,8 @@ const SessionTableResult: React.FunctionComponent<SessionTableRowProps> = ({ res
     <StyledTableRow>
         <ResultPositionCell classifiedStatus={result.classified_status} position={result.finish_position} />
         <StyledTableCell>{result.car_number.toString()}</StyledTableCell>
-        <ResultEntryCell countryCode={result.driver.country.code} name={result.driver.name} />
-        <ResultEntryCell countryCode={result.team.country.code} name={result.team.name} />
+        <ResultEntryCell country={result.driver.country} name={result.driver.name} />
+        <ResultEntryCell country={result.team.country} name={result.team.name} />
         <StyledTableCell>{result.laps.toString()}</StyledTableCell>
         <ResultTimeCell time={result.race_time} />
         {withComparison && (

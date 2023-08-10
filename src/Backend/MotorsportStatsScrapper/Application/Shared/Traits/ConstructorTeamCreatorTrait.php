@@ -9,14 +9,10 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 trait ConstructorTeamCreatorTrait
 {
-    private function createConstructorTeamIfNotExists(UuidValueObject $constructor, UuidValueObject $team): UuidValueObject
+    private function createConstructorTeamIfNotExists(UuidValueObject $constructor, UuidValueObject $team): void
     {
-        $constructorId = $this->commandBus->execute(
+        $this->commandBus->execute(
             CreateConstructorTeamIfNotExistsCommand::fromScalars($constructor->value(), $team->value()),
         );
-
-        assert($constructorId instanceof UuidValueObject);
-
-        return $constructorId;
     }
 }

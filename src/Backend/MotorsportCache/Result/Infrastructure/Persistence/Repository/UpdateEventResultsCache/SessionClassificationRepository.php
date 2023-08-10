@@ -31,11 +31,16 @@ json_build_object(
     'id', t.id,
     'name', t.name,
     'color', t.color,
-    'country', case when c_t is not null
-        then json_build_object(
+    'country', case
+        when c_t is not null then json_build_object(
             'id', c_t.id,
             'code', c_t.code,
             'name', c_t.name
+        )
+        when c_c is not null then json_build_object(
+            'id', c_c.id,
+            'code', c_c.code,
+            'name', c_c.name
         )
     end
 )
@@ -61,10 +66,35 @@ TXT;
             ->innerJoin('event', 'ev', $qb->expr()->eq('es.event', 'ev.id'))
             ->innerJoin('season', 's', $qb->expr()->eq('ev.season', 's.id'))
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
-            ->innerJoin('team', 't', $qb->expr()->eq('t.id', 'e.team'))
             ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'e.country'))
-            // TODO: Caveat, the team's country will always be the driver country
-            ->leftJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 'e.country'))
+            ->innerJoin(
+                'team',
+                't',
+                $qb->expr()->andX(
+                    $qb->expr()->eq('t.id', 'e.team'),
+                    $qb->expr()->eq('t.season', 's.id'),
+                ),
+            )
+            ->leftJoin(
+                'standing_team',
+                'st',
+                $qb->expr()->andX(
+                    $qb->expr()->eq('st.standee', 't.id'),
+                    $qb->expr()->eq('st.season', 's.id'),
+                ),
+            )
+            ->leftJoin('country', 'c_t', $qb->expr()->eq('c_t.id', 'st.country'))
+            ->leftJoin('constructor_team', 'ct', $qb->expr()->eq('t.id', 'ct.team'))
+            ->leftJoin('constructor', 'co', $qb->expr()->eq('co.id', 'ct.constructor'))
+            ->leftJoin(
+                'standing_constructor',
+                'sc',
+                $qb->expr()->andX(
+                    $qb->expr()->eq('sc.standee', 'co.id'),
+                    $qb->expr()->eq('sc.season', 's.id'),
+                ),
+            )
+            ->leftJoin('country', 'c_c', $qb->expr()->eq('c_c.id', 'sc.country'))
             ->where($qb->expr()->eq('e.session', ':session'))
             ->orderBy('c.classified_status')
             ->orderBy('c.finish_position')

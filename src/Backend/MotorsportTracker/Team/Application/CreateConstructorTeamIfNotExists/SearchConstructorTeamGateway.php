@@ -8,5 +8,5 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface SearchConstructorTeamGateway
 {
-    public function find(UuidValueObject $constructor, UuidValueObject $team): ?UuidValueObject;
+    public function has(UuidValueObject $constructor, UuidValueObject $team): bool;
 }

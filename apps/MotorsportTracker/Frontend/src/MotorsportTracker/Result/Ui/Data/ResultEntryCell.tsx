@@ -2,24 +2,35 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
+import { Country } from '../../../../Shared/Types/Index';
 
 declare type ResultEntryProps = {
-    countryCode: string,
+    country: null|Country,
     name: string,
 };
 
-const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ countryCode, name }) => (
-    <StyledTableCell>
-        <Typography noWrap>
-            <img
-                src={`/assets/flags/1x1/${countryCode}.svg`}
-                style={{ verticalAlign: 'text-bottom' }}
-                alt={countryCode}
-                height={20}
-            />
-            <span style={{ marginLeft: '5px' }}>{name}</span>
-        </Typography>
-    </StyledTableCell>
-);
+const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ country, name }) => {
+    const content = null !== country
+        ? (
+            <>
+                <img
+                    src={`/assets/flags/1x1/${country.code}.svg`}
+                    style={{ verticalAlign: 'text-bottom' }}
+                    alt={country.code}
+                    height={20}
+                />
+                <span style={{ marginLeft: '10px' }}>{name}</span>
+            </>
+        )
+        : (<span style={{ marginLeft: '30px' }}>{name}</span>);
+
+    return (
+        <StyledTableCell>
+            <Typography noWrap>
+                {content}
+            </Typography>
+        </StyledTableCell>
+    );
+};
 
 export default ResultEntryCell;

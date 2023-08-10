@@ -40,15 +40,12 @@ ALTER TABLE public.team
     ADD CONSTRAINT fk_team_season FOREIGN KEY (season) REFERENCES season (id);
 
 CREATE TABLE public.constructor_team (
-    id character varying(36) NOT NULL,
     constructor character varying(36) NOT NULL,
     team character varying(36) NOT NULL
 );
 
 ALTER TABLE ONLY public.constructor_team
-    ADD CONSTRAINT pkey_constructor_teams PRIMARY KEY (id);
-
-CREATE UNIQUE INDEX idx_constructor_constructor_team ON public.constructor_team USING btree (constructor, team);
+    ADD CONSTRAINT pkey_constructor_teams PRIMARY KEY (constructor, team);
 
 ALTER TABLE public.constructor_team
     ADD CONSTRAINT fk_constructor_team_constructor FOREIGN KEY (constructor) REFERENCES constructor (id);

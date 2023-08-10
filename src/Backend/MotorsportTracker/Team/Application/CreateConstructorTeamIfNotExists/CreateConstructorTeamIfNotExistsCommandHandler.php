@@ -7,8 +7,6 @@ namespace Kishlin\Backend\MotorsportTracker\Team\Application\CreateConstructorTe
 use Kishlin\Backend\MotorsportTracker\Team\Domain\Entity\ConstructorTeam;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
-use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
 final readonly class CreateConstructorTeamIfNotExistsCommandHandler implements CommandHandler
@@ -17,23 +15,18 @@ final readonly class CreateConstructorTeamIfNotExistsCommandHandler implements C
         private SearchConstructorTeamGateway $searchGateway,
         private SaveConstructorTeamGateway $saveGateway,
         private EventDispatcher $eventDispatcher,
-        private UuidGenerator $uuidGenerator,
     ) {
     }
 
-    public function __invoke(CreateConstructorTeamIfNotExistsCommand $command): UuidValueObject
+    public function __invoke(CreateConstructorTeamIfNotExistsCommand $command): void
     {
-        $existing = $this->searchGateway->find($command->constructor(), $command->team());
+        $existing = $this->searchGateway->has($command->constructor(), $command->team());
 
-        if (null !== $existing) {
-            return $existing;
+        if (true === $existing) {
+            return;
         }
 
-        $constructorTeam = ConstructorTeam::create(
-            new UuidValueObject($this->uuidGenerator->uuid4()),
-            $command->constructor(),
-            $command->team(),
-        );
+        $constructorTeam = ConstructorTeam::create($command->constructor(), $command->team());
 
         try {
             $this->saveGateway->save($constructorTeam);
@@ -42,7 +35,5 @@ final readonly class CreateConstructorTeamIfNotExistsCommandHandler implements C
         }
 
         $this->eventDispatcher->dispatch(...$constructorTeam->pullDomainEvents());
-
-        return $constructorTeam->id();
     }
 }
