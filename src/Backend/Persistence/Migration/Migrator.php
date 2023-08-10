@@ -48,7 +48,7 @@ final readonly class Migrator
             return;
         }
 
-        foreach ($content as $file) {
+        foreach (array_reverse($content) as $file) {
             if (str_ends_with($file, '.php')) {
                 $this->downOne(substr($file, 0, strlen($file) - 4));
             }
