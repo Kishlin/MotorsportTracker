@@ -74,7 +74,7 @@ clean:
 	fi;
 	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
 
-start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test db.core.fill db.cache.fill
+start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test
 	@echo "All services should be running."
 	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
 	@echo "    Backend: http://localhost:8030/monitoring/check-health"
