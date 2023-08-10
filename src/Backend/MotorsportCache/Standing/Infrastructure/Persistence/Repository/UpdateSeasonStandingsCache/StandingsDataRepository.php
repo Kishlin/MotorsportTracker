@@ -174,6 +174,7 @@ TXT;
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
             ->orderBy('sd.points', OrderBy::DESC)
+            ->addOrderBy('sd.position')
             ->withParam('championship', $championship)
             ->withParam('year', $year)
         ;
