@@ -27,6 +27,7 @@ services:
       - '../../../../src/Backend/**/Application/*/*Exception.php'
       - '../../../../src/Backend/**/Infrastructure/Persistence/Fixtures'
       - '../../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
+      - '../../../../src/Backend/Persistence/{Infrastructure,Migration}'
 
 
   ##> Cache
