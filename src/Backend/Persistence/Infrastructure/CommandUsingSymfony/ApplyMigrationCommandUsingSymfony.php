@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\Persistence\Command;
+namespace Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony;
 
 use Kishlin\Backend\Persistence\Migration\Migrator;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
