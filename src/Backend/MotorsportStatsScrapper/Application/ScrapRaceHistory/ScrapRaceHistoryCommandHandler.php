@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory;
 
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SessionDTO;
-use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionGateway;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Event\NoSessionsFoundEvent;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionsListGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRaceLapIfNotExists\CreateRaceLapIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\EntryNotFoundException;
 use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberQuery;
 use Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessionAndNumber\FindEntryForSessionAndNumberResponse;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -23,30 +25,60 @@ final class ScrapRaceHistoryCommandHandler implements CommandHandler
 
     public function __construct(
         private readonly RaceHistoryGateway $raceHistoryGateway,
-        private readonly SessionGateway $sessionGateway,
+        private readonly SessionsListGateway $sessionsGateway,
+        private readonly EventDispatcher $eventDispatcher,
         private readonly CommandBus $commandBus,
         private readonly QueryBus $queryBus,
-        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
     public function __invoke(ScrapRaceHistoryCommand $command): void
     {
-        $session = $this->sessionGateway->find(
-            $command->championship(),
-            $command->year(),
-            $command->event(),
-            $command->sessionType(),
-        );
+        $sessions = $this->sessionsGateway->allSessions($command->championship(), $command->year(), $command->event());
 
-        if (null === $session) {
+        if (empty($sessions->list())) {
+            $this->eventDispatcher->dispatch(NoSessionsFoundEvent::forScrapRaceHistoryCommand($command));
+
             return;
         }
 
+        $eventScrapped = [];
+
+        foreach ($sessions->list() as $session) {
+            $this->scrapRaceLapsForSession($session);
+
+            if (false === array_key_exists($session->event(), $eventScrapped)) {
+                $eventScrapped[$session->event()] = true;
+            }
+        }
+
+        foreach ($eventScrapped as $event => $boolean) {
+            $this->eventDispatcher->dispatch(RaceLapScrappingSuccessEvent::forEvent($event));
+        }
+    }
+
+    private function scrapRaceLapsForSession(SessionDTO $session): void
+    {
         $raceHistory = $this->raceHistoryGateway->fetch($session->ref())->data();
 
+        if (empty($raceHistory['laps'])) {
+            return;
+        }
+
+        $skippedEntries = [];
+
         foreach ($raceHistory['entries'] as $historyEntry) {
-            $entryId = $this->findEntry($session, $historyEntry['carNumber']);
+            try {
+                $entryId = $this->findEntry($session, $historyEntry['carNumber']);
+            } catch (EntryNotFoundException) {
+                $skippedEntries[$historyEntry['uuid']] = $historyEntry['carNumber'];
+
+                $this->eventDispatcher->dispatch(
+                    EntryNotFoundEvent::fromScalars($session->id(), $historyEntry['carNumber']),
+                );
+
+                continue;
+            }
 
             $this->storeEntryForUuid($historyEntry['uuid'], $entryId);
         }
@@ -54,10 +86,20 @@ final class ScrapRaceHistoryCommandHandler implements CommandHandler
         foreach ($raceHistory['laps'] as $lap) {
             $lapKey = $lap['lap'];
             foreach ($lap['carPosition'] as $carPosition) {
+                $entry = $carPosition['entryUuid'];
+
+                if (array_key_exists($entry, $skippedEntries)) {
+                    $this->eventDispatcher->dispatch(
+                        RaceLapForSkippedEntryEvent::fromScalars($session->id(), $skippedEntries[$entry], $carPosition),
+                    );
+
+                    continue;
+                }
+
                 try {
                     $this->commandBus->execute(
                         CreateRaceLapIfNotExistsCommand::fromScalars(
-                            $this->retrieveEntryForUuid($carPosition['entryUuid']),
+                            $this->retrieveEntryForUuid($entry),
                             $lapKey,
                             $carPosition['position'],
                             $carPosition['pit'],
@@ -70,7 +112,7 @@ final class ScrapRaceHistoryCommandHandler implements CommandHandler
                         ),
                     );
                 } catch (Throwable $e) {
-                    $this->eventDispatcher->dispatch(RaceLapScrappingFailureEvent::forCarPosition($carPosition));
+                    $this->eventDispatcher->dispatch(RaceLapScrappingFailureEvent::forCarPosition($carPosition, $e));
                 }
             }
         }

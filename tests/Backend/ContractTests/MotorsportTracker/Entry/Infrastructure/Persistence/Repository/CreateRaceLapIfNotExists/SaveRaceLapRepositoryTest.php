@@ -10,7 +10,6 @@ use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Reposito
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
@@ -28,7 +27,7 @@ final class SaveRaceLapRepositoryTest extends CoreRepositoryContractTestCase
             new UuidValueObject('1230a0c2-8392-4e57-967f-9859b43601bd'),
             new UuidValueObject('45b56055-ab7b-4271-b6c3-07eef8753f76'),
             new PositiveIntValueObject(1),
-            new StrictlyPositiveIntValueObject(9),
+            new PositiveIntValueObject(9),
             new BoolValueObject(false),
             new PositiveIntValueObject(99745),
             new NullableIntValueObject(10957),

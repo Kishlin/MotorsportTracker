@@ -8,10 +8,10 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory\RaceLap
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-final class RaceLapScrappingFailureLogger implements EventSubscriber
+final readonly class RaceLapScrappingFailureLogger implements EventSubscriber
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -20,5 +20,6 @@ final class RaceLapScrappingFailureLogger implements EventSubscriber
         $carPosition = $event->carPosition();
 
         $this->logger->error("Failed to scrap car position for entry uuid {$carPosition['entryUuid']}.", $carPosition);
+        $this->logger->error($event->e()->getMessage());
     }
 }

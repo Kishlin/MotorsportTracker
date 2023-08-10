@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory;
 
-use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
-use Throwable;
+use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
-final readonly class RaceLapScrappingFailureEvent implements Event
+final readonly class RaceLapForSkippedEntryEvent implements ApplicationEvent
 {
     /**
      * @param array{
@@ -29,9 +28,20 @@ final readonly class RaceLapScrappingFailureEvent implements Event
      * } $carPosition
      */
     private function __construct(
+        private string $session,
+        private string $carNumber,
         private array $carPosition,
-        private Throwable $e,
     ) {
+    }
+
+    public function session(): string
+    {
+        return $this->session;
+    }
+
+    public function carNumber(): string
+    {
+        return $this->carNumber;
     }
 
     /**
@@ -51,16 +61,11 @@ final readonly class RaceLapScrappingFailureEvent implements Event
      *         wear: string,
      *         laps: int,
      *     }[],
-     * } $event
+     * }
      */
     public function carPosition(): array
     {
         return $this->carPosition;
-    }
-
-    public function e(): Throwable
-    {
-        return $this->e;
     }
 
     /**
@@ -82,8 +87,8 @@ final readonly class RaceLapScrappingFailureEvent implements Event
      *     }[],
      * } $carPosition
      */
-    public static function forCarPosition(array $carPosition, Throwable $e): self
+    public static function fromScalars(string $session, string $carNumber, array $carPosition): self
     {
-        return new self($carPosition, $e);
+        return new self($session, $carNumber, $carPosition);
     }
 }

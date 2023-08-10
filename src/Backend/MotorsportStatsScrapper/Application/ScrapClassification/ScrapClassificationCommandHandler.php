@@ -8,6 +8,7 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCre
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\DriverCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\TeamCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SessionDTO;
+use Kishlin\Backend\MotorsportStatsScrapper\Domain\Event\NoSessionsFoundEvent;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionsListGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
@@ -41,7 +42,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
         $sessions = $this->sessionsGateway->allSessions($command->championship(), $command->year(), $command->event());
 
         if (empty($sessions->list())) {
-            $this->eventDispatcher->dispatch(NoSessionsFoundEvent::forCommand($command));
+            $this->eventDispatcher->dispatch(NoSessionsFoundEvent::forScrapClassificationCommand($command));
 
             return;
         }

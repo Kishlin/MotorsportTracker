@@ -13,7 +13,6 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final class RaceLap extends AggregateRoot
@@ -22,7 +21,7 @@ final class RaceLap extends AggregateRoot
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $entry,
         private readonly PositiveIntValueObject $lap,
-        private readonly StrictlyPositiveIntValueObject $position,
+        private readonly PositiveIntValueObject $position,
         private readonly BoolValueObject $pit,
         private readonly PositiveIntValueObject $time,
         private readonly NullableIntValueObject $timeToLead,
@@ -37,7 +36,7 @@ final class RaceLap extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $entry,
         PositiveIntValueObject $lap,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         BoolValueObject $pit,
         PositiveIntValueObject $time,
         NullableIntValueObject $timeToLead,
@@ -72,7 +71,7 @@ final class RaceLap extends AggregateRoot
         UuidValueObject $id,
         UuidValueObject $entry,
         PositiveIntValueObject $lap,
-        StrictlyPositiveIntValueObject $position,
+        PositiveIntValueObject $position,
         BoolValueObject $pit,
         PositiveIntValueObject $time,
         NullableIntValueObject $timeToLead,
@@ -111,7 +110,7 @@ final class RaceLap extends AggregateRoot
         return $this->lap;
     }
 
-    public function position(): StrictlyPositiveIntValueObject
+    public function position(): PositiveIntValueObject
     {
         return $this->position;
     }

@@ -11,13 +11,13 @@ use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateRaceLapIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateRaceLapIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchRaceLapGateway $searchGateway,
-        private readonly SaveRaceLapGateway $saveGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchRaceLapGateway $searchGateway,
+        private SaveRaceLapGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 

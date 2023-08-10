@@ -6,13 +6,12 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 
-final class ScrapRaceHistoryCommand implements Command
+final readonly class ScrapRaceHistoryCommand implements Command
 {
     private function __construct(
-        private readonly string $championship,
-        private readonly int $year,
-        private readonly string $event,
-        private readonly string $sessionType,
+        private string $championship,
+        private int $year,
+        private ?string $event,
     ) {
     }
 
@@ -26,18 +25,13 @@ final class ScrapRaceHistoryCommand implements Command
         return $this->year;
     }
 
-    public function event(): string
+    public function event(): ?string
     {
         return $this->event;
     }
 
-    public function sessionType(): string
+    public static function fromScalars(string $championship, int $year, ?string $event = null): self
     {
-        return $this->sessionType;
-    }
-
-    public static function fromScalars(string $championship, int $year, string $event, string $sessionType): self
-    {
-        return new self($championship, $year, $event, $sessionType);
+        return new self($championship, $year, $event);
     }
 }

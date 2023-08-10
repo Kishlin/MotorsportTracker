@@ -6,10 +6,10 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Application\FindEntryForSessi
 
 use Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler;
 
-final class FindEntryForSessionAndNumberQueryHandler implements QueryHandler
+final readonly class FindEntryForSessionAndNumberQueryHandler implements QueryHandler
 {
     public function __construct(
-        private readonly FindEntryForSessionAndNumberGateway $gateway,
+        private FindEntryForSessionAndNumberGateway $gateway,
     ) {
     }
 
@@ -18,7 +18,9 @@ final class FindEntryForSessionAndNumberQueryHandler implements QueryHandler
         $id = $this->gateway->findForSessionAndNumber($query->session(), $query->number());
 
         if (null === $id) {
-            throw new EntryNotFoundException();
+            throw new EntryNotFoundException(
+                "Failed for session {$query->session()->value()} car #{$query->number()->value()}",
+            );
         }
 
         return FindEntryForSessionAndNumberResponse::forId($id);

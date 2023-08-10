@@ -10,7 +10,6 @@ use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
@@ -23,7 +22,7 @@ final class FixtureToRaceLapConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('entry')),
             new PositiveIntValueObject($fixture->getInt('lap')),
-            new StrictlyPositiveIntValueObject($fixture->getInt('position')),
+            new PositiveIntValueObject($fixture->getInt('position')),
             new BoolValueObject($fixture->getBool('pit')),
             new PositiveIntValueObject($fixture->getInt('time')),
             new NullableIntValueObject($fixture->getInt('timeToLead')),

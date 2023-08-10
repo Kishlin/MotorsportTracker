@@ -32,6 +32,10 @@ final class RaceHistoryGatewayUsingCurl implements RaceHistoryGateway
 
         $response = $this->client->fetch($url, $this->headers());
 
+        if (empty($response)) {
+            return RaceHistoryResponse::withRaceHistory(['entries' => [], 'laps' => []]);
+        }
+
         /**
          * @var array{
          *     entries: array{

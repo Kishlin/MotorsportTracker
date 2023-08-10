@@ -9,10 +9,9 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateRaceLapIfNotExistsCommand implements Command
+final readonly class CreateRaceLapIfNotExistsCommand implements Command
 {
     /**
      * @param array{
@@ -22,16 +21,16 @@ final class CreateRaceLapIfNotExistsCommand implements Command
      * }[] $tyreDetails
      */
     private function __construct(
-        private readonly string $entry,
-        private readonly int $lap,
-        private readonly int $position,
-        private readonly bool $pit,
-        private readonly int $time,
-        private readonly ?int $timeToLead,
-        private readonly ?int $lapsToLead,
-        private readonly ?int $timeToNext,
-        private readonly ?int $lapsToNext,
-        private readonly array $tyreDetails,
+        private string $entry,
+        private int $lap,
+        private int $position,
+        private bool $pit,
+        private int $time,
+        private ?int $timeToLead,
+        private ?int $lapsToLead,
+        private ?int $timeToNext,
+        private ?int $lapsToNext,
+        private array $tyreDetails,
     ) {
     }
 
@@ -45,9 +44,9 @@ final class CreateRaceLapIfNotExistsCommand implements Command
         return new PositiveIntValueObject($this->lap);
     }
 
-    public function position(): StrictlyPositiveIntValueObject
+    public function position(): PositiveIntValueObject
     {
-        return new StrictlyPositiveIntValueObject($this->position);
+        return new PositiveIntValueObject($this->position);
     }
 
     public function pit(): BoolValueObject

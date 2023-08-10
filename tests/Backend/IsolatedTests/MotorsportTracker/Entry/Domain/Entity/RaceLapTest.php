@@ -10,7 +10,6 @@ use Kishlin\Backend\MotorsportTracker\Result\Domain\ValueObject\TyreDetailsValue
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
 
@@ -37,7 +36,7 @@ final class RaceLapTest extends AggregateRootIsolatedTestCase
             new UuidValueObject($id),
             new UuidValueObject($entry),
             new PositiveIntValueObject($lap),
-            new StrictlyPositiveIntValueObject($position),
+            new PositiveIntValueObject($position),
             new BoolValueObject(false),
             new PositiveIntValueObject($time),
             new NullableIntValueObject($timeToLead),
