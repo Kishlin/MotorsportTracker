@@ -34,11 +34,11 @@ const EventNavbar: React.FunctionComponent<EventNavbarProps> = ({
 
         const targetYear = years.includes(parseInt(year, 10)) ? year : years[0];
 
-        navigate(`/event/${targetChampionship}/${targetYear}/schedule`);
+        navigate(`/championship/${targetChampionship}/${targetYear}/schedule`);
     };
 
     const handleYearChange = (newYear: string) => {
-        navigate(`/event/${championship}/${newYear}/schedule`);
+        navigate(`/championship/${championship}/${newYear}/schedule`);
     };
 
     const handleEventChange = (newEvent: string) => {
