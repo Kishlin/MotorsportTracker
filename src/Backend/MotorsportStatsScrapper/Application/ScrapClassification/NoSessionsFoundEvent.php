@@ -11,7 +11,7 @@ final readonly class NoSessionsFoundEvent implements ApplicationEvent
     private function __construct(
         private string $championship,
         private int $year,
-        private string $event,
+        private ?string $event,
     ) {
     }
 
@@ -25,7 +25,7 @@ final readonly class NoSessionsFoundEvent implements ApplicationEvent
         return $this->year;
     }
 
-    public function event(): string
+    public function event(): ?string
     {
         return $this->event;
     }
@@ -35,7 +35,7 @@ final readonly class NoSessionsFoundEvent implements ApplicationEvent
         return self::fromScalars($command->championship(), $command->year(), $command->event());
     }
 
-    public static function fromScalars(string $championship, int $year, string $event): self
+    public static function fromScalars(string $championship, int $year, ?string $event): self
     {
         return new self($championship, $year, $event);
     }

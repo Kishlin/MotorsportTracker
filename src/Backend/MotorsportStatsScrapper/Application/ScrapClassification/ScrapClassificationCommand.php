@@ -11,7 +11,7 @@ final readonly class ScrapClassificationCommand implements Command
     private function __construct(
         private string $championship,
         private int $year,
-        private string $event,
+        private ?string $event,
     ) {
     }
 
@@ -25,12 +25,12 @@ final readonly class ScrapClassificationCommand implements Command
         return $this->year;
     }
 
-    public function event(): string
+    public function event(): ?string
     {
         return $this->event;
     }
 
-    public static function fromScalars(string $championship, int $year, string $event): self
+    public static function fromScalars(string $championship, int $year, ?string $event = null): self
     {
         return new self($championship, $year, $event);
     }

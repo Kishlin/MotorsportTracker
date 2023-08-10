@@ -8,5 +8,5 @@ use Kishlin\Backend\MotorsportStatsScrapper\Domain\DTO\SessionsListDTO;
 
 interface SessionsListGateway
 {
-    public function allSessionsForEvent(string $championship, int $year, string $event): SessionsListDTO;
+    public function allSessions(string $championship, int $year, ?string $event): SessionsListDTO;
 }

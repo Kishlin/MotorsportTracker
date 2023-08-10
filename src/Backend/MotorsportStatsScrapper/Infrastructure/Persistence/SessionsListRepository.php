@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class SessionsListRepository extends CoreRepository implements SessionsListGateway
 {
-    public function allSessionsForEvent(string $championship, int $year, string $event): SessionsListDTO
+    public function allSessions(string $championship, int $year, ?string $event): SessionsListDTO
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -24,12 +24,17 @@ final class SessionsListRepository extends CoreRepository implements SessionsLis
             ->innerJoin('championship', 'c', $qb->expr()->eq('c.id', 's.championship'))
             ->where($qb->expr()->eq('c.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
-            ->andWhere($qb->expr()->eq('e.name', ':event'))
             ->andWhere('es.has_result is true')
             ->withParam('championship', $championship)
-            ->withParam('event', $event)
             ->withParam('year', $year)
         ;
+
+        if (null !== $event) {
+            $qb
+                ->andWhere($qb->expr()->eq('e.name', ':event'))
+                ->withParam('event', $event)
+            ;
+        }
 
         /** @var array<array{id: string, ref: string, event: string, season: string}> $ret */
         $ret = $this->connection->execute($qb->buildQuery())->fetchAllAssociative();

@@ -38,7 +38,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
     public function __invoke(ScrapClassificationCommand $command): void
     {
-        $sessions = $this->sessionsGateway->allSessionsForEvent($command->championship(), $command->year(), $command->event());
+        $sessions = $this->sessionsGateway->allSessions($command->championship(), $command->year(), $command->event());
 
         if (empty($sessions->list())) {
             $this->eventDispatcher->dispatch(NoSessionsFoundEvent::forCommand($command));
@@ -46,11 +46,19 @@ final class ScrapClassificationCommandHandler implements CommandHandler
             return;
         }
 
+        $eventScrapped = [];
+
         foreach ($sessions->list() as $session) {
             $this->scrapClassificationsForSession($session);
+
+            if (false === array_key_exists($session->event(), $eventScrapped)) {
+                $eventScrapped[$session->event()] = true;
+            }
         }
 
-        $this->eventDispatcher->dispatch(ClassificationScrappingSuccessEvent::forEvent($sessions->list()[0]->event()));
+        foreach ($eventScrapped as $event => $boolean) {
+            $this->eventDispatcher->dispatch(ClassificationScrappingSuccessEvent::forEvent($event));
+        }
     }
 
     private function scrapClassificationsForSession(SessionDTO $session): void
