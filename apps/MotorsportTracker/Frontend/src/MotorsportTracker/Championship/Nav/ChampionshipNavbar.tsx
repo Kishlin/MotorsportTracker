@@ -48,6 +48,14 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
         <MenuItem key={seasonYear} value={seasonYear}>{seasonYear}</MenuItem>
     ));
 
+    const statsPage = 0 < Object.keys(availableStandings).length
+        ? (
+            <Link to={`/championship/${championship}/${year}/stats`}>
+                Stats
+            </Link>
+        )
+        : <noscript />;
+
     const standingsPages = ['constructor', 'team', 'driver']
         .filter((type: StandingType) => true === availableStandings[type])
         .map((type: StandingType) => (
@@ -62,9 +70,7 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
                 <Link to={`/championship/${championship}/${year}/schedule`}>
                     Calendar
                 </Link>
-                <Link to={`/championship/${championship}/${year}/stats`}>
-                    Stats
-                </Link>
+                {statsPage}
                 {standingsPages}
             </NavMainMenu>
             <NavSearchBar>
