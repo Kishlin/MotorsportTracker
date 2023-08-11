@@ -68,8 +68,11 @@ final class ScrapClassificationCommandHandler implements CommandHandler
 
         foreach ($classificationData['details'] as $details) {
             try {
-                $country = $this->createCountryIfNotExists($details['nationality']);
-                $team    = $this->createTeamIfNotExists(
+                $countryId = null !== $details['nationality']
+                    ? $this->createCountryIfNotExists($details['nationality'])->value()
+                    : null;
+
+                $team = $this->createTeamIfNotExists(
                     $session->season(),
                     $details['team']['name'],
                     $details['team']['colour'],
@@ -81,7 +84,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                 $entryId = $this->commandBus->execute(
                     CreateEntryIfNotExistsCommand::fromScalars(
                         $session->id(),
-                        $country->value(),
+                        $countryId,
                         $details['drivers'][0]['name'],
                         $team->value(),
                         (int) $details['carNumber'],

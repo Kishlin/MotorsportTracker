@@ -14,7 +14,7 @@ final class Version202303222112 implements Migration
 CREATE TABLE public.entry (
     id character varying(36) NOT NULL,
     session character varying(36) NOT NULL,
-    country character varying(36) NOT NULL,
+    country character varying(36) DEFAULT NULL::character varying,
     driver character varying(36) NOT NULL,
     team character varying(36) NOT NULL,
     car_number integer NOT NULL

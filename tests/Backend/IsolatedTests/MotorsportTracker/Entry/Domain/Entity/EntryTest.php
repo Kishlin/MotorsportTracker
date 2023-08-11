@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\IsolatedTests\MotorsportTracker\Entry\Domain\Ent
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\EntryCreatedDomainEvent;
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Entry;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Isolated\AggregateRootIsolatedTestCase;
@@ -28,7 +29,7 @@ final class EntryTest extends AggregateRootIsolatedTestCase
         $entity = Entry::create(
             new UuidValueObject($id),
             new UuidValueObject($session),
-            new UuidValueObject($country),
+            new NullableUuidValueObject($country),
             new UuidValueObject($driver),
             new UuidValueObject($team),
             new PositiveIntValueObject($carNumber),

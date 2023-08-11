@@ -25,9 +25,9 @@ final class SaveEntryRepositoryTest extends CoreRepositoryContractTestCase
 
         $entry = Entry::instance(
             new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race')),
             new UuidValueObject(self::fixtureId('country.country.netherlands')),
             new UuidValueObject(self::fixtureId('motorsport.driver.driver.maxVerstappen')),
-            new UuidValueObject(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race')),
             new UuidValueObject(self::fixtureId('motorsport.team.team.redBullRacing')),
             new PositiveIntValueObject(33),
         );
