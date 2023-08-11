@@ -88,15 +88,17 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
             $standings = $this->standingDriverGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
-                $countryId = $this->createCountryIfNotExists($standing['nationality']);
                 $driverId  = $this->createDriverIfNotExists($standing['driver']);
+                $countryId = null !== $standing['nationality']
+                    ? $this->createCountryIfNotExists($standing['nationality'])->value()
+                    : null;
 
                 $this->commandBus->execute(
                     CreateOrUpdateStandingCommand::fromScalars(
                         $season->id(),
                         $seriesName,
                         $driverId->value(),
-                        $countryId->value(),
+                        $countryId,
                         $standing['position'],
                         $standing['points'],
                         StandingType::DRIVER,
@@ -107,7 +109,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
                     CreateAnalyticsDriversIfNotExistsCommand::fromScalars(
                         season: $season->id(),
                         driver: $driverId->value(),
-                        country: $countryId->value(),
+                        country: $countryId,
                         position: $standing['position'],
                         points: $standing['points'],
                         analyticsStatsDTO: AnalyticsDriversStatsDTO::fromScalars(
