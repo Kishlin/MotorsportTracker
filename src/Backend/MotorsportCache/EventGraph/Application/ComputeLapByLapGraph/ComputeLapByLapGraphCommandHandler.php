@@ -47,8 +47,6 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
 
     private function computeGraphsForEvent(string $event, float $maxTimeRatio): void
     {
-        $this->hasParsedLabelCache = [];
-
         $sessions = $this->eventRaceSessionsGateway->findForEvent($event);
         if (empty($sessions->sessions())) {
             $this->eventDispatcher->dispatch(NoSessionFoundEvent::create());
@@ -110,6 +108,8 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
      */
     private function buildGraphDataForSession(array $session, LapByLapData $history): array
     {
+        $this->hasParsedLabelCache = [];
+
         $seriesList = [];
 
         $slowest = $laps = 0;
