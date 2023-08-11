@@ -23,8 +23,10 @@ use Throwable;
 
 final class ComputeLapByLapGraphCommandHandler implements CommandHandler
 {
+    private const BASE_MAX_TIME_RATIO = 1.07;
+
     /** @var array<string, bool> */
-    private array $hasParsedLabelCache = [];
+    private array $hasParsedLabelCache;
 
     public function __construct(
         private readonly DeleteDeprecatedEventGraphGateway $deleteDeprecatedEventGraphGateway,
@@ -36,28 +38,35 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
     ) {
     }
 
-    public function __invoke(ComputeLapByLapGraphCommand $command): ?UuidValueObject
+    public function __invoke(ComputeLapByLapGraphCommand $command): void
     {
-        $event = $command->eventId();
+        $maxTimeRatio = $command->maxTimeRatio() ?? self::BASE_MAX_TIME_RATIO;
+
+        $this->computeGraphsForEvent($command->eventId(), $maxTimeRatio);
+    }
+
+    private function computeGraphsForEvent(string $event, float $maxTimeRatio): void
+    {
+        $this->hasParsedLabelCache = [];
 
         $sessions = $this->eventRaceSessionsGateway->findForEvent($event);
         if (empty($sessions->sessions())) {
             $this->eventDispatcher->dispatch(NoSessionFoundEvent::create());
 
-            return null;
+            return;
         }
 
         $graphsData = [];
 
         foreach ($sessions->sessions() as $session) {
-            $history = $this->lapByLapDataGateway->findForSession($session['session']);
+            $history = $this->lapByLapDataGateway->findForSession($session['session'], $maxTimeRatio);
             if (empty($history->data())) {
                 $this->eventDispatcher->dispatch(EmptyLapByLapDataEvent::forSession($session['session']));
 
                 continue;
             }
 
-            $graphsData[$session['session']] = $this->buildGraphDataForSession($session, $history, $command);
+            $graphsData[$session['session']] = $this->buildGraphDataForSession($session, $history);
         }
 
         $eventGraph = EventGraph::lapByLap(
@@ -75,23 +84,10 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
         } catch (Throwable $e) {
             $this->eventDispatcher->dispatch(FailedToSaveEventGraphEvent::forThrowable($e));
 
-            return null;
+            return;
         }
 
         $this->eventDispatcher->dispatch(...$eventGraph->pullDomainEvents());
-
-        return $eventGraph->id();
-    }
-
-    private function shouldBeDashed(string $key): bool
-    {
-        if (false === array_key_exists($key, $this->hasParsedLabelCache)) {
-            $this->hasParsedLabelCache[$key] = true;
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -112,7 +108,7 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
      *     laps: number,
      * }
      */
-    private function buildGraphDataForSession(array $session, LapByLapData $history, ComputeLapByLapGraphCommand $command): array
+    private function buildGraphDataForSession(array $session, LapByLapData $history): array
     {
         $seriesList = [];
 
@@ -121,13 +117,13 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
         foreach ($history->data() as $series) {
             $lapTimesAsString = explode(',', substr($series['laptimes'], 1, -1));
 
-            $laps = max($laps, $series['laps']);
+            $max = $series['max'];
 
             $lapTimes = [];
             foreach ($lapTimesAsString as $key => $lapTimeAsString) {
                 $lapTime = (int) $lapTimeAsString;
 
-                if ($lapTime < $command->minimumLapTime() || $lapTime > $command->maximumLapTime()) {
+                if ($lapTime > $max) {
                     continue;
                 }
 
@@ -136,6 +132,8 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
 
                 $lapTimes[$key] = $lapTime;
             }
+
+            $laps = max($laps, count($lapTimes));
 
             $seriesList[] = [
                 'color'    => $series['color'],
@@ -157,5 +155,16 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
                 'slowest' => $slowest,
             ],
         ];
+    }
+
+    private function shouldBeDashed(string $key): bool
+    {
+        if (false === array_key_exists($key, $this->hasParsedLabelCache)) {
+            $this->hasParsedLabelCache[$key] = true;
+
+            return false;
+        }
+
+        return true;
     }
 }

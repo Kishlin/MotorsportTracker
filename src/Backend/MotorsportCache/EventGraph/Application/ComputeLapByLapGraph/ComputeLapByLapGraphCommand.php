@@ -6,12 +6,11 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLap
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 
-final class ComputeLapByLapGraphCommand implements Command
+final readonly class ComputeLapByLapGraphCommand implements Command
 {
     private function __construct(
-        private readonly string $eventId,
-        private readonly int $maximumLapTime,
-        private readonly int $minimumLapTime,
+        private string $eventId,
+        private ?float $maxTimeRatio,
     ) {
     }
 
@@ -20,18 +19,13 @@ final class ComputeLapByLapGraphCommand implements Command
         return $this->eventId;
     }
 
-    public function maximumLapTime(): int
+    public function maxTimeRatio(): ?float
     {
-        return $this->maximumLapTime;
+        return $this->maxTimeRatio;
     }
 
-    public function minimumLapTime(): int
+    public static function fromScalars(string $eventId, ?float $maxTimeRatio = null): self
     {
-        return $this->minimumLapTime;
-    }
-
-    public static function fromScalars(string $eventId, int $maximumLapTime, int $minimumLapTime): self
-    {
-        return new self($eventId, $maximumLapTime, $minimumLapTime);
+        return new self($eventId, $maxTimeRatio);
     }
 }

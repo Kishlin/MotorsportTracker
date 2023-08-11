@@ -53,7 +53,7 @@ final class ScrapRaceHistoryCommandHandler implements CommandHandler
         }
 
         foreach ($eventScrapped as $event => $boolean) {
-            $this->eventDispatcher->dispatch(RaceLapScrappingSuccessEvent::forEvent($event));
+            $this->eventDispatcher->dispatch(RaceLapScrappingSuccessEvent::forEvent($command->championship(), $event));
         }
     }
 

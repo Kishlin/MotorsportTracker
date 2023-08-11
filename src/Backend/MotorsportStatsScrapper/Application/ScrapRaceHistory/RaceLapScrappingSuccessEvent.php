@@ -9,8 +9,14 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
 final readonly class RaceLapScrappingSuccessEvent implements Event
 {
     private function __construct(
+        private string $championship,
         private string $eventId,
     ) {
+    }
+
+    public function championship(): string
+    {
+        return $this->championship;
     }
 
     public function eventId(): string
@@ -18,8 +24,8 @@ final readonly class RaceLapScrappingSuccessEvent implements Event
         return $this->eventId;
     }
 
-    public static function forEvent(string $eventId): self
+    public static function forEvent(string $championship, string $eventId): self
     {
-        return new self($eventId);
+        return new self($championship, $eventId);
     }
 }

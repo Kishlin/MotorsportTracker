@@ -8,5 +8,5 @@ use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\
 
 interface LapByLapDataGateway
 {
-    public function findForSession(string $session): LapByLapData;
+    public function findForSession(string $session, float $maxTimeRatio): LapByLapData;
 }
