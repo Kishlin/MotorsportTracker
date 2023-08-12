@@ -161,7 +161,10 @@ TXT;
                     $driver = json_decode($raceResult['driver'], true, 512, JSON_THROW_ON_ERROR);
 
                     /** @var array{id: string, short_code: string, name: string}[] $additionalDrivers */
-                    $additionalDrivers = json_decode($raceResult['additional_drivers'], true, 512, JSON_THROW_ON_ERROR);
+                    $additionalDrivers = null !== $raceResult['additional_drivers'] ?
+                        json_decode($raceResult['additional_drivers'], true, 512, JSON_THROW_ON_ERROR) :
+                        []
+                    ;
 
                     /** @var array{id: string, name: string, color: string, country: null|array{id: string, code: string, name: string}} $team */
                     $team = json_decode($raceResult['team'], true, 512, JSON_THROW_ON_ERROR);
