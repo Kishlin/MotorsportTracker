@@ -36,7 +36,6 @@ final readonly class CreateEntryIfNotExistsCommandHandler implements CommandHand
         $entry = Entry::create(
             new UuidValueObject($this->uuidGenerator->uuid4()),
             $command->sessionId(),
-            $command->countryId(),
             $driverId,
             $command->teamId(),
             $command->carNumber(),

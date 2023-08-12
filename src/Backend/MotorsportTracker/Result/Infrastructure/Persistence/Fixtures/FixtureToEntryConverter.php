@@ -6,7 +6,6 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fi
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\Entity\Entry;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
-use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
@@ -19,7 +18,6 @@ final class FixtureToEntryConverter implements FixtureConverter
         return Entry::instance(
             new UuidValueObject($fixture->identifier()),
             new UuidValueObject($fixture->getString('session')),
-            new NullableUuidValueObject($fixture->getString('country')),
             new UuidValueObject($fixture->getString('driver')),
             new UuidValueObject($fixture->getString('team')),
             new PositiveIntValueObject($fixture->getInt('carNumber')),

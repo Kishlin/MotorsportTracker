@@ -88,10 +88,11 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
             $standings = $this->standingDriverGateway->fetch($season->ref(), $seriesUuid)->standings()['standings'];
 
             foreach ($standings as $standing) {
-                $driverId  = $this->createDriverIfNotExists($standing['driver']);
                 $countryId = null !== $standing['nationality']
                     ? $this->createCountryIfNotExists($standing['nationality'])->value()
                     : null;
+
+                $driverId = $this->createDriverIfNotExists($standing['driver'], $countryId);
 
                 $this->commandBus->execute(
                     CreateOrUpdateStandingCommand::fromScalars(

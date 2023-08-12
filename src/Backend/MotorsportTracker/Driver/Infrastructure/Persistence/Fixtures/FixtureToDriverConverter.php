@@ -20,6 +20,7 @@ final class FixtureToDriverConverter implements FixtureConverter
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
             new StringValueObject($fixture->getString('shortCode')),
+            new NullableUuidValueObject($fixture->getString('countryId')),
             new NullableUuidValueObject(null),
         );
     }

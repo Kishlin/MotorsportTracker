@@ -54,11 +54,10 @@ final class EntryContext extends MotorsportTrackerContext
         try {
             $sessionId = $this->fixtureId("motorsport.event.eventSession.{$this->format($session)}");
             $teamId    = $this->fixtureId("motorsport.team.team.{$this->format($team)}");
-            $countryId = $this->fixtureId("country.country.{$this->format($country)}");
 
             /** @var UuidValueObject $entryId */
             $entryId = self::container()->commandBus()->execute(
-                CreateEntryIfNotExistsCommand::fromScalars($sessionId, $countryId, $driverName, $teamId, $carNumber),
+                CreateEntryIfNotExistsCommand::fromScalars($sessionId, $driverName, $teamId, $carNumber),
             );
 
             $this->entryId = $entryId;

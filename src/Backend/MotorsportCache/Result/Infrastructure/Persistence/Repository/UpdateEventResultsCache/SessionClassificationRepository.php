@@ -18,11 +18,13 @@ jsonb_build_object(
     'id', d.id,
     'short_code', d.short_code,
     'name', d.name,
-    'country', json_build_object(
-        'id', c_d.id,
-        'code', c_d.code,
-        'name', c_d.name
-    )
+    'country', case when c_d is not null
+        then json_build_object(
+            'id', c_d.id,
+            'code', c_d.code,
+            'name', c_d.name
+        )
+    end
 )
 TXT;
 
@@ -32,11 +34,19 @@ TXT;
         jsonb_build_object(
             'id', ad.id,
             'short_code', ad.short_code,
-            'name', ad.name
+            'name', ad.name,
+            'country', case when cad is not null
+                then json_build_object(
+                    'id', cad.id,
+                    'code', cad.code,
+                    'name', cad.name
+                )
+            end
         )
     )
     FROM entry_additional_driver ead
     INNER JOIN driver ad ON ad.id = ead.driver
+    LEFT JOIN country cad ON cad.id = ad.country
     WHERE ead.entry = e.id
 )
 TXT;
@@ -83,7 +93,7 @@ TXT;
             ->innerJoin('event', 'ev', $qb->expr()->eq('es.event', 'ev.id'))
             ->innerJoin('season', 's', $qb->expr()->eq('ev.season', 's.id'))
             ->innerJoin('driver', 'd', $qb->expr()->eq('d.id', 'e.driver'))
-            ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'e.country'))
+            ->innerJoin('country', 'c_d', $qb->expr()->eq('c_d.id', 'd.country'))
             ->innerJoin(
                 'team',
                 't',

@@ -43,7 +43,7 @@ final class DriverCreationContext extends MotorsportTrackerContext
         try {
             /** @var UuidValueObject $driverId */
             $driverId = self::container()->commandBus()->execute(
-                CreateDriverIfNotExistsCommand::fromScalars($name, $code, null),
+                CreateDriverIfNotExistsCommand::fromScalars($name, $code, null, null),
             );
 
             $this->driverId = $driverId;

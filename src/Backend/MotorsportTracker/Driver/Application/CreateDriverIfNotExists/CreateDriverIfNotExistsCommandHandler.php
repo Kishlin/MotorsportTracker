@@ -30,7 +30,13 @@ final readonly class CreateDriverIfNotExistsCommandHandler implements CommandHan
         }
 
         $driverId = new UuidValueObject($this->uuidGenerator->uuid4());
-        $driver   = Driver::create($driverId, $command->name(), $command->shortCode(), $command->ref());
+        $driver   = Driver::create(
+            $driverId,
+            $command->name(),
+            $command->shortCode(),
+            $command->country(),
+            $command->ref(),
+        );
 
         try {
             $this->saveGateway->save($driver);

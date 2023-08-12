@@ -80,12 +80,11 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                     $details['team']['uuid'],
                 );
 
-                $this->createDriverIfNotExists($details['drivers'][0]);
+                $this->createDriverIfNotExists($details['drivers'][0], $countryId);
 
                 $entryId = $this->commandBus->execute(
                     CreateEntryIfNotExistsCommand::fromScalars(
                         $session->id(),
-                        $countryId,
                         $details['drivers'][0]['name'],
                         $team->value(),
                         (int) $details['carNumber'],

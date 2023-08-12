@@ -18,7 +18,6 @@ final class SaveEntryRepositoryTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveAnEntry(): void
     {
-        self::loadFixture('country.country.netherlands');
         self::loadFixture('motorsport.team.team.redBullRacing');
         self::loadFixture('motorsport.driver.driver.maxVerstappen');
         self::loadFixture('motorsport.event.eventSession.dutchGrandPrix2022Race');
@@ -26,7 +25,6 @@ final class SaveEntryRepositoryTest extends CoreRepositoryContractTestCase
         $entry = Entry::instance(
             new UuidValueObject(self::uuid()),
             new UuidValueObject(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race')),
-            new UuidValueObject(self::fixtureId('country.country.netherlands')),
             new UuidValueObject(self::fixtureId('motorsport.driver.driver.maxVerstappen')),
             new UuidValueObject(self::fixtureId('motorsport.team.team.redBullRacing')),
             new PositiveIntValueObject(33),

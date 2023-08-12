@@ -13,6 +13,7 @@ final readonly class CreateDriverIfNotExistsCommand implements Command
     private function __construct(
         private string $name,
         private string $shortCode,
+        private ?string $country,
         private ?string $ref,
     ) {
     }
@@ -27,13 +28,18 @@ final readonly class CreateDriverIfNotExistsCommand implements Command
         return new StringValueObject($this->shortCode);
     }
 
+    public function country(): NullableUuidValueObject
+    {
+        return new NullableUuidValueObject($this->country);
+    }
+
     public function ref(): NullableUuidValueObject
     {
         return new NullableUuidValueObject($this->ref);
     }
 
-    public static function fromScalars(string $name, string $shortCode, ?string $ref): self
+    public static function fromScalars(string $name, string $shortCode, ?string $country, ?string $ref): self
     {
-        return new self($name, $shortCode, $ref);
+        return new self($name, $shortCode, $country, $ref);
     }
 }

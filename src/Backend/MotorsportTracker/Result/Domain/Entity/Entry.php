@@ -6,7 +6,6 @@ namespace Kishlin\Backend\MotorsportTracker\Result\Domain\Entity;
 
 use Kishlin\Backend\MotorsportTracker\Result\Domain\DomainEvent\EntryCreatedDomainEvent;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
-use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\PositiveIntValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
@@ -15,7 +14,6 @@ final class Entry extends AggregateRoot
     private function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $session,
-        private readonly NullableUuidValueObject $country,
         private readonly UuidValueObject $driver,
         private readonly UuidValueObject $team,
         private readonly PositiveIntValueObject $carNumber,
@@ -25,12 +23,11 @@ final class Entry extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $session,
-        NullableUuidValueObject $country,
         UuidValueObject $driver,
         UuidValueObject $team,
         PositiveIntValueObject $carNumber,
     ): self {
-        $entry = new self($id, $session, $country, $driver, $team, $carNumber);
+        $entry = new self($id, $session, $driver, $team, $carNumber);
 
         $entry->record(new EntryCreatedDomainEvent($id));
 
@@ -43,12 +40,11 @@ final class Entry extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $session,
-        NullableUuidValueObject $country,
         UuidValueObject $driver,
         UuidValueObject $team,
         PositiveIntValueObject $carNumber,
     ): self {
-        return new self($id, $session, $country, $driver, $team, $carNumber);
+        return new self($id, $session, $driver, $team, $carNumber);
     }
 
     public function id(): UuidValueObject
@@ -59,11 +55,6 @@ final class Entry extends AggregateRoot
     public function session(): UuidValueObject
     {
         return $this->session;
-    }
-
-    public function country(): NullableUuidValueObject
-    {
-        return $this->country;
     }
 
     public function driver(): UuidValueObject
@@ -86,7 +77,6 @@ final class Entry extends AggregateRoot
         return [
             'id'         => $this->id->value(),
             'session'    => $this->session->value(),
-            'country'    => $this->country->value(),
             'driver'     => $this->driver->value(),
             'team'       => $this->team->value(),
             'car_number' => $this->carNumber->value(),

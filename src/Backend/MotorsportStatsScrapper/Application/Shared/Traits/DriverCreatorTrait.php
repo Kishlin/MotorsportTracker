@@ -12,12 +12,13 @@ trait DriverCreatorTrait
     /**
      * @param array{name: string, uuid: string, shortCode: string} $driver
      */
-    private function createDriverIfNotExists(array $driver): UuidValueObject
+    private function createDriverIfNotExists(array $driver, ?string $country = null): UuidValueObject
     {
         $driverId = $this->commandBus->execute(
             CreateDriverIfNotExistsCommand::fromScalars(
                 name: $driver['name'],
                 shortCode: $driver['shortCode'],
+                country: $country,
                 ref: $driver['uuid'],
             ),
         );
