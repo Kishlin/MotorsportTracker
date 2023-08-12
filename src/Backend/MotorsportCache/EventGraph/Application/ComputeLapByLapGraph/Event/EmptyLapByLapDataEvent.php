@@ -6,10 +6,10 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLap
 
 use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
-final class EmptyLapByLapDataEvent implements ApplicationEvent
+final readonly class EmptyLapByLapDataEvent implements ApplicationEvent
 {
     private function __construct(
-        private readonly string $session,
+        private string $session,
     ) {
     }
 

@@ -8,6 +8,7 @@ import LapByLapTitle from './LapByLapTitle';
 
 declare type LapByLapGraphProps = {
     data: LapByLapGraphData,
+    isMultiDriver: boolean,
 };
 
 const axisColor = '#ffffff';
@@ -19,17 +20,17 @@ const labelsMargin = 25;
 const axisNameMargin = 10;
 const lineDash = [3, 3];
 
-const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) => {
-    const showSeries: {[key: string]: boolean} = {};
+const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMultiDriver }) => {
+    const showSeries: {[key: number]: boolean} = {};
 
     data.series.forEach((series: LapByLapSeries) => {
-        showSeries[series.label] = true;
+        showSeries[series.car_number] = true;
     });
 
     const [seriesShowStatus, setSeriesShowStatus] = useState<{[key: string]: boolean}>(showSeries);
 
-    const toggleSeries = (label: string) => {
-        setSeriesShowStatus({ ...seriesShowStatus, [label]: !seriesShowStatus[label] });
+    const toggleSeries = (index: number) => {
+        setSeriesShowStatus({ ...seriesShowStatus, [index]: !seriesShowStatus[index] });
     };
 
     const { laps, lapTimes, series } = data;
@@ -99,7 +100,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
 
     const drawSeries = (ctx: CanvasRenderingContext2D, pixelToMilliRatio: number, pixelToLapsRatio: number) => {
         series.forEach((currentSeries: LapByLapSeries) => {
-            if (false === seriesShowStatus[currentSeries.label]) {
+            if (false === seriesShowStatus[currentSeries.car_number]) {
                 return;
             }
 
@@ -155,7 +156,12 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data }) =>
         <GraphContainer>
             <LapByLapTitle type={data.session.type} />
             <Canvas draw={drawLapByLapGraph} aspectRatio={2} />
-            <LapByLapLegend series={series} toggleSeries={toggleSeries} seriesShowStatus={seriesShowStatus} />
+            <LapByLapLegend
+                series={series}
+                isMultiDriver={isMultiDriver}
+                toggleSeries={toggleSeries}
+                seriesShowStatus={seriesShowStatus}
+            />
         </GraphContainer>
     );
 };

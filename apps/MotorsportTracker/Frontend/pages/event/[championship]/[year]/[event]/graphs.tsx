@@ -11,6 +11,7 @@ import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types'
 import { EventGraphs } from '../../../../../src/MotorsportGraph/Shared/Types';
 import Graphs from '../../../../../src/MotorsportGraph/Shared/Ui/Graphs';
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
+import championships from '../../../../../src/MotorsportTracker/Config/Championships';
 
 declare type EventGraphsPathParams = {
     params: {
@@ -41,13 +42,15 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventGraphsPageProps> =
         return null;
     }
 
+    const { isMultiDriver } = championships[championship];
+
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
             content={(
                 <GraphContainer>
                     <GraphTitle event={season[event]} />
-                    <Graphs graphs={graphs} />
+                    <Graphs graphs={graphs} isMultiDriver={isMultiDriver} />
                 </GraphContainer>
             )}
             subHeader={

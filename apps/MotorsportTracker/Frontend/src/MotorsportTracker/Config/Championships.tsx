@@ -7,6 +7,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'Formula 1',
         slug: 'formula-one',
         years: Array.from({ length: 74 }, (x, i) => 1950 + i),
+        isMultiDriver: false,
     },
     'fia-formula-2-championship': {
         name: 'FIA Formula 2 Championship',
@@ -14,6 +15,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'Formula 2',
         slug: 'fia-formula-2-championship',
         years: Array.from({ length: 7 }, (x, i) => 2017 + i),
+        isMultiDriver: false,
     },
     'fia-formula-3-championship': {
         name: 'FIA Formula 3 Championship',
@@ -21,6 +23,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'Formula 3',
         slug: 'fia-formula-3-championship',
         years: Array.from({ length: 5 }, (x, i) => 2019 + i),
+        isMultiDriver: false,
     },
     'formula-e': {
         name: 'Formula E',
@@ -28,6 +31,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'Formula E',
         slug: 'formula-e',
         years: [2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023], // No championship in 2020
+        isMultiDriver: false,
     },
     'f4-france': {
         name: 'F4 France',
@@ -35,6 +39,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'F4 France',
         slug: 'f4-france',
         years: Array.from({ length: 3 }, (x, i) => 2021 + i),
+        isMultiDriver: false,
     },
     'w-series': {
         name: 'W Series',
@@ -42,6 +47,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'W Series',
         slug: 'w-series',
         years: [2019, 2021, 2022], // No championship in 2020
+        isMultiDriver: false,
     },
     'world-endurance-championship': {
         name: 'World Endurance Championship',
@@ -49,6 +55,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'WEC',
         slug: 'world-endurance-championship',
         years: Array.from({ length: 12 }, (x, i) => 2012 + i),
+        isMultiDriver: true,
     },
     'gt-world-challenge-europe': {
         name: 'GT World Challenge Europe',
@@ -56,6 +63,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'GT Europe E',
         slug: 'gt-world-challenge-europe',
         years: Array.from({ length: 10 }, (x, i) => 2013 + i),
+        isMultiDriver: true,
     },
     'gt-world-challenge-europe-sprint-cup': {
         name: 'GT World Challenge Europe Sprint Cup',
@@ -63,6 +71,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'GT Europe S',
         slug: 'gt-world-challenge-europe-sprint-cup',
         years: Array.from({ length: 4 }, (x, i) => 2019 + i),
+        isMultiDriver: true,
     },
     'gt4-france': {
         name: 'GT4 France',
@@ -70,6 +79,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'GT4 France',
         slug: 'gt4-france',
         years: Array.from({ length: 1 }, (x, i) => 2022 + i),
+        isMultiDriver: false,
     },
     'imsa-sportscar-championship': {
         name: 'IMSA SportsCar Championship',
@@ -77,13 +87,15 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'IMSA',
         slug: 'imsa-sportscar-championship',
         years: Array.from({ length: 10 }, (x, i) => 2014 + i),
+        isMultiDriver: true,
     },
     'adac-gt-masters': {
         name: 'ADAC GT Masters',
         displayName: 'ADAC GT Masters',
         shortName: 'ADAC',
         slug: 'adac-gt-masters',
-        years: [2021, 2022],
+        years: [2021, 2022, 2023],
+        isMultiDriver: true,
     },
     motogp: {
         name: 'MotoGP',
@@ -91,6 +103,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'MotoGP',
         slug: 'motogp',
         years: Array.from({ length: 75 }, (x, i) => 1949 + i),
+        isMultiDriver: false,
     },
 };
 

@@ -95,7 +95,8 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
      *     session: array{id: string, type: string},
      *     series: array<array{
      *         color: string,
-     *         label: string,
+     *         car_number: string,
+     *         short_code: string,
      *         dashed: bool,
      *         lapTimes: int[],
      *     }>,
@@ -136,10 +137,11 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
             $laps = max($laps, count($lapTimes));
 
             $seriesList[] = [
-                'color'    => $series['color'],
-                'label'    => $series['label'],
-                'dashed'   => $this->shouldBeDashed($series['color']),
-                'lapTimes' => $lapTimes,
+                'color'      => $series['color'],
+                'car_number' => $series['car_number'],
+                'short_code' => $series['short_code'],
+                'dashed'     => $this->shouldBeDashed($series['color']),
+                'lapTimes'   => $lapTimes,
             ];
         }
 

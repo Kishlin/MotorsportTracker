@@ -8,15 +8,21 @@ import { LapByLapSeries } from '../../Shared/Types';
 
 declare type LapByLapLegendProps = {
     series: Array<LapByLapSeries>,
-    toggleSeries: (series: string) => void,
+    toggleSeries: (series: number) => void,
     seriesShowStatus: {[key: string]: boolean},
+    isMultiDriver: boolean,
 };
 
 const disabledSeriesColor = '#666';
 
-const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({ series, toggleSeries, seriesShowStatus }) => {
+const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({
+    series,
+    toggleSeries,
+    seriesShowStatus,
+    isMultiDriver,
+}) => {
     const legendIcon = ((entry: LapByLapSeries) => {
-        const color = seriesShowStatus[entry.label] ? entry.color : disabledSeriesColor;
+        const color = seriesShowStatus[entry.car_number] ? entry.color : disabledSeriesColor;
 
         if (entry.dashed) {
             return <MoreHorizIcon style={{ color }} />;
@@ -26,14 +32,14 @@ const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({ series, 
     });
 
     const legend = series.map((entry) => (
-        <Grid key={entry.label} item sx={{ px: 1 }}>
-            <Grid container justifyContent="center" sx={{ cursor: 'pointer' }} onClick={() => toggleSeries(entry.label)}>
+        <Grid key={entry.car_number} item sx={{ px: 1 }}>
+            <Grid container justifyContent="center" sx={{ cursor: 'pointer' }} onClick={() => toggleSeries(entry.car_number)}>
                 <Grid item sx={{ mt: '-1px', mr: 1 }}>
                     {legendIcon(entry)}
                 </Grid>
                 <Grid item>
-                    <Typography style={{ color: seriesShowStatus[entry.label] ? 'inherit' : disabledSeriesColor }}>
-                        {entry.label}
+                    <Typography style={{ color: seriesShowStatus[entry.car_number] ? 'inherit' : disabledSeriesColor }}>
+                        {isMultiDriver ? entry.car_number : entry.short_code}
                     </Typography>
                 </Grid>
             </Grid>

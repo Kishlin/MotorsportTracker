@@ -15,7 +15,8 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
         $qb = $this->connection->createQueryBuilder();
 
         $query = $qb
-            ->select('DISTINCT e.car_number', 'label')
+            ->select('DISTINCT e.car_number', 'car_number')
+            ->addSelect('d.short_code', 'short_code')
             ->addSelect('t.color', 'color')
             ->addSelect('array_agg(rl.time ORDER BY rl.lap ASC)', 'lapTimes')
             ->addSelect("min(rl.time)*{$maxTimeRatio}", 'max')
@@ -31,6 +32,7 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->andWhere($qb->expr()->gt('rl.time', '0'))
             ->withParam('session', $session)
             ->addGroupBy('e.car_number')
+            ->addGroupBy('d.short_code')
             ->addGroupBy('t.color')
             ->addGroupBy('c.laps')
             ->addGroupBy('finishPosition')
@@ -38,7 +40,7 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->buildQuery()
         ;
 
-        /** @var array<array{label: string, color: string, laptimes: string, max: float}> $result */
+        /** @var array<array{car_number: string, short_code: string, color: string, laptimes: string, max: float}> $result */
         $result = $this->connection->execute($query)->fetchAllAssociative();
 
         return LapByLapData::fromData($result);

@@ -64,6 +64,7 @@ export type Championship = {
     shortName: string,
     slug: string,
     years: number[],
+    isMultiDriver: boolean,
 };
 
 export type ChampionshipList = {

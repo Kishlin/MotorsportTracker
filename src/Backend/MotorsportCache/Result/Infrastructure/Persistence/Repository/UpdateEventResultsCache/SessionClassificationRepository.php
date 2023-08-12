@@ -132,7 +132,7 @@ TXT;
         /**
          * @var array<array{
          *     driver: string,
-         *     additional_drivers: string,
+         *     additional_drivers: null|string,
          *     team: string,
          *     car_number: int,
          *     finish_position: int,
@@ -163,8 +163,7 @@ TXT;
                     /** @var array{id: string, short_code: string, name: string}[] $additionalDrivers */
                     $additionalDrivers = null !== $raceResult['additional_drivers'] ?
                         json_decode($raceResult['additional_drivers'], true, 512, JSON_THROW_ON_ERROR) :
-                        []
-                    ;
+                        [];
 
                     /** @var array{id: string, name: string, color: string, country: null|array{id: string, code: string, name: string}} $team */
                     $team = json_decode($raceResult['team'], true, 512, JSON_THROW_ON_ERROR);
