@@ -101,7 +101,7 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                     );
                 }
 
-                $this->storeEntryForDriver($details['drivers'][0], $entryId);
+                $this->storeEntryForCarNumber($details['carNumber'], $entryId);
 
                 $this->commandBus->execute(
                     CreateClassificationIfNotExistsCommand::fromScalars(
@@ -133,32 +133,26 @@ final class ScrapClassificationCommandHandler implements CommandHandler
             try {
                 $this->commandBus->execute(
                     CreateRetirementIfNotExistsCommand::fromScalars(
-                        $this->retrieveEntryForDriver($retirement['driver']),
+                        $this->retrieveEntryForCarNumber($retirement['carNumber']),
                         $retirement['reason'],
                         $retirement['type'],
                         $retirement['dns'],
                         $retirement['lap'],
                     ),
                 );
-            } catch (Throwable) {
-                $this->eventDispatcher->dispatch(RetirementScrappingFailureEvent::forRetirement($retirement));
+            } catch (Throwable $e) {
+                $this->eventDispatcher->dispatch(RetirementScrappingFailureEvent::forRetirement($retirement, $e));
             }
         }
     }
 
-    /**
-     * @param array{uuid: string} $driver
-     */
-    private function storeEntryForDriver(array $driver, UuidValueObject $entry): void
+    private function storeEntryForCarNumber(string $carNumber, UuidValueObject $entry): void
     {
-        $this->entryIdForDriverIdCache[$driver['uuid']] = $entry->value();
+        $this->entryIdForDriverIdCache[$carNumber] = $entry->value();
     }
 
-    /**
-     * @param array{uuid: string} $driver
-     */
-    private function retrieveEntryForDriver(array $driver): string
+    private function retrieveEntryForCarNumber(string $carNumber): string
     {
-        return $this->entryIdForDriverIdCache[$driver['uuid']];
+        return $this->entryIdForDriverIdCache[$carNumber];
     }
 }

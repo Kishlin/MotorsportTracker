@@ -8,10 +8,10 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\Reti
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-final class RetirementScrappingFailureLogger implements EventSubscriber
+final readonly class RetirementScrappingFailureLogger implements EventSubscriber
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -20,5 +20,6 @@ final class RetirementScrappingFailureLogger implements EventSubscriber
         $retirementData = $event->retirement();
 
         $this->logger->error("Failed to scrap retirement for car {$retirementData['carNumber']}.", $retirementData);
+        $this->logger->error($event->throwable()->getMessage());
     }
 }

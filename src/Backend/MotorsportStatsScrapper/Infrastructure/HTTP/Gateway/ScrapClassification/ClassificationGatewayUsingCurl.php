@@ -37,7 +37,7 @@ final readonly class ClassificationGatewayUsingCurl implements ClassificationGat
          *     details: array{
          *         finishPosition: int,
          *         gridPosition: ?int,
-         *         carNumber: int,
+         *         carNumber: string,
          *         drivers: array<array{
          *             name: string,
          *             firstName: string,
@@ -68,7 +68,7 @@ final readonly class ClassificationGatewayUsingCurl implements ClassificationGat
          *             uuid: string,
          *             picture: string,
          *         },
-         *         carNumber: int,
+         *         carNumber: string,
          *         reason: string,
          *         type: string,
          *         dns: bool,

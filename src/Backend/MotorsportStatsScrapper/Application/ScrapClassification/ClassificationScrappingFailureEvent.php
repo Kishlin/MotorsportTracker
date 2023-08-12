@@ -13,7 +13,7 @@ final readonly class ClassificationScrappingFailureEvent implements Event
      * @param array{
      *     finishPosition: int,
      *     gridPosition: ?int,
-     *     carNumber: int,
+     *     carNumber: string,
      *     drivers: array<array{
      *         name: string,
      *         firstName: string,
@@ -45,7 +45,7 @@ final readonly class ClassificationScrappingFailureEvent implements Event
      * @return array{
      *     finishPosition: int,
      *     gridPosition: ?int,
-     *     carNumber: int,
+     *     carNumber: string,
      *     drivers: array<array{
      *         name: string,
      *         firstName: string,
@@ -81,7 +81,7 @@ final readonly class ClassificationScrappingFailureEvent implements Event
      * @param array{
      *     finishPosition: int,
      *     gridPosition: ?int,
-     *     carNumber: int,
+     *     carNumber: string,
      *     drivers: array<array{
      *         name: string,
      *         firstName: string,

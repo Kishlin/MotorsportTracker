@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
+use Throwable;
 
-final class RetirementScrappingFailureEvent implements Event
+final readonly class RetirementScrappingFailureEvent implements Event
 {
     /**
      * @param array{
@@ -19,7 +20,7 @@ final class RetirementScrappingFailureEvent implements Event
      *         uuid: string,
      *         picture: string,
      *     },
-     *     carNumber: int,
+     *     carNumber: string,
      *     reason: string,
      *     type: string,
      *     dns: bool,
@@ -28,7 +29,8 @@ final class RetirementScrappingFailureEvent implements Event
      * } $retirement
      */
     private function __construct(
-        private readonly array $retirement,
+        private array $retirement,
+        private Throwable $throwable,
     ) {
     }
 
@@ -43,7 +45,7 @@ final class RetirementScrappingFailureEvent implements Event
      *         uuid: string,
      *         picture: string,
      *     },
-     *     carNumber: int,
+     *     carNumber: string,
      *     reason: string,
      *     type: string,
      *     dns: bool,
@@ -54,6 +56,11 @@ final class RetirementScrappingFailureEvent implements Event
     public function retirement(): array
     {
         return $this->retirement;
+    }
+
+    public function throwable(): Throwable
+    {
+        return $this->throwable;
     }
 
     /**
@@ -67,7 +74,7 @@ final class RetirementScrappingFailureEvent implements Event
      *         uuid: string,
      *         picture: string,
      *     },
-     *     carNumber: int,
+     *     carNumber: string,
      *     reason: string,
      *     type: string,
      *     dns: bool,
@@ -75,8 +82,8 @@ final class RetirementScrappingFailureEvent implements Event
      *     details: null,
      * } $retirement
      */
-    public static function forRetirement(array $retirement): self
+    public static function forRetirement(array $retirement, Throwable $e): self
     {
-        return new self($retirement);
+        return new self($retirement, $e);
     }
 }
