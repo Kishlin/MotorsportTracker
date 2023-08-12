@@ -15,10 +15,11 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
         $qb = $this->connection->createQueryBuilder();
 
         $query = $qb
-            ->select('d.short_code', 'label')
+            ->select('DISTINCT e.car_number', 'label')
             ->addSelect('t.color', 'color')
             ->addSelect('array_agg(rl.time ORDER BY rl.lap ASC)', 'lapTimes')
             ->addSelect("min(rl.time)*{$maxTimeRatio}", 'max')
+            ->addSelect('(c.finish_position+99)%100', 'finishPosition')
             ->from('race_lap', 'rl')
             ->innerJoin('entry', 'e', $qb->expr()->eq('e.id', 'rl.entry'))
             ->innerJoin('event_session', 'es', $qb->expr()->eq('es.id', 'e.session'))
@@ -29,11 +30,11 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->where($qb->expr()->eq('e.session', ':session'))
             ->andWhere($qb->expr()->gt('rl.time', '0'))
             ->withParam('session', $session)
-            ->addGroupBy('d.short_code')
+            ->addGroupBy('e.car_number')
             ->addGroupBy('t.color')
             ->addGroupBy('c.laps')
-            ->addGroupBy('c.finish_position')
-            ->orderBy('(c.finish_position+99)%100')
+            ->addGroupBy('finishPosition')
+            ->orderBy('finishPosition')
             ->buildQuery()
         ;
 
