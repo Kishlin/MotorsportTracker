@@ -30,6 +30,6 @@ const DriversAnalyticsTable: React.FunctionComponent<DriverAnalyticsTableProps> 
             </AnalyticsTable>
         </Box>
     );
-}
+};
 
 export default DriversAnalyticsTable;

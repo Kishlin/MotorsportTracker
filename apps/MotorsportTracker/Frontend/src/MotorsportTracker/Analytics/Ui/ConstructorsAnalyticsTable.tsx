@@ -30,6 +30,6 @@ const ConstructorsAnalyticsTable: React.FunctionComponent<ConstructorAnalyticsTa
             </AnalyticsTable>
         </Box>
     );
-}
+};
 
 export default ConstructorsAnalyticsTable;

@@ -30,6 +30,6 @@ const TeamsAnalyticsTable: React.FunctionComponent<TeamAnalyticsTableProps> = ({
             </AnalyticsTable>
         </Box>
     );
-}
+};
 
 export default TeamsAnalyticsTable;
