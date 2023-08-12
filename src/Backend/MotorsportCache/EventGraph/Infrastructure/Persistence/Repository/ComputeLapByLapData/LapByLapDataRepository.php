@@ -10,7 +10,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class LapByLapDataRepository extends CoreRepository implements LapByLapDataGateway
 {
-    const SELECT_LAPS = <<<'TXT'
+    public const SELECT_LAPS = <<<'TXT'
 jsonb_agg(
     jsonb_build_object(
         'lap', rl.lap,
@@ -20,7 +20,6 @@ jsonb_agg(
     ORDER BY rl.lap ASC
 )
 TXT;
-
 
     public function findForSession(string $session, float $maxTimeRatio): LapByLapData
     {
@@ -51,7 +50,6 @@ TXT;
             ->orderBy('finishPosition')
             ->buildQuery()
         ;
-
 
         /** @var array<array{car_number: string, short_code: string, color: string, laps: string, max: float}> $result */
         $result = $this->connection->execute($query)->fetchAllAssociative();

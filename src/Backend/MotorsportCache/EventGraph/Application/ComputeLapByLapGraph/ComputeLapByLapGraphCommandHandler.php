@@ -134,6 +134,7 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
                 if (true === $lap['pit']) { // If it is an inlap
                     unset($lapTimes[$lap['lap'] - 1]);
                     ++$key; // Skip two because we want to skip the outlap also
+
                     continue;
                 }
 
