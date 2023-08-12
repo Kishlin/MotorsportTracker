@@ -18,6 +18,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\JsonValueObject;
  *             name: string,
  *         },
  *     },
+ *     additional_drivers: array{id: string, short_code: string, name: string}[],
  *     team: array{
  *         id: string,
  *         name: string,
@@ -60,6 +61,7 @@ final class ResultsBySession extends JsonValueObject
      *             name: string,
      *         },
      *     },
+     *     additional_drivers: array{id: string, short_code: string, name: string}[],
      *     team: array{
      *         id: string,
      *         name: string,
@@ -105,6 +107,7 @@ final class ResultsBySession extends JsonValueObject
      *             name: string,
      *         },
      *     },
+     *     additional_drivers: array{id: string, short_code: string, name: string}[],
      *     team: array{
      *         id: string,
      *         name: string,

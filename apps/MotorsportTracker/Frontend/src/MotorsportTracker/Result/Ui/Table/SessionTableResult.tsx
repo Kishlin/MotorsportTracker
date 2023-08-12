@@ -8,6 +8,7 @@ import ResultEntryCell from '../Data/ResultEntryCell';
 import ResultTimeCell from '../Data/ResultTimeCell';
 import ResultSpanCell from '../Data/ResultSpanCell';
 import { Result } from '../../Types/Index';
+import ResultDriversCell from '../Data/ResultDriversCell';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -28,7 +29,7 @@ const SessionTableResult: React.FunctionComponent<SessionTableRowProps> = ({ res
     <StyledTableRow>
         <ResultPositionCell classifiedStatus={result.classified_status} position={result.finish_position} />
         <StyledTableCell>{result.car_number.toString()}</StyledTableCell>
-        <ResultEntryCell country={result.driver.country} name={result.driver.name} />
+        <ResultDriversCell driver={result.driver} additionalDrivers={result.additional_drivers} />
         <ResultEntryCell country={result.team.country} name={result.team.name} />
         <StyledTableCell>{result.laps.toString()}</StyledTableCell>
         <ResultTimeCell time={result.race_time} />

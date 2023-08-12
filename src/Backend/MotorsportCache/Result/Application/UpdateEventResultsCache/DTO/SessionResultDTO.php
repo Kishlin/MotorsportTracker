@@ -18,6 +18,7 @@ final readonly class SessionResultDTO
      *             name: string,
      *         },
      *     },
+     *     additional_drivers: array{id: string, short_code: string, name: string}[],
      *     team: array{
      *         id: string,
      *         name: string,
@@ -63,6 +64,7 @@ final readonly class SessionResultDTO
      *             name: string,
      *         },
      *     },
+     *     additional_drivers: array{id: string, short_code: string, name: string}[],
      *     team: array{
      *         id: string,
      *         name: string,
@@ -108,6 +110,7 @@ final readonly class SessionResultDTO
      *             name: string,
      *         },
      *     },
+     *     additional_drivers: array{id: string, short_code: string, name: string}[],
      *     team: array{
      *         id: string,
      *         name: string,

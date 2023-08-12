@@ -26,6 +26,21 @@ json_build_object(
 )
 TXT;
 
+    private const ADDITIONAL_SELECT = <<<'TXT'
+(
+    SELECT json_agg(
+        json_build_object(
+            'id', ad.id,
+            'short_code', ad.short_code,
+            'name', ad.name
+        )
+    )
+    FROM entry_additional_driver ead
+    INNER JOIN driver ad ON ad.id = ead.driver
+    WHERE ead.entry = e.id
+)
+TXT;
+
     private const TEAM_SELECT = <<<'TXT'
 json_build_object(
     'id', t.id,
@@ -55,6 +70,7 @@ TXT;
 
         $query = $qb
             ->select(self::DRIVER_SELECT, 'driver')
+            ->select(self::ADDITIONAL_SELECT, 'additional_drivers')
             ->select(self::TEAM_SELECT, 'team')
             ->select('e.car_number, c.finish_position, c.classified_status, c.grid_position, c.laps, c.lap_time as race_time')
             ->select('c.average_lap_speed, c.fastest_lap_time as best_lap_time, c.best_lap, c.best_is_fastest, c.best_speed')
@@ -105,6 +121,7 @@ TXT;
         /**
          * @var array<array{
          *     driver: string,
+         *     additional_drivers: string,
          *     team: string,
          *     car_number: int,
          *     finish_position: int,
@@ -132,13 +149,17 @@ TXT;
                     /** @var array{id: string, short_code: string, name: string, country: array{id: string, code: string, name: string}} $driver */
                     $driver = json_decode($raceResult['driver'], true, 512, JSON_THROW_ON_ERROR);
 
+                    /** @var array{id: string, short_code: string, name: string}[] $additionalDrivers */
+                    $additionalDrivers = json_decode($raceResult['additional_drivers'], true, 512, JSON_THROW_ON_ERROR);
+
                     /** @var array{id: string, name: string, color: string, country: null|array{id: string, code: string, name: string}} $team */
                     $team = json_decode($raceResult['team'], true, 512, JSON_THROW_ON_ERROR);
 
                     return [
                         ...$raceResult,
-                        'team'   => $team,
-                        'driver' => $driver,
+                        'team'               => $team,
+                        'driver'             => $driver,
+                        'additional_drivers' => $additionalDrivers,
                     ];
                 },
                 $result,

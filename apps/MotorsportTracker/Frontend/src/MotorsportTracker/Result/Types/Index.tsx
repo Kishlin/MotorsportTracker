@@ -1,24 +1,28 @@
 import { Country } from '../../../Shared/Types/Index';
 
-export type ResultTeam = {
+export type ResultTeamWithCountry = {
     id: string,
     short_code: string,
     name: string,
-    country: Country,
+    country: null|Country,
 };
 
-export type ResultDriver = {
+export interface ResultDriver {
     id: string,
     short_code: string,
     name: string,
-    country: Country,
 };
+
+export interface ResultDriverWithCountry extends ResultDriver {
+    country: null|Country,
+}
 
 export type ResultClassification = null | 'CLA' | 'DNF' | 'DNS' | 'WIT';
 
 export type Result = {
-    driver: ResultDriver,
-    team: ResultTeam,
+    driver: ResultDriverWithCountry,
+    additional_drivers: ResultDriver[],
+    team: ResultTeamWithCountry,
     car_number: number,
     finish_position: number,
     classified_status: ResultClassification,
