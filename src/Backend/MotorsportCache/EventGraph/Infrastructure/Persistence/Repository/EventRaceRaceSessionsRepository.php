@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\EventGraph\Infrastructure\Persistence\Repository\ComputeLapByLapData;
+namespace Kishlin\Backend\MotorsportCache\EventGraph\Infrastructure\Persistence\Repository;
 
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\EventSessionsDTO;
-use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Gateway\EventRaceSessionsGateway;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventRaceSessionsGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class EventRaceRaceSessionsRepository extends CoreRepository implements EventRaceSessionsGateway

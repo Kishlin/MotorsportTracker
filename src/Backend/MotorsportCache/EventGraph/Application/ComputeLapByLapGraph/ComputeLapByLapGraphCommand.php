@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph;
 
-use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
+use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeGraphCommand;
 
-final readonly class ComputeLapByLapGraphCommand implements Command
+final readonly class ComputeLapByLapGraphCommand extends ComputeGraphCommand
 {
     private function __construct(
-        private string $eventId,
+        string $eventId,
         private ?float $maxTimeRatio,
     ) {
-    }
-
-    public function eventId(): string
-    {
-        return $this->eventId;
+        parent::__construct($eventId);
     }
 
     public function maxTimeRatio(): ?float

@@ -1,8 +1,8 @@
 export type LapByLapSeries = {
     color: string,
+    index: number,
     car_number: number,
     short_code: string,
-    dashed: boolean,
     lapTimes: {
         [key: string]: number,
     },

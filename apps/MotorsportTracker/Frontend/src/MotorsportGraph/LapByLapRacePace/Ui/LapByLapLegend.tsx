@@ -1,4 +1,5 @@
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -24,7 +25,11 @@ const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({
     const legendIcon = ((entry: LapByLapSeries) => {
         const color = seriesShowStatus[entry.car_number] ? entry.color : disabledSeriesColor;
 
-        if (entry.dashed) {
+        if (2 === entry.index) {
+            return <LinearScaleIcon style={{ color }} />;
+        }
+
+        if (1 === entry.index) {
             return <MoreHorizIcon style={{ color }} />;
         }
 

@@ -7,115 +7,80 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph;
 
 use JsonException;
+use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeGraphCommandHandler;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Event\EmptyLapByLapDataEvent;
-use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Event\NoSessionFoundEvent;
-use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Gateway\EventRaceSessionsGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Gateway\LapByLapDataGateway;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ApplicationEvent\DeprecatedLapByLapGraphDeletedEvent;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ApplicationEvent\FailedToSaveEventGraphEvent;
+use Kishlin\Backend\MotorsportCache\EventGraph\Application\GraphDataSaverUsingEntity;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\EventGraph;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Enum\EventGraphType;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\DeleteDeprecatedEventGraphGateway;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventGraphGateway;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\Graph;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventRaceSessionsGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ValueObject\EventGraphDataValueObject;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
-use Throwable;
 
-final class ComputeLapByLapGraphCommandHandler implements CommandHandler
+final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandler
 {
     private const BASE_MAX_TIME_RATIO = 1.07;
 
-    /** @var array<string, bool> */
-    private array $hasParsedLabelCache;
+    private ComputeLapByLapGraphCommand $command;
 
     public function __construct(
-        private readonly DeleteDeprecatedEventGraphGateway $deleteDeprecatedEventGraphGateway,
+        private readonly GraphDataSaverUsingEntity $graphDataSaverUsingEntity,
         private readonly EventRaceSessionsGateway $eventRaceSessionsGateway,
         private readonly LapByLapDataGateway $lapByLapDataGateway,
-        private readonly EventGraphGateway $eventGraphGateway,
         private readonly EventDispatcher $eventDispatcher,
         private readonly UuidGenerator $uuidGenerator,
     ) {
+        parent::__construct(
+            $this->eventRaceSessionsGateway,
+            $this->graphDataSaverUsingEntity,
+            $this->eventDispatcher,
+        );
     }
 
     public function __invoke(ComputeLapByLapGraphCommand $command): void
     {
-        $maxTimeRatio = $command->maxTimeRatio() ?? self::BASE_MAX_TIME_RATIO;
+        $this->command = $command;
 
-        $this->computeGraphsForEvent($command->eventId(), $maxTimeRatio);
+        parent::doInvoke($command);
     }
 
-    private function computeGraphsForEvent(string $event, float $maxTimeRatio): void
+    /**
+     * @throws JsonException
+     */
+    protected function computeDataForSession(array $session): array
     {
-        $sessions = $this->eventRaceSessionsGateway->findForEvent($event);
-        if (empty($sessions->sessions())) {
-            $this->eventDispatcher->dispatch(NoSessionFoundEvent::create());
+        $maxTimeRatio = $this->command->maxTimeRatio() ?? self::BASE_MAX_TIME_RATIO;
 
-            return;
+        $history = $this->lapByLapDataGateway->findForSession($session['session'], $maxTimeRatio);
+        if (empty($history->data())) {
+            $this->eventDispatcher->dispatch(EmptyLapByLapDataEvent::forSession($session['session']));
+
+            return [];
         }
 
-        $graphsData = [];
+        return $this->buildGraphDataForSession($session, $history);
+    }
 
-        foreach ($sessions->sessions() as $session) {
-            $history = $this->lapByLapDataGateway->findForSession($session['session'], $maxTimeRatio);
-            if (empty($history->data())) {
-                $this->eventDispatcher->dispatch(EmptyLapByLapDataEvent::forSession($session['session']));
-
-                continue;
-            }
-
-            $graphsData[$session['session']] = $this->buildGraphDataForSession($session, $history);
-        }
-
-        $eventGraph = EventGraph::lapByLap(
+    protected function createGraph(array $dataPerSession): Graph
+    {
+        return EventGraph::lapByLap(
             new UuidValueObject($this->uuidGenerator->uuid4()),
-            new UuidValueObject($event),
-            new EventGraphDataValueObject($graphsData),
+            new UuidValueObject($this->command->eventId()),
+            new EventGraphDataValueObject($dataPerSession),
         );
-
-        if ($this->deleteDeprecatedEventGraphGateway->deleteForEvent($event, EventGraphType::LAP_BY_LAP_PACE)) {
-            $this->eventDispatcher->dispatch(DeprecatedLapByLapGraphDeletedEvent::forEvent($event));
-        }
-
-        try {
-            $this->eventGraphGateway->save($eventGraph);
-        } catch (Throwable $e) {
-            $this->eventDispatcher->dispatch(FailedToSaveEventGraphEvent::forThrowable($e));
-
-            return;
-        }
-
-        $this->eventDispatcher->dispatch(...$eventGraph->pullDomainEvents());
     }
 
     /**
      * @param array{session: string, type: string} $session
      *
-     * @return array{
-     *     session: array{id: string, type: string},
-     *     series: array<array{
-     *         color: string,
-     *         car_number: string,
-     *         short_code: string,
-     *         dashed: bool,
-     *         lapTimes: int[],
-     *     }>,
-     *     lapTimes: array{
-     *         slowest: int,
-     *         fastest: int,
-     *     },
-     *     laps: number,
-     * }
+     * @return array<string, mixed>
      *
      * @throws JsonException
      */
     private function buildGraphDataForSession(array $session, LapByLapData $history): array
     {
-        $this->hasParsedLabelCache = [];
-
         $seriesList = [];
 
         $slowest = $laps = 0;
@@ -126,25 +91,9 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
             assert(is_array($lapsList));
 
             $max = $series['max'];
+            assert(is_string($max));
 
-            $lapTimes = [];
-            for ($key = 0, $length = count($lapsList); $key < $length; ++$key) {
-                $lap = $lapsList[$key];
-
-                if (true === $lap['pit']) { // If it is an inlap
-                    unset($lapTimes[$lap['lap'] - 1]);
-                    ++$key; // Skip two because we want to skip the outlap also
-
-                    continue;
-                }
-
-                $lapTime = (int) $lap['time'];
-                if ($lapTime > $max) {
-                    continue;
-                }
-
-                $lapTimes[$lap['lap']] = $lapTime;
-            }
+            $lapTimes = $this->computeLapTimes($lapsList, $max);
 
             if (false === empty($lapTimes)) {
                 $fastest = min($fastest, min($lapTimes));
@@ -155,9 +104,9 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
 
             $seriesList[] = [
                 'color'      => $series['color'],
+                'index'      => $this->nextIndexForColor($series['color']),
                 'car_number' => $series['car_number'],
                 'short_code' => $series['short_code'],
-                'dashed'     => $this->shouldBeDashed($series['color']),
                 'lapTimes'   => $lapTimes,
             ];
         }
@@ -176,14 +125,32 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
         ];
     }
 
-    private function shouldBeDashed(string $key): bool
+    /**
+     * @param array<int, array{lap: int, pit: boolean, time: int}> $lapsList
+     *
+     * @return array<int, int>
+     */
+    private function computeLapTimes(array $lapsList, string $max): array
     {
-        if (false === array_key_exists($key, $this->hasParsedLabelCache)) {
-            $this->hasParsedLabelCache[$key] = true;
+        $lapTimes = [];
+        for ($key = 0, $length = count($lapsList); $key < $length; ++$key) {
+            $lap = $lapsList[$key];
 
-            return false;
+            if (true === $lap['pit']) { // If it is an inlap
+                unset($lapTimes[$lap['lap'] - 1]);
+                ++$key; // Skip two because we want to skip the outlap also
+
+                continue;
+            }
+
+            $lapTime = (int) $lap['time'];
+            if ($lapTime > $max) {
+                continue;
+            }
+
+            $lapTimes[$lap['lap']] = $lapTime;
         }
 
-        return true;
+        return $lapTimes;
     }
 }

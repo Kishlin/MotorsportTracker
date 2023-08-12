@@ -18,7 +18,11 @@ const axisMargin = 50;
 const tickStart = 40;
 const labelsMargin = 25;
 const axisNameMargin = 10;
-const lineDash = [3, 3];
+const lineDash = [
+    [0, 0],
+    [6, 6],
+    [2, 2],
+];
 
 const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMultiDriver }) => {
     const showSeries: {[key: number]: boolean} = {};
@@ -106,7 +110,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMu
 
             ctx.save();
             ctx.beginPath();
-            ctx.setLineDash(currentSeries.dashed ? lineDash : []);
+            ctx.setLineDash(lineDash[currentSeries.index]);
 
             ctx.strokeStyle = currentSeries.color;
 

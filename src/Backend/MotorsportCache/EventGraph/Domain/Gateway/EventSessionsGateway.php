@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Gateway;
+namespace Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway;
 
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\EventSessionsDTO;
 
-interface EventRaceSessionsGateway
+interface EventSessionsGateway
 {
     public function findForEvent(string $eventId): EventSessionsDTO;
 }

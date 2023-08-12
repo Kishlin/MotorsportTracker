@@ -16,7 +16,7 @@ use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ValueObject\EventGraphType
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class EventGraph extends AggregateRoot
+final class EventGraph extends AggregateRoot implements Graph
 {
     private function __construct(
         private readonly UuidValueObject $id,
