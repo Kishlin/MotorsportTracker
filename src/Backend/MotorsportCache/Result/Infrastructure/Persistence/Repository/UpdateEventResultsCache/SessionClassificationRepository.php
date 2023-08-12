@@ -14,7 +14,7 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 final class SessionClassificationRepository extends CoreRepository implements SessionClassificationGateway
 {
     private const DRIVER_SELECT = <<<'TXT'
-json_build_object(
+jsonb_build_object(
     'id', d.id,
     'short_code', d.short_code,
     'name', d.name,
@@ -28,8 +28,8 @@ TXT;
 
     private const ADDITIONAL_SELECT = <<<'TXT'
 (
-    SELECT json_agg(
-        json_build_object(
+    SELECT jsonb_agg(
+        jsonb_build_object(
             'id', ad.id,
             'short_code', ad.short_code,
             'name', ad.name
@@ -42,7 +42,7 @@ TXT;
 TXT;
 
     private const TEAM_SELECT = <<<'TXT'
-json_build_object(
+jsonb_build_object(
     'id', t.id,
     'name', t.name,
     'color', t.color,
@@ -69,13 +69,14 @@ TXT;
         $qb = $this->connection->createQueryBuilder();
 
         $query = $qb
-            ->select(self::DRIVER_SELECT, 'driver')
-            ->select(self::ADDITIONAL_SELECT, 'additional_drivers')
-            ->select(self::TEAM_SELECT, 'team')
-            ->select('e.car_number, c.finish_position, c.classified_status, c.grid_position, c.laps, c.lap_time as race_time')
-            ->select('c.average_lap_speed, c.fastest_lap_time as best_lap_time, c.best_lap, c.best_is_fastest, c.best_speed')
-            ->select('c.gap_time_to_lead as gap_time, c.gap_time_to_next as interval_time')
-            ->select('c.gap_laps_to_lead as gap_laps, c.gap_laps_to_next as interval_laps')
+            ->select('DISTINCT e.car_number')
+            ->addSelect(self::DRIVER_SELECT, 'driver')
+            ->addSelect(self::ADDITIONAL_SELECT, 'additional_drivers')
+            ->addSelect(self::TEAM_SELECT, 'team')
+            ->addSelect('c.finish_position, c.classified_status, c.grid_position, c.laps, c.lap_time as race_time')
+            ->addSelect('c.average_lap_speed, c.fastest_lap_time as best_lap_time, c.best_lap, c.best_is_fastest, c.best_speed')
+            ->addSelect('c.gap_time_to_lead as gap_time, c.gap_time_to_next as interval_time')
+            ->addSelect('c.gap_laps_to_lead as gap_laps, c.gap_laps_to_next as interval_laps')
             ->from('classification', 'c')
             ->innerJoin('entry', 'e', $qb->expr()->eq('e.id', 'c.entry'))
             ->innerJoin('event_session', 'es', $qb->expr()->eq('e.session', 'es.id'))
