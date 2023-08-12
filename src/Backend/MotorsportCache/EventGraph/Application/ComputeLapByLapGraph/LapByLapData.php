@@ -7,7 +7,7 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLap
 final readonly class LapByLapData
 {
     /**
-     * @param array<array{car_number: string, short_code: string, color: string, laptimes: string, max: float}> $data
+     * @param array<array{car_number: string, short_code: string, color: string, laps: string, max: float}> $data
      */
     private function __construct(
         private array $data,
@@ -15,7 +15,7 @@ final readonly class LapByLapData
     }
 
     /**
-     * @return array<array{car_number: string, short_code: string, color: string, laptimes: string, max: float}>
+     * @return array<array{car_number: string, short_code: string, color: string, laps: string, max: float}>
      */
     public function data(): array
     {
@@ -23,7 +23,7 @@ final readonly class LapByLapData
     }
 
     /**
-     * @param array<array{car_number: string, short_code: string, color: string, laptimes: string, max: float}> $data
+     * @param array<array{car_number: string, short_code: string, color: string, laps: string, max: float}> $data
      */
     public static function fromData(array $data): self
     {

@@ -10,6 +10,18 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class LapByLapDataRepository extends CoreRepository implements LapByLapDataGateway
 {
+    const SELECT_LAPS = <<<'TXT'
+jsonb_agg(
+    jsonb_build_object(
+        'lap', rl.lap,
+        'pit', rl.pit,
+        'time', rl.time
+    )
+    ORDER BY rl.lap ASC
+)
+TXT;
+
+
     public function findForSession(string $session, float $maxTimeRatio): LapByLapData
     {
         $qb = $this->connection->createQueryBuilder();
@@ -18,7 +30,7 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->select('DISTINCT e.car_number', 'car_number')
             ->addSelect('d.short_code', 'short_code')
             ->addSelect('t.color', 'color')
-            ->addSelect('array_agg(rl.time ORDER BY rl.lap ASC)', 'lapTimes')
+            ->addSelect(self::SELECT_LAPS, 'laps')
             ->addSelect("min(rl.time)*{$maxTimeRatio}", 'max')
             ->addSelect('(c.finish_position+99)%100', 'finishPosition')
             ->from('race_lap', 'rl')
@@ -40,7 +52,8 @@ final class LapByLapDataRepository extends CoreRepository implements LapByLapDat
             ->buildQuery()
         ;
 
-        /** @var array<array{car_number: string, short_code: string, color: string, laptimes: string, max: float}> $result */
+
+        /** @var array<array{car_number: string, short_code: string, color: string, laps: string, max: float}> $result */
         $result = $this->connection->execute($query)->fetchAllAssociative();
 
         return LapByLapData::fromData($result);

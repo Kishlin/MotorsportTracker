@@ -1,9 +1,12 @@
 <?php
 
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
 declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph;
 
+use JsonException;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Event\EmptyLapByLapDataEvent;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Event\NoSessionFoundEvent;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\Gateway\EventRaceSessionsGateway;
@@ -106,6 +109,8 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
      *     },
      *     laps: number,
      * }
+     *
+     * @throws JsonException
      */
     private function buildGraphDataForSession(array $session, LapByLapData $history): array
     {
@@ -116,22 +121,33 @@ final class ComputeLapByLapGraphCommandHandler implements CommandHandler
         $slowest = $laps = 0;
         $fastest = PHP_INT_MAX;
         foreach ($history->data() as $series) {
-            $lapTimesAsString = explode(',', substr($series['laptimes'], 1, -1));
+            /** @var array<int, array{lap: int, pit: boolean, time: int}> $lapsList */
+            $lapsList = json_decode($series['laps'], true, 512, JSON_THROW_ON_ERROR);
+            assert(is_array($lapsList));
 
             $max = $series['max'];
 
             $lapTimes = [];
-            foreach ($lapTimesAsString as $key => $lapTimeAsString) {
-                $lapTime = (int) $lapTimeAsString;
+            for ($key = 0, $length = count($lapsList); $key < $length; ++$key) {
+                $lap = $lapsList[$key];
 
+                if (true === $lap['pit']) { // If it is an inlap
+                    unset($lapTimes[$lap['lap'] - 1]);
+                    ++$key; // Skip two because we want to skip the outlap also
+                    continue;
+                }
+
+                $lapTime = (int) $lap['time'];
                 if ($lapTime > $max) {
                     continue;
                 }
 
-                $fastest = min($fastest, $lapTime);
-                $slowest = max($slowest, $lapTime);
+                $lapTimes[$lap['lap']] = $lapTime;
+            }
 
-                $lapTimes[$key] = $lapTime;
+            if (false === empty($lapTimes)) {
+                $fastest = min($fastest, min($lapTimes));
+                $slowest = max($slowest, max($lapTimes));
             }
 
             $laps = max($laps, count($lapTimes));
