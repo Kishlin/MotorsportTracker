@@ -13,6 +13,7 @@ use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SessionsListGateway;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateClassificationIfNotExists\CreateClassificationIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateEntryIfNotExists\CreateEntryIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Result\Application\CreateRetirementIfNotExists\CreateRetirementIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Result\Application\RegisterAdditionalDriver\RegisterAdditionalDriverCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
@@ -92,6 +93,14 @@ final class ScrapClassificationCommandHandler implements CommandHandler
                 );
 
                 assert($entryId instanceof UuidValueObject);
+
+                for ($i = 1, $max = count($details['drivers']); $i < $max; ++$i) {
+                    $additionalDriver = $this->createDriverIfNotExists($details['drivers'][$i]);
+
+                    $this->commandBus->execute(
+                        RegisterAdditionalDriverCommand::fromScalars($entryId->value(), $additionalDriver->value()),
+                    );
+                }
 
                 $this->storeEntryForDriver($details['drivers'][0], $entryId);
 
