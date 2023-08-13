@@ -9,7 +9,6 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Infrastructure\Persistence\
 use JsonException;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ViewGraphDataForEvent\GraphDataForEventGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ViewGraphDataForEvent\GraphDataForEventJsonableView;
-use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository;
 
 final class GraphDataForEventRepository extends CacheRepository implements GraphDataForEventGateway
@@ -27,7 +26,7 @@ final class GraphDataForEventRepository extends CacheRepository implements Graph
             ->from('event_graph')
             ->where($qb->expr()->eq('event', ':event'))
             ->withParam('event', $event)
-            ->orderBy('event_graph.order', OrderBy::DESC)
+            ->orderBy('event_graph.order')
             ->buildQuery()
         ;
 
