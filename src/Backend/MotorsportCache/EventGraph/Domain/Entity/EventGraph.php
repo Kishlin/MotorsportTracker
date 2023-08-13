@@ -42,6 +42,21 @@ final class EventGraph extends AggregateRoot implements Graph
         return $eventGraph;
     }
 
+    public static function tyreHistory(
+        UuidValueObject $id,
+        UuidValueObject $event,
+        EventGraphDataValueObject $data,
+    ): self {
+        $order = new EventGraphOrderValueObject(EventGraphOrder::TYRE_HISTORY);
+        $type  = new EventGraphTypeValueObject(EventGraphType::TYRE_HISTORY);
+
+        $eventGraph = new self($id, $event, $order, $type, $data);
+
+        $eventGraph->record(new EventGraphCreatedDomainEvent($id));
+
+        return $eventGraph;
+    }
+
     /**
      * @internal only use to get a test object
      */

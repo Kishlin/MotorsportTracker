@@ -20,8 +20,8 @@ final class ComputeHistoriesForEventCommandHandler extends ComputeGraphCommandHa
     public function __construct(
         private readonly GraphDataSaverUsingCacheItem $graphDataSaverUsingCacheItem,
         private readonly RaceAndSprintSessionsGateway $raceSessionsGateway,
-        private readonly HistoriesDataGateway         $historiesDataGateway,
-        private readonly EventDispatcher              $eventDispatcher,
+        private readonly HistoriesDataGateway $historiesDataGateway,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
         parent::__construct(
             $this->raceSessionsGateway,

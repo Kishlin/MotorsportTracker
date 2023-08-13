@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportCache\EventGraph\Application;
 
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ApplicationEvent\DeprecatedLapByLapGraphDeletedEvent;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ApplicationEvent\DeprecatedGraphDeletedEvent;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ApplicationEvent\FailedToSaveEventGraphEvent;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\EventGraph;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\Graph;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Enum\EventGraphType;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\DeleteDeprecatedEventGraphGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventGraphGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
@@ -27,8 +26,8 @@ final readonly class GraphDataSaverUsingEntity implements GraphDataSaver
     {
         assert($graph instanceof EventGraph);
 
-        if ($this->deleteDeprecatedEventGraphGateway->deleteForEvent($event, EventGraphType::LAP_BY_LAP_PACE)) {
-            $this->eventDispatcher->dispatch(DeprecatedLapByLapGraphDeletedEvent::forEvent($event));
+        if ($this->deleteDeprecatedEventGraphGateway->deleteForEvent($event, $graph->type()->value())) {
+            $this->eventDispatcher->dispatch(DeprecatedGraphDeletedEvent::forEvent($event, $graph->type()->value()));
         }
 
         try {

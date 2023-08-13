@@ -85,7 +85,14 @@ final class ScrapRaceHistoryCommandHandler implements CommandHandler
 
         foreach ($raceHistory['laps'] as $lap) {
             $lapKey = $lap['lap'];
-            foreach ($lap['carPosition'] as $carPosition) {
+
+            foreach ($lap['carPosition'] as $key => $carPosition) {
+                if (empty($carPosition['tyreDetail'])
+                    && array_key_exists($key + 1, $lap['carPosition'])
+                    && $lap['carPosition'][$key + 1]['entryUuid'] === $lap['carPosition'][$key]['entryUuid']) {
+                    continue;
+                }
+
                 $entry = $carPosition['entryUuid'];
 
                 if (array_key_exists($entry, $skippedEntries)) {

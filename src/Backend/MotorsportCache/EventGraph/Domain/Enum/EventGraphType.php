@@ -7,4 +7,6 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Domain\Enum;
 enum EventGraphType: String
 {
     case LAP_BY_LAP_PACE = 'lap-by-lap-pace';
+
+    case TYRE_HISTORY = 'tyre-history';
 }

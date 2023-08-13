@@ -7,4 +7,6 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Domain\Enum;
 enum EventGraphOrder: Int
 {
     case LAP_BY_LAP_PACE = 500;
+
+    case TYRE_HISTORY = 1000;
 }

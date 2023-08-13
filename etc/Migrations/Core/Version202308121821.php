@@ -6,7 +6,7 @@ namespace Migrations\Core;
 
 use Kishlin\Backend\Persistence\Migration\Migration;
 
-final class Version202310101821 implements Migration
+final class Version202308121821 implements Migration
 {
     public function up(): string
     {
