@@ -62,7 +62,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'GT World Europe Endurance',
         shortName: 'GT Europe E',
         slug: 'gt-world-challenge-europe',
-        years: Array.from({ length: 10 }, (x, i) => 2013 + i),
+        years: Array.from({ length: 11 }, (x, i) => 2013 + i),
         isMultiDriver: true,
     },
     'gt-world-challenge-europe-sprint-cup': {
@@ -70,7 +70,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'GT World Europe Sprint',
         shortName: 'GT Europe S',
         slug: 'gt-world-challenge-europe-sprint-cup',
-        years: Array.from({ length: 4 }, (x, i) => 2019 + i),
+        years: Array.from({ length: 5 }, (x, i) => 2019 + i),
         isMultiDriver: true,
     },
     'gt4-france': {
