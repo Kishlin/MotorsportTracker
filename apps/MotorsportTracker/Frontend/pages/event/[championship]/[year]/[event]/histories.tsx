@@ -4,11 +4,15 @@ import Typography from '@mui/material/Typography';
 
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 
+import HistoriesContainer from '../../../../../src/MotorsportGraph/RaceHistories/Ui/HistoriesContainer';
 import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import EventContainer from '../../../../../src/MotorsportTracker/Event/Ui/EventContainer';
+import historiesApi from '../../../../../src/MotorsportGraph/RaceHistories/Api/HistoriesApi';
+import { HistoriesList } from '../../../../../src/MotorsportGraph/RaceHistories/Types';
+import championships from '../../../../../src/MotorsportTracker/Config/Championships';
 import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNavbar';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
+import Histories from '../../../../../src/MotorsportGraph/RaceHistories/Ui/Histories';
 
 declare type EventHistoriesPathParams = {
     params: {
@@ -21,6 +25,7 @@ declare type EventHistoriesPathParams = {
 declare type EventHistoriesPageProps = {
     championship: string,
     season: SeasonEvents,
+    histories: HistoriesList,
     event: string,
     year: string,
     page: string,
@@ -28,6 +33,7 @@ declare type EventHistoriesPageProps = {
 
 const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps> = ({
     championship,
+    histories,
     season,
     event,
     year,
@@ -37,14 +43,16 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
         return null;
     }
 
+    const { isMultiDriver } = championships[championship];
+
     return (
         <Layout
             menu={<MotorsportTrackerMenu />}
             content={(
-                <EventContainer>
+                <HistoriesContainer>
                     <Typography variant="h4" align="left" sx={{ my: 4 }}>{`${season[event].name} - Histories`}</Typography>
-                    <Typography align="center">There are no histories available at this time.</Typography>
-                </EventContainer>
+                    <Histories histories={histories} isMultiDriver={isMultiDriver} />
+                </HistoriesContainer>
             )}
             subHeader={
                 <EventNavbar championship={championship} year={year} event={event} season={season} page={page} />
@@ -56,12 +64,15 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
 export const getStaticProps = async ({ params: { championship, year, event } }: EventHistoriesPathParams) => {
     const season = await seasonApi(championship, parseInt(year, 10));
 
+    const histories = await historiesApi(season[event].id);
+
     return {
         props: {
             championship,
             year,
             event,
             season,
+            histories,
             page: 'histories',
         },
         revalidate: 60,
