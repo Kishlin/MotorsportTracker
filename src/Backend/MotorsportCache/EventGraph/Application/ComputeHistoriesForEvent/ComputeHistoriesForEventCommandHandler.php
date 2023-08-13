@@ -11,7 +11,7 @@ use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeGraphCommandHa
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\GraphDataSaverUsingCacheItem;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\Graph;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\Histories;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventRaceSessionsGateway;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\RaceAndSprintSessionsGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ValueObject\HistoriesValueObject;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 
@@ -19,9 +19,9 @@ final class ComputeHistoriesForEventCommandHandler extends ComputeGraphCommandHa
 {
     public function __construct(
         private readonly GraphDataSaverUsingCacheItem $graphDataSaverUsingCacheItem,
-        private readonly EventRaceSessionsGateway $raceSessionsGateway,
-        private readonly HistoriesDataGateway $historiesDataGateway,
-        private readonly EventDispatcher $eventDispatcher,
+        private readonly RaceAndSprintSessionsGateway $raceSessionsGateway,
+        private readonly HistoriesDataGateway         $historiesDataGateway,
+        private readonly EventDispatcher              $eventDispatcher,
     ) {
         parent::__construct(
             $this->raceSessionsGateway,

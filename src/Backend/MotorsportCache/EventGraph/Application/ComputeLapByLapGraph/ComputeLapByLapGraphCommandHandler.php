@@ -13,7 +13,7 @@ use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeLapByLapGraph\
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\GraphDataSaverUsingEntity;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\EventGraph;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Entity\Graph;
-use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\EventRaceSessionsGateway;
+use Kishlin\Backend\MotorsportCache\EventGraph\Domain\Gateway\RaceAndSprintSessionsGateway;
 use Kishlin\Backend\MotorsportCache\EventGraph\Domain\ValueObject\EventGraphDataValueObject;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
@@ -26,11 +26,11 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
     private ComputeLapByLapGraphCommand $command;
 
     public function __construct(
-        private readonly GraphDataSaverUsingEntity $graphDataSaverUsingEntity,
-        private readonly EventRaceSessionsGateway $eventRaceSessionsGateway,
-        private readonly LapByLapDataGateway $lapByLapDataGateway,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly UuidGenerator $uuidGenerator,
+        private readonly GraphDataSaverUsingEntity    $graphDataSaverUsingEntity,
+        private readonly RaceAndSprintSessionsGateway $eventRaceSessionsGateway,
+        private readonly LapByLapDataGateway          $lapByLapDataGateway,
+        private readonly EventDispatcher              $eventDispatcher,
+        private readonly UuidGenerator                $uuidGenerator,
     ) {
         parent::__construct(
             $this->eventRaceSessionsGateway,
