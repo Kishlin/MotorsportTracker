@@ -16,15 +16,21 @@ events:
   type: annotation
   stateless: true
 
-results:
-  resource: ../../src/MotorsportCache/Results/Controller/
-  prefix: /api/v1/results
-  type: annotation
-  stateless: true
-
 event_graphs:
   resource: ../../src/MotorsportCache/EventGraph/Controller/
   prefix: /api/v1/graph/event
+  type: annotation
+  stateless: true
+
+histories:
+  resource: ../../src/MotorsportCache/Histories/Controller/
+  prefix: /api/v1/histories
+  type: annotation
+  stateless: true
+
+results:
+  resource: ../../src/MotorsportCache/Results/Controller/
+  prefix: /api/v1/results
   type: annotation
   stateless: true
 
