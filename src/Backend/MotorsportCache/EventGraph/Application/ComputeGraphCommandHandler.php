@@ -38,7 +38,13 @@ abstract class ComputeGraphCommandHandler implements CommandHandler
 
             $data = $this->computeDataForSession($session);
 
-            $dataPerSession[$session['session']] = $data;
+            if (false === empty($data)) {
+                $dataPerSession[$session['session']] = $data;
+            }
+        }
+
+        if (empty($dataPerSession)) {
+            return;
         }
 
         $graph = $this->createGraph($dataPerSession);

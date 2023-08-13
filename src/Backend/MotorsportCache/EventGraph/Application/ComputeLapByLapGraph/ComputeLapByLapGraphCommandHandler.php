@@ -26,11 +26,11 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
     private ComputeLapByLapGraphCommand $command;
 
     public function __construct(
-        private readonly GraphDataSaverUsingEntity    $graphDataSaverUsingEntity,
+        private readonly GraphDataSaverUsingEntity $graphDataSaverUsingEntity,
         private readonly RaceAndSprintSessionsGateway $eventRaceSessionsGateway,
-        private readonly LapByLapDataGateway          $lapByLapDataGateway,
-        private readonly EventDispatcher              $eventDispatcher,
-        private readonly UuidGenerator                $uuidGenerator,
+        private readonly LapByLapDataGateway $lapByLapDataGateway,
+        private readonly EventDispatcher $eventDispatcher,
+        private readonly UuidGenerator $uuidGenerator,
     ) {
         parent::__construct(
             $this->eventRaceSessionsGateway,
@@ -53,14 +53,15 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
     {
         $maxTimeRatio = $this->command->maxTimeRatio() ?? self::BASE_MAX_TIME_RATIO;
 
-        $history = $this->lapByLapDataGateway->findForSession($session['session'], $maxTimeRatio);
-        if (empty($history->data())) {
+        $lapByLapData = $this->lapByLapDataGateway->findForSession($session['session'], $maxTimeRatio);
+
+        if (empty($lapByLapData->data())) {
             $this->eventDispatcher->dispatch(EmptyLapByLapDataEvent::forSession($session['session']));
 
             return [];
         }
 
-        return $this->buildGraphDataForSession($session, $history);
+        return $this->buildGraphDataForSession($session, $lapByLapData);
     }
 
     protected function createGraph(array $dataPerSession): Graph
@@ -79,13 +80,14 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
      *
      * @throws JsonException
      */
-    private function buildGraphDataForSession(array $session, LapByLapData $history): array
+    private function buildGraphDataForSession(array $session, LapByLapData $lapByLapData): array
     {
         $seriesList = [];
 
         $slowest = $laps = 0;
         $fastest = PHP_INT_MAX;
-        foreach ($history->data() as $series) {
+
+        foreach ($lapByLapData->data() as $series) {
             /** @var array<int, array{lap: int, pit: boolean, time: int}> $lapsList */
             $lapsList = json_decode($series['laps'], true, 512, JSON_THROW_ON_ERROR);
             assert(is_array($lapsList));

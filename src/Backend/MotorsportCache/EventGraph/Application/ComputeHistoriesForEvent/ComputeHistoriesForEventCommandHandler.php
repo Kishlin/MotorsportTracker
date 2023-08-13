@@ -40,10 +40,18 @@ final class ComputeHistoriesForEventCommandHandler extends ComputeGraphCommandHa
      */
     protected function computeDataForSession(array $session): array
     {
+        $histories = $this->historiesDataGateway->findForSession($session['session'])->data();
+
+        if (empty($histories)) {
+            $this->eventDispatcher->dispatch(EmptyHistoriesDataEvent::forSession($session['session']));
+
+            return [];
+        }
+
         $seriesList = [];
         $laps       = 0;
 
-        foreach ($this->historiesDataGateway->findForSession($session['session'])->data() as $history) {
+        foreach ($histories as $history) {
             /** @var array<int, array{lap: int, position: int, pit: boolean}> $lapsList */
             $lapsList = json_decode($history['laps'], true, 512, JSON_THROW_ON_ERROR);
             assert(is_array($lapsList));
