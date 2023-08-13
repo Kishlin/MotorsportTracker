@@ -72,6 +72,21 @@ final class EventGraph extends AggregateRoot implements Graph
         return $eventGraph;
     }
 
+    public static function fastestLapDelta(
+        UuidValueObject $id,
+        UuidValueObject $event,
+        EventGraphDataValueObject $data,
+    ): self {
+        $order = new EventGraphOrderValueObject(EventGraphOrder::FASTEST_LAP_DELTA);
+        $type  = new EventGraphTypeValueObject(EventGraphType::FASTEST_LAP_DELTA);
+
+        $eventGraph = new self($id, $event, $order, $type, $data);
+
+        $eventGraph->record(new EventGraphCreatedDomainEvent($id));
+
+        return $eventGraph;
+    }
+
     /**
      * @internal only use to get a test object
      */

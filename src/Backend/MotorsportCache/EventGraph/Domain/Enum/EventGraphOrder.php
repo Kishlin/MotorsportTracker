@@ -11,4 +11,6 @@ enum EventGraphOrder: Int
     case TYRE_HISTORY = 1000;
 
     case POSITION_CHANGE = 1500;
+
+    case FASTEST_LAP_DELTA = 2000;
 }

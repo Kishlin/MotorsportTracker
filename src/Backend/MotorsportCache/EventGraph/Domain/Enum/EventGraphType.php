@@ -11,4 +11,6 @@ enum EventGraphType: String
     case TYRE_HISTORY = 'tyre-history';
 
     case POSITION_CHANGE = 'position-change';
+
+    case FASTEST_LAP_DELTA = 'fastest-lap';
 }
