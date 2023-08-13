@@ -57,6 +57,21 @@ final class EventGraph extends AggregateRoot implements Graph
         return $eventGraph;
     }
 
+    public static function positionChange(
+        UuidValueObject $id,
+        UuidValueObject $event,
+        EventGraphDataValueObject $data,
+    ): self {
+        $order = new EventGraphOrderValueObject(EventGraphOrder::POSITION_CHANGE);
+        $type  = new EventGraphTypeValueObject(EventGraphType::POSITION_CHANGE);
+
+        $eventGraph = new self($id, $event, $order, $type, $data);
+
+        $eventGraph->record(new EventGraphCreatedDomainEvent($id));
+
+        return $eventGraph;
+    }
+
     /**
      * @internal only use to get a test object
      */
