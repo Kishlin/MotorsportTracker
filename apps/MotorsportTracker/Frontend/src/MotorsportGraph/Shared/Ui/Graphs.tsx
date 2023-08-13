@@ -2,6 +2,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import React from 'react';
 
+import TyreHistoryGraph from '../../TyreHistory/Ui/TyreHistoryGraph';
 import LapByLapGraph from '../../LapByLapRacePace/Ui/LapByLapGraph';
 import { EventGraphs } from '../Types';
 
@@ -15,13 +16,21 @@ const Graphs: React.FunctionComponent<GraphsProps> = ({ graphs, isMultiDriver })
         return <Typography align="center">There are no graphs available at this time.</Typography>;
     }
 
-    const graphsJSX = Object.keys(graphs['lap-by-lap-pace']).map((key: string) => (
+    const lapByLapGraphsJSX = Object.keys(graphs['lap-by-lap-pace']).map((key: string) => (
         <LapByLapGraph key={key} isMultiDriver={isMultiDriver} data={graphs['lap-by-lap-pace'][key]} />
     ));
 
+    let tyreHistoryGraphsJSX: JSX.Element[] = [];
+    if (undefined !== graphs['tyre-history']) {
+        tyreHistoryGraphsJSX = Object.keys(graphs['tyre-history']).map((key: string) => (
+            <TyreHistoryGraph key={key} data={graphs['tyre-history'][key]} />
+        ));
+    }
+
     return (
         <Box>
-            {graphsJSX}
+            {lapByLapGraphsJSX}
+            {tyreHistoryGraphsJSX}
         </Box>
     );
 };

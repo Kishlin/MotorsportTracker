@@ -20,8 +20,9 @@ export interface LapByLapSeries extends Series {
 }
 
 export interface TyreHistorySeries extends Series {
+    laps: number,
     tyre_history: {
-        [key: number]: {
+        [key: string]: {
             laps: number,
             type: 'H'|'M'|'S'|'I'|'W',
             wear: 'n'|'u',
@@ -67,4 +68,7 @@ export type EventGraphList<T> = {
 
 export type EventGraphs = {
     'lap-by-lap-pace': EventGraphList<LapByLapGraphData>,
+    'tyre-history': EventGraphList<TyreHistoryGraphData>,
+    'position-change': EventGraphList<PositionChangeGraphData>,
+    'fastest-lap': EventGraphList<FastestLapGraphData>,
 };
