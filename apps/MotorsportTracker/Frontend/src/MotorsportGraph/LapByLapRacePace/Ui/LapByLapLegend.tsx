@@ -24,12 +24,13 @@ const LapByLapLegend: React.FunctionComponent<LapByLapLegendProps> = ({
 }) => {
     const legendIcon = ((entry: LapByLapSeries) => {
         const color = seriesShowStatus[entry.car_number] ? entry.color : disabledSeriesColor;
+        const applicableIndex = entry.index % 3;
 
-        if (2 === entry.index) {
+        if (2 === applicableIndex) {
             return <LinearScaleIcon style={{ color }} />;
         }
 
-        if (1 === entry.index) {
+        if (1 === applicableIndex) {
             return <MoreHorizIcon style={{ color }} />;
         }
 

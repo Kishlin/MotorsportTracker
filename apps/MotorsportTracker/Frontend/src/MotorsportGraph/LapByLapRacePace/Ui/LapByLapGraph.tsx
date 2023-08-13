@@ -110,7 +110,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMu
 
             ctx.save();
             ctx.beginPath();
-            ctx.setLineDash(lineDash[currentSeries.index]);
+            ctx.setLineDash(lineDash[currentSeries.index % 3]);
 
             ctx.strokeStyle = currentSeries.color;
 
