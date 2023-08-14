@@ -4,6 +4,7 @@ export type ResultTeam = {
     id: string,
     short_code: string,
     name: string,
+    country: null|Country,
 };
 
 export type ResultDriver = {
