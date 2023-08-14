@@ -5,6 +5,7 @@ import { LapByLapGraphData, LapByLapSeries } from '../../Shared/Types';
 import Canvas from '../../../Canvas/Ui/Canvas';
 import LapByLapLegend from './LapByLapLegend';
 import LapByLapTitle from './LapByLapTitle';
+import formatTime from '../../../MotorsportTracker/Result/Utils/FormatTime';
 
 declare type LapByLapGraphProps = {
     data: LapByLapGraphData,
@@ -15,7 +16,7 @@ const axisColor = '#ffffff';
 
 const lapTimeSpace = 500;
 const axisMargin = 50;
-const tickStart = 40;
+const tickStart = 45;
 const labelsMargin = 25;
 const axisNameMargin = 10;
 const lineDash = [
@@ -63,7 +64,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMu
             ctx.lineTo(axisMargin, yPos);
             ctx.stroke();
 
-            ctx.fillText((i / 1000).toString(), labelsMargin, yPos);
+            ctx.fillText(formatTime((i).toString(), true), labelsMargin + 5, yPos);
             ctx.restore();
         }
 
@@ -93,7 +94,7 @@ const LapByLapGraph: React.FunctionComponent<LapByLapGraphProps> = ({ data, isMu
             ctx.lineTo(xPos, tickEndYPos);
             ctx.stroke();
 
-            ctx.fillText(i.toString(), xPos, labelYPos);
+            ctx.fillText(i.toString(), xPos, labelYPos - 5);
             ctx.restore();
         }
 
