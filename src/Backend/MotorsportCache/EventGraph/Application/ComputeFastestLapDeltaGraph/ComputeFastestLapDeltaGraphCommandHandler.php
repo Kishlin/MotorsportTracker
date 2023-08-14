@@ -84,7 +84,7 @@ final class ComputeFastestLapDeltaGraphCommandHandler extends ComputeGraphComman
                 'index'      => $this->nextIndexForColor($series['color']),
                 'car_number' => $series['car_number'],
                 'short_code' => $series['short_code'],
-                'fastest'    => $fastest,
+                'fastest'    => $series['fastest'],
                 'delta'      => $delta,
             ];
         }
