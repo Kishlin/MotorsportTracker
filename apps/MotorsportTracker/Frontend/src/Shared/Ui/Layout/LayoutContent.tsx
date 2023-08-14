@@ -37,21 +37,21 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 declare type LayoutContentProps = {
-    hasSubHeader: boolean,
+    subHeader : ReactNode,
     drawerWidth: number,
     content: ReactNode,
     open: boolean,
 }
 
 const LayoutContent: React.FunctionComponent<LayoutContentProps> = ({
-    hasSubHeader,
+    subHeader,
     drawerWidth,
     content,
     open,
 }) => (
     <Main open={open} drawerwidth={drawerWidth}>
         <DrawerHeader />
-        {hasSubHeader ? <DrawerHeader /> : <noscript />}
+        {subHeader}
         { content }
     </Main>
 );

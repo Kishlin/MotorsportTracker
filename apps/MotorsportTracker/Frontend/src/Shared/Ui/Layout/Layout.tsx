@@ -29,11 +29,10 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ menu, content, subHeader
             <LayoutHeader
                 handleDrawerOpen={handleDrawerOpen}
                 drawerWidth={drawerWidth}
-                subHeader={subHeader}
                 open={open}
             />
             <LayoutContent
-                hasSubHeader={undefined !== subHeader}
+                subHeader={subHeader}
                 drawerWidth={drawerWidth}
                 content={content}
                 open={open}
