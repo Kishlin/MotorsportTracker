@@ -11,6 +11,7 @@ parameters:
   kishlin.jwt.expire_refresh_token: '%env(default:kishlin.jwt.expire_refresh_token_default:JWT_EXP_REFRESH_TOKEN)%'
   kishlin.jwt.expire_refresh_token_default: '+1 month'
   kishlin.jwt.exp_claim_is_required: '%env(bool:JWT_EXP_CLAIM_IS_REQUIRED)%'
+  kishlin.http.cache: '%env(bool:HTTP_CLIENT_USE_CACHE)%'
 
 services:
   _defaults:
@@ -33,6 +34,12 @@ services:
 
   Psr\Cache\CacheItemPoolInterface: '@app.cache.memcached'
 
+
+  ##> HTTP Client
+
+  Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\CachedClientUsingCurl:
+    bind:
+      $storeToCache: '%kishlin.http.cache%'
 
   ##> Messaging
 

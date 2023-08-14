@@ -14,11 +14,18 @@ final readonly class CachedClientUsingCurl implements Client
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
         private LoggerInterface $logger,
+        private bool $storeToCache = true,
     ) {
     }
 
     public function fetch(string $url, array $headers = []): string
     {
+        if (false === $this->storeToCache) {
+            $this->logger->info(sprintf('Requesting %s without using cache.', $url));
+
+            return $this->doFetch($headers, $url);
+        }
+
         try {
             $item = $this->cacheItemPool->getItem($this->computeKey($url));
         } catch (InvalidArgumentException $e) {
