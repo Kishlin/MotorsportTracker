@@ -79,7 +79,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: 'GT4 France',
         slug: 'gt4-france',
         years: Array.from({ length: 2 }, (x, i) => 2022 + i),
-        isMultiDriver: false,
+        isMultiDriver: true,
     },
     'imsa-sportscar-championship': {
         name: 'IMSA SportsCar Championship',
