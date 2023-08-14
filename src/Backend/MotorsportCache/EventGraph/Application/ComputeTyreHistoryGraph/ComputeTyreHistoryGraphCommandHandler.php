@@ -100,7 +100,17 @@ final class ComputeTyreHistoryGraphCommandHandler extends ComputeGraphCommandHan
                 ];
 
                 foreach ($pitHistory as $pitLap) {
-                    $tyreHistory[$pitLap] = array_shift($tyreDetails);
+                    $tyreDetail = array_shift($tyreDetails);
+
+                    if (null === $tyreDetail) {
+                        $this->eventDispatcher->dispatch(
+                            MismatchingTyreAndPitHistoriesEvent::forSeries($session['session'], $series, true),
+                        );
+
+                        continue 2;
+                    }
+
+                    $tyreHistory[$pitLap] = $tyreDetail;
                 }
 
                 if (false === empty($tyreDetails)) {

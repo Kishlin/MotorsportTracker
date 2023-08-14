@@ -17,6 +17,12 @@ final readonly class MismatchingTyreAndPitHistoriesLogger implements EventSubscr
 
     public function __invoke(MismatchingTyreAndPitHistoriesEvent $event): void
     {
-        $this->logger->warning("Mismatching tyre and pit histories in session {$event->session()}.", $event->series());
+        if ($event->skipping()) {
+            $this->logger->error("Skipping mismatching tyre and pit histories for {$event->session()}", $event->series());
+
+            return;
+        }
+
+        $this->logger->warning("Mismatching tyre and pit histories in session {$event->session()}", $event->series());
     }
 }

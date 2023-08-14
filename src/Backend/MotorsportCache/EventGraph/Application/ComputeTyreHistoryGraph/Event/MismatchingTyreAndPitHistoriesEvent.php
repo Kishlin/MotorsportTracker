@@ -14,6 +14,7 @@ final readonly class MismatchingTyreAndPitHistoriesEvent implements ApplicationE
     private function __construct(
         private string $session,
         private array $series,
+        private bool$skipping,
     ) {
     }
 
@@ -30,11 +31,16 @@ final readonly class MismatchingTyreAndPitHistoriesEvent implements ApplicationE
         return $this->series;
     }
 
+    public function skipping(): bool
+    {
+        return $this->skipping;
+    }
+
     /**
      * @param array{car_number: string, short_code: string, color: string, laps: int, tyre_details: null|string, pit_history: null|string, finishPosition: int} $series
      */
-    public static function forSeries(string $session, array $series): self
+    public static function forSeries(string $session, array $series, bool $skipping = false): self
     {
-        return new self($session, $series);
+        return new self($session, $series, $skipping);
     }
 }
