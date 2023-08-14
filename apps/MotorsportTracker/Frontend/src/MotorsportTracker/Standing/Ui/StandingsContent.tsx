@@ -55,7 +55,7 @@ const StandingsContent: React.FunctionComponent<StandingsContentProps> = ({ stan
                     <StandingsTableBody>
                         {standings[selectedCategory].map(
                             (standing: Standing) => (
-                                <StandingsTableStanding standing={standing} />
+                                <StandingsTableStanding key={standing.id} standing={standing} />
                             ),
                         )}
                     </StandingsTableBody>
