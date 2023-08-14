@@ -29,6 +29,7 @@ TXT;
             ->select('DISTINCT e.car_number', 'car_number')
             ->addSelect('d.short_code', 'short_code')
             ->addSelect('t.color', 'color')
+            ->addSelect('c.classified_status', 'classified_status')
             ->addSelect(self::SELECT_LAPS, 'laps')
             ->addSelect("min(rl.time)*{$maxTimeRatio}", 'max')
             ->addSelect('(c.finish_position+99)%100', 'finishPosition')
@@ -42,6 +43,7 @@ TXT;
             ->where($qb->expr()->eq('e.session', ':session'))
             ->andWhere($qb->expr()->gt('rl.time', '0'))
             ->withParam('session', $session)
+            ->addGroupBy('c.classified_status')
             ->addGroupBy('e.car_number')
             ->addGroupBy('d.short_code')
             ->addGroupBy('t.color')
@@ -51,7 +53,7 @@ TXT;
             ->buildQuery()
         ;
 
-        /** @var array<array{car_number: string, short_code: string, color: string, laps: string, max: float}> $result */
+        /** @var array<array{car_number: string, short_code: string, color: string, laps: string, max: float, classified_status: string}> $result */
         $result = $this->connection->execute($query)->fetchAllAssociative();
 
         return LapByLapData::fromData($result);

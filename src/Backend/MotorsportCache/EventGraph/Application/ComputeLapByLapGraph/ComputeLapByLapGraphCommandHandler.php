@@ -97,7 +97,7 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
 
             $lapTimes = $this->computeLapTimes($lapsList, $max);
 
-            if (false === empty($lapTimes)) {
+            if (false === empty($lapTimes) && 'CLA' === $series['classified_status']) {
                 $fastest = min($fastest, min($lapTimes));
                 $slowest = max($slowest, max($lapTimes));
             }
