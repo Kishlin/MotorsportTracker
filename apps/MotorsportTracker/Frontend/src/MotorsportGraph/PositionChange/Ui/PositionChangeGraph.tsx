@@ -7,6 +7,7 @@ import Canvas from '../../../Canvas/Ui/Canvas';
 
 declare type PositionChangeGraphProps = {
     data: PositionChangeGraphData,
+    isMultiDriver: boolean,
 };
 
 const axisColor = '#ffffff';
@@ -19,7 +20,7 @@ const axisNameMargin = 10;
 const seriesRowSpacing = 8;
 const marginPositions = 1;
 
-const PositionChangeGraph: React.FunctionComponent<PositionChangeGraphProps> = ({ data }) => {
+const PositionChangeGraph: React.FunctionComponent<PositionChangeGraphProps> = ({ data, isMultiDriver }) => {
     const { minChanges, maxChanges } = data;
 
     const seriesCount = data.series.length;
@@ -42,7 +43,11 @@ const PositionChangeGraph: React.FunctionComponent<PositionChangeGraphProps> = (
             const yPos = (index + 1) * pixelToSeriesRatio;
 
             ctx.fillStyle = series.color;
-            ctx.fillText(series.short_code.slice(0, 3), labelsMargin, yPos);
+            ctx.fillText(
+                isMultiDriver ? series.car_number.toString() : series.short_code.slice(0, 3),
+                labelsMargin,
+                yPos,
+            );
 
             ctx.strokeStyle = axisInGraphColor;
             ctx.setLineDash([2, 2]);

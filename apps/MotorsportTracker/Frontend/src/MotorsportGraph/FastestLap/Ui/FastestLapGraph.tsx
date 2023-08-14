@@ -1,13 +1,14 @@
 import React from 'react';
 
+import formatTime from '../../../MotorsportTracker/Result/Utils/FormatTime';
 import { FastestLapGraphData, FastestLapSeries } from '../../Shared/Types';
 import GraphContainer from '../../Shared/Ui/GraphContainer';
 import FastestLapTitle from './FastestLapTitle';
 import Canvas from '../../../Canvas/Ui/Canvas';
-import formatTime from '../../../MotorsportTracker/Result/Utils/FormatTime';
 
 declare type FastestLapGraphProps = {
     data: FastestLapGraphData,
+    isMultiDriver: boolean,
 };
 
 const axisColor = '#ffffff';
@@ -21,7 +22,7 @@ const axisNameMargin = 10;
 const seriesRowSpacing = 8;
 const marginSeconds = 1;
 
-const FastestLapGraph: React.FunctionComponent<FastestLapGraphProps> = ({ data }) => {
+const FastestLapGraph: React.FunctionComponent<FastestLapGraphProps> = ({ data, isMultiDriver }) => {
     const { maxDelta } = data;
 
     const seriesCount = data.series.length;
@@ -40,7 +41,11 @@ const FastestLapGraph: React.FunctionComponent<FastestLapGraphProps> = ({ data }
 
         data.series.forEach((series: FastestLapSeries, index: number) => {
             ctx.fillStyle = series.color;
-            ctx.fillText(series.short_code.slice(0, 3), labelsMargin, (index + 1) * pixelToSeriesRatio);
+            ctx.fillText(
+                isMultiDriver ? series.car_number.toString() : series.short_code.slice(0, 3),
+                labelsMargin,
+                (index + 1) * pixelToSeriesRatio,
+            );
         });
 
         ctx.restore();

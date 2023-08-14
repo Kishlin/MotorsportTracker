@@ -1,12 +1,13 @@
 import React from 'react';
 
-import GraphContainer from '../../Shared/Ui/GraphContainer';
 import { TyreHistoryGraphData, TyreHistorySeries } from '../../Shared/Types';
-import Canvas from '../../../Canvas/Ui/Canvas';
+import GraphContainer from '../../Shared/Ui/GraphContainer';
 import TyreHistoryTitle from './TyreHistoryTitle';
+import Canvas from '../../../Canvas/Ui/Canvas';
 
 declare type TyreHistoryGraphProps = {
     data: TyreHistoryGraphData,
+    isMultiDriver: boolean,
 };
 
 const axisColor = '#ffffff';
@@ -32,7 +33,7 @@ const tyresColor: TyresColors = {
     w: '#00aef1',
 };
 
-const TyreHistoryGraph: React.FunctionComponent<TyreHistoryGraphProps> = ({ data }) => {
+const TyreHistoryGraph: React.FunctionComponent<TyreHistoryGraphProps> = ({ data, isMultiDriver }) => {
     const { laps } = data;
 
     const seriesCount = data.series.length;
@@ -51,7 +52,11 @@ const TyreHistoryGraph: React.FunctionComponent<TyreHistoryGraphProps> = ({ data
 
         data.series.forEach((series: TyreHistorySeries, index: number) => {
             ctx.fillStyle = series.color;
-            ctx.fillText(series.short_code.slice(0, 3), labelsMargin, (index + 1) * pixelToSeriesRatio);
+            ctx.fillText(
+                isMultiDriver ? series.car_number.toString() : series.short_code.slice(0, 3),
+                labelsMargin,
+                (index + 1) * pixelToSeriesRatio,
+            );
         });
 
         ctx.restore();

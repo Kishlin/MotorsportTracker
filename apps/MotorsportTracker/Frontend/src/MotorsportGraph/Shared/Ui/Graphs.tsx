@@ -28,21 +28,21 @@ const Graphs: React.FunctionComponent<GraphsProps> = ({ graphs, isMultiDriver })
     let tyreHistoryGraphsJSX: React.ReactElement[] = [];
     if (undefined !== graphs['tyre-history']) {
         tyreHistoryGraphsJSX = Object.keys(graphs['tyre-history']).map((key: string) => (
-            <TyreHistoryGraph key={key} data={graphs['tyre-history'][key]} />
+            <TyreHistoryGraph key={key} data={graphs['tyre-history'][key]} isMultiDriver={isMultiDriver} />
         ));
     }
 
     let positionChangesGraphsJSX: React.ReactNode[] = [];
     if (undefined !== graphs['position-change']) {
         positionChangesGraphsJSX = Object.keys(graphs['position-change']).map((key: string) => (
-            <PositionChangeGraph key={key} data={graphs['position-change'][key]} />
+            <PositionChangeGraph key={key} data={graphs['position-change'][key]} isMultiDriver={isMultiDriver} />
         ));
     }
 
     let fastestLapGraphsJSX: React.ReactNode[] = [];
     if (undefined !== graphs['fastest-lap']) {
         fastestLapGraphsJSX = Object.keys(graphs['fastest-lap']).map((key: string) => (
-            <FastestLapGraph key={key} data={graphs['fastest-lap'][key]} />
+            <FastestLapGraph key={key} data={graphs['fastest-lap'][key]} isMultiDriver={isMultiDriver} />
         ));
     }
 
