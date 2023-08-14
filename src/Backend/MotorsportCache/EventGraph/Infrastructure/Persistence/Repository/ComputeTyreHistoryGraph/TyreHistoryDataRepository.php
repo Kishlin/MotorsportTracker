@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Infrastructure\Persistence\
 
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeTyreHistoryGraph\TyreHistoryData;
 use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeTyreHistoryGraph\TyreHistoryDataGateway;
+use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class TyreHistoryDataRepository extends CoreRepository implements TyreHistoryDataGateway
@@ -61,7 +62,8 @@ TXT;
             ->addGroupBy('c.laps')
             ->addGroupBy('finishPosition')
             ->addGroupBy('rl.entry')
-            ->orderBy('finishPosition')
+            ->orderBy('laps', OrderBy::DESC)
+            ->addOrderBy('finishPosition')
             ->buildQuery()
         ;
 
