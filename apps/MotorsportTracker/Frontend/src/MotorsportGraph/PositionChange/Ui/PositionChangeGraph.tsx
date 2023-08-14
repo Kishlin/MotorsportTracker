@@ -144,51 +144,6 @@ const PositionChangeGraph: React.FunctionComponent<PositionChangeGraphProps> = (
         });
 
         ctx.restore();
-
-            // for (let i = 0, limit = lapsPitted.length; i < limit; i += 1) {
-            //     const initialLap = parseInt(lapsPitted[i], 10);
-            //
-            //     const hasAStintAfter = i === limit - 1;
-            //     const stintAfterIsNull = null === currentSeries.tyre_history[lapsPitted[i + 1]];
-            //     let finalLap = hasAStintAfter ? seriesLap : parseInt(lapsPitted[i + 1], 10);
-            //
-            //     if (hasAStintAfter && stintAfterIsNull) {
-            //         finalLap = parseInt(lapsPitted[i + 1], 10);
-            //     }
-            //
-            //     if (null !== currentSeries.tyre_history[lapsPitted[i]]) {
-            //         const stintHeight = pixelToSeriesRatio - seriesRowSpacing;
-            //         const stintStartX = axisMargin + (initialLap * pixelToLapsRatio);
-            //         const rectangleUpperY = (seriesIndex + 1) * pixelToSeriesRatio - (stintHeight / 2);
-            //
-            //         ctx.save();
-            //
-            //         const tyre = currentSeries.tyre_history[lapsPitted[i]].type.toLowerCase() as tyre;
-            //         ctx.fillStyle = tyresColor[tyre];
-            //
-            //         ctx.fillRect(
-            //             stintStartX,
-            //             rectangleUpperY,
-            //             (finalLap - initialLap) * pixelToLapsRatio,
-            //             stintHeight,
-            //         );
-            //
-            //         if (0 !== initialLap) {
-            //             ctx.fillStyle = '#000000';
-            //             ctx.fillRect(
-            //                 stintStartX - Math.max(stintHeight / 2, 10),
-            //                 rectangleUpperY + 1,
-            //                 Math.max(stintHeight, 20),
-            //                 stintHeight - 2,
-            //             );
-            //
-            //             ctx.strokeText(initialLap.toString(), stintStartX, rectangleUpperY + stintHeight / 2);
-            //         }
-            //
-            //         ctx.stroke();
-            //         ctx.restore();
-            //     }
-            // }
     };
 
     const drawPositionChangeGraph = (ctx: CanvasRenderingContext2D) => {
