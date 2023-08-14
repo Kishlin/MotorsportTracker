@@ -2,10 +2,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import React from 'react';
 
+import PositionChangeGraph from '../../PositionChange/Ui/PositionChangeGraph';
 import TyreHistoryGraph from '../../TyreHistory/Ui/TyreHistoryGraph';
 import LapByLapGraph from '../../LapByLapRacePace/Ui/LapByLapGraph';
+import FastestLapGraph from '../../FastestLap/Ui/FastestLapGraph';
 import { EventGraphs } from '../Types';
-import PositionChangeGraph from '../../PositionChange/Ui/PositionChangeGraph';
 
 declare type GraphsProps = {
     graphs: EventGraphs,
@@ -38,11 +39,19 @@ const Graphs: React.FunctionComponent<GraphsProps> = ({ graphs, isMultiDriver })
         ));
     }
 
+    let fastestLapGraphsJSX: React.ReactNode[] = [];
+    if (undefined !== graphs['fastest-lap']) {
+        fastestLapGraphsJSX = Object.keys(graphs['fastest-lap']).map((key: string) => (
+            <FastestLapGraph key={key} data={graphs['fastest-lap'][key]} />
+        ));
+    }
+
     return (
         <Box>
             {lapByLapGraphsJSX}
             {tyreHistoryGraphsJSX}
             {positionChangesGraphsJSX}
+            {fastestLapGraphsJSX}
         </Box>
     );
 };
