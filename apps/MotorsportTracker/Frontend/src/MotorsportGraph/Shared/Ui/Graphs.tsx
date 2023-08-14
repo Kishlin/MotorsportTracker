@@ -5,6 +5,7 @@ import React from 'react';
 import TyreHistoryGraph from '../../TyreHistory/Ui/TyreHistoryGraph';
 import LapByLapGraph from '../../LapByLapRacePace/Ui/LapByLapGraph';
 import { EventGraphs } from '../Types';
+import PositionChangeGraph from '../../PositionChange/Ui/PositionChangeGraph';
 
 declare type GraphsProps = {
     graphs: EventGraphs,
@@ -30,10 +31,18 @@ const Graphs: React.FunctionComponent<GraphsProps> = ({ graphs, isMultiDriver })
         ));
     }
 
+    let positionChangesGraphsJSX: React.ReactNode[] = [];
+    if (undefined !== graphs['position-change']) {
+        positionChangesGraphsJSX = Object.keys(graphs['position-change']).map((key: string) => (
+            <PositionChangeGraph key={key} data={graphs['position-change'][key]} />
+        ));
+    }
+
     return (
         <Box>
             {lapByLapGraphsJSX}
             {tyreHistoryGraphsJSX}
+            {positionChangesGraphsJSX}
         </Box>
     );
 };
