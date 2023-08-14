@@ -1,7 +1,7 @@
 parameters:
   kishlin.app.name: 'MotorsportTracker'
   kishlin.app.environment: '%env(APP_ENV)%'
-  kishlin.src.dir: '/app'
+  kishlin.src.dir: '%env(WORKDIR)%'
   kishlin.memcached.dsn: '%env(MEMCACHED_DSN)%'
   kishlin.memcached.namespace: '%env(MEMCACHED_NAMESPACE)%'
   kishlin.jwt.secretKey: '%env(JWT_SECRET_KEY)%'
