@@ -74,7 +74,6 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             graphs,
             page: 'graphs',
         },
-        revalidate: 60,
     };
 };
 
@@ -82,7 +81,19 @@ export async function getStaticPaths(): Promise<{
     paths: Array<EventGraphsPathParams>,
     fallback: boolean|'blocking',
 }> {
-    return { paths: [], fallback: 'blocking' };
+    const paths: Array<EventGraphsPathParams> = [];
+
+    Object.keys(championships).forEach((slug: string) => {
+        championships[slug].years.forEach(async (year: number) => {
+            const season = await seasonApi(slug, year);
+
+            Object.keys(season).forEach((eventSlug: string) => {
+                paths.push({ params: { championship: slug, year: year.toString(), event: eventSlug } });
+            });
+        });
+    });
+
+    return { paths, fallback: false };
 }
 
 export default ChampionshipStandingsPage;

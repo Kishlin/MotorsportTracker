@@ -44,7 +44,7 @@ export const getStaticProps = async ({ params: { month, year } }: SchedulePathPa
     try {
         const events = await calendarApi(month, year);
 
-        return { props: { events, date: new Date(Date.parse(`${month} 1, ${year}`)).getTime() }, revalidate: 60 };
+        return { props: { events, date: new Date(Date.parse(`${month} 1, ${year}`)).getTime() }, revalidate: 3600 };
     } catch (err) {
         return { notFound: true };
     }
@@ -53,7 +53,7 @@ export const getStaticProps = async ({ params: { month, year } }: SchedulePathPa
 export async function getStaticPaths(): Promise<{ paths: Array<SchedulePathParams>, fallback: boolean|'blocking' }> {
     const paths: Array<SchedulePathParams> = [];
 
-    for (let year = 2022; 2024 >= year; year += 1) {
+    for (let year = 2020; 2024 >= year; year += 1) {
         paths.push(...listOfAllMonths().map((month: string) => ({ params: { year: year.toString(), month } })));
     }
 

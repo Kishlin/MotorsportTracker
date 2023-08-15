@@ -11,6 +11,7 @@ import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNav
 import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
+import championships from '../../../../../src/MotorsportTracker/Config/Championships';
 
 declare type EventResultsPathParams = {
     params: {
@@ -71,7 +72,6 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             season,
             page: 'results',
         },
-        revalidate: 60,
     };
 };
 
@@ -79,7 +79,19 @@ export async function getStaticPaths(): Promise<{
     paths: Array<EventResultsPathParams>,
     fallback: boolean|'blocking',
 }> {
-    return { paths: [], fallback: 'blocking' };
+    const paths: Array<EventResultsPathParams> = [];
+
+    Object.keys(championships).forEach((slug: string) => {
+        championships[slug].years.forEach(async (year: number) => {
+            const season = await seasonApi(slug, year);
+
+            Object.keys(season).forEach((eventSlug: string) => {
+                paths.push({ params: { championship: slug, year: year.toString(), event: eventSlug } });
+            });
+        });
+    });
+
+    return { paths, fallback: false };
 }
 
 export default ChampionshipStandingsPage;
