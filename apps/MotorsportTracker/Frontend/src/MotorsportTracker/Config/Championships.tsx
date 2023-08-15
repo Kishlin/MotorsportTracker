@@ -30,7 +30,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'Formula E',
         shortName: 'Formula E',
         slug: 'formula-e',
-        years: [2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023], // No championship in 2020
+        years: Array.from({ length: 10 }, (x, i) => 2014 + i),
         isMultiDriver: false,
     },
     'f4-france': {
