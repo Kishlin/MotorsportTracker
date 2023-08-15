@@ -12,6 +12,8 @@ final class Version202308150312 implements Migration
     {
         return <<<'SQL'
 DROP INDEX uniq_e410c3075e237e06;
+
+CREATE UNIQUE INDEX uniq_driver_name_ref ON public.driver USING btree (name, ref);
 SQL;
     }
 
