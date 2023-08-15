@@ -49,8 +49,8 @@ final class ScrapCalendarCommandHandler implements CommandHandler
                 $eventId = $this->createEventIfNotExists($event, $season->id(), $venueId, $key);
 
                 $this->createEventSessionsIfNotExists($event['sessions'], $eventId);
-            } catch (Throwable) {
-                $this->eventDispatcher->dispatch(CalendarEventScrappingFailureEvent::forEvent($event));
+            } catch (Throwable $e) {
+                $this->eventDispatcher->dispatch(CalendarEventScrappingFailureEvent::forEvent($event, $e));
             }
         }
 

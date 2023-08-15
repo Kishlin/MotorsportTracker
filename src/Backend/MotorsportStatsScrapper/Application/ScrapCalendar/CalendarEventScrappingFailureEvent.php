@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\Event;
+use Throwable;
 
-final class CalendarEventScrappingFailureEvent implements Event
+final readonly class CalendarEventScrappingFailureEvent implements Event
 {
     /**
      * @param array{
@@ -46,7 +47,8 @@ final class CalendarEventScrappingFailureEvent implements Event
      * } $event
      */
     private function __construct(
-        private readonly array $event,
+        private array $event,
+        private Throwable $e,
     ) {
     }
 
@@ -92,6 +94,11 @@ final class CalendarEventScrappingFailureEvent implements Event
         return $this->event;
     }
 
+    public function e(): Throwable
+    {
+        return $this->e;
+    }
+
     /**
      * @param array{
      *     uuid: string,
@@ -129,8 +136,8 @@ final class CalendarEventScrappingFailureEvent implements Event
      *     }>
      * } $event
      */
-    public static function forEvent(array $event): self
+    public static function forEvent(array $event, Throwable $e): self
     {
-        return new self($event);
+        return new self($event, $e);
     }
 }

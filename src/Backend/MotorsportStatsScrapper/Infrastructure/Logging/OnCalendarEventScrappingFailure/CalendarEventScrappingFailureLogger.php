@@ -8,10 +8,10 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\CalendarEv
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber;
 use Psr\Log\LoggerInterface;
 
-final class CalendarEventScrappingFailureLogger implements EventSubscriber
+final readonly class CalendarEventScrappingFailureLogger implements EventSubscriber
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -20,5 +20,6 @@ final class CalendarEventScrappingFailureLogger implements EventSubscriber
         $eventData = $event->event();
 
         $this->logger->error("Failed to scrap event {$eventData['name']}.", $eventData);
+        $this->logger->error($event->e()->getMessage());
     }
 }
