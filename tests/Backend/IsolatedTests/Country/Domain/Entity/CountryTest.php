@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\IsolatedTests\Country\Domain\Entity;
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -25,7 +26,7 @@ final class CountryTest extends AggregateRootIsolatedTestCase
 
         $entity = Country::create(
             new UuidValueObject($id),
-            new StringValueObject($code),
+            new NullableStringValueObject($code),
             new StringValueObject($name),
             new NullableUuidValueObject($ref),
         );

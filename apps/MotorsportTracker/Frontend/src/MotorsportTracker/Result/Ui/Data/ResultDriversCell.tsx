@@ -10,7 +10,7 @@ declare type ResultDriversProps = {
 };
 
 const row = (driver: ResultDriver) => {
-    if (null === driver.country) {
+    if (null === driver.country || null !== driver.country.code) {
         return (<span style={{ display: 'block', marginLeft: '30px' }}>{driver.name}</span>);
     }
 

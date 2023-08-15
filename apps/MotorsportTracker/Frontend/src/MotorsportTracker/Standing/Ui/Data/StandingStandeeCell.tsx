@@ -10,7 +10,7 @@ declare type StandingStandeeProps = {
 };
 
 const StandingStandeeCell: React.FunctionComponent<StandingStandeeProps> = ({ name, country }) => {
-    const content = null !== country
+    const content = null !== country && null !== country.code
         ? (
             <>
                 <img

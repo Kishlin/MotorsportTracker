@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Country\Domain\Entity;
 
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -13,7 +14,7 @@ final class Country extends AggregateRoot
 {
     public function __construct(
         private readonly UuidValueObject $id,
-        private readonly StringValueObject $code,
+        private readonly NullableStringValueObject $code,
         private readonly StringValueObject $name,
         private readonly NullableUuidValueObject $ref,
     ) {
@@ -21,7 +22,7 @@ final class Country extends AggregateRoot
 
     public static function create(
         UuidValueObject $id,
-        StringValueObject $code,
+        NullableStringValueObject $code,
         StringValueObject $name,
         NullableUuidValueObject $ref,
     ): self {
@@ -33,7 +34,7 @@ final class Country extends AggregateRoot
      */
     public static function instance(
         UuidValueObject $id,
-        StringValueObject $code,
+        NullableStringValueObject $code,
         StringValueObject $name,
         NullableUuidValueObject $ref,
     ): self {
@@ -45,7 +46,7 @@ final class Country extends AggregateRoot
         return $this->id;
     }
 
-    public function code(): StringValueObject
+    public function code(): NullableStringValueObject
     {
         return $this->code;
     }

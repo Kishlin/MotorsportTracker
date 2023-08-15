@@ -12,16 +12,16 @@ use RuntimeException;
 
 final class SearchCountryRepository extends CoreRepository implements SearchCountryGateway
 {
-    public function searchForCode(StringValueObject $code): ?UuidValueObject
+    public function searchForName(StringValueObject $name): ?UuidValueObject
     {
         $qb = $this->connection->createQueryBuilder();
 
         $query = $qb
             ->select('c.id')
             ->from('country', 'c')
-            ->where($qb->expr()->eq('c.code', ':code'))
-            ->where('c.code = :code')
-            ->withParam('code', $code->value())
+            ->where($qb->expr()->eq('c.name', ':name'))
+            ->where('c.name = :name')
+            ->withParam('name', $name->value())
             ->buildQuery()
         ;
 

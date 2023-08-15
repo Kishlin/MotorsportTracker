@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\Country\Infrastructure\Persistance
 
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\Country\Infrastructure\Persistence\Repository\SaveCountryRepository;
+use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
@@ -21,7 +22,7 @@ final class SaveCountryRepositoryTest extends CoreRepositoryContractTestCase
     {
         $country = Country::instance(
             new UuidValueObject(self::uuid()),
-            new StringValueObject('fr'),
+            new NullableStringValueObject('fr'),
             new StringValueObject('France'),
             new NullableUuidValueObject(null),
         );

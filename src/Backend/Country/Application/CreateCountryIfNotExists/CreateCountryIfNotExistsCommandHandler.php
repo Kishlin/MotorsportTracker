@@ -9,18 +9,18 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateCountryIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateCountryIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchCountryGateway $searchGateway,
-        private readonly SaveCountryGateway $saveGateway,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchCountryGateway $searchGateway,
+        private SaveCountryGateway $saveGateway,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
     public function __invoke(CreateCountryIfNotExistsCommand $command): UuidValueObject
     {
-        $id = $this->searchGateway->searchForCode($command->code());
+        $id = $this->searchGateway->searchForName($command->name());
 
         if (null !== $id) {
             return $id;

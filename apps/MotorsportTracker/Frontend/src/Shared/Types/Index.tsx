@@ -1,6 +1,6 @@
 export type Country = {
     id: string,
-    code: string,
+    code: null|string,
     name: string,
 };
 

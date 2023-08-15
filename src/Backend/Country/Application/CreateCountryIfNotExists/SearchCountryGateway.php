@@ -9,5 +9,5 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 interface SearchCountryGateway
 {
-    public function searchForCode(StringValueObject $code): ?UuidValueObject;
+    public function searchForName(StringValueObject $name): ?UuidValueObject;
 }

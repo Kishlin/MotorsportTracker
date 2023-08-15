@@ -10,7 +10,7 @@ declare type ResultEntryProps = {
 };
 
 const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ country, name }) => {
-    const content = null !== country
+    const content = null !== country && null !== country.code
         ? (
             <>
                 <img

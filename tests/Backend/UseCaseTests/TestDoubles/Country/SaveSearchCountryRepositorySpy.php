@@ -33,10 +33,10 @@ final class SaveSearchCountryRepositorySpy extends AbstractRepositorySpy impleme
         $this->objects[$country->id()->value()] = $country;
     }
 
-    public function searchForCode(StringValueObject $code): ?UuidValueObject
+    public function searchForName(StringValueObject $name): ?UuidValueObject
     {
         foreach ($this->objects as $savedCountry) {
-            if ($savedCountry->code()->equals($code)) {
+            if ($savedCountry->name()->equals($name)) {
                 return $savedCountry->id();
             }
         }

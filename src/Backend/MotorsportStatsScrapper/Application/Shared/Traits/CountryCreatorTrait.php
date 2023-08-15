@@ -15,16 +15,26 @@ trait CountryCreatorTrait
      */
     private function createCountryIfNotExists(array $country): UuidValueObject
     {
-        if ('/' === $country['picture'][-6]) {
-            throw new RuntimeException("Unexpected Country Picture format: {$country['picture']}");
-        }
+        $countryCode = $this->getCountryCode($country['picture']);
 
-        $countryCode = substr($country['picture'], -6, 2);
-        $command     = CreateCountryIfNotExistsCommand::fromScalars($countryCode, $country['name'], $country['uuid']);
-        $countryId   = $this->commandBus->execute($command);
+        $command   = CreateCountryIfNotExistsCommand::fromScalars($countryCode, $country['name'], $country['uuid']);
+        $countryId = $this->commandBus->execute($command);
 
         assert($countryId instanceof UuidValueObject);
 
         return $countryId;
+    }
+
+    private function getCountryCode($picture): ?string
+    {
+        if (null === $picture) {
+            return null;
+        }
+
+        if ('/' === $picture[-6]) {
+            throw new RuntimeException("Unexpected Country Picture format: {$picture}");
+        }
+
+        return substr($picture, -6, 2);
     }
 }
