@@ -19,12 +19,18 @@ final class SearchDriverRepository extends CoreRepository implements SearchDrive
 
         $qb->select('d.id')
             ->from('driver', 'd')
-            ->where($qb->expr()->eq('d.name', ':name'))
-            ->withParam('name', $name->value())
         ;
 
         if (null !== $ref->value()) {
-            $qb->andWhere($qb->expr()->eq('d.ref', ':ref'))->withParam('ref', $ref->value());
+            $qb
+                ->andWhere($qb->expr()->eq('d.ref', ':ref'))
+                ->withParam('ref', $ref->value())
+            ;
+        } else {
+            $qb
+                ->where($qb->expr()->eq('d.name', ':name'))
+                ->withParam('name', $name->value())
+            ;
         }
 
         /** @var array<array{id: string}> $result */
