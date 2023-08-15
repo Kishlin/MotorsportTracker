@@ -64,7 +64,7 @@ when@prod:
             console:
                 type: console
                 process_psr_3_messages: false
-                channels: ["!event", "!doctrine"]
+                channels: ["!event", "!doctrine", "!console", "!messenger"]
             deprecation:
                 type: stream
                 channels: [deprecation]
