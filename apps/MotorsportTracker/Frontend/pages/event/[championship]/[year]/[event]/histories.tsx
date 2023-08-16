@@ -13,14 +13,10 @@ import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNav
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
 import Histories from '../../../../../src/MotorsportGraph/RaceHistories/Ui/Histories';
-
-declare type EventHistoriesPathParams = {
-    params: {
-        championship: string,
-        year: string,
-        event: string,
-    },
-};
+import {
+    EventPathParams,
+    useEventStaticPaths,
+} from '../../../../../src/MotorsportTracker/Shared/Hook/EventStaticPaths';
 
 declare type EventHistoriesPageProps = {
     championship: string,
@@ -61,7 +57,7 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventHistoriesPageProps
     );
 };
 
-export const getStaticProps = async ({ params: { championship, year, event } }: EventHistoriesPathParams) => {
+export const getStaticProps = async ({ params: { championship, year, event } }: EventPathParams) => {
     const season = await seasonApi(championship, parseInt(year, 10));
 
     const histories = await historiesApi(season[event].id);
@@ -79,22 +75,12 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
 };
 
 export async function getStaticPaths(): Promise<{
-    paths: Array<EventHistoriesPathParams>,
+    paths: Array<EventPathParams>,
     fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventHistoriesPathParams> = [];
+    const eventStaticPaths = useEventStaticPaths();
 
-    Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.forEach(async (year: number) => {
-            const season = await seasonApi(slug, year);
-
-            Object.keys(season).forEach((eventSlug: string) => {
-                paths.push({ params: { championship: slug, year: year.toString(), event: eventSlug } });
-            });
-        });
-    });
-
-    return { paths, fallback: false };
+    return eventStaticPaths();
 }
 
 export default ChampionshipStandingsPage;

@@ -12,14 +12,10 @@ import { EventGraphs } from '../../../../../src/MotorsportGraph/Shared/Types';
 import Graphs from '../../../../../src/MotorsportGraph/Shared/Ui/Graphs';
 import Layout from '../../../../../src/Shared/Ui/Layout/Layout';
 import championships from '../../../../../src/MotorsportTracker/Config/Championships';
-
-declare type EventGraphsPathParams = {
-    params: {
-        championship: string,
-        year: string,
-        event: string,
-    },
-};
+import {
+    EventPathParams,
+    useEventStaticPaths,
+} from '../../../../../src/MotorsportTracker/Shared/Hook/EventStaticPaths';
 
 declare type EventGraphsPageProps = {
     championship: string,
@@ -60,7 +56,7 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventGraphsPageProps> =
     );
 };
 
-export const getStaticProps = async ({ params: { championship, year, event } }: EventGraphsPathParams) => {
+export const getStaticProps = async ({ params: { championship, year, event } }: EventPathParams) => {
     const season = await seasonApi(championship, parseInt(year, 10));
 
     const graphs = await eventGraphsApi(season[event].id);
@@ -78,22 +74,12 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
 };
 
 export async function getStaticPaths(): Promise<{
-    paths: Array<EventGraphsPathParams>,
+    paths: Array<EventPathParams>,
     fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventGraphsPathParams> = [];
+    const eventStaticPaths = useEventStaticPaths();
 
-    Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.forEach(async (year: number) => {
-            const season = await seasonApi(slug, year);
-
-            Object.keys(season).forEach((eventSlug: string) => {
-                paths.push({ params: { championship: slug, year: year.toString(), event: eventSlug } });
-            });
-        });
-    });
-
-    return { paths, fallback: false };
+    return eventStaticPaths();
 }
 
 export default ChampionshipStandingsPage;

@@ -11,15 +11,10 @@ import EventNavbar from '../../../../../src/MotorsportTracker/Event/Nav/EventNav
 import resultsApi from '../../../../../src/MotorsportTracker/Result/Api/ResultsApi';
 import seasonApi from '../../../../../src/MotorsportTracker/Event/Api/SeasonApi';
 import { SeasonEvents } from '../../../../../src/MotorsportTracker/Shared/Types';
-import championships from '../../../../../src/MotorsportTracker/Config/Championships';
-
-declare type EventResultsPathParams = {
-    params: {
-        championship: string,
-        year: string,
-        event: string,
-    },
-};
+import {
+    EventPathParams,
+    useEventStaticPaths,
+} from '../../../../../src/MotorsportTracker/Shared/Hook/EventStaticPaths';
 
 declare type EventResultsPageProps = {
     championship: string,
@@ -57,7 +52,7 @@ const ChampionshipStandingsPage: React.FunctionComponent<EventResultsPageProps> 
     );
 };
 
-export const getStaticProps = async ({ params: { championship, year, event } }: EventResultsPathParams) => {
+export const getStaticProps = async ({ params: { championship, year, event } }: EventPathParams) => {
     const season = await seasonApi(championship, parseInt(year, 10));
 
     const eventId = season[event].id;
@@ -76,22 +71,12 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
 };
 
 export async function getStaticPaths(): Promise<{
-    paths: Array<EventResultsPathParams>,
+    paths: Array<EventPathParams>,
     fallback: boolean|'blocking',
 }> {
-    const paths: Array<EventResultsPathParams> = [];
+    const eventStaticPaths = useEventStaticPaths();
 
-    Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.forEach(async (year: number) => {
-            const season = await seasonApi(slug, year);
-
-            Object.keys(season).forEach((eventSlug: string) => {
-                paths.push({ params: { championship: slug, year: year.toString(), event: eventSlug } });
-            });
-        });
-    });
-
-    return { paths, fallback: false };
+    return eventStaticPaths();
 }
 
 export default ChampionshipStandingsPage;
