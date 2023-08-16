@@ -53,11 +53,11 @@ export const getStaticProps = async ({ params: { month, year } }: SchedulePathPa
 export async function getStaticPaths(): Promise<{ paths: Array<SchedulePathParams>, fallback: boolean|'blocking' }> {
     const paths: Array<SchedulePathParams> = [];
 
-    for (let year = 2020; 2024 >= year; year += 1) {
+    for (let year = 1950; 2024 >= year; year += 1) {
         paths.push(...listOfAllMonths().map((month: string) => ({ params: { year: year.toString(), month } })));
     }
 
-    return { paths, fallback: 'blocking' };
+    return { paths, fallback: false };
 }
 
 export default MonthlySchedulePage;
