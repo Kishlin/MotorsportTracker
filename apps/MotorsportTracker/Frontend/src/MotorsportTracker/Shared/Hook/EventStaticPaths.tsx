@@ -22,16 +22,18 @@ export function useEventStaticPaths(): (
 
         Object.keys(championships).forEach((slug: string) => {
             championships[slug].years.forEach(async (year: number) => {
-                paramsPromise.push(
-                    seasonApi(slug, year)
-                        .then((result: SeasonEvents) => Object.entries(result).map(([, seasonEvent]) => ({
-                            params: {
-                                championship: slug,
-                                year: year.toString(),
-                                event: seasonEvent.slug,
-                            },
-                        }))),
-                );
+                if (2015 <= year) {
+                    paramsPromise.push(
+                        seasonApi(slug, year)
+                            .then((result: SeasonEvents) => Object.entries(result).map(([, seasonEvent]) => ({
+                                params: {
+                                    championship: slug,
+                                    year: year.toString(),
+                                    event: seasonEvent.slug,
+                                },
+                            }))),
+                    );
+                }
             });
         });
 
@@ -39,6 +41,6 @@ export function useEventStaticPaths(): (
             paths.push(...paramsList);
         });
 
-        return { paths, fallback: false };
+        return { paths, fallback: 'blocking' };
     };
 }

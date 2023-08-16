@@ -163,7 +163,7 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
                 firstDay,
                 lastDay,
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -179,7 +179,7 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
                 driversAnalytics,
                 teamsAnalytics,
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -188,7 +188,7 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
 
         return {
             props: { availableStandings, standings: constructorStandings.standings, type: 'constructor' },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -197,7 +197,7 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
 
         return {
             props: { availableStandings, standings: teamStandings.standings, type: 'team' },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -206,6 +206,7 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
 
         return {
             props: { availableStandings, standings: driverStandings.standings, type: 'driver' },
+            revalidate: 86400,
         };
     }
 
@@ -220,10 +221,12 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathP
 
     Object.entries(championships).forEach(([slug, championship]) => {
         championship.years.forEach((year: number) => {
-            standingsPromises.push(
-                availableStandingsApi(slug, year.toString())
-                    .then((standings: AvailableStandings) => ({ standings, slug, year: year.toString() })),
-            );
+            if (2000 <= year) {
+                standingsPromises.push(
+                    availableStandingsApi(slug, year.toString())
+                        .then((standings: AvailableStandings) => ({ standings, slug, year: year.toString() })),
+                );
+            }
 
             paths.push({ params: { championship: slug, year: year.toString(), page: 'schedule' } });
             paths.push({ params: { championship: slug, year: year.toString(), page: 'stats' } });
@@ -244,7 +247,7 @@ export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathP
         });
     });
 
-    return { paths, fallback: false };
+    return { paths, fallback: 'blocking' };
 }
 
 export default ChampionshipSchedulePage;

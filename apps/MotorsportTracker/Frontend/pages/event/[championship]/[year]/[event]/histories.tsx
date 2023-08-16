@@ -71,6 +71,7 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             histories,
             page: 'histories',
         },
+        revalidate: 86400,
     };
 };
 

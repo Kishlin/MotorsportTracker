@@ -67,6 +67,7 @@ export const getStaticProps = async ({ params: { championship, year, event } }: 
             season,
             page: 'results',
         },
+        revalidate: 86400,
     };
 };
 
