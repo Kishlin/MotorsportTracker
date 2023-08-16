@@ -212,21 +212,35 @@ export const getStaticProps = async ({ params: { championship, year, page } }: (
     return { notFound: true };
 };
 
+const standingsTypes = ['constructor', 'team', 'driver'];
+
 export async function getStaticPaths(): Promise<{ paths: Array<ChampionshipPathParams>, fallback: boolean|'blocking' }> {
+    const standingsPromises: Array<Promise<{ standings: AvailableStandings, slug: string, year: string }>> = [];
     const paths: Array<ChampionshipPathParams> = [];
 
-    Object.keys(championships).forEach((slug: string) => {
-        championships[slug].years.forEach(async (year: number) => {
-            const availableStandings = await availableStandingsApi(slug, year.toString());
-
-            ['constructor', 'team', 'driver'].forEach((type: StandingType) => {
-                if (true === availableStandings[type]) {
-                    paths.push({ params: { championship: slug, year: year.toString(), page: `standings-${type}` } });
-                }
-            });
+    Object.entries(championships).forEach(([slug, championship]) => {
+        championship.years.forEach((year: number) => {
+            standingsPromises.push(
+                availableStandingsApi(slug, year.toString())
+                    .then((standings: AvailableStandings) => ({ standings, slug, year: year.toString() })),
+            );
 
             paths.push({ params: { championship: slug, year: year.toString(), page: 'schedule' } });
             paths.push({ params: { championship: slug, year: year.toString(), page: 'stats' } });
+        });
+    });
+
+    (await Promise.all(standingsPromises)).forEach((data) => {
+        standingsTypes.forEach((type: StandingType) => {
+            if (true === data.standings[type]) {
+                paths.push({
+                    params: {
+                        championship: data.slug,
+                        year: data.year,
+                        page: `standings-${type}`,
+                    },
+                });
+            }
         });
     });
 
