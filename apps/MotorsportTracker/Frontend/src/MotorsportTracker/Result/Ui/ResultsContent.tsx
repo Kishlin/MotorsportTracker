@@ -17,13 +17,17 @@ declare type ResultsContentProps = {
 };
 
 const ResultsContent: React.FunctionComponent<ResultsContentProps> = ({ results }) => {
-    if (0 === Object.keys(results).length) {
+    if (undefined === results || 0 === Object.keys(results).length) {
         return <Typography align="center" sx={{ mt: 4 }}>No results are available at this time.</Typography>;
     }
 
     const applicableCategories = ORDERED_SESSION_TYPES.filter((type: string) => undefined !== results[type]);
 
     const [selectedType, setSelectedType] = React.useState<string>(applicableCategories[0]);
+
+    if (undefined === results[selectedType]) {
+        return <Typography align="center" sx={{ mt: 4 }}>No results are available at this time.</Typography>;
+    }
 
     useEffect(
         () => {
