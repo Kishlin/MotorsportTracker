@@ -19,7 +19,7 @@ TXT;
 
     private const COUNTRY_SELECT = <<<'TXT'
 case when co is not null
-    then json_build_object(
+    then jsonb_build_object(
         'id', co.id,
         'code', co.code,
         'name', co.name
@@ -51,7 +51,7 @@ TXT;
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $qb->select('sc.id', 'id')
+        $qb->select('DISTINCT sc.id', 'id')
             ->addSelect('sc.series_class', 'series_class')
             ->addSelect('c.name', 'name')
             ->addSelect('sc.position', 'position')
@@ -105,7 +105,7 @@ TXT;
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $qb->select('st.id', 'id')
+        $qb->select('DISTINCT st.id', 'id')
             ->addSelect('st.series_class', 'series_class')
             ->addSelect('t.name', 'name')
             ->addSelect('st.position', 'position')
@@ -158,7 +158,7 @@ TXT;
     {
         $qb = $this->connection->createQueryBuilder();
 
-        $qb->select('sd.id', 'id')
+        $qb->select('DISTINCT sd.id', 'id')
             ->addSelect('sd.series_class', 'series_class')
             ->addSelect('d.name', 'name')
             ->addSelect('d.short_code', 'short_code')
