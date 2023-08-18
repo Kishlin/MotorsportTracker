@@ -8,8 +8,8 @@ declare type Navigate = {
 const useNavigate = (): Navigate => {
     const router = useRouter();
 
-    const navigateTo = (path: string) => router.replace(path);
-    const redirection = (path: string) => () => router.replace(path);
+    const navigateTo = (path: string) => router.push(path);
+    const redirection = (path: string) => () => router.push(path);
 
     return { navigate: navigateTo, redirectionTo: redirection };
 };
