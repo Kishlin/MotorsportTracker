@@ -7,7 +7,7 @@ declare type LinkProps = {
 };
 
 const Link: React.FunctionComponent<LinkProps> = ({ to, children }) => (
-    <LinkUsingNext href={to}>
+    <LinkUsingNext href={to} legacyBehavior>
         {children}
     </LinkUsingNext>
 );
