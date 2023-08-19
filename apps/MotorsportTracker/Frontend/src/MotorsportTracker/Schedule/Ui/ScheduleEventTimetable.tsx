@@ -71,7 +71,7 @@ const ScheduleEventTimetable: FunctionComponent<ScheduleEventTimetableProps> = (
     ));
 
     return (
-        <Grid item container sx={{ mb: '-40px' }}>
+        <Grid item container>
             <Grid item xs={1} />
             <Grid item xs={11} sx={{ backgroundColor: 'divider', borderLeft: leftHandleWidth, borderColor: event.series.color }}>
                 <Grid container direction="row">
