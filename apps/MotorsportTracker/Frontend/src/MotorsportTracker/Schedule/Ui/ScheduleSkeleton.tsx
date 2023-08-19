@@ -16,6 +16,18 @@ const ScheduleSkeleton: FunctionComponent = () => (
             <ScheduleEventSkeleton />
             <ScheduleEventSkeleton />
         </Grid>
+        <Grid item container flexDirection="column" sx={{ my: 1 }}>
+            <ScheduleEventSkeleton />
+            <ScheduleEventSkeleton />
+            <ScheduleEventSkeleton />
+        </Grid>
+        <Grid item container flexDirection="column" sx={{ my: 1 }}>
+            <ScheduleEventSkeleton />
+        </Grid>
+        <Grid item container flexDirection="column" sx={{ my: 1 }}>
+            <ScheduleEventSkeleton />
+            <ScheduleEventSkeleton />
+        </Grid>
     </Grid>
 );
 
