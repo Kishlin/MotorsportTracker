@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import ScheduleSkeleton from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
 
 const PageSkeleton: FunctionComponent = () => (
-    <Box sx={{ mx: 4 }}>
+    <Box sx={{ mx: 4, mt: 2 }}>
         <ScheduleSkeleton />
     </Box>
 );
