@@ -1,7 +1,9 @@
-import { Typography } from '@mui/material';
-import React from 'react';
+'use client';
 
-const ScheduleTitle: React.FunctionComponent = () => (
+import { Typography } from '@mui/material';
+import { FunctionComponent } from 'react';
+
+const ScheduleTitle: FunctionComponent = () => (
     <Typography variant="h2" align="left" sx={{ my: 4 }}>Schedule</Typography>
 );
 
