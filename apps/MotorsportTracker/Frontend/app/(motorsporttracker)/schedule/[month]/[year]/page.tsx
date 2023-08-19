@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import { Suspense } from 'react';
+import { Metadata } from 'next';
 
 import listOfAllMonths from '../../../../../src/MotorsportTracker/Schedule/Utils/Date/listOfAllMonths';
 import ScheduleEventsList from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
@@ -14,6 +15,12 @@ declare type PageParams = {
     month: string,
     year: string,
 };
+
+export async function generateMetadata({ params: { month, year } }: { params: PageParams }): Promise<Metadata> {
+    return {
+        title: `Schedule - ${month.slice(0, 1).toUpperCase()}${month.slice(1)} ${year} - Motorsport Tracker`,
+    };
+}
 
 const Page = async ({ params: { month, year } }: { params: PageParams }) => {
     const events = await calendarApi(month, year);
