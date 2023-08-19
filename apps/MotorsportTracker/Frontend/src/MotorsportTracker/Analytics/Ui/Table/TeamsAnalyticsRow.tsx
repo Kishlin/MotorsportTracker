@@ -1,6 +1,8 @@
+'use client';
+
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StandingStandeeCell from '../../../Standing/Ui/Data/StandingStandeeCell';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
@@ -20,7 +22,7 @@ declare type TeamsAnalyticsRowProps = {
     analytics: TeamAnalytics,
 };
 
-const TeamsAnalyticsRow: React.FunctionComponent<TeamsAnalyticsRowProps> = ({ analytics }) => (
+const TeamsAnalyticsRow: FunctionComponent<TeamsAnalyticsRowProps> = ({ analytics }) => (
     <StyledTableRow>
         <StyledTableCell>{analytics.position.toString()}</StyledTableCell>
         <StandingStandeeCell name={analytics.name} country={analytics.country} />

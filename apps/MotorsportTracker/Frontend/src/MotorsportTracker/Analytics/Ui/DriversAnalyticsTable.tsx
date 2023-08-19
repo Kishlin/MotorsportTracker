@@ -1,5 +1,7 @@
+'use client';
+
+import React, { FunctionComponent } from 'react';
 import Box from '@mui/material/Box';
-import React from 'react';
 
 import DriversAnalyticsTableHead from './Table/DriversAnalyticsTableHead';
 import DriversAnalyticsRow from './Table/DriversAnalyticsRow';
@@ -11,7 +13,7 @@ declare type DriverAnalyticsTableProps = {
     analytics: Array<DriverAnalytics>,
 };
 
-const DriversAnalyticsTable: React.FunctionComponent<DriverAnalyticsTableProps> = ({ analytics }) => {
+const DriversAnalyticsTable: FunctionComponent<DriverAnalyticsTableProps> = ({ analytics }) => {
     if (0 === analytics.length) {
         return <noscript />;
     }

@@ -1,10 +1,12 @@
+'use client';
+
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { TableHead } from '@mui/material';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
-const ConstructorsAnalyticsTableHead: React.FunctionComponent = () => (
+const ConstructorsAnalyticsTableHead: FunctionComponent = () => (
     <TableHead>
         <TableRow>
             <StyledTableCell align="left">Position</StyledTableCell>

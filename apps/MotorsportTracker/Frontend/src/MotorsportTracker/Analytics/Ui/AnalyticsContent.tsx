@@ -1,6 +1,8 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import { Stack } from '@mui/material';
-import React from 'react';
+import { FunctionComponent } from 'react';
+import Stack from '@mui/material/Stack';
 
 import { ConstructorAnalytics, DriverAnalytics, TeamAnalytics } from '../Types/Index';
 import ConstructorsAnalyticsTable from './ConstructorsAnalyticsTable';
@@ -13,7 +15,7 @@ declare type StandingsContentProps = {
     teamsAnalytics: Array<TeamAnalytics>,
 }
 
-const AnalyticsContent: React.FunctionComponent<StandingsContentProps> = ({
+const AnalyticsContent: FunctionComponent<StandingsContentProps> = ({
     constructorsAnalytics,
     driversAnalytics,
     teamsAnalytics,

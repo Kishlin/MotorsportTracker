@@ -1,5 +1,7 @@
+'use client';
+
+import { FunctionComponent } from 'react';
 import Box from '@mui/material/Box';
-import React from 'react';
 
 import ConstructorsAnalyticsTableHead from './Table/ConstructorsAnalyticsTableHead';
 import ConstructorsAnalyticsRow from './Table/ConstructorsAnalyticsRow';
@@ -11,7 +13,7 @@ declare type ConstructorAnalyticsTableProps = {
     analytics: Array<ConstructorAnalytics>,
 };
 
-const ConstructorsAnalyticsTable: React.FunctionComponent<ConstructorAnalyticsTableProps> = ({ analytics }) => {
+const ConstructorsAnalyticsTable: FunctionComponent<ConstructorAnalyticsTableProps> = ({ analytics }) => {
     if (0 === analytics.length) {
         return <noscript />;
     }

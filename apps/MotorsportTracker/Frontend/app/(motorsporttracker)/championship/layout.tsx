@@ -10,6 +10,11 @@ import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/Motors
 import championships from '../../../src/MotorsportTracker/Config/Championships';
 import MotorsportTrackerLayout from '../../../src/Shared/Ui/Layout/Layout';
 
+declare type PageParams = {
+    championship: string,
+    year: string,
+};
+
 export async function generateMetadata(): Promise<Metadata> {
     const pathname = headers().get('x-pathname');
 
@@ -50,5 +55,19 @@ const Layout = async ({
         </MotorsportTrackerLayout>
     );
 };
+
+export function generateStaticParams(): Array<PageParams> {
+    const paths: Array<PageParams> = [];
+
+    Object.entries(championships).forEach(([slug, championship]) => {
+        championship.years.forEach((year: number) => {
+            paths.push({ championship: slug, year: year.toString() });
+        });
+    });
+
+    return paths;
+}
+
+export const dynamicParams = true;
 
 export default Layout;

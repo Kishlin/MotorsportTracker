@@ -1,11 +1,13 @@
+'use client';
+
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 import { TableHead } from '@mui/material';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
-const DriversAnalyticsTableHead: React.FunctionComponent = () => (
+const DriversAnalyticsTableHead: FunctionComponent = () => (
     <TableHead>
         <TableRow>
             <StyledTableCell align="left">Position</StyledTableCell>
