@@ -58,7 +58,7 @@ const ScheduleEventTimetable: FunctionComponent<ScheduleEventTimetableProps> = (
                                 : <noscript />;
 
                             return (
-                                <TableRow key={session.slug}>
+                                <TableRow key={session.type + session.start_date}>
                                     <TableCell sx={{ p: 1 }}>{session.type}</TableCell>
                                     <TableCell sx={{ p: 1 }}>{startDate}</TableCell>
                                 </TableRow>
