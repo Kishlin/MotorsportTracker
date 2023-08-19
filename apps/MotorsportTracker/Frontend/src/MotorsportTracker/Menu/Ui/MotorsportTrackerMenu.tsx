@@ -1,20 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import { useRouter } from 'next/navigation';
+
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
+import ListItemButton from '@mui/material/ListItemButton';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
 import Collapse from '@mui/material/Collapse';
+import Divider from '@mui/material/Divider';
+import React, { useState } from 'react';
+import List from '@mui/material/List';
 
 import championships from '../../Config/Championships';
-import useNavigate from '../../../Shared/Hooks/useNavigate';
 
 declare type MenuOpenType = {
     schedule: boolean,
@@ -23,12 +24,12 @@ declare type MenuOpenType = {
 const MotorsportTrackerMenu: React.FunctionComponent = () => {
     const [menuOpen, setMenuOpen] = useState<MenuOpenType>({ schedule: true });
 
+    const router = useRouter();
+
     const toggleMenu = (key: 'schedule') => () => setMenuOpen({
         ...menuOpen,
         [key]: !(menuOpen[key]),
     });
-
-    const { redirectionTo } = useNavigate();
 
     const now = new Date();
     const schedulePath = now.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toLowerCase().replace(' ', '/');
@@ -38,7 +39,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
 
         return (
             <ListItem key={championshipSlug} disablePadding>
-                <ListItemButton onClick={redirectionTo(`/championship/${championshipSlug}/${year}/schedule`)}>
+                <ListItemButton onClick={() => router.push(`/championship/${championshipSlug}/${year}/schedule`)}>
                     <ListItemIcon>
                         <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
                     </ListItemIcon>
@@ -61,7 +62,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
             </ListItem>
             <Collapse in={menuOpen.schedule} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={redirectionTo('/')}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => router.push('/')}>
                         <ListItemIcon>
                             <CalendarTodayIcon />
                         </ListItemIcon>
@@ -69,7 +70,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                     </ListItemButton>
                 </List>
                 <List component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }} onClick={redirectionTo(`/schedule/${schedulePath}`)}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => router.push(`/schedule/${schedulePath}`)}>
                         <ListItemIcon>
                             <CalendarMonthIcon />
                         </ListItemIcon>
