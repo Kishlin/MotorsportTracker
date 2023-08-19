@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
+import { FunctionComponent } from 'react';
 import Grid from '@mui/material/Grid';
 
 import ScheduleEventIconList from './ScheduleEventIconList';
@@ -7,38 +7,26 @@ import { MotorsportEvent } from '../../Shared/Types';
 
 declare type ScheduleEventMainPanelProps = {
     toggleTimetable: () => void,
-    handleWidth: number,
     event: MotorsportEvent,
+    handleWidth: number,
 };
 
-const ScheduleEventMainPanel: React.FunctionComponent<ScheduleEventMainPanelProps> = ({
+const dateWidth = 100;
+
+const ScheduleEventMainPanel: FunctionComponent<ScheduleEventMainPanelProps> = ({
     toggleTimetable,
     handleWidth,
     event,
 }) => {
-    const [dateLabels, setDateLabels] = useState<{ start: string, end: string}>({ start: '', end: '' });
+    const start = null !== event.start_date
+        ? (new Date(event.start_date)).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
+        : '';
 
-    useEffect(
-        () => {
-            let start = '';
-            let end = '';
+    const end = null !== event.end_date
+        ? (new Date(event.end_date)).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
+        : '';
 
-            if (null !== event.start_date) {
-                const startDate = new Date(event.start_date);
-                start = startDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
-            }
-
-            if (null !== event.end_date) {
-                const endDate = new Date(event.end_date);
-                end = endDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
-            }
-
-            setDateLabels({ start, end });
-        },
-        [],
-    );
-
-    const dateWidth = 100;
+    const dateLabels = { start, end };
 
     return (
         <Grid item container direction="row" justifyContent="center">

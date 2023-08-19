@@ -73,6 +73,7 @@
                 "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ],
+        "react/require-default-props": "off",
         "yoda": ["error", "always"]
     }
 }

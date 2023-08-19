@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ReactNode } from 'react';
 import Box from '@mui/material/Box';
 
@@ -8,12 +10,14 @@ import LayoutHeader from './LayoutHeader';
 const drawerWidth = 240;
 
 declare type LayoutProps = {
-    content: ReactNode,
+    children: ReactNode,
     menu: ReactNode,
     subHeader?: ReactNode,
 };
 
-const Layout: React.FunctionComponent<LayoutProps> = ({ menu, content, subHeader }) => {
+const defaultProps = { subHeader: undefined, menu: <noscript />, children: <noscript /> };
+
+const Layout: React.FunctionComponent<LayoutProps> = ({ menu, children, subHeader } = defaultProps) => {
     const [open, setOpen] = React.useState(true);
 
     const handleDrawerOpen = () => {
@@ -34,16 +38,12 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ menu, content, subHeader
             <LayoutContent
                 subHeader={subHeader}
                 drawerWidth={drawerWidth}
-                content={content}
+                content={children}
                 open={open}
             />
             <LayoutMenu menu={menu} drawerWidth={drawerWidth} handleDrawerClose={handleDrawerClose} open={open} />
         </Box>
     );
-};
-
-Layout.defaultProps = {
-    subHeader: undefined,
 };
 
 export default Layout;

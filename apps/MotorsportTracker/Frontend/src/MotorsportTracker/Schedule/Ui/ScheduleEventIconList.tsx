@@ -5,9 +5,9 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import React from 'react';
+import { FunctionComponent } from 'react';
+import Link from 'next/link';
 
-import useNavigate from '../../../Shared/Hooks/useNavigate';
 import { MotorsportEvent } from '../../Shared/Types';
 
 declare type ScheduleEventIconListProps = {
@@ -15,7 +15,7 @@ declare type ScheduleEventIconListProps = {
     event: MotorsportEvent,
 };
 
-const ScheduleEventIconList: React.FunctionComponent<ScheduleEventIconListProps> = ({ event, toggleTimetable }) => {
+const ScheduleEventIconList: FunctionComponent<ScheduleEventIconListProps> = ({ event, toggleTimetable }) => {
     if (null !== event.status) {
         return (
             <Typography sx={{ color: '#d95757' }}>{event.status}</Typography>
@@ -36,8 +36,6 @@ const ScheduleEventIconList: React.FunctionComponent<ScheduleEventIconListProps>
         return timetableIcon;
     }
 
-    const { redirectionTo } = useNavigate();
-
     const eventUri = event.slug.replaceAll('_', '/');
 
     const props: Partial<SvgIconProps> = { color: 'action', sx: { cursor: 'pointer', mr: 1 } };
@@ -45,13 +43,19 @@ const ScheduleEventIconList: React.FunctionComponent<ScheduleEventIconListProps>
     return (
         <>
             <Tooltip title="Results">
-                <LeaderboardIcon onClick={redirectionTo(`/event/${eventUri}/results`)} {...props} />
+                <Link href={`/event/${eventUri}/results`}>
+                    <LeaderboardIcon {...props} />
+                </Link>
             </Tooltip>
             <Tooltip title="Histories">
-                <SlowMotionVideoIcon onClick={redirectionTo(`/event/${eventUri}/histories`)} {...props} />
+                <Link href={`/event/${eventUri}/histories`}>
+                    <SlowMotionVideoIcon {...props} />
+                </Link>
             </Tooltip>
             <Tooltip title="Graphs">
-                <QueryStatsIcon onClick={redirectionTo(`/event/${eventUri}/graphs`)} {...props} />
+                <Link href={`/event/${eventUri}/graphs`}>
+                    <QueryStatsIcon {...props} />
+                </Link>
             </Tooltip>
             {timetableIcon}
         </>

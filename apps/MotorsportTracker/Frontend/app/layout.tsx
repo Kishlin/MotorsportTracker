@@ -1,8 +1,9 @@
+// noinspection HtmlRequiredTitleElement
+
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
 
-import RootLayout from './RootLayout';
-import MuiLayout from './MuiLayout';
+import ThemeRegistry from './ThemeRegistry';
 
 // noinspection JSUnusedGlobalSymbols
 export const metadata: Metadata = {
@@ -10,16 +11,30 @@ export const metadata: Metadata = {
     description: 'Stats and Data for motorsport series.',
 };
 
-const Layout = ({
+const RootLayout = ({
     children,
 }: {
     children: ReactNode
 }) => (
-    <RootLayout>
-        <MuiLayout>
-            {children}
-        </MuiLayout>
-    </RootLayout>
+    <html lang="en">
+        <head>
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            />
+
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            />
+        </head>
+        <body>
+            <ThemeRegistry options={{ key: 'mui' }}>
+                {children}
+            </ThemeRegistry>
+        </body>
+    </html>
 );
 
-export default Layout;
+export default RootLayout;
+

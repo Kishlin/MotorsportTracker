@@ -1,7 +1,9 @@
-import React from 'react';
-import { Typography } from '@mui/material';
+'use client';
 
-const ScheduleTitleUpcoming: React.FunctionComponent = () => (
+import { Typography } from '@mui/material';
+import { FunctionComponent } from 'react';
+
+const ScheduleTitleUpcoming: FunctionComponent = () => (
     <Typography variant="h2" align="left" sx={{ my: 4 }}>Upcoming</Typography>
 );
 

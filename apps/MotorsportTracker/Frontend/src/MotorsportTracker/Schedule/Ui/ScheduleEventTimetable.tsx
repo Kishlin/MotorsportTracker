@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import Divider from '@mui/material/Divider';
+import { FunctionComponent } from 'react';
 import Table from '@mui/material/Table';
 import Grid from '@mui/material/Grid';
-import React from 'react';
 
 import { MotorsportEvent, MotorsportSession } from '../../Shared/Types';
 
@@ -15,7 +15,7 @@ declare type ScheduleEventTimetableProps = {
     event: MotorsportEvent,
 };
 
-const ScheduleEventTimetable: React.FunctionComponent<ScheduleEventTimetableProps> = ({ leftHandleWidth, event }) => {
+const ScheduleEventTimetable: FunctionComponent<ScheduleEventTimetableProps> = ({ leftHandleWidth, event }) => {
     event.sessions.sort((a, b) => {
         if (null === a.start_date || null === b.start_date) {
             return 0;
@@ -49,12 +49,21 @@ const ScheduleEventTimetable: React.FunctionComponent<ScheduleEventTimetableProp
             <TableContainer>
                 <Table size="medium" sx={{ [`& .${tableCellClasses.root}`]: { borderBottom: 'none' } }}>
                     <TableBody>
-                        {timetable[day].map((session: MotorsportSession) => (
-                            <TableRow key={session.slug}>
-                                <TableCell sx={{ p: 1 }}>{session.type}</TableCell>
-                                <TableCell sx={{ p: 1 }}>{new Date(session.start_date).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</TableCell>
-                            </TableRow>
-                        ))}
+                        {timetable[day].map((session: MotorsportSession) => {
+                            const startDate = null !== session.start_date
+                                ? new Date(session.start_date).toLocaleTimeString(undefined, {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })
+                                : <noscript />;
+
+                            return (
+                                <TableRow key={session.slug}>
+                                    <TableCell sx={{ p: 1 }}>{session.type}</TableCell>
+                                    <TableCell sx={{ p: 1 }}>{startDate}</TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

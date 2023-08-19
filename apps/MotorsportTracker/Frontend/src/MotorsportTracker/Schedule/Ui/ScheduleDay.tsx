@@ -1,5 +1,5 @@
-import React from 'react';
-import { Grid } from '@mui/material';
+import { FunctionComponent } from 'react';
+import Grid from '@mui/material/Grid';
 
 import { MotorsportEvent } from '../../Shared/Types';
 import ScheduleEvent from './ScheduleEvent';
@@ -8,7 +8,7 @@ declare type ScheduleDayProps = {
     events: MotorsportEvent[],
 };
 
-const ScheduleDay: React.FunctionComponent<ScheduleDayProps> = ({ events }) => {
+const ScheduleDay: FunctionComponent<ScheduleDayProps> = ({ events }) => {
     const eventsJSX = Object.values(events).map(
         (event: MotorsportEvent) => <ScheduleEvent key={event.id} event={event} />,
     );
