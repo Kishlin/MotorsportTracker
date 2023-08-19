@@ -1,33 +1,44 @@
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
+import { styled } from '@mui/material/styles';
+import { FunctionComponent } from 'react';
+import Link from 'next/link';
 
 import SelectorChampionship from '../../Shared/Nav/SelectorChampionship';
-import useNavigate from '../../../Shared/Hooks/useNavigate';
+import { AvailableStandings, StandingType } from '../../Shared/Types';
 import SelectorYear from '../../Shared/Nav/SelectorYear';
 import NavSearchBar from '../../Shared/Nav/NavSearchBar';
 import NavContainer from '../../Shared/Nav/NavContainer';
-import { AvailableStandings, StandingType } from '../../Shared/Types';
 import NavMainMenu from '../../Shared/Nav/NavMainMenu';
 import championships from '../../Config/Championships';
-import Link from '../../Shared/Nav/Link';
 
 declare type ChampionshipNavbarProps = {
     availableStandings: AvailableStandings,
-    championship: string,
-    year: string,
-    page: string,
 };
 
-const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
-    availableStandings,
-    championship,
-    year,
-    page,
-}) => {
-    const { navigate } = useNavigate();
+const StyledLink = styled(Link)(
+    () => ({
+        letterSpacing: '0.0075em',
+        textDecoration: 'none',
+        fontSize: '1.25rem',
+        display: 'block',
+        fontWeight: 500,
+        lineHeight: 1.6,
+        color: '#fff',
+        margin: '0 16px',
+    }),
+);
+
+const ChampionshipNavbar: FunctionComponent<ChampionshipNavbarProps> = ({ availableStandings }) => {
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const [, championship, year, page] = pathname.slice(1).split('/');
 
     const handleYearChange = (newYear: string) => {
-        navigate(`/championship/${championship}/${newYear}/${page}`);
+        router.push(`/championship/${championship}/${newYear}/${page}`);
     };
 
     const handleChampionshipChange = (targetChampionship: string) => {
@@ -35,7 +46,7 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
 
         const targetYear = years.includes(parseInt(year, 10)) ? year : years[0];
 
-        navigate(`/championship/${targetChampionship}/${targetYear}/${page}`);
+        router.push(`/championship/${targetChampionship}/${targetYear}/${page}`);
     };
 
     const championshipSelectItems = Object.keys(championships).map((championshipSlug: string) => (
@@ -50,26 +61,26 @@ const ChampionshipNavbar: React.FunctionComponent<ChampionshipNavbarProps> = ({
 
     const statsPage = 0 < Object.keys(availableStandings).length
         ? (
-            <Link to={`/championship/${championship}/${year}/stats`}>
+            <StyledLink href={`/championship/${championship}/${year}/stats`}>
                 Stats
-            </Link>
+            </StyledLink>
         )
         : <noscript />;
 
     const standingsPages = ['constructor', 'team', 'driver']
-        .filter((type: StandingType) => true === availableStandings[type])
+        .filter((type: StandingType) => availableStandings[type])
         .map((type: StandingType) => (
-            <Link key={type} to={`/championship/${championship}/${year}/standings-${type}`}>
+            <StyledLink key={type} href={`/championship/${championship}/${year}/standings-${type}`}>
                 {`${type.slice(0, 1).toUpperCase()}${type.slice(1)} Standings`}
-            </Link>
+            </StyledLink>
         ));
 
     return (
         <NavContainer>
             <NavMainMenu>
-                <Link to={`/championship/${championship}/${year}/schedule`}>
+                <StyledLink href={`/championship/${championship}/${year}/schedule`}>
                     Calendar
-                </Link>
+                </StyledLink>
                 {statsPage}
                 {standingsPages}
             </NavMainMenu>
