@@ -4,9 +4,9 @@ import Skeleton from '@mui/material/Skeleton';
 import { FunctionComponent } from 'react';
 import Grid from '@mui/material/Grid';
 
-import ScheduleContainer from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
-import ScheduleSkeleton from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
-import ScheduleTitle from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleTitle';
+import ScheduleContainer from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
+import ScheduleSkeleton from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
+import ScheduleTitle from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleTitle';
 
 const PageSkeleton: FunctionComponent = () => (
     <ScheduleContainer>

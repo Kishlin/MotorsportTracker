@@ -3,13 +3,13 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 
-import listOfAllMonths from '../../../../../src/MotorsportTracker/Schedule/Utils/Date/listOfAllMonths';
-import ScheduleEventsList from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
-import ScheduleNavigation from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleNavigation';
-import ScheduleContainer from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
-import ScheduleSkeleton from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
-import ScheduleTitle from '../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleTitle';
-import calendarApi from '../../../../../src/MotorsportTracker/Schedule/Api/CalendarApi';
+import listOfAllMonths from '../../../../../../src/MotorsportTracker/Schedule/Utils/Date/listOfAllMonths';
+import ScheduleEventsList from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleEventsList';
+import ScheduleNavigation from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleNavigation';
+import ScheduleContainer from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleContainer';
+import ScheduleSkeleton from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
+import ScheduleTitle from '../../../../../../src/MotorsportTracker/Schedule/Ui/ScheduleTitle';
+import calendarApi from '../../../../../../src/MotorsportTracker/Schedule/Api/CalendarApi';
 
 declare type PageParams = {
     month: string,

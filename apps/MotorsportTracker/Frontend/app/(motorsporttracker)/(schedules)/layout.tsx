@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import MotorsportTrackerLayout from '../../src/Shared/Ui/Layout/Layout';
-import MotorsportTrackerMenu from '../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import MotorsportTrackerLayout from '../../../src/Shared/Ui/Layout/Layout';
 
 const Layout = ({
     children,
