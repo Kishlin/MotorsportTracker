@@ -1,5 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
+import { notFound } from 'next/navigation';
 import React, { ReactNode } from 'react';
 import { headers } from 'next/headers';
 import { Metadata } from 'next';
@@ -9,6 +10,7 @@ import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/
 import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
 import championships from '../../../src/MotorsportTracker/Config/Championships';
 import MotorsportTrackerLayout from '../../../src/Shared/Ui/Layout/Layout';
+import { StandingType } from '../../../src/MotorsportTracker/Shared/Types';
 
 declare type PageParams = {
     championship: string,
@@ -42,9 +44,16 @@ const Layout = async ({
         return children;
     }
 
-    const [, championship, year] = pathname.slice(1).split('/');
+    const [, championship, year, page] = pathname.slice(1).split('/');
 
     const availableStandings = await availableStandingsApi(championship, year);
+
+    // eslint-disable-next-line
+    ['constructor', 'team', 'driver'].forEach((type: StandingType) => {
+        if (page === `standings-${type}` && false === availableStandings[type]) {
+            return notFound();
+        }
+    });
 
     return (
         <MotorsportTrackerLayout
