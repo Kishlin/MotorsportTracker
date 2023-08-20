@@ -1,5 +1,7 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import { ResultDriver } from '../../Types/Index';
@@ -27,7 +29,7 @@ const row = (driver: ResultDriver) => {
     );
 };
 
-const ResultDriversCell: React.FunctionComponent<ResultDriversProps> = ({ driver, additionalDrivers }) => (
+const ResultDriversCell: FunctionComponent<ResultDriversProps> = ({ driver, additionalDrivers }) => (
     <StyledTableCell>
         <Typography noWrap>
             {row(driver)}

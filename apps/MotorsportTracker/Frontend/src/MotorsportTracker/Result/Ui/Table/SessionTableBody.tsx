@@ -1,11 +1,13 @@
-import React from 'react';
+'use client';
+
+import { FunctionComponent, ReactNode } from 'react';
 import TableBody from '@mui/material/TableBody';
 
 declare type SessionTableBodyProps = {
-    children: React.ReactNode,
+    children: ReactNode,
 };
 
-const SessionTableBody: React.FunctionComponent<SessionTableBodyProps> = ({ children }) => (
+const SessionTableBody: FunctionComponent<SessionTableBodyProps> = ({ children }) => (
     <TableBody>
         {children}
     </TableBody>

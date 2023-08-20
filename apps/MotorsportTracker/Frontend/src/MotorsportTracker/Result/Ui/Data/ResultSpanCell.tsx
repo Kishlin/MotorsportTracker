@@ -1,5 +1,7 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import formatSpan from '../../Utils/FormatSpan';
 import { ResultClassification } from '../../Types/Index';
@@ -11,7 +13,7 @@ declare type ResultSpanProps = {
     laps: number,
 };
 
-const ResultSpanCell: React.FunctionComponent<ResultSpanProps> = ({ classification, time, laps }) => (
+const ResultSpanCell: FunctionComponent<ResultSpanProps> = ({ classification, time, laps }) => (
     <StyledTableCell>
         <Typography noWrap>{formatSpan(classification, time, laps)}</Typography>
     </StyledTableCell>

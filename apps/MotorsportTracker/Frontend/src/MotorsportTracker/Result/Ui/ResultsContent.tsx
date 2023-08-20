@@ -1,6 +1,8 @@
+'use client';
+
+import { FunctionComponent, useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useEffect } from 'react';
 
 import SESSION_TYPES_WITH_COMPARISON from '../../Config/SessionTypesWithComparison';
 import ORDERED_SESSION_TYPES from '../../Config/OrderedSessionTypes';
@@ -16,14 +18,14 @@ declare type ResultsContentProps = {
     results: ResultsBySession,
 };
 
-const ResultsContent: React.FunctionComponent<ResultsContentProps> = ({ results }) => {
+const ResultsContent: FunctionComponent<ResultsContentProps> = ({ results }) => {
     if (undefined === results || 0 === Object.keys(results).length) {
         return <Typography align="center" sx={{ mt: 4 }}>No results are available at this time.</Typography>;
     }
 
     const applicableCategories = ORDERED_SESSION_TYPES.filter((type: string) => undefined !== results[type]);
 
-    const [selectedType, setSelectedType] = React.useState<string>(applicableCategories[0]);
+    const [selectedType, setSelectedType] = useState<string>(applicableCategories[0]);
 
     if (undefined === results[selectedType]) {
         return <Typography align="center" sx={{ mt: 4 }}>No results are available at this time.</Typography>;

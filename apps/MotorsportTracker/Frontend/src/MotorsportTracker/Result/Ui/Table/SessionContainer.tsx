@@ -1,11 +1,13 @@
+'use client';
+
+import { FunctionComponent, ReactNode } from 'react';
 import Box from '@mui/material/Box';
-import React from 'react';
 
 declare type SessionContainerProps = {
-    children: React.ReactNode,
+    children: ReactNode,
 };
 
-const SessionContainer: React.FunctionComponent<SessionContainerProps> = ({ children }) => (
+const SessionContainer: FunctionComponent<SessionContainerProps> = ({ children }) => (
     <Box>
         {children}
     </Box>

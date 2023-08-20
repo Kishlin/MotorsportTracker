@@ -1,6 +1,8 @@
+'use client';
+
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import ResultPositionCell from '../Data/ResultPositionCell';
@@ -25,7 +27,7 @@ declare type SessionTableRowProps = {
     result: Result,
 };
 
-const SessionTableResult: React.FunctionComponent<SessionTableRowProps> = ({ result, withComparison }) => (
+const SessionTableResult: FunctionComponent<SessionTableRowProps> = ({ result, withComparison }) => (
     <StyledTableRow>
         <ResultPositionCell classifiedStatus={result.classified_status} position={result.finish_position} />
         <StyledTableCell>{result.car_number.toString()}</StyledTableCell>

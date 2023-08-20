@@ -1,6 +1,8 @@
+'use client';
+
+import { FunctionComponent } from 'react';
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { TableHead } from '@mui/material';
-import React from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 
@@ -8,7 +10,7 @@ declare type SessionTableHeadProps = {
     withComparison: boolean
 };
 
-const SessionTableHead: React.FunctionComponent<SessionTableHeadProps> = ({ withComparison }) => (
+const SessionTableHead: FunctionComponent<SessionTableHeadProps> = ({ withComparison }) => (
     <TableHead>
         <TableRow>
             <StyledTableCell>Pos</StyledTableCell>

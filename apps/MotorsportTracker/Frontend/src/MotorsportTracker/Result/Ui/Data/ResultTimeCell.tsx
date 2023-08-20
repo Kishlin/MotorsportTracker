@@ -1,5 +1,7 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import formatTime from '../../Utils/FormatTime';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
@@ -8,7 +10,7 @@ declare type ResultTimeProps = {
     time: null|string,
 };
 
-const ResultTimeCell: React.FunctionComponent<ResultTimeProps> = ({ time }) => (
+const ResultTimeCell: FunctionComponent<ResultTimeProps> = ({ time }) => (
     <StyledTableCell>
         <Typography noWrap>{null === time ? <noscript /> : formatTime(time)}</Typography>
     </StyledTableCell>

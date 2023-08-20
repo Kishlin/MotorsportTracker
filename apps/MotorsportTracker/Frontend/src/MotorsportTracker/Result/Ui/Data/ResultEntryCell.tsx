@@ -1,5 +1,7 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import { Country } from '../../../../Shared/Types/Index';
@@ -9,7 +11,7 @@ declare type ResultEntryProps = {
     name: string,
 };
 
-const ResultEntryCell: React.FunctionComponent<ResultEntryProps> = ({ country, name }) => {
+const ResultEntryCell: FunctionComponent<ResultEntryProps> = ({ country, name }) => {
     const content = null !== country && null !== country.code
         ? (
             <>
