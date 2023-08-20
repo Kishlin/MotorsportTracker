@@ -1,24 +1,26 @@
+'use client';
+
+import { FunctionComponent, useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 
 import CategorySelector from './CategorySelector/CategorySelector';
-import { List } from '../../../Shared/Types/Index';
+import StandingsTableStanding from './Table/StandingsTableStanding';
 import { Standing, StandingType } from '../../Shared/Types';
-import StandingsTable from './Table/StandingsTable';
 import StandingsTableHead from './Table/StandingsTableHead';
 import StandingsTableBody from './Table/StandingsTableBody';
-import StandingsTableStanding from './Table/StandingsTableStanding';
+import StandingsTable from './Table/StandingsTable';
+import { List } from '../../../Shared/Types/Index';
 
 declare type StandingsContentProps = {
     standings: List<Array<Standing>>,
     type: StandingType,
 }
 
-const StandingsContent: React.FunctionComponent<StandingsContentProps> = ({ standings, type }) => {
+const StandingsContent: FunctionComponent<StandingsContentProps> = ({ standings, type }) => {
     const categories = Object.keys(standings);
 
-    const [selectedCategory, setSelectedCategory] = React.useState<string>(categories[0]);
+    const [selectedCategory, setSelectedCategory] = useState<string>(categories[0]);
 
     useEffect(
         () => {

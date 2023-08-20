@@ -1,13 +1,16 @@
+'use client';
+
+import { FunctionComponent, ReactNode } from 'react';
+
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
-import React from 'react';
 
 declare type RaceResultProps = {
-    children: React.ReactNode,
+    children: ReactNode,
 };
 
-const StandingsTable: React.FunctionComponent<RaceResultProps> = ({ children }) => (
+const StandingsTable: FunctionComponent<RaceResultProps> = ({ children }) => (
     <TableContainer component={Paper}>
         <Table aria-label="standings-table">
             {children}

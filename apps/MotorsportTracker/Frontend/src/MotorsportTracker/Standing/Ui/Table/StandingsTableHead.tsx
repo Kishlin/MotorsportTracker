@@ -1,6 +1,8 @@
+'use client';
+
+import { FunctionComponent } from 'react';
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { TableHead } from '@mui/material';
-import React from 'react';
 
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import { StandingType } from '../../../Shared/Types';
@@ -9,7 +11,7 @@ declare type StandingsTableHeadProps = {
     type: StandingType,
 };
 
-const StandingsTableHead: React.FunctionComponent<StandingsTableHeadProps> = ({ type }) => (
+const StandingsTableHead: FunctionComponent<StandingsTableHeadProps> = ({ type }) => (
     <TableHead>
         <TableRow>
             <StyledTableCell align="left">Position</StyledTableCell>
