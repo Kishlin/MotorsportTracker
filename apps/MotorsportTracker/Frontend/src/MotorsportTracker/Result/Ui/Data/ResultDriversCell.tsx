@@ -19,7 +19,7 @@ const row = (driver: ResultDriver) => {
             <img
                 src={`/assets/flags/1x1/${driver.country.code}.svg`}
                 style={{ verticalAlign: 'text-bottom' }}
-                alt={driver.country.code}
+                alt={driver.country.code ?? 'Country'}
                 height={20}
             />
             <span style={{ marginLeft: '10px' }}>{driver.name}</span>

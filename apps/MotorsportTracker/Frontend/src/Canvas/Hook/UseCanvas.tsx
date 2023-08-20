@@ -3,7 +3,7 @@ import { useRef, useEffect, MutableRefObject } from 'react';
 export type Draw = (ctx: CanvasRenderingContext2D, frameCount: number) => void;
 
 const useCanvas = (draw: Draw, aspectRatio: number, containerRef: MutableRefObject<any>) => {
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(
         () => {
@@ -12,7 +12,14 @@ const useCanvas = (draw: Draw, aspectRatio: number, containerRef: MutableRefObje
 
             const render = () => {
                 const canvas = canvasRef.current;
+                if (null === canvas) {
+                    return;
+                }
+
                 const context = canvas.getContext('2d');
+                if (null === context) {
+                    return;
+                }
 
                 const { width } = containerRef.current.getBoundingClientRect();
 

@@ -3,12 +3,19 @@ import { useRef, useEffect, MutableRefObject } from 'react';
 export type StaticDraw = (ctx: CanvasRenderingContext2D) => void;
 
 const useStaticCanvas = (aspectRatio: number, draw: StaticDraw, containerRef: MutableRefObject<any>) => {
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(
         () => {
             const canvas = canvasRef.current;
+            if (null === canvas) {
+                return;
+            }
+
             const context = canvas.getContext('2d');
+            if (null === context) {
+                return;
+            }
 
             const { width } = containerRef.current.getBoundingClientRect();
 

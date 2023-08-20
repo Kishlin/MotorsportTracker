@@ -9,7 +9,7 @@ declare type PageParams = {
     year: string,
 };
 
-const Page = async ({ params: { championship, year }}: { params: PageParams }) => {
+const Page = async ({ params: { championship, year } }: { params: PageParams }) => {
     const schedule = await scheduleApi(championship, year);
 
     return (

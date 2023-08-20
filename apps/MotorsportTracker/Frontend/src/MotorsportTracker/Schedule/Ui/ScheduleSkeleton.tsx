@@ -32,4 +32,3 @@ const ScheduleSkeleton: FunctionComponent = () => (
 );
 
 export default ScheduleSkeleton;
-
