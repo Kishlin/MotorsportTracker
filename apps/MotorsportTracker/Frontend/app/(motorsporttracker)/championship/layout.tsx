@@ -1,8 +1,8 @@
 // noinspection JSUnusedGlobalSymbols
 
 import { notFound } from 'next/navigation';
-import React, { ReactNode } from 'react';
 import { headers } from 'next/headers';
+import { ReactNode } from 'react';
 import { Metadata } from 'next';
 
 import availableStandingsApi from '../../../src/MotorsportTracker/Standing/Api/AvailableStandingsApi';
@@ -70,7 +70,9 @@ export function generateStaticParams(): Array<PageParams> {
 
     Object.entries(championships).forEach(([slug, championship]) => {
         championship.years.forEach((year: number) => {
-            paths.push({ championship: slug, year: year.toString() });
+            if (2015 <= year) {
+                paths.push({ championship: slug, year: year.toString() });
+            }
         });
     });
 
