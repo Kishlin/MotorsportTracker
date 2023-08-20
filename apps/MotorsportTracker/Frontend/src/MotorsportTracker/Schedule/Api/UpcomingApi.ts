@@ -6,9 +6,7 @@ const upcomingApi: UpcomingApi = async () => {
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/calendar/upcoming`,
         {
-            next: {
-                revalidate: 3600,
-            },
+            cache: 'no-store',
         },
     );
 
