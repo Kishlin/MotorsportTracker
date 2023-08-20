@@ -7,10 +7,6 @@ import ScheduleContainer from '../../../../src/MotorsportTracker/Schedule/Ui/Sch
 import ScheduleSkeleton from '../../../../src/MotorsportTracker/Schedule/Ui/ScheduleSkeleton';
 import upcomingApi from '../../../../src/MotorsportTracker/Schedule/Api/UpcomingApi';
 
-async function loadEvents() {
-    return upcomingApi();
-}
-
 export async function generateMetadata(): Promise<Metadata> {
     return {
         title: 'Upcoming - Motorsport Tracker',
@@ -18,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Page = async () => {
-    const events = await loadEvents();
+    const events = await upcomingApi();
 
     return (
         <ScheduleContainer>
