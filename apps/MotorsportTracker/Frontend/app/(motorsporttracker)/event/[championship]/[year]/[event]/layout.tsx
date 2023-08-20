@@ -27,10 +27,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
     const [, championship, year, event, page] = pathname.slice(1).split('/');
 
+    const season = await seasonApi(championship, parseInt(year, 10));
     const pageUcFirst = page.slice(0, 1).toUpperCase() + page.slice(1);
 
     return {
-        title: `${event}, ${championships[championship].shortName} ${year} ${pageUcFirst} - Motorsport Tracker`,
+        title: `${season[event].name}, ${pageUcFirst} - Motorsport Tracker`,
     };
 }
 
