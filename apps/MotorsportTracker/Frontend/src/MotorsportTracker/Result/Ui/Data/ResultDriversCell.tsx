@@ -17,7 +17,7 @@ const row = (driver: ResultDriver) => {
     }
 
     return (
-        <span style={{ display: 'block' }}>
+        <span>
             <img
                 src={`/assets/flags/1x1/${driver.country.code}.svg`}
                 style={{ verticalAlign: 'text-bottom' }}
@@ -33,8 +33,12 @@ const ResultDriversCell: FunctionComponent<ResultDriversProps> = ({ driver, addi
     <StyledTableCell>
         <Typography noWrap>
             {row(driver)}
-            {additionalDrivers.map((additionalDriver: ResultDriver) => row(additionalDriver))}
         </Typography>
+        {additionalDrivers.map((additionalDriver: ResultDriver) => (
+            <Typography noWrap key={additionalDriver.id}>
+                {row(additionalDriver)}
+            </Typography>
+        ))}
     </StyledTableCell>
 );
 
