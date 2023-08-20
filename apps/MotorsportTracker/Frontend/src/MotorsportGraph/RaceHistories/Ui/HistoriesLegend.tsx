@@ -1,9 +1,11 @@
+'use client';
+
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Typography from '@mui/material/Typography';
+import { FunctionComponent } from 'react';
 import Grid from '@mui/material/Grid';
-import React from 'react';
 
 import { HistoriesSeries } from '../Types';
 
@@ -16,7 +18,7 @@ declare type HistoriesLegendProps = {
 
 const disabledSeriesColor = '#666';
 
-const HistoriesLegend: React.FunctionComponent<HistoriesLegendProps> = ({
+const HistoriesLegend: FunctionComponent<HistoriesLegendProps> = ({
     series,
     toggleSeries,
     seriesShowStatus,

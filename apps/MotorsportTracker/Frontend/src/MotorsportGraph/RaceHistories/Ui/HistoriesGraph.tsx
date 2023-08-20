@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import { FunctionComponent, useState } from 'react';
 
 import GraphContainer from '../../Shared/Ui/GraphContainer';
 import { HistoriesData, HistoriesSeries } from '../Types';
@@ -23,7 +25,7 @@ const lineDash = [
     [2, 2],
 ];
 
-const HistoriesGraph: React.FunctionComponent<HistoriesGraphProps> = ({ data, isMultiDriver }) => {
+const HistoriesGraph: FunctionComponent<HistoriesGraphProps> = ({ data, isMultiDriver }) => {
     const showSeries: {[key: number]: boolean} = {};
 
     data.series.forEach((series: HistoriesSeries) => {

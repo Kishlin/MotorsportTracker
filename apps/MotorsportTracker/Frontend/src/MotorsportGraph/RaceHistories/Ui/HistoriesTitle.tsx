@@ -1,11 +1,13 @@
+'use client';
+
 import Typography from '@mui/material/Typography';
-import React from 'react';
+import { FunctionComponent } from 'react';
 
 declare type HistoriesTitleProps = {
     type: string,
 };
 
-const HistoriesTitle: React.FunctionComponent<HistoriesTitleProps> = ({ type }) => (
+const HistoriesTitle: FunctionComponent<HistoriesTitleProps> = ({ type }) => (
     <Typography variant="h4" align="left" sx={{ mb: 1 }}>
         {type}
     </Typography>
