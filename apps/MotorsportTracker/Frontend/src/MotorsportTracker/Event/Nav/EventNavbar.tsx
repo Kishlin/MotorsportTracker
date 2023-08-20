@@ -1,8 +1,12 @@
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
+import { styled } from '@mui/material/styles';
+import { FunctionComponent } from 'react';
+import Link from 'next/link';
 
 import SelectorChampionship from '../../Shared/Nav/SelectorChampionship';
-import useNavigate from '../../../Shared/Hooks/useNavigate';
 import SelectorEvent from '../../Shared/Nav/SelectorEvent';
 import SelectorYear from '../../Shared/Nav/SelectorYear';
 import NavSearchBar from '../../Shared/Nav/NavSearchBar';
@@ -10,39 +14,46 @@ import NavContainer from '../../Shared/Nav/NavContainer';
 import NavMainMenu from '../../Shared/Nav/NavMainMenu';
 import championships from '../../Config/Championships';
 import { SeasonEvents } from '../../Shared/Types';
-import Link from '../../Shared/Nav/Link';
 
 declare type EventNavbarProps = {
-    championship: string,
-    year: string,
-    event: string,
     season: SeasonEvents,
-    page: string,
 };
 
-const EventNavbar: React.FunctionComponent<EventNavbarProps> = ({
-    championship,
-    year,
-    event,
+const StyledLink = styled(Link)(
+    () => ({
+        letterSpacing: '0.0075em',
+        textDecoration: 'none',
+        fontSize: '1.25rem',
+        display: 'block',
+        fontWeight: 500,
+        lineHeight: 1.6,
+        color: '#fff',
+        margin: '0 16px',
+    }),
+);
+
+const EventNavbar: FunctionComponent<EventNavbarProps> = ({
     season,
-    page,
 }) => {
-    const { navigate } = useNavigate();
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const [, championship, year, event, page] = pathname.slice(1).split('/');
 
     const handleChampionshipChange = (targetChampionship: string) => {
         const { years } = championships[targetChampionship];
 
         const targetYear = years.includes(parseInt(year, 10)) ? year : years[0];
 
-        navigate(`/championship/${targetChampionship}/${targetYear}/schedule`);
+        router.push(`/championship/${targetChampionship}/${targetYear}/schedule`);
     };
 
     const handleYearChange = (newYear: string) => {
-        navigate(`/championship/${championship}/${newYear}/schedule`);
+        router.push(`/championship/${championship}/${newYear}/schedule`);
     };
 
     const handleEventChange = (newEvent: string) => {
-        navigate(`/event/${championship}/${year}/${newEvent}/${page}`);
+        router.push(`/event/${championship}/${year}/${newEvent}/${page}`);
     };
 
     const championshipSelectItems = Object.keys(championships).map((championshipSlug: string) => (
@@ -62,15 +73,15 @@ const EventNavbar: React.FunctionComponent<EventNavbarProps> = ({
     return (
         <NavContainer>
             <NavMainMenu>
-                <Link to={`/event/${championship}/${year}/${event}/results`}>
+                <StyledLink href={`/event/${championship}/${year}/${event}/results`}>
                     Results
-                </Link>
-                <Link to={`/event/${championship}/${year}/${event}/histories`}>
+                </StyledLink>
+                <StyledLink href={`/event/${championship}/${year}/${event}/histories`}>
                     Histories
-                </Link>
-                <Link to={`/event/${championship}/${year}/${event}/graphs`}>
+                </StyledLink>
+                <StyledLink href={`/event/${championship}/${year}/${event}/graphs`}>
                     Graphs
-                </Link>
+                </StyledLink>
             </NavMainMenu>
             <NavSearchBar>
                 <SelectorChampionship onChange={handleChampionshipChange} championship={championship}>
