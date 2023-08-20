@@ -70,7 +70,7 @@ export function generateStaticParams(): Array<PageParams> {
 
     Object.entries(championships).forEach(([slug, championship]) => {
         championship.years.forEach((year: number) => {
-            if (2015 <= year) {
+            if (parseInt(process.env.BUILD_FROM_YEAR ?? '2015', 10) <= year) {
                 paths.push({ championship: slug, year: year.toString() });
             }
         });

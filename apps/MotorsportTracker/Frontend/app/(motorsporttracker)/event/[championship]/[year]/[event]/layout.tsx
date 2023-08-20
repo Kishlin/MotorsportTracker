@@ -70,7 +70,7 @@ export async function generateStaticParams():Promise<Array<PageParams>> {
 
     Object.keys(championships).forEach((slug: string) => {
         championships[slug].years.forEach(async (year: number) => {
-            if (2015 <= year) {
+            if (parseInt(process.env.BUILD_FROM_YEAR ?? '2015', 10) <= year) {
                 paramsPromise.push(
                     seasonApi(slug, year)
                         .then((result: SeasonEvents) => Object.entries(result).map(([, seasonEvent]) => ({
