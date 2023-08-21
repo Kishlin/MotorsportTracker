@@ -60,6 +60,8 @@ final class SyncGraphsForEventListCommandUsingSymfony extends SymfonyCommand
         $year        = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
         $eventFilter = $this->getEventFilterFromCommandOption($input);
 
+        $ui->info("Syncing results for {$series} {$year}");
+
         try {
             $response = $this->queryBus->ask(GetSeasonEventIdListQuery::fromScalars($series, $year, $eventFilter));
             assert($response instanceof GetSeasonEventIdListResponse);
@@ -69,8 +71,10 @@ final class SyncGraphsForEventListCommandUsingSymfony extends SymfonyCommand
             return Command::FAILURE;
         }
 
+        $ui->progressStart(count($response->eventIdList()->idList()));
+
         foreach ($response->eventIdList()->idList() as $id) {
-            $ui->info("Syncing graphs for event {$id}");
+            $ui->progressAdvance();
 
             $this->commandBus->execute(ComputeHistoriesForEventCommand::fromScalars($id));
             $this->commandBus->execute(ComputeFastestLapDeltaGraphCommand::fromScalars($id));
@@ -78,6 +82,10 @@ final class SyncGraphsForEventListCommandUsingSymfony extends SymfonyCommand
             $this->commandBus->execute(ComputeTyreHistoryGraphCommand::fromScalars($id));
             $this->commandBus->execute(ComputeLapByLapGraphCommand::fromScalars($id));
         }
+
+        $ui->progressFinish();
+
+        $ui->success("Finished syncing graphs for {$series} {$year}");
 
         return Command::SUCCESS;
     }

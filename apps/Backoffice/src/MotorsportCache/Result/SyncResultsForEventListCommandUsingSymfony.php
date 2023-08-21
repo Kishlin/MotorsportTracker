@@ -56,6 +56,8 @@ final class SyncResultsForEventListCommandUsingSymfony extends SymfonyCommand
         $year        = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
         $eventFilter = $this->getEventFilterFromCommandOption($input);
 
+        $ui->info("Syncing results for {$series} {$year}");
+
         try {
             $response = $this->queryBus->ask(GetSeasonEventIdListQuery::fromScalars($series, $year, $eventFilter));
             assert($response instanceof GetSeasonEventIdListResponse);
@@ -65,11 +67,16 @@ final class SyncResultsForEventListCommandUsingSymfony extends SymfonyCommand
             return Command::FAILURE;
         }
 
-        foreach ($response->eventIdList()->idList() as $id) {
-            $ui->info("Syncing results for event {$id}");
+        $ui->progressStart(count($response->eventIdList()->idList()));
 
+        foreach ($response->eventIdList()->idList() as $id) {
+            $ui->progressAdvance();
             $this->commandBus->execute(UpdateEventResultsCacheCommand::fromScalars($id));
         }
+
+        $ui->progressFinish();
+
+        $ui->success("Finished syncing results for {$series} {$year}");
 
         return Command::SUCCESS;
     }

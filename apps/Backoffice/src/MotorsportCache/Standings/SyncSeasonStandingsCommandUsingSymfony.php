@@ -55,6 +55,8 @@ final class SyncSeasonStandingsCommandUsingSymfony extends SymfonyCommand
             return Command::FAILURE;
         }
 
+        $ui->success("Finished syncing standings for {$series} {$year}");
+
         return Command::SUCCESS;
     }
 }
