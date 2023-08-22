@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client;
+namespace Kishlin\Backend\Client\Domain;
 
 interface Client
 {

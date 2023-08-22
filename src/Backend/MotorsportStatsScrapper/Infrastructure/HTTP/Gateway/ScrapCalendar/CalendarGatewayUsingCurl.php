@@ -9,28 +9,16 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway\Sc
 use JsonException;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\CalendarGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\CalendarResponse;
-use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\Client;
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\MotorsportStatsAPIClient;
 
-final class CalendarGatewayUsingCurl implements CalendarGateway
+final readonly class CalendarGatewayUsingCurl extends MotorsportStatsAPIClient implements CalendarGateway
 {
-    use MotorsportStatsAPIClient;
-
-    private const url = 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/calendar';
-
-    public function __construct(
-        private readonly Client $client,
-    ) {
-    }
-
     /**
      * @throws JsonException
      */
     public function fetch(string $seasonRef): CalendarResponse
     {
-        $url = sprintf(self::url, $seasonRef);
-
-        $response = $this->client->fetch($url, $this->headers());
+        $response = $this->fetchFromClient($seasonRef);
 
         /**
          * @var array{
@@ -79,5 +67,15 @@ final class CalendarGatewayUsingCurl implements CalendarGateway
         $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
         return CalendarResponse::withCalendar($data);
+    }
+
+    protected function url(int $parametersCount): string
+    {
+        return 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/calendar';
+    }
+
+    protected function topic(): string
+    {
+        return 'calendar';
     }
 }

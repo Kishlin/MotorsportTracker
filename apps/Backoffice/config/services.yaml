@@ -37,9 +37,7 @@ services:
 
   ##> HTTP Client
 
-  Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\CachedClientUsingCurl:
-    bind:
-      $storeToCache: '%kishlin.http.cache%'
+  Kishlin\Backend\Client\Infrastructure\CachedClientUsingCurl:
 
   ##> Messaging
 
@@ -106,6 +104,17 @@ services:
       $password: '%env(DB_CACHE_PASSWORD)%'
     public: true
 
+  kishlin.app.infrastructure.connection.client:
+    class: Kishlin\Backend\Persistence\Core\Connection\Connection
+    factory: [ Kishlin\Backend\Persistence\PDO\PDOConnection, create ]
+    arguments:
+      $host: '%env(DB_CLIENT_HOST)%'
+      $port: '%env(DB_CLIENT_PORT)%'
+      $dbName: '%env(DB_CLIENT_NAME)%'
+      $user: '%env(DB_CLIENT_USER)%'
+      $password: '%env(DB_CLIENT_PASSWORD)%'
+    public: true
+
   Kishlin\Backend\Persistence\Core\Connection\Connection:
     alias: 'kishlin.app.infrastructure.connection.core'
 
@@ -125,6 +134,14 @@ services:
       $table: 'migration_version'
       $folder: '%kishlin.src.dir%/etc/Migrations/Cache'
 
+  Kishlin\Backend\Persistence\Migration\Migrator.client:
+    class: Kishlin\Backend\Persistence\Migration\Migrator
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.client'
+      $namespace: '\Migrations\Client'
+      $table: 'migration_version'
+      $folder: '%kishlin.src.dir%/etc/Migrations/Client'
+
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony:
     class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
@@ -137,6 +154,12 @@ services:
       $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.cache'
       $database: 'cache'
 
+  Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony.client:
+    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    bind:
+      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.client'
+      $database: 'client'
+
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony:
     class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
@@ -148,6 +171,12 @@ services:
     bind:
       $connection: '@kishlin.app.infrastructure.connection.cache'
       $database: 'cache'
+
+  Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony.client:
+    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.client'
+      $database: 'client'
 
   ##> Cache
 
@@ -208,6 +237,10 @@ services:
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.core'
+
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ClientRepository:
+      bind:
+        $connection: '@kishlin.app.infrastructure.connection.client'
 
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\Probe:
       tags: ['kishlin.shared.infrastructure.monitoring.probe']

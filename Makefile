@@ -74,7 +74,7 @@ clean:
 	fi;
 	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
 
-start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test
+start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test db.client.reload db.client.reload.test
 	@echo "All services should be running."
 	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
 	@echo "    Backend: http://localhost:8030/monitoring/check-health"
@@ -89,6 +89,7 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
 .PHONY: db.core.connect db.core.reload db.core.reload.test
 .PHONY: db.cache.connect db.cache.reload db.cache.reload.test
+.PHONY: db.client.connect db.client.reload db.client.reload.test
 
 xdebug.on:
 	@docker-compose exec php sudo mv /usr/local/etc/php/conf.d/xdebug.ini.dis /usr/local/etc/php/conf.d/xdebug.ini
@@ -96,8 +97,8 @@ xdebug.on:
 xdebug.off:
 	@docker-compose exec php sudo mv /usr/local/etc/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini.dis
 
-db.core.reload db.cache.reload: ENV=dev
-db.core.reload.test db.cache.reload.test: ENV=test
+db.core.reload db.cache.reload db.client.reload: ENV=dev
+db.core.reload.test db.cache.reload.test db.client.reload.test: ENV=test
 
 db.core.reload db.core.reload.test: DB=core
 db.core.connect db.core.dump db.core.dump.data db.core.fill: DB=core
@@ -105,7 +106,10 @@ db.core.connect db.core.dump db.core.dump.data db.core.fill: DB=core
 db.cache.reload db.cache.reload.test: DB=cache
 db.cache.connect db.cache.dump db.cache.dump.data db.cache.fill: DB=cache
 
-db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test:
+db.client.reload db.client.reload.test: DB=client
+db.client.connect db.client.dump db.client.dump.data db.client.fill: DB=client
+
+db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test db.client.reload db.client.reload.test:
 	@echo "Creating $(DB) $(ENV) database"
 	@docker-compose exec postgres /bin/bash -c 'dropdb -U $$POSTGRES_USER --if-exists $(DB)-$(ENV) &>/dev/null'
 	@docker-compose exec postgres /bin/bash -c 'createdb -U $$POSTGRES_USER $(DB)-$(ENV)'
@@ -113,18 +117,18 @@ db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test:
 	@docker-compose exec backoffice /bin/bash -c 'php -d xdebug.mode=off bin/console kishlin:persistence:migration:$(DB):apply --env=$(ENV) --up &>/dev/null'
 	@echo "Done reloading $(DB) $(ENV) database"
 
-db.core.connect db.cache.connect:
+db.core.connect db.cache.connect db.client.connect:
 	@docker-compose exec postgres /bin/bash -c 'psql -U $$POSTGRES_USER -d $(DB)-dev'
 
-db.core.dump db.cache.dump:
+db.core.dump db.cache.dump db.client.dump:
 	@echo "Dump DB schema to file"
 	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d $(DB)-dev --schema-only > /app/etc/Schema/create-$(DB).sql'
 
-db.core.dump.data db.cache.dump.data:
+db.core.dump.data db.cache.dump.data db.client.dump.data:
 	@echo "Dump DB data to file"
 	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER --column-inserts --data-only -d $(DB)-dev > /app/etc/Data/data-$(DB).sql'
 
-db.core.fill db.cache.fill:
+db.core.fill db.cache.fill db.client.fill:
 	@echo "Filling DB $(DB) with data from dump"
 	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d $(DB)-dev -f /app/etc/Data/data-$(DB).sql &>/dev/null'
 

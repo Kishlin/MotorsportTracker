@@ -9,28 +9,16 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway\Sc
 use JsonException;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory\RaceHistoryGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapRaceHistory\RaceHistoryResponse;
-use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\Client;
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\MotorsportStatsAPIClient;
 
-final class RaceHistoryGatewayUsingCurl implements RaceHistoryGateway
+final readonly class RaceHistoryGatewayUsingCurl extends MotorsportStatsAPIClient implements RaceHistoryGateway
 {
-    use MotorsportStatsAPIClient;
-
-    private const url = 'https://api.motorsportstats.com/widgets/1.0.0/sessions/%s/raceHistory';
-
-    public function __construct(
-        private readonly Client $client,
-    ) {
-    }
-
     /**
      * @throws JsonException
      */
     public function fetch(string $sessionRef): RaceHistoryResponse
     {
-        $url = sprintf(self::url, $sessionRef);
-
-        $response = $this->client->fetch($url, $this->headers());
+        $response = $this->fetchFromClient($sessionRef);
 
         if (empty($response)) {
             return RaceHistoryResponse::withRaceHistory(['entries' => [], 'laps' => []]);
@@ -74,5 +62,15 @@ final class RaceHistoryGatewayUsingCurl implements RaceHistoryGateway
         $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
         return RaceHistoryResponse::withRaceHistory($data);
+    }
+
+    protected function url(int $parametersCount): string
+    {
+        return 'https://api.motorsportstats.com/widgets/1.0.0/sessions/%s/raceHistory';
+    }
+
+    protected function topic(): string
+    {
+        return 'race_history';
     }
 }

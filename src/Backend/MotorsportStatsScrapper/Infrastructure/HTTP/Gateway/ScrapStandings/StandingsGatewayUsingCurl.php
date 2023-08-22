@@ -9,28 +9,16 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway\Sc
 use JsonException;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\DTO\StandingsDataDTO;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\Gateway\StandingsGateway;
-use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\Client;
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\MotorsportStatsAPIClient;
 
-final readonly class StandingsGatewayUsingCurl implements StandingsGateway
+final readonly class StandingsGatewayUsingCurl extends MotorsportStatsAPIClient implements StandingsGateway
 {
-    use MotorsportStatsAPIClient;
-
-    private const url = 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/standings';
-
-    public function __construct(
-        private Client $client,
-    ) {
-    }
-
     /**
      * @throws JsonException
      */
     public function fetchStandingsDataForSeason(string $seasonRef): StandingsDataDTO
     {
-        $url = sprintf(self::url, $seasonRef);
-
-        $response = $this->client->fetch($url, $this->headers());
+        $response = $this->fetchFromClient($seasonRef);
 
         /**
          * @var array{
@@ -42,5 +30,15 @@ final readonly class StandingsGatewayUsingCurl implements StandingsGateway
         $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
         return StandingsDataDTO::fromData($data);
+    }
+
+    protected function url(int $parametersCount): string
+    {
+        return 'https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/standings';
+    }
+
+    protected function topic(): string
+    {
+        return 'standings';
     }
 }

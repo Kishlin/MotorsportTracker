@@ -9,28 +9,16 @@ namespace Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Gateway\Sc
 use JsonException;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\ClassificationGateway;
 use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapClassification\ClassificationResponse;
-use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\Client;
 use Kishlin\Backend\MotorsportStatsScrapper\Infrastructure\HTTP\Client\MotorsportStatsAPIClient;
 
-final readonly class ClassificationGatewayUsingCurl implements ClassificationGateway
+final readonly class ClassificationGatewayUsingCurl extends MotorsportStatsAPIClient implements ClassificationGateway
 {
-    use MotorsportStatsAPIClient;
-
-    private const url = 'https://api.motorsportstats.com/widgets/1.0.0/sessions/%s/classification';
-
-    public function __construct(
-        private Client $client,
-    ) {
-    }
-
     /**
      * @throws JsonException
      */
     public function fetch(string $sessionRef): ClassificationResponse
     {
-        $url = sprintf(self::url, $sessionRef);
-
-        $response = $this->client->fetch($url, $this->headers());
+        $response = $this->fetchFromClient($sessionRef);
 
         /**
          * @var array{
@@ -80,5 +68,15 @@ final readonly class ClassificationGatewayUsingCurl implements ClassificationGat
         $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
         return ClassificationResponse::withClassification($data);
+    }
+
+    protected function url(int $parametersCount): string
+    {
+        return 'https://api.motorsportstats.com/widgets/1.0.0/sessions/%s/classification';
+    }
+
+    protected function topic(): string
+    {
+        return 'classification';
     }
 }
