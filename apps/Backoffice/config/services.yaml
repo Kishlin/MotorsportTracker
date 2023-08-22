@@ -210,6 +210,12 @@ services:
       $dbName: 'Database Cache'
       $connection: '@kishlin.app.infrastructure.connection.cache'
 
+  kishlin.monitoring.probe.database.client:
+    class: Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe
+    bind:
+      $dbName: 'Database Client'
+      $connection: '@kishlin.app.infrastructure.connection.client'
+
 
   _instanceof:
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
