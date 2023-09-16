@@ -7,16 +7,18 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChamp
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
+use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Throwable;
 
-final class CreateChampionshipIfNotExistsCommandHandler implements CommandHandler
+final readonly class CreateChampionshipIfNotExistsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly SearchChampionshipGateway $searchGateway,
-        private readonly SaveChampionshipGateway $saveGateway,
-        private readonly UuidGenerator $uuidGenerator,
+        private SearchChampionshipGateway $searchGateway,
+        private SaveChampionshipGateway $saveGateway,
+        private EventDispatcher $eventDispatcher,
+        private UuidGenerator $uuidGenerator,
     ) {
     }
 
@@ -35,8 +37,10 @@ final class CreateChampionshipIfNotExistsCommandHandler implements CommandHandle
         try {
             $this->saveGateway->save($championship);
         } catch (Throwable $e) {
-            throw new ChampionshipCreationFailureException(previous: $e);
+            $this->eventDispatcher->dispatch(ChampionshipCreationFailureEvent::forCommand($command, $e));
         }
+
+        $this->eventDispatcher->dispatch(...$championship->pullDomainEvents());
 
         return $championship->id();
     }
