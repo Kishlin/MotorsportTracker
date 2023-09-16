@@ -6,7 +6,7 @@ namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastruc
 
 use DateTimeImmutable;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
-use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventSessionIfNotExists\SaveEventSessionRepository;
+use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateOrUpdateEventSession\SaveEventSessionRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\BoolValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
@@ -15,7 +15,7 @@ use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventSessionIfNotExists\SaveEventSessionRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateOrUpdateEventSession\SaveEventSessionRepository
  */
 final class SaveEventSessionRepositoryTest extends CoreRepositoryContractTestCase
 {

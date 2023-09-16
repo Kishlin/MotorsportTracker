@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event;
 
 use Exception;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SaveEventSessionGateway;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\SearchEventSessionGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession\SaveEventSessionGateway;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession\SearchEventSessionGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Domain\Entity\EventSession;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventSessionIfNotExists;
 
 use DateTimeImmutable;
-use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventSessionIfNotExists\SearchEventSessionRepository;
+use Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateOrUpdateEventSession\SearchEventSessionRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CoreRepositoryContractTestCase;
 
 /**
  * @internal
- * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateEventSessionIfNotExists\SearchEventSessionRepository
+ * @covers \Kishlin\Backend\MotorsportTracker\Event\Infrastructure\Persistence\Repository\CreateOrUpdateEventSession\SearchEventSessionRepository
  */
 final class SearchEventSessionRepositoryTest extends CoreRepositoryContractTestCase
 {

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportTracker\Event;
 
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommandHandler;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession\CreateOrUpdateEventSessionCommandHandler;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportTracker\Event\EventSessionRepositorySpy;
 
 trait EventSessionServicesTrait
 {
     private ?EventSessionRepositorySpy $eventSessionRepositorySpy = null;
 
-    private ?CreateEventSessionIfNotExistsCommandHandler $createEventSessionCommandHandler = null;
+    private ?CreateOrUpdateEventSessionCommandHandler $createEventSessionCommandHandler = null;
 
     public function eventSessionRepositorySpy(): EventSessionRepositorySpy
     {
@@ -22,10 +22,10 @@ trait EventSessionServicesTrait
         return $this->eventSessionRepositorySpy;
     }
 
-    public function createEventSessionCommandHandler(): CreateEventSessionIfNotExistsCommandHandler
+    public function createEventSessionCommandHandler(): CreateOrUpdateEventSessionCommandHandler
     {
         if (null === $this->createEventSessionCommandHandler) {
-            $this->createEventSessionCommandHandler = new CreateEventSessionIfNotExistsCommandHandler(
+            $this->createEventSessionCommandHandler = new CreateOrUpdateEventSessionCommandHandler(
                 $this->eventSessionRepositorySpy(),
                 $this->eventSessionRepositorySpy(),
                 $this->uuidGenerator(),

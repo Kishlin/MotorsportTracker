@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession;
 
 use DateTimeImmutable;
 use Exception;
@@ -12,15 +12,15 @@ use Kishlin\Backend\Shared\Domain\ValueObject\NullableDateTimeValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class CreateEventSessionIfNotExistsCommand implements Command
+final readonly class CreateOrUpdateEventSessionCommand implements Command
 {
     private function __construct(
-        private readonly string $eventId,
-        private readonly string $typeId,
-        private readonly bool $hasResult,
-        private readonly ?DateTimeImmutable $startDate,
-        private readonly ?DateTimeImmutable $endDate,
-        private readonly ?string $ref,
+        private string $eventId,
+        private string $typeId,
+        private bool $hasResult,
+        private ?DateTimeImmutable $startDate,
+        private ?DateTimeImmutable $endDate,
+        private ?string $ref,
     ) {
     }
 

@@ -9,7 +9,7 @@ use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Event\SeasonNotFo
 use Kishlin\Backend\MotorsportStatsScrapper\Application\Shared\Traits\CountryCreatorTrait;
 use Kishlin\Backend\MotorsportStatsScrapper\Domain\Gateway\SeasonGateway;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventIfNotExists\CreateEventIfNotExistsCommand;
-use Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists\CreateEventSessionIfNotExistsCommand;
+use Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession\CreateOrUpdateEventSessionCommand;
 use Kishlin\Backend\MotorsportTracker\Event\Application\CreateSessionTypeIfNotExists\CreateSessionTypeIfNotExistsCommand;
 use Kishlin\Backend\MotorsportTracker\Venue\Application\CreateVenueIfNotExists\CreateVenueIfNotExistsCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -131,7 +131,7 @@ final class ScrapCalendarCommandHandler implements CommandHandler
             assert($sessionTypeId instanceof UuidValueObject);
 
             $this->commandBus->execute(
-                CreateEventSessionIfNotExistsCommand::fromScalars(
+                CreateOrUpdateEventSessionCommand::fromScalars(
                     eventId: $eventId->value(),
                     typeId: $sessionTypeId->value(),
                     hasResult: $session['hasResults'],

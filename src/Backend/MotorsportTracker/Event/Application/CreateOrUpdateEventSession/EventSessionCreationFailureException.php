@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateEventSessionIfNotExists;
+namespace Kishlin\Backend\MotorsportTracker\Event\Application\CreateOrUpdateEventSession;
 
 use Kishlin\Backend\Shared\Domain\Exception\DomainException;
 
