@@ -5,12 +5,12 @@ import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
 
-import availableStandingsApi from '../../../src/MotorsportTracker/Standing/Api/AvailableStandingsApi';
-import ChampionshipNavbar from '../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
-import MotorsportTrackerMenu from '../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
-import championships from '../../../src/MotorsportTracker/Config/Championships';
-import MotorsportTrackerLayout from '../../../src/Shared/Ui/Layout/Layout';
-import { StandingType } from '../../../src/MotorsportTracker/Shared/Types';
+import availableStandingsApi from '../../../../../src/MotorsportTracker/Standing/Api/AvailableStandingsApi';
+import ChampionshipNavbar from '../../../../../src/MotorsportTracker/Championship/Nav/ChampionshipNavbar';
+import MotorsportTrackerMenu from '../../../../../src/MotorsportTracker/Menu/Ui/MotorsportTrackerMenu';
+import championships from '../../../../../src/MotorsportTracker/Config/Championships';
+import MotorsportTrackerLayout from '../../../../../src/Shared/Ui/Layout/Layout';
+import { StandingType } from '../../../../../src/MotorsportTracker/Shared/Types';
 
 declare type PageParams = {
     championship: string,
