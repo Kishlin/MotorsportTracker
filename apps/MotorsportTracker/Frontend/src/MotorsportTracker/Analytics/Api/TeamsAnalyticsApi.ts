@@ -3,7 +3,15 @@ import { TeamAnalytics } from '../Types/Index';
 export type TeamsAnalyticsApi = (championship: string, year: string) => Promise<Array<TeamAnalytics>>;
 
 const teamsAnalyticsApi: TeamsAnalyticsApi = async (championship, year) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/analytics/${championship}/${year}/teams`);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/analytics/${championship}/${year}/teams`;
+
+    const configuration = {
+        next: {
+            tags: [`analytics-${championship}-${year}`],
+        },
+    };
+
+    const response = await fetch(url, configuration as RequestInit);
 
     if (404 === response.status) {
         return [];

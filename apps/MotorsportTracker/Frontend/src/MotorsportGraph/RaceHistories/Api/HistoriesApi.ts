@@ -3,7 +3,15 @@ import { HistoriesList } from '../Types';
 export type HistoriesApi = (event: string) => Promise<HistoriesList>;
 
 const historiesApi: HistoriesApi = async (event) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/histories/${event}`);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/histories/${event}`;
+
+    const configuration = {
+        next: {
+            tags: [`histories-${event}`],
+        },
+    };
+
+    const response = await fetch(url, configuration as RequestInit);
 
     return await response.json() as HistoriesList;
 };

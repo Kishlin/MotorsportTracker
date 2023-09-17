@@ -3,7 +3,15 @@ import { EventsSchedule } from '../../Shared/Types';
 export type CalendarApi = (month: string, year: string) => Promise<EventsSchedule>;
 
 const calendarApi: CalendarApi = async (month, year) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/calendar/${month}/${year}`);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/calendar/${month}/${year}`;
+
+    const configuration = {
+        next: {
+            tags: [`calendar-${month}-${year}`],
+        },
+    };
+
+    const response = await fetch(url, configuration as RequestInit);
 
     return await response.json() as EventsSchedule;
 };

@@ -5,7 +5,15 @@ export type ConstructorStandingApi = (championship: string, year: string) =>
     Promise<{ standings: List<Array<ConstructorStanding>> }>;
 
 const constructorStandingApi: ConstructorStandingApi = async (championship, year) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/details/${championship}/${year}/constructor`);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/details/${championship}/${year}/constructor`;
+
+    const configuration = {
+        next: {
+            tags: [`standings-${championship}-${year}`],
+        },
+    };
+
+    const response = await fetch(url, configuration as RequestInit);
 
     return await response.json() as { standings: List<Array<ConstructorStanding>> };
 };
