@@ -41,7 +41,7 @@ const Page = async ({ params: { month, year } }: { params: PageParams }) => {
 export function generateStaticParams(): Array<PageParams> {
     const paths: Array<PageParams> = [];
 
-    for (let year = parseInt(process.env.BUILD_FROM_YEAR ?? '2015', 10); 2023 >= year; year += 1) {
+    for (let year = parseInt(process.env.NEXT_PUBLIC_BUILD_FROM_YEAR ?? '2015', 10); 2023 >= year; year += 1) {
         paths.push(...listOfAllMonths().map((month: string) => ({ year: year.toString(), month })));
     }
 
