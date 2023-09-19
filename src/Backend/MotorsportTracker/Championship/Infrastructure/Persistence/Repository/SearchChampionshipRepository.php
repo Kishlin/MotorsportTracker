@@ -24,7 +24,7 @@ final class SearchChampionshipRepository extends CoreRepository implements Searc
         if (null !== $ref->value()) {
             $qb->andWhere($qb->expr()->eq('c.ref', ':ref'))->withParam('ref', $ref->value());
         } else {
-            $qb->andWhere($qb->expr()->eq('c.name', ':name'))->withParam('name', $ref->value());
+            $qb->andWhere($qb->expr()->eq('c.name', ':name'))->withParam('name', $championship->value());
         }
 
         /** @var array<array{id: string}> $result */
