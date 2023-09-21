@@ -21,7 +21,7 @@ final readonly class FailResult implements Result
         throw new ResultIsFailureException();
     }
 
-    public function failure(): ?int
+    public function unwrapFailure(): ?int
     {
         return $this->code;
     }

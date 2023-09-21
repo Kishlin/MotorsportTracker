@@ -52,7 +52,7 @@ final class ScrapSeasonsCommandUsingSymfony extends SymfonyCommand
             return Command::SUCCESS;
         }
 
-        if (ScrapSeasonsFailures::SERIES_NOT_FOUND === $result->failure()) {
+        if (ScrapSeasonsFailures::SERIES_NOT_FOUND === $result->unwrapFailure()) {
             $ui->warning("Series {$series} not found.");
         }
 

@@ -10,5 +10,5 @@ interface Result
 
     public function unwrap(): null|object;
 
-    public function failure(): ?int;
+    public function unwrapFailure(): ?int;
 }

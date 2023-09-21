@@ -21,7 +21,7 @@ final readonly class OkResult implements Result
         return $this->value;
     }
 
-    public function failure(): ?int
+    public function unwrapFailure(): ?int
     {
         throw new ResultIsSuccessException();
     }
