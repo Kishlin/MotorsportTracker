@@ -178,6 +178,10 @@ services:
       $connection: '@kishlin.app.infrastructure.connection.client'
       $database: 'client'
 
+  Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer:
+    class: Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer
+
+
   ##> Cache
 
   Kishlin\Backend\Shared\Domain\Cache\CachePersister:
@@ -215,6 +219,12 @@ services:
     bind:
       $dbName: 'Database Client'
       $connection: '@kishlin.app.infrastructure.connection.client'
+
+
+  ##> Parser
+
+  Kishlin\Backend\Shared\Application\Service\Parser\Json\JsonableStringParser:
+    class: Kishlin\Backend\Shared\Application\Service\Parser\Json\JsonableStringParser
 
 
   _instanceof:

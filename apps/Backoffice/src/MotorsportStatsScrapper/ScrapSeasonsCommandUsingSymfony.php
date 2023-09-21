@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapSeasons\ScrapSeasonsCommand;
+use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeasons\ScrapSeasonsCommand;
+use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeasons\ScrapSeasonsFailures;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
+use Kishlin\Backend\Shared\Domain\Result\Result;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ScrapSeasonsCommandUsingSymfony extends SymfonyCommand
 {
-    public const NAME = 'kishlin:motorsport-stats:season:scrap';
+    public const NAME = 'kishlin:motorsport-stats:seasons:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
@@ -41,10 +43,19 @@ final class ScrapSeasonsCommandUsingSymfony extends SymfonyCommand
 
         $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
 
-        $this->commandBus->execute(ScrapSeasonsCommand::fromScalar($series));
+        /** @var Result $result */
+        $result = $this->commandBus->execute(ScrapSeasonsCommand::forSeries($series));
 
-        $ui->success("Finished scrapping seasons for {$series}.");
+        if ($result->isOk()) {
+            $ui->success("Finished scrapping seasons for {$series}.");
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        }
+
+        if (ScrapSeasonsFailures::SERIES_NOT_FOUND === $result->failure()) {
+            $ui->warning("Series {$series} not found.");
+        }
+
+        return Command::FAILURE;
     }
 }

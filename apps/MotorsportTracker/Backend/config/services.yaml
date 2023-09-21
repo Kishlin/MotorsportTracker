@@ -24,6 +24,7 @@ services:
     resource: '../../../../src/Backend'
     exclude:
       - '../../../../src/Backend/Shared'
+      - '../../../../src/Backend/MotorsportETL'
       - '../../../../src/Backend/**/Application/*/*Exception.php'
       - '../../../../src/Backend/**/Infrastructure/Persistence/Fixtures'
       - '../../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'

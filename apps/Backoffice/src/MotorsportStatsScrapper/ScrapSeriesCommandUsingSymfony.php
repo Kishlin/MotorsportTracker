@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapSeries\ScrapSeriesCommand;
+use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeriesList\ScrapSeriesListCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
@@ -34,7 +34,7 @@ final class ScrapSeriesCommandUsingSymfony extends SymfonyCommand
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $this->commandBus->execute(ScrapSeriesCommand::create());
+        $this->commandBus->execute(ScrapSeriesListCommand::create());
 
         $ui->success('Finished scrapping series.');
 
