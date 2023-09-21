@@ -20,13 +20,13 @@ final class SearchCountryRepositoryTest extends CoreRepositoryContractTestCase
 
         $repository = new SearchCountryRepository($this->connection());
 
-        self::assertNotNull($repository->searchForName(new StringValueObject('fr')));
+        self::assertNotNull($repository->searchForName(new StringValueObject('France')));
     }
 
     public function testItReturnsNullIfCodeDoesNotExist(): void
     {
         $repository = new SearchCountryRepository($this->connection());
 
-        self::assertNull($repository->searchForName(new StringValueObject('fr')));
+        self::assertNull($repository->searchForName(new StringValueObject('France')));
     }
 }
