@@ -4,23 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeriesList\ScrapSeriesListCommand;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
-use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
+use Kishlin\Backend\MotorsportETL\Series\Application\ScrapSeriesList\ScrapSeriesListCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapSeriesCommandUsingSymfony extends SymfonyCommand
+final class ScrapSeriesCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
     public const NAME = 'kishlin:motorsport-stats:series:scrap';
-
-    public function __construct(
-        private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {
@@ -34,10 +26,14 @@ final class ScrapSeriesCommandUsingSymfony extends SymfonyCommand
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $this->commandBus->execute(ScrapSeriesListCommand::create());
+        $result = $this->executeApplicationCommand($input, ScrapSeriesListCommand::create());
 
-        $ui->success('Finished scrapping series.');
+        if ($result->isOk()) {
+            $ui->success('Finished scrapping series.');
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        }
+
+        return Command::FAILURE;
     }
 }

@@ -4,29 +4,20 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeasons\ScrapSeasonsCommand;
-use Kishlin\Backend\MotorsportETL\Championship\Application\ScrapSeasons\ScrapSeasonsFailures;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
-use Kishlin\Backend\Shared\Domain\Result\Result;
-use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
+use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\ScrapSeasonsCommand;
+use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\ScrapSeasonsFailures;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapSeasonsCommandUsingSymfony extends SymfonyCommand
+final class ScrapSeasonsCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
     public const NAME = 'kishlin:motorsport-stats:seasons:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
-
-    public function __construct(
-        private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {
@@ -43,8 +34,7 @@ final class ScrapSeasonsCommandUsingSymfony extends SymfonyCommand
 
         $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
 
-        /** @var Result $result */
-        $result = $this->commandBus->execute(ScrapSeasonsCommand::forSeries($series));
+        $result = $this->executeApplicationCommand($input, ScrapSeasonsCommand::forSeries($series));
 
         if ($result->isOk()) {
             $ui->success("Finished scrapping seasons for {$series}.");

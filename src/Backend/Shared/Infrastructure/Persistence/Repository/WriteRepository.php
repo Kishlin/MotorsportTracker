@@ -12,7 +12,7 @@ abstract readonly class WriteRepository
 {
     public function __construct(
         private LocationComputer $locationComputer,
-        private Connection $connection,
+        protected Connection $connection,
     ) {
     }
 

@@ -11,7 +11,6 @@ parameters:
   kishlin.jwt.expire_refresh_token: '%env(default:kishlin.jwt.expire_refresh_token_default:JWT_EXP_REFRESH_TOKEN)%'
   kishlin.jwt.expire_refresh_token_default: '+1 month'
   kishlin.jwt.exp_claim_is_required: '%env(bool:JWT_EXP_CLAIM_IS_REQUIRED)%'
-  kishlin.http.cache: '%env(bool:HTTP_CLIENT_USE_CACHE)%'
 
 services:
   _defaults:
@@ -35,9 +34,10 @@ services:
   Psr\Cache\CacheItemPoolInterface: '@app.cache.memcached'
 
 
-  ##> HTTP Client
+  ##> ETL Connector
 
-  Kishlin\Backend\Client\Infrastructure\CachedClientUsingCurl:
+  Kishlin\Backend\MotorsportETL\Shared\Application\Connector:
+    alias: Kishlin\Backend\MotorsportETL\Shared\Infrastructure\CachedConnector\ConnectorDecorator
 
   ##> Messaging
 
@@ -255,6 +255,10 @@ services:
         $connection: '@kishlin.app.infrastructure.connection.core'
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ClientRepository:
+      bind:
+        $connection: '@kishlin.app.infrastructure.connection.client'
+
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ClientRepositoryInterface:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.client'
 
