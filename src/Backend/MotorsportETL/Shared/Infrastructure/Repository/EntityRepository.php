@@ -31,4 +31,12 @@ final readonly class EntityRepository extends WriteRepository implements CoreRep
 
         return (string) $data['id'];
     }
+
+    /**
+     * @param array<string, null|bool|float|int|string> $data
+     */
+    public function update(string $location, string $id, array $data): void
+    {
+        $this->connection->update($location, $id, $data);
+    }
 }

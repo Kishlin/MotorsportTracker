@@ -36,7 +36,7 @@ final class EventSession extends Entity implements GuardedAgainstDoubles
 
     public function strategyOnDuplicate(): DuplicateStrategy
     {
-        return DuplicateStrategy::SKIP;
+        return DuplicateStrategy::UPDATE;
     }
 
     /**

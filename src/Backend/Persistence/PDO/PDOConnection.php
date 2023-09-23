@@ -50,6 +50,30 @@ final class PDOConnection implements Connection
         return false === $status ? PDOResult::fail(ResultFailure::QUERY_ERROR) : PDOResult::ok($statement);
     }
 
+    public function update(string $table, string $id, array $data): PDOResult
+    {
+        try {
+            $connection = $this->connection();
+        } catch (Throwable) {
+            return PDOResult::fail(ResultFailure::CONNECTION_ERROR);
+        }
+
+        $sets = array_map(
+            fn (string $key) => "\"{$key}\" = :{$key}",
+            array_keys($data),
+        );
+
+        $query = "UPDATE {$table} SET "
+            . implode(', ', $sets)
+            . " WHERE id = '{$id}';";
+
+        $statement = $connection->prepare($query);
+
+        $status = $statement->execute($data);
+
+        return false === $status ? PDOResult::fail(ResultFailure::QUERY_ERROR) : PDOResult::ok($statement);
+    }
+
     public function execute(Query $query): PDOResult
     {
         try {

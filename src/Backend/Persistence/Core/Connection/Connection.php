@@ -17,6 +17,11 @@ interface Connection
      */
     public function insert(string $table, array $data): Result;
 
+    /**
+     * @param array<string, null|bool|float|int|string> $data
+     */
+    public function update(string $table, string $id, array $data): Result;
+
     public function execute(Query $query): Result;
 
     public function beginTransaction(): void;

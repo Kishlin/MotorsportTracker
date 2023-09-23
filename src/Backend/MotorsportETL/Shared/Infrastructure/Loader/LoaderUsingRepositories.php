@@ -62,6 +62,14 @@ final readonly class LoaderUsingRepositories implements Loader
             return $existingId;
         }
 
+        if (DuplicateStrategy::UPDATE === $strategy) {
+            $this->logger?->info("Updating existing {$location}", $data);
+
+            $this->writeRepository->update($location, $existingId, $data);
+
+            return $existingId;
+        }
+
         // @phpstan-ignore-next-line
         throw new LogicException("Do not know what to do of duplicate {$location} with id {$existingId}");
     }
