@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
+namespace Kishlin\Apps\Backoffice\MotorsportETL;
 
 use Kishlin\Backend\MotorsportETL\Series\Application\ScrapSeriesList\ScrapSeriesListCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ScrapSeriesCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
-    public const NAME = 'kishlin:motorsport-stats:series:scrap';
+    public const NAME = 'kishlin:motorsport-etl:series:scrap';
 
     protected function configure(): void
     {

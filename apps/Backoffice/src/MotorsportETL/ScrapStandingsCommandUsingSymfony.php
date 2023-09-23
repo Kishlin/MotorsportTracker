@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
+namespace Kishlin\Apps\Backoffice\MotorsportETL;
 
 use Kishlin\Backend\MotorsportETL\Standing\Application\ScrapStandings\ScrapStandingsCommand;
 use Kishlin\Backend\MotorsportETL\Standing\Application\ScrapStandings\ScrapStandingsFailures;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ScrapStandingsCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
-    public const NAME = 'kishlin:motorsport-stats:standings:scrap';
+    public const NAME = 'kishlin:motorsport-etl:standings:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";

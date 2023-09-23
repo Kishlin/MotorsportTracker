@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
+namespace Kishlin\Apps\Backoffice\MotorsportETL;
 
 use Kishlin\Backend\MotorsportETL\Shared\Application\ScrapWithCacheCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
