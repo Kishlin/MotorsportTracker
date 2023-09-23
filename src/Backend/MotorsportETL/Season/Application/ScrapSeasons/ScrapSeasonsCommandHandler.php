@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
 
-use Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
+use Kishlin\Backend\MotorsportETL\Shared\Application\Loader\Loader;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Result\FailResult;
 use Kishlin\Backend\Shared\Domain\Result\OkResult;

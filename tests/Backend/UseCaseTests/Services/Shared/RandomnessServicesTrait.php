@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Randomness;
+namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared;
 
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey;

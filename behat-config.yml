@@ -3,28 +3,7 @@ default:
     use_case_tests:
       paths: [ features ]
       contexts:
-        - Kishlin\Tests\Backend\UseCaseTests\Context\Country\CountryContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Result\ResultContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Result\ViewResultsContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\SyncCalendarContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewCalendarEventsContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Calendar\ViewSeasonScheduleContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Event\SeasonEventsContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipPresentationCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\ChampionshipCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Championship\SeasonCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Driver\DriverCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventSessionContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\SessionTypeContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Event\EventContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\ClassificationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\EntryContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RaceLapContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Result\RetirementContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Standing\AnalyticsCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Team\TeamCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTracker\Venue\VenueCreationContext
-        - Kishlin\Tests\Backend\UseCaseTests\Context\Shared\FixturesContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Series\ScrapSeriesListContext
     api_tests:
       paths: [ features ]
       contexts:

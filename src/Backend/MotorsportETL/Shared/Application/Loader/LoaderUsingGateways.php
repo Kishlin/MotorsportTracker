@@ -2,26 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Loader;
+namespace Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
 
 use DateTimeImmutable;
-use Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
-use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository\EntityRepository;
-use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository\UniquenessCheckRepository;
 use Kishlin\Backend\Shared\Domain\Entity\DuplicateStrategy;
 use Kishlin\Backend\Shared\Domain\Entity\Entity;
 use Kishlin\Backend\Shared\Domain\Entity\GuardedAgainstDoubles;
 use Kishlin\Backend\Shared\Domain\Entity\Mapped;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer;
+use Kishlin\Backend\Shared\Domain\Tools;
 use LogicException;
 use Psr\Log\LoggerInterface;
+use ReflectionException;
 
-final readonly class LoaderUsingRepositories implements Loader
+final readonly class LoaderUsingGateways implements Loader
 {
     public function __construct(
-        private UniquenessCheckRepository $uniquenessCheckRepository,
-        private EntityRepository $writeRepository,
-        private LocationComputer $locationComputer,
+        private UniquenessCheckGateway $uniquenessCheckGateway,
+        private EntityGateway $writeGateway,
         private ?LoggerInterface $logger = null,
     ) {
     }
@@ -33,16 +30,16 @@ final readonly class LoaderUsingRepositories implements Loader
 
     public function doLoad(Entity $entity): string
     {
-        $location = $this->locationComputer->computeLocation($entity);
+        $location = $this->computeLocation($entity);
         $data     = $this->computeData($entity->mappedData());
 
         if (false === $entity instanceof GuardedAgainstDoubles) {
             $this->logger?->info("Saving {$location} without uniqueness check", $data);
 
-            return $this->writeRepository->save($location, $data);
+            return $this->writeGateway->save($location, $data);
         }
 
-        $existingId = $this->uniquenessCheckRepository->findIfExists(
+        $existingId = $this->uniquenessCheckGateway->findIfExists(
             $entity->uniquenessConstraints(),
             $location,
             $data,
@@ -51,7 +48,7 @@ final readonly class LoaderUsingRepositories implements Loader
         if (null === $existingId) {
             $this->logger?->info("Saving non-existing {$location}", $data);
 
-            return $this->writeRepository->save($location, $data);
+            return $this->writeGateway->save($location, $data);
         }
 
         $strategy = $entity->strategyOnDuplicate();
@@ -65,13 +62,22 @@ final readonly class LoaderUsingRepositories implements Loader
         if (DuplicateStrategy::UPDATE === $strategy) {
             $this->logger?->info("Updating existing {$location}", $data);
 
-            $this->writeRepository->update($location, $existingId, $data);
+            $this->writeGateway->update($location, $existingId, $data);
 
             return $existingId;
         }
 
         // @phpstan-ignore-next-line
         throw new LogicException("Do not know what to do of duplicate {$location} with id {$existingId}");
+    }
+
+    private function computeLocation(Entity $entity): string
+    {
+        try {
+            return Tools::fromPascalToSnakeCase(Tools::shortClassName($entity));
+        } catch (ReflectionException) {
+            return $entity::class;
+        }
     }
 
     /**

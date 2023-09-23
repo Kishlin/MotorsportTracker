@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportETL\Shared\Application;
+namespace Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
 
 use Kishlin\Backend\Shared\Domain\Entity\Entity;
 

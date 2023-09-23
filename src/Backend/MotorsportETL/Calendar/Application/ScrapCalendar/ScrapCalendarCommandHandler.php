@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Calendar\Application\ScrapCalendar;
 
-use Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
+use Kishlin\Backend\MotorsportETL\Shared\Application\Loader\Loader;
 use Kishlin\Backend\MotorsportETL\Shared\Domain\CacheInvalidatorGateway;
 use Kishlin\Backend\MotorsportETL\Shared\Domain\Context;
 use Kishlin\Backend\MotorsportETL\Shared\Domain\SeasonGateway;

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository;
 
+use Kishlin\Backend\MotorsportETL\Shared\Application\Loader\EntityGateway;
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepositoryInterface;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\WriteRepository;
 
-final readonly class EntityRepository extends WriteRepository implements CoreRepositoryInterface
+final readonly class EntityRepository extends WriteRepository implements CoreRepositoryInterface, EntityGateway
 {
     public function __construct(
         private UuidGenerator $uuidGenerator,

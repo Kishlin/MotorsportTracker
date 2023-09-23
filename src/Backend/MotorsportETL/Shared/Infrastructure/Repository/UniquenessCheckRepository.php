@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository;
 
+use Kishlin\Backend\MotorsportETL\Shared\Application\Loader\UniquenessCheckGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepositoryInterface;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ReadRepository;
 
-final readonly class UniquenessCheckRepository extends ReadRepository implements CoreRepositoryInterface
+final readonly class UniquenessCheckRepository extends ReadRepository implements CoreRepositoryInterface, UniquenessCheckGateway
 {
     /**
      * @param array<string[]>                           $uniquenessConstraints

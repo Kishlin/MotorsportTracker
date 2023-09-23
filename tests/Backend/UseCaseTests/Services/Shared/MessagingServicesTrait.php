@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared\Messaging;
+namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared;
 
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging\TestCommandBus;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging\TestEventDispatcher;
