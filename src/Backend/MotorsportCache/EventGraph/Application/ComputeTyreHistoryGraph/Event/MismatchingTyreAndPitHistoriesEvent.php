@@ -14,7 +14,7 @@ final readonly class MismatchingTyreAndPitHistoriesEvent implements ApplicationE
     private function __construct(
         private string $session,
         private array $series,
-        private bool$skipping,
+        private bool $skipping,
     ) {
     }
 
