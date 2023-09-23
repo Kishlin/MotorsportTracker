@@ -6,6 +6,7 @@ default:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Series\ScrapSeriesListContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Season\ScrapSeasonsContext
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Shared\SharedContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Calendar\ScrapCalendarContext
     api_tests:
       paths: [ features ]
       contexts:

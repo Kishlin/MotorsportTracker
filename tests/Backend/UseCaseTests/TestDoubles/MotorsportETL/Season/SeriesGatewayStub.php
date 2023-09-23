@@ -19,7 +19,7 @@ final readonly class SeriesGatewayStub implements SeriesGateway
     {
         foreach ($this->entityStoreSpy->stored('series') as $series) {
             if ($series['name'] === $seriesName) {
-                return SeriesIdentity::forScalars($series['id'], $series['ref']);
+                return SeriesIdentity::forScalars((string) $series['id'], (string) $series['ref']);
             }
         }
 
