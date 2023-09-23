@@ -21,7 +21,7 @@ final class FindSeasonRepositoryTest extends CoreRepositoryContractTestCase
 
         self::assertSame(
             self::fixtureId('motorsport.championship.season.formulaOne2022'),
-            $repository->find(self::fixtureId('motorsport.championship.championship.formulaOne'), 2022)?->value(),
+            $repository->find(self::fixtureId('motorsport.championship.series.formulaOne'), 2022)?->value(),
         );
     }
 

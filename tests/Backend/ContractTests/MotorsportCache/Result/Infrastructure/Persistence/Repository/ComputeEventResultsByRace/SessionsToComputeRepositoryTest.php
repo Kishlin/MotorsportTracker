@@ -45,10 +45,10 @@ final class SessionsToComputeRepositoryTest extends CoreRepositoryContractTestCa
         self::assertCount(2, $races);
 
         self::assertSame('race', $races[0]['type']);
-        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceOne'), $races[0]['id']);
+        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo'), $races[0]['id']);
 
         self::assertSame('race', $races[1]['type']);
-        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo'), $races[1]['id']);
+        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceOne'), $races[1]['id']);
     }
 
     public function testItIsEmptyWhenThereAreNone(): void

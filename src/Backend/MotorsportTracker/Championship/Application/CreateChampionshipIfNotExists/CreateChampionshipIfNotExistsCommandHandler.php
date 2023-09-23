@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChampionshipIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Series;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Gateway\SearchChampionshipGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
@@ -32,7 +32,7 @@ final readonly class CreateChampionshipIfNotExistsCommandHandler implements Comm
 
         $id = new UuidValueObject($this->uuidGenerator->uuid4());
 
-        $championship = Championship::create($id, $command->name(), $command->shortName(), $command->shortCode(), $command->ref());
+        $championship = Series::create($id, $command->name(), $command->shortName(), $command->shortCode(), $command->ref());
 
         try {
             $this->saveGateway->save($championship);

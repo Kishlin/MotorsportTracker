@@ -35,7 +35,7 @@ SQL;
     #[Given('the championship :championship exists')]
     public function theChampionshipExists(string $championship): void
     {
-        self::database()->loadFixture("motorsport.championship.championship.{$this->format($championship)}");
+        self::database()->loadFixture("motorsport.championship.series.{$this->format($championship)}");
     }
 
     /**
@@ -87,7 +87,7 @@ SQL;
     #[Then('the latest championship presentation for :championship has icon :icon and color :color')]
     public function theLatestChampionshipPresentationIs(string $championship, string $icon, string $color): void
     {
-        $championshipId = self::database()->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
+        $championshipId = self::database()->fixtureId("motorsport.championship.series.{$this->format($championship)}");
 
         /** @var null|array{id: string, championshipId: string, icon: string, color: string} $championshipPresentationData */
         $championshipPresentationData = self::database()->fetchAssociative(self::QUERY, ['championship' => $championshipId]);

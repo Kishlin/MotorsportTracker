@@ -19,12 +19,12 @@ final class SaveSeasonRepositoryTest extends CoreRepositoryContractTestCase
 {
     public function testItCanSaveASeason(): void
     {
-        self::loadFixture('motorsport.championship.championship.formulaOne');
+        self::loadFixture('motorsport.championship.series.formulaOne');
 
         $season = Season::instance(
             new UuidValueObject(self::uuid()),
             new StrictlyPositiveIntValueObject(2022),
-            new UuidValueObject(self::fixtureId('motorsport.championship.championship.formulaOne')),
+            new UuidValueObject(self::fixtureId('motorsport.championship.series.formulaOne')),
             new NullableUuidValueObject(self::uuid()),
         );
 

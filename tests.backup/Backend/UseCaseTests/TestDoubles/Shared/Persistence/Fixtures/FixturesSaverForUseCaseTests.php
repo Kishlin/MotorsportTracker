@@ -7,7 +7,7 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence\Fixt
 use Exception;
 use Kishlin\Backend\Country\Domain\Entity\Country;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Series;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\ChampionshipPresentation;
 use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
 use Kishlin\Backend\MotorsportTracker\Driver\Domain\Entity\Driver;
@@ -53,7 +53,7 @@ final class FixturesSaverForUseCaseTests extends FixtureSaver
             return;
         }
 
-        if ($aggregateRoot instanceof Championship) {
+        if ($aggregateRoot instanceof Series) {
             $this->testServiceContainer->championshipRepositorySpy()->save($aggregateRoot);
 
             return;

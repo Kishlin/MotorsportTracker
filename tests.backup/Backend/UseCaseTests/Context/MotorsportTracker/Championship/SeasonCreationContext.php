@@ -41,7 +41,7 @@ final class SeasonCreationContext extends MotorsportTrackerContext
         $this->thrownException = null;
 
         try {
-            $championshipId = $this->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
+            $championshipId = $this->fixtureId("motorsport.championship.series.{$this->format($championship)}");
 
             /** @var UuidValueObject $seasonId */
             $seasonId = self::container()->commandBus()->execute(

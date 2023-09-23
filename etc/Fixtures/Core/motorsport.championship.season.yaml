@@ -1,15 +1,15 @@
 formulaOne2022:
-  championshipId: '@motorsport.championship.championship.formulaOne'
+  championshipId: '@motorsport.championship.series.formulaOne'
   year: 2022
 
 formulaOne2019:
-  championshipId: '@motorsport.championship.championship.formulaOne'
+  championshipId: '@motorsport.championship.series.formulaOne'
   year: 2019
 
 motoGP2022:
-  championshipId: '@motorsport.championship.championship.motoGp'
+  championshipId: '@motorsport.championship.series.motoGp'
   year: 2022
 
 formulaTwo2023:
-  championshipId: '@motorsport.championship.championship.formulaTwo'
+  championshipId: '@motorsport.championship.series.formulaTwo'
   year: 2023

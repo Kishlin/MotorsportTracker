@@ -58,7 +58,7 @@ LEFT JOIN session_type t on t.id = es.type
 LEFT JOIN venue v on e.venue = v.id
 LEFT JOIN country c on v.country = c.id
 LEFT JOIN season s on e.season = s.id
-LEFT JOIN championship cs on cs.id = s.championship
+LEFT JOIN series cs on cs.id = s.series
 WHERE s.year = :year
 AND cs.name = :championship
 GROUP BY e.id, v.id, v.name, c.id, c.name, c.code, cs.name, s.year

@@ -17,12 +17,12 @@ final class SearchChampionshipRepositoryTest extends CoreRepositoryContractTestC
 {
     public function testItCanFindAChampionship(): void
     {
-        self::loadFixture('motorsport.championship.championship.formulaOne');
+        self::loadFixture('motorsport.championship.series.formulaOne');
 
         $repository = new SearchChampionshipRepository(self::connection());
 
         self::assertSame(
-            self::fixtureId('motorsport.championship.championship.formulaOne'),
+            self::fixtureId('motorsport.championship.series.formulaOne'),
             $repository->findIfExists(new StringValueObject('Formula One'), new NullableUuidValueObject(null))?->value(),
         );
     }

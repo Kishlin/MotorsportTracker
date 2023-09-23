@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Fixtures;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Series;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
@@ -17,7 +17,7 @@ final class FixtureToChampionshipConverter implements FixtureConverter
 {
     public function convert(Fixture $fixture): AggregateRoot
     {
-        return Championship::instance(
+        return Series::instance(
             new UuidValueObject($fixture->identifier()),
             new StringValueObject($fixture->getString('name')),
             new NullableStringValueObject(null),

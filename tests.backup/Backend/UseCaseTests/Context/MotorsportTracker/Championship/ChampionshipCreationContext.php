@@ -30,7 +30,7 @@ final class ChampionshipCreationContext extends MotorsportTrackerContext
     #[Given('the championship :name exists')]
     public function theChampionshipExists(string $name): void
     {
-        self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.championship.{$this->format($name)}");
+        self::container()->coreFixtureLoader()->loadFixture("motorsport.championship.series.{$this->format($name)}");
     }
 
     #[When('a client creates the championship :name with code :code')]

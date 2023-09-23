@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\ContractTests\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateChampionshipIfNotExists;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Championship;
+use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Series;
 use Kishlin\Backend\MotorsportTracker\Championship\Infrastructure\Persistence\Repository\CreateChampionshipIfNotExists\SaveChampionshipRepository;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
@@ -20,7 +20,7 @@ final class SaveChampionshipRepositoryTest extends CoreRepositoryContractTestCas
 {
     public function testItCanSaveAChampionship(): void
     {
-        $championship = Championship::instance(
+        $championship = Series::instance(
             new UuidValueObject(self::uuid()),
             new StringValueObject('Formula One'),
             new NullableStringValueObject('formula1'),
@@ -37,7 +37,7 @@ final class SaveChampionshipRepositoryTest extends CoreRepositoryContractTestCas
 
     public function testItCanSaveAChampionshipWithNullValues(): void
     {
-        $championship = Championship::instance(
+        $championship = Series::instance(
             new UuidValueObject(self::uuid()),
             new StringValueObject('Formula One'),
             new NullableStringValueObject(null),

@@ -11,7 +11,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class Championship extends AggregateRoot
+final class Series extends AggregateRoot
 {
     private function __construct(
         private readonly UuidValueObject $id,

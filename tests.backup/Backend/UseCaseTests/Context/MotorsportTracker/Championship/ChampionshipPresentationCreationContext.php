@@ -66,7 +66,7 @@ final class ChampionshipPresentationCreationContext extends MotorsportTrackerCon
     #[Then('the latest championship presentation for :championship has icon :icon and color :color')]
     public function theLatestChampionshipPresentationIs(string $championship, string $icon, string $color): void
     {
-        $championshipId = $this->fixtureId("motorsport.championship.championship.{$this->format($championship)}");
+        $championshipId = $this->fixtureId("motorsport.championship.series.{$this->format($championship)}");
 
         $championshipPresentation = self::container()->championshipPresentationRepositorySpy()->latest(
             new UuidValueObject($championshipId),

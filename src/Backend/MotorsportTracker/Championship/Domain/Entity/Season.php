@@ -68,10 +68,10 @@ final class Season extends AggregateRoot
     public function mappedData(): array
     {
         return [
-            'id'           => $this->id->value(),
-            'year'         => $this->year->value(),
-            'championship' => $this->championshipId->value(),
-            'ref'          => $this->ref->value(),
+            'id'     => $this->id->value(),
+            'year'   => $this->year->value(),
+            'series' => $this->championshipId->value(),
+            'ref'    => $this->ref->value(),
         ];
     }
 }

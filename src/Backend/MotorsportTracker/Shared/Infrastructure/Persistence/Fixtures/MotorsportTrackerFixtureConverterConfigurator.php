@@ -29,7 +29,7 @@ final class MotorsportTrackerFixtureConverterConfigurator
     public static function populateFixtureSaverWithConverters(FixtureSaver $fixtureSaver): void
     {
         $fixtureSaver->addConverter('motorsport.championship.championshipPresentation', new FixtureToChampionshipPresentationConverter());
-        $fixtureSaver->addConverter('motorsport.championship.championship', new FixtureToChampionshipConverter());
+        $fixtureSaver->addConverter('motorsport.championship.series', new FixtureToChampionshipConverter());
         $fixtureSaver->addConverter('motorsport.championship.season', new FixtureToSeasonConverter());
 
         $fixtureSaver->addConverter('motorsport.driver.driver', new FixtureToDriverConverter());

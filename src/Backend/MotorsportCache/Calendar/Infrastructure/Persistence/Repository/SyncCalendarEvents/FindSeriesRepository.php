@@ -19,7 +19,7 @@ final class FindSeriesRepository extends CoreRepository implements FindSeriesGat
         $qb
             ->select('c.name as name, s.year as year, cp.icon as icon, cp.color as color')
             ->from('season', 's')
-            ->leftJoin('championship', 'c', $qb->expr()->eq('c.id', 's.championship'))
+            ->leftJoin('series', 'c', $qb->expr()->eq('c.id', 's.series'))
             ->leftJoin('championship_presentation', 'cp', $qb->expr()->eq('c.id', 'cp.championship'))
             ->where($qb->expr()->eq('c.name', ':seriesSlug'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
