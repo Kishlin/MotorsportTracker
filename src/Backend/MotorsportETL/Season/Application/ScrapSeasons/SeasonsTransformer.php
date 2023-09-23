@@ -6,6 +6,7 @@ namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
 
 use Generator;
 use Kishlin\Backend\MotorsportETL\Season\Domain\Season;
+use Kishlin\Backend\MotorsportETL\Season\Domain\ValueObject\SeriesIdentity;
 use Kishlin\Backend\MotorsportETL\Shared\Application\Transformer\JsonableStringTransformer;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
@@ -20,7 +21,7 @@ final readonly class SeasonsTransformer
     /**
      * @return Generator<Season>
      */
-    public function transform(mixed $extractorResponse, SeriesDTO $series): Generator
+    public function transform(mixed $extractorResponse, SeriesIdentity $series): Generator
     {
         /** @var array<array{
          *      name: string,

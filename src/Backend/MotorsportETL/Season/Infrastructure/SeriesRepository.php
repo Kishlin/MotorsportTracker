@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Season\Infrastructure;
 
-use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\SeriesDTO;
 use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\SeriesGateway;
+use Kishlin\Backend\MotorsportETL\Season\Domain\ValueObject\SeriesIdentity;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepositoryInterface;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ReadRepository;
 
 final readonly class SeriesRepository extends ReadRepository implements SeriesGateway, CoreRepositoryInterface
 {
-    public function find(string $seriesName): ?SeriesDTO
+    public function find(string $seriesName): ?SeriesIdentity
     {
         $qb = $this->createQueryBuilder();
 
@@ -31,6 +31,6 @@ final readonly class SeriesRepository extends ReadRepository implements SeriesGa
             return null;
         }
 
-        return SeriesDTO::forScalars($ret['id'], $ret['ref']);
+        return SeriesIdentity::forScalars($ret['id'], $ret['ref']);
     }
 }

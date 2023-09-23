@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportETL\Season\Infrastructure;
 
 use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\SeasonsCacheInvalidator;
-use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\SeriesDTO;
+use Kishlin\Backend\MotorsportETL\Season\Domain\ValueObject\SeriesIdentity;
 use Kishlin\Backend\MotorsportETL\Shared\Domain\Context;
 use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\CachedConnector\CacheInvalidatorRepository;
 use Psr\Log\LoggerInterface;
@@ -18,12 +18,12 @@ final readonly class SeasonsCacheInvalidatorUsingRepository implements SeasonsCa
     ) {
     }
 
-    public function invalidate(SeriesDTO $seriesDTO): void
+    public function invalidate(SeriesIdentity $series): void
     {
         $this->logger?->info('Invalidating seasons cache for series {series}', [
-            'series' => $seriesDTO->ref()->value(),
+            'series' => $series->ref()->value(),
         ]);
 
-        $this->cacheInvalidatorRepository->invalidate(Context::SEASONS->value, $seriesDTO->ref()->value());
+        $this->cacheInvalidatorRepository->invalidate(Context::SEASONS->value, $series->ref()->value());
     }
 }

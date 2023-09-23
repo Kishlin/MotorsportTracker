@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
+namespace Kishlin\Backend\MotorsportETL\Season\Domain\ValueObject;
 
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final readonly class SeriesDTO
+final readonly class SeriesIdentity
 {
     private function __construct(
         private string $id,
