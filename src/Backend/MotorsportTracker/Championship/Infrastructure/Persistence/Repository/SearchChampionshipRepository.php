@@ -18,7 +18,7 @@ final class SearchChampionshipRepository extends CoreRepository implements Searc
         $qb = $this->connection->createQueryBuilder();
 
         $qb->select('c.id')
-            ->from('championship', 'c')
+            ->from('series', 'c')
         ;
 
         if (null !== $ref->value()) {

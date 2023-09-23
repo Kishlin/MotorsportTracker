@@ -20,9 +20,11 @@ final class SaveChampionshipPresentationRepositoryTest extends CoreRepositoryCon
 {
     public function testItCanSaveAChampionshipPresentation(): void
     {
+        self::loadFixture('motorsport.championship.series.formulaOne');
+
         $championshipPresentation = ChampionshipPresentation::instance(
             new UuidValueObject(self::uuid()),
-            new UuidValueObject(self::uuid()),
+            new UuidValueObject(self::fixtureId('motorsport.championship.series.formulaOne')),
             new StringValueObject('f1.png'),
             new StringValueObject('#fff'),
             new DateTimeValueObject(new DateTimeImmutable()),

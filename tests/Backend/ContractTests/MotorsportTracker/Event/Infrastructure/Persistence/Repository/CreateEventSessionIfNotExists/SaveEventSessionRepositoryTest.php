@@ -28,8 +28,8 @@ final class SaveEventSessionRepositoryTest extends CoreRepositoryContractTestCas
 
         $eventSession = EventSession::instance(
             new UuidValueObject(self::uuid()),
-            new UuidValueObject(self::fixtureId('motorsport.event.sessionType.race')),
             new UuidValueObject(self::fixtureId('motorsport.event.event.dutchGrandPrix2022')),
+            new UuidValueObject(self::fixtureId('motorsport.event.sessionType.race')),
             new BoolValueObject(false),
             new NullableDateTimeValueObject(new DateTimeImmutable('2022-09-04 15:00:00')),
             new NullableDateTimeValueObject(new DateTimeImmutable('2022-09-04 16:00:00')),

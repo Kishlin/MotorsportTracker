@@ -18,7 +18,7 @@ final class FindSeasonRepository extends CoreRepository implements FindSeasonGat
         $qb->select('s.id')
             ->from('season', 's')
             ->where($qb->expr()->eq('s.year', ':year'))
-            ->andWhere($qb->expr()->eq('s.championship', ':championship'))
+            ->andWhere($qb->expr()->eq('s.series', ':championship'))
             ->withParam('championship', $championshipId)
             ->withParam('year', $year)
         ;

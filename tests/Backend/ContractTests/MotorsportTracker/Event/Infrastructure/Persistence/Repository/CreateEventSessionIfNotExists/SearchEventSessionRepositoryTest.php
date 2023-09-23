@@ -31,7 +31,7 @@ final class SearchEventSessionRepositoryTest extends CoreRepositoryContractTestC
                 new UuidValueObject($eventId),
                 new UuidValueObject(self::fixtureId('motorsport.event.sessionType.race')),
                 new NullableDateTimeValueObject($startDate),
-            )?->value(),
+            )?->id()->value(),
         );
     }
 

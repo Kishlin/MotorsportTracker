@@ -25,7 +25,7 @@ final class SaveRaceLapRepositoryTest extends CoreRepositoryContractTestCase
 
         $raceLap = RaceLap::instance(
             new UuidValueObject('1230a0c2-8392-4e57-967f-9859b43601bd'),
-            new UuidValueObject('45b56055-ab7b-4271-b6c3-07eef8753f76'),
+            new UuidValueObject(self::fixtureId('motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race')),
             new PositiveIntValueObject(1),
             new PositiveIntValueObject(9),
             new BoolValueObject(false),

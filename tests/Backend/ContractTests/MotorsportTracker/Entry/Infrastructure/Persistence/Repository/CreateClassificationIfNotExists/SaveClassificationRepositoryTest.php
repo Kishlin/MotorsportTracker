@@ -29,7 +29,7 @@ final class SaveClassificationRepositoryTest extends CoreRepositoryContractTestC
 
         $classification = Classification::instance(
             new UuidValueObject('17e9f5aa-836b-4dfc-a613-3d0b9a55e931'),
-            new UuidValueObject('61756cdd-deaa-4304-9c3b-5a889e155ce6'),
+            new UuidValueObject(self::fixtureId('motorsport.result.entry.maxVerstappenForRedBullRacingAtDutchGP2022Race')),
             new PositiveIntValueObject(9),
             new NullableIntValueObject(20),
             new PositiveIntValueObject(57),
