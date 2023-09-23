@@ -2,32 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
+namespace Kishlin\Apps\Backoffice\MotorsportETL;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapCalendar\ScrapCalendarCommand;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
-use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
+use Kishlin\Backend\MotorsportETL\Calendar\Application\ScrapCalendar\ScrapCalendarCommand;
+use Kishlin\Backend\MotorsportETL\Calendar\Application\ScrapCalendar\ScrapCalendarFailures;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapCalendarCommandUsingSymfony extends SymfonyCommand
+final class ScrapCalendarCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
-    public const NAME = 'kishlin:motorsport-stats:calendar:scrap';
+    public const NAME = 'kishlin:motorsport-etl:calendar:scrap';
 
     private const ARGUMENT_CHAMPIONSHIP = 'championship';
     private const QUESTION_CHAMPIONSHIP = "Please enter the name of the championship:\n";
 
     private const ARGUMENT_YEAR = 'year';
     private const QUESTION_YEAR = "Please enter the year of the season:\n";
-
-    public function __construct(
-        private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {
@@ -46,10 +39,18 @@ final class ScrapCalendarCommandUsingSymfony extends SymfonyCommand
         $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
         $year   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
 
-        $this->commandBus->execute(ScrapCalendarCommand::fromScalars($series, $year));
+        $result = $this->executeApplicationCommand($input, ScrapCalendarCommand::forSeason($series, $year));
 
-        $ui->success("Finished scrapping calendar for {$series} #{$year}.");
+        if ($result->isOk()) {
+            $ui->success("Finished scrapping calendar for {$series} #{$year}.");
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        }
+
+        if (ScrapCalendarFailures::SEASON_NOT_FOUND === $result->unwrapFailure()) {
+            $ui->error("Season {$series} #{$year} not found.");
+        }
+
+        return Command::FAILURE;
     }
 }

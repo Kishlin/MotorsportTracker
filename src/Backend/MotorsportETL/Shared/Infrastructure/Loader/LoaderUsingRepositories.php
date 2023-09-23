@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Loader;
 
+use DateTimeImmutable;
 use Kishlin\Backend\MotorsportETL\Shared\Application\Loader;
 use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository\EntityRepository;
 use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\Repository\UniquenessCheckRepository;
@@ -12,6 +13,7 @@ use Kishlin\Backend\Shared\Domain\Entity\Entity;
 use Kishlin\Backend\Shared\Domain\Entity\GuardedAgainstDoubles;
 use Kishlin\Backend\Shared\Domain\Entity\Mapped;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer;
+use LogicException;
 use Psr\Log\LoggerInterface;
 
 final readonly class LoaderUsingRepositories implements Loader
@@ -59,10 +61,13 @@ final readonly class LoaderUsingRepositories implements Loader
 
             return $existingId;
         }
+
+        // @phpstan-ignore-next-line
+        throw new LogicException("Do not know what to do of duplicate {$location} with id {$existingId}");
     }
 
     /**
-     * @param array<string, null|bool|Entity|float|int|Mapped|string> $mappedDetails
+     * @param array<string, null|bool|DateTimeImmutable|Entity|float|int|Mapped|string> $mappedDetails
      *
      * @return array<string, null|bool|float|int|string>
      */
@@ -80,6 +85,18 @@ final readonly class LoaderUsingRepositories implements Loader
 
             if ($value instanceof Mapped) {
                 $data = array_merge($data, $this->computeData($value->mappedData()));
+
+                continue;
+            }
+
+            if ($value instanceof DateTimeImmutable) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+
+                continue;
+            }
+
+            if (is_bool($value)) {
+                $data[$key] = (int) $value;
 
                 continue;
             }

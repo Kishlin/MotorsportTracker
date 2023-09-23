@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportETL\Shared\Domain;
 
 enum Context: String
 {
+    case CALENDAR = 'calendar';
+
     case SERIES = 'series';
 
     case SEASONS = 'seasons';

@@ -20,6 +20,10 @@ final class ContextFinder
             return Context::SEASONS;
         }
 
+        if (Tools::endsWith($url, 'calendar')) {
+            return Context::CALENDAR;
+        }
+
         /*
          * At this point, url should be a standing url, so one of
          * https://api.motorsportstats.com/widgets/1.0.0/seasons/%s/standings
