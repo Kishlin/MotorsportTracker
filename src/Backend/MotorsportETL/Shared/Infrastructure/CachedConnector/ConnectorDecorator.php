@@ -15,14 +15,15 @@ final readonly class ConnectorDecorator implements Connector
         private ConnectorResponseReadRepository $readRepository,
         private StringHashTool $stringConversionsTool,
         private MotorsportStatsConnector $decorated,
+        private ContextFinder $contextFinder,
         private ?LoggerInterface $logger,
     ) {
     }
 
     public function fetch(string $url, array $parameters = []): string
     {
-        $urlContext     = $this->stringConversionsTool->urlToContext($url);
         $parametersHash = $this->stringConversionsTool->parametersToKey($parameters);
+        $urlContext     = $this->contextFinder->urlToContext($url);
 
         $cachedResponse = $this->readRepository->findResponse($urlContext, $parametersHash);
 

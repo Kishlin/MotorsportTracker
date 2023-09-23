@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportStatsScrapper;
 
-use Kishlin\Backend\MotorsportStatsScrapper\Application\ScrapStandings\ScrapStandingsCommand;
-use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
-use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
+use Kishlin\Backend\MotorsportETL\Standing\Application\ScrapStandings\ScrapStandingsCommand;
+use Kishlin\Backend\MotorsportETL\Standing\Application\ScrapStandings\ScrapStandingsFailures;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ScrapStandingsCommandUsingSymfony extends SymfonyCommand
+final class ScrapStandingsCommandUsingSymfony extends CachableScrapCommandUsingSymfony
 {
     public const NAME = 'kishlin:motorsport-stats:standings:scrap';
 
@@ -22,12 +21,6 @@ final class ScrapStandingsCommandUsingSymfony extends SymfonyCommand
 
     private const ARGUMENT_YEAR = 'year';
     private const QUESTION_YEAR = "Please enter the year of the season:\n";
-
-    public function __construct(
-        private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {
@@ -46,10 +39,18 @@ final class ScrapStandingsCommandUsingSymfony extends SymfonyCommand
         $series = $this->stringFromArgumentsOrPrompt($input, $output, self::ARGUMENT_CHAMPIONSHIP, self::QUESTION_CHAMPIONSHIP);
         $year   = $this->intFromArgumentsOrPrompt($input, $output, self::ARGUMENT_YEAR, self::QUESTION_YEAR);
 
-        $this->commandBus->execute(ScrapStandingsCommand::fromScalars($series, $year));
+        $result = $this->executeApplicationCommand($input, ScrapStandingsCommand::forSeason($series, $year));
 
-        $ui->success("Finished scrapping standings for {$series} #{$year}.");
+        if ($result->isOk()) {
+            $ui->success("Finished scrapping standings for {$series} #{$year}.");
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        }
+
+        if (ScrapStandingsFailures::SEASON_NOT_FOUND === $result->unwrapFailure()) {
+            $ui->error("Season {$series} #{$year} not found.");
+        }
+
+        return Command::FAILURE;
     }
 }

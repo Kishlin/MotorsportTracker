@@ -60,11 +60,18 @@ $config
                 ['param'],
             ],
         ],
+        'phpdoc_to_comment' => [
+            'ignored_tags' => [
+                'noinspection',
+                'phpstan-ignore-next-line',
+                'var',
+            ],
+        ],
         'php_unit_test_case_static_method_calls' => [
             'call_type' => 'self',
         ],
         'single_line_comment_style' => [
-            'comment_types' => ['asterisk', 'hash'],
+            'comment_types' => ['hash'],
         ],
         'trailing_comma_in_multiline' => true,
         'trim_array_spaces' => true,

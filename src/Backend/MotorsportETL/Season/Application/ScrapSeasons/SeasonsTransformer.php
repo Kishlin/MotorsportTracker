@@ -7,16 +7,13 @@ namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
 use Generator;
 use Kishlin\Backend\MotorsportETL\Season\Domain\Season;
 use Kishlin\Backend\MotorsportETL\Shared\Application\Transformer\JsonableStringTransformer;
-use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
 final readonly class SeasonsTransformer
 {
     public function __construct(
         private JsonableStringTransformer $jsonableStringParser,
-        private UuidGenerator $uuidGenerator,
     ) {
     }
 
@@ -37,7 +34,6 @@ final readonly class SeasonsTransformer
 
         foreach ($seasons as $season) {
             yield Season::create(
-                new UuidValueObject($this->uuidGenerator->uuid4()),
                 new StrictlyPositiveIntValueObject($season['year']),
                 $series->id(),
                 new NullableUuidValueObject($season['uuid']),

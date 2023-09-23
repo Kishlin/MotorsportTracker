@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Series\Domain;
 
+use Kishlin\Backend\Shared\Domain\Entity\DuplicateStrategy;
 use Kishlin\Backend\Shared\Domain\Entity\Entity;
+use Kishlin\Backend\Shared\Domain\Entity\GuardedAgainstDoubles;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 
-final class Series extends Entity
+final class Series extends Entity implements GuardedAgainstDoubles
 {
     private function __construct(
-        private readonly UuidValueObject $id,
         private readonly StringValueObject $name,
         private readonly NullableStringValueObject $shortName,
         private readonly StringValueObject $shortCode,
@@ -22,14 +22,12 @@ final class Series extends Entity
     }
 
     public static function create(
-        UuidValueObject $id,
         StringValueObject $name,
         NullableStringValueObject $shortName,
         StringValueObject $shortCode,
         NullableUuidValueObject $ref,
     ): self {
         return new self(
-            $id,
             $name,
             $shortName,
             $shortCode,
@@ -40,7 +38,6 @@ final class Series extends Entity
     public function mappedData(): array
     {
         return [
-            'id'         => $this->id->value(),
             'name'       => $this->name->value(),
             'short_name' => $this->shortName->value(),
             'short_code' => $this->shortCode->value(),
@@ -48,11 +45,16 @@ final class Series extends Entity
         ];
     }
 
-    public function mappedUniqueness(): array
+    public function strategyOnDuplicate(): DuplicateStrategy
+    {
+        return DuplicateStrategy::SKIP;
+    }
+
+    public function uniquenessConstraints(): array
     {
         return [
-            'name' => $this->name->value(),
-            'ref'  => $this->ref->value(),
+            ['name'],
+            ['ref'],
         ];
     }
 }

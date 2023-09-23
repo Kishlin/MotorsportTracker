@@ -7,11 +7,9 @@ namespace Kishlin\Backend\MotorsportETL\Series\Application\ScrapSeriesList;
 use Generator;
 use Kishlin\Backend\MotorsportETL\Series\Domain\Series;
 use Kishlin\Backend\MotorsportETL\Shared\Application\Transformer\JsonableStringTransformer;
-use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableStringValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
 use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final readonly class SeriesListTransformer
@@ -27,7 +25,6 @@ final readonly class SeriesListTransformer
     public function __construct(
         #[TaggedIterator('kishlin.motorsport_etl.series.transformer_step')] iterable $steps,
         private JsonableStringTransformer $jsonableStringParser,
-        private UuidGenerator $uuidGenerator,
     ) {
         $this->steps = $steps;
     }
@@ -53,7 +50,6 @@ final readonly class SeriesListTransformer
             }
 
             yield Series::create(
-                new UuidValueObject($this->uuidGenerator->uuid4()),
                 new StringValueObject($series['name']),
                 new NullableStringValueObject($series['shortName']),
                 new StringValueObject($series['shortCode']),

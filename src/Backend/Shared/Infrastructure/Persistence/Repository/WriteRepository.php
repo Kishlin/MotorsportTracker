@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Kishlin\Backend\Shared\Infrastructure\Persistence\Repository;
 
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
-use Kishlin\Backend\Shared\Domain\Entity\Entity;
-use Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer;
 
 abstract readonly class WriteRepository
 {
     public function __construct(
-        private LocationComputer $locationComputer,
         protected Connection $connection,
     ) {
     }
 
-    protected function persist(Entity $entity): void
+    /**
+     * @param array<string, null|bool|float|int|string> $data
+     */
+    protected function persist(string $location, array $data): void
     {
-        $location = $this->locationComputer->computeLocation($entity);
-        $data     = $entity->mappedData();
-
         $this->connection->insert($location, $data);
     }
 }

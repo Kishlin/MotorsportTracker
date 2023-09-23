@@ -12,7 +12,7 @@ final readonly class CacheInvalidatorRepository extends WriteRepository implemen
 {
     private const QUERY = <<<'SQL'
 DELETE FROM %s
-WHERE key = :key
+WHERE key LIKE :key
 SQL;
 
     public function invalidate(string $table, string $key): void
@@ -20,7 +20,7 @@ SQL;
         $this->connection->execute(
             SQLQuery::create(
                 sprintf(self::QUERY, $table),
-                ['key' => $key],
+                ['key' => "{$key}%"],
             ),
         );
     }

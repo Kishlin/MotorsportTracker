@@ -4,25 +4,8 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Shared\Infrastructure\CachedConnector;
 
-use Kishlin\Backend\MotorsportETL\Shared\Domain\Context;
-use Kishlin\Backend\Shared\Domain\Tools;
-use RuntimeException;
-
 final class StringHashTool
 {
-    public function urlToContext(string $url): Context
-    {
-        if (Tools::endsWith($url, 'series')) {
-            return Context::SERIES;
-        }
-
-        if (Tools::endsWith($url, 'seasons')) {
-            return Context::SEASONS;
-        }
-
-        throw new RuntimeException("Unknown context for url: {$url}");
-    }
-
     /**
      * @param array<int|string> $parameters
      */
