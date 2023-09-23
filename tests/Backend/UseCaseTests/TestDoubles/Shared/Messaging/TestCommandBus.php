@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\ScrapSeasonsCommand;
 use Kishlin\Backend\MotorsportETL\Series\Application\ScrapSeriesList\ScrapSeriesListCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -21,6 +22,10 @@ final readonly class TestCommandBus implements CommandBus
     {
         if ($command instanceof ScrapSeriesListCommand) {
             return $this->testServiceContainer->scrapSeriesListCommandHandler()($command);
+        }
+
+        if ($command instanceof ScrapSeasonsCommand) {
+            return $this->testServiceContainer->scrapSeasonsCommandHandler()($command);
         }
 
         throw new RuntimeException('Unknown command type: ' . get_class($command));

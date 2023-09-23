@@ -4,6 +4,7 @@ default:
       paths: [ features ]
       contexts:
         - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Series\ScrapSeriesListContext
+        - Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportETL\Season\ScrapSeasonsContext
     api_tests:
       paths: [ features ]
       contexts:

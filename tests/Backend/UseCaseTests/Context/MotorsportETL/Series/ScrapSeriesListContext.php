@@ -23,7 +23,7 @@ final class ScrapSeriesListContext extends MotorsportTrackerContext
     {
         $response = $this->extractResponseFromTable($tableNode);
 
-        self::container()->cachableConnectorSpy()->prepareNextResponse($response);
+        self::container()->cachableConnectorSpy()->prepareResponse(self::CONTEXT_SERIES, [], $response);
     }
 
     /**

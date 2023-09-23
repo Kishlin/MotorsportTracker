@@ -8,8 +8,6 @@ use Generator;
 use Kishlin\Backend\MotorsportETL\Season\Domain\Season;
 use Kishlin\Backend\MotorsportETL\Season\Domain\ValueObject\SeriesIdentity;
 use Kishlin\Backend\MotorsportETL\Shared\Application\Transformer\JsonableStringTransformer;
-use Kishlin\Backend\Shared\Domain\ValueObject\NullableUuidValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
 
 final readonly class SeasonsTransformer
 {
@@ -34,10 +32,9 @@ final readonly class SeasonsTransformer
         $seasons = $this->jsonableStringParser->transform($extractorResponse);
 
         foreach ($seasons as $season) {
-            yield Season::create(
-                new StrictlyPositiveIntValueObject($season['year']),
-                $series->id(),
-                new NullableUuidValueObject($season['uuid']),
+            yield Season::fromData(
+                $series,
+                $season,
             );
         }
     }

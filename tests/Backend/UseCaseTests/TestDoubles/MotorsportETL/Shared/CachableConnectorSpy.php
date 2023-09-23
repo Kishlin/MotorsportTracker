@@ -11,14 +11,13 @@ use Kishlin\Backend\MotorsportETL\Shared\Infrastructure\CachedConnector\ContextF
 
 final class CachableConnectorSpy implements Connector, CacheInvalidatorGateway
 {
-    private const FIXTURES_FOLDER = __DIR__ . '/../../../../../../etc/Fixtures/ETL/';
-
-    private ?string $preparedResponse = null;
-
     private int $actualRequestsCounter = 0;
 
     /** @var array<string, array<string, int>> */
     private array $cacheInvalidations = [];
+
+    /** @var array<string, array<string, string>> */
+    private array $preparedResponses = [];
 
     /** @var array<string, array<string, string>> */
     private array $cache = [];
@@ -31,14 +30,19 @@ final class CachableConnectorSpy implements Connector, CacheInvalidatorGateway
     public function resetState(): void
     {
         $this->actualRequestsCounter = 0;
-        $this->preparedResponse      = null;
+        $this->preparedResponses     = [];
         $this->cacheInvalidations    = [];
         $this->cache                 = [];
     }
 
-    public function prepareNextResponse(string $response): void
+    /**
+     * @param array<int|string> $parameters
+     */
+    public function prepareResponse(string $context, array $parameters, string $response): void
     {
-        $this->preparedResponse = $response;
+        $parametersKey = $this->computeParametersKey($parameters);
+
+        $this->preparedResponses[$context][$parametersKey] = $response;
     }
 
     public function actualRequestsCount(): int
@@ -98,11 +102,7 @@ final class CachableConnectorSpy implements Connector, CacheInvalidatorGateway
 
         ++$this->actualRequestsCounter;
 
-        if (null !== $this->preparedResponse) {
-            $response = $this->preparedResponse;
-
-            $this->preparedResponse = null;
-        }
+        $response = $this->getFromPreparedResponse($context, $parameters);
 
         if (null === $response) {
             throw new Exception("Cannot find content for url {$url}");
@@ -139,6 +139,24 @@ final class CachableConnectorSpy implements Connector, CacheInvalidatorGateway
         }
 
         return $this->cache[$context][$parametersKey];
+    }
+
+    /**
+     * @param array<int|string> $parameters
+     */
+    private function getFromPreparedResponse(string $context, array $parameters): ?string
+    {
+        if (false === isset($this->preparedResponses[$context])) {
+            return null;
+        }
+
+        $parametersKey = $this->computeParametersKey($parameters);
+
+        if (false === isset($this->preparedResponses[$context][$parametersKey])) {
+            return null;
+        }
+
+        return $this->preparedResponses[$context][$parametersKey];
     }
 
     /**

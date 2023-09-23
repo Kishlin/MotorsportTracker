@@ -1,6 +1,6 @@
 Feature: Scrap series from an external data source
 
-  Scenario: Scrap series from an external data source
+  Scenario: It scrapes series from an external data source
     Given the external data source has the list of series
       | name                               | shortName            | shortCode | category      | uuid                                 |
       | FIA Formula One World Championship | Formula 1            | F1        | Single Seater | a33f8b4a-2b22-41ce-8e7d-0aea08f0e176 |

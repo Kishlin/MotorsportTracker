@@ -68,6 +68,14 @@ final class EntityStoreSpy implements EntityGateway, UniquenessCheckGateway
         return $id;
     }
 
+    /**
+     * @return array<string, array<string, null|bool|float|int|string>>
+     */
+    public function stored(string $location): array
+    {
+        return $this->store[$location] ?? [];
+    }
+
     public function save(string $location, array $data): string
     {
         $this->actions['saved'][$location] = ($this->actions['saved'][$location] ?? 0) + 1;

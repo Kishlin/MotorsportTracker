@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
 
 use Kishlin\Backend\MotorsportETL\Shared\Application\Loader\Loader;
+use Kishlin\Backend\MotorsportETL\Shared\Domain\CacheInvalidatorGateway;
+use Kishlin\Backend\MotorsportETL\Shared\Domain\Context;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Result\FailResult;
 use Kishlin\Backend\Shared\Domain\Result\OkResult;
@@ -13,7 +15,7 @@ use Kishlin\Backend\Shared\Domain\Result\Result;
 final readonly class ScrapSeasonsCommandHandler implements CommandHandler
 {
     public function __construct(
-        private SeasonsCacheInvalidator $seasonsCacheInvalidator,
+        private CacheInvalidatorGateway $cacheInvalidatorGateway,
         private SeasonsTransformer $seriesTransformer,
         private SeasonsExtractor $seriesExtractor,
         private SeriesGateway $seriesGateway,
@@ -30,7 +32,7 @@ final readonly class ScrapSeasonsCommandHandler implements CommandHandler
         }
 
         if ($command->cacheMustBeInvalidated()) {
-            $this->seasonsCacheInvalidator->invalidate($seriesDTO);
+            $this->cacheInvalidatorGateway->invalidate(Context::SEASONS->value, $seriesDTO->ref()->value());
         }
 
         $response = $this->seriesExtractor->extract($seriesDTO);
