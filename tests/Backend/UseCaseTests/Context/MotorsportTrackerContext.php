@@ -11,15 +11,6 @@ abstract class MotorsportTrackerContext implements Context
 {
     private static ?TestServiceContainer $container = null;
 
-    /**
-     * @BeforeScenario
-     */
-    public static function prepare(): void
-    {
-        self::container()->cachableConnectorSpy()->resetState();
-        self::container()->entityStoreSpy()->resetState();
-    }
-
     protected static function container(): TestServiceContainer
     {
         if (null === self::$container) {

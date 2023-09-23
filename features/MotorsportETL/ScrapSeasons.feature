@@ -12,7 +12,7 @@ Feature: Scrap seasons from an external data source
     When I scrap the list of seasons for "FIA Formula One World Championship"
     Then the external data source is called "1" times
     And the seasons list for "FIA Formula One World Championship" from the external source is cached to minimize future calls
-    And it saved "3" new seasons
+    And it saved "3" new "season"
     And it saved the seasons for "FIA Formula One World Championship" "2023"
     And it saved the seasons for "FIA Formula One World Championship" "2022"
     And it saved the seasons for "FIA Formula One World Championship" "2021"
@@ -28,7 +28,7 @@ Feature: Scrap seasons from an external data source
       | 2021 World Championship | 2021 | c620fbb8-7169-4f6a-af74-13f6cd80a233 |
     When I scrap the list of seasons for "FIA Formula One World Championship"
     Then the external data source is called "0" times
-    And it saved "3" new seasons
+    And it saved "3" new "season"
     And it saved the seasons for "FIA Formula One World Championship" "2023"
     And it saved the seasons for "FIA Formula One World Championship" "2022"
     And it saved the seasons for "FIA Formula One World Championship" "2021"
@@ -48,7 +48,7 @@ Feature: Scrap seasons from an external data source
       | 2021 World Championship | 2021 | c620fbb8-7169-4f6a-af74-13f6cd80a233 |
     When I scrap the list of seasons for "FIA Formula One World Championship"
     Then the external data source is called "1" times
-    And it saved "1" new seasons
+    And it saved "1" new "season"
     And it saved the seasons for "FIA Formula One World Championship" "2021"
 
   Scenario: It invalidates cache when required
@@ -64,7 +64,7 @@ Feature: Scrap seasons from an external data source
     When I scrap the list of seasons for "FIA Formula One World Championship", asking for the cache to be invalidated
     Then the cached response for seasons for "FIA Formula One World Championship" is cleared before requesting the external data source
     And the external data source is called "1" times
-    And it saved "3" new seasons
+    And it saved "3" new "season"
     And it saved the seasons for "FIA Formula One World Championship" "2023"
     And it saved the seasons for "FIA Formula One World Championship" "2022"
     And it saved the seasons for "FIA Formula One World Championship" "2021"

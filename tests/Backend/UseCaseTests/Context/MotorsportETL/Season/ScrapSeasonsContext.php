@@ -41,19 +41,6 @@ final class ScrapSeasonsContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Given the season exists
-     */
-    public function theSeasonsExists(TableNode $table): void
-    {
-        $rows = $table->getRows();
-        $keys = array_shift($rows);
-
-        $data = array_combine($keys, $rows[0]);
-
-        self::container()->entityStoreSpy()->add(self::CONTEXT_SEASONS, $data);
-    }
-
-    /**
      * @Given the seasons for :series exist
      */
     public function theSeasonsForSeriesExist(TableNode $tableNode, string $series): void
@@ -108,14 +95,6 @@ final class ScrapSeasonsContext extends MotorsportTrackerContext
         $seriesRef = $this->savedSeriesRef($series);
 
         Assert::assertTrue(self::container()->cachableConnectorSpy()->hasCached(self::CONTEXT_SEASONS, [$seriesRef]));
-    }
-
-    /**
-     * @Then it saved :count new seasons
-     */
-    public function theTwoSeasonsFromTheDataSourceAreSaved(int $count): void
-    {
-        Assert::assertSame($count, self::container()->entityStoreSpy()->saved(self::LOCATION));
     }
 
     /**

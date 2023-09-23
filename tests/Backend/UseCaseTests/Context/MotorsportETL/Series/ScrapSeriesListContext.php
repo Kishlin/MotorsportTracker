@@ -71,14 +71,6 @@ final class ScrapSeriesListContext extends MotorsportTrackerContext
     }
 
     /**
-     * @Then the external data source is called :count times
-     */
-    public function theExternalDataSourceIsCalledXTimes(int $count): void
-    {
-        Assert::assertSame($count, self::container()->cachableConnectorSpy()->actualRequestsCount());
-    }
-
-    /**
      * @Then /^the cached response for series is cleared before requesting the external data source$/
      */
     public function theCachedResponseForSeriesIsClearedBeforeRequestingTheExternalDataSource(): void
@@ -92,14 +84,6 @@ final class ScrapSeriesListContext extends MotorsportTrackerContext
     public function theSeriesListFromTheExternalSourceIsCachedToMinimizeFutureCalls(): void
     {
         Assert::assertTrue(self::container()->cachableConnectorSpy()->hasCached(self::CONTEXT_SERIES, []));
-    }
-
-    /**
-     * @Then it saved :count new series
-     */
-    public function theTwoSeriesFromTheDataSourceAreSaved(int $count): void
-    {
-        Assert::assertSame($count, self::container()->entityStoreSpy()->saved(self::CONTEXT_SERIES));
     }
 
     /**
