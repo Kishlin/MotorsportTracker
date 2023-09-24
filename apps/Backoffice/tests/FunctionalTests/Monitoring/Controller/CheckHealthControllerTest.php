@@ -27,7 +27,9 @@ final class CheckHealthControllerTest extends CheckHealthControllerTestCase
         $expectedServices = [
             'Backoffice',
             'Database Core',
+            'Database Client',
             'Database Cache',
+            'Memcached',
             'Environment',
         ];
 
