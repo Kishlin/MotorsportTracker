@@ -26,7 +26,6 @@ final class CheckHealthControllerTest extends CheckHealthControllerTestCase
 
         $expectedServices = [
             'MotorsportTracker',
-            'Database Core',
             'Database Cache',
             'Environment',
         ];

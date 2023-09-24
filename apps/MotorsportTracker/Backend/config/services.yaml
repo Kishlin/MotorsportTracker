@@ -24,7 +24,18 @@ services:
     resource: '../../../../src/Backend'
     exclude:
       - '../../../../src/Backend/Shared'
+      - '../../../../src/Backend/Country'
+      - '../../../../src/Backend/MotorsportCache/{Analytics,Result,Schedule,Standing}'
+      - '../../../../src/Backend/MotorsportCache/Calendar/Infrastructure/Persistence/Repository/SyncCalendarEvents'
+      - '../../../../src/Backend/MotorsportCache/Calendar/Application/SyncCalendarEvents'
+      - '../../../../src/Backend/MotorsportCache/EventGraph/Application/Compute*'
+      - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/Compute*'
+      - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/DeleteDeprecatedEventGraphRepository'
+      - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/EventGraphRepository'
+      - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/RaceAndSprintSessionsRepository'
       - '../../../../src/Backend/MotorsportETL'
+      - '../../../../src/Backend/MotorsportTracker'
+      - '../../../../src/Backend/MotorsportStatsScrapper'
       - '../../../../src/Backend/**/Application/*/*Exception.php'
       - '../../../../src/Backend/**/Infrastructure/Persistence/Fixtures'
       - '../../../../src/Backend/**/Domain/{DomainEvent,Entity,ReadModel,ValueObject,View}'
@@ -71,23 +82,12 @@ services:
   Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator:
     alias: 'Kishlin\Backend\Shared\Infrastructure\Randomness\UuidGeneratorUsingRamsey'
 
-  Kishlin\Backend\Shared\Domain\Randomness\GenerateUuidCommandUsingSymfony:
+  Kishlin\Backend\Shared\Infrastructure\Randomness\GenerateUuidCommandUsingSymfony:
     class: 'Kishlin\Backend\Shared\Infrastructure\Randomness\GenerateUuidCommandUsingSymfony'
     tags: ['console.command']
 
 
   ##> Persistence
-
-  kishlin.app.infrastructure.connection.core:
-    class: Kishlin\Backend\Persistence\Core\Connection\Connection
-    factory: [ Kishlin\Backend\Persistence\PDO\PDOConnection, create ]
-    arguments:
-      $host: '%env(DB_CORE_HOST)%'
-      $port: '%env(DB_CORE_PORT)%'
-      $dbName: '%env(DB_CORE_NAME)%'
-      $user: '%env(DB_CORE_USER)%'
-      $password: '%env(DB_CORE_PASSWORD)%'
-    public: true
 
   kishlin.app.infrastructure.connection.cache:
     class: Kishlin\Backend\Persistence\Core\Connection\Connection
@@ -101,7 +101,7 @@ services:
     public: true
 
   Kishlin\Backend\Persistence\Core\Connection\Connection:
-    alias: 'kishlin.app.infrastructure.connection.core'
+    alias: 'kishlin.app.infrastructure.connection.cache'
 
 
   ##> Cache
@@ -125,13 +125,6 @@ services:
       $server: '%kishlin.memcached.dsn%'
 
   Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe:
-    bind:
-      $dbName: 'Database Core'
-      $connection: '@kishlin.app.infrastructure.connection.core'
-
-  kishlin.monitoring.probe.database.cache:
-    class: Kishlin\Backend\Shared\Infrastructure\Monitoring\Probe\DatabaseProbe
-    bind:
       $dbName: 'Database Cache'
       $connection: '@kishlin.app.infrastructure.connection.cache'
 
