@@ -20,7 +20,7 @@ final class SessionRepository extends CoreRepository implements SessionGateway
             ->innerJoin('event', 'e', $qb->expr()->eq('e.id', 'es.event'))
             ->innerJoin('season', 's', $qb->expr()->eq('s.id', 'e.season'))
             ->innerJoin('session_type', 'st', $qb->expr()->eq('st.id', 'es.type'))
-            ->innerJoin('championship', 'c', $qb->expr()->eq('c.id', 's.championship'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('c.id', 's.series'))
             ->andWhere($qb->expr()->eq('st.label', ':type'))
             ->andWhere($qb->expr()->eq('e.name', ':event'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))

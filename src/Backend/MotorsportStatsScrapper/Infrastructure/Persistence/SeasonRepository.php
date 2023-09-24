@@ -16,7 +16,7 @@ final class SeasonRepository extends CoreRepository implements SeasonGateway
 
         $qb->select('s.id, s.ref')
             ->from('season', 's')
-            ->innerJoin('championship', 'c', $qb->expr()->eq('c.id', 's.championship'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('c.id', 's.series'))
             ->where($qb->expr()->eq('c.name', ':name'))
             ->withParam('name', $championshipName)
             ->andWhere($qb->expr()->eq('s.year', ':year'))

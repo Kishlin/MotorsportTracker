@@ -24,7 +24,7 @@ final class SeasonEventIdListRepository extends CoreRepository implements Season
             ->select('e.id')
             ->from('event', 'e')
             ->innerJoin('season', 's', $qb->expr()->eq('e.season', 's.id'))
-            ->innerJoin('championship', 'c', $qb->expr()->eq('s.championship', 'c.id'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('s.series', 'c.id'))
             ->andWhere($qb->expr()->eq('c.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
             ->withParam('championship', $championshipName->value())

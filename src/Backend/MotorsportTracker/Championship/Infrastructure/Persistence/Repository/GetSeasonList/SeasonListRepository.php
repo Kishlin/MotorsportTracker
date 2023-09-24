@@ -18,7 +18,7 @@ final class SeasonListRepository extends CoreRepository implements SeasonListGat
         $qb
             ->select('s.year', 'year')
             ->from('season', 's')
-            ->innerJoin('championship', 'c', $qb->expr()->eq('s.championship', 'c.id'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('s.series', 'c.id'))
             ->andWhere($qb->expr()->eq('c.name', ':championship'))
             ->withParam('championship', $championshipName->value())
         ;

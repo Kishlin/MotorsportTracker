@@ -19,7 +19,7 @@ final class SeasonScheduleDataRepository extends CoreRepository implements Seaso
             ->select('e.id, e.name, e.index')
             ->from('event', 'e')
             ->innerJoin('season', 's', $qb->expr()->eq('e.season', 's.id'))
-            ->innerJoin('championship', 'c', $qb->expr()->eq('s.championship', 'c.id'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('s.series', 'c.id'))
             ->where($qb->expr()->eq('c.name', ':championship'))
             ->withParam('championship', $championship)
             ->andWhere($qb->expr()->eq('s.year', ':year'))

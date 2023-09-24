@@ -21,7 +21,7 @@ final class SessionsListRepository extends CoreRepository implements SessionsLis
             ->innerJoin('event', 'e', $qb->expr()->eq('e.id', 'es.event'))
             ->innerJoin('season', 's', $qb->expr()->eq('s.id', 'e.season'))
             ->innerJoin('session_type', 'st', $qb->expr()->eq('st.id', 'es.type'))
-            ->innerJoin('championship', 'c', $qb->expr()->eq('c.id', 's.championship'))
+            ->innerJoin('series', 'c', $qb->expr()->eq('c.id', 's.series'))
             ->where($qb->expr()->eq('c.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
             ->andWhere('es.has_result is true')

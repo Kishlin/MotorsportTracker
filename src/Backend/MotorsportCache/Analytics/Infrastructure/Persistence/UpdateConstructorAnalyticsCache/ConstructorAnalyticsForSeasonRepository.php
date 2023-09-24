@@ -41,7 +41,7 @@ TXT;
             ->innerJoin('constructor', 'c', $qb->expr()->eq('a.constructor', 'c.id'))
             ->leftJoin('country', 'co', $qb->expr()->eq('a.country', 'co.id'))
             ->innerJoin('season', 's', $qb->expr()->eq('a.season', 's.id'))
-            ->innerJoin('championship', 'ch', $qb->expr()->eq('s.championship', 'ch.id'))
+            ->innerJoin('series', 'ch', $qb->expr()->eq('s.series', 'ch.id'))
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
             ->withParam('championship', $championship)
