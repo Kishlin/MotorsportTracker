@@ -185,7 +185,7 @@ services:
   ##> Cache
 
   Kishlin\Backend\Shared\Domain\Cache\CachePersister:
-    class: Kishlin\Backend\Shared\Infrastructure\Cache\CachePersisterImpl
+    class: Kishlin\Backend\Shared\Infrastructure\Cache\CachePersisterUsingPool
 
 
   ##> Monitoring
