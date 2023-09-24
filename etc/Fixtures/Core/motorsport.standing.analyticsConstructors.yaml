@@ -1,0 +1,15 @@
+redBullHondaInFormulaOne2023:
+  season: '@motorsport.championship.season.formulaOne2023'
+  constructor: '@motorsport.team.constructor.redBullHonda'
+  country: '@country.country.austria'
+  position: 1
+  points: 503
+  wins: 12
+
+mercedesInFormulaOne2023:
+  season: '@motorsport.championship.season.formulaOne2023'
+  constructor: '@motorsport.team.constructor.mercedes'
+  country: '@country.country.unitedKingdom'
+  position: 2
+  points: 247.0
+  wins: 0

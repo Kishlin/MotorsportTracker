@@ -12,6 +12,7 @@ final class FixturesContext extends MotorsportTrackerContext
     public static function prepare(): void
     {
         self::container()->objectStoreSpy()->resetState();
+        self::container()->coreFixtureLoader()->reset();
         self::container()->cacheItemPoolSpy()->clear();
     }
 }

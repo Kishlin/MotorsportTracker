@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateConstructorAnalyticsCache\UpdateConstructorAnalyticsCacheCommand;
 use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateDriverAnalyticsCache\UpdateDriverAnalyticsCacheCommand;
 use Kishlin\Backend\MotorsportETL\Calendar\Application\ScrapCalendar\ScrapCalendarCommand;
 use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\ScrapSeasonsCommand;
@@ -27,6 +28,11 @@ final readonly class TestCommandBus implements CommandBus
         if ($command instanceof UpdateDriverAnalyticsCacheCommand) {
             // @phpstan-ignore-next-line
             return $this->testServiceContainer->updateDriverDriverAnalyticsCacheCommandHandler()($command);
+        }
+
+        if ($command instanceof UpdateConstructorAnalyticsCacheCommand) {
+            // @phpstan-ignore-next-line
+            return $this->testServiceContainer->updateConstructorAnalyticsCacheCommandHandler()($command);
         }
 
         // ETL

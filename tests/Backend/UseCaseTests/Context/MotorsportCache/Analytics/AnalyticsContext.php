@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportCache\Analytics;
 
 use Exception;
+use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateConstructorAnalyticsCache\UpdateConstructorAnalyticsCacheCommand;
 use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateDriverAnalyticsCache\UpdateDriverAnalyticsCacheCommand;
 use Kishlin\Backend\MotorsportCache\Analytics\Domain\Entity\SeasonAnalytics;
 use Kishlin\Tests\Backend\UseCaseTests\Context\MotorsportTrackerContext;
@@ -15,6 +16,8 @@ use Psr\Cache\InvalidArgumentException;
 final class AnalyticsContext extends MotorsportTrackerContext
 {
     private const TYPE_DRIVER = 'driver';
+
+    private const TYPE_CONSTRUCTOR = 'constructor';
 
     /**
      * @Given the analytics data for :type :name exist
@@ -38,6 +41,14 @@ final class AnalyticsContext extends MotorsportTrackerContext
         if (self::TYPE_DRIVER === $type) {
             self::container()->commandBus()->execute(
                 UpdateDriverAnalyticsCacheCommand::fromScalars($series, $year),
+            );
+
+            return;
+        }
+
+        if (self::TYPE_CONSTRUCTOR === $type) {
+            self::container()->commandBus()->execute(
+                UpdateConstructorAnalyticsCacheCommand::fromScalars($series, $year),
             );
 
             return;
@@ -77,8 +88,10 @@ final class AnalyticsContext extends MotorsportTrackerContext
         /** @var array<string, string> $analyticsView */
         $analyticsView = $value->toArray()[$index];
 
+        $class = self::TYPE_DRIVER === $type ? 'driver' : 'team';
+
         Assert::assertSame(
-            $this->fixtureId("motorsport.{$type}.{$type}.{$this->formatFixtureName($fixture)}"),
+            $this->fixtureId("motorsport.{$class}.{$type}.{$this->formatFixtureName($fixture)}"),
             $analyticsView[$type],
         );
     }

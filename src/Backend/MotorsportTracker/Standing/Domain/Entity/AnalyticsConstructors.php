@@ -17,7 +17,7 @@ final class AnalyticsConstructors extends AggregateRoot
     private function __construct(
         private readonly UuidValueObject $id,
         private readonly UuidValueObject $season,
-        private readonly UuidValueObject $driver,
+        private readonly UuidValueObject $constructor,
         private readonly NullableUuidValueObject $country,
         private readonly PositiveIntValueObject $position,
         private readonly FloatValueObject $points,
@@ -28,7 +28,7 @@ final class AnalyticsConstructors extends AggregateRoot
     public static function create(
         UuidValueObject $id,
         UuidValueObject $season,
-        UuidValueObject $driver,
+        UuidValueObject $constructor,
         NullableUuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
@@ -37,7 +37,7 @@ final class AnalyticsConstructors extends AggregateRoot
         $analytics = new self(
             $id,
             $season,
-            $driver,
+            $constructor,
             $country,
             $position,
             $points,
@@ -55,7 +55,7 @@ final class AnalyticsConstructors extends AggregateRoot
     public static function instance(
         UuidValueObject $id,
         UuidValueObject $season,
-        UuidValueObject $driver,
+        UuidValueObject $constructor,
         NullableUuidValueObject $country,
         PositiveIntValueObject $position,
         FloatValueObject $points,
@@ -64,7 +64,7 @@ final class AnalyticsConstructors extends AggregateRoot
         $analytics = new self(
             $id,
             $season,
-            $driver,
+            $constructor,
             $country,
             $position,
             $points,
@@ -86,9 +86,9 @@ final class AnalyticsConstructors extends AggregateRoot
         return $this->season;
     }
 
-    public function driver(): UuidValueObject
+    public function constructor(): UuidValueObject
     {
-        return $this->driver;
+        return $this->constructor;
     }
 
     public function country(): NullableUuidValueObject
@@ -116,7 +116,7 @@ final class AnalyticsConstructors extends AggregateRoot
         return [
             'id'          => $this->id->value(),
             'season'      => $this->season->value(),
-            'constructor' => $this->driver->value(),
+            'constructor' => $this->constructor->value(),
             'country'     => $this->country->value(),
             'position'    => $this->position->value(),
             'points'      => $this->points->value(),
