@@ -31,7 +31,7 @@ trait MessagingServicesTrait
     public function eventDispatcher(): TestEventDispatcher
     {
         if (null === $this->testEventDispatcher) {
-            $this->testEventDispatcher = new TestEventDispatcher($this->serviceContainer());
+            $this->testEventDispatcher = new TestEventDispatcher();
         }
 
         return $this->testEventDispatcher;
@@ -40,7 +40,7 @@ trait MessagingServicesTrait
     public function queryBus(): TestQueryBus
     {
         if (null === $this->testQueryBus) {
-            $this->testQueryBus = new TestQueryBus($this->serviceContainer());
+            $this->testQueryBus = new TestQueryBus();
         }
 
         return $this->testQueryBus;

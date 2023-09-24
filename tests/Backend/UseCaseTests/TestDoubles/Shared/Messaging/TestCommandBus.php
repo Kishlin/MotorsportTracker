@@ -25,6 +25,7 @@ final readonly class TestCommandBus implements CommandBus
         // Cache
 
         if ($command instanceof UpdateDriverAnalyticsCacheCommand) {
+            // @phpstan-ignore-next-line
             return $this->testServiceContainer->updateDriverDriverAnalyticsCacheCommandHandler()($command);
         }
 

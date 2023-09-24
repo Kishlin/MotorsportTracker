@@ -14,6 +14,9 @@ final readonly class SeasonEventIdListDTO
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function idList(): array
     {
         return $this->idList;

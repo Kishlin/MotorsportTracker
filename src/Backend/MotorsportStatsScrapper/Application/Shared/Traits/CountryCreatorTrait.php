@@ -25,7 +25,7 @@ trait CountryCreatorTrait
         return $countryId;
     }
 
-    private function getCountryCode($picture): ?string
+    private function getCountryCode(?string $picture): ?string
     {
         if (null === $picture) {
             return null;

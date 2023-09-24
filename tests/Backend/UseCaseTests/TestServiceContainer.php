@@ -13,7 +13,6 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\MotorsportETL\SharedServicesTrai
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\MessagingServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\PersistenceServicesTrait;
 use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\RandomnessServicesTrait;
-use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\TimeServicesTrait;
 
 final class TestServiceContainer
 {
@@ -26,7 +25,6 @@ final class TestServiceContainer
     use MessagingServicesTrait;
     use PersistenceServicesTrait;
     use RandomnessServicesTrait;
-    use TimeServicesTrait;
 
     public function serviceContainer(): self
     {
