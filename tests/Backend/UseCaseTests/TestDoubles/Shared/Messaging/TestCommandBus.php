@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Messaging;
 
+use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateDriverAnalyticsCache\UpdateDriverAnalyticsCacheCommand;
 use Kishlin\Backend\MotorsportETL\Calendar\Application\ScrapCalendar\ScrapCalendarCommand;
 use Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons\ScrapSeasonsCommand;
 use Kishlin\Backend\MotorsportETL\Series\Application\ScrapSeriesList\ScrapSeriesListCommand;
@@ -21,6 +22,14 @@ final readonly class TestCommandBus implements CommandBus
 
     public function execute(Command $command): mixed
     {
+        // Cache
+
+        if ($command instanceof UpdateDriverAnalyticsCacheCommand) {
+            return $this->testServiceContainer->updateDriverDriverAnalyticsCacheCommandHandler()($command);
+        }
+
+        // ETL
+
         if ($command instanceof ScrapSeriesListCommand) {
             return $this->testServiceContainer->scrapSeriesListCommandHandler()($command);
         }

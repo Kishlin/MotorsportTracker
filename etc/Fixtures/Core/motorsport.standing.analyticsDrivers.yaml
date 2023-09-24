@@ -1,0 +1,47 @@
+maxVerstappenInFormulaOne2023:
+  season: '@motorsport.championship.season.formulaOne2023'
+  driver: '@motorsport.driver.driver.maxVerstappen'
+  country: '@country.country.netherlands'
+  position: 1
+  points: 314.0
+  avgFinishPosition: 1.17
+  classWins: 0
+  fastestLaps: 6
+  finalAppearances: 0
+  hatTricks: 2
+  podiums: 12
+  poles: 7
+  racesLed: 17
+  ralliesLed: 0
+  retirements: 0
+  semiFinalAppearances: 0
+  stageWins: 0
+  starts: 12
+  top10s: 12
+  top5s: 12
+  wins: 10
+  winsPercentage: 83.33
+
+lewisHamiltonInFormulaOne2023:
+  season: '@motorsport.championship.season.formulaOne2023'
+  driver: '@motorsport.driver.driver.lewisHamilton'
+  country: '@country.country.unitedKingdom'
+  position: 4
+  points: 148.0
+  avgFinishPosition: 4.33
+  classWins: 0
+  fastestLaps: 2
+  finalAppearances: 0
+  hatTricks: 2
+  podiums: 4
+  poles: 1
+  racesLed: 0
+  ralliesLed: 0
+  retirements: 0
+  semiFinalAppearances: 0
+  stageWins: 0
+  starts: 12
+  top10s: 12
+  top5s: 9
+  wins: 0
+  winsPercentage: 0

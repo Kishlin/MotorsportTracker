@@ -11,6 +11,21 @@ abstract class MotorsportTrackerContext implements Context
 {
     private static ?TestServiceContainer $container = null;
 
+    public function formatFixtureName(string $parameterValue): string
+    {
+        return lcfirst(str_replace(' ', '', $parameterValue));
+    }
+
+    public function formatCacheKey(string $cacheKey): string
+    {
+        return strtolower(str_replace(' ', '-', $cacheKey));
+    }
+
+    public function fixtureId(string $fixture): string
+    {
+        return self::container()->coreFixtureLoader()->identifier($fixture);
+    }
+
     protected static function container(): TestServiceContainer
     {
         if (null === self::$container) {

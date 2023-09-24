@@ -1,3 +1,7 @@
+formulaOne2023:
+  championshipId: '@motorsport.championship.series.formulaOne'
+  year: 2023
+
 formulaOne2022:
   championshipId: '@motorsport.championship.series.formulaOne'
   year: 2022

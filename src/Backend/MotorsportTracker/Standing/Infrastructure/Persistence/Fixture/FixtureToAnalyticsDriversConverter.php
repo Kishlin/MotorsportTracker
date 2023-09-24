@@ -12,7 +12,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\Fixture;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureConverter;
 
-final class FixtureToAnalyticsConverter implements FixtureConverter
+final class FixtureToAnalyticsDriversConverter implements FixtureConverter
 {
     public function convert(Fixture $fixture): AggregateRoot
     {

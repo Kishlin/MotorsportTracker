@@ -11,11 +11,11 @@ use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-final readonly class CachePersisterImpl implements CachePersister
+final readonly class CachePersisterUsingPool implements CachePersister
 {
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
-        private LoggerInterface $logger
+        private ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -36,6 +36,6 @@ final readonly class CachePersisterImpl implements CachePersister
 
         $this->cacheItemPool->save($item);
 
-        $this->logger->info("Saved new cache item with key {$key}");
+        $this->logger?->info("Saved new cache item with key {$key}");
     }
 }

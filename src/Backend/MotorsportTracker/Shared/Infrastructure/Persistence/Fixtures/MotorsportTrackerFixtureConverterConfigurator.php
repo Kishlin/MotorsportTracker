@@ -15,7 +15,7 @@ use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fixtures
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fixtures\FixtureToEntryConverter;
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fixtures\FixtureToRaceLapConverter;
 use Kishlin\Backend\MotorsportTracker\Result\Infrastructure\Persistence\Fixtures\FixtureToRetirementConverter;
-use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Fixture\FixtureToAnalyticsConverter;
+use Kishlin\Backend\MotorsportTracker\Standing\Infrastructure\Persistence\Fixture\FixtureToAnalyticsDriversConverter;
 use Kishlin\Backend\MotorsportTracker\Team\Infrastructure\Persistence\Fixtures\FixtureToTeamConverter;
 use Kishlin\Backend\MotorsportTracker\Venue\Infrastructure\Persistence\Fixtures\FixtureToVenueConverter;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
@@ -43,7 +43,7 @@ final class MotorsportTrackerFixtureConverterConfigurator
         $fixtureSaver->addConverter('motorsport.result.retirement', new FixtureToRetirementConverter());
         $fixtureSaver->addConverter('motorsport.result.classification', new FixtureToClassificationConverter());
 
-        $fixtureSaver->addConverter('motorsport.standing.analytics', new FixtureToAnalyticsConverter());
+        $fixtureSaver->addConverter('motorsport.standing.analyticsDrivers', new FixtureToAnalyticsDriversConverter());
 
         $fixtureSaver->addConverter('motorsport.team.team', new FixtureToTeamConverter());
 
