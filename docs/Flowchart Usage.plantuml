@@ -1,0 +1,83 @@
+@startuml
+
+actor User as user
+
+box MotorsportTracker
+actor CLI as cli
+boundary Next as next
+database "Next Cache" as nextCache
+boundary api
+database cache
+database memcached as memd
+control worker
+database core
+control etl
+endbox
+
+boundary "Motorsportstas.com" as external
+== Usage ==
+
+cli --> next++: start()
+
+alt Static Site Generation
+user --> next: GET https://motorsportanalytics.com/standings
+next --> nextCache++: standings()
+return
+next --> user: HTML + CSS
+
+else Server Side Rendering
+
+user --> next: GET https://motorsportanalytics.com/upcoming
+next --> next: Server Side Rendering
+activate next
+next --> api++: upcoming()
+api --> cache++: events()
+return
+return
+next --> user: HTML + CSS
+deactivate next
+
+end
+
+
+== Updates ==
+
+cli --> etl++: scrapStandings()
+etl --> external++: extract()
+return
+etl --> etl: transform()
+etl --> core: load()
+return OK
+
+cli --> worker++: syncStandings()
+worker --> core++: query()
+return
+worker --> worker: compute()
+worker --> memd: save()
+return OK
+
+cli --> next++: invalidateStandings()
+next --> nextCache++: invalidateStandings()
+return
+return OK
+
+
+user --> next: GET https://motorsportanalytics.com/standings
+next --> next: Server Side Rendering
+activate next
+next --> api++: standings()
+api --> memd++: standings()
+return
+return
+next --> nextCache++: save()
+return
+next --> user: HTML + CSS
+deactivate next
+
+user --> next: GET https://motorsportanalytics.com/standings
+next --> nextCache++: query()
+return
+next --> user: HTML + CSS
+
+@enduml
+

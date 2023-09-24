@@ -1,0 +1,45 @@
+```plantuml
+
+cloud "Motorsportstats.com" as external
+cloud RacingSim as sim
+
+actor User
+actor VroomTM
+
+package "MotorsportTracker" {
+    control ETL
+    node API
+    node Next
+    node AppVroom
+
+    control Worker
+
+    database Core
+    database Cache
+
+    storage Memcached
+}
+
+external -left-> ETL
+sim -up-> ETL
+
+ETL -left-> Core
+
+Core -down-> Worker
+
+Worker -down-> Cache
+Worker -down-> Memcached
+
+Cache -down-> API
+Memcached -down-> API
+
+API -right-> Next
+API -down-> AppVroom
+
+VroomTM -left-> AppVroom
+AppVroom -right-> VroomTM
+
+User -left-> Next
+Next -right-> User
+
+```

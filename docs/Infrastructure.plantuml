@@ -1,0 +1,37 @@
+```plantuml
+
+cloud "Motorsportstats.com" as external
+
+actor User
+
+package "MotorsportTracker" {
+    control ETL
+    node API
+    node Next
+
+    control Worker
+
+    database Core
+    database Cache
+
+    storage Memcached
+}
+
+external -left-> ETL
+
+ETL -left-> Core
+
+Core -down-> Worker
+
+Worker -down-> Cache
+Worker -down-> Memcached
+
+Cache -down-> API
+Memcached -down-> API
+
+API -right-> Next
+
+User -left-> Next
+Next -right-> User
+
+```

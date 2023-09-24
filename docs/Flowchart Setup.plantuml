@@ -1,0 +1,55 @@
+@startuml
+
+actor User as user
+
+box MotorsportTracker
+actor CLI as cli
+boundary Next as next
+database "Next Cache" as nextCache
+boundary api
+database cache
+database memcached as memd
+control worker
+database core
+control etl
+endbox
+
+boundary "Motorsportstas.com" as external
+
+== Scrapping ==
+
+cli --> etl++: scrap()
+etl --> external++: extract()
+return
+etl --> etl: transform()
+etl --> core: load()
+return OK
+
+== Sync ==
+
+cli --> worker++: syncCalendar()
+worker --> core++: query()
+return
+worker --> worker: compute()
+worker --> cache: save()
+return OK
+
+cli --> worker++: syncStandings()
+worker --> core++: query()
+return
+worker --> worker: compute()
+worker --> memd: save()
+return
+
+== Static Generation ==
+
+cli --> next++: build()
+next --> next: Static Site Generation
+next --> api++: request()
+api --> memd++: query()
+return
+return
+next --> nextCache: save()
+return
+
+@enduml
