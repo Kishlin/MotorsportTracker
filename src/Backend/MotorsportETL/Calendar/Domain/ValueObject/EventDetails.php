@@ -55,7 +55,7 @@ final readonly class EventDetails implements Mapped
             $index,
             $data['name'],
             $data['shortName'],
-            $data['status'],
+            empty($data['status']) ? null : $data['status'],
             DateTimeUtils::dateTimeOrNull($data['startTimeUtc']),
             DateTimeUtils::dateTimeOrNull($data['endTimeUtc']),
             $data['shortCode'],
