@@ -16,8 +16,8 @@ use Kishlin\Tests\Backend\UseCaseTests\Services\Shared\RandomnessServicesTrait;
 
 final class TestServiceContainer
 {
-    use CacheSharedServicesTrait;
     use CacheAnalyticsServicesTrait;
+    use CacheSharedServicesTrait;
     use ETLCalendarServicesTrait;
     use ETLSeasonServicesTrait;
     use ETLSeriesServicesTrait;
