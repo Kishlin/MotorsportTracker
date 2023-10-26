@@ -22,6 +22,7 @@
         "firebase/php-jwt": "^6.0",
         "nelmio/cors-bundle": "^2.2",
         "ramsey/uuid": "^4.2",
+        "symfony/amazon-sqs-messenger": "6.0.*",
         "symfony/asset": "6.0.*",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",

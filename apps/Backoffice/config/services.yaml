@@ -62,6 +62,19 @@ services:
     tags:
       - { name: messenger.bus }
 
+  Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Task\InMemoryTaskBusUsingSymfony'
+    arguments:
+      - '@symfony.messenger.bus.task'
+    tags:
+      - { name: messenger.bus }
+
+  Symfony\Component\Messenger\Command\ConsumeMessagesCommand:
+    class: 'Symfony\Component\Messenger\Command\ConsumeMessagesCommand'
+    bind:
+      $routableBus: '@messenger.receiver_locator'
+      $receiverLocator: '@service_container'
+    tags: ['console.command']
 
   ##> Time
 
@@ -115,6 +128,17 @@ services:
       $password: '%env(DB_CLIENT_PASSWORD)%'
     public: true
 
+  kishlin.app.infrastructure.connection.admin:
+    class: Kishlin\Backend\Persistence\Core\Connection\Connection
+    factory: [ Kishlin\Backend\Persistence\PDO\PDOConnection, create ]
+    arguments:
+      $host: '%env(DB_ADMIN_HOST)%'
+      $port: '%env(DB_ADMIN_PORT)%'
+      $dbName: '%env(DB_ADMIN_NAME)%'
+      $user: '%env(DB_ADMIN_USER)%'
+      $password: '%env(DB_ADMIN_PASSWORD)%'
+    public: true
+
   Kishlin\Backend\Persistence\Core\Connection\Connection:
     alias: 'kishlin.app.infrastructure.connection.core'
 
@@ -142,6 +166,14 @@ services:
       $table: 'migration_version'
       $folder: '%kishlin.src.dir%/etc/Migrations/Client'
 
+  Kishlin\Backend\Persistence\Migration\Migrator.admin:
+    class: Kishlin\Backend\Persistence\Migration\Migrator
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.admin'
+      $namespace: '\Migrations\Admin'
+      $table: 'migration_version'
+      $folder: '%kishlin.src.dir%/etc/Migrations/Admin'
+
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony:
     class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
@@ -160,6 +192,12 @@ services:
       $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.client'
       $database: 'client'
 
+  Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony.admin:
+    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    bind:
+      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.admin'
+      $database: 'admin'
+
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony:
     class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
@@ -177,6 +215,12 @@ services:
     bind:
       $connection: '@kishlin.app.infrastructure.connection.client'
       $database: 'client'
+
+  Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony.admin:
+    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    bind:
+      $connection: '@kishlin.app.infrastructure.connection.admin'
+      $database: 'admin'
 
   Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer:
     class: Kishlin\Backend\Shared\Infrastructure\Persistence\LocationComputer
@@ -240,11 +284,17 @@ services:
     Kishlin\Backend\Shared\Domain\Bus\Event\EventSubscriber:
       tags: ['kishlin.application_service']
 
+    Kishlin\Backend\Shared\Domain\Bus\Event\EventListener:
+      tags: ['kishlin.application_service']
+
     Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler:
       tags: ['kishlin.application_service']
 
     Kishlin\Backend\Shared\Domain\Bus\Query\QueryHandler:
       tags: ['kishlin.application_service']
+
+    Kishlin\Backend\Shared\Domain\Bus\Task\TaskHandler:
+      tags: ['kishlin.messaging.task_handler']
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepository:
       bind:
@@ -257,6 +307,10 @@ services:
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ClientRepository:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.client'
+
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\AdminRepositoryInterface:
+      bind:
+        $connection: '@kishlin.app.infrastructure.connection.admin'
 
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ClientRepositoryInterface:
       bind:

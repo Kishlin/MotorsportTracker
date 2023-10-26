@@ -2,6 +2,17 @@ version: '3'
 
 services:
 
+  sqs:
+    container_name: sqs-${PROJECT}
+    image: ${PROJECT}-sqs:${SQS_VERSION}
+    build:
+      context: ./.docker/sqs/${SQS_VERSION}
+    restart: on-failure
+    ports:
+      - "${SQS_PORT_EXTERNAL}:9324"
+    networks:
+        - "docker-app"
+
   memcached:
     container_name: memcached-${PROJECT}
     image: ${PROJECT}-memcached:${MEMCACHED_VERSION}

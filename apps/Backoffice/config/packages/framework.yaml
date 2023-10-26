@@ -9,11 +9,18 @@ framework:
     log: true
 
   messenger:
+    transports:
+      async:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+      sync: 'sync://'
+    routing:
+      'Kishlin\Backend\Shared\Domain\Bus\Task\Task': async
     default_bus: symfony.messenger.bus.command
     buses:
       symfony.messenger.bus.command: ~
       symfony.messenger.bus.event: ~
       symfony.messenger.bus.query: ~
+      symfony.messenger.bus.task: ~
 
   cache:
     default_memcached_provider: 'memcached://%kishlin.memcached.dsn%'
