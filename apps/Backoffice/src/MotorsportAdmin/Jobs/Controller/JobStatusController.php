@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Jobs\Controller;
 
+use Kishlin\Apps\Backoffice\MotorsportAdmin\Shared\Controller\NotFoundOrContentResponseTrait;
 use Kishlin\Backend\MotorsportAdmin\Jobs\Application\JobStatus\JobStatusService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
@@ -21,16 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 )]
 final class JobStatusController extends AbstractController
 {
+    use NotFoundOrContentResponseTrait;
+
     public function __invoke(
         JobStatusService $jobStatusService,
         string $job,
     ): JsonResponse {
         $content = $jobStatusService->status($job);
 
-        if (null === $content) {
-            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-        }
-
-        return new JsonResponse($content->data());
+        return $this->notFoundOrContent($content);
     }
 }
