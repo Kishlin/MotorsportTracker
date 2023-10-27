@@ -23,7 +23,8 @@ final readonly class UnfinishedJobsService
                 [
                     ['status' => JobStatus::RUNNING->value],
                     ['status' => JobStatus::REQUESTED->value],
-                ]
+                ],
+                ['started_on' => 'DESC'],
             ),
         );
     }

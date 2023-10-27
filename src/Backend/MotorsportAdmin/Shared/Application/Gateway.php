@@ -8,8 +8,9 @@ interface Gateway
 {
     /**
      * @param array<array<string, null|bool|float|int|string>> $criteria
+     * @param array<string, string>                            $sorts
      *
      * @return array<int|string, array<int|string, mixed>>
      */
-    public function find(string $location, array $criteria = [], ?int $limit = null): array;
+    public function find(string $location, array $criteria = [], array $sorts = [], ?int $limit = null): array;
 }

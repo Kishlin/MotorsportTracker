@@ -16,7 +16,7 @@ final readonly class JobStatusService
 
     public function status(string $id): ?JsonResponse
     {
-        $jobs = $this->gateway->find('job', [['id' => $id]], 1);
+        $jobs = $this->gateway->find('job', [['id' => $id]], limit: 1);
 
         if (empty($jobs)) {
             return null;

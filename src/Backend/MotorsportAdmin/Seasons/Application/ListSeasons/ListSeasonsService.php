@@ -32,6 +32,7 @@ final readonly class ListSeasonsService
             $this->gateway->find(
                 'season',
                 [['series' => $seriesId]],
+                ['year' => 'DESC'],
             ),
         );
     }
