@@ -25,6 +25,15 @@
 /.nvm
 ###< Frontend ###
 
+###> Admin ###
+/apps/Admin/.env.local
+/apps/Admin/node
+/apps/Admin/build
+/apps/Admin/node_modules
+/apps/Admin/.next
+/.nvm
+###< Admin ###
+
 ###> phpunit/phpunit ###
 .phpunit.result.cache
 ###< phpunit/phpunit ###

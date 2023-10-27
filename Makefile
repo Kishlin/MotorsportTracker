@@ -78,10 +78,9 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 	@echo "All services should be running."
 	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
 	@echo "    Backend: http://localhost:8030/monitoring/check-health"
-	@echo "    Frontend: http://localhost:3000/monitoring/check-health"
-	@echo "You can access services with the root links."
-	@echo "    Backoffice: http://localhost:8040/"
-	@echo "    Frontend: http://localhost:3000/"
+	@echo "You can access fronts services."
+	@echo "    Frontend: http://localhost:3030/"
+	@echo "    Admin: http://localhost:3040/"
 	@echo "Ports may differ if overridden in the .env.local file."
 	@echo "Run static analysis: \`make complete-analysis\` (see Makefile for more options)."
 

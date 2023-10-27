@@ -42,6 +42,29 @@ services:
     networks:
       - "docker-app"
 
+  admin:
+    container_name: admin-${PROJECT}
+    image: ${PROJECT}-admin:${NODE_VERSION}
+    env_file:
+      - .env
+      - .env.local
+    build:
+      context: ./.docker/node/${NODE_VERSION}
+      args:
+        DOCKER_USER: kishlin
+        DOCKER_USER_ID: 1000
+    restart: on-failure
+    volumes:
+      - ${PWD}:/app
+      - cache:/srv/cache
+    ports:
+      - "${ADMIN_SERVER_PORT_EXTERNAL}:3000"
+    working_dir: "/app/apps/Admin"
+    user: kishlin
+    command: npm run install-and-start
+    networks:
+      - "docker-app"
+
   frontend:
     container_name: frontend-${PROJECT}
     image: ${PROJECT}-frontend:${NODE_VERSION}
