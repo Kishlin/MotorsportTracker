@@ -6,10 +6,10 @@ declare type LinkProps = {
     to: string,
 };
 
-const Link: React.FunctionComponent<LinkProps> = ({ to, children }) => (
+const AdminLink: React.FunctionComponent<LinkProps> = ({ to, children }) => (
     <LinkUsingNext href={to} legacyBehavior>
         {children}
     </LinkUsingNext>
 );
 
-export default Link;
+export default AdminLink;
