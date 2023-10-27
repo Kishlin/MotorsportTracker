@@ -15,14 +15,14 @@ final readonly class UnfinishedJobsService
     ) {
     }
 
-    public function all(): JsonResponse
+    public function forType(string $type): JsonResponse
     {
         return JsonResponse::fromData(
             $this->gateway->find(
                 'job',
                 [
-                    ['status' => JobStatus::RUNNING->value],
-                    ['status' => JobStatus::REQUESTED->value],
+                    ['type' => $type, 'status' => JobStatus::RUNNING->value],
+                    ['type' => $type, 'status' => JobStatus::REQUESTED->value],
                 ],
                 ['started_on' => 'DESC'],
             ),

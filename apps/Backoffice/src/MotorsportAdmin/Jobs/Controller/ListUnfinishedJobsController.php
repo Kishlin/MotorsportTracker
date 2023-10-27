@@ -11,17 +11,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '/',
+    '/{type}',
     name: 'jobs_unfinished',
+    requirements: ['type' => '[\w+_]+'],
     methods: [Request::METHOD_GET],
 )]
 final class ListUnfinishedJobsController extends AbstractController
 {
     public function __invoke(
         UnfinishedJobsService $unfinishedJobsService,
+        string $type,
     ): JsonResponse {
         return new JsonResponse(
-            $unfinishedJobsService->all()->data(),
+            $unfinishedJobsService->forType($type)->data(),
         );
     }
 }
