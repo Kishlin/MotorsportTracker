@@ -1,5 +1,13 @@
+jobs:
+  resource: ../../src/MotorsportAdmin/Jobs/Controller/
+  prefix: /api/v1/jobs
+  type: annotation
+  stateless: true
+
 series:
   resource: ../../src/MotorsportAdmin/Series/Controller/
   prefix: /api/v1/series
   type: annotation
   stateless: true
+
+

@@ -27,6 +27,7 @@ final readonly class JobStartedEventListener implements EventListener
             $this->logger?->error('Job not found', ['uuid' => $event->uuid()]);
 
             $event->flagJobAsNotFound();
+
             return;
         }
 
@@ -34,6 +35,7 @@ final readonly class JobStartedEventListener implements EventListener
             $this->logger?->warning('Job already started', ['uuid' => $event->uuid()]);
 
             $event->flagJobAsAlreadyStarted();
+
             return;
         }
 
