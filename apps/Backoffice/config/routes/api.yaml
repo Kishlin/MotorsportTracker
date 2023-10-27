@@ -1,0 +1,5 @@
+series:
+  resource: ../../src/MotorsportAdmin/Series/Controller/
+  prefix: /api/v1/series
+  type: annotation
+  stateless: true
