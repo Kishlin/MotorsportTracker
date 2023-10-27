@@ -6,5 +6,5 @@ namespace Kishlin\Backend\Shared\Domain\Bus\Task;
 
 interface TaskBus
 {
-    public function execute(Task $task): void;
+    public function execute(Task $task): bool;
 }

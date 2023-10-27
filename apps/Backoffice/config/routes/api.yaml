@@ -4,6 +4,12 @@ jobs:
   type: annotation
   stateless: true
 
+seasons:
+  resource: ../../src/MotorsportAdmin/Seasons/Controller/
+  prefix: /api/v1/seasons
+  type: annotation
+  stateless: true
+
 series:
   resource: ../../src/MotorsportAdmin/Series/Controller/
   prefix: /api/v1/series

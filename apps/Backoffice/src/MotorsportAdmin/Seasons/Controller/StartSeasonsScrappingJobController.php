@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Series\Controller;
+namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Seasons\Controller;
 
 use Kishlin\Backend\MotorsportTask\Job\Application\RecordJob\RecordJobCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -15,17 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '',
-    name: 'series_scrap',
+    '/{series}',
+    name: 'seasons_scrap',
+    requirements: [
+        'series' => '^[^/]+$',
+    ],
     methods: [Request::METHOD_POST],
 )]
-final class StartSeriesScrappingJobController extends AbstractController
+final class StartSeasonsScrappingJobController extends AbstractController
 {
     public function __invoke(
         CommandBus $commandBus,
         TaskBus $taskBus,
+        string $series,
     ): JsonResponse {
-        $uuid = $commandBus->execute(RecordJobCommand::scrapSeriesJob());
+        $uuid = $commandBus->execute(RecordJobCommand::scrapSeasons($series));
         assert($uuid instanceof UuidValueObject);
 
         return new JsonResponse(['uuid' => $uuid->value()], Response::HTTP_ACCEPTED);

@@ -8,6 +8,7 @@ namespace Kishlin\Backend\MotorsportTask\Job\Domain\Entity;
 
 use DateTimeImmutable;
 use Exception;
+use InvalidArgumentException;
 use JsonException;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobStatus;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
@@ -85,6 +86,21 @@ final class Job extends Entity
         return $this->status->value() === $status->value;
     }
 
+    public function isOfType(JobType $type): bool
+    {
+        return $this->type->value() === $type->value;
+    }
+
+    public function stringParam(string $key): string
+    {
+        $this->guardAgainstMissingParam($key);
+
+        $value = $this->params->value()[$key];
+        assert(is_string($value));
+
+        return $value;
+    }
+
     /**
      * @throws JsonException
      */
@@ -98,5 +114,12 @@ final class Job extends Entity
             'started_on'  => $this->startedOn->value()->format('Y-m-d H:i:s'),
             'finished_on' => $this->finishedOn->value()?->format('Y-m-d H:i:s'),
         ];
+    }
+
+    private function guardAgainstMissingParam(string $key): void
+    {
+        if (false === array_key_exists($key, $this->params->value())) {
+            throw new InvalidArgumentException(sprintf('Missing param "%s" in job "%s"', $key, $this->id->value()));
+        }
     }
 }

@@ -25,9 +25,11 @@ final readonly class InMemoryTaskBusUsingSymfony implements TaskBus
     /**
      * @throws Throwable
      */
-    public function execute(Task $task): void
+    public function execute(Task $task): bool
     {
         $stamp = $this->commandBus->dispatch($task)->last(SentStamp::class);
         assert($stamp instanceof SentStamp);
+
+        return true;
     }
 }

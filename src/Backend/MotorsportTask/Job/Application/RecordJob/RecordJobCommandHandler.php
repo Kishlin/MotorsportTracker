@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTask\Job\Application\RecordJob;
 
+use Kishlin\Backend\MotorsportTask\Job\Application\ExecuteJob\ExecuteJobCommand;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\SaveJobGateway;
+use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Domain\Time\Clock;
@@ -16,6 +18,7 @@ final readonly class RecordJobCommandHandler implements CommandHandler
     public function __construct(
         private SaveJobGateway $saveJobGateway,
         private UuidGenerator $uuidGenerator,
+        private CommandBus $commandBus,
         private Clock $clock,
     ) {
     }
@@ -27,6 +30,8 @@ final readonly class RecordJobCommandHandler implements CommandHandler
         $job = Job::new($uuid, $this->clock->now(), $command->type(), $command->params());
 
         $this->saveJobGateway->save($job);
+
+        $this->commandBus->execute(ExecuteJobCommand::forJob($uuid->value()));
 
         return $uuid;
     }
