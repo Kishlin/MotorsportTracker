@@ -1,6 +1,6 @@
 export type JobType = 'scrap_series'|'scrap_seasons';
 
-export type JobStatus = 'requested'|'running'|'success';
+export type JobStatus = 'requested'|'running'|'finished';
 
 export type Job = {
     id: string;

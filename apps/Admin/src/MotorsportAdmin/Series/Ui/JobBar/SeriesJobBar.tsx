@@ -9,7 +9,10 @@ import {
 } from 'react';
 
 import { SnackbarContext, SnackbarContextType } from '../../../../Shared/Context/Snackbar/SnackbarContext';
+import { SeriesContext, SeriesContextType } from '../../Context/SeriesContext';
+import jobStatusApi from '../../../Jobs/Api/JobsStatusApi';
 import SeriesJobBarContent from './SeriesJobBarContent';
+import scrapSeriesApi from '../../Api/ScrapSeriesApi';
 import jobsApi from '../../../Jobs/Api/JobsApi';
 import { Job } from '../../../Shared/Types';
 
@@ -17,23 +20,47 @@ const SeriesJobBar: FunctionComponent = () => {
     const [jobs, setJobs] = useState<Array<Job>>([]);
 
     const { showSnackAlert } = useContext<SnackbarContextType>(SnackbarContext);
+    const { refreshSeries } = useContext<SeriesContextType>(SeriesContext);
 
-    const refreshJobs = async () => {
-        setJobs(await jobsApi('scrap_series'));
+    const checkJobStatus = async (id: string) => {
+        const job = await jobStatusApi(id);
+
+        if ('finished' === job.status) {
+            await refreshSeries();
+            await refreshJobs();
+        } else {
+            setTimeout(
+                () => {
+                    checkJobStatus(id);
+                },
+                500,
+            );
+        }
     };
 
-    const showAlertAndRefreshJobs = async (id: string) => {
-        showSnackAlert(`Job started: ${id}`);
+    const refreshJobs = async () => {
+        const newJobs = await jobsApi('scrap_series');
+
+        await setJobs(newJobs);
+    };
+
+    const startANewJob = async () => {
+        const response = await scrapSeriesApi();
+
         const tempJob = {
             started_on: new Date().toISOString(),
             type: 'scrap_series',
             status: 'requested',
             finished_on: null,
+            id: response.uuid,
             params: '{}',
-            id,
         } as Job;
 
-        setJobs([...jobs, tempJob]);
+        await setJobs([tempJob, ...jobs]);
+
+        showSnackAlert(`Job started: ${response.uuid}`);
+        await refreshJobs();
+        await checkJobStatus(response.uuid);
     };
 
     useEffect(
@@ -44,7 +71,7 @@ const SeriesJobBar: FunctionComponent = () => {
                 () => {
                     refreshJobs();
                 },
-                3000,
+                10000,
             );
 
             return () => clearInterval(interval);
@@ -54,7 +81,7 @@ const SeriesJobBar: FunctionComponent = () => {
 
     return (
         <Box sx={{ my: 2 }}>
-            <SeriesJobBarContent jobs={jobs} onJobStarted={showAlertAndRefreshJobs} />
+            <SeriesJobBarContent jobs={jobs} onJobRequested={startANewJob} />
         </Box>
     );
 };

@@ -19,6 +19,8 @@ final readonly class ListSeriesService
         return JsonResponse::fromData(
             $this->gateway->find(
                 'series',
+                [],
+                ['name' => 'ASC'],
             ),
         );
     }

@@ -2,18 +2,19 @@
 
 import {
     Paper,
-    Table, TableBody,
-    TableContainer,
-    TableHead,
+    Table,
     TableRow,
+    TableHead,
+    TableBody,
+    TableContainer,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useContext, useEffect } from 'react';
 
+import { SeriesContext, SeriesContextType } from '../../Context/SeriesContext';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import { Series } from '../../../Shared/Types';
-import seriesListApi from '../../Api/SeriesListApi';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -26,11 +27,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const SeriesTable: FunctionComponent = () => {
-    const [series, setSeries] = useState<Array<Series>>([]);
+    const { series, refreshSeries } = useContext<SeriesContextType>(SeriesContext);
 
     useEffect(
         () => {
-            seriesListApi().then(setSeries);
+            refreshSeries();
         },
         [],
     );
