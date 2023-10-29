@@ -1,9 +1,10 @@
-import SeriesJobBar from '../../../src/MotorsportAdmin/Series/JobBar/SeriesJobBar';
+import SeriesTable from '../../../src/MotorsportAdmin/Series/Ui/SeriesTable/SeriesTable';
+import SeriesJobBar from '../../../src/MotorsportAdmin/Series/Ui/JobBar/SeriesJobBar';
 
 const Page = async () => (
     <>
         <SeriesJobBar />
-        <p>Hello World</p>
+        <SeriesTable />
     </>
 );
 
