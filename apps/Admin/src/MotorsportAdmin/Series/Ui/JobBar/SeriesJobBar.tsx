@@ -1,49 +1,39 @@
 'use client';
 
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { Snackbar } from '@mui/material';
 import Box from '@mui/material/Box';
 import {
-    forwardRef,
     FunctionComponent,
-    SyntheticEvent,
+    useContext,
     useEffect,
     useState,
 } from 'react';
 
+import { SnackbarContext, SnackbarContextType } from '../../../../Shared/Context/Snackbar/SnackbarContext';
 import SeriesJobBarContent from './SeriesJobBarContent';
 import jobsApi from '../../../Jobs/Api/JobsApi';
 import { Job } from '../../../Shared/Types';
 
-const Alert = forwardRef<HTMLDivElement, AlertProps>((
-    props,
-    ref,
-) => (
-    <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-));
-
 const SeriesJobBar: FunctionComponent = () => {
-    const [message, setMessage] = useState<string>('');
-    const [open, setOpen] = useState<boolean>(false);
     const [jobs, setJobs] = useState<Array<Job>>([]);
+
+    const { showSnackAlert } = useContext<SnackbarContextType>(SnackbarContext);
 
     const refreshJobs = async () => {
         setJobs(await jobsApi('scrap_series'));
     };
 
-    const showSnackAlert = (newMessage: string) => {
-        setMessage(newMessage);
-        setOpen(true);
+    const showAlertAndRefreshJobs = async (id: string) => {
+        showSnackAlert(`Job started: ${id}`);
+        const tempJob = {
+            started_on: new Date().toISOString(),
+            type: 'scrap_series',
+            status: 'requested',
+            finished_on: null,
+            params: '{}',
+            id,
+        } as Job;
 
-        refreshJobs();
-    };
-
-    const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
-        if ('clickaway' === reason) {
-            return;
-        }
-
-        setOpen(false);
+        setJobs([...jobs, tempJob]);
     };
 
     useEffect(
@@ -64,12 +54,7 @@ const SeriesJobBar: FunctionComponent = () => {
 
     return (
         <Box sx={{ my: 2 }}>
-            <SeriesJobBarContent jobs={jobs} onJobStarted={showSnackAlert} />
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    {message}
-                </Alert>
-            </Snackbar>
+            <SeriesJobBarContent jobs={jobs} onJobStarted={showAlertAndRefreshJobs} />
         </Box>
     );
 };

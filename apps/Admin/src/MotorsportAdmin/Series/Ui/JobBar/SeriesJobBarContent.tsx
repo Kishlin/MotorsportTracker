@@ -5,7 +5,7 @@ import scrapSeriesApi from '../../Api/ScrapSeriesApi';
 import { Job } from '../../../Shared/Types';
 
 declare type SeriesJobBarContentProps = {
-    onJobStarted: (message: string) => void,
+    onJobStarted: (id: string) => void,
     jobs: Array<Job>,
 };
 
@@ -13,7 +13,7 @@ const SeriesJobBarContent: FunctionComponent<SeriesJobBarContentProps> = ({ jobs
     const startJobThroughApi = async () => {
         const response = await scrapSeriesApi();
 
-        onJobStarted(`Job started: ${response.uuid}`);
+        onJobStarted(response.uuid);
     };
 
     if (0 === jobs.length) {

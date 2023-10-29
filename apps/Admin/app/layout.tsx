@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { Metadata } from 'next';
 
 import ThemeRegistry from './ThemeRegistry';
+import { SnackbarProvider } from '../src/Shared/Context/Snackbar/SnackbarContext';
 
 // noinspection JSUnusedGlobalSymbols
 export const metadata: Metadata = {
@@ -30,7 +31,9 @@ const RootLayout = ({
         </head>
         <body>
             <ThemeRegistry options={{ key: 'mui' }}>
-                {children}
+                <SnackbarProvider>
+                    {children}
+                </SnackbarProvider>
             </ThemeRegistry>
         </body>
     </html>
