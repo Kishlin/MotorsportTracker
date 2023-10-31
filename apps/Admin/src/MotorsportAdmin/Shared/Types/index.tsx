@@ -19,4 +19,5 @@ export type Series = {
     short_name: string;
     short_code: string;
     ref: string;
+    seasons: number;
 };

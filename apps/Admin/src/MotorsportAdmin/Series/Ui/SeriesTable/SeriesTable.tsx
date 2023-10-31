@@ -10,11 +10,14 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { FunctionComponent, useContext, useEffect } from 'react';
+import { faRotate } from '@fortawesome/free-solid-svg-icons/faRotate';
 
 import { SeriesContext, SeriesContextType } from '../../Context/SeriesContext';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import { Series } from '../../../Shared/Types';
+import FontAwesomeSvgIcon from '../../../../Shared/Ui/Icon/FontAwesomeSvgIcon';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -46,7 +49,11 @@ const SeriesTable: FunctionComponent = () => {
         (item: Series) => (
             <StyledTableRow key={item.id}>
                 <StyledTableCell align="left">{item.name}</StyledTableCell>
-                <StyledTableCell align="right">Actions</StyledTableCell>
+                <StyledTableCell align="right">{item.seasons}</StyledTableCell>
+                <StyledTableCell align="right">
+                    <FontAwesomeSvgIcon icon={faEye} sx={{ mr: 1 }} />
+                    <FontAwesomeSvgIcon icon={faRotate} />
+                </StyledTableCell>
             </StyledTableRow>
         ),
     );
@@ -57,6 +64,7 @@ const SeriesTable: FunctionComponent = () => {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell align="left">Name</StyledTableCell>
+                        <StyledTableCell align="right">Seasons</StyledTableCell>
                         <StyledTableCell align="right">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
