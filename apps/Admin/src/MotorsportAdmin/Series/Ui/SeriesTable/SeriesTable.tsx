@@ -1,6 +1,7 @@
 'use client';
 
 import {
+    Button,
     Paper,
     Table,
     TableRow,
@@ -8,16 +9,20 @@ import {
     TableBody,
     TableContainer,
 } from '@mui/material';
+import {
+    useEffect,
+    useContext,
+    FunctionComponent,
+} from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
-import { FunctionComponent, useContext, useEffect } from 'react';
-import { faRotate } from '@fortawesome/free-solid-svg-icons/faRotate';
 
 import { SeriesContext, SeriesContextType } from '../../Context/SeriesContext';
-import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
-import { Series } from '../../../Shared/Types';
 import FontAwesomeSvgIcon from '../../../../Shared/Ui/Icon/FontAwesomeSvgIcon';
+import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
+import SeriesSeasonsButton from './SeriesSeasonsButton';
+import { Series } from '../../../Shared/Types';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -28,6 +33,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
+
+declare type SeasonsJobStarterType = (seriesToCompute: Series) => () => Promise<void>;
 
 const SeriesTable: FunctionComponent = () => {
     const { series, refreshSeries } = useContext<SeriesContextType>(SeriesContext);
@@ -51,8 +58,10 @@ const SeriesTable: FunctionComponent = () => {
                 <StyledTableCell align="left">{item.name}</StyledTableCell>
                 <StyledTableCell align="right">{item.seasons}</StyledTableCell>
                 <StyledTableCell align="right">
-                    <FontAwesomeSvgIcon icon={faEye} sx={{ mr: 1 }} />
-                    <FontAwesomeSvgIcon icon={faRotate} />
+                    <SeriesSeasonsButton series={item} />
+                    <Button onClick={() => {}} sx={{ p: 0, display: 'inline-block', height: 24 }}>
+                        <FontAwesomeSvgIcon icon={faEye} />
+                    </Button>
                 </StyledTableCell>
             </StyledTableRow>
         ),

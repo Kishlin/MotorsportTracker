@@ -22,6 +22,12 @@ const SeriesJobBar: FunctionComponent = () => {
     const { showSnackAlert } = useContext<SnackbarContextType>(SnackbarContext);
     const { refreshSeries } = useContext<SeriesContextType>(SeriesContext);
 
+    const refreshJobs = async () => {
+        const newJobs = await jobsApi('scrap_series');
+
+        await setJobs(newJobs);
+    };
+
     const checkJobStatus = async (id: string) => {
         const job = await jobStatusApi(id);
 
@@ -36,12 +42,6 @@ const SeriesJobBar: FunctionComponent = () => {
                 500,
             );
         }
-    };
-
-    const refreshJobs = async () => {
-        const newJobs = await jobsApi('scrap_series');
-
-        await setJobs(newJobs);
     };
 
     const startANewJob = async () => {
