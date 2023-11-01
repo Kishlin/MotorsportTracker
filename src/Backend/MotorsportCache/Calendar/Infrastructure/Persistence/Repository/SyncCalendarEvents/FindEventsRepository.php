@@ -29,7 +29,7 @@ SELECT
     e.id as reference,
     e.index as index,
     e.name as name,
-    CONCAT(cs.name, '_', s.year, '_', e.name) as slug,
+    CONCAT(cs.name, '_', s.year, '_', e.index, '_', e.name) as slug,
     e.short_code as short_code,
     e.short_name as short_name,
     e.status as status,
