@@ -23,6 +23,7 @@ import FontAwesomeSvgIcon from '../../../../Shared/Ui/Icon/FontAwesomeSvgIcon';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import SeriesSeasonsButton from './SeriesSeasonsButton';
 import { Series } from '../../../Shared/Types';
+import AdminLink from '../../../../Shared/Ui/Navigation/AdminLink';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -33,8 +34,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-declare type SeasonsJobStarterType = (seriesToCompute: Series) => () => Promise<void>;
 
 const SeriesTable: FunctionComponent = () => {
     const { series, refreshSeries } = useContext<SeriesContextType>(SeriesContext);
@@ -59,8 +58,10 @@ const SeriesTable: FunctionComponent = () => {
                 <StyledTableCell align="right">{item.seasons}</StyledTableCell>
                 <StyledTableCell align="right">
                     <SeriesSeasonsButton series={item} />
-                    <Button onClick={() => {}} sx={{ p: 0, display: 'inline-block', height: 24 }}>
-                        <FontAwesomeSvgIcon icon={faEye} />
+                    <Button sx={{ p: 0, display: 'inline-block', height: 24 }}>
+                        <AdminLink to={`/series/${item.name}`}>
+                            <FontAwesomeSvgIcon icon={faEye} />
+                        </AdminLink>
                     </Button>
                 </StyledTableCell>
             </StyledTableRow>
@@ -69,7 +70,7 @@ const SeriesTable: FunctionComponent = () => {
 
     return (
         <TableContainer component={Paper}>
-            <Table aria-label="standings-table">
+            <Table aria-label="series-table">
                 <TableHead>
                     <TableRow>
                         <StyledTableCell align="left">Name</StyledTableCell>

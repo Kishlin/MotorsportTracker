@@ -21,3 +21,12 @@ export type Series = {
     ref: string;
     seasons: number;
 };
+
+export type Season = {
+    id: string,
+    series: string,
+    year: number,
+    ref: string,
+    standings: number,
+    events: number,
+};

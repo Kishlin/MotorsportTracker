@@ -19,7 +19,6 @@ GROUP BY series.id, series.name
 ORDER BY series.name
 SQL;
 
-
     public function all(): array
     {
         return $this->connection->execute(SQLQuery::create(self::QUERY))->fetchAllAssociative();

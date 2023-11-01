@@ -27,7 +27,7 @@ final class ListSeasonsController extends AbstractController
         ListSeasonsService $listSeasonsService,
         string $series,
     ): JsonResponse {
-        $content = $listSeasonsService->all($series);
+        $content = $listSeasonsService->forSeries(urldecode($series));
 
         return $this->notFoundOrContent($content);
     }

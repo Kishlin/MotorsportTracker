@@ -7,7 +7,7 @@ declare type LinkProps = {
 };
 
 const AdminLink: React.FunctionComponent<LinkProps> = ({ to, children }) => (
-    <LinkUsingNext href={to} legacyBehavior>
+    <LinkUsingNext href={to}>
         {children}
     </LinkUsingNext>
 );
