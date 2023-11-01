@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Seasons\Controller;
+namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Calendar\Controller;
 
 use Kishlin\Backend\MotorsportTask\Job\Application\RecordJob\RecordJobCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
@@ -14,20 +14,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(
-    '/{series}',
-    name: 'seasons_scrap',
+    '/{series}/{year}',
+    name: 'calendar_scrap',
     requirements: [
         'series' => '^[^/]+$',
+        'year'   => '^\d{4}$',
     ],
     methods: [Request::METHOD_POST],
 )]
-final class StartSeasonsScrappingJobController extends AbstractController
+final class StartCalendarScrappingJobController extends AbstractController
 {
     public function __invoke(
         CommandBus $commandBus,
         string $series,
+        int $year,
     ): JsonResponse {
-        $uuid = $commandBus->execute(RecordJobCommand::scrapSeasons($series));
+        $uuid = $commandBus->execute(RecordJobCommand::scrapCalendar($series, $year));
         assert($uuid instanceof UuidValueObject);
 
         return new JsonResponse(['uuid' => $uuid->value()], Response::HTTP_ACCEPTED);

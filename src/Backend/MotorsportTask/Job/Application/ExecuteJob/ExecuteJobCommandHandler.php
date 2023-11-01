@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportTask\Job\Application\ExecuteJob;
 
+use Kishlin\Backend\MotorsportTask\Calendar\Application\Scrap\ScrapCalendarTask;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
+use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobStatus;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\FindJobGateway;
 use Kishlin\Backend\MotorsportTask\Seasons\Application\Scrap\ScrapSeasonsTask;
@@ -23,7 +25,7 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
     public function __invoke(ExecuteJobCommand $command): bool
     {
         $job = $this->gateway->find($command->job());
-        if (null === $job) {
+        if (null === $job || false === $job->hasStatus(JobStatus::REQUESTED)) {
             return false;
         }
 
@@ -33,6 +35,10 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
 
         if ($job->isOfType(JobType::SCRAP_SEASONS)) {
             return $this->executeScrapSeasonsJob($job, $command);
+        }
+
+        if ($job->isOfType(JobType::SCRAP_CALENDAR)) {
+            return $this->executeScrapCalendarJob($job, $command);
         }
 
         return false;
@@ -49,6 +55,13 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
     {
         return $this->taskBus->execute(
             ScrapSeasonsTask::forSeriesAndJob($job->stringParam('series'), $command->job()),
+        );
+    }
+
+    private function executeScrapCalendarJob(Job $job, ExecuteJobCommand $command): bool
+    {
+        return $this->taskBus->execute(
+            ScrapCalendarTask::forSeriesAndJob($job->stringParam('series'), $job->intParam('year'), $command->job()),
         );
     }
 }

@@ -9,4 +9,6 @@ enum JobType: string
     case SCRAP_SERIES = 'scrap_series';
 
     case SCRAP_SEASONS = 'scrap_seasons';
+
+    case SCRAP_CALENDAR = 'scrap_calendar';
 }

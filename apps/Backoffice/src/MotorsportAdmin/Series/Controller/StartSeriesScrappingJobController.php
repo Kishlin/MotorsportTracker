@@ -6,7 +6,6 @@ namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Series\Controller;
 
 use Kishlin\Backend\MotorsportTask\Job\Application\RecordJob\RecordJobCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
-use Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +22,6 @@ final class StartSeriesScrappingJobController extends AbstractController
 {
     public function __invoke(
         CommandBus $commandBus,
-        TaskBus $taskBus,
     ): JsonResponse {
         $uuid = $commandBus->execute(RecordJobCommand::scrapSeriesJob());
         assert($uuid instanceof UuidValueObject);
