@@ -14,6 +14,7 @@ framework:
       symfony.messenger.bus.command: ~
       symfony.messenger.bus.event: ~
       symfony.messenger.bus.query: ~
+      symfony.messenger.bus.task: ~
 
   cache:
     default_memcached_provider: 'memcached://%kishlin.memcached.dsn%'

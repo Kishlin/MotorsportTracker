@@ -33,7 +33,9 @@ services:
       - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/DeleteDeprecatedEventGraphRepository'
       - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/EventGraphRepository'
       - '../../../../src/Backend/MotorsportCache/EventGraph/Infrastructure/Persistence/Repository/RaceAndSprintSessionsRepository'
+      - '../../../../src/Backend/MotorsportAdmin'
       - '../../../../src/Backend/MotorsportETL'
+      - '../../../../src/Backend/MotorsportJob'
       - '../../../../src/Backend/MotorsportTracker'
       - '../../../../src/Backend/MotorsportStatsScrapper'
       - '../../../../src/Backend/**/Application/*/*Exception.php'
@@ -66,6 +68,13 @@ services:
     class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Query\InMemoryQueryBusUsingSymfony'
     arguments:
       - '@symfony.messenger.bus.query'
+    tags:
+      - { name: messenger.bus }
+
+  Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus:
+    class: 'Kishlin\Backend\Shared\Infrastructure\Bus\Task\InMemoryTaskBusUsingSymfony'
+    arguments:
+      - '@symfony.messenger.bus.task'
     tags:
       - { name: messenger.bus }
 
