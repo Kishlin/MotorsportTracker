@@ -12,13 +12,30 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ReadRepository;
 final readonly class SeasonsRepository extends ReadRepository implements CoreRepositoryInterface, SeasonsGateway
 {
     private const QUERY = <<<'SQL'
-SELECT season.*, count(event.id) as events, count(sc.id) + count(sd.id) + count(st.id) as standings
+SELECT season.*,
+       (
+           SELECT count(*)
+           FROM event
+           WHERE event.season = season.id
+       ) as events,
+       (
+           SELECT count(sc.id)
+           FROM season s2
+                    INNER JOIN standing_constructor sc on s2.id = sc.season
+           WHERE s2.id = season.id
+       ) + (
+           SELECT count(sd.id)
+           FROM season s2
+                    INNER JOIN standing_driver sd on s2.id = sd.season
+           WHERE s2.id = season.id
+       ) + (
+           SELECT count(st.id)
+           FROM season s2
+                    INNER JOIN standing_team st on s2.id = st.season
+           WHERE s2.id = season.id
+       ) as standings
 FROM season
-LEFT JOIN series ON season.series = series.id
-LEFT JOIN event ON event.season = season.id
-LEFT JOIN standing_constructor sc on season.id = sc.season
-LEFT JOIN standing_driver sd on season.id = sd.season
-LEFT JOIN standing_team st on season.id = st.season
+         LEFT JOIN series ON season.series = series.id
 WHERE series.name = :seriesName
 GROUP BY season.id, season.year
 ORDER BY season.year DESC
