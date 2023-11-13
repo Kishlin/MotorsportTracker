@@ -1,7 +1,6 @@
 'use client';
 
 import {
-    Button,
     Paper,
     Table,
     TableRow,
@@ -11,17 +10,16 @@ import {
 } from '@mui/material';
 import {
     useEffect,
-    useContext,
     FunctionComponent, useState,
 } from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 
 import { Season } from '../../Shared/Types';
 import seasonsListApi from '../Api/SeasonsListApi';
 import StyledTableCell from '../../../Shared/Ui/Table/StyledTableCell';
 import SeasonCalendarButton from './SeasonCalendarButton';
+import SeasonStandingsButton from './SeasonStandingsButton';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -65,12 +63,7 @@ const SeasonsTable: FunctionComponent<SeasonsTableProps> = ({ seriesName }) => {
                 <StyledTableCell align="left">{item.standings}</StyledTableCell>
                 <StyledTableCell align="right">
                     <SeasonCalendarButton onJobFinished={refreshSeasons} seriesName={seriesName} year={item.year} />
-                {/*    <SeriesSeasonsButton series={item} />*/}
-                {/*    <Button sx={{ p: 0, display: 'inline-block', height: 24 }}>*/}
-                {/*        <AdminLink to={`/series/${item.name}`}>*/}
-                {/*            <FontAwesomeSvgIcon icon={faEye} />*/}
-                {/*        </AdminLink>*/}
-                {/*    </Button>*/}
+                    <SeasonStandingsButton onJobFinished={refreshSeasons} seriesName={seriesName} year={item.year} />
                 </StyledTableCell>
             </StyledTableRow>
         ),

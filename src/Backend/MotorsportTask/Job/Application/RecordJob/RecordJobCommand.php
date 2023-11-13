@@ -45,4 +45,9 @@ final readonly class RecordJobCommand implements Command
     {
         return new self(JobType::SCRAP_CALENDAR, ['series' => $series, 'year' => $season]);
     }
+
+    public static function scrapStandings(string $series, int $season): self
+    {
+        return new self(JobType::SCRAP_STANDINGS, ['series' => $series, 'year' => $season]);
+    }
 }

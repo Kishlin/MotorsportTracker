@@ -22,4 +22,10 @@ series:
   type: annotation
   stateless: true
 
+standings:
+  resource: ../../src/MotorsportAdmin/Standing/Controller/
+  prefix: /api/v1/standings
+  type: annotation
+  stateless: true
+
 

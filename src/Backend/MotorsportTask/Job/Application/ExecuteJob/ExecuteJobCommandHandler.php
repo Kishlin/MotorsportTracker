@@ -9,14 +9,17 @@ use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobStatus;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\FindJobGateway;
+use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\SaveJobGateway;
 use Kishlin\Backend\MotorsportTask\Seasons\Application\Scrap\ScrapSeasonsTask;
 use Kishlin\Backend\MotorsportTask\Series\Application\Scrap\ScrapSeriesTask;
+use Kishlin\Backend\MotorsportTask\Standing\Application\Scrap\ScrapStandingsTask;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandHandler;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus;
 
 final readonly class ExecuteJobCommandHandler implements CommandHandler
 {
     public function __construct(
+        private SaveJobGateway $saveJobGateway,
         private FindJobGateway $gateway,
         private TaskBus $taskBus,
     ) {
@@ -29,6 +32,9 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
             return false;
         }
 
+        $job->start();
+        $this->saveJobGateway->save($job);
+
         if ($job->isOfType(JobType::SCRAP_SERIES)) {
             return $this->executeScrapSeriesJob($command);
         }
@@ -39,6 +45,10 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
 
         if ($job->isOfType(JobType::SCRAP_CALENDAR)) {
             return $this->executeScrapCalendarJob($job, $command);
+        }
+
+        if ($job->isOfType(JobType::SCRAP_STANDINGS)) {
+            return $this->executeScrapStandingsJob($job, $command);
         }
 
         return false;
@@ -62,6 +72,13 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
     {
         return $this->taskBus->execute(
             ScrapCalendarTask::forSeriesAndJob($job->stringParam('series'), $job->intParam('year'), $command->job()),
+        );
+    }
+
+    private function executeScrapStandingsJob(Job $job, ExecuteJobCommand $command): bool
+    {
+        return $this->taskBus->execute(
+            ScrapStandingsTask::forSeasonAndJob($job->stringParam('series'), $job->intParam('year'), $command->job()),
         );
     }
 }

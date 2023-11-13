@@ -11,4 +11,6 @@ enum JobType: string
     case SCRAP_SEASONS = 'scrap_seasons';
 
     case SCRAP_CALENDAR = 'scrap_calendar';
+
+    case SCRAP_STANDINGS = 'scrap_standings';
 }
