@@ -42,7 +42,7 @@ final class AnalyticsDrivers extends Entity implements GuardedAgainstDoubles
     public function uniquenessConstraints(): array
     {
         return [
-            ['season', 'driver', 'position'],
+            ['season', 'driver'],
         ];
     }
 

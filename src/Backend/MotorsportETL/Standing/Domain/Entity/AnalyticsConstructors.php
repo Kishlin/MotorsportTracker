@@ -42,7 +42,7 @@ final class AnalyticsConstructors extends Entity implements GuardedAgainstDouble
     public function uniquenessConstraints(): array
     {
         return [
-            ['season', 'constructor', 'position'],
+            ['season', 'constructor'],
         ];
     }
 
