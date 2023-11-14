@@ -20,7 +20,7 @@ abstract readonly class AbstractRepository extends ReadRepository implements Gat
         ;
 
         $wheres = [];
-        foreach ($criteria as $criterion) {
+        foreach ($criteria as $key => $criterion) {
             $filters = [];
 
             foreach ($criterion as $column => $value) {
@@ -30,8 +30,10 @@ abstract readonly class AbstractRepository extends ReadRepository implements Gat
                     continue;
                 }
 
-                $filters[] = "{$column} = :{$column}";
-                $qb->withParam($column, $value);
+                $paramKey = "{$column}{$key}";
+
+                $filters[] = "{$column} = :{$paramKey}";
+                $qb->withParam($paramKey, $value);
             }
 
             $wheres[] = '(' . implode(' AND ', $filters) . ')';
