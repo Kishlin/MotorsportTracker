@@ -13,6 +13,7 @@ use Kishlin\Backend\Shared\Domain\Tools;
 use LogicException;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
+use Throwable;
 
 final readonly class LoaderUsingGateways implements Loader
 {
@@ -28,7 +29,7 @@ final readonly class LoaderUsingGateways implements Loader
         $this->doLoad($entity);
     }
 
-    public function doLoad(Entity $entity): string
+    public function doLoad(Entity $entity): ?string
     {
         $location = $this->computeLocation($entity);
         $data     = $this->computeData($entity->mappedData());
@@ -36,7 +37,7 @@ final readonly class LoaderUsingGateways implements Loader
         if (false === $entity instanceof GuardedAgainstDoubles) {
             $this->logger?->info("Saving {$location} without uniqueness check", $data);
 
-            return $this->writeGateway->save($location, $data);
+            return $this->doSave($location, $data);
         }
 
         $existingId = $this->uniquenessCheckGateway->findIfExists(
@@ -48,7 +49,7 @@ final readonly class LoaderUsingGateways implements Loader
         if (null === $existingId) {
             $this->logger?->info("Saving non-existing {$location}", $data);
 
-            return $this->writeGateway->save($location, $data);
+            return $this->doSave($location, $data);
         }
 
         $strategy = $entity->strategyOnDuplicate();
@@ -62,7 +63,7 @@ final readonly class LoaderUsingGateways implements Loader
         if (DuplicateStrategy::UPDATE === $strategy) {
             $this->logger?->info("Updating existing {$location}", $data);
 
-            $this->writeGateway->update($location, $existingId, $data);
+            $this->doUpdate($location, $existingId, $data);
 
             return $existingId;
         }
@@ -91,7 +92,14 @@ final readonly class LoaderUsingGateways implements Loader
 
         foreach ($mappedDetails as $key => $value) {
             if ($value instanceof Entity) {
-                $nestedId   = $this->doLoad($value);
+                $nestedId = $this->doLoad($value);
+
+                if (null === $nestedId) {
+                    $this->logger?->warning(sprintf('Could not load entity of type %s.', $value::class));
+
+                    continue;
+                }
+
                 $data[$key] = $nestedId;
 
                 continue;
@@ -119,5 +127,47 @@ final readonly class LoaderUsingGateways implements Loader
         }
 
         return $data;
+    }
+
+    /**
+     * @param array<string, null|bool|float|int|string> $data
+     */
+    private function doSave(string $location, array $data): ?string
+    {
+        try {
+            return $this->writeGateway->save($location, $data);
+        } catch (Throwable $t) {
+            $this->logger?->error(
+                "Error saving {$location}",
+                [
+                    'data'    => $data,
+                    'message' => $t->getMessage(),
+                    'file'    => $t->getFile(),
+                    'line'    => $t->getLine(),
+                ],
+            );
+
+            return null;
+        }
+    }
+
+    /**
+     * @param array<string, null|bool|float|int|string> $data
+     */
+    private function doUpdate(string $location, string $existingId, array $data): void
+    {
+        try {
+            $this->writeGateway->update($location, $existingId, $data);
+        } catch (Throwable $t) {
+            $this->logger?->error(
+                "Error updating {$location} with id {$existingId}",
+                [
+                    'data'    => $data,
+                    'message' => $t->getMessage(),
+                    'file'    => $t->getFile(),
+                    'line'    => $t->getLine(),
+                ],
+            );
+        }
     }
 }
