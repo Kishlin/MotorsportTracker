@@ -11,12 +11,6 @@ use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepository;
 
 final class StandingsDataRepository extends CoreRepository implements StandingsDataGateway
 {
-    private const COLOR_SELECT = <<<'TXT'
-case when t is not null
-    then t.color
-end
-TXT;
-
     private const COUNTRY_SELECT = <<<'TXT'
 case when co is not null
     then jsonb_build_object(
@@ -25,6 +19,16 @@ case when co is not null
         'name', co.name
     )
 end
+TXT;
+
+    private const CONSTRUCTOR_COUNTRY_SELECT = <<<'TXT'
+(
+    SELECT jsonb_build_object(
+        'id', co.id,
+        'code', co.code,
+        'name', co.name
+    ) FROM country AS co WHERE co.id = sc.country
+)
 TXT;
 
     public function findForSeason(string $championship, int $year): StandingsDataDTO
@@ -56,14 +60,14 @@ TXT;
             ->addSelect('c.name', 'name')
             ->addSelect('sc.position', 'position')
             ->addSelect('sc.points', 'points')
-            ->addSelect(self::COLOR_SELECT, 'color')
-            ->addSelect(self::COUNTRY_SELECT, 'country')
+            ->addSelect('MAX(t.color)', 'color')
+            ->addSelect(self::CONSTRUCTOR_COUNTRY_SELECT, 'country')
             ->from('standing_constructor', 'sc')
             ->innerJoin('season', 's', $qb->expr()->eq('sc.season', 's.id'))
             ->innerJoin('series', 'ch', $qb->expr()->eq('ch.id', 's.series'))
             ->innerJoin('constructor', 'c', $qb->expr()->eq('c.id', 'sc.standee'))
             ->leftJoin('constructor_team', 'ct', $qb->expr()->eq('c.id', 'ct.constructor'))
-            ->innerJoin(
+            ->leftJoin(
                 'team',
                 't',
                 $qb->expr()->andX(
@@ -71,9 +75,9 @@ TXT;
                     $qb->expr()->eq('t.season', 's.id'),
                 )
             )
-            ->leftJoin('country', 'co', $qb->expr()->eq('co.id', 'sc.country'))
             ->where($qb->expr()->eq('ch.name', ':championship'))
             ->andWhere($qb->expr()->eq('s.year', ':year'))
+            ->groupBy('sc.id, c.name, sc.points')
             ->orderBy('sc.points', OrderBy::DESC)
             ->withParam('championship', $championship)
             ->withParam('year', $year)
