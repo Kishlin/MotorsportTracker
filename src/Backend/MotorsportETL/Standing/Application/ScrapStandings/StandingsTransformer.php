@@ -11,6 +11,7 @@ use Kishlin\Backend\MotorsportETL\Standing\Domain\DTO\PossibleStandingClass;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\AnalyticsConstructors;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\AnalyticsDrivers;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\AnalyticsTeams;
+use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\ConstructorTeam;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\StandingConstructor;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\StandingDriver;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\Entity\StandingTeam;
@@ -76,6 +77,10 @@ final readonly class StandingsTransformer
             yield AnalyticsConstructors::fromData($season->id(), $standing);
 
             yield StandingConstructor::fromData($season->id(), $class?->name(), $standing);
+
+            if (null !== $standing['team']) {
+                yield ConstructorTeam::fromData($season->id(), $standing);
+            }
         }
     }
 
