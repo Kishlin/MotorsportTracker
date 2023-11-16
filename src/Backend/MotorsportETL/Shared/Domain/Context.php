@@ -14,6 +14,8 @@ enum Context: String
 
     case STANDINGS = 'standings';
 
+    case CLASSIFICATION = 'classification';
+
     case STANDINGS_TEAMS = 'standings_teams';
 
     case STANDINGS_DRIVERS = 'standings_drivers';

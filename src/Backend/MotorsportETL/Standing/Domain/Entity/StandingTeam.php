@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportETL\Standing\Domain\Entity;
 
 use Kishlin\Backend\MotorsportETL\Shared\Domain\Entity\Country;
+use Kishlin\Backend\MotorsportETL\Shared\Domain\Entity\Team;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\ValueObject\StandingData;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\ValueObject\StandingsIdentity;
 use Kishlin\Backend\Shared\Domain\Entity\DuplicateStrategy;

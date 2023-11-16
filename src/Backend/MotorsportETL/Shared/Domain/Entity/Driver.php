@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportETL\Standing\Domain\Entity;
+namespace Kishlin\Backend\MotorsportETL\Shared\Domain\Entity;
 
-use Kishlin\Backend\MotorsportETL\Shared\Domain\Entity\Country;
 use Kishlin\Backend\Shared\Domain\Entity\DuplicateStrategy;
 use Kishlin\Backend\Shared\Domain\Entity\Entity;
 use Kishlin\Backend\Shared\Domain\Entity\GuardedAgainstDoubles;
