@@ -3,6 +3,7 @@
 import {
     Paper,
     Table,
+    Button,
     TableRow,
     TableHead,
     TableBody,
@@ -14,12 +15,15 @@ import {
 } from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 
 import { Season } from '../../Shared/Types';
 import seasonsListApi from '../Api/SeasonsListApi';
 import StyledTableCell from '../../../Shared/Ui/Table/StyledTableCell';
 import SeasonCalendarButton from './SeasonCalendarButton';
 import SeasonStandingsButton from './SeasonStandingsButton';
+import AdminLink from '../../../Shared/Ui/Navigation/AdminLink';
+import FontAwesomeSvgIcon from '../../../Shared/Ui/Icon/FontAwesomeSvgIcon';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -64,6 +68,11 @@ const SeasonsTable: FunctionComponent<SeasonsTableProps> = ({ seriesName }) => {
                 <StyledTableCell align="right">
                     <SeasonCalendarButton onJobFinished={refreshSeasons} seriesName={seriesName} year={item.year} />
                     <SeasonStandingsButton onJobFinished={refreshSeasons} seriesName={seriesName} year={item.year} />
+                    <Button sx={{ p: 0, display: 'inline-block', height: 24 }}>
+                        <AdminLink to={`/series/${seriesName}/${item.year}`}>
+                            <FontAwesomeSvgIcon icon={faEye} />
+                        </AdminLink>
+                    </Button>
                 </StyledTableCell>
             </StyledTableRow>
         ),

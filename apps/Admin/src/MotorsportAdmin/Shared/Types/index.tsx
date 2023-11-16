@@ -30,3 +30,9 @@ export type Season = {
     standings: number,
     events: number,
 };
+
+export type Event = {
+    id: string,
+    name: string,
+    sessions: number,
+};
