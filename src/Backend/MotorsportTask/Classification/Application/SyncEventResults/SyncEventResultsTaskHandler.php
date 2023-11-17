@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTask\Classification\Application\SyncEventResults;
 
 use Kishlin\Backend\MotorsportCache\Result\Application\UpdateEventResultsCache\UpdateEventResultsCacheCommand;
+use Kishlin\Backend\MotorsportTask\Classification\Application\SyncGraphFastestLapDelta\SyncGraphFastestLapDeltaTask;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Event\JobFinishedEvent;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
+use Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskHandler;
 
 final readonly class SyncEventResultsTaskHandler implements TaskHandler
@@ -16,6 +18,7 @@ final readonly class SyncEventResultsTaskHandler implements TaskHandler
         private EventDispatcher $eventDispatcher,
         private EventIdGateway $eventIdGateway,
         private CommandBus $commandBus,
+        private TaskBus $taskBus,
     ) {
     }
 
@@ -27,10 +30,14 @@ final readonly class SyncEventResultsTaskHandler implements TaskHandler
             $task->event()->value(),
         );
 
-        if (null !== $eventId) {
-            $this->commandBus->execute(UpdateEventResultsCacheCommand::fromScalars($eventId));
+        if (null === $eventId) {
+            $this->eventDispatcher->dispatch(JobFinishedEvent::forJob($task->job()->value()));
+
+            return;
         }
 
-        $this->eventDispatcher->dispatch(JobFinishedEvent::forJob($task->job()->value()));
+        $this->commandBus->execute(UpdateEventResultsCacheCommand::fromScalars($eventId));
+
+        $this->taskBus->execute(SyncGraphFastestLapDeltaTask::forEventAndJob($eventId, $task->job()->value()));
     }
 }
