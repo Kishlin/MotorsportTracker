@@ -22,7 +22,7 @@ SELECT
 FROM event
         INNER JOIN season ON event.season = season.id
         INNER JOIN series ON season.series = series.id
-        INNER JOIN event_session session ON event.id = session.event
+        LEFT JOIN event_session session ON event.id = session.event
         LEFT JOIN entry ON session.id = entry.session
         LEFT JOIN classification c on entry.id = c.entry
         LEFT JOIN race_lap rl on entry.id = rl.entry
