@@ -35,4 +35,7 @@ export type Event = {
     id: string,
     name: string,
     sessions: number,
+    sessions_with_results: number,
+    sessions_with_classification: number,
+    sessions_with_race_lap: number,
 };

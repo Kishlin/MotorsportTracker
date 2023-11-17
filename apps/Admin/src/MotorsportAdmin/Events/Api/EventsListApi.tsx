@@ -4,7 +4,7 @@ export type EventsListApi = (seriesName: string, year: number) => Promise<Array<
 
 const eventsListApi: EventsListApi = async (seriesName: string, year: number) => {
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKOFFICE_URL}/api/v1/seasons/${seriesName}/${year}`,
+        `${process.env.NEXT_PUBLIC_BACKOFFICE_URL}/api/v1/events/${seriesName}/${year}`,
         {
             cache: 'no-store',
         },

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportAdmin\Seasons\Application\ListEvents;
+namespace Kishlin\Backend\MotorsportAdmin\Events\Application\ListEvents;
 
 use Kishlin\Backend\MotorsportAdmin\Shared\Application\JsonResponse;
 

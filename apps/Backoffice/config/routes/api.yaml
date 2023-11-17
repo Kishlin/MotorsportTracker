@@ -10,6 +10,12 @@ classification:
   type: annotation
   stateless: true
 
+events:
+  resource: ../../src/MotorsportAdmin/Events/Controller/
+  prefix: /api/v1/events
+  type: annotation
+  stateless: true
+
 jobs:
   resource: ../../src/MotorsportAdmin/Jobs/Controller/
   prefix: /api/v1/jobs

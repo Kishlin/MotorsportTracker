@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Seasons\Controller;
+namespace Kishlin\Apps\Backoffice\MotorsportAdmin\Events\Controller;
 
 use Kishlin\Apps\Backoffice\MotorsportAdmin\Shared\Controller\NotFoundOrContentResponseTrait;
-use Kishlin\Backend\MotorsportAdmin\Seasons\Application\ListEvents\ListEventsService;
+use Kishlin\Backend\MotorsportAdmin\Events\Application\ListEvents\ListEventsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
