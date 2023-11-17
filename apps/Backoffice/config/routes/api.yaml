@@ -4,6 +4,12 @@ calendar:
   type: annotation
   stateless: true
 
+classification:
+  resource: ../../src/MotorsportAdmin/Classification/Controller/
+  prefix: /api/v1/classification
+  type: annotation
+  stateless: true
+
 jobs:
   resource: ../../src/MotorsportAdmin/Jobs/Controller/
   prefix: /api/v1/jobs

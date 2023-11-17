@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import { Event } from '../../Shared/Types';
 import eventsListApi from '../Api/EventsListApi';
 import StyledTableCell from '../../../Shared/Ui/Table/StyledTableCell';
+import EventClassificationButton from './EventClassificationButton';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -59,7 +60,14 @@ const EventsTable: FunctionComponent<EventsTableProps> = ({ seriesName, year }) 
             <StyledTableRow key={item.id}>
                 <StyledTableCell align="left">{item.name}</StyledTableCell>
                 <StyledTableCell align="left">{item.sessions}</StyledTableCell>
-                <StyledTableCell align="right">/</StyledTableCell>
+                <StyledTableCell align="right">
+                    <EventClassificationButton
+                        onJobFinished={refreshEvents}
+                        seriesName={seriesName}
+                        year={year}
+                        event={item.name}
+                    />
+                </StyledTableCell>
             </StyledTableRow>
         ),
     );
