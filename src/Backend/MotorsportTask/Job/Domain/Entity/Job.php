@@ -106,7 +106,7 @@ final class Job extends Entity
         $this->guardAgainstMissingParam($key);
 
         $value = $this->params->value()[$key];
-        assert(is_numeric($value));
+        assert(is_int($value));
 
         return $value;
     }
