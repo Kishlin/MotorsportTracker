@@ -28,7 +28,7 @@ final readonly class ConnectorDecorator implements Connector
         $cachedResponse = $this->readRepository->findResponse($urlContext, $parametersHash);
 
         if (null !== $cachedResponse) {
-            $this->logger?->info('Using cached response');
+            $this->logger?->info('Using cached response ' . implode(' ', $parameters));
 
             return $this->stringConversionsTool->decryptCachedResponse($cachedResponse);
         }
@@ -46,7 +46,7 @@ final readonly class ConnectorDecorator implements Connector
      */
     private function doFetch(string $url, array $parameters = []): string
     {
-        $this->logger?->info('Fetching from API');
+        $this->logger?->info('Fetching from API ' . implode(' ', $parameters));
 
         return $this->decorated->fetch($url, $parameters);
     }
