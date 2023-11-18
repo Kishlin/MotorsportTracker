@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTask\Classification\Application\SyncEventResults;
+namespace Kishlin\Backend\MotorsportTask\Shared\Application;
 
 interface EventIdGateway
 {

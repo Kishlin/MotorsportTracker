@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTask\Classification\Infrastructure\SyncEventResults;
+namespace Kishlin\Backend\MotorsportTask\Shared\Infrastructure;
 
-use Kishlin\Backend\MotorsportTask\Classification\Application\SyncEventResults\EventIdGateway;
+use Kishlin\Backend\MotorsportTask\Shared\Application\EventIdGateway;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepositoryInterface;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\ReadRepository;
 

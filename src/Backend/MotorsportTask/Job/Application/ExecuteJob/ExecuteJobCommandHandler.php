@@ -11,6 +11,7 @@ use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobStatus;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\FindJobGateway;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Gateway\SaveJobGateway;
+use Kishlin\Backend\MotorsportTask\RaceHistory\Application\Scrap\ScrapRaceHistoriesTask;
 use Kishlin\Backend\MotorsportTask\Seasons\Application\Scrap\ScrapSeasonsTask;
 use Kishlin\Backend\MotorsportTask\Series\Application\Scrap\ScrapSeriesTask;
 use Kishlin\Backend\MotorsportTask\Standing\Application\Scrap\ScrapStandingsTask;
@@ -52,6 +53,10 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
             return $this->executeScrapStandingsJob($job, $command);
         }
 
+        if ($job->isOfType(JobType::SCRAP_RACE_HISTORIES)) {
+            return $this->executeScrapRaceHistoriesJob($job, $command);
+        }
+
         if ($job->isOfType(JobType::SCRAP_CLASSIFICATIONS)) {
             return $this->executeScrapClassificationsJob($job, $command);
         }
@@ -91,6 +96,18 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
     {
         return $this->taskBus->execute(
             ScrapClassificationsTask::forEventAndJob(
+                $job->stringParam('series'),
+                $job->intParam('year'),
+                $job->stringParam('event'),
+                $command->job(),
+            ),
+        );
+    }
+
+    private function executeScrapRaceHistoriesJob(Job $job, ExecuteJobCommand $command): bool
+    {
+        return $this->taskBus->execute(
+            ScrapRaceHistoriesTask::forEventAndJob(
                 $job->stringParam('series'),
                 $job->intParam('year'),
                 $job->stringParam('event'),

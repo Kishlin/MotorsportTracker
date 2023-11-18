@@ -19,6 +19,7 @@ import { Event } from '../../Shared/Types';
 import eventsListApi from '../Api/EventsListApi';
 import StyledTableCell from '../../../Shared/Ui/Table/StyledTableCell';
 import EventClassificationButton from './EventClassificationButton';
+import EventHistoriesButton from './EventHistoriesButton';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -65,6 +66,12 @@ const EventsTable: FunctionComponent<EventsTableProps> = ({ seriesName, year }) 
                 <StyledTableCell align="left">{item.sessions_with_race_lap}</StyledTableCell>
                 <StyledTableCell align="right">
                     <EventClassificationButton
+                        onJobFinished={refreshEvents}
+                        seriesName={seriesName}
+                        year={year}
+                        event={item.name}
+                    />
+                    <EventHistoriesButton
                         onJobFinished={refreshEvents}
                         seriesName={seriesName}
                         year={year}

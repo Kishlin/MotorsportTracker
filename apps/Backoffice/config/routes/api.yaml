@@ -22,6 +22,12 @@ jobs:
   type: annotation
   stateless: true
 
+histories:
+  resource: ../../src/MotorsportAdmin/RaceHistory/Controller/
+  prefix: /api/v1/histories
+  type: annotation
+  stateless: true
+
 seasons:
   resource: ../../src/MotorsportAdmin/Seasons/Controller/
   prefix: /api/v1/seasons

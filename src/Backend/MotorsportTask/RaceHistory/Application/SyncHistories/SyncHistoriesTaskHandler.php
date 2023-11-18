@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\MotorsportTask\Classification\Application\SyncEventResults;
+namespace Kishlin\Backend\MotorsportTask\RaceHistory\Application\SyncHistories;
 
-use Kishlin\Backend\MotorsportCache\Result\Application\UpdateEventResultsCache\UpdateEventResultsCacheCommand;
-use Kishlin\Backend\MotorsportTask\Classification\Application\SyncGraphFastestLapDelta\SyncGraphFastestLapDeltaTask;
+use Kishlin\Backend\MotorsportCache\EventGraph\Application\ComputeHistoriesForEvent\ComputeHistoriesForEventCommand;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Event\JobFinishedEvent;
+use Kishlin\Backend\MotorsportTask\RaceHistory\Application\SyncLapByLapGraph\SyncLapByLapGraphTask;
 use Kishlin\Backend\MotorsportTask\Shared\Application\EventIdGateway;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskHandler;
 
-final readonly class SyncEventResultsTaskHandler implements TaskHandler
+final readonly class SyncHistoriesTaskHandler implements TaskHandler
 {
     public function __construct(
         private EventDispatcher $eventDispatcher,
@@ -23,7 +23,7 @@ final readonly class SyncEventResultsTaskHandler implements TaskHandler
     ) {
     }
 
-    public function __invoke(SyncEventResultsTask $task): void
+    public function __invoke(SyncHistoriesTask $task): void
     {
         $eventId = $this->eventIdGateway->findEventId(
             $task->series()->value(),
@@ -37,8 +37,15 @@ final readonly class SyncEventResultsTaskHandler implements TaskHandler
             return;
         }
 
-        $this->commandBus->execute(UpdateEventResultsCacheCommand::fromScalars($eventId));
+        $this->commandBus->execute(
+            ComputeHistoriesForEventCommand::fromScalars($eventId),
+        );
 
-        $this->taskBus->execute(SyncGraphFastestLapDeltaTask::forEventAndJob($eventId, $task->job()->value()));
+        $this->taskBus->execute(
+            SyncLapByLapGraphTask::forEventAndJob(
+                $eventId,
+                $task->job()->value(),
+            ),
+        );
     }
 }

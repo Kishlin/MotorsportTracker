@@ -14,5 +14,7 @@ enum JobType: string
 
     case SCRAP_STANDINGS = 'scrap_standings';
 
+    case SCRAP_RACE_HISTORIES = 'scrap_race_histories';
+
     case SCRAP_CLASSIFICATIONS = 'scrap_classifications';
 }
