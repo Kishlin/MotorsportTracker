@@ -24,6 +24,10 @@ final class ContextFinder
             return Context::CALENDAR;
         }
 
+        if (Tools::endsWith($url, 'raceHistory')) {
+            return Context::RACE_HISTORY;
+        }
+
         if (Tools::endsWith($url, 'classification')) {
             return Context::CLASSIFICATION;
         }
