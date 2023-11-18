@@ -36,7 +36,10 @@ const ScheduleEventIconList: FunctionComponent<ScheduleEventIconListProps> = ({ 
         return timetableIcon;
     }
 
-    const eventUri = event.slug.replaceAll('_', '/');
+    const slugParts = event.slug.split('_');
+    slugParts.splice(2, 1);
+
+    const eventUri = slugParts.join('/');
 
     const props: Partial<SvgIconProps> = { color: 'action', sx: { cursor: 'pointer', mr: 1 } };
 
