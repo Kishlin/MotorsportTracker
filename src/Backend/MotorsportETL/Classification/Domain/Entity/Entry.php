@@ -45,21 +45,21 @@ final class Entry extends Entity implements GuardedAgainstDoubles
     }
 
     /**
-     * @param array{name: string, uuid: string, picture: ?string}                                 $country
+     * @param null|array{name: string, uuid: string, picture: ?string}                            $country
      * @param array{name: string, shortCode: string, uuid: string}                                $driver
      * @param array{name: string, uuid: string, colour: string, picture: string, carIcon: string} $team
      */
     public static function fromData(
         string $session,
         string $season,
-        array $country,
+        ?array $country,
         array $driver,
         array $team,
         string $carNumber,
     ): self {
         return new self(
             $session,
-            Driver::fromData($driver, Country::fromData($country)),
+            Driver::fromData($driver, null === $country ? null : Country::fromData($country)),
             Team::fromData($season, $team),
             (int) $carNumber,
         );
