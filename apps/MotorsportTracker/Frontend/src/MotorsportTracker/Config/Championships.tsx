@@ -6,7 +6,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'Formula One',
         shortName: 'Formula 1',
         slug: 'fia-formula-one-world-championship',
-        years: Array.from({ length: 74 }, (x, i) => 1950 + i),
+        years: Array.from({ length: 75 }, (x, i) => 1950 + i),
         isMultiDriver: false,
     },
     'fia-formula-2-championship': {
@@ -14,7 +14,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'Formula 2',
         shortName: 'Formula 2',
         slug: 'fia-formula-2-championship',
-        years: Array.from({ length: 7 }, (x, i) => 2017 + i),
+        years: Array.from({ length: 8 }, (x, i) => 2017 + i),
         isMultiDriver: false,
     },
     'fia-formula-3-championship': {
@@ -22,7 +22,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'Formula 3',
         shortName: 'Formula 3',
         slug: 'fia-formula-3-championship',
-        years: Array.from({ length: 5 }, (x, i) => 2019 + i),
+        years: Array.from({ length: 6 }, (x, i) => 2019 + i),
         isMultiDriver: false,
     },
     'abb-fia-formula-e-world-championship': {
@@ -86,7 +86,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'IMSA SportsCar Championship',
         shortName: 'IMSA',
         slug: 'imsa-sportscar-championship',
-        years: Array.from({ length: 10 }, (x, i) => 2014 + i),
+        years: Array.from({ length: 11 }, (x, i) => 2014 + i),
         isMultiDriver: true,
     },
     'adac-gt-masters': {
@@ -102,7 +102,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         displayName: 'MotoGP',
         shortName: 'MotoGP',
         slug: 'fim-motogp-world-championship',
-        years: Array.from({ length: 75 }, (x, i) => 1949 + i),
+        years: Array.from({ length: 76 }, (x, i) => 1949 + i),
         isMultiDriver: false,
     },
 };

@@ -34,12 +34,17 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
     const now = new Date();
     const schedulePath = now.toLocaleString('en-US', { month: 'long', year: 'numeric' }).toLowerCase().replace(' ', '/');
 
+    const yearDate = new Date().getFullYear();
+
     const championshipsMenu = Object.keys(championships).map((championshipSlug: string) => {
-        const year = championships[championshipSlug].years[championships[championshipSlug].years.length - 1];
+        const linkYear = Math.min(
+            championships[championshipSlug].years[championships[championshipSlug].years.length - 1],
+            yearDate,
+        );
 
         return (
             <ListItem key={championshipSlug} disablePadding>
-                <ListItemButton onClick={() => router.push(`/championship/${championshipSlug}/${year}/schedule`)}>
+                <ListItemButton onClick={() => router.push(`/championship/${championshipSlug}/${linkYear}/schedule`)}>
                     <ListItemIcon>
                         <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
                     </ListItemIcon>
