@@ -59,16 +59,20 @@ const ChampionshipNavbar: FunctionComponent<ChampionshipNavbarProps> = ({ availa
         <MenuItem key={seasonYear} value={seasonYear}>{seasonYear}</MenuItem>
     ));
 
-    const statsPage = 0 < Object.keys(availableStandings).length
-        ? (
+    const statsPage = (
+            0 < Object.keys(availableStandings).length
+            && (availableStandings.driver || availableStandings.constructor || availableStandings.team)
+        ) ? (
             <StyledLink href={`/championship/${championship}/${year}/stats`}>
                 Stats
             </StyledLink>
         )
         : <noscript />;
 
+    // noinspection PointlessBooleanExpressionJS
     const standingsPages = ['constructor', 'team', 'driver']
-        .filter((type: StandingType) => availableStandings[type])
+        // standingPages.constructor exists because it's an object. Strong type checking is needed.
+        .filter((type: StandingType) => true === availableStandings[type])
         .map((type: StandingType) => (
             <StyledLink key={type} href={`/championship/${championship}/${year}/standings-${type}`}>
                 {`${type.slice(0, 1).toUpperCase()}${type.slice(1)} Standings`}
