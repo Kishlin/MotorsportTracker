@@ -39,16 +39,16 @@ final class EntryAdditionalDriver extends Entity implements GuardedAgainstDouble
     }
 
     /**
-     * @param array{name: string, uuid: string, picture: ?string}  $country
-     * @param array{name: string, shortCode: string, uuid: string} $driver
+     * @param null|array{name: string, uuid: string, picture: ?string} $country
+     * @param array{name: string, shortCode: string, uuid: string}     $driver
      */
-    public static function fromData(Entry $entry, array $driver, array $country): self
+    public static function fromData(Entry $entry, array $driver, ?array $country): self
     {
         return new self(
             $entry,
             Driver::fromData(
                 $driver,
-                Country::fromData($country),
+                null === $country ? null : Country::fromData($country),
             ),
         );
     }
