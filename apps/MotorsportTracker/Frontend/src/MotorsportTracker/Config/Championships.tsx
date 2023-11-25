@@ -1,6 +1,14 @@
 import { ChampionshipList } from '../Shared/Types';
 
 const CHAMPIONSHIPS: ChampionshipList = {
+    '24-hours-of-daytona': {
+        name: '24h Of Daytona',
+        displayName: '24h Of Daytona',
+        shortName: '24h Daytona',
+        slug: '24-hours-of-daytona',
+        years: Array.from({ length: 63 }, (x, i) => 1962 + i),
+        isMultiDriver: false,
+    },
     'fia-formula-one-world-championship': {
         name: 'Formula One',
         displayName: 'Formula One',
