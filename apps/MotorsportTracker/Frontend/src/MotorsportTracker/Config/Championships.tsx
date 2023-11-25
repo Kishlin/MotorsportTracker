@@ -73,6 +73,15 @@ const CHAMPIONSHIPS: ChampionshipList = {
         isMultiDriver: false,
         menuIconFormat: 'svg',
     },
+    'f1-academy': {
+        name: 'F1 Academy',
+        displayName: 'F1 Academy',
+        shortName: 'F1 Academy',
+        slug: 'f1-academy',
+        years: Array.from({ length: 2 }, (x, i) => 2023 + i),
+        isMultiDriver: false,
+        menuIconFormat: 'svg',
+    },
     'w-series': {
         name: 'W Series',
         displayName: 'W Series',

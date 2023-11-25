@@ -25,3 +25,4 @@ $prefix kishlin:motorsport:championship-presentation:add "FIA World Endurance Ch
 $prefix kishlin:motorsport:championship-presentation:add "24 Hours of Daytona" "24-hours-of-daytona.png" "#64cb62"
 $prefix kishlin:motorsport:championship-presentation:add "24 Hours of Le Mans" "24-hours-of-le-mans.png" "#063269"
 $prefix kishlin:motorsport:championship-presentation:add "ADAC 24h Rennen Nürburgring" "adac-24h-rennen-nurburgring.png" "#65b22e"
+$prefix kishlin:motorsport:championship-presentation:add "F1 Academy" "f1-academy.svg" "#bc147f"
