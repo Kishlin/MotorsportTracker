@@ -65,6 +65,7 @@ export type Championship = {
     slug: string,
     years: number[],
     isMultiDriver: boolean,
+    menuIconFormat: null|'svg'|'png',
 };
 
 export type ChampionshipList = {

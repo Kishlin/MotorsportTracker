@@ -36,23 +36,29 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
 
     const yearDate = new Date().getFullYear();
 
-    const championshipsMenu = Object.keys(championships).map((championshipSlug: string) => {
-        const linkYear = Math.min(
-            championships[championshipSlug].years[championships[championshipSlug].years.length - 1],
-            yearDate,
-        );
+    const championshipsMenu = Object
+        .keys(championships)
+        .filter((championshipSlug: string) => null !== championships[championshipSlug].menuIconFormat)
+        .map((championshipSlug: string) => {
+            const linkYear = Math.min(
+                championships[championshipSlug].years[championships[championshipSlug].years.length - 1],
+                yearDate,
+            );
 
-        return (
-            <ListItem key={championshipSlug} disablePadding>
-                <ListItemButton onClick={() => router.push(`/championship/${championshipSlug}/${linkYear}/schedule`)}>
-                    <ListItemIcon>
-                        <img src={`/assets/championships/logos/${championshipSlug}.svg`} alt={championshipSlug} height={24} />
-                    </ListItemIcon>
-                    <ListItemText sx={{ ml: 1 }} primary={championships[championshipSlug].shortName} />
-                </ListItemButton>
-            </ListItem>
-        );
-    });
+            const iconFormat = championships[championshipSlug].menuIconFormat;
+
+            return (
+                <ListItem key={championshipSlug} disablePadding>
+                    <ListItemButton onClick={() => router.push(`/championship/${championshipSlug}/${linkYear}/schedule`)}>
+                        <ListItemIcon>
+                            <img src={`/assets/championships/logos/${championshipSlug}.${iconFormat}`} alt={championshipSlug} height={24} />
+                        </ListItemIcon>
+                        <ListItemText sx={{ ml: 1 }} primary={championships[championshipSlug].shortName} />
+                    </ListItemButton>
+                </ListItem>
+            );
+        },
+    );
 
     return (
         <List>

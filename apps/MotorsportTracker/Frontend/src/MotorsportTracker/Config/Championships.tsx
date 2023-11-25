@@ -7,7 +7,8 @@ const CHAMPIONSHIPS: ChampionshipList = {
         shortName: '24h Daytona',
         slug: '24-hours-of-daytona',
         years: Array.from({ length: 63 }, (x, i) => 1962 + i),
-        isMultiDriver: false,
+        isMultiDriver: true,
+        menuIconFormat: null,
     },
     'fia-formula-one-world-championship': {
         name: 'Formula One',
@@ -16,6 +17,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'fia-formula-one-world-championship',
         years: Array.from({ length: 75 }, (x, i) => 1950 + i),
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'fia-formula-2-championship': {
         name: 'FIA Formula 2 Championship',
@@ -24,6 +26,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'fia-formula-2-championship',
         years: Array.from({ length: 8 }, (x, i) => 2017 + i),
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'fia-formula-3-championship': {
         name: 'FIA Formula 3 Championship',
@@ -32,6 +35,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'fia-formula-3-championship',
         years: Array.from({ length: 6 }, (x, i) => 2019 + i),
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'abb-fia-formula-e-world-championship': {
         name: 'Formula E',
@@ -40,6 +44,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'abb-fia-formula-e-world-championship',
         years: [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2022, 2023], // No championship in 2021
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'f4-french-championship': {
         name: 'F4 France',
@@ -48,6 +53,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'f4-french-championship',
         years: Array.from({ length: 3 }, (x, i) => 2021 + i),
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'w-series': {
         name: 'W Series',
@@ -56,6 +62,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'w-series',
         years: [2019, 2021, 2022], // No championship in 2020
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
     'fia-world-endurance-championship': {
         name: 'World Endurance Championship',
@@ -64,6 +71,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'fia-world-endurance-championship',
         years: Array.from({ length: 12 }, (x, i) => 2012 + i),
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'gt-world-challenge-europe-endurance': {
         name: 'GT World Challenge Europe',
@@ -72,6 +80,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'gt-world-challenge-europe-endurance',
         years: Array.from({ length: 11 }, (x, i) => 2013 + i),
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'gt-world-challenge-europe-sprint-cup': {
         name: 'GT World Challenge Europe Sprint Cup',
@@ -80,6 +89,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'gt-world-challenge-europe-sprint-cup',
         years: Array.from({ length: 5 }, (x, i) => 2019 + i),
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'ffsa-gt4-france': {
         name: 'GT4 France',
@@ -88,6 +98,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'ffsa-gt4-france',
         years: Array.from({ length: 2 }, (x, i) => 2022 + i),
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'imsa-sportscar-championship': {
         name: 'IMSA SportsCar Championship',
@@ -96,6 +107,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'imsa-sportscar-championship',
         years: Array.from({ length: 11 }, (x, i) => 2014 + i),
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'adac-gt-masters': {
         name: 'ADAC GT Masters',
@@ -104,6 +116,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'adac-gt-masters',
         years: [2021, 2022, 2023],
         isMultiDriver: true,
+        menuIconFormat: 'svg',
     },
     'fim-motogp-world-championship': {
         name: 'MotoGP',
@@ -112,6 +125,7 @@ const CHAMPIONSHIPS: ChampionshipList = {
         slug: 'fim-motogp-world-championship',
         years: Array.from({ length: 76 }, (x, i) => 1949 + i),
         isMultiDriver: false,
+        menuIconFormat: 'svg',
     },
 };
 
