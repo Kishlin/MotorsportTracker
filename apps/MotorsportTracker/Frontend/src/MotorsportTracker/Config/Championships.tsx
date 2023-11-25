@@ -19,6 +19,15 @@ const CHAMPIONSHIPS: ChampionshipList = {
         isMultiDriver: true,
         menuIconFormat: null,
     },
+    'adac-24h-rennen-nurburgring': {
+        name: 'ADAC 24h Rennen Nürburgring',
+        displayName: '24h Nürburgring',
+        shortName: '24h Nürburgring',
+        slug: 'adac-24h-rennen-nürburgring',
+        years: Array.from({ length: 3 }, (x, i) => 2022 + i),
+        isMultiDriver: true,
+        menuIconFormat: null,
+    },
     'fia-formula-one-world-championship': {
         name: 'Formula One',
         displayName: 'Formula One',
