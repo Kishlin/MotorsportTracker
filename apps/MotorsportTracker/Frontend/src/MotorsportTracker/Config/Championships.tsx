@@ -3,10 +3,19 @@ import { ChampionshipList } from '../Shared/Types';
 const CHAMPIONSHIPS: ChampionshipList = {
     '24-hours-of-daytona': {
         name: '24h Of Daytona',
-        displayName: '24h Of Daytona',
+        displayName: '24h of Daytona',
         shortName: '24h Daytona',
         slug: '24-hours-of-daytona',
         years: Array.from({ length: 63 }, (x, i) => 1962 + i),
+        isMultiDriver: true,
+        menuIconFormat: null,
+    },
+    '24-hours-of-le-mans': {
+        name: '24h Of Le Mans',
+        displayName: '24h of Le Mans',
+        shortName: '24h Le Mans',
+        slug: '24-hours-of-le-mans',
+        years: Array.from({ length: 102 }, (x, i) => 1923 + i),
         isMultiDriver: true,
         menuIconFormat: null,
     },

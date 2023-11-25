@@ -23,3 +23,4 @@ $prefix kishlin:motorsport:championship-presentation:add "FIM MotoGP World Champ
 $prefix kishlin:motorsport:championship-presentation:add "W Series" "w-series.svg" "#440099"
 $prefix kishlin:motorsport:championship-presentation:add "FIA World Endurance Championship" "fia-world-endurance-championship.svg" "#0649a1"
 $prefix kishlin:motorsport:championship-presentation:add "24 Hours of Daytona" "24-hours-of-daytona.png" "#64cb62"
+$prefix kishlin:motorsport:championship-presentation:add "24 Hours of Le Mans" "24-hours-of-le-mans.png" "#063269"
