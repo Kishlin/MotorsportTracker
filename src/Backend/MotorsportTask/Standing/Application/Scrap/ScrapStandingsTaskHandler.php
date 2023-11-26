@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kishlin\Backend\MotorsportTask\Standing\Application\Scrap;
 
 use Kishlin\Backend\MotorsportETL\Standing\Application\ScrapStandings\ScrapStandingsCommand;
-use Kishlin\Backend\MotorsportTask\Standing\Application\SyncAnalyticsAfterScrapping\SyncAnalyticsAfterScrappingTask;
+use Kishlin\Backend\MotorsportTask\Standing\Application\SpotMissingConstructorTeamRelations\SpotMissingConstructorTeamRelationsTask;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskBus;
 use Kishlin\Backend\Shared\Domain\Bus\Task\TaskHandler;
@@ -28,7 +28,7 @@ final readonly class ScrapStandingsTaskHandler implements TaskHandler
         );
 
         $this->taskBus->execute(
-            SyncAnalyticsAfterScrappingTask::forSeasonAndJob(
+            SpotMissingConstructorTeamRelationsTask::forSeasonAndJob(
                 $task->series()->value(),
                 $task->year()->value(),
                 $task->job()->value(),

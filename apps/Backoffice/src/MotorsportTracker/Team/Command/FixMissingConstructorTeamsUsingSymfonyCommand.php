@@ -4,29 +4,20 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Team\Command;
 
-use Kishlin\Backend\Persistence\Core\Connection\Connection;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
+use Kishlin\Backend\MotorsportETL\DataFix\Application\FixMissingConstructorTeams\FixMissingConstructorTeamsCommand;
+use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class FixMissingConstructorTeamsCommand extends SymfonyCommand
+final class FixMissingConstructorTeamsUsingSymfonyCommand extends SymfonyCommand
 {
     public const NAME = 'kishlin:motorsport:constructor-team:fix';
 
-    private const QUERY = <<<'SQL'
-INSERT INTO constructor_team (constructor, team)
-SELECT DISTINCT ct.constructor, t.id
-FROM team t
-         JOIN constructor_team ct ON t.ref = (SELECT t2.ref FROM team t2 WHERE t2.id = ct.team)
-         LEFT JOIN constructor_team ct_existing ON t.id = ct_existing.team
-WHERE ct_existing.team IS NULL;
-SQL;
-
     public function __construct(
-        private readonly Connection $connection,
+        private readonly CommandBus $commandBus,
     ) {
         parent::__construct();
     }
@@ -43,7 +34,9 @@ SQL;
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $this->connection->execute(SQLQuery::create(self::QUERY));
+        $this->commandBus->execute(
+            FixMissingConstructorTeamsCommand::create(),
+        );
 
         $ui->success('Fixed missing constructor-team relations.');
 
