@@ -47,7 +47,7 @@ final class ScrapRaceHistoryCommandUsingSymfony extends CachableScrapCommandUsin
         $result = $this->executeApplicationCommand($input, ScrapRaceHistoryCommand::forEvents($series, $year, $event));
 
         if ($result->isOk()) {
-            $ui->success("Finished scrapping standings for {$series} #{$year}.");
+            $ui->success("Finished scrapping histories for {$series} #{$year}.");
 
             return Command::SUCCESS;
         }
