@@ -107,6 +107,9 @@ final class ClassificationTransformer
 
         foreach ($content['retirements'] as $retirement) {
             $entry = $this->retrieveEntryForCarNumber($retirement['carNumber']);
+            if (null === $entry) {
+                continue;
+            }
 
             yield Retirement::fromData($entry, $retirement);
         }
@@ -117,8 +120,12 @@ final class ClassificationTransformer
         $this->entryForDriverIdCache[$carNumber] = $entry;
     }
 
-    private function retrieveEntryForCarNumber(string $carNumber): Entry
+    private function retrieveEntryForCarNumber(string $carNumber): ?Entry
     {
+        if (false === array_key_exists($carNumber, $this->entryForDriverIdCache)) {
+            return null;
+        }
+
         return $this->entryForDriverIdCache[$carNumber];
     }
 }
