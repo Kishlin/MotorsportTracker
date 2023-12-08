@@ -78,6 +78,11 @@ final class ClassificationTransformer
         $content = $this->jsonableStringParser->transform($extractorResponse);
 
         foreach ($content['details'] as $classification) {
+            if (empty($classification['drivers'])) {
+                // TODO: Allow creation of entries without drivers
+                continue;
+            }
+
             $entry = Entry::fromData(
                 $session->id(),
                 $session->season(),
