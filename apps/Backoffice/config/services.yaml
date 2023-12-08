@@ -308,6 +308,10 @@ services:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.client'
 
+    Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CacheRepositoryInterface:
+      bind:
+        $connection: '@kishlin.app.infrastructure.connection.cache'
+
     Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\AdminRepositoryInterface:
       bind:
         $connection: '@kishlin.app.infrastructure.connection.admin'

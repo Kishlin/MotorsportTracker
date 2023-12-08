@@ -64,6 +64,8 @@ const EventsTable: FunctionComponent<EventsTableProps> = ({ seriesName, year }) 
                 <StyledTableCell align="left">{item.sessions_with_results}</StyledTableCell>
                 <StyledTableCell align="left">{item.sessions_with_classification}</StyledTableCell>
                 <StyledTableCell align="left">{item.sessions_with_race_lap}</StyledTableCell>
+                <StyledTableCell align="left">{item.count_results}</StyledTableCell>
+                <StyledTableCell align="left">{item.count_graphs}</StyledTableCell>
                 <StyledTableCell align="right">
                     <EventClassificationButton
                         onJobFinished={refreshEvents}
@@ -92,6 +94,8 @@ const EventsTable: FunctionComponent<EventsTableProps> = ({ seriesName, year }) 
                         <StyledTableCell align="right">With Results</StyledTableCell>
                         <StyledTableCell align="right">Classification</StyledTableCell>
                         <StyledTableCell align="right">Histories</StyledTableCell>
+                        <StyledTableCell align="right">Results</StyledTableCell>
+                        <StyledTableCell align="right">Graphs</StyledTableCell>
                         <StyledTableCell align="right">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
