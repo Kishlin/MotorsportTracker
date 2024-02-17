@@ -6,9 +6,12 @@ namespace Kishlin\Backend\MotorsportETL\Shared\Application;
 
 use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 
-abstract class ScrapWithCacheCommand implements Command
+abstract class ScrapCachableResourceCommand implements Command
 {
-    private bool $cacheMustBeInvalidated = false;
+    protected function __construct(
+        private bool $cacheMustBeInvalidated = false,
+    ) {
+    }
 
     public function cacheMustBeInvalidated(): bool
     {

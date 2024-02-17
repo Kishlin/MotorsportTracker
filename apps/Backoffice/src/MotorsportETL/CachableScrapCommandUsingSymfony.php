@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportETL;
 
-use Kishlin\Backend\MotorsportETL\Shared\Application\ScrapWithCacheCommand;
+use Kishlin\Backend\MotorsportETL\Shared\Application\ScrapCachableResourceCommand;
 use Kishlin\Backend\Shared\Domain\Bus\Command\CommandBus;
 use Kishlin\Backend\Shared\Domain\Result\Result;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
@@ -28,7 +28,7 @@ abstract class CachableScrapCommandUsingSymfony extends SymfonyCommand
         );
     }
 
-    public function executeApplicationCommand(InputInterface $input, ScrapWithCacheCommand $command): Result
+    public function executeApplicationCommand(InputInterface $input, ScrapCachableResourceCommand $command): Result
     {
         if (true === $input->getOption(self::OPTION_INVALIDATE_CACHE)) {
             $command->invalidateCache();
@@ -41,3 +41,4 @@ abstract class CachableScrapCommandUsingSymfony extends SymfonyCommand
         return $result;
     }
 }
+

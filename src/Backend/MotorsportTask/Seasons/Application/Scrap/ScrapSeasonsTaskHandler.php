@@ -20,7 +20,9 @@ final readonly class ScrapSeasonsTaskHandler implements TaskHandler
 
     public function __invoke(ScrapSeasonsTask $task): void
     {
-        $this->commandBus->execute(ScrapSeasonsCommand::forSeries($task->series()->value()));
+        $this->commandBus->execute(
+            ScrapSeasonsCommand::forSeries($task->series()->value(), cacheMustBeInvalidated: true),
+        );
 
         $this->eventDispatcher->dispatch(JobFinishedEvent::forJob($task->job()->value()));
     }

@@ -24,6 +24,7 @@ final readonly class ScrapCalendarTaskHandler implements TaskHandler
             ScrapCalendarCommand::forSeason(
                 $task->series()->value(),
                 $task->year()->value(),
+                cacheMustBeInvalidated: true,
             ),
         );
 

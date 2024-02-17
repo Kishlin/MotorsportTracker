@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\MotorsportETL\Season\Application\ScrapSeasons;
 
-use Kishlin\Backend\MotorsportETL\Shared\Application\ScrapWithCacheCommand;
+use Kishlin\Backend\MotorsportETL\Shared\Application\ScrapCachableResourceCommand;
 
-final class ScrapSeasonsCommand extends ScrapWithCacheCommand
+final class ScrapSeasonsCommand extends ScrapCachableResourceCommand
 {
     private function __construct(
         private readonly string $seriesName,
+        bool $cacheMustBeInvalidated,
     ) {
+        parent::__construct($cacheMustBeInvalidated);
     }
 
     public function seriesName(): string
@@ -18,8 +20,8 @@ final class ScrapSeasonsCommand extends ScrapWithCacheCommand
         return $this->seriesName;
     }
 
-    public static function forSeries(string $seriesName): self
+    public static function forSeries(string $seriesName, bool $cacheMustBeInvalidated = false): self
     {
-        return new self($seriesName);
+        return new self($seriesName, $cacheMustBeInvalidated);
     }
 }

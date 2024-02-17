@@ -24,6 +24,7 @@ final readonly class ScrapStandingsTaskHandler implements TaskHandler
             ScrapStandingsCommand::forSeason(
                 $task->series()->value(),
                 $task->year()->value(),
+                cacheMustBeInvalidated: true,
             ),
         );
 

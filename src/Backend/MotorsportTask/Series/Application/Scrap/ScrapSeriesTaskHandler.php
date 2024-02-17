@@ -20,7 +20,7 @@ final readonly class ScrapSeriesTaskHandler implements TaskHandler
 
     public function __invoke(ScrapSeriesTask $task): void
     {
-        $this->commandBus->execute(ScrapSeriesListCommand::create());
+        $this->commandBus->execute(ScrapSeriesListCommand::create(cacheMustBeInvalidated: true));
 
         $this->eventDispatcher->dispatch(JobFinishedEvent::forJob($task->job()->value()));
     }

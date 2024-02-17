@@ -25,6 +25,7 @@ final readonly class ScrapClassificationsTaskHandler implements TaskHandler
                 $task->series()->value(),
                 $task->year()->value(),
                 $task->event()->value(),
+                cacheMustBeInvalidated: true,
             ),
         );
 
