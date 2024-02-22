@@ -57,8 +57,7 @@ const MotorsportTrackerMenu: React.FunctionComponent = () => {
                     </ListItemButton>
                 </ListItem>
             );
-        },
-    );
+        });
 
     return (
         <List>
