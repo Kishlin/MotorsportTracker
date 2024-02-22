@@ -11,6 +11,8 @@ parameters:
   kishlin.jwt.expire_refresh_token: '%env(default:kishlin.jwt.expire_refresh_token_default:JWT_EXP_REFRESH_TOKEN)%'
   kishlin.jwt.expire_refresh_token_default: '+1 month'
   kishlin.jwt.exp_claim_is_required: '%env(bool:JWT_EXP_CLAIM_IS_REQUIRED)%'
+  kishlin.app.front.host: '%env(string:FRONTEND_HOST)%'
+  kishlin.app.front.secret: '%env(string:FRONTEND_SECRET)%'
 
 services:
   _defaults:
@@ -33,6 +35,10 @@ services:
 
   Psr\Cache\CacheItemPoolInterface: '@app.cache.memcached'
 
+  Kishlin\Backend\MotorsportTask\Job\Infrastructure\InvalidateFrontCacheOnJobFinished\FrontConnector:
+    bind:
+      $frontHost: '%kishlin.app.front.host%'
+      $frontToken: '%kishlin.app.front.secret%'
 
   ##> ETL Connector
 
