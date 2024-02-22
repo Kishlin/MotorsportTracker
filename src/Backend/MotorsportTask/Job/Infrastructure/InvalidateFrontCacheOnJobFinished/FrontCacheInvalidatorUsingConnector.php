@@ -6,6 +6,8 @@ namespace Kishlin\Backend\MotorsportTask\Job\Infrastructure\InvalidateFrontCache
 
 use Kishlin\Backend\MotorsportTask\Job\Application\InvalidateFrontCacheOnJobFinished\FrontCacheInvalidator;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
+use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
+use Kishlin\Backend\Tools\Helpers\StringHelper;
 
 final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheInvalidator
 {
@@ -16,6 +18,12 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
 
     public function invalidateAfter(Job $job): void
     {
-        // TODO: Implement invalidateAfter() method.
+        if ($job->isOfType(JobType::SCRAP_CALENDAR)) {
+            $series = StringHelper::slugify($job->stringParam('series'));
+            $year   = $job->intParam('year');
+
+            $this->connector->invalidateCacheTag("calendar_{$series}_{$year}");
+            $this->connector->invalidateCacheTag((string) $year);
+        }
     }
 }
