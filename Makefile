@@ -141,6 +141,21 @@ frontend.sh:
 frontend.build:
 	@docker-compose exec node npm run build
 
+##> Prod
+.PHONY: deploy
+
+deploy:
+	@echo "Composer runs"
+	composer install --no-dev --optimize-autoloader
+	composer dump-autoload --no-dev --classmap-authoritative
+	composer dump-env prod
+	@echo "Symfony caches"
+	php /app/MotorsportTracker/apps/Backoffice/bin/console ca:cl
+	php /app/MotorsportTracker/apps/Backoffice/bin/console ca:warmup
+	php /app/MotorsportTracker/apps/MotorsportTracker/Backend/bin/console ca:cl
+	php /app/MotorsportTracker/apps/MotorsportTracker/Backend/bin/console ca:warmup
+	@echo "Deployed! Remember to clear the opcache with php-fpm."
+
 ##> Tests
 #.PHONY: tests.backend.use-cases tests.backend.api tests.backend.backoffice \
 
