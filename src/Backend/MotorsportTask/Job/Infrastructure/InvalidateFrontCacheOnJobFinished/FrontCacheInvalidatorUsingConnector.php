@@ -7,12 +7,16 @@ namespace Kishlin\Backend\MotorsportTask\Job\Infrastructure\InvalidateFrontCache
 use Kishlin\Backend\MotorsportTask\Job\Application\InvalidateFrontCacheOnJobFinished\FrontCacheInvalidator;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
 use Kishlin\Backend\MotorsportTask\Job\Domain\Enum\JobType;
+use Kishlin\Backend\MotorsportTask\Shared\Application\EventIdGateway;
 use Kishlin\Backend\Tools\Helpers\StringHelper;
+use Psr\Log\LoggerInterface;
 
 final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheInvalidator
 {
     public function __construct(
+        private EventIdGateway $eventIdGateway,
         private FrontConnector $connector,
+        private ?LoggerInterface $logger,
     ) {
     }
 
@@ -26,6 +30,29 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
             return $this->invalidateAfterAStandingsJob($job);
         }
 
+        if ($job->isOfType(JobType::SCRAP_CLASSIFICATIONS)) {
+            return $this->invalidateAfterAClassificationsJob($job);
+        }
+
+        return false;
+    }
+
+    private function invalidateAfterAClassificationsJob(Job $job): bool
+    {
+        $series = $job->stringParam('series');
+        $year   = $job->intParam('year');
+        $event  = $job->stringParam('event');
+
+        $eventId = $this->eventIdGateway->findEventId($series, $year, $event);
+
+        if (null === $eventId) {
+            $this->logger?->warning('Event not found', ['series' => $series, 'year' => $year, 'event' => $event]);
+
+            return false;
+        }
+
+        $this->connector->invalidateCacheTag("classifications_{$eventId}");
+
         return false;
     }
 
@@ -35,7 +62,6 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
         $year   = $job->intParam('year');
 
         $this->connector->invalidateCacheTag("stats_{$series}_{$year}");
-
 
         return true;
     }

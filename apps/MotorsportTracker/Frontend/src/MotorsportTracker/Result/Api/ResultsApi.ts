@@ -4,10 +4,11 @@ export type ResultsApi = (event: string) => Promise<ResultsBySession>;
 
 const resultsApi: ResultsApi = async (event) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/results/${event}`;
+    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {
-            tags: [`results-${event}`],
+            tags: [`classifications_${event}`],
         },
     };
 
