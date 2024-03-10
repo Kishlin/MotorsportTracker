@@ -8,5 +8,5 @@ use Kishlin\Backend\MotorsportTask\Job\Domain\Entity\Job;
 
 interface FrontCacheInvalidator
 {
-    public function invalidateAfter(Job $job): void;
+    public function invalidateAfter(Job $job): bool;
 }

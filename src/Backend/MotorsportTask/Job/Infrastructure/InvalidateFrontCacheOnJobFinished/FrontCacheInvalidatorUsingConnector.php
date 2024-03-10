@@ -16,14 +16,38 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
     ) {
     }
 
-    public function invalidateAfter(Job $job): void
+    public function invalidateAfter(Job $job): bool
     {
         if ($job->isOfType(JobType::SCRAP_CALENDAR)) {
-            $series = StringHelper::slugify($job->stringParam('series'));
-            $year   = $job->intParam('year');
-
-            $this->connector->invalidateCacheTag("calendar_{$series}_{$year}");
-            $this->connector->invalidateCacheTag((string) $year);
+            return $this->invalidateAfterACalendarJob($job);
         }
+
+        if ($job->isOfType(JobType::SCRAP_STANDINGS)) {
+            return $this->invalidateAfterAStandingsJob($job);
+        }
+
+        return false;
+    }
+
+    private function invalidateAfterAStandingsJob(Job $job): bool
+    {
+        $series = StringHelper::slugify($job->stringParam('series'));
+        $year   = $job->intParam('year');
+
+        $this->connector->invalidateCacheTag("stats_{$series}_{$year}");
+
+
+        return true;
+    }
+
+    private function invalidateAfterACalendarJob(Job $job): bool
+    {
+        $series = StringHelper::slugify($job->stringParam('series'));
+        $year   = $job->intParam('year');
+
+        $this->connector->invalidateCacheTag("calendar_{$series}_{$year}");
+        $this->connector->invalidateCacheTag((string) $year);
+
+        return true;
     }
 }
