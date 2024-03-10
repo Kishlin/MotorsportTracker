@@ -9,16 +9,11 @@ import {
     TableBody,
     TableContainer,
 } from '@mui/material';
-import {
-    useEffect,
-    useContext,
-    FunctionComponent,
-} from 'react';
+import { FunctionComponent } from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 
-import { SeriesContext, SeriesContextType } from '../../Context/SeriesContext';
 import FontAwesomeSvgIcon from '../../../../Shared/Ui/Icon/FontAwesomeSvgIcon';
 import StyledTableCell from '../../../../Shared/Ui/Table/StyledTableCell';
 import SeriesSeasonsButton from './SeriesSeasonsButton';
@@ -35,16 +30,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const SeriesTable: FunctionComponent = () => {
-    const { series, refreshSeries } = useContext<SeriesContextType>(SeriesContext);
+declare type SeriesTableProps = {
+    series: Array<Series>,
+};
 
-    useEffect(
-        () => {
-            refreshSeries();
-        },
-        [],
-    );
-
+const SeriesTable: FunctionComponent<SeriesTableProps> = ({ series }) => {
     if (0 === series.length) {
         return (
             <Typography>There are no series at that time.</Typography>
