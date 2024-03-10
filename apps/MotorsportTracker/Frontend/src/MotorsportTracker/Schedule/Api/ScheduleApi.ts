@@ -4,7 +4,6 @@ export type ScheduleApi = (championship: string, year: string) => Promise<Events
 
 const scheduleApi: ScheduleApi = async (championship, year) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/schedule/${championship}/${year}`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {

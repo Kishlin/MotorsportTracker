@@ -6,7 +6,6 @@ export type ConstructorStandingApi = (championship: string, year: string) =>
 
 const constructorStandingApi: ConstructorStandingApi = async (championship, year) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/standings/details/${championship}/${year}/constructor`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {

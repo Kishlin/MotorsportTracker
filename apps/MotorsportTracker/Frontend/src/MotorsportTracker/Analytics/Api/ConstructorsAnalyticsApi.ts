@@ -4,7 +4,6 @@ export type ConstructorsAnalyticsApi = (championship: string, year: string) => P
 
 const constructorsAnalyticsApi: ConstructorsAnalyticsApi = async (championship, year) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/analytics/${championship}/${year}/constructors`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {

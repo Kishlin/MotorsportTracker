@@ -4,7 +4,6 @@ export type DriversAnalyticsApi = (championship: string, year: string) => Promis
 
 const driversAnalyticsApi: DriversAnalyticsApi = async (championship, year) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/analytics/${championship}/${year}/drivers`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {

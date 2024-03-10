@@ -4,7 +4,6 @@ export type TeamsAnalyticsApi = (championship: string, year: string) => Promise<
 
 const teamsAnalyticsApi: TeamsAnalyticsApi = async (championship, year) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/analytics/${championship}/${year}/teams`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {

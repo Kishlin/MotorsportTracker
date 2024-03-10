@@ -4,7 +4,6 @@ export type HistoriesApi = (event: string) => Promise<HistoriesList>;
 
 const historiesApi: HistoriesApi = async (event) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/histories/${event}`;
-    console.log(`Fetching ${url}`);
 
     const configuration = {
         next: {
