@@ -22,6 +22,10 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
 
     public function invalidateAfter(Job $job): bool
     {
+        if ($job->isOfType(JobType::SCRAP_RACE_HISTORIES)) {
+            return $this->invalidateAfterARaceHistoriesJob($job);
+        }
+
         if ($job->isOfType(JobType::SCRAP_CALENDAR)) {
             return $this->invalidateAfterACalendarJob($job);
         }
@@ -37,23 +41,28 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
         return false;
     }
 
+    private function invalidateAfterARaceHistoriesJob(Job $job): bool
+    {
+        $eventId = $this->findEventIdForJob($job);
+        if (null === $eventId) {
+            return false;
+        }
+
+        $this->connector->invalidateCacheTag("histories_{$eventId}");
+
+        return true;
+    }
+
     private function invalidateAfterAClassificationsJob(Job $job): bool
     {
-        $series = $job->stringParam('series');
-        $year   = $job->intParam('year');
-        $event  = $job->stringParam('event');
-
-        $eventId = $this->eventIdGateway->findEventId($series, $year, $event);
-
+        $eventId = $this->findEventIdForJob($job);
         if (null === $eventId) {
-            $this->logger?->warning('Event not found', ['series' => $series, 'year' => $year, 'event' => $event]);
-
             return false;
         }
 
         $this->connector->invalidateCacheTag("classifications_{$eventId}");
 
-        return false;
+        return true;
     }
 
     private function invalidateAfterAStandingsJob(Job $job): bool
@@ -75,5 +84,20 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
         $this->connector->invalidateCacheTag((string) $year);
 
         return true;
+    }
+
+    private function findEventIdForJob(Job $job): null|string
+    {
+        $series = $job->stringParam('series');
+        $year   = $job->intParam('year');
+        $event  = $job->stringParam('event');
+
+        $eventId = $this->eventIdGateway->findEventId($series, $year, $event);
+
+        if (null === $eventId) {
+            $this->logger?->warning('Event not found', ['series' => $series, 'year' => $year, 'event' => $event]);
+        }
+
+        return $eventId;
     }
 }
