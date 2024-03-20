@@ -41,8 +41,8 @@ final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestC
     public function testItUpdatesTheEventIfItAlreadyExists(): void
     {
         self::loadFixtures(
-            'motorsport.calendar.calendarEvent.formulaOne2022DutchGP',
-            'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
+            'calendar_event.formula_one_2022_dutch_gp',
+            'calendar_event.formula_one_2022_emilia_romagna_gp',
         );
 
         $repository = new SaveCalendarEventRepository(self::connection());

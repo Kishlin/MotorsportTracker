@@ -1,0 +1,19 @@
+formula_one_2023:
+  series: '@series.formula_one'
+  year: 2023
+
+formula_one_2022:
+  series: '@series.formula_one'
+  year: 2022
+
+formula_one_2019:
+  series: '@series.formula_one'
+  year: 2019
+
+moto_gp_2022:
+  series: '@series.moto_gp'
+  year: 2022
+
+formula_two_2023:
+  series: '@series.formula_two'
+  year: 2023

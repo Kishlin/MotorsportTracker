@@ -1,0 +1,23 @@
+max_verstappen_2022:
+  season: '@season.formula_one_2022'
+  driver: '@driver.max_verstappen'
+  country: '@country.netherlands'
+  position: 1
+  points: 454.0
+  avg_finish_position: 2.81
+  class_wins: 0
+  fastest_laps: 5
+  final_appearances: 0
+  hat_tricks: 2
+  podiums: 17
+  poles: 7
+  races_led: 17
+  rallies_led: 0
+  retirements: 2
+  semi_final_appearances: 0
+  stage_wins: 0
+  starts: 22
+  top10s: 20
+  top5s: 17
+  wins: 15
+  wins_percentage: 68.18

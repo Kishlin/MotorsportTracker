@@ -1,0 +1,89 @@
+dutch_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.zandvoort'
+  index: '14'
+  name: 'Dutch GP'
+  short_name: 'Dutch GP'
+  start_date: '2022-09-04 13:00:00'
+  end_date: '2022-09-04 13:00:00'
+
+australian_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.melbourne'
+  index: '2'
+  name: 'Australian GP'
+  short_name: 'Australian GP'
+  start_date: '2022-04-10 05:00:00'
+  end_date: '2022-04-10 05:00:00'
+
+emilia_romagna_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.emilia_romagna'
+  index: '3'
+  name: 'Emilia Romagna GP'
+  short_name: 'Emilia Romagna GP'
+  start_date: '2022-04-23 14:30:00'
+  end_date: '2022-04-24 13:00:00'
+
+americas_moto_gp_2022:
+  season: '@season.moto_gp_2022'
+  venue: '@venue.circuit_of_the_americas'
+  index: '3'
+  name: 'Americas GP'
+  short_name: 'Americas GP'
+  start_date: '2022-04-10 18:00:00'
+  end_date: '2022-04-10 18:00:00'
+
+italian_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.monza'
+  index: '15'
+  name: 'Italian GP'
+  short_name: 'Italian GP'
+  start_date: '2022-09-11 13:00:00'
+  end_date: '2022-09-11 13:00:00'
+
+singapore_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.singapore'
+  index: '16'
+  name: 'Singapore GP'
+  short_name: 'Singapore GP'
+  start_date: '2022-10-02 12:00:00'
+  end_date: '2022-10-02 12:00:00'
+
+hungarian_grand_prix_2022:
+  season: '@season.formula_one_2022'
+  venue: '@venue.hungaroring'
+  index: '12'
+  name: 'Hungarian GP'
+  short_name: 'Hungarian GP'
+  start_date: '2022-07-31 13:00:00'
+  end_date: '2022-07-31 13:00:00'
+
+hungarian_grand_prix_2019:
+  season: '@season.formula_one_2019'
+  venue: '@venue.hungaroring'
+  index: '10'
+  name: 'Hungarian GP'
+  short_name: 'Hungarian GP'
+  start_date: '2019-08-04 13:10:00'
+  end_date: '2019-08-04 13:10:00'
+
+belgian_grand_prix_2019:
+  season: '@season.formula_one_2019'
+  venue: '@venue.spa_francorchamps'
+  index: '11'
+  name: 'Belgian GP'
+  short_name: 'Belgian GP'
+  start_date: '2019-09-01 13:10:00'
+  end_date: '2019-09-01 13:10:00'
+
+australian_gp_2023_formula_two:
+  season: '@season.formula_two_2023'
+  venue: '@venue.melbourne'
+  index: '3'
+  name: 'Australian GP'
+  short_name: 'Australian GP'
+  start_date: '2023-03-31 2:00:00'
+  end_date: '2023-04-02 6:00:00'

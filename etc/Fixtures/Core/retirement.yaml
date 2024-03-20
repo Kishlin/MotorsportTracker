@@ -1,0 +1,6 @@
+max_verstappen_at_australian_gp_2022_race:
+  entry: '@entry.max_verstappen_for_red_bull_racing_at_australian_gp_2022_race'
+  reason: 'Power Unit'
+  type: 'Mechanical'
+  dns: 0,
+  lap: 38

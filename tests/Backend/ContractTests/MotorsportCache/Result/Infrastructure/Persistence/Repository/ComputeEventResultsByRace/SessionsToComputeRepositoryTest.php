@@ -16,39 +16,39 @@ final class SessionsToComputeRepositoryTest extends CoreRepositoryContractTestCa
     public function testItCanFindARaceToCompute(): void
     {
         self::loadFixtures(
-            'motorsport.event.eventSession.dutchGrandPrix2022Race',
+            'event_session.dutch_grand_prix_2022_race',
         );
 
         $repository = new SessionsToComputeRepository(self::connection());
 
-        $races = $repository->findSessions(self::fixtureId('motorsport.event.event.dutchGrandPrix2022'))->sessions();
+        $races = $repository->findSessions(self::fixtureId('event.dutch_grand_prix_2022'))->sessions();
 
         self::assertIsArray($races);
         self::assertCount(1, $races);
 
         self::assertSame('race', $races[0]['type']);
-        self::assertSame(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'), $races[0]['id']);
+        self::assertSame(self::fixtureId('event_session.dutch_grand_prix_2022_race'), $races[0]['id']);
     }
 
     public function testItCanFindMultipleRacesToCompute(): void
     {
         self::loadFixtures(
-            'motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceOne',
-            'motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo',
+            'event_session.australian_grand_prix_2023_formula_two_race_one',
+            'event_session.australian_grand_prix_2023_formula_two_race_two',
         );
 
         $repository = new SessionsToComputeRepository(self::connection());
 
-        $races = $repository->findSessions(self::fixtureId('motorsport.event.event.australianGP2023FormulaTwo'))->sessions();
+        $races = $repository->findSessions(self::fixtureId('event.australian_gp_2023_formula_two'))->sessions();
 
         self::assertIsArray($races);
         self::assertCount(2, $races);
 
         self::assertSame('race', $races[0]['type']);
-        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceTwo'), $races[0]['id']);
+        self::assertSame(self::fixtureId('event_session.australian_grand_prix_2023_formula_two_race_two'), $races[0]['id']);
 
         self::assertSame('race', $races[1]['type']);
-        self::assertSame(self::fixtureId('motorsport.event.eventSession.australianGrandPrix2023FormulaTwoRaceOne'), $races[1]['id']);
+        self::assertSame(self::fixtureId('event_session.australian_grand_prix_2023_formula_two_race_one'), $races[1]['id']);
     }
 
     public function testItIsEmptyWhenThereAreNone(): void

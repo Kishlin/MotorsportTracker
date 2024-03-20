@@ -1,0 +1,31 @@
+zandvoort:
+  country: '@country.netherlands'
+  name: 'Circuit Zandvoort'
+
+melbourne:
+  country: '@country.australia'
+  name: 'Melbourne Grand Prix Circuit'
+
+emilia_romagna:
+  country: '@country.italia'
+  name: 'Autodromo Internazionale Enzo e Dino Ferrari'
+
+circuit_of_the_americas:
+  country: '@country.usa'
+  name: 'Circuit of the Americas'
+
+monza:
+  country: '@country.italia'
+  name: 'Autodromo Nazionale Monza'
+
+singapore:
+  country: '@country.singapore'
+  name: 'Marina Bay Street Circuit'
+
+hungaroring:
+  country: '@country.hungary'
+  name: 'Hungaroring'
+
+spa_francorchamps:
+  country: '@country.belgium'
+  name: 'Circuit de Spa Francorchamps'

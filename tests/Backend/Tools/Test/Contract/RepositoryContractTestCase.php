@@ -80,8 +80,6 @@ abstract class RepositoryContractTestCase extends TestCase
 
     abstract protected static function fixturesFolder(): string;
 
-    abstract protected static function configureFixtureSaver(FixtureSaver $fixtureSaver): void;
-
     abstract protected static function createConnection(): Connection;
 
     protected static function uuid(): string
@@ -101,6 +99,7 @@ abstract class RepositoryContractTestCase extends TestCase
         try {
             self::fixtureLoader()->loadFixture($fixture);
         } catch (Exception $e) {
+            var_dump($e->getTrace());
             self::fail("Failed to load fixture: {$e->getMessage()}");
         }
     }
@@ -123,8 +122,6 @@ abstract class RepositoryContractTestCase extends TestCase
     {
         if (null === self::$fixtureSaver) {
             self::$fixtureSaver = new FixtureSaverUsingConnection(self::connection());
-
-            static::configureFixtureSaver(self::$fixtureSaver);
         }
 
         return self::$fixtureSaver;

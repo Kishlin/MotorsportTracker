@@ -22,14 +22,14 @@ final class SessionClassificationRepositoryTest extends CoreRepositoryContractTe
     public function testItCanFindResultsForOneSession(): void
     {
         self::loadFixtures(
-            'motorsport.result.classification.maxVerstappenAtDutchGP2022Race',
-            'motorsport.result.classification.sergioPerezAtDutchGP2022Race',
-            'motorsport.team.team.redBullRacing'
+            'classification.max_verstappen_at_dutch_gp_2022_race',
+            'classification.sergio_perez_at_dutch_gp_2022_race',
+            'team.red_bull_racing'
         );
 
         $repository = new SessionClassificationRepository(self::connection());
 
-        $results = $repository->findResult(self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'))->results();
+        $results = $repository->findResult(self::fixtureId('event_session.dutch_grand_prix_2022_race'))->results();
 
         self::assertIsArray($results);
         self::assertCount(2, $results);

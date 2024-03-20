@@ -55,8 +55,8 @@ final class FixtureLoader
             return;
         }
 
-        if (1 !== preg_match('/^([\w]+(?:\.[\w]+)+?)\.([\w]+)$/', $fixture, $matches)) {
-            throw new InvalidArgumentException('Fixture Name is not in the class.key format.');
+        if (1 !== preg_match('/^([\w]+)\.([\w]+)$/', $fixture, $matches)) {
+            throw new InvalidArgumentException(sprintf('Fixture %s is not in the class.key format.', $fixture));
         }
 
         [, $fixtureClass, $fixtureName] = $matches;
@@ -77,7 +77,7 @@ final class FixtureLoader
 
         $this->identifiers[$fixture] = $identifier;
 
-        $this->fixtureSaver->save($fixtureClass, Fixture::fromScalars($identifier, $fixtureData));
+        $this->fixtureSaver->save($fixtureClass, $identifier, $fixtureData);
     }
 
     private function fixtureHasBeenLoaded(string $fixture): bool

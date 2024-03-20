@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\Services\Shared;
 
-use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence\ObjectStoreSpy;
@@ -22,9 +20,6 @@ trait PersistenceServicesTrait
     {
         if (null === $this->objectStoreSpy) {
             $this->objectStoreSpy = new ObjectStoreSpy();
-
-            CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($this->objectStoreSpy);
-            MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($this->objectStoreSpy);
         }
 
         return $this->objectStoreSpy;

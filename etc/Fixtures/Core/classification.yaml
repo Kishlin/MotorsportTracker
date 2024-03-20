@@ -1,0 +1,75 @@
+max_verstappen_at_dutch_gp_2022_race:
+  entry: '@entry.max_verstappen_for_red_bull_racing_at_dutch_gp_2022_race'
+  finish_position: 9
+  grid_position: 20
+  laps: 57
+  points: 2.0
+  lap_time: 5710489.0
+  classified_status: 'CLA'
+  average_lap_speed: 194.319
+  fastest_lap_time: 95068.0
+  gap_time_to_lead: 73753.0
+  gap_time_to_next: 1106.0
+  gap_laps_to_lead: 0
+  gap_laps_to_next: 0
+  best_lap: 42
+  best_time: 95068.0
+  best_is_fastest: 0
+  best_speed: 285.6
+
+sergio_perez_at_dutch_gp_2022_race:
+  entry: '@entry.sergio_perez_for_red_bull_racing_at_dutch_gp_2022_race'
+  finish_position: 2
+  grid_position: 7
+  laps: 57
+  points: 18.0
+  lap_time: 5710489.0
+  classified_status: 'CLA'
+  average_lap_speed: 195.319
+  fastest_lap_time: 95048.0
+  gap_time_to_lead: 4753.0
+  gap_time_to_next: 2106.0
+  gap_laps_to_lead: 0
+  gap_laps_to_next: 0
+  best_lap: 38
+  best_time: 95048.0
+  best_is_fastest: 0
+  best_speed: 276.5
+
+ralph_boschung_at_australian_gp_2023_formula_two_race_one:
+  entry: '@entry.ralph_boschung_for_campos_racing_at_australian_gp_2023_formula_two_race_one'
+  finish_position: 1
+  grid_position: 1
+  laps: 23
+  points: 10.0
+  lap_time: 2510597.0
+  classified_status: 'CLA'
+  average_lap_speed: 178.136
+  fastest_lap_time: 107857.0
+  gap_time_to_lead: 0.0
+  gap_time_to_next: 0.0
+  gap_laps_to_lead: 0
+  gap_laps_to_next: 0
+  best_lap: 4
+  best_time: 107857.0
+  best_is_fastest: 0
+  best_speed: 243.8
+
+theo_pourchaire_at_australian_gp_2023_formula_two_race_two:
+  entry: '@entry.theo_pourchaire_for_art_grand_prix_at_australian_gp_2023_formula_two_race_two'
+  finish_position: 1
+  grid_position: 1
+  laps: 32
+  points: 27.0
+  lap_time: 3670926.0
+  classified_status: 'CLA'
+  average_lap_speed: 169.596
+  fastest_lap_time: 107689.0
+  gap_time_to_lead: 0.0
+  gap_time_to_next: 0.0
+  gap_laps_to_lead: 0
+  gap_laps_to_next: 0
+  best_lap: 17
+  best_time: 107689.0
+  best_is_fastest: 0
+  best_speed: 275.6

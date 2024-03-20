@@ -16,7 +16,7 @@ final class SearchCountryRepositoryTest extends CoreRepositoryContractTestCase
 {
     public function testItCanRetrieveAnId(): void
     {
-        $this->loadFixture('country.country.france');
+        $this->loadFixture('country.france');
 
         $repository = new SearchCountryRepository($this->connection());
 

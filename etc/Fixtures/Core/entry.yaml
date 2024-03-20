@@ -1,0 +1,35 @@
+max_verstappen_for_red_bull_racing_at_dutch_gp_2022_race:
+  session: '@event_session.dutch_grand_prix_2022_race'
+  driver: '@driver.max_verstappen'
+  team: '@team.red_bull_racing'
+  car_number: 33
+
+sergio_perez_for_red_bull_racing_at_dutch_gp_2022_race:
+  session: '@event_session.dutch_grand_prix_2022_race'
+  driver: '@driver.sergio_perez'
+  team: '@team.red_bull_racing'
+  car_number: 11
+
+max_verstappen_for_red_bull_racing_at_australian_gp_2022_race:
+  session: '@event_session.australian_grand_prix_2022_race'
+  driver: '@driver.max_verstappen'
+  team: '@team.red_bull_racing'
+  car_number: 33
+
+lewis_hamilton_for_mercedes_at_australian_gp_2022_race:
+  session: '@event_session.australian_grand_prix_2022_race'
+  driver: '@driver.lewis_hamilton'
+  team: '@team.mercedes'
+  car_number: 44
+
+ralph_boschung_for_campos_racing_at_australian_gp_2023_formula_two_race_one:
+  session: '@event_session.australian_grand_prix_2023_formula_two_race_one'
+  driver: '@driver.ralph_boschung'
+  team: '@team.campos_racing'
+  car_number: 25
+
+theo_pourchaire_for_art_grand_prix_at_australian_gp_2023_formula_two_race_two:
+  session: '@event_session.australian_grand_prix_2023_formula_two_race_two'
+  driver: '@driver.theo_pourchaire'
+  team: '@team.art_grand_prix'
+  car_number: 5

@@ -1,0 +1,47 @@
+max_verstappen_in_formula_one_2023:
+  season: '@season.formula_one_2023'
+  driver: '@driver.max_verstappen'
+  country: '@country.netherlands'
+  position: 1
+  points: 314.0
+  avg_finish_position: 1.17
+  class_wins: 0
+  fastest_laps: 6
+  final_appearances: 0
+  hat_tricks: 2
+  podiums: 12
+  poles: 7
+  races_led: 17
+  rallies_led: 0
+  retirements: 0
+  semi_final_appearances: 0
+  stage_wins: 0
+  starts: 12
+  top10s: 12
+  top5s: 12
+  wins: 10
+  wins_percentage: 83.33
+
+lewis_hamilton_in_formula_one_2023:
+  season: '@season.formula_one_2023'
+  driver: '@driver.lewis_hamilton'
+  country: '@country.united_kingdom'
+  position: 4
+  points: 148.0
+  avg_finish_position: 4.33
+  class_wins: 0
+  fastest_laps: 2
+  final_appearances: 0
+  hat_tricks: 2
+  podiums: 4
+  poles: 1
+  races_led: 0
+  rallies_led: 0
+  retirements: 0
+  semi_final_appearances: 0
+  stage_wins: 0
+  starts: 12
+  top10s: 12
+  top5s: 9
+  wins: 0
+  wins_percentage: 0

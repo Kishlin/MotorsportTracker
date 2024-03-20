@@ -1,0 +1,17 @@
+formula_one_white:
+  championship: '@series.formula_one'
+  icon: 'f1.png'
+  color: "#fff"
+  created_on: '1993-11-22'
+
+formula_one_red:
+  championship: '@series.formula_one'
+  icon: 'f1.png'
+  color: "#f00"
+  created_on: '2000-01-01'
+
+moto_gp_black:
+  championship: '@series.moto_gp'
+  icon: 'motogp.png'
+  color: "#ddd"
+  created_on: '1993-11-22'

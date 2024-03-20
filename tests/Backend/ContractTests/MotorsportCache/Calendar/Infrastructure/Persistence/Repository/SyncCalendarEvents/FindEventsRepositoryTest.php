@@ -28,7 +28,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     public function testItHasAnEmptySessionsArrayWhenThereAreNone(): void
     {
         // We are loading the event but not its sessions
-        self::loadFixtures('motorsport.event.event.dutchGrandPrix2022');
+        self::loadFixtures('event.dutch_grand_prix_2022');
 
         $repository = new FindEventsRepository(self::connection());
 
@@ -41,9 +41,9 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     public function testItFindsAllEventsWithSessions(): void
     {
         self::loadFixtures(
-            'motorsport.event.eventSession.dutchGrandPrix2022Race',
-            'motorsport.event.eventSession.emiliaRomagnaGrandPrix2022SprintQualifying',
-            'motorsport.event.eventSession.emiliaRomagnaGrandPrix2022Race',
+            'event_session.dutch_grand_prix_2022_race',
+            'event_session.emilia_romagna_grand_prix_2022_sprint_qualifying',
+            'event_session.emilia_romagna_grand_prix_2022_race',
         );
 
         $repository = new FindEventsRepository(self::connection());
@@ -60,16 +60,16 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     {
         return CalendarEventEntry::fromData([
             'venue' => [
-                'id'      => self::fixtureId('motorsport.venue.venue.zandvoort'),
+                'id'      => self::fixtureId('venue.zandvoort'),
                 'name'    => 'Circuit Zandvoort',
                 'slug'    => StringHelper::slugify('Circuit Zandvoort'),
                 'country' => [
-                    'id'   => self::fixtureId('country.country.netherlands'),
+                    'id'   => self::fixtureId('country.netherlands'),
                     'code' => 'nl',
                     'name' => 'Netherlands',
                 ],
             ],
-            'reference'  => self::fixtureId('motorsport.event.event.dutchGrandPrix2022'),
+            'reference'  => self::fixtureId('event.dutch_grand_prix_2022'),
             'index'      => 14,
             'name'       => 'Dutch GP',
             'slug'       => StringHelper::slugify('Formula One', '2022', '14', 'Dutch GP'),
@@ -80,7 +80,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
             'end_date'   => '2022-09-04 13:00:00',
             'sessions'   => [
                 [
-                    'id'         => self::fixtureId('motorsport.event.eventSession.dutchGrandPrix2022Race'),
+                    'id'         => self::fixtureId('event_session.dutch_grand_prix_2022_race'),
                     'slug'       => StringHelper::slugify('Formula One', '2022', 'Dutch GP', 'Race'),
                     'type'       => 'race',
                     'has_result' => false,
@@ -95,16 +95,16 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
     {
         return CalendarEventEntry::fromData([
             'venue' => [
-                'id'      => self::fixtureId('motorsport.venue.venue.emiliaRomagna'),
+                'id'      => self::fixtureId('venue.emilia_romagna'),
                 'name'    => 'Autodromo Internazionale Enzo e Dino Ferrari',
                 'slug'    => StringHelper::slugify('Autodromo Internazionale Enzo e Dino Ferrari'),
                 'country' => [
-                    'id'   => self::fixtureId('country.country.italia'),
+                    'id'   => self::fixtureId('country.italia'),
                     'code' => 'it',
                     'name' => 'Italia',
                 ],
             ],
-            'reference'  => self::fixtureId('motorsport.event.event.emiliaRomagnaGrandPrix2022'),
+            'reference'  => self::fixtureId('event.emilia_romagna_grand_prix_2022'),
             'index'      => 3,
             'name'       => 'Emilia Romagna GP',
             'slug'       => StringHelper::slugify('Formula One', '2022', '3', 'Emilia Romagna GP'),
@@ -115,7 +115,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
             'end_date'   => '2022-04-24 13:00:00',
             'sessions'   => [
                 [
-                    'id'         => self::fixtureId('motorsport.event.eventSession.emiliaRomagnaGrandPrix2022SprintQualifying'),
+                    'id'         => self::fixtureId('event_session.emilia_romagna_grand_prix_2022_sprint_qualifying'),
                     'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP', 'Sprint Qualifying'),
                     'type'       => 'sprint qualifying',
                     'has_result' => false,
@@ -123,7 +123,7 @@ final class FindEventsRepositoryTest extends CoreRepositoryContractTestCase
                     'end_date'   => '2022-04-23T15:30:00',
                 ],
                 [
-                    'id'         => self::fixtureId('motorsport.event.eventSession.emiliaRomagnaGrandPrix2022Race'),
+                    'id'         => self::fixtureId('event_session.emilia_romagna_grand_prix_2022_race'),
                     'slug'       => StringHelper::slugify('Formula One', '2022', 'Emilia Romagna GP', 'Race'),
                     'type'       => 'race',
                     'has_result' => false,

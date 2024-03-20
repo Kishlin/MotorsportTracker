@@ -19,8 +19,8 @@ final class FindSeriesRepositoryTest extends CoreRepositoryContractTestCase
     public function testItCanFindData(): void
     {
         self::loadFixtures(
-            'motorsport.championship.championshipPresentation.formulaOneWhite',
-            'motorsport.championship.season.formulaOne2022',
+            'championship_presentation.formula_one_white',
+            'season.formula_one_2022',
         );
 
         $repository = new FindSeriesRepository(self::connection());

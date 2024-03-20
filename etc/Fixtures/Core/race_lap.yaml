@@ -1,0 +1,11 @@
+max_verstappen_at_dutch_gp_2022_race_lap_10:
+  entry: '@entry.max_verstappen_for_red_bull_racing_at_dutch_gp_2022_race'
+  lap: 10
+  position: 1
+  pit: 9
+  time:  99745
+  time_to_lead: 10957
+  laps_to_lead: 0
+  time_to_next: 602
+  laps_to_next: 0
+  tyre_details: '[{"type":"S","wear":"u","laps":6}]'

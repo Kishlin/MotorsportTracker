@@ -1,0 +1,39 @@
+max_verstappen:
+  name: 'Max Verstappen'
+  short_code: 'VER'
+  country: '@country.netherlands'
+
+sergio_perez:
+  name: 'Sergio Perez'
+  short_code: 'PER'
+  country: '@country.mexico'
+
+pierre_gasly:
+  name: 'Pierre Gasly'
+  short_code: 'GAS'
+  country: '@country.france'
+
+lewis_hamilton:
+  name: 'Lewis Hamilton'
+  short_code: 'HAM'
+  country: '@country.united_kingdom'
+
+nicholas_latifi:
+  name: 'Nicholas Latifi'
+  short_code: 'LAT'
+  country: '@country.canada'
+
+nyck_de_vries:
+  name: 'Nick de Vries'
+  short_code: 'VRI'
+  country: '@country.netherlands'
+
+theo_pourchaire:
+  name: 'Theo Pourchaire'
+  short_code: 'POU'
+  country: '@country.france'
+
+ralph_boschung:
+  name: 'Ralph Boschung'
+  short_code: 'BOSR'
+  country: '@country.switzerland'

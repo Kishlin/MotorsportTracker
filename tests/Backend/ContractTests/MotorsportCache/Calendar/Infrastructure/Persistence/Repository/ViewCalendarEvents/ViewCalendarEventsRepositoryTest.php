@@ -25,7 +25,7 @@ final class ViewCalendarEventsRepositoryTest extends CacheRepositoryContractTest
 
     public function testItCanViewACalendarOfOneEvent(): void
     {
-        self::loadFixture('motorsport.calendar.calendarEvent.formulaOne2022DutchGP');
+        self::loadFixture('calendar_event.formula_one_2022_dutch_gp');
 
         $repository = new ViewCalendarEventsRepository(self::connection());
 
@@ -45,8 +45,8 @@ final class ViewCalendarEventsRepositoryTest extends CacheRepositoryContractTest
     public function testItCanViewAComplexCalendar(): void
     {
         self::loadFixtures(
-            'motorsport.calendar.calendarEvent.formulaOne2022DutchGP',
-            'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
+            'calendar_event.formula_one_2022_dutch_gp',
+            'calendar_event.formula_one_2022_emilia_romagna_gp',
         );
 
         $repository = new ViewCalendarEventsRepository(self::connection());
@@ -71,8 +71,8 @@ final class ViewCalendarEventsRepositoryTest extends CacheRepositoryContractTest
     public function testItCanFilterOnSpecificDate(): void
     {
         self::loadFixtures(
-            'motorsport.calendar.calendarEvent.formulaOne2022DutchGP',
-            'motorsport.calendar.calendarEvent.formulaOne2022EmiliaRomagnaGP',
+            'calendar_event.formula_one_2022_dutch_gp',
+            'calendar_event.formula_one_2022_emilia_romagna_gp',
         );
 
         $repository = new ViewCalendarEventsRepository(self::connection());

@@ -1,64 +1,64 @@
-formulaOne2022DutchGP:
+formula_one_2022_dutch_gp:
   series: '{"name":"Formula One","slug":"formula-one","year":2023,"icon":"f1.svg","color":"#fff"}'
   venue: '{"id":"e3147d3f-8c19-479c-8621-51e6a58e8ecc","name":"Circuit Zandvoort","slug":"circuit-zandvoort","country":{"id":"234fc618-1705-44e0-97a2-13307b70a088","code":"nl","name":"Netherlands"}}'
   reference: '4404f2d2-410b-46d7-8b62-75e0f6c15d7b'
   index: 0
   slug: 'formula-one_0_dutch-gp'
   name: 'Dutch Grand Prix'
-  shortName: 'Dutch GP'
-  shortCode: 'ZAN'
-  startDate: '2022-11-22 01:00:00'
-  endDate: '2022-11-22 01:00:00'
+  short_name: 'Dutch GP'
+  short_code: 'ZAN'
+  start_date: '2022-11-22 01:00:00'
+  end_date: '2022-11-22 01:00:00'
   sessions: '[{"id":"5de05512-4749-4dbb-9bea-30b9a990063e","type":"race","slug":"dutchGrandPrix2022Race","hasResult":false,"startDate":"2022-11-22 01:00:00","enDate":"2022-11-22 01:00:00"}]'
 
-formulaOne2022EmiliaRomagnaGP:
+formula_one_2022_emilia_romagna_gp:
   series: '{"name":"Formula One","slug":"formula-one","year":2023,"icon":"f1.svg","color":"#fff"}'
   venue: '{"id":"0986a24d-8810-4fb7-82ad-453a12d35f97","name":"Autodromo Internazionale Enzo e Dino Ferrari","slug":"autodromo-internazionale-enzo-e-dino-ferrari","country":{"id":"8ff9f07c-5b39-48b8-8c75-6d852a2f4db3","code":"it","name":"Italia"}}'
   reference: 'c30c917d-cc0a-4d71-a709-1604e50390dc'
   index: 3
   slug: 'Emilia Romagna-gp'
   name: 'Emilia Romagna GP'
-  shortName: 'Emilia Romagna GP'
-  shortCode: 'IMO'
-  startDate: '2022-04-23 14:30:00'
-  endDate: '2022-04-24 13:00:00'
+  short_name: 'Emilia Romagna GP'
+  short_code: 'IMO'
+  start_date: '2022-04-23 14:30:00'
+  end_date: '2022-04-24 13:00:00'
   sessions: '[{"id":"737bb995-d068-429c-8e3a-676b9e906ae7","type":"sprint qualifying","slug":"emiliaRomagnaGrandPrix2022Sprint","hasResult":false,"startDate":"2022-04-23T14:30:00","enDate":"2022-04-23T15:30:00"},{"id":"8aa9653c-8fb2-443e-9f42-673bbad2c318","type":"race","slug":"emiliaRomagnaGrandPrix2022Race","hasResult":false,"startDate":"2022-04-24T13:00:00","enDate":"2022-04-24T14:00:00"}]'
 
-motoGP1949TouristTrophy:
+moto_gp_1949_tourist_trophy:
   series: '{"name":"MotoGP","slug":"motogp","year":1949,"icon":"motogp.svg","color":"#e07000"}'
   venue: '{"id":"5e9818cd-0989-4890-973a-ffa35a2132d5","name":"Snaefell Mountain Course","slug":"snaefell-mountain-course","country":{"id":"d74d9836-5073-45ae-befe-08a2ff181f1f","code":"gb","name":"Great Britain"}}'
   reference: '7e94a6d1-bb78-4a85-8222-8b65f195a292'
   index: 0
   slug: 'motogp_1949_tourist-trophy'
   name: 'Tourist Trophy'
-  shortName: 'Tourist Trophy'
-  shortCode: 'IOM'
-  startDate: '1949-06-16 23:00:00'
-  endDate: '1949-06-17 23:00:00'
+  short_name: 'Tourist Trophy'
+  short_code: 'IOM'
+  start_date: '1949-06-16 23:00:00'
+  end_date: '1949-06-17 23:00:00'
   sessions: '[{"id":"63dcb2e0-1135-47c9-892d-e3f565b26e1d","type":"Race","slug":"motogp_1949_tourist-trophy_race","has_result":true,"start_date":"1949-06-16T23:00:00","end_date":null}]'
 
-motoGP1949SwitzerlandGrandPrix:
+moto_gp_1949_switzerland_grand_prix:
   series: '{"name":"MotoGP","slug":"motogp","year":1949,"icon":"motogp.svg","color":"#e07000"}'
   venue: '{"id":"3a47ef9a-a8db-4005-8281-f96aac36451b","name":"Circuit Bremgarten","slug":"circuit-bremgarten","country":{"id":"4409d69e-f643-436d-83be-a299f0bcb245","code":"ch","name":"Switzerland"}}'
   reference: '81801e07-3dee-4228-8026-a5e0c8e6397d'
   index: 1
   slug: 'motogp_1949_switzerland-grand-prix'
   name: 'Switzerland Grand Prix'
-  shortName: 'Switzerland GP'
-  shortCode: 'CHE'
-  startDate: '1949-07-03 00:00:00'
-  endDate: '1949-07-04 00:00:00'
+  short_name: 'Switzerland GP'
+  short_code: 'CHE'
+  start_date: '1949-07-03 00:00:00'
+  end_date: '1949-07-04 00:00:00'
   sessions: '[{"id":"bd47166f-2006-4803-bcb6-16e01a28c1df","type":"Race","slug":"motogp_1949_switzerland-grand-prix_race","has_result":true,"start_date":"1949-07-03T00:00:00","end_date":null}]'
 
-formulaOne1950SwissGrandPrix:
+formula_one_1950_swiss_grand_prix:
   series: '{"name":"Formula One","slug":"formula-one","year":1950,"icon":"f1.svg","color":"#fff"}'
   venue: '{"id":"3a47ef9a-a8db-4005-8281-f96aac36451b","name":"Circuit Bremgarten","slug":"circuit-bremgarten","country":{"id":"4409d69e-f643-436d-83be-a299f0bcb245","code":"ch","name":"Switzerland"}}'
   reference: '03fd32ab-40cc-402f-94c6-e9ad57339dc2'
   index: 3
   slug: 'formula-one_1950_swiss-grand-prix'
   name: 'Swiss Grand Prix'
-  shortName: 'Swiss GP'
-  shortCode: 'CHE'
-  startDate: '1950-06-03 00:00:00'
-  endDate: '1950-06-05 00:00:00'
+  short_name: 'Swiss GP'
+  short_code: 'CHE'
+  start_date: '1950-06-03 00:00:00'
+  end_date: '1950-06-05 00:00:00'
   sessions: '[{"id":"997fc23c-009a-429e-927c-1bbe4ee8801c","type":"Race","slug":"formula-one_1950_swiss-grand-prix_race","has_result":true,"start_date":"1950-06-04T00:00:00","end_date":null},{"id":"69f408f8-2b59-4e1a-8429-04fbe0684560","type":"Qualifying","slug":"formula-one_1950_swiss-grand-prix_qualifying","has_result":true,"start_date":"1950-06-03T00:00:00","end_date":null}]'

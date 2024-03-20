@@ -1,0 +1,24 @@
+bahrain_grand_prix:
+  championship: 'formula-one'
+  year: 2022
+  event_slug: 'bahrain-grand-prix'
+
+saudi_arabian_grand_prix:
+  championship: 'formula-one'
+  year: 2022
+  event_slug: 'saudi-arabian-grand-prix'
+
+australian_grand_prix:
+  championship: 'formula-one'
+  year: 2022
+  event_slug: 'australian-grand-prix'
+
+hungarian_grand_prix:
+  championship: 'formula-one'
+  year: 2019
+  event_slug: 'hungarian-grand-prix'
+
+moto_gp_americas_grand_prix:
+  championship: 'motogp'
+  year: 2022
+  event_slug: 'americas-grand-prix'

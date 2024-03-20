@@ -1,0 +1,83 @@
+dutch_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.dutch_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-09-04 13:00:00'
+  end_date: '2022-09-04 14:00:00'
+
+australian_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.australian_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-04-10 05:00:00'
+  end_date: '2022-04-10 06:00:00'
+
+emilia_romagna_grand_prix_2022_sprint_qualifying:
+  type: '@session_type.sprint_qualifying'
+  event: '@event.emilia_romagna_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-04-23 14:30:00'
+  end_date: '2022-04-23 15:30:00'
+
+emilia_romagna_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.emilia_romagna_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-04-24 13:00:00'
+  end_date: '2022-04-24 14:00:00'
+
+americas_moto_gp_2022_race:
+  type: '@session_type.race'
+  event: '@event.americas_moto_gp_2022'
+  has_result: 0
+  start_date: '2022-04-10 18:00:00'
+  end_date: '2022-04-10 19:00:00'
+
+italian_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.italian_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-09-11 13:00:00'
+  end_date: '2022-09-11 14:00:00'
+
+singapore_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.singapore_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-10-02 12:00:00'
+  end_date: '2022-10-02 13:00:00'
+
+hungarian_grand_prix_2022_race:
+  type: '@session_type.race'
+  event: '@event.hungarian_grand_prix_2022'
+  has_result: 0
+  start_date: '2022-07-31 13:00:00'
+  end_date: '2022-07-31 14:00:00'
+
+hungarian_grand_prix_2019_race:
+  type: '@session_type.race'
+  event: '@event.hungarian_grand_prix_2019'
+  has_result: 0
+  start_date: '2019-08-04 13:10:00'
+  end_date: '2019-08-04 14:10:00'
+
+belgian_grand_prix_2019_race:
+  type: '@session_type.race'
+  event: '@event.belgian_grand_prix_2019'
+  has_result: 0
+  start_date: '2019-09-01 13:10:00'
+  end_date: '2019-09-01 14:10:00'
+
+australian_grand_prix_2023_formula_two_race_one:
+  type: '@session_type.race'
+  event: '@event.australian_gp_2023_formula_two'
+  has_result: 0
+  start_date: '2023-04-01 2:00:00'
+  end_date: '2023-04-01 3:00:00'
+
+australian_grand_prix_2023_formula_two_race_two:
+  type: '@session_type.race'
+  event: '@event.australian_gp_2023_formula_two'
+  has_result: 0
+  start_date: '2023-04-02 3:00:00'
+  end_date: '2023-04-02 4:00:00'

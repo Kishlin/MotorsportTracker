@@ -1,0 +1,15 @@
+formula_one:
+  name: 'Formula One'
+  short_code: 'formula_1'
+
+moto_gp:
+  name: 'Moto GP'
+  short_code: 'motogp'
+
+wec:
+  name: 'FIA World Endurance Championship'
+  short_code: 'wec'
+
+formula_two:
+  name: 'Formula Two'
+  short_code: 'formula_2'

@@ -43,7 +43,7 @@ abstract class BackofficeContext implements Context
 
     protected function countryNameToCode(string $countryName): string
     {
-        $countryId   = self::coreDatabase()->fixtureId("country.country.{$this->format($countryName)}");
+        $countryId   = self::coreDatabase()->fixtureId("country.{$this->format($countryName)}");
         $countryCode = self::coreDatabase()->fetchOne("SELECT code FROM countries WHERE id = '{$countryId}'");
 
         assert(is_string($countryCode));

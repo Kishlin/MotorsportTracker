@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Kishlin\Tests\Backend\Tools\Environment;
 
 use Exception;
-use Kishlin\Backend\Country\Shared\Infrastructure\Persistence\Fixtures\CountryFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportCache\Shared\Infrastructure\Persistence\Fixtures\MotorsportCacheFixtureConverterConfigurator;
-use Kishlin\Backend\MotorsportTracker\Shared\Infrastructure\Persistence\Fixtures\MotorsportTrackerFixtureConverterConfigurator;
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaverUsingConnection;
@@ -69,12 +66,7 @@ final class SymfonyApplication
             $connection = self::kernel()->getContainer()->get($service);
             assert($connection instanceof Connection);
 
-            $fixtureSaver = new FixtureSaverUsingConnection($connection);
-
-            CountryFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
-            MotorsportCacheFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
-            MotorsportTrackerFixtureConverterConfigurator::populateFixtureSaverWithConverters($fixtureSaver);
-
+            $fixtureSaver  = new FixtureSaverUsingConnection($connection);
             $fixtureLoader = new FixtureLoader(new UuidGeneratorUsingRamsey(), $fixtureSaver, '/app/etc/Fixtures/' . ucfirst($database));
 
             $this->databases[$database] = new PostgresDatabase($connection, $fixtureLoader);

@@ -24,7 +24,7 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
 
     public function testItCanViewAScheduleOfOneEvent(): void
     {
-        self::loadFixture('motorsport.calendar.calendarEvent.motoGP1949TouristTrophy');
+        self::loadFixture('calendar_event.moto_gp_1949_tourist_trophy');
 
         $repository = new ViewSeasonScheduleRepository(self::connection());
 
@@ -39,8 +39,8 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
     public function testItCanViewAComplexCalendar(): void
     {
         self::loadFixtures(
-            'motorsport.calendar.calendarEvent.motoGP1949TouristTrophy',
-            'motorsport.calendar.calendarEvent.motoGP1949SwitzerlandGrandPrix',
+            'calendar_event.moto_gp_1949_tourist_trophy',
+            'calendar_event.moto_gp_1949_switzerland_grand_prix',
         );
 
         $repository = new ViewSeasonScheduleRepository(self::connection());
@@ -60,9 +60,9 @@ final class ViewSeasonScheduleRepositoryTest extends CacheRepositoryContractTest
     public function testItCanFilterOnSpecificDate(): void
     {
         self::loadFixtures(
-            'motorsport.calendar.calendarEvent.motoGP1949TouristTrophy',
-            'motorsport.calendar.calendarEvent.motoGP1949SwitzerlandGrandPrix',
-            'motorsport.calendar.calendarEvent.formulaOne1950SwissGrandPrix',
+            'calendar_event.moto_gp_1949_tourist_trophy',
+            'calendar_event.moto_gp_1949_switzerland_grand_prix',
+            'calendar_event.formula_one_1950_swiss_grand_prix',
         );
 
         $repository = new ViewSeasonScheduleRepository(self::connection());
