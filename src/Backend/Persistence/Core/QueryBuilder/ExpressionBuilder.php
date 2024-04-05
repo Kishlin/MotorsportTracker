@@ -12,7 +12,7 @@ use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\ComparisonComparato
 use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\OrX;
 use Stringable;
 
-final class Expression
+final class ExpressionBuilder
 {
     public function eq(string|Stringable $left, string|Stringable $right): Comparison
     {

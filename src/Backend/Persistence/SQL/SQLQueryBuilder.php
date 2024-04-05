@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Backend\Persistence\SQL;
 
-use Kishlin\Backend\Persistence\Core\QueryBuilder\Expression;
+use Kishlin\Backend\Persistence\Core\QueryBuilder\ExpressionBuilder;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\Join;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\OrderBy;
 use Kishlin\Backend\Persistence\Core\QueryBuilder\QueryBuilder;
@@ -14,7 +14,7 @@ use Stringable;
 
 final class SQLQueryBuilder implements QueryBuilder
 {
-    private Expression $expression;
+    private ExpressionBuilder $expression;
 
     /** @var array<int, string> */
     private array $selects = [];
@@ -40,10 +40,10 @@ final class SQLQueryBuilder implements QueryBuilder
 
     public function __construct()
     {
-        $this->expression = new Expression();
+        $this->expression = new ExpressionBuilder();
     }
 
-    public function expr(): Expression
+    public function expr(): ExpressionBuilder
     {
         return $this->expression;
     }

@@ -11,7 +11,7 @@ use Stringable;
 
 interface QueryBuilder
 {
-    public function expr(): Expression;
+    public function expr(): ExpressionBuilder;
 
     public function select(string $key, ?string $alias = null): self;
 
