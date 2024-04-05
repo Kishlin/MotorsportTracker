@@ -9,7 +9,7 @@ use Kishlin\Backend\Shared\Domain\ValueObject\JsonValueObject;
 final class AnalyticsView extends JsonValueObject
 {
     /**
-     * @param array<int, array<string, null|array<string, mixed>|float|int|string>> $analytics
+     * @param array<int, array<string, null|array<string, mixed>|bool|float|int|string>> $analytics
      */
     public static function with(array $analytics): self
     {

@@ -11,7 +11,7 @@ use JsonException;
 final readonly class AnalyticsForSeasonDTO
 {
     /**
-     * @param array<int, array<string, null|array<string, mixed>|float|int|string>> $data
+     * @param array<int, array<string, null|array<string, mixed>|bool|float|int|string>> $data
      */
     private function __construct(
         private array $data,
@@ -19,7 +19,7 @@ final readonly class AnalyticsForSeasonDTO
     }
 
     /**
-     * @return array<int, array<string, null|array<string, mixed>|float|int|string>>
+     * @return array<int, array<string, null|array<string, mixed>|bool|float|int|string>>
      */
     public function analytics(): array
     {
@@ -27,7 +27,7 @@ final readonly class AnalyticsForSeasonDTO
     }
 
     /**
-     * @param array<int, array<string, null|array<string, mixed>|float|int|string>> $data
+     * @param array<int, array<string, null|array<string, mixed>|bool|float|int|string>> $data
      *
      * @throws JsonException
      */

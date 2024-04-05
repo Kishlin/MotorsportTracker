@@ -17,7 +17,7 @@ trait SeasonFinderTrait
 
         foreach ($this->objectStore->all('season') as $season) {
             if ($season['year'] === $year && $season['series'] === $seriesId) {
-                return $season['id'];
+                return (string) $season['id'];
             }
         }
 
@@ -39,7 +39,7 @@ trait SeasonFinderTrait
     {
         foreach ($this->objectStore->all('series') as $series) {
             if ($series['name'] === $championship) {
-                return $series['id'];
+                return (string) $series['id'];
             }
         }
 
