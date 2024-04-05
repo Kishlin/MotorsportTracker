@@ -41,4 +41,3 @@ abstract class CachableScrapCommandUsingSymfony extends SymfonyCommand
         return $result;
     }
 }
-

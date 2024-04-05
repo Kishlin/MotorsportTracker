@@ -13,7 +13,7 @@ final readonly class FixMissingConstructorTeamsRepository extends WriteRepositor
 {
     private const QUERY = <<<'SQL'
 INSERT INTO constructor_team (id, constructor, team)
-SELECT DISTINCT 
+SELECT DISTINCT
     CONCAT(
         LPAD(TO_HEX(FLOOR(RANDOM() * 2147483647)::int), 8, '0'), '-',
         LPAD(TO_HEX(FLOOR(RANDOM() * 65535)::int), 4, '0'), '-',
