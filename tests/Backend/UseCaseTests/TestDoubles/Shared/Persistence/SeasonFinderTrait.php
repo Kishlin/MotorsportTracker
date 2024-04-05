@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence;
 
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Season;
-use Kishlin\Backend\MotorsportTracker\Championship\Domain\Entity\Series;
-use Kishlin\Backend\Shared\Domain\ValueObject\StrictlyPositiveIntValueObject;
-use Kishlin\Backend\Shared\Domain\ValueObject\StringValueObject;
 use LogicException;
 
 /**
@@ -15,24 +11,22 @@ use LogicException;
  */
 trait SeasonFinderTrait
 {
-    protected function findSeasonOrStop(string $championship, int $year): Season
+    protected function findSeasonIdOrStop(string $championship, int $year): string
     {
-        $series = $this->findSeriesOrStop($championship);
-        $filter = new StrictlyPositiveIntValueObject($year);
+        $seriesId = $this->findSeriesIdOrStop($championship);
 
-        /** @var Season $season */
-        foreach ($this->objectStore->all(Season::class) as $season) {
-            if ($season->year()->equals($filter) && $season->championshipId()->equals($series->id())) {
-                return $season;
+        foreach ($this->objectStore->all('season') as $season) {
+            if ($season['year'] === $year && $season['series'] === $seriesId) {
+                return $season['id'];
             }
         }
 
         throw new LogicException("Season {$championship} {$year} not found");
     }
 
-    protected function findSeriesOrStop(string $championship): Series
+    protected function findSeriesIdOrStop(string $championship): string
     {
-        $series = $this->findSeries($championship);
+        $series = $this->findSeriesId($championship);
 
         if (null === $series) {
             throw new LogicException("Series {$championship} not found");
@@ -41,14 +35,11 @@ trait SeasonFinderTrait
         return $series;
     }
 
-    protected function findSeries(string $championship): ?Series
+    protected function findSeriesId(string $championship): ?string
     {
-        $filter = new StringValueObject($championship);
-
-        /** @var Series $series */
-        foreach ($this->objectStore->all(Series::class) as $series) {
-            if ($series->name()->equals($filter)) {
-                return $series;
+        foreach ($this->objectStore->all('series') as $series) {
+            if ($series['name'] === $championship) {
+                return $series['id'];
             }
         }
 

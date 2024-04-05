@@ -17,7 +17,7 @@ final readonly class FixtureSaverUsingConnection implements FixtureSaver
     {
         $this->connection->insert(
             $class,
-            [...$data, 'id' => $identifier],
+            $data,
         );
     }
 }

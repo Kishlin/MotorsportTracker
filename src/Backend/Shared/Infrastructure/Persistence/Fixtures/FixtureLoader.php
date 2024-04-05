@@ -77,7 +77,7 @@ final class FixtureLoader
 
         $this->identifiers[$fixture] = $identifier;
 
-        $this->fixtureSaver->save($fixtureClass, $identifier, $fixtureData);
+        $this->fixtureSaver->save($fixtureClass, $identifier, [...$fixtureData, 'id' => $identifier]);
     }
 
     private function fixtureHasBeenLoaded(string $fixture): bool

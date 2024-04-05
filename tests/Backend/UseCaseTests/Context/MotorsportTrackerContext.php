@@ -13,7 +13,7 @@ abstract class MotorsportTrackerContext implements Context
 
     public function formatFixtureName(string $parameterValue): string
     {
-        return lcfirst(str_replace(' ', '', $parameterValue));
+        return strtolower(str_replace(' ', '_', $parameterValue));
     }
 
     public function formatCacheKey(string $cacheKey): string

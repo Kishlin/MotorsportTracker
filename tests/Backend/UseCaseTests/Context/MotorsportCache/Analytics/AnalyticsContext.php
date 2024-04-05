@@ -24,9 +24,11 @@ final class AnalyticsContext extends MotorsportTrackerContext
      */
     public function theAnalyticsDataExist(string $type, string $name): void
     {
+        $type = strtolower($type);
+
         try {
             self::container()->coreFixtureLoader()->loadFixture(
-                "motorsport.standing.analytics{$type}s.{$this->formatFixtureName($name)}",
+                "analytics_{$type}s.{$this->formatFixtureName($name)}",
             );
         } catch (Exception $e) {
             Assert::fail($e->getMessage());
@@ -88,10 +90,8 @@ final class AnalyticsContext extends MotorsportTrackerContext
         /** @var array<string, string> $analyticsView */
         $analyticsView = $value->toArray()[$index];
 
-        $class = self::TYPE_DRIVER === $type ? 'driver' : 'team';
-
         Assert::assertSame(
-            $this->fixtureId("motorsport.{$class}.{$type}.{$this->formatFixtureName($fixture)}"),
+            $this->fixtureId("{$type}.{$this->formatFixtureName($fixture)}"),
             $analyticsView[$type],
         );
     }

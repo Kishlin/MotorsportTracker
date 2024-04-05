@@ -9,7 +9,6 @@ namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\MotorsportCache\Analyti
 use JsonException;
 use Kishlin\Backend\MotorsportCache\Analytics\Application\UpdateConstructorAnalyticsCache\ConstructorAnalyticsForSeasonGateway;
 use Kishlin\Backend\MotorsportCache\Analytics\Domain\DTO\AnalyticsForSeasonDTO;
-use Kishlin\Backend\MotorsportTracker\Standing\Domain\Entity\AnalyticsConstructors;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence\ObjectStoreSpy;
 use Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence\SeasonFinderTrait;
 
@@ -27,19 +26,18 @@ final readonly class ConstructorAnalyticsForSeasonRepositoryStub implements Cons
      */
     public function find(string $championship, int $year): AnalyticsForSeasonDTO
     {
-        $data   = [];
-        $season = $this->findSeasonOrStop($championship, $year);
+        $seasonId = $this->findSeasonIdOrStop($championship, $year);
+        $data     = [];
 
-        /** @var AnalyticsConstructors $analytics */
-        foreach ($this->objectStore->all(AnalyticsConstructors::class) as $analytics) {
-            if (false === $analytics->season()->equals($season->id())) {
+        foreach ($this->objectStore->all('analytics_constructors') as $analytics) {
+            if ($seasonId !== $analytics['season']) {
                 continue;
             }
 
             $data[] = [
-                'id'          => $analytics->id()->value(),
-                'constructor' => $analytics->constructor()->value(),
-                'country'     => "{\"id\":\"{$analytics->country()->value()}\"}",
+                'id'          => $analytics['id'],
+                'constructor' => $analytics['constructor'],
+                'country'     => "{\"id\":\"{$analytics['country']}\"}",
             ];
         }
 

@@ -4,41 +4,39 @@ declare(strict_types=1);
 
 namespace Kishlin\Tests\Backend\UseCaseTests\TestDoubles\Shared\Persistence;
 
-use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
-use Kishlin\Backend\Shared\Domain\Tools;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureSaver;
 use LogicException;
-use ReflectionException;
 
-final class ObjectStoreSpy extends FixtureSaver
+final class ObjectStoreSpy implements FixtureSaver
 {
-    /** @var array<string, array<string, AggregateRoot>> */
+    /** @var array<string, array<string, array<string, bool|float|int|string>>> */
     private array $objects = [];
 
-    /**
-     * @param class-string<object> $className
-     *
-     * @return AggregateRoot[]
-     */
-    public function all(string $className): array
+    public function save(string $class, string $identifier, array $data): void
     {
-        return $this->objects[$this->location($className)] ?? [];
+        $this->objects[$class][$identifier] = $data;
     }
 
     /**
-     * @param class-string<object> $className
+     * @return array<string, bool|float|int|string>[]
      */
-    public function get(string $className, string $id): ?AggregateRoot
+    public function all(string $location): array
     {
-        $location = $this->location($className);
+        return $this->objects[$location] ?? [];
+    }
 
+    /**
+     * @return null|array<string, bool|float|int|string>
+     */
+    public function get(string $location, string $id): ?array
+    {
         return $this->objects[$location][$id] ?? null;
     }
 
     /**
-     * @param class-string<object> $className
+     * @return array<string, bool|float|int|string>
      */
-    public function forceGet(string $className, string $id): AggregateRoot
+    public function forceGet(string $className, string $id): array
     {
         $object = $this->get($className, $id);
 
@@ -52,24 +50,5 @@ final class ObjectStoreSpy extends FixtureSaver
     public function resetState(): void
     {
         $this->objects = [];
-    }
-
-    protected function saveAggregateRoot(AggregateRoot $aggregateRoot): void
-    {
-        $location = $this->location($aggregateRoot);
-
-        $this->objects[$location][$aggregateRoot->id()->value()] = $aggregateRoot;
-    }
-
-    /**
-     * @param AggregateRoot|class-string<object> $aggregateClass
-     */
-    private function location(AggregateRoot|string $aggregateClass): string
-    {
-        try {
-            return Tools::fromPascalToSnakeCase(Tools::shortClassName($aggregateClass));
-        } catch (ReflectionException) {
-            return $aggregateClass::class;
-        }
     }
 }
