@@ -10,7 +10,6 @@ use Kishlin\Backend\MotorsportCache\Calendar\Application\SyncCalendarEvents\Gate
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\Entity\CalendarEvent;
 use Kishlin\Backend\MotorsportCache\Calendar\Domain\ValueObject\CalendarEventSeries;
 use Kishlin\Backend\MotorsportCache\Calendar\Infrastructure\Persistence\Repository\SyncCalendarEvents\SaveCalendarEventRepository;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Domain\ValueObject\UuidValueObject;
 use Kishlin\Tests\Backend\Tools\Test\Contract\CacheRepositoryContractTestCase;
 
@@ -32,7 +31,7 @@ final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestC
         $response = $repository->save($entity);
 
         self::assertSame(CalendarEventUpsert::CREATED, $response);
-        self::assertCount(1, self::connection()->execute(SQLQuery::create('SELECT * FROM calendar_event'))->fetchAllAssociative());
+        self::assertCount(1, self::connection()->doExecute('SELECT * FROM calendar_event')->fetchAllAssociative());
     }
 
     /**
@@ -52,7 +51,7 @@ final class SaveCalendarEventRepositoryTest extends CacheRepositoryContractTestC
         $response = $repository->save($entity);
 
         self::assertSame(CalendarEventUpsert::UPDATED, $response);
-        self::assertCount(2, self::connection()->execute(SQLQuery::create('SELECT * FROM calendar_event'))->fetchAllAssociative());
+        self::assertCount(2, self::connection()->doExecute('SELECT * FROM calendar_event')->fetchAllAssociative());
     }
 
     /**

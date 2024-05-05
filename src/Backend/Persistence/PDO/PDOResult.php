@@ -11,12 +11,12 @@ use Kishlin\Backend\Persistence\Core\Result\ResultIsNotASuccessException;
 use PDO;
 use PDOStatement;
 
-final class PDOResult implements Result
+final readonly class PDOResult implements Result
 {
     private function __construct(
-        private readonly ?PDOStatement $statement,
-        private readonly bool $isOk,
-        private readonly ?ResultFailure $failure,
+        private ?PDOStatement $statement,
+        private bool $isOk,
+        private ?ResultFailure $failure,
     ) {
     }
 

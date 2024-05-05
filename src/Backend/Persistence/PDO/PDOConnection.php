@@ -6,8 +6,8 @@ namespace Kishlin\Backend\Persistence\PDO;
 
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
 use Kishlin\Backend\Persistence\Core\Query\Query;
+use Kishlin\Backend\Persistence\Core\QueryBuilder\QueryBuilder;
 use Kishlin\Backend\Persistence\Core\Result\ResultFailure;
-use Kishlin\Backend\Persistence\SQL\SQLQueryBuilder;
 use PDO;
 use Throwable;
 
@@ -24,9 +24,9 @@ final class PDOConnection implements Connection
     ) {
     }
 
-    public function createQueryBuilder(): SQLQueryBuilder
+    public function createQueryBuilder(): QueryBuilder
     {
-        return new SQLQueryBuilder();
+        return new QueryBuilder();
     }
 
     public function insert(string $table, array $data): PDOResult
@@ -76,15 +76,23 @@ final class PDOConnection implements Connection
 
     public function execute(Query $query): PDOResult
     {
+        return $this->doExecute($this->computeQuery($query), $query->params);
+    }
+
+    /**
+     * @param array<string, null|bool|float|int|string> $params
+     */
+    public function doExecute(string $query, array $params = []): PDOResult
+    {
         try {
             $connection = $this->connection();
         } catch (Throwable) {
             return PDOResult::fail(ResultFailure::CONNECTION_ERROR);
         }
 
-        $statement = $connection->prepare($query->query());
+        $statement = $connection->prepare($query);
 
-        $status = $statement->execute($query->parameters());
+        $status = $statement->execute($params);
 
         if (false === $status) {
             return PDOResult::fail(ResultFailure::QUERY_ERROR);
@@ -151,5 +159,36 @@ final class PDOConnection implements Connection
         assert(null !== $this->pdo);
 
         return $this->pdo;
+    }
+
+    private function computeQuery(Query $query): string
+    {
+        $computed = 'SELECT ' . implode(', ', $query->selects);
+
+        if (null !== $query->from) {
+            $computed .= ' FROM ' . $query->from;
+        }
+
+        $computed .= implode('', $query->joins);
+
+        if (false === empty($query->wheres)) {
+            $computed .= ' WHERE (' . implode(') AND (', $query->wheres) . ')';
+        }
+
+        if (false === empty($query->groupBys)) {
+            $computed .= ' GROUP BY ' . implode(', ', $query->groupBys);
+        }
+
+        if (false === empty($query->orderBys)) {
+            $computed .= ' ORDER BY ' . implode(', ', $query->orderBys);
+        }
+
+        if (null !== $query->limit) {
+            $computed .= " LIMIT {$query->limit}";
+        }
+
+        $computed .= ';';
+
+        return $computed;
     }
 }

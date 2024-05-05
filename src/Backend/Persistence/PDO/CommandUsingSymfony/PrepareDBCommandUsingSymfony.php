@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony;
+namespace Kishlin\Backend\Persistence\PDO\CommandUsingSymfony;
 
-use Kishlin\Backend\Persistence\Core\Connection\Connection;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
+use Kishlin\Backend\Persistence\PDO\PDOConnection;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +27,7 @@ ALTER TABLE ONLY public.migration_version ADD CONSTRAINT migration_version_pkey 
 SQL;
 
     public function __construct(
-        private readonly Connection $connection,
+        private readonly PDOConnection $connection,
         private readonly string $database,
     ) {
         parent::__construct();
@@ -46,8 +45,8 @@ SQL;
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $this->connection->execute(SQLQuery::create(self::CREATE_MIGRATION_TABLE));
-        $this->connection->execute(SQLQuery::create(self::PRIMARY_KEY));
+        $this->connection->doExecute(self::CREATE_MIGRATION_TABLE);
+        $this->connection->doExecute(self::PRIMARY_KEY);
 
         $ui->success("Successfully prepared {$this->database} database to use migrations.");
 

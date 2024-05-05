@@ -14,7 +14,7 @@ abstract class CacheRepositoryContractTestCase extends RepositoryContractTestCas
         return '/app/etc/Fixtures/Cache';
     }
 
-    protected static function createConnection(): Connection
+    protected static function createConnection(): PDOConnection
     {
         return PDOConnection::create(
             $_ENV['DB_HOST'],

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony;
+namespace Kishlin\Backend\Persistence\PDO\CommandUsingSymfony;
 
-use Kishlin\Backend\Persistence\Migration\Migrator;
+use Kishlin\Backend\Persistence\PDO\PDOMigrator;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,8 +21,8 @@ final class ApplyMigrationCommandUsingSymfony extends SymfonyCommand
     public const OPTION_VERSION = 'migration';
 
     public function __construct(
-        private readonly Migrator $migrator,
-        private readonly string $database,
+        private readonly PDOMigrator $migrator,
+        private readonly string      $database,
     ) {
         parent::__construct();
     }

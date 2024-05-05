@@ -6,6 +6,7 @@ namespace Kishlin\Tests\Backend\Tools\Test\Contract;
 
 use Exception;
 use Kishlin\Backend\Persistence\Core\Connection\Connection;
+use Kishlin\Backend\Persistence\PDO\PDOConnection;
 use Kishlin\Backend\Shared\Domain\Aggregate\AggregateRoot;
 use Kishlin\Backend\Shared\Domain\Randomness\UuidGenerator;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Fixtures\FixtureLoader;
@@ -109,7 +110,7 @@ abstract class RepositoryContractTestCase extends TestCase
         return self::fixtureLoader()->identifier($fixture);
     }
 
-    protected static function connection(): Connection
+    protected static function connection(): PDOConnection
     {
         if (null === self::$connection) {
             self::$connection = static::createConnection();

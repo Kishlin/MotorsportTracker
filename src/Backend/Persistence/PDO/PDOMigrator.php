@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Kishlin\Backend\Persistence\Migration;
+namespace Kishlin\Backend\Persistence\PDO;
 
-use Kishlin\Backend\Persistence\Core\Connection\Connection;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
+use Kishlin\Backend\Persistence\Migration\Migration;
 use Psr\Log\LoggerInterface;
 
-final readonly class Migrator
+final readonly class PDOMigrator
 {
     private const DELETE_VERSION = 'DELETE FROM migration_version WHERE version = :version';
 
     public function __construct(
         private LoggerInterface $logger,
-        private Connection $connection,
+        private PDOConnection $connection,
         private string $namespace,
         private string $table,
         private string $folder,
@@ -113,7 +112,7 @@ final readonly class Migrator
             return;
         }
 
-        $this->connection->execute(SQLQuery::create($trimmed));
+        $this->connection->doExecute($trimmed);
 
         $this->logger->debug("Applied query `{$trimmed}`");
     }
@@ -142,6 +141,6 @@ final readonly class Migrator
 
     private function removeFlagForVersion(string $version): void
     {
-        $this->connection->execute(SQLQuery::create(self::DELETE_VERSION, ['version' => $version]));
+        $this->connection->doExecute(self::DELETE_VERSION, ['version' => $version]);
     }
 }

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Kishlin\Backend\Persistence\Core\QueryBuilder\Expression\ComparisonComparator
  * @covers \Kishlin\Backend\Persistence\Core\QueryBuilder\ExpressionBuilder
  */
-final class ExpressionTest extends TestCase
+final class ExpressionBuilderTest extends TestCase
 {
     public function testItCanBeEqual(): void
     {

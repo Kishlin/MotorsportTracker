@@ -149,7 +149,7 @@ services:
     alias: 'kishlin.app.infrastructure.connection.core'
 
   Kishlin\Backend\Persistence\Migration\Migrator:
-    class: Kishlin\Backend\Persistence\Migration\Migrator
+    class: Kishlin\Backend\Persistence\PDO\Migrator
     bind:
       $connection: '@kishlin.app.infrastructure.connection.core'
       $namespace: '\Migrations\Core'
@@ -157,7 +157,7 @@ services:
       $folder: '%kishlin.src.dir%/etc/Migrations/Core'
 
   Kishlin\Backend\Persistence\Migration\Migrator.cache:
-    class: Kishlin\Backend\Persistence\Migration\Migrator
+    class: Kishlin\Backend\Persistence\PDO\Migrator
     bind:
       $connection: '@kishlin.app.infrastructure.connection.cache'
       $namespace: '\Migrations\Cache'
@@ -165,7 +165,7 @@ services:
       $folder: '%kishlin.src.dir%/etc/Migrations/Cache'
 
   Kishlin\Backend\Persistence\Migration\Migrator.client:
-    class: Kishlin\Backend\Persistence\Migration\Migrator
+    class: Kishlin\Backend\Persistence\PDO\Migrator
     bind:
       $connection: '@kishlin.app.infrastructure.connection.client'
       $namespace: '\Migrations\Client'
@@ -173,7 +173,7 @@ services:
       $folder: '%kishlin.src.dir%/etc/Migrations/Client'
 
   Kishlin\Backend\Persistence\Migration\Migrator.admin:
-    class: Kishlin\Backend\Persistence\Migration\Migrator
+    class: Kishlin\Backend\Persistence\PDO\Migrator
     bind:
       $connection: '@kishlin.app.infrastructure.connection.admin'
       $namespace: '\Migrations\Admin'
@@ -181,49 +181,49 @@ services:
       $folder: '%kishlin.src.dir%/etc/Migrations/Admin'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
-      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator'
+      $migrator: '@Kishlin\Backend\Persistence\PDO\Migrator'
       $database: 'core'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony.cache:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
-      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.cache'
+      $migrator: '@Kishlin\Backend\Persistence\PDO\Migrator.cache'
       $database: 'cache'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony.client:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
-      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.client'
+      $migrator: '@Kishlin\Backend\Persistence\PDO\Migrator.client'
       $database: 'client'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony.admin:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\ApplyMigrationCommandUsingSymfony
     bind:
-      $migrator: '@Kishlin\Backend\Persistence\Migration\Migrator.admin'
+      $migrator: '@Kishlin\Backend\Persistence\PDO\Migrator.admin'
       $database: 'admin'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
       $connection: '@kishlin.app.infrastructure.connection.core'
       $database: 'core'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony.cache:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
       $connection: '@kishlin.app.infrastructure.connection.cache'
       $database: 'cache'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony.client:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
       $connection: '@kishlin.app.infrastructure.connection.client'
       $database: 'client'
 
   Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony.admin:
-    class: Kishlin\Backend\Persistence\Infrastructure\CommandUsingSymfony\PrepareDBCommandUsingSymfony
+    class: Kishlin\Backend\Persistence\PDO\CommandUsingSymfony\PrepareDBCommandUsingSymfony
     bind:
       $connection: '@kishlin.app.infrastructure.connection.admin'
       $database: 'admin'

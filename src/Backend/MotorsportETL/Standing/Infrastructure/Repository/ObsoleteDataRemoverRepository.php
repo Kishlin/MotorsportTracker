@@ -6,7 +6,6 @@ namespace Kishlin\Backend\MotorsportETL\Standing\Infrastructure\Repository;
 
 use Kishlin\Backend\MotorsportETL\Shared\Domain\ValueObject\SeasonIdentity;
 use Kishlin\Backend\MotorsportETL\Standing\Domain\ObsoleteDataRemover;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\CoreRepositoryInterface;
 use Kishlin\Backend\Shared\Infrastructure\Persistence\Repository\WriteRepository;
 

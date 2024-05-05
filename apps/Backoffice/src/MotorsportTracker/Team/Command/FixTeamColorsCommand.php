@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Kishlin\Apps\Backoffice\MotorsportTracker\Team\Command;
 
-use Kishlin\Backend\Persistence\Core\Connection\Connection;
-use Kishlin\Backend\Persistence\SQL\SQLQuery;
+use Kishlin\Backend\Persistence\PDO\PDOConnection;
 use Kishlin\Backend\Tools\Infrastructure\Symfony\Command\SymfonyCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +22,7 @@ WHERE ref = '2943bfb0-9957-4430-adc5-121c7975f176'; -- F4 France
 SQL;
 
     public function __construct(
-        private readonly Connection $connection,
+        private readonly PDOConnection $connection,
     ) {
         parent::__construct();
     }
@@ -40,7 +39,7 @@ SQL;
     {
         $ui = new SymfonyStyle($input, $output);
 
-        $this->connection->execute(SQLQuery::create(self::QUERY));
+        $this->connection->doExecute(self::QUERY);
 
         $ui->success('Fixed team colors.');
 
