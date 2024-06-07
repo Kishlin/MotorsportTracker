@@ -1,49 +1,49 @@
 calendar:
   resource: ../../src/MotorsportAdmin/Calendar/Controller/
   prefix: /api/v1/calendar
-  type: annotation
+  type: attribute
   stateless: true
 
 classification:
   resource: ../../src/MotorsportAdmin/Classification/Controller/
   prefix: /api/v1/classification
-  type: annotation
+  type: attribute
   stateless: true
 
 events:
   resource: ../../src/MotorsportAdmin/Events/Controller/
   prefix: /api/v1/events
-  type: annotation
+  type: attribute
   stateless: true
 
 jobs:
   resource: ../../src/MotorsportAdmin/Jobs/Controller/
   prefix: /api/v1/jobs
-  type: annotation
+  type: attribute
   stateless: true
 
 histories:
   resource: ../../src/MotorsportAdmin/RaceHistory/Controller/
   prefix: /api/v1/histories
-  type: annotation
+  type: attribute
   stateless: true
 
 seasons:
   resource: ../../src/MotorsportAdmin/Seasons/Controller/
   prefix: /api/v1/seasons
-  type: annotation
+  type: attribute
   stateless: true
 
 series:
   resource: ../../src/MotorsportAdmin/Series/Controller/
   prefix: /api/v1/series
-  type: annotation
+  type: attribute
   stateless: true
 
 standings:
   resource: ../../src/MotorsportAdmin/Standing/Controller/
   prefix: /api/v1/standings
-  type: annotation
+  type: attribute
   stateless: true
 
 

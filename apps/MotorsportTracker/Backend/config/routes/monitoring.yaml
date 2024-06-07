@@ -1,5 +1,5 @@
 monitoring:
   resource: ../../src/Monitoring/Controller/
   prefix: /monitoring
-  type: annotation
+  type: attribute
   stateless: true

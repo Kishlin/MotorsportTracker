@@ -1,47 +1,47 @@
 analytics:
   resource: ../../src/MotorsportCache/Analytics/Controller/
   prefix: /api/v1/analytics
-  type: annotation
+  type: attribute
   stateless: true
 
 calendar:
   resource: ../../src/MotorsportCache/Calendar/Controller/
   prefix: /api/v1/calendar
-  type: annotation
+  type: attribute
   stateless: true
 
 events:
   resource: ../../src/MotorsportCache/Event/Controller/
   prefix: /api/v1/events
-  type: annotation
+  type: attribute
   stateless: true
 
 event_graphs:
   resource: ../../src/MotorsportCache/EventGraph/Controller/
   prefix: /api/v1/graph/event
-  type: annotation
+  type: attribute
   stateless: true
 
 histories:
   resource: ../../src/MotorsportCache/Histories/Controller/
   prefix: /api/v1/histories
-  type: annotation
+  type: attribute
   stateless: true
 
 results:
   resource: ../../src/MotorsportCache/Results/Controller/
   prefix: /api/v1/results
-  type: annotation
+  type: attribute
   stateless: true
 
 schedule:
   resource: ../../src/MotorsportCache/Schedule/Controller/
   prefix: /api/v1/schedule
-  type: annotation
+  type: attribute
   stateless: true
 
 standings:
   resource: ../../src/MotorsportCache/Standings/Controller/
   prefix: /api/v1/standings
-  type: annotation
+  type: attribute
   stateless: true
