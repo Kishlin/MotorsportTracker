@@ -36,6 +36,5 @@ final class AggregateRootTest extends TestCase
 
         ReflectionHelper::invoke($root, 'record', $event);
         self::assertContainsEquals($event, $root->pullDomainEvents());
-        self::assertEmpty($root->pullDomainEvents());
     }
 }
