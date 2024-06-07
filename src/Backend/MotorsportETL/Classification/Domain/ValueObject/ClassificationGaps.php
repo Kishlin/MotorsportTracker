@@ -13,8 +13,7 @@ final readonly class ClassificationGaps implements Mapped
         private float $timeToNext,
         private int $lapsToLead,
         private int $lapsToNext,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

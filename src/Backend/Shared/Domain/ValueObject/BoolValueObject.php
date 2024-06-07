@@ -8,8 +8,7 @@ class BoolValueObject
 {
     public function __construct(
         protected readonly bool $value
-    ) {
-    }
+    ) {}
 
     public function value(): bool
     {

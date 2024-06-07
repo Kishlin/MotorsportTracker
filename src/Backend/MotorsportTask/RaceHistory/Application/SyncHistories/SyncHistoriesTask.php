@@ -16,8 +16,7 @@ final readonly class SyncHistoriesTask implements Task
         private int $year,
         private string $event,
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function series(): StringValueObject
     {

@@ -14,8 +14,7 @@ final class PostgresDatabase implements DatabaseInterface
     public function __construct(
         private readonly Connection $connection,
         private readonly FixtureLoader $fixtureLoader,
-    ) {
-    }
+    ) {}
 
     public function refreshDatabase(): void
     {
@@ -54,12 +53,12 @@ final class PostgresDatabase implements DatabaseInterface
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchOne();
     }
 
-    public function fetchAssociative(string $query, array $params = []): array|null
+    public function fetchAssociative(string $query, array $params = []): ?array
     {
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchAssociative() ?: null;
     }
 
-    public function fetchAllAssociative(string $query, array $params = []): array|null
+    public function fetchAllAssociative(string $query, array $params = []): ?array
     {
         return $this->connection->execute(SQLQuery::create($query, $params))->fetchAllAssociative() ?: null;
     }

@@ -14,8 +14,7 @@ final class SQLQuery implements Query
     private function __construct(
         private readonly string $query,
         private readonly array $parameters,
-    ) {
-    }
+    ) {}
 
     public function query(): string
     {

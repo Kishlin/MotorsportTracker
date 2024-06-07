@@ -11,8 +11,7 @@ final readonly class CachedClientUsingCurl implements Client
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function fetch(string $url, array $headers = []): string
     {

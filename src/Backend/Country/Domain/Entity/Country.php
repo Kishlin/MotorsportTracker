@@ -17,8 +17,7 @@ final class Country extends AggregateRoot
         private readonly NullableStringValueObject $code,
         private readonly StringValueObject $name,
         private readonly NullableUuidValueObject $ref,
-    ) {
-    }
+    ) {}
 
     public static function create(
         UuidValueObject $id,

@@ -12,8 +12,7 @@ final readonly class NoSessionsToComputeLogger implements EventSubscriber
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(NoSessionsToComputeEvent $event): void
     {

@@ -28,8 +28,7 @@ final class Job extends Entity
         private readonly JsonValueObject $params,
         private readonly DateTimeValueObject $startedOn,
         private NullableDateTimeValueObject $finishedOn,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $params

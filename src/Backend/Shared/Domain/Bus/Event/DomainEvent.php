@@ -13,8 +13,7 @@ abstract class DomainEvent implements Event
      */
     public function __construct(
         private readonly UuidValueObject $aggregateUuid,
-    ) {
-    }
+    ) {}
 
     /**
      * @return UuidValueObject the Uuid of the object that raised the event

@@ -10,8 +10,7 @@ final class ErrorJsonResponseBuilder
 {
     private function __construct(
         private JsonResponse $response,
-    ) {
-    }
+    ) {}
 
     public static function new(): self
     {

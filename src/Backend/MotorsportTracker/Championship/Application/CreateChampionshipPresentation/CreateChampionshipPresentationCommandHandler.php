@@ -21,8 +21,7 @@ final readonly class CreateChampionshipPresentationCommandHandler implements Com
         private UuidGenerator $uuidGenerator,
         private EventDispatcher $dispatcher,
         private Clock $clock,
-    ) {
-    }
+    ) {}
 
     public function __invoke(CreateChampionshipPresentationCommand $command): UuidValueObject
     {

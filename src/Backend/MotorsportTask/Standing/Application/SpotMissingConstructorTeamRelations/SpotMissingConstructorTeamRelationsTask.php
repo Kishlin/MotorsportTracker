@@ -15,8 +15,7 @@ final readonly class SpotMissingConstructorTeamRelationsTask implements Task
         private string $series,
         private int $year,
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function series(): StringValueObject
     {

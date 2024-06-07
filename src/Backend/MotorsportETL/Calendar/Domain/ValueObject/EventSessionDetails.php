@@ -15,8 +15,7 @@ final readonly class EventSessionDetails implements Mapped
         private ?DateTimeImmutable $startDate,
         private ?DateTimeImmutable $endDate,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

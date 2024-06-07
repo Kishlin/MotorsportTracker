@@ -12,8 +12,7 @@ final readonly class FixMissingConstructorTeamsCommandHandler implements Command
     public function __construct(
         private FixMissingConstructorTeamsGateway $gateway,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function __invoke(FixMissingConstructorTeamsCommand $command): void
     {

@@ -46,7 +46,7 @@ final class Tools
      *
      * @throws ReflectionException
      */
-    public static function shortClassName(string|object $objectOrClass): string
+    public static function shortClassName(object|string $objectOrClass): string
     {
         $reflectionClass = new ReflectionClass($objectOrClass);
 

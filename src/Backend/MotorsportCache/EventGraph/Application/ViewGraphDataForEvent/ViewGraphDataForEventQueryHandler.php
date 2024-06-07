@@ -10,8 +10,7 @@ final class ViewGraphDataForEventQueryHandler implements QueryHandler
 {
     public function __construct(
         private readonly GraphDataForEventGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ViewGraphDataForEventQuery $query): ViewGraphDataForEventResponse
     {

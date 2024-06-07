@@ -22,8 +22,7 @@ final readonly class UpdateEventResultsCacheCommandHandler implements CommandHan
         private SessionClassificationGateway $raceResultGateway,
         private EventDispatcher $eventDispatcher,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateEventResultsCacheCommand $command): void
     {

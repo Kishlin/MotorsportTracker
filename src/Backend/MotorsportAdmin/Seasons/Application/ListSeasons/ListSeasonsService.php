@@ -10,8 +10,7 @@ final readonly class ListSeasonsService
 {
     public function __construct(
         private SeasonsGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function forSeries(string $seriesName): ?JsonResponse
     {

@@ -27,8 +27,7 @@ final readonly class ScrapStandingsCommandHandler implements CommandHandler
         private StandingsExtractor $standingsExtractor,
         private SeasonGateway $seasonGateway,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapStandingsCommand $command): Result
     {

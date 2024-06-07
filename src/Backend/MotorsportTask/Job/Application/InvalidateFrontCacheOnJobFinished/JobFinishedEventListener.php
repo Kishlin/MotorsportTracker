@@ -15,8 +15,7 @@ final readonly class JobFinishedEventListener implements EventListener
         private FrontCacheInvalidator $cacheInvalidator,
         private FindJobGateway $findJobGateway,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function __invoke(JobFinishedEvent $event): void
     {

@@ -14,8 +14,7 @@ final readonly class TyreHistoryWithNullValuesEvent implements ApplicationEvent
     private function __construct(
         private string $session,
         private array $series,
-    ) {
-    }
+    ) {}
 
     public function session(): string
     {

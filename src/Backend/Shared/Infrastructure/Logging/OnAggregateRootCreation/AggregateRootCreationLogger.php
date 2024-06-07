@@ -15,8 +15,7 @@ abstract class AggregateRootCreationLogger implements EventSubscriber
     public function __construct(
         private readonly Connection $connection,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     protected function logCreation(string $table, string $id, string $title): void
     {

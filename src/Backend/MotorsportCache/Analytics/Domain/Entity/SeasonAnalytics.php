@@ -11,8 +11,7 @@ final readonly class SeasonAnalytics implements CacheItem
 {
     private function __construct(
         private AnalyticsView $analyticsView,
-    ) {
-    }
+    ) {}
 
     public static function create(AnalyticsView $analyticsView): self
     {

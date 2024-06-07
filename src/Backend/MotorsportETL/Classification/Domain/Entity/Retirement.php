@@ -16,8 +16,7 @@ final class Retirement extends Entity implements GuardedAgainstDoubles
         private readonly string $type,
         private readonly bool $dns,
         private readonly ?int $lap,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

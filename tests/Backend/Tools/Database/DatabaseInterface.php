@@ -24,14 +24,14 @@ interface DatabaseInterface
      *
      * @return null|array<string, null|bool|float|int|string> null if the query failed, the result as an associative array otherwise
      */
-    public function fetchAssociative(string $query, array $params = []): array|null;
+    public function fetchAssociative(string $query, array $params = []): ?array;
 
     /**
      * @param array<string, null|bool|float|int|string> $params
      *
      * @return null|array<array<string, null|bool|float|int|string>> null if the query failed, the result as an array of associative array otherwise
      */
-    public function fetchAllAssociative(string $query, array $params = []): array|null;
+    public function fetchAllAssociative(string $query, array $params = []): ?array;
 
     /**
      * @param array<string, null|bool|float|int|string> $params

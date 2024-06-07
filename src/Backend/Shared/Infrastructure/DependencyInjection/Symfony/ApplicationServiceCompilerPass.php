@@ -16,7 +16,7 @@ final class ApplicationServiceCompilerPass implements CompilerPassInterface
     /**
      * Important that priority remains >0 and <101 for the compiler pass to work.
      *
-     * @see \Symfony\Component\DependencyInjection\Compiler\PassConfig
+     * @see PassConfig
      */
     public static function register(ContainerBuilder $container): void
     {

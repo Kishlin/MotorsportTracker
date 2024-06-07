@@ -19,8 +19,7 @@ abstract class ComputeGraphCommandHandler implements CommandHandler
         private readonly EventSessionsGateway $eventSessionsGateway,
         private readonly GraphDataSaver $graphDataSaver,
         private readonly EventDispatcher $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     protected function doInvoke(ComputeGraphCommand $command): void
     {

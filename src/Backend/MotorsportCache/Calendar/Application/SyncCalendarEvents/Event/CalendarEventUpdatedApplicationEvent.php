@@ -12,8 +12,7 @@ final class CalendarEventUpdatedApplicationEvent implements ApplicationEvent
 {
     private function __construct(
         private readonly StringValueObject $calendarEventSlug,
-    ) {
-    }
+    ) {}
 
     public function calendarEventSlug(): StringValueObject
     {

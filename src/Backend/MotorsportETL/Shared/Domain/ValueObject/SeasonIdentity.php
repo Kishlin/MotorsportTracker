@@ -9,8 +9,7 @@ final readonly class SeasonIdentity
     private function __construct(
         private string $id,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function id(): string
     {

@@ -12,8 +12,7 @@ final readonly class DeprecatedGraphDeletedEvent implements ApplicationEvent
     private function __construct(
         private string $event,
         private EventGraphType $type,
-    ) {
-    }
+    ) {}
 
     public function event(): string
     {

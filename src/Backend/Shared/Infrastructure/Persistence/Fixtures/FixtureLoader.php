@@ -24,8 +24,7 @@ final class FixtureLoader
         private readonly UuidGenerator $uuidGenerator,
         private readonly FixtureSaver $fixtureSaver,
         private readonly string $pathToFixtures,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

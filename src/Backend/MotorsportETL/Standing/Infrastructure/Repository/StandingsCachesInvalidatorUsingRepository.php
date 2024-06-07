@@ -15,8 +15,7 @@ final readonly class StandingsCachesInvalidatorUsingRepository implements Standi
     public function __construct(
         private CacheInvalidatorRepository $cacheInvalidatorRepository,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function invalidate(SeasonIdentity $season): void
     {

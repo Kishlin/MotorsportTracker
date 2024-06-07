@@ -12,8 +12,7 @@ final readonly class GraphDataSaverUsingCacheItem implements GraphDataSaver
 {
     public function __construct(
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function save(string $event, Graph $graph): void
     {

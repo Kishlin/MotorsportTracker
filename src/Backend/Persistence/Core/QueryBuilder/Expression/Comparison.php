@@ -14,8 +14,7 @@ final class Comparison implements Stringable
         private readonly string|Stringable $left,
         private readonly ComparisonComparator $comparison,
         private readonly string|Stringable $right,
-    ) {
-    }
+    ) {}
 
     public function __toString()
     {

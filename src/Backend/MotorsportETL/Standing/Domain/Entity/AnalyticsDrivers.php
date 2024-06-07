@@ -21,8 +21,7 @@ final class AnalyticsDrivers extends Entity implements GuardedAgainstDoubles
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
         private readonly DriverAnalyticsData $analyticsData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

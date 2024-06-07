@@ -8,8 +8,7 @@ final class TokenPayload
 {
     private function __construct(
         private string $userId,
-    ) {
-    }
+    ) {}
 
     public function userId(): string
     {

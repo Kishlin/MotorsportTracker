@@ -14,8 +14,7 @@ final readonly class SeasonsExtractorUsingMotorsportStatsConnector implements Se
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(SeriesIdentity $series): string
     {

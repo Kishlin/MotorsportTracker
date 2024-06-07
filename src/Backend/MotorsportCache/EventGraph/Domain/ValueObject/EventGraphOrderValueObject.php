@@ -10,8 +10,7 @@ final class EventGraphOrderValueObject
 {
     public function __construct(
         protected readonly EventGraphOrder $value
-    ) {
-    }
+    ) {}
 
     public function value(): EventGraphOrder
     {

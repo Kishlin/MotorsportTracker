@@ -11,8 +11,7 @@ final readonly class EventResultsByRace implements CacheItem
 {
     private function __construct(
         private ResultsBySession $resultsBySession,
-    ) {
-    }
+    ) {}
 
     public static function create(ResultsBySession $resultsByRace): self
     {

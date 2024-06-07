@@ -15,8 +15,7 @@ final readonly class SyncGraphFastestLapDeltaTaskHandler implements TaskHandler
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncGraphFastestLapDeltaTask $task): void
     {

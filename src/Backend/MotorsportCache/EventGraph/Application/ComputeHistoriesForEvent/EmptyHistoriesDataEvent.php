@@ -10,8 +10,7 @@ final readonly class EmptyHistoriesDataEvent implements ApplicationEvent
 {
     private function __construct(
         private string $session,
-    ) {
-    }
+    ) {}
 
     public function session(): string
     {

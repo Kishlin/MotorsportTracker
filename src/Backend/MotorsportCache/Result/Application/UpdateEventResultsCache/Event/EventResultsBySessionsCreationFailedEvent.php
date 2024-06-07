@@ -12,8 +12,7 @@ final readonly class EventResultsBySessionsCreationFailedEvent implements Applic
     private function __construct(
         private string $eventId,
         private Throwable $throwable,
-    ) {
-    }
+    ) {}
 
     public function eventId(): string
     {

@@ -82,7 +82,7 @@ final class MappingTest extends TestCase
         );
     }
 
-    public static function assertItMapsTheValueCorrectly(int|string|bool $expectedTypedValue, mixed $actual): void
+    public static function assertItMapsTheValueCorrectly(bool|int|string $expectedTypedValue, mixed $actual): void
     {
         self::assertThat($actual, new ItMapsTheValueCorrectlyConstraint($expectedTypedValue));
     }

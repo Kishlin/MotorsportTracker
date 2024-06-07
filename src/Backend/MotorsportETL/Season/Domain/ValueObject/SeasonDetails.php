@@ -11,8 +11,7 @@ final readonly class SeasonDetails implements Mapped
     private function __construct(
         private int $year,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

@@ -15,8 +15,7 @@ final readonly class SyncTyreHistoryGraphTaskHandler implements TaskHandler
     public function __construct(
         private EventDispatcher $eventDispatcher,
         private CommandBus $commandBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncTyreHistoryGraphTask $task): void
     {

@@ -6,6 +6,4 @@ namespace Kishlin\Backend\MotorsportCache\EventGraph\Domain\DomainEvent;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 
-final class EventGraphCreatedDomainEvent extends DomainEvent
-{
-}
+final class EventGraphCreatedDomainEvent extends DomainEvent {}

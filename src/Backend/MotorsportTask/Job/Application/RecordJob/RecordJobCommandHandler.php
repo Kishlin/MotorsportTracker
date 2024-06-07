@@ -20,8 +20,7 @@ final readonly class RecordJobCommandHandler implements CommandHandler
         private UuidGenerator $uuidGenerator,
         private CommandBus $commandBus,
         private Clock $clock,
-    ) {
-    }
+    ) {}
 
     public function __invoke(RecordJobCommand $command): UuidValueObject
     {

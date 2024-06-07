@@ -9,8 +9,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Command\Command;
 final readonly class FixMissingConstructorTeamsCommand implements Command
 {
     private function __construct(
-    ) {
-    }
+    ) {}
 
     public static function create(): self
     {

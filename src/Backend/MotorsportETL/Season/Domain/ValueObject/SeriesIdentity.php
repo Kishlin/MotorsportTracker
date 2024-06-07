@@ -12,8 +12,7 @@ final readonly class SeriesIdentity implements Mapped
     private function __construct(
         private string $id,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function id(): UuidValueObject
     {

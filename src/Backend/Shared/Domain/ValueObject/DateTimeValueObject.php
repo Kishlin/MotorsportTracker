@@ -10,8 +10,7 @@ class DateTimeValueObject
 {
     public function __construct(
         protected readonly DateTimeImmutable $value
-    ) {
-    }
+    ) {}
 
     public function value(): DateTimeImmutable
     {

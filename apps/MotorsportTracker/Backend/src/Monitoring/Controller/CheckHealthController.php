@@ -13,6 +13,4 @@ use Symfony\Component\Routing\Annotation\Route;
     name: 'monitoring_status',
     methods: [Request::METHOD_GET],
 )]
-final class CheckHealthController extends AbstractCheckHealthController
-{
-}
+final class CheckHealthController extends AbstractCheckHealthController {}

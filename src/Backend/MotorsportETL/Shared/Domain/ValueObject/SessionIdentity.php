@@ -10,8 +10,7 @@ final readonly class SessionIdentity
         private string $id,
         private string $ref,
         private string $season,
-    ) {
-    }
+    ) {}
 
     public function id(): string
     {

@@ -10,8 +10,7 @@ final readonly class GetSeasonEventIdListQueryHandler implements QueryHandler
 {
     public function __construct(
         private SeasonEventIdListGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function __invoke(GetSeasonEventIdListQuery $query): GetSeasonEventIdListResponse
     {

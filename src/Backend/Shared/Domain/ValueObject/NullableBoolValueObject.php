@@ -27,7 +27,5 @@ readonly class NullableBoolValueObject
         return $other->value() === $this->value;
     }
 
-    protected function ensureIsValid(?bool $value): void
-    {
-    }
+    protected function ensureIsValid(?bool $value): void {}
 }

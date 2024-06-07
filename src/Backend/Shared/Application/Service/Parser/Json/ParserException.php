@@ -8,6 +8,4 @@ namespace Kishlin\Backend\Shared\Application\Service\Parser\Json;
 
 use RuntimeException;
 
-final class ParserException extends RuntimeException
-{
-}
+final class ParserException extends RuntimeException {}

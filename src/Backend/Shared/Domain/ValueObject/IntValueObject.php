@@ -27,7 +27,5 @@ class IntValueObject
         return $other->value() === $this->value;
     }
 
-    protected function ensureIsValid(int $value): void
-    {
-    }
+    protected function ensureIsValid(int $value): void {}
 }

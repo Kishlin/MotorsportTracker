@@ -13,8 +13,7 @@ final class CreateChampionshipPresentationCommand implements Command
         private readonly string $championship,
         private readonly string $icon,
         private readonly string $color,
-    ) {
-    }
+    ) {}
 
     public function championship(): StringValueObject
     {

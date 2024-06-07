@@ -15,8 +15,7 @@ final class Venue extends Entity implements GuardedAgainstDoubles
     private function __construct(
         private readonly VenueDetails $venueDetails,
         private readonly Country $country,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

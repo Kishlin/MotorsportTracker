@@ -11,8 +11,7 @@ final readonly class UpdateTeamAnalyticsCacheCommand implements Command
     private function __construct(
         private string $championship,
         private int $year,
-    ) {
-    }
+    ) {}
 
     public function championship(): string
     {

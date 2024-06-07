@@ -12,8 +12,7 @@ use RuntimeException;
 final readonly class TestQueryBus implements QueryBus
 {
     public function __construct(
-    ) {
-    }
+    ) {}
 
     public function ask(Query $query): ?Response
     {

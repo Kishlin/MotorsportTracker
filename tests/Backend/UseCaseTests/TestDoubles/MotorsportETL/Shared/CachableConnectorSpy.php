@@ -24,8 +24,7 @@ final class CachableConnectorSpy implements Connector, CacheInvalidatorGateway
 
     public function __construct(
         private readonly ContextFinder $contextFinder
-    ) {
-    }
+    ) {}
 
     public function resetState(): void
     {

@@ -9,8 +9,6 @@ namespace Kishlin\Backend\Shared\Domain\Bus\Query;
  * The method must either return null, or an instance of \Kishlin\Backend\Shared\Domain\Bus\Query\Response
  * The Response (or null) will be returned to the client by the QueryBus.
  *
- * @see \Kishlin\Backend\Shared\Domain\Bus\Query\QueryBus
+ * @see QueryBus
  */
-interface QueryHandler
-{
-}
+interface QueryHandler {}

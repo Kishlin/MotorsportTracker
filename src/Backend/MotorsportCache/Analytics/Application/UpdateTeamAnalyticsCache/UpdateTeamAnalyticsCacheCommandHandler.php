@@ -16,8 +16,7 @@ final readonly class UpdateTeamAnalyticsCacheCommandHandler implements CommandHa
     public function __construct(
         private TeamAnalyticsForSeasonGateway $gateway,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateTeamAnalyticsCacheCommand $command): void
     {

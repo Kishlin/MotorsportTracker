@@ -10,8 +10,7 @@ final readonly class UpdateEventResultsCacheCommand implements Command
 {
     private function __construct(
         private string $eventId,
-    ) {
-    }
+    ) {}
 
     public function eventId(): string
     {

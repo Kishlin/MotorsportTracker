@@ -48,8 +48,7 @@ final readonly class CalendarEventEntry
         private ?string $startDate,
         private ?string $endDate,
         private array $sessions,
-    ) {
-    }
+    ) {}
 
     public function venue(): CalendarEventVenue
     {

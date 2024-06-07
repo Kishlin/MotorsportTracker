@@ -13,8 +13,7 @@ final readonly class SyncGraphPositionChangeTask implements Task
     private function __construct(
         private string $eventId,
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function eventId(): StringValueObject
     {

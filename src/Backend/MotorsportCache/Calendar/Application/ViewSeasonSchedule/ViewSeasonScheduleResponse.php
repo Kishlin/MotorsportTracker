@@ -11,8 +11,7 @@ final class ViewSeasonScheduleResponse implements Response
 {
     private function __construct(
         private readonly JsonableEventsView $view,
-    ) {
-    }
+    ) {}
 
     public function schedule(): JsonableEventsView
     {

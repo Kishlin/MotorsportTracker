@@ -31,8 +31,7 @@ final class AggregateRecordedDomainEventsConstraint extends Constraint
     public function __construct(
         private array $expectedDomainEvents,
         private ?string $exporterToUseClass = null
-    ) {
-    }
+    ) {}
 
     public function toString(): string
     {

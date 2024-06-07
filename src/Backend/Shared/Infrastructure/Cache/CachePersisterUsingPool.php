@@ -16,8 +16,7 @@ final readonly class CachePersisterUsingPool implements CachePersister
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws InvalidArgumentException

@@ -10,8 +10,7 @@ final readonly class NoSessionsToComputeEvent implements ApplicationEvent
 {
     private function __construct(
         private string $eventId,
-    ) {
-    }
+    ) {}
 
     public function eventId(): string
     {

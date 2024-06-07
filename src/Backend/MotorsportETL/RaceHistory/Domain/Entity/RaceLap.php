@@ -18,8 +18,7 @@ final class RaceLap extends Entity implements GuardedAgainstDoubles
         private readonly RaceLapDetails $details,
         private readonly RaceLapGaps $gaps,
         private readonly RaceLapTyreDetails $tyreDetails,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

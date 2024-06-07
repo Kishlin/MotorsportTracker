@@ -17,8 +17,7 @@ final class TokenParserUsingFirebase implements TokenParser
         private string $secretKey,
         private string $algorithm,
         private bool $expirationClaimIsRequired,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ParsingTokenFailedException

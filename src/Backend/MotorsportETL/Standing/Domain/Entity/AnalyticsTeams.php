@@ -21,8 +21,7 @@ final class AnalyticsTeams extends Entity implements GuardedAgainstDoubles
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
         private readonly TeamAnalyticsData $analyticsData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

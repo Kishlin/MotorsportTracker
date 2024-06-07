@@ -17,8 +17,7 @@ final class RefreshTokenParserUsingFirebase implements RefreshTokenParser
         private string $secretKey,
         private string $algorithm,
         private bool $expirationClaimIsRequired,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ParsingTokenFailedException

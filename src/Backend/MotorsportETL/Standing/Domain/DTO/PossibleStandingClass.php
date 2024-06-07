@@ -9,8 +9,7 @@ final readonly class PossibleStandingClass
     private function __construct(
         private string $uuid,
         private string $name,
-    ) {
-    }
+    ) {}
 
     public function uuid(): string
     {

@@ -30,9 +30,7 @@ final class SymfonyApplication
     /**
      * @param class-string<KernelInterface> $kernelClass
      */
-    public function __construct(private readonly string $kernelClass)
-    {
-    }
+    public function __construct(private readonly string $kernelClass) {}
 
     public function clearEnvironment(): void
     {

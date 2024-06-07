@@ -16,8 +16,7 @@ final class Event extends Entity implements GuardedAgainstDoubles
         private readonly string $season,
         private readonly EventDetails $eventDetails,
         private readonly Venue $venue,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

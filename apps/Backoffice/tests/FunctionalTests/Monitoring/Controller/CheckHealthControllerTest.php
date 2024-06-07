@@ -10,7 +10,7 @@ use Kishlin\Tests\Backend\Apps\AbstractFunctionalTests\Controller\Monitoring\Che
 /**
  * Functional Test to verify the application has an up-and-running check-health API endpoint.
  *
- * @see \Kishlin\Tests\Backend\Apps\AbstractFunctionalTests\Controller\Monitoring\CheckHealthControllerTestCase
+ * @see CheckHealthControllerTestCase
  *
  * @internal
  * @covers \Kishlin\Apps\Backoffice\Monitoring\Controller\CheckHealthController

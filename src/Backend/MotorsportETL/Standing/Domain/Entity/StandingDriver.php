@@ -19,8 +19,7 @@ final class StandingDriver extends Entity implements GuardedAgainstDoubles
         private readonly Driver $driver,
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

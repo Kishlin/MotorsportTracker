@@ -8,10 +8,9 @@ final class JWTAuthorization
 {
     private function __construct(
         private string $token,
-    ) {
-    }
+    ) {}
 
-    public static function fromCookie(string|int|float|bool|null $cookieValue): self
+    public static function fromCookie(null|bool|float|int|string $cookieValue): self
     {
         if (false === is_string($cookieValue) || '' === $cookieValue) {
             throw new FailedToReadCookieException('Failed to read cookie.');

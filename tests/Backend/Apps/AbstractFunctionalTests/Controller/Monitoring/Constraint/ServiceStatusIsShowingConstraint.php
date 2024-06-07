@@ -10,8 +10,7 @@ final class ServiceStatusIsShowingConstraint extends Constraint
 {
     public function __construct(
         private string $service
-    ) {
-    }
+    ) {}
 
     public function toString(): string
     {

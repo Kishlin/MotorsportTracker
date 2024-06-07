@@ -16,8 +16,7 @@ final class AggregateRootWasSavedConstraint extends Constraint
 {
     public function __construct(
         private readonly Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function toString(): string
     {

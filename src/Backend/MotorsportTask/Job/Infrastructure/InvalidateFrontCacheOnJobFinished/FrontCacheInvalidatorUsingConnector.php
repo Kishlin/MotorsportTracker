@@ -17,8 +17,7 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
         private EventIdGateway $eventIdGateway,
         private FrontConnector $connector,
         private ?LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function invalidateAfter(Job $job): bool
     {
@@ -86,7 +85,7 @@ final readonly class FrontCacheInvalidatorUsingConnector implements FrontCacheIn
         return true;
     }
 
-    private function findEventIdForJob(Job $job): null|string
+    private function findEventIdForJob(Job $job): ?string
     {
         $series = $job->stringParam('series');
         $year   = $job->intParam('year');

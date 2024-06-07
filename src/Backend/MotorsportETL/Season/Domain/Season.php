@@ -15,8 +15,7 @@ final class Season extends Entity implements GuardedAgainstDoubles
     private function __construct(
         private readonly SeriesIdentity $series,
         private readonly SeasonDetails $details,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array{year: int, uuid: string} $data

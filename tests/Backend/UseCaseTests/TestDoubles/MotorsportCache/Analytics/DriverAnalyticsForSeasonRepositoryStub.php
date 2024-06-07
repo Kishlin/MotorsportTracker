@@ -18,8 +18,7 @@ final readonly class DriverAnalyticsForSeasonRepositoryStub implements DriverAna
 
     public function __construct(
         private ObjectStoreSpy $objectStore,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws JsonException

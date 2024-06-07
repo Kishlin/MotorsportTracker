@@ -15,8 +15,7 @@ final readonly class ScrapSeriesTaskHandler implements TaskHandler
     public function __construct(
         private EventDispatcher $eventDispatcher,
         private CommandBus $commandBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapSeriesTask $task): void
     {

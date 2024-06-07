@@ -11,8 +11,7 @@ final class EventSessionsDTO
      */
     private function __construct(
         private readonly array $sessions
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{session: string, type: string}>

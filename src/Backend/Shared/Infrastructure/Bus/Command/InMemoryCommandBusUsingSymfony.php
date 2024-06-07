@@ -21,8 +21,7 @@ final class InMemoryCommandBusUsingSymfony implements CommandBus
 {
     public function __construct(
         private MessageBus $commandBus
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Throwable

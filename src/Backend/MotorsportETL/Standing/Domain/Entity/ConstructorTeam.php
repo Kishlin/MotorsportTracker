@@ -14,8 +14,7 @@ final class ConstructorTeam extends Entity implements GuardedAgainstDoubles
     private function __construct(
         private readonly Constructor $constructor,
         private readonly Team $team,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

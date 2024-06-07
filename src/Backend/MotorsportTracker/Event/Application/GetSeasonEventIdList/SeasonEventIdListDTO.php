@@ -11,8 +11,7 @@ final readonly class SeasonEventIdListDTO
      */
     private function __construct(
         private array $idList,
-    ) {
-    }
+    ) {}
 
     /**
      * @return string[]

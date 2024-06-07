@@ -15,8 +15,7 @@ final class Country extends Entity implements GuardedAgainstDoubles
         private readonly ?string $code,
         private readonly string $name,
         private readonly string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

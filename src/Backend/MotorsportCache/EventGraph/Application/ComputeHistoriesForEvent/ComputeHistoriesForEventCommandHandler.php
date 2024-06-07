@@ -52,7 +52,7 @@ final class ComputeHistoriesForEventCommandHandler extends ComputeGraphCommandHa
         $laps       = 0;
 
         foreach ($histories as $history) {
-            /** @var array<int, array{lap: int, position: int, pit: boolean}> $lapsList */
+            /** @var array<int, array{lap: int, position: int, pit: bool}> $lapsList */
             $lapsList = json_decode($history['laps'], true, 512, JSON_THROW_ON_ERROR);
             assert(is_array($lapsList));
 

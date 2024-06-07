@@ -22,8 +22,7 @@ final class InMemoryQueryBusUsingSymfony implements QueryBus
 {
     public function __construct(
         private MessageBus $queryBus
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Throwable

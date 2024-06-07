@@ -14,8 +14,7 @@ final readonly class PossibleStandingCategory
      */
     private function __construct(
         private ?array $standings,
-    ) {
-    }
+    ) {}
 
     public function isAvailable(): bool
     {
@@ -56,7 +55,7 @@ final readonly class PossibleStandingCategory
 
         return new self(
             array_map(
-                fn (array $standing): PossibleStandingClass => PossibleStandingClass::forStanding($standing),
+                static fn (array $standing): PossibleStandingClass => PossibleStandingClass::forStanding($standing),
                 $standings,
             ),
         );

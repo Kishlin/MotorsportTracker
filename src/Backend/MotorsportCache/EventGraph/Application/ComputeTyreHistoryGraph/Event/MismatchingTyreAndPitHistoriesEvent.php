@@ -15,8 +15,7 @@ final readonly class MismatchingTyreAndPitHistoriesEvent implements ApplicationE
         private string $session,
         private array $series,
         private bool $skipping,
-    ) {
-    }
+    ) {}
 
     public function session(): string
     {

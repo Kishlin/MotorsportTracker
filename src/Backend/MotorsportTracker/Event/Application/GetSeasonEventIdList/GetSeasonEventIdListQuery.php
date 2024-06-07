@@ -15,8 +15,7 @@ final readonly class GetSeasonEventIdListQuery implements Query
         private string $championshipName,
         private int $year,
         private ?string $eventFilter,
-    ) {
-    }
+    ) {}
 
     public function championshipName(): StringValueObject
     {

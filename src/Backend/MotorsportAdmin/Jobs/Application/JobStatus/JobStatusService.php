@@ -11,8 +11,7 @@ final readonly class JobStatusService
 {
     public function __construct(
         private AdminGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function status(string $id): ?JsonResponse
     {

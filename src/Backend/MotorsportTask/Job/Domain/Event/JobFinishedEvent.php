@@ -10,8 +10,7 @@ final readonly class JobFinishedEvent implements Event
 {
     private function __construct(
         private string $uuid,
-    ) {
-    }
+    ) {}
 
     public function uuid(): string
     {

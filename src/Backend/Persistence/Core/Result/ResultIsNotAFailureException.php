@@ -6,6 +6,4 @@ namespace Kishlin\Backend\Persistence\Core\Result;
 
 use RuntimeException;
 
-final class ResultIsNotAFailureException extends RuntimeException
-{
-}
+final class ResultIsNotAFailureException extends RuntimeException {}

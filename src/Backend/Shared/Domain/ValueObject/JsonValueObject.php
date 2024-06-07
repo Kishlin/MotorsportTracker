@@ -15,8 +15,7 @@ class JsonValueObject
      */
     final public function __construct(
         protected readonly array $value
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int|string, mixed>

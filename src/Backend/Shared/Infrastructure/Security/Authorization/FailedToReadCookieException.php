@@ -6,6 +6,4 @@ namespace Kishlin\Backend\Shared\Infrastructure\Security\Authorization;
 
 use RuntimeException;
 
-class FailedToReadCookieException extends RuntimeException
-{
-}
+class FailedToReadCookieException extends RuntimeException {}

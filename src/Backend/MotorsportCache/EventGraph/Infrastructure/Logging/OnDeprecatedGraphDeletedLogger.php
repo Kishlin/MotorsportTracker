@@ -12,8 +12,7 @@ final readonly class OnDeprecatedGraphDeletedLogger implements EventSubscriber
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(DeprecatedGraphDeletedEvent $event): void
     {

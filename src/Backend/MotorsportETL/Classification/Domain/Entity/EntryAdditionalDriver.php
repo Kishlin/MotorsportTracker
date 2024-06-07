@@ -15,8 +15,7 @@ final class EntryAdditionalDriver extends Entity implements GuardedAgainstDouble
     private function __construct(
         private readonly Entry $entry,
         private readonly Driver $driver,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

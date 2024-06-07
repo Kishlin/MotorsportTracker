@@ -11,8 +11,7 @@ final readonly class PossibleStandingsTransformer
 {
     public function __construct(
         private JsonableStringTransformer $jsonableStringParser,
-    ) {
-    }
+    ) {}
 
     public function transform(mixed $extractorResponse): PossibleStandingList
     {

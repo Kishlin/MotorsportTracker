@@ -18,8 +18,7 @@ final class CacheItemStub implements CacheItemInterface
     public function __construct(
         private readonly string $key,
         private bool $isHit,
-    ) {
-    }
+    ) {}
 
     public function getKey(): string
     {
@@ -53,7 +52,7 @@ final class CacheItemStub implements CacheItemInterface
         throw new LogicException('Not implemented');
     }
 
-    public function expiresAfter(DateInterval|int|null $time): static
+    public function expiresAfter(null|DateInterval|int $time): static
     {
         throw new LogicException('Not implemented');
     }

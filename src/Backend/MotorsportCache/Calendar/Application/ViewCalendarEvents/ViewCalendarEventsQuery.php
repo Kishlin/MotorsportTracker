@@ -13,8 +13,7 @@ final class ViewCalendarEventsQuery implements Query
     private function __construct(
         private readonly string $start,
         private readonly string $end,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

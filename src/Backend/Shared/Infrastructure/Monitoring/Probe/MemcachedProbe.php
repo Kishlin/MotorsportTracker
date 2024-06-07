@@ -15,8 +15,7 @@ final readonly class MemcachedProbe implements Probe
     public function __construct(
         private CacheItemPoolInterface $cache,
         private string $server,
-    ) {
-    }
+    ) {}
 
     public function name(): string
     {

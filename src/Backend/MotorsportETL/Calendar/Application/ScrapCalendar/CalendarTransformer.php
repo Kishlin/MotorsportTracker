@@ -15,8 +15,7 @@ final readonly class CalendarTransformer
 {
     public function __construct(
         private JsonableStringTransformer $jsonableStringParser,
-    ) {
-    }
+    ) {}
 
     /**
      * @return Generator<Entity>

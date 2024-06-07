@@ -14,8 +14,7 @@ final readonly class CalendarExtractorUsingConnector implements CalendarExtracto
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(SeasonIdentity $season): string
     {

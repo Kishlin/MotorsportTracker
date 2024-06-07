@@ -24,8 +24,7 @@ final readonly class ExecuteJobCommandHandler implements CommandHandler
         private SaveJobGateway $saveJobGateway,
         private FindJobGateway $gateway,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ExecuteJobCommand $command): bool
     {

@@ -10,8 +10,7 @@ final readonly class ExecuteJobCommand implements Command
 {
     private function __construct(
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function job(): string
     {

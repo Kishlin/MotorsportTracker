@@ -13,8 +13,7 @@ final readonly class SeasonsTransformer
 {
     public function __construct(
         private JsonableStringTransformer $jsonableStringParser,
-    ) {
-    }
+    ) {}
 
     /**
      * @return Generator<Season>

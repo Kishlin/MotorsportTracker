@@ -16,8 +16,7 @@ final readonly class ScrapSeriesListCommandHandler implements CommandHandler
         private SeriesListTransformer $seriesTransformer,
         private SeriesListExtractor $seriesExtractor,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapSeriesListCommand $command): Result
     {

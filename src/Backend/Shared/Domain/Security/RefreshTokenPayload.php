@@ -9,8 +9,7 @@ final class RefreshTokenPayload
     private function __construct(
         private string $userId,
         private string $salt,
-    ) {
-    }
+    ) {}
 
     public function userId(): string
     {

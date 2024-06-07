@@ -19,8 +19,7 @@ final readonly class GraphDataSaverUsingEntity implements GraphDataSaver
         private DeleteDeprecatedEventGraphGateway $deleteDeprecatedEventGraphGateway,
         private EventGraphGateway $eventGraphGateway,
         private EventDispatcher $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     public function save(string $event, Graph $graph): void
     {

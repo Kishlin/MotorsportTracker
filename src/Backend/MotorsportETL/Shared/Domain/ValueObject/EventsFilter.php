@@ -10,8 +10,7 @@ final readonly class EventsFilter
         private string $seriesName,
         private int $year,
         private ?string $eventFilter,
-    ) {
-    }
+    ) {}
 
     public function seriesName(): string
     {

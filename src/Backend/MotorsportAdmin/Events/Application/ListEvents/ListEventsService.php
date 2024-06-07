@@ -12,8 +12,7 @@ final readonly class ListEventsService
         private EventsGateway $gateway,
         private ResultCounter $resultCounter,
         private EventGraphCounter $eventGraphCounter,
-    ) {
-    }
+    ) {}
 
     public function forSeries(string $seriesName, int $year): ?JsonResponse
     {

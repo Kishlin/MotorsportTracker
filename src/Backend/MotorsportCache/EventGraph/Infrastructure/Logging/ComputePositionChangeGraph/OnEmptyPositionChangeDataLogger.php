@@ -12,8 +12,7 @@ final readonly class OnEmptyPositionChangeDataLogger implements EventSubscriber
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(EmptyPositionChangeDataEvent $event): void
     {

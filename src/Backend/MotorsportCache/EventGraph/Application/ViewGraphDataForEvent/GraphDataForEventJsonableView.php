@@ -16,8 +16,7 @@ final class GraphDataForEventJsonableView extends JsonableView
      */
     private function __construct(
         private readonly array $data,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

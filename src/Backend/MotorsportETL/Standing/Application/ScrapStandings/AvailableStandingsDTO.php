@@ -15,8 +15,7 @@ final readonly class AvailableStandingsDTO
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, null|array{name: string, uuid: string}>

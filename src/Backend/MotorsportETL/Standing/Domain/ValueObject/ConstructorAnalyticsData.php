@@ -10,8 +10,7 @@ final readonly class ConstructorAnalyticsData implements Mapped
 {
     private function __construct(
         private int $wins,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

@@ -20,8 +20,7 @@ final readonly class SyncHistoriesTaskHandler implements TaskHandler
         private EventIdGateway $eventIdGateway,
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncHistoriesTask $task): void
     {

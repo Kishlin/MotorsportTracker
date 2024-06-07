@@ -10,8 +10,7 @@ final class ViewGraphDataForEventResponse implements Response
 {
     private function __construct(
         private readonly GraphDataForEventJsonableView $view,
-    ) {
-    }
+    ) {}
 
     public function view(): GraphDataForEventJsonableView
     {

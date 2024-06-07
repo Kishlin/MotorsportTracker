@@ -6,6 +6,4 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Application\CreateChamp
 
 use Kishlin\Backend\Shared\Domain\Exception\DomainException;
 
-final class ChampionshipNotFoundDomainException extends DomainException
-{
-}
+final class ChampionshipNotFoundDomainException extends DomainException {}

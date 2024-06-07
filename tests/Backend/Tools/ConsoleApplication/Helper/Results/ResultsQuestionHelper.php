@@ -13,8 +13,7 @@ final class ResultsQuestionHelper extends QuestionHelper
 {
     public function __construct(
         private ResultsHolderInterface $resultContext,
-    ) {
-    }
+    ) {}
 
     public function ask(InputInterface $input, OutputInterface $output, Question $question): string
     {

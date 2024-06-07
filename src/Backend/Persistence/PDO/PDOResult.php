@@ -17,8 +17,7 @@ final class PDOResult implements Result
         private readonly ?PDOStatement $statement,
         private readonly bool $isOk,
         private readonly ?ResultFailure $failure,
-    ) {
-    }
+    ) {}
 
     public function isOk(): bool
     {

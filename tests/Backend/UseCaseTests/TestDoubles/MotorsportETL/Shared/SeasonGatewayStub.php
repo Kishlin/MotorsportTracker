@@ -12,8 +12,7 @@ final readonly class SeasonGatewayStub implements SeasonGateway
 {
     public function __construct(
         private EntityStoreSpy $entityStoreSpy,
-    ) {
-    }
+    ) {}
 
     public function find(SeasonFilter $filter): ?SeasonIdentity
     {

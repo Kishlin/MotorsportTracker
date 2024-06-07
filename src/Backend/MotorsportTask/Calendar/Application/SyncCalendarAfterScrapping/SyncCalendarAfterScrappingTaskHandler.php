@@ -15,8 +15,7 @@ final readonly class SyncCalendarAfterScrappingTaskHandler implements TaskHandle
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncCalendarAfterScrappingTask $task): void
     {

@@ -11,8 +11,7 @@ final readonly class Histories implements CacheItem, Graph
 {
     private function __construct(
         private HistoriesValueObject $histories,
-    ) {
-    }
+    ) {}
 
     public static function create(HistoriesValueObject $histories): self
     {

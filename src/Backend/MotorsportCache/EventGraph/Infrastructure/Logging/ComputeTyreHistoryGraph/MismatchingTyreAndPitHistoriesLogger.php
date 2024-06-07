@@ -12,8 +12,7 @@ final readonly class MismatchingTyreAndPitHistoriesLogger implements EventSubscr
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(MismatchingTyreAndPitHistoriesEvent $event): void
     {

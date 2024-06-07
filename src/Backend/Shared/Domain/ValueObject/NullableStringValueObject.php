@@ -8,8 +8,7 @@ class NullableStringValueObject
 {
     public function __construct(
         protected readonly ?string $value
-    ) {
-    }
+    ) {}
 
     public function value(): ?string
     {

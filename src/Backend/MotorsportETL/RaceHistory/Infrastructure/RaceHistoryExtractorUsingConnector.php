@@ -14,8 +14,7 @@ final readonly class RaceHistoryExtractorUsingConnector implements RaceHistoryEx
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(SessionIdentity $session): string
     {

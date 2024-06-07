@@ -17,8 +17,7 @@ final readonly class RaceHistoryTransformer
         private JsonableStringTransformer $jsonableStringParser,
         private EventDispatcher $eventDispatcher,
         private EntryGateway $entryGateway,
-    ) {
-    }
+    ) {}
 
     /**
      * @return Generator<Entity>

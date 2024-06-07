@@ -10,8 +10,7 @@ final readonly class PossibleStandingList
         private PossibleStandingCategory $constructorStandings,
         private PossibleStandingCategory $driversStandings,
         private PossibleStandingCategory $teamStandings,
-    ) {
-    }
+    ) {}
 
     public function constructorStandings(): PossibleStandingCategory
     {

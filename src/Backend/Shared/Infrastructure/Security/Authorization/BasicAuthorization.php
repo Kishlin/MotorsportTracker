@@ -9,8 +9,7 @@ final class BasicAuthorization
     private function __construct(
         private string $username,
         private string $password,
-    ) {
-    }
+    ) {}
 
     public static function fromHeader(string $header): self
     {

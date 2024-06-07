@@ -11,8 +11,7 @@ final readonly class GetSeasonListQuery implements Query
 {
     private function __construct(
         private string $championshipName,
-    ) {
-    }
+    ) {}
 
     public function championshipName(): StringValueObject
     {

@@ -18,8 +18,7 @@ final class InMemoryEventDispatcherUsingSymfony implements EventDispatcher
 {
     public function __construct(
         private readonly MessageBus $eventBus
-    ) {
-    }
+    ) {}
 
     public function dispatch(Event ...$events): void
     {

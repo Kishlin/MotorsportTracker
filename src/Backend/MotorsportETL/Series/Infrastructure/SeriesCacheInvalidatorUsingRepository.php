@@ -14,8 +14,7 @@ final readonly class SeriesCacheInvalidatorUsingRepository implements SeriesCach
     public function __construct(
         private CacheInvalidatorGateway $cacheInvalidatorRepository,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function invalidate(): void
     {

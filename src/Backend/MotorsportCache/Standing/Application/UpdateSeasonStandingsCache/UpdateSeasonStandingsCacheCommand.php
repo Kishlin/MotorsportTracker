@@ -11,8 +11,7 @@ final readonly class UpdateSeasonStandingsCacheCommand implements Command
     private function __construct(
         private string $championshipName,
         private int $year,
-    ) {
-    }
+    ) {}
 
     public function championshipName(): string
     {

@@ -16,8 +16,7 @@ final class ClientRequestEvent implements Event
     private function __construct(
         private readonly string $topic,
         private readonly array $key,
-    ) {
-    }
+    ) {}
 
     public function setResponse(?string $response): void
     {

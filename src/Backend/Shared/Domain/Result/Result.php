@@ -8,7 +8,7 @@ interface Result
 {
     public function isOk(): bool;
 
-    public function unwrap(): null|object;
+    public function unwrap(): ?object;
 
     public function unwrapFailure(): ?int;
 }

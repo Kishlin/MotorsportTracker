@@ -11,8 +11,7 @@ final readonly class StandingsIdentity implements Mapped
     private function __construct(
         private string $season,
         private ?string $seriesClass,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

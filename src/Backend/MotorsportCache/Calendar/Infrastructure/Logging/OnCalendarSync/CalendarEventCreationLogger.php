@@ -12,8 +12,7 @@ final class CalendarEventCreationLogger implements EventSubscriber
 {
     public function __construct(
         private readonly LoggerInterface $logger
-    ) {
-    }
+    ) {}
 
     public function __invoke(CalendarEventCreatedApplicationEvent $event): void
     {

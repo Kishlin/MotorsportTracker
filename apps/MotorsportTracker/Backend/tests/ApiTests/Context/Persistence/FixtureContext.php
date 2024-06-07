@@ -11,7 +11,5 @@ final class FixtureContext extends BackendApiContext
     /**
      * @Given the :class :name does not exist yet
      */
-    public function theFixtureDoesNotExistYet(string $class, string $name): void
-    {
-    }
+    public function theFixtureDoesNotExistYet(string $class, string $name): void {}
 }

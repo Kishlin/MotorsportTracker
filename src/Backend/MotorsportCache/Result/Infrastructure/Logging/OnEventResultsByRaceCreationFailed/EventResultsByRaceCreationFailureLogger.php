@@ -12,8 +12,7 @@ final readonly class EventResultsByRaceCreationFailureLogger implements EventSub
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(EventResultsBySessionsCreationFailedEvent $event): void
     {

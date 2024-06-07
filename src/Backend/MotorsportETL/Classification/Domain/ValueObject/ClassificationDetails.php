@@ -17,8 +17,7 @@ final readonly class ClassificationDetails implements Mapped
         private ?string $classifiedStatus,
         private float $averageLapSpeed,
         private ?float $fastestLapTime,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

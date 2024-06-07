@@ -22,8 +22,7 @@ final readonly class ScrapRaceHistoryCommandHandler implements CommandHandler
         private RaceHistoryTransformer $transformer,
         private RaceHistoryExtractor $extractor,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapRaceHistoryCommand $command): Result
     {

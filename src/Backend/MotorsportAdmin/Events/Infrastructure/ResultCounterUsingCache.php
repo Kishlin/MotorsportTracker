@@ -13,8 +13,7 @@ final readonly class ResultCounterUsingCache implements ResultCounter
 {
     public function __construct(
         private CacheItemPoolInterface $cacheItemPool,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws InvalidArgumentException

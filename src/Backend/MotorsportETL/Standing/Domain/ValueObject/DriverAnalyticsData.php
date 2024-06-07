@@ -26,8 +26,7 @@ final readonly class DriverAnalyticsData implements Mapped
         private int $top5s,
         private int $wins,
         private float $winsPercentage,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

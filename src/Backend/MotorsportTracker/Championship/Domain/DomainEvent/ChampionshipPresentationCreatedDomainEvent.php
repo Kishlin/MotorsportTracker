@@ -6,6 +6,4 @@ namespace Kishlin\Backend\MotorsportTracker\Championship\Domain\DomainEvent;
 
 use Kishlin\Backend\Shared\Domain\Bus\Event\DomainEvent;
 
-final class ChampionshipPresentationCreatedDomainEvent extends DomainEvent
-{
-}
+final class ChampionshipPresentationCreatedDomainEvent extends DomainEvent {}

@@ -15,8 +15,7 @@ final class Constructor extends Entity implements GuardedAgainstDoubles
     private function __construct(
         private readonly string $name,
         private readonly string $ref,
-    ) {
-    }
+    ) {}
 
     public function name(): StringValueObject
     {

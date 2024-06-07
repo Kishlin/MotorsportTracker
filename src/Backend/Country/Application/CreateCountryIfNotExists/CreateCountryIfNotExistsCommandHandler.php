@@ -15,8 +15,7 @@ final readonly class CreateCountryIfNotExistsCommandHandler implements CommandHa
         private SearchCountryGateway $searchGateway,
         private SaveCountryGateway $saveGateway,
         private UuidGenerator $uuidGenerator,
-    ) {
-    }
+    ) {}
 
     public function __invoke(CreateCountryIfNotExistsCommand $command): UuidValueObject
     {

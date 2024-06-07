@@ -11,8 +11,7 @@ use Kishlin\Backend\Shared\Domain\Bus\Event\EventDispatcher;
 final readonly class TestEventDispatcher implements EventDispatcher
 {
     public function __construct(
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception
@@ -27,7 +26,5 @@ final readonly class TestEventDispatcher implements EventDispatcher
     /**
      * @throws Exception
      */
-    private function handleEvent(Event $event): void
-    {
-    }
+    private function handleEvent(Event $event): void {}
 }

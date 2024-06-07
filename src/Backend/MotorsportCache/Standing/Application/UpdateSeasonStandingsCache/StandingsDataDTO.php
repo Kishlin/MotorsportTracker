@@ -40,8 +40,7 @@ final readonly class StandingsDataDTO
         private array $constructorStandings,
         private array $teamStandings,
         private array $driverStandings,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{

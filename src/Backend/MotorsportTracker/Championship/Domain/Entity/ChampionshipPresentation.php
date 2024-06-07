@@ -18,8 +18,7 @@ final class ChampionshipPresentation extends AggregateRoot
         private readonly StringValueObject $icon,
         private readonly StringValueObject $color,
         private readonly DateTimeValueObject $createdOn,
-    ) {
-    }
+    ) {}
 
     public static function create(
         UuidValueObject $id,

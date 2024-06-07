@@ -11,8 +11,7 @@ final readonly class SeasonListDTO
      */
     private function __construct(
         private array $yearList,
-    ) {
-    }
+    ) {}
 
     /**
      * @return int[]

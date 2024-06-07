@@ -15,8 +15,7 @@ final readonly class SeasonsCacheInvalidatorUsingRepository implements SeasonsCa
     public function __construct(
         private CacheInvalidatorRepository $cacheInvalidatorRepository,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function invalidate(SeriesIdentity $series): void
     {

@@ -7,16 +7,15 @@ namespace Kishlin\Backend\Shared\Domain\Result;
 final readonly class OkResult implements Result
 {
     private function __construct(
-        private null|object $value,
-    ) {
-    }
+        private ?object $value,
+    ) {}
 
     public function isOk(): bool
     {
         return true;
     }
 
-    public function unwrap(): null|object
+    public function unwrap(): ?object
     {
         return $this->value;
     }
@@ -26,7 +25,7 @@ final readonly class OkResult implements Result
         throw new ResultIsSuccessException();
     }
 
-    public static function forValue(null|object $value): self
+    public static function forValue(?object $value): self
     {
         return new self($value);
     }

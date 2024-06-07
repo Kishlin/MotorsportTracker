@@ -18,8 +18,7 @@ final class StandingConstructor extends Entity implements GuardedAgainstDoubles
         private readonly Constructor $constructor,
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

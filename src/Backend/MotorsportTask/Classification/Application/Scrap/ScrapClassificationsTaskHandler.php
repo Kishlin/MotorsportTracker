@@ -15,8 +15,7 @@ final readonly class ScrapClassificationsTaskHandler implements TaskHandler
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapClassificationsTask $task): void
     {

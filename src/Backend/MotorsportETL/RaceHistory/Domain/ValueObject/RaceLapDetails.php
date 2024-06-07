@@ -13,8 +13,7 @@ final readonly class RaceLapDetails implements Mapped
         private int $position,
         private bool $pit,
         private int $time,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

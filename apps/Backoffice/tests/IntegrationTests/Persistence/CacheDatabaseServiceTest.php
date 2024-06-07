@@ -12,7 +12,7 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * Integration Test to verify the service container holds an active database connection.
  *
- * @see \Kishlin\Tests\Backend\Apps\AbstractIntegrationTests\Persistence\DatabaseServiceTestCase
+ * @see DatabaseServiceTestCase
  *
  * @internal
  * @coversNothing

@@ -11,8 +11,7 @@ final readonly class ViewCalendarEventsResponse implements Response
 {
     private function __construct(
         private JsonableEventsView $calendarView,
-    ) {
-    }
+    ) {}
 
     public function calendarView(): JsonableEventsView
     {

@@ -18,8 +18,7 @@ final readonly class Migrator
         private string $namespace,
         private string $table,
         private string $folder,
-    ) {
-    }
+    ) {}
 
     public function upALl(): void
     {

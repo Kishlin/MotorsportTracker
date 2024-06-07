@@ -11,8 +11,7 @@ final class ViewCalendarEventsQueryHandler implements QueryHandler
 {
     public function __construct(
         private readonly ViewCalendarEventsGateway $gateway,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

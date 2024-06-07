@@ -13,8 +13,7 @@ final readonly class RaceLapGaps implements Mapped
         private ?int $timeToNext,
         private ?int $lapsToLead,
         private ?int $lapsToNext,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

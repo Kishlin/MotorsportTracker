@@ -9,8 +9,7 @@ final readonly class SeasonFilter
     private function __construct(
         private string $seriesName,
         private int $year,
-    ) {
-    }
+    ) {}
 
     public function seriesName(): string
     {

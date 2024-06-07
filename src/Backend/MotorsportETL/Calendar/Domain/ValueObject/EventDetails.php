@@ -19,8 +19,7 @@ final readonly class EventDetails implements Mapped
         private ?DateTimeImmutable $endDate,
         private ?string $short_code,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

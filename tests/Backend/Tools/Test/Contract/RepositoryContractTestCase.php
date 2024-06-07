@@ -73,7 +73,7 @@ abstract class RepositoryContractTestCase extends TestCase
     /**
      * @param class-string<object>|object $entity
      */
-    public static function assertTableIsEmpty(string|object $entity): void
+    public static function assertTableIsEmpty(object|string $entity): void
     {
         self::assertThat($entity, new TableIsEmptyConstraint(self::connection()));
     }

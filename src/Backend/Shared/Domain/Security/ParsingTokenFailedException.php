@@ -6,6 +6,4 @@ namespace Kishlin\Backend\Shared\Domain\Security;
 
 use Kishlin\Backend\Shared\Domain\Exception\DomainException;
 
-final class ParsingTokenFailedException extends DomainException
-{
-}
+final class ParsingTokenFailedException extends DomainException {}

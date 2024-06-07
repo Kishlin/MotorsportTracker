@@ -12,8 +12,7 @@ final readonly class AvailableStandings implements CacheItem
         private bool $constructor,
         private bool $team,
         private bool $driver,
-    ) {
-    }
+    ) {}
 
     public static function create(bool $constructor, bool $team, bool $driver): self
     {

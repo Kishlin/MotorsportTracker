@@ -10,8 +10,7 @@ final readonly class ListSeriesService
 {
     public function __construct(
         private AllSeriesGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function all(): JsonResponse
     {

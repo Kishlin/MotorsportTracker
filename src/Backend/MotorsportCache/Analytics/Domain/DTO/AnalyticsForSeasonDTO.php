@@ -15,8 +15,7 @@ final readonly class AnalyticsForSeasonDTO
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, array<string, null|array<string, mixed>|bool|float|int|string>>

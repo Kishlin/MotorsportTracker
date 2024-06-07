@@ -15,8 +15,7 @@ final class Fixture
     private function __construct(
         private readonly string $identifier,
         private readonly array $data,
-    ) {
-    }
+    ) {}
 
     public function identifier(): string
     {

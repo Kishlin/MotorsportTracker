@@ -17,8 +17,7 @@ final readonly class ConnectorDecorator implements Connector
         private MotorsportStatsConnector $decorated,
         private ContextFinder $contextFinder,
         private ?LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function fetch(string $url, array $parameters = []): string
     {

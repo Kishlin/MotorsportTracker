@@ -12,8 +12,7 @@ final readonly class SeriesGatewayStub implements SeriesGateway
 {
     public function __construct(
         private EntityStoreSpy $entityStoreSpy,
-    ) {
-    }
+    ) {}
 
     public function find(string $seriesName): ?SeriesIdentity
     {

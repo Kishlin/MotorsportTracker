@@ -12,8 +12,7 @@ final readonly class UnfinishedJobsService
 {
     public function __construct(
         private AdminGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function forType(string $type): JsonResponse
     {

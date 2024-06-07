@@ -11,8 +11,7 @@ abstract readonly class ReadRepository
 {
     public function __construct(
         protected Connection $connection,
-    ) {
-    }
+    ) {}
 
     protected function createQueryBuilder(): QueryBuilder
     {

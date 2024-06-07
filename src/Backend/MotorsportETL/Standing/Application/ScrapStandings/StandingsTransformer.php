@@ -22,8 +22,7 @@ final readonly class StandingsTransformer
 {
     public function __construct(
         private JsonableStringTransformer $jsonableStringParser,
-    ) {
-    }
+    ) {}
 
     /**
      * @return Generator<Entity>

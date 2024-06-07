@@ -11,16 +11,15 @@ use Kishlin\Backend\Shared\Application\Service\Parser\Json\ParserException;
 final readonly class JsonableStringParserExceptionEvent implements ApplicationEvent
 {
     private function __construct(
-        private ParserException|InvalidArgumentException $exception,
-    ) {
-    }
+        private InvalidArgumentException|ParserException $exception,
+    ) {}
 
     public function exception(): InvalidArgumentException|ParserException
     {
         return $this->exception;
     }
 
-    public static function forException(ParserException|InvalidArgumentException $e): self
+    public static function forException(InvalidArgumentException|ParserException $e): self
     {
         return new self($e);
     }

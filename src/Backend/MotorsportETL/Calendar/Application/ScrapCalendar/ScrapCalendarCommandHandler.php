@@ -21,8 +21,7 @@ final readonly class ScrapCalendarCommandHandler implements CommandHandler
         private CalendarExtractor $extractor,
         private SeasonGateway $seasonGateway,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapCalendarCommand $command): Result
     {

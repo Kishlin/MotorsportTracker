@@ -88,7 +88,7 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
         $fastest = PHP_INT_MAX;
 
         foreach ($lapByLapData->data() as $series) {
-            /** @var array<int, array{lap: int, pit: boolean, time: int}> $lapsList */
+            /** @var array<int, array{lap: int, pit: bool, time: int}> $lapsList */
             $lapsList = json_decode($series['laps'], true, 512, JSON_THROW_ON_ERROR);
             assert(is_array($lapsList));
 
@@ -128,7 +128,7 @@ final class ComputeLapByLapGraphCommandHandler extends ComputeGraphCommandHandle
     }
 
     /**
-     * @param array<int, array{lap: int, pit: boolean, time: int}> $lapsList
+     * @param array<int, array{lap: int, pit: bool, time: int}> $lapsList
      *
      * @return array<int, int>
      */

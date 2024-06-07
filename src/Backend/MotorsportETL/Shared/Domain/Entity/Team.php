@@ -15,8 +15,7 @@ final class Team extends Entity implements GuardedAgainstDoubles
         private readonly string $name,
         private readonly ?string $color,
         private readonly string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

@@ -18,7 +18,8 @@ abstract class AbstractCheckHealthController
      * @param Probe[] $probes
      */
     public function __construct(
-        #[TaggedIterator('kishlin.shared.infrastructure.monitoring.probe')] iterable $probes,
+        #[TaggedIterator('kishlin.shared.infrastructure.monitoring.probe')]
+        iterable $probes,
         private readonly string $env,
     ) {
         $this->probes = $probes;

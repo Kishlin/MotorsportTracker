@@ -20,8 +20,7 @@ final readonly class SyncEventResultsTaskHandler implements TaskHandler
         private EventIdGateway $eventIdGateway,
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncEventResultsTask $task): void
     {

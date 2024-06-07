@@ -11,8 +11,7 @@ final readonly class VenueDetails implements Mapped
     private function __construct(
         private string $name,
         private string $ref,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

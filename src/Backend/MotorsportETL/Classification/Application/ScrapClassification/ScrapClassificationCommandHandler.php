@@ -22,8 +22,7 @@ final readonly class ScrapClassificationCommandHandler implements CommandHandler
         private ClassificationTransformer $transformer,
         private ClassificationExtractor $extractor,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapClassificationCommand $command): Result
     {

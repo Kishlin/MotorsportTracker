@@ -8,9 +8,7 @@ use Kishlin\Backend\Shared\Application\Event\ApplicationEvent;
 
 final class NoSessionFoundEvent implements ApplicationEvent
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function create(): self
     {

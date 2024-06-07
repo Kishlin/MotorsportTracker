@@ -15,8 +15,7 @@ final readonly class CreateCountryIfNotExistsCommand implements Command
         private ?string $code,
         private string $name,
         private ?string $ref,
-    ) {
-    }
+    ) {}
 
     public function code(): NullableStringValueObject
     {

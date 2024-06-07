@@ -10,8 +10,7 @@ abstract readonly class ComputeGraphCommand implements Command
 {
     protected function __construct(
         private string $eventId,
-    ) {
-    }
+    ) {}
 
     public function eventId(): string
     {

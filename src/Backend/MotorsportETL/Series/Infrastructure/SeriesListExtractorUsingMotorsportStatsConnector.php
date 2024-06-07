@@ -13,8 +13,7 @@ final readonly class SeriesListExtractorUsingMotorsportStatsConnector implements
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(): string
     {

@@ -16,8 +16,7 @@ final readonly class SeasonEventListDTO
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, array{

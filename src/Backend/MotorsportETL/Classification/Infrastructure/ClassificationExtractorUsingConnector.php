@@ -14,8 +14,7 @@ final readonly class ClassificationExtractorUsingConnector implements Classifica
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(SessionIdentity $session): string
     {

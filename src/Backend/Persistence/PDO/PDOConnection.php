@@ -21,8 +21,7 @@ final class PDOConnection implements Connection
         private readonly string $dbName,
         private readonly string $user,
         private readonly string $password,
-    ) {
-    }
+    ) {}
 
     public function createQueryBuilder(): SQLQueryBuilder
     {
@@ -59,7 +58,7 @@ final class PDOConnection implements Connection
         }
 
         $sets = array_map(
-            fn (string $key) => "\"{$key}\" = :{$key}",
+            static fn (string $key) => "\"{$key}\" = :{$key}",
             array_keys($data),
         );
 

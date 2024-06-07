@@ -11,8 +11,7 @@ final readonly class TeamStandings implements CacheItem
 {
     private function __construct(
         private TeamStandingsView $teamStandingsView,
-    ) {
-    }
+    ) {}
 
     public static function create(TeamStandingsView $teamStandingsView): self
     {

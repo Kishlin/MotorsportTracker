@@ -15,8 +15,7 @@ final readonly class RecordJobCommand implements Command
     private function __construct(
         private JobType $type,
         private array $params,
-    ) {
-    }
+    ) {}
 
     public function type(): JobType
     {

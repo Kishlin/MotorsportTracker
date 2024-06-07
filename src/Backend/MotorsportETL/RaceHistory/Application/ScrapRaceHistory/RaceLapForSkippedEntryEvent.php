@@ -31,8 +31,7 @@ final readonly class RaceLapForSkippedEntryEvent implements ApplicationEvent
         private string $session,
         private string $carNumber,
         private array $carPosition,
-    ) {
-    }
+    ) {}
 
     public function session(): string
     {

@@ -13,8 +13,7 @@ final readonly class StandingData implements Mapped
     private function __construct(
         private int $position,
         private float $points,
-    ) {
-    }
+    ) {}
 
     public function position(): PositiveIntValueObject
     {

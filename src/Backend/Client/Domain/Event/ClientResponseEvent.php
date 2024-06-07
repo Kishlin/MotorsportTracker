@@ -15,8 +15,7 @@ final readonly class ClientResponseEvent implements Event
         private string $topic,
         private array $key,
         private string $response,
-    ) {
-    }
+    ) {}
 
     public function topic(): string
     {

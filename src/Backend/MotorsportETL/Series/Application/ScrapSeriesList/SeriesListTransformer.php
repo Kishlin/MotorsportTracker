@@ -23,7 +23,8 @@ final readonly class SeriesListTransformer
      * @param TransformerStep[] $steps
      */
     public function __construct(
-        #[TaggedIterator('kishlin.motorsport_etl.series.transformer_step')] iterable $steps,
+        #[TaggedIterator('kishlin.motorsport_etl.series.transformer_step')]
+        iterable $steps,
         private JsonableStringTransformer $jsonableStringParser,
     ) {
         $this->steps = $steps;

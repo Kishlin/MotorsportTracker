@@ -27,7 +27,5 @@ readonly class NullableFloatValueObject
         return $other->value() === $this->value;
     }
 
-    protected function ensureIsValid(?float $value): void
-    {
-    }
+    protected function ensureIsValid(?float $value): void {}
 }

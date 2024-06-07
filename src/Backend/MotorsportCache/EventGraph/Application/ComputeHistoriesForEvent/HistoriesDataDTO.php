@@ -11,8 +11,7 @@ final readonly class HistoriesDataDTO
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{car_number: string, short_code: string, color: string, laps: string}>

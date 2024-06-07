@@ -18,8 +18,7 @@ final class Entry extends Entity implements GuardedAgainstDoubles
         private readonly Driver $driver,
         private readonly Team $team,
         private readonly int $carNumber,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

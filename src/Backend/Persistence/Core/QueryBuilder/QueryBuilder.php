@@ -19,15 +19,15 @@ interface QueryBuilder
 
     public function from(string $key, ?string $alias = null): self;
 
-    public function join(Join $join, string $key, ?string $alias, Stringable|string $criterion): self;
+    public function join(Join $join, string $key, ?string $alias, string|Stringable $criterion): self;
 
-    public function innerJoin(string $key, ?string $alias, Stringable|string $criterion): self;
+    public function innerJoin(string $key, ?string $alias, string|Stringable $criterion): self;
 
-    public function leftJoin(string $key, ?string $alias, Stringable|string $criterion): self;
+    public function leftJoin(string $key, ?string $alias, string|Stringable $criterion): self;
 
-    public function where(Stringable|string $expression): self;
+    public function where(string|Stringable $expression): self;
 
-    public function andWhere(Stringable|string $expression): self;
+    public function andWhere(string|Stringable $expression): self;
 
     public function groupBy(string $key): self;
 

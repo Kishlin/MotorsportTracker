@@ -21,8 +21,7 @@ final readonly class LoaderUsingGateways implements Loader
         private UniquenessCheckGateway $uniquenessCheckGateway,
         private EntityGateway $writeGateway,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function load(Entity $entity): void
     {

@@ -18,8 +18,7 @@ final class Series extends Entity implements GuardedAgainstDoubles
         private readonly NullableStringValueObject $shortName,
         private readonly StringValueObject $shortCode,
         private readonly NullableUuidValueObject $ref,
-    ) {
-    }
+    ) {}
 
     public static function create(
         StringValueObject $name,

@@ -25,8 +25,7 @@ final readonly class UpdateSeasonStandingsCacheCommandHandler implements Command
     public function __construct(
         private StandingsDataGateway $standingsDataGateway,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws JsonException

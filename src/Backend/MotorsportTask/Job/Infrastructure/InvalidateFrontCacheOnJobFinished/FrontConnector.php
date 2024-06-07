@@ -19,8 +19,7 @@ final readonly class FrontConnector
         private string $frontHost,
         private string $frontToken,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function invalidateCacheTag(string $tag): void
     {

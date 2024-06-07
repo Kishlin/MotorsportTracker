@@ -15,8 +15,7 @@ final readonly class ScrapCalendarTaskHandler implements TaskHandler
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapCalendarTask $task): void
     {

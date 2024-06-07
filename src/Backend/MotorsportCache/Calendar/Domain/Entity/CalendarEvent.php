@@ -35,8 +35,7 @@ final class CalendarEvent extends AggregateRoot
         private readonly NullableStringValueObject $status,
         private readonly NullableDateTimeValueObject $startDate,
         private readonly NullableDateTimeValueObject $endDate,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

@@ -20,8 +20,7 @@ final readonly class ScrapSeasonsCommandHandler implements CommandHandler
         private SeasonsExtractor $seriesExtractor,
         private SeriesGateway $seriesGateway,
         private Loader $loader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ScrapSeasonsCommand $command): Result
     {

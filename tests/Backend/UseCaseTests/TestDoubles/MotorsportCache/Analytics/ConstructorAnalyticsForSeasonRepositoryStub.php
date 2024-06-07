@@ -18,8 +18,7 @@ final readonly class ConstructorAnalyticsForSeasonRepositoryStub implements Cons
 
     public function __construct(
         private ObjectStoreSpy $objectStore,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws JsonException

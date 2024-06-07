@@ -20,8 +20,7 @@ final class ClassificationTransformer
 
     public function __construct(
         private readonly JsonableStringTransformer $jsonableStringParser,
-    ) {
-    }
+    ) {}
 
     /**
      * @return Generator<Entity>

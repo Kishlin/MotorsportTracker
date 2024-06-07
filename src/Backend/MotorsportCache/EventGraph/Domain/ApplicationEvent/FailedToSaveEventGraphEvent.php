@@ -11,8 +11,7 @@ final class FailedToSaveEventGraphEvent implements ApplicationEvent
 {
     private function __construct(
         private readonly Throwable $e,
-    ) {
-    }
+    ) {}
 
     public function throwable(): Throwable
     {

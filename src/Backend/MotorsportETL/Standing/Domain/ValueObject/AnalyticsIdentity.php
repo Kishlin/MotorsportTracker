@@ -10,8 +10,7 @@ final readonly class AnalyticsIdentity implements Mapped
 {
     private function __construct(
         private string $season,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

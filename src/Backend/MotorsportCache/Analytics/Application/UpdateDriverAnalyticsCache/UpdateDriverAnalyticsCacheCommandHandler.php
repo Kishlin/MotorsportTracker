@@ -16,8 +16,7 @@ final readonly class UpdateDriverAnalyticsCacheCommandHandler implements Command
     public function __construct(
         private DriverAnalyticsForSeasonGateway $gateway,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateDriverAnalyticsCacheCommand $command): void
     {

@@ -11,8 +11,7 @@ final readonly class SessionsToComputeDTO
      */
     private function __construct(
         private array $sessions,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{id: string, type: string}>

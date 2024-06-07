@@ -8,15 +8,14 @@ final readonly class FailResult implements Result
 {
     private function __construct(
         private ?int $code,
-    ) {
-    }
+    ) {}
 
     public function isOk(): bool
     {
         return false;
     }
 
-    public function unwrap(): null|object
+    public function unwrap(): ?object
     {
         throw new ResultIsFailureException();
     }

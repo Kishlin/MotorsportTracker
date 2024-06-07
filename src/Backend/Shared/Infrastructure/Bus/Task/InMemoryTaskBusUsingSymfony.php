@@ -19,8 +19,7 @@ final readonly class InMemoryTaskBusUsingSymfony implements TaskBus
 {
     public function __construct(
         private MessageBus $commandBus,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Throwable

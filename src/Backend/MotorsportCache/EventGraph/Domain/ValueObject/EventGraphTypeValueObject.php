@@ -10,8 +10,7 @@ final class EventGraphTypeValueObject
 {
     public function __construct(
         protected readonly EventGraphType $value
-    ) {
-    }
+    ) {}
 
     public function value(): EventGraphType
     {

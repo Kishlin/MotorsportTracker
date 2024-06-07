@@ -10,8 +10,7 @@ abstract readonly class WriteRepository
 {
     public function __construct(
         protected Connection $connection,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, null|bool|float|int|string> $data

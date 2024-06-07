@@ -12,8 +12,7 @@ final readonly class JsonableStringParseFailureLogger implements EventListener
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(JsonableStringParserExceptionEvent $event): void
     {

@@ -14,8 +14,7 @@ final readonly class JsonableStringTransformer
     public function __construct(
         private JsonableStringParser $parser,
         private EventDispatcher $eventDispatcher,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>
@@ -24,7 +23,7 @@ final readonly class JsonableStringTransformer
     {
         try {
             return $this->parser->parse($extractorResponse);
-        } catch (ParserException|InvalidArgumentException $e) {
+        } catch (InvalidArgumentException|ParserException $e) {
             $this->eventDispatcher->dispatch(JsonableStringParserExceptionEvent::forException($e));
 
             return [];

@@ -11,8 +11,7 @@ final readonly class MotorsportStatsConnector implements Connector
 {
     public function __construct(
         private Client $client,
-    ) {
-    }
+    ) {}
 
     public function fetch(string $url, array $parameters = []): string
     {

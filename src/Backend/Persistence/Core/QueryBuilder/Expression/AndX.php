@@ -13,8 +13,7 @@ final class AndX implements Stringable
     private function __construct(
         private readonly string|Stringable $left,
         private readonly string|Stringable $right,
-    ) {
-    }
+    ) {}
 
     public function __toString()
     {

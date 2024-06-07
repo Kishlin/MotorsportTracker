@@ -10,8 +10,7 @@ final readonly class GetSeasonEventIdListResponse implements Response
 {
     private function __construct(
         private SeasonEventIdListDTO $eventIdList,
-    ) {
-    }
+    ) {}
 
     public function eventIdList(): SeasonEventIdListDTO
     {

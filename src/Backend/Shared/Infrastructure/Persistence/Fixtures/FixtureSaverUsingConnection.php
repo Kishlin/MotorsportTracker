@@ -10,8 +10,7 @@ final readonly class FixtureSaverUsingConnection implements FixtureSaver
 {
     public function __construct(
         private Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function save(string $class, string $identifier, array $data): void
     {

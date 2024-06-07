@@ -25,8 +25,7 @@ final readonly class TeamAnalyticsData implements Mapped
         private int $top5s,
         private int $wins,
         private float $winsPercentage,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

@@ -11,8 +11,7 @@ final readonly class Schedule implements CacheItem
 {
     private function __construct(
         private SeasonEventList $events,
-    ) {
-    }
+    ) {}
 
     public static function create(SeasonEventList $events): self
     {

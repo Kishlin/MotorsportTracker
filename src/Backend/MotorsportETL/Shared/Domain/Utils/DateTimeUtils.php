@@ -10,8 +10,7 @@ use Kishlin\Backend\Tools\Helpers\DateTimeImmutableHelper;
 final class DateTimeUtils
 {
     private function __construct(
-    ) {
-    }
+    ) {}
 
     public static function dateTimeOrNull(?int $timestamp): ?DateTimeImmutable
     {

@@ -18,8 +18,7 @@ final readonly class StandingsExtractorUsingConnector implements StandingsExtrac
 
     public function __construct(
         private Connector $connector,
-    ) {
-    }
+    ) {}
 
     public function extract(
         SeasonIdentity $season,

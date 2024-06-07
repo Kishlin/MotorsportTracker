@@ -12,8 +12,7 @@ final class OnEmptyLapByLapDataLogger implements EventSubscriber
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(EmptyLapByLapDataEvent $event): void
     {

@@ -13,8 +13,7 @@ final readonly class ClassificationBestLap implements Mapped
         private ?float $bestTime,
         private ?bool $bestIsFastest,
         private ?float $bestSpeed,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

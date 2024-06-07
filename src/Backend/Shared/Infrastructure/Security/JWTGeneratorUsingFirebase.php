@@ -12,8 +12,7 @@ final class JWTGeneratorUsingFirebase
         private string $secretKey,
         private string $hostname,
         private string $algorithm,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $additionalPayload

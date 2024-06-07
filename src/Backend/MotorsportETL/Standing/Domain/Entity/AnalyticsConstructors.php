@@ -20,8 +20,7 @@ final class AnalyticsConstructors extends Entity implements GuardedAgainstDouble
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
         private readonly ConstructorAnalyticsData $analyticsData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

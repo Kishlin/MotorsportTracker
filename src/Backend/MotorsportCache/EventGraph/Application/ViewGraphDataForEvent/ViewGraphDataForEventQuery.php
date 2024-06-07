@@ -10,8 +10,7 @@ final class ViewGraphDataForEventQuery implements Query
 {
     private function __construct(
         private readonly string $eventId,
-    ) {
-    }
+    ) {}
 
     public function eventId(): string
     {

@@ -12,8 +12,7 @@ final readonly class OnEmptyFastestLapDeltaLogger implements EventSubscriber
 {
     public function __construct(
         private LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function __invoke(EmptyFastestLapDataEvent $event): void
     {

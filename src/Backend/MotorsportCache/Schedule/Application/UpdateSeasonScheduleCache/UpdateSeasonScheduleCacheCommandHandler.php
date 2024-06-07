@@ -15,8 +15,7 @@ final readonly class UpdateSeasonScheduleCacheCommandHandler implements CommandH
     public function __construct(
         private SeasonScheduleDataGateway $seasonScheduleDataGateway,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateSeasonScheduleCacheCommand $command): void
     {

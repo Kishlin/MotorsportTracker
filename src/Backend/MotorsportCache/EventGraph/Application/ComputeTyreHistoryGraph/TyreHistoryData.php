@@ -11,8 +11,7 @@ final readonly class TyreHistoryData
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{car_number: string, short_code: string, color: string, laps: int, tyre_details: null|string, pit_history: null|string, finishPosition: int}>

@@ -16,8 +16,7 @@ final readonly class RaceLapTyreDetails implements Mapped
      */
     private function __construct(
         private array $tyreDetails,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws JsonException

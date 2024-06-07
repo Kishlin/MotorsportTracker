@@ -15,8 +15,7 @@ final readonly class SyncLapByLapGraphTaskHandler implements TaskHandler
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncLapByLapGraphTask $task): void
     {

@@ -15,8 +15,7 @@ final class EventSession extends Entity implements GuardedAgainstDoubles
         private readonly Event $event,
         private readonly EventSessionDetails $details,
         private readonly SessionType $sessionType,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

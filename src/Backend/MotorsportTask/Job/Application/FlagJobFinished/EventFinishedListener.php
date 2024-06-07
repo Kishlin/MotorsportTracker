@@ -18,8 +18,7 @@ final readonly class EventFinishedListener implements EventListener
         private FindJobGateway $findJobGateway,
         private Clock $clock,
         private ?LoggerInterface $logger = null,
-    ) {
-    }
+    ) {}
 
     public function __invoke(JobFinishedEvent $event): void
     {

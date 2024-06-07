@@ -18,8 +18,7 @@ final class Classification extends Entity implements GuardedAgainstDoubles
         private readonly ClassificationDetails $classificationDetails,
         private readonly ClassificationGaps $classificationGaps,
         private readonly ClassificationBestLap $classificationBestLap,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

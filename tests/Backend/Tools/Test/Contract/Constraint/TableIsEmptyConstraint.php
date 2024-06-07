@@ -15,8 +15,7 @@ final class TableIsEmptyConstraint extends Constraint
 {
     public function __construct(
         private readonly Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function toString(): string
     {
@@ -46,7 +45,7 @@ final class TableIsEmptyConstraint extends Constraint
      *
      * @throws ReflectionException
      */
-    protected function computeLocation(string|object $entity): string
+    protected function computeLocation(object|string $entity): string
     {
         return Tools::fromPascalToSnakeCase(Tools::shortClassName($entity));
     }

@@ -11,8 +11,7 @@ final readonly class ScrapSeriesTask implements Task
 {
     private function __construct(
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function job(): UuidValueObject
     {

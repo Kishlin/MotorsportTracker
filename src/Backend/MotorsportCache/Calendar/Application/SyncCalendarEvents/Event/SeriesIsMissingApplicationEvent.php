@@ -10,8 +10,7 @@ final class SeriesIsMissingApplicationEvent implements ApplicationEvent
 {
     private function __construct(
         private readonly string $seriesSlug,
-    ) {
-    }
+    ) {}
 
     public function seriesSlug(): string
     {

@@ -67,7 +67,7 @@ final class SQLQueryBuilder implements QueryBuilder
         return $this;
     }
 
-    public function join(Join $join, string $key, ?string $alias, Stringable|string $criterion): self
+    public function join(Join $join, string $key, ?string $alias, string|Stringable $criterion): self
     {
         $sql = " {$join->value} JOIN {$key}";
 
@@ -82,22 +82,22 @@ final class SQLQueryBuilder implements QueryBuilder
         return $this;
     }
 
-    public function innerJoin(string $key, ?string $alias, Stringable|string $criterion): self
+    public function innerJoin(string $key, ?string $alias, string|Stringable $criterion): self
     {
         return $this->join(Join::INNER, $key, $alias, $criterion);
     }
 
-    public function leftJoin(string $key, ?string $alias, Stringable|string $criterion): self
+    public function leftJoin(string $key, ?string $alias, string|Stringable $criterion): self
     {
         return $this->join(Join::LEFT, $key, $alias, $criterion);
     }
 
-    public function where(Stringable|string $expression): self
+    public function where(string|Stringable $expression): self
     {
         return $this->andWhere($expression);
     }
 
-    public function andWhere(Stringable|string $expression): self
+    public function andWhere(string|Stringable $expression): self
     {
         $this->wheres[] = (string) $expression;
 
@@ -135,7 +135,7 @@ final class SQLQueryBuilder implements QueryBuilder
         return $this;
     }
 
-    public function withParam(string $key, null|float|bool|int|string $param): self
+    public function withParam(string $key, null|bool|float|int|string $param): self
     {
         $this->params[$key] = $param;
 

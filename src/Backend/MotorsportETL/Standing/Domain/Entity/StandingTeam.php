@@ -19,8 +19,7 @@ final class StandingTeam extends Entity implements GuardedAgainstDoubles
         private readonly Team $team,
         private readonly ?Country $countryRepresenting,
         private readonly StandingData $standingData,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

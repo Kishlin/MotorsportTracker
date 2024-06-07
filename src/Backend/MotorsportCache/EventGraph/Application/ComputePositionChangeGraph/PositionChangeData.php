@@ -11,8 +11,7 @@ final readonly class PositionChangeData
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{car_number: string, short_code: string, color: string, grid: int, finish: int, changes: int}>

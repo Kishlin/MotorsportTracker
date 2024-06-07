@@ -16,8 +16,7 @@ final readonly class UpdateConstructorAnalyticsCacheCommandHandler implements Co
     public function __construct(
         private ConstructorAnalyticsForSeasonGateway $gateway,
         private CachePersister $cachePersister,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateConstructorAnalyticsCacheCommand $command): void
     {

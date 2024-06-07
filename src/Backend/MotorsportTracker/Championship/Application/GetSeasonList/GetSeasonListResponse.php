@@ -10,8 +10,7 @@ final readonly class GetSeasonListResponse implements Response
 {
     private function __construct(
         private SeasonListDTO $yearList,
-    ) {
-    }
+    ) {}
 
     public function yearListDTO(): SeasonListDTO
     {

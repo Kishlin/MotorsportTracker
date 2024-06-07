@@ -15,8 +15,7 @@ final readonly class SpotMissingConstructorTeamRelationsTaskHandler implements T
     public function __construct(
         private CommandBus $commandBus,
         private TaskBus $taskBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SpotMissingConstructorTeamRelationsTask $task): void
     {

@@ -8,8 +8,7 @@ final class ApplicationProbe implements Probe
 {
     public function __construct(
         private string $appName
-    ) {
-    }
+    ) {}
 
     public function name(): string
     {

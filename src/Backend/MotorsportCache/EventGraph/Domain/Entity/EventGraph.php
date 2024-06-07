@@ -24,8 +24,7 @@ final class EventGraph extends AggregateRoot implements Graph
         private readonly EventGraphOrderValueObject $order,
         private readonly EventGraphTypeValueObject $type,
         private readonly EventGraphDataValueObject $data,
-    ) {
-    }
+    ) {}
 
     public static function lapByLap(
         UuidValueObject $id,

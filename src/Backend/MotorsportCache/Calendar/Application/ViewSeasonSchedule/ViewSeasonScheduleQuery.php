@@ -11,8 +11,7 @@ final class ViewSeasonScheduleQuery implements Query
     private function __construct(
         private readonly string $championship,
         private readonly int $year,
-    ) {
-    }
+    ) {}
 
     public function championship(): string
     {

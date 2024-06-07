@@ -15,7 +15,7 @@ final class FrozenClock implements Clock
     private DateTimeImmutable $frozenTime;
 
     public function __construct(
-        DateTimeImmutable $time = null,
+        ?DateTimeImmutable $time = null,
     ) {
         $this->frozenTime = $time ?? new DateTimeImmutable();
     }

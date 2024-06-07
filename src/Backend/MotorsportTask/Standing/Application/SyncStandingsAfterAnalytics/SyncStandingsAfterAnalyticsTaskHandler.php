@@ -15,8 +15,7 @@ final readonly class SyncStandingsAfterAnalyticsTaskHandler implements TaskHandl
     public function __construct(
         private EventDispatcher $eventDispatcher,
         private CommandBus $commandBus,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SyncStandingsAfterAnalyticsTask $task): void
     {

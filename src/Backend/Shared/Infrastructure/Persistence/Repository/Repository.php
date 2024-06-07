@@ -13,8 +13,7 @@ abstract class Repository
 {
     public function __construct(
         protected Connection $connection
-    ) {
-    }
+    ) {}
 
     protected function persist(AggregateRoot $entity): void
     {

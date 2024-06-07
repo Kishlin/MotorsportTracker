@@ -6,6 +6,4 @@ namespace Kishlin\Backend\Shared\Domain\Exception;
 
 use RuntimeException;
 
-abstract class DomainException extends RuntimeException implements DomainThrowable
-{
-}
+abstract class DomainException extends RuntimeException implements DomainThrowable {}

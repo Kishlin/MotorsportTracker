@@ -18,8 +18,7 @@ final readonly class TestCommandBus implements CommandBus
 {
     public function __construct(
         private TestServiceContainer $testServiceContainer,
-    ) {
-    }
+    ) {}
 
     public function execute(Command $command): mixed
     {

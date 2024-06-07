@@ -11,8 +11,7 @@ final readonly class JsonResponse
      */
     private function __construct(
         private array $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int|string, mixed>

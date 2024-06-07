@@ -12,8 +12,7 @@ final class SessionType extends Entity implements GuardedAgainstDoubles
 {
     private function __construct(
         private readonly string $label,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {

@@ -11,8 +11,7 @@ final readonly class DriverStandings implements CacheItem
 {
     private function __construct(
         private DriverStandingsView $driverStandingsView,
-    ) {
-    }
+    ) {}
 
     public static function create(DriverStandingsView $driverStandingsView): self
     {

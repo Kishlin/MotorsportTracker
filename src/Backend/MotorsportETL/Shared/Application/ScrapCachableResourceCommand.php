@@ -10,8 +10,7 @@ abstract class ScrapCachableResourceCommand implements Command
 {
     protected function __construct(
         private bool $cacheMustBeInvalidated = false,
-    ) {
-    }
+    ) {}
 
     public function cacheMustBeInvalidated(): bool
     {

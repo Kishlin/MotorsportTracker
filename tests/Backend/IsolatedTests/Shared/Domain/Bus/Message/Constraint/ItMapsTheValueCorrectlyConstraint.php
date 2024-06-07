@@ -12,9 +12,8 @@ use PHPUnit\Framework\Constraint\Constraint;
 final class ItMapsTheValueCorrectlyConstraint extends Constraint
 {
     public function __construct(
-        private int|bool|string $expectedTypedValue
-    ) {
-    }
+        private bool|int|string $expectedTypedValue
+    ) {}
 
     public function toString(): string
     {

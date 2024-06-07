@@ -49,8 +49,7 @@ final readonly class SessionResultDTO
      */
     private function __construct(
         private array $result,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<array{

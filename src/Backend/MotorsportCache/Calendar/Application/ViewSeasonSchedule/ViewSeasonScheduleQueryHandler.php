@@ -10,8 +10,7 @@ final class ViewSeasonScheduleQueryHandler implements QueryHandler
 {
     public function __construct(
         private readonly ViewSeasonScheduleGateway $gateway,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ViewSeasonScheduleQuery $query): ViewSeasonScheduleResponse
     {

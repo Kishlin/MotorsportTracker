@@ -13,8 +13,7 @@ final readonly class ScrapSeasonsTask implements Task
     private function __construct(
         private string $series,
         private string $job,
-    ) {
-    }
+    ) {}
 
     public function series(): StringValueObject
     {

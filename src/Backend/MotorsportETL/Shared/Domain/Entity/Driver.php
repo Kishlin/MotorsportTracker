@@ -15,8 +15,7 @@ final class Driver extends Entity implements GuardedAgainstDoubles
         private readonly string $shortCode,
         private readonly string $ref,
         private readonly ?Country $country,
-    ) {
-    }
+    ) {}
 
     public function mappedData(): array
     {
