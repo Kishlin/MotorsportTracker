@@ -62,7 +62,7 @@ final class JsonableEventsView extends JsonableView
                 ...$item,
                 'sessions' => json_decode($item['sessions'], true),
                 'venue'    => json_decode($item['venue'], true),
-                'series'   => json_decode($item['series'], true),
+                'series'   => unserialize($item['series']),
             ];
 
             if (null !== $item['start_date']) {
