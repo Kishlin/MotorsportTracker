@@ -16,13 +16,17 @@ declare type PageParams = {
     year: string,
 };
 
-export async function generateMetadata({ params: { month, year } }: { params: PageParams }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<PageParams> }): Promise<Metadata> {
+    const { month, year } = await props.params;
+
     return {
         title: `Schedule - ${month.slice(0, 1).toUpperCase()}${month.slice(1)} ${year} - Motorsport Tracker`,
     };
 }
 
-const Page = async ({ params: { month, year } }: { params: PageParams }) => {
+const Page = async (props: { params: Promise<PageParams> }) => {
+    const { month, year } = await props.params;
+
     const events = await calendarApi(month, year);
 
     const date = new Date(Date.parse(`${month} 1, ${year}`)).getTime();

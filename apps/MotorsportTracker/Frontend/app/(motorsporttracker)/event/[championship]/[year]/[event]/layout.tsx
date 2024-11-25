@@ -19,7 +19,7 @@ declare type PageParams = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-    const pathname = headers().get('x-pathname');
+    const pathname = (await headers()).get('x-pathname');
 
     if (null === pathname) {
         return {};
@@ -40,7 +40,7 @@ const Layout = async ({
 }: {
     children: ReactNode
 }) => {
-    const pathname = headers().get('x-pathname');
+    const pathname = (await headers()).get('x-pathname');
 
     if (null === pathname) {
         return children;

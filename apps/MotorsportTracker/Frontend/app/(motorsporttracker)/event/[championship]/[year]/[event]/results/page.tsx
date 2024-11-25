@@ -11,7 +11,9 @@ declare type PageParams = {
     year: string,
 };
 
-const Page = async ({ params: { championship, year, event } }: { params: PageParams }) => {
+const Page = async (props: { params: Promise<PageParams> }) => {
+    const { championship, event, year } = await props.params;
+
     const season = await seasonApi(championship, parseInt(year, 10));
 
     const eventId = season[event].id;

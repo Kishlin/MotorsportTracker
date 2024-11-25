@@ -9,7 +9,9 @@ declare type PageParams = {
     year: string,
 };
 
-const Page = async ({ params: { championship, year } }: { params: PageParams }) => {
+const Page = async (props: { params: Promise<PageParams> }) => {
+    const { championship, year } = await props.params;
+
     const teamStandings = await teamStandingsApi(championship, year);
 
     return (

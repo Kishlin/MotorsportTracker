@@ -11,7 +11,9 @@ declare type PageParams = {
     year: string,
 };
 
-const Page = async ({ params: { championship, year } }: { params: PageParams }) => {
+const Page = async (props: { params: Promise<PageParams> }) => {
+    const { championship, year } = await props.params;
+
     const constructorsAnalytics = await constructorsAnalyticsApi(championship, year);
     const driversAnalytics = await driversAnalyticsApi(championship, year);
     const teamsAnalytics = await teamsAnalyticsApi(championship, year);
