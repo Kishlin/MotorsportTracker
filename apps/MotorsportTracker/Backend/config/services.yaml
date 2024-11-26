@@ -120,6 +120,10 @@ services:
 
   ##> Monitoring
 
+  Kishlin\Apps\MotorsportTracker\Backend\Monitoring\Command\CheckHealthCommand:
+    bind:
+      $env: '%kishlin.app.environment%'
+
   Kishlin\Apps\MotorsportTracker\Backend\Monitoring\Controller\CheckHealthController:
     bind:
       $env: '%kishlin.app.environment%'
@@ -138,6 +142,9 @@ services:
       $connection: '@kishlin.app.infrastructure.connection.cache'
 
   _instanceof:
+    Kishlin\Backend\Shared\Infrastructure\Monitoring\Command\Symfony\AbstractCheckHealthCommand:
+      tags: ['console.command']
+
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
       tags: ['controller.service_arguments']
 

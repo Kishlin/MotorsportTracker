@@ -240,6 +240,10 @@ services:
 
   ##> Monitoring
 
+  Kishlin\Apps\Backoffice\Monitoring\Command\CheckHealthCommand:
+    bind:
+      $env: '%kishlin.app.environment%'
+
   Kishlin\Apps\Backoffice\Monitoring\Controller\CheckHealthController:
     bind:
       $env: '%kishlin.app.environment%'
@@ -278,6 +282,9 @@ services:
 
 
   _instanceof:
+    Kishlin\Backend\Shared\Infrastructure\Monitoring\Command\Symfony\AbstractCheckHealthCommand:
+      tags: ['console.command']
+
     Kishlin\Backend\Shared\Infrastructure\Monitoring\Controller\Symfony\AbstractCheckHealthController:
       tags: ['controller.service_arguments']
 
