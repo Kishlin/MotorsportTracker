@@ -3,7 +3,7 @@
 ###< PHPStorm ###
 
 ###> Dev Env ###
-/.env.local
+/.env.local*
 /.env.local.php
 /.env.*.local
 /.docker-cache
