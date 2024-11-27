@@ -2,6 +2,10 @@
 /.idea
 ###< PHPStorm ###
 
+###> Local testing ###
+test.php
+###< Local testing ###
+
 ###> Dev Env ###
 /.env.local*
 /.env.local.php
