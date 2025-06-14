@@ -17,7 +17,6 @@ func main() {
 	// Define command-line flags specific to processing
 	workerCount := flag.Int("workers", 3, "Number of concurrent workers for processing")
 	pollInterval := flag.Duration("interval", 5*time.Second, "Queue polling interval")
-	queueType := flag.String("queue", "memory", "Queue type: memory or sqs (default: memory)")
 
 	// Parse the command-line flags
 	flag.Parse()
@@ -28,8 +27,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Create the queue based on configuration
-	q, err := queue.QueueFactory(queue.QueueType(*queueType))
+	// Create the queue using factory (with environment variables)
+	q, err := queue.Factory(queue.ScrappingIntentsQueue)
 	if err != nil {
 		log.Fatalf("Error creating queue: %v", err)
 	}
@@ -43,7 +42,7 @@ func main() {
 	// Start the processor with the specified parameters
 	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n",
 		*workerCount, *pollInterval)
-	fmt.Printf("Using queue type: %s\n", *queueType)
+	fmt.Printf("Using queue type: %s\n", queue.GetQueueTypeFromEnv())
 
 	// Create and start the worker
 	w := worker.NewWorker(q, *workerCount, *pollInterval)
@@ -72,10 +71,16 @@ func printHelp() {
 	fmt.Println("\nOptions:")
 	fmt.Println("  -workers=<n>      Number of concurrent workers (default: 3)")
 	fmt.Println("  -interval=<dur>   Queue polling interval (default: 5s)")
-	fmt.Println("  -queue=<type>     Queue type: memory or sqs (default: memory)")
+	fmt.Println("\nEnvironment Variables:")
+	fmt.Println("  QUEUE_TYPE          Type of queue to use: 'memory' or 'sqs' (default: memory)")
+	fmt.Println("  SQS_ENDPOINT        SQS endpoint URL (default: http://localhost:9324)")
+	fmt.Println("  SQS_REGION          AWS region (default: elasticmq)")
+	fmt.Println("  SQS_QUEUE_NAME      SQS queue name (default: ScrappingIntents)")
+	fmt.Println("  SQS_ACCESS_KEY      AWS access key for SQS")
+	fmt.Println("  SQS_SECRET_KEY      AWS secret key for SQS")
 	fmt.Println("\nExamples:")
 	fmt.Println("  ./ScrappingProcessor")
 	fmt.Println("  ./ScrappingProcessor -workers=5")
 	fmt.Println("  ./ScrappingProcessor -interval=10s")
-	fmt.Println("  ./ScrappingProcessor -queue=sqs")
+	fmt.Println("  QUEUE_TYPE=sqs ./ScrappingProcessor -workers=5")
 }

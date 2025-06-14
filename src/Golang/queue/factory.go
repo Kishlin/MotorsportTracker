@@ -3,35 +3,64 @@ package queue
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
-// QueueType represents the type of queue to use
-type QueueType string
+type Name string
+
+const (
+	ScrappingIntentsQueue Name = "QUEUE_SCRAPPING_INTENTS"
+)
+
+// Type represents the type of queue to use
+type Type string
 
 const (
 	// MemoryQueueType represents an in-memory queue implementation
-	MemoryQueueType QueueType = "memory"
+	MemoryQueueType Type = "memory"
 
 	// SQSQueueType represents an AWS SQS queue implementation
-	SQSQueueType QueueType = "sqs"
+	SQSQueueType Type = "sqs"
 )
 
-// Default SQS queue URL for local development
-const defaultLocalSQSQueueURL = "http://localhost:9324/queue/ScrappingIntents"
+// GetQueueTypeFromEnv determines which queue type to use based on environment variables
+func GetQueueTypeFromEnv() Type {
+	queueType := os.Getenv("QUEUE_TYPE")
+	switch strings.ToLower(queueType) {
+	case "sqs":
+		return SQSQueueType
+	case "memory":
+		return MemoryQueueType
+	default:
+		// Default to memory queue if not specified
+		return MemoryQueueType
+	}
+}
 
-// QueueFactory creates queue instances based on configuration
-func QueueFactory(queueType QueueType) (Queue, error) {
+// Factory creates queue instances based on configuration
+func Factory(name Name) (Queue, error) {
+	queueType := GetQueueTypeFromEnv()
+
 	switch queueType {
 	case MemoryQueueType:
 		return NewMemoryQueue(), nil
 	case SQSQueueType:
-		// Get queue URL from environment variable or use default local URL
-		queueURL := os.Getenv("SQS_QUEUE_URL")
-		if queueURL == "" {
-			queueURL = defaultLocalSQSQueueURL
+		config := SQSConfig{
+			QueueName:    getEnv(string(name)),
+			Endpoint:     getEnv("SQS_ENDPOINT"),
+			Region:       getEnv("SQS_REGION"),
+			AccessKey:    getEnv("SQS_ACCESS_KEY"),
+			SecretKey:    getEnv("SQS_SECRET_KEY"),
+			SessionToken: getEnv("SQS_SESSION_TOKEN"),
 		}
-		return NewSQSQueue(queueURL), nil
+
+		return NewSQSQueueWithConfig(config), nil
 	default:
 		return nil, fmt.Errorf("unknown queue type: %s", queueType)
 	}
+}
+
+// getEnv gets an environment variable value
+func getEnv(key string) string {
+	return os.Getenv(key)
 }

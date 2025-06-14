@@ -26,7 +26,6 @@ func main() {
 	// Define command-line flags (options)
 	series := flag.String("series", "", "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)")
 	season := flag.String("season", "", "Season identifier (e.g., 2025)")
-	queueType := flag.String("queue", "memory", "Queue type: memory or sqs (default: memory)")
 	help := flag.Bool("help", false, "Show help information")
 
 	// Parse the command-line flags (everything after the command)
@@ -61,8 +60,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Create the queue based on configuration
-	q, err := queue.QueueFactory(queue.QueueType(*queueType))
+	q, err := queue.Factory(queue.ScrappingIntentsQueue)
 	if err != nil {
 		log.Fatalf("Error creating queue: %v", err)
 	}
@@ -90,13 +88,19 @@ func printHelp() {
 	fmt.Println("\nOptions:")
 	fmt.Println("  -series=<series>    Motorsport series (required for 'seasons' and 'events' commands)")
 	fmt.Println("  -season=<season>    Season identifier (required for 'events' command)")
-	fmt.Println("  -queue=<type>       Queue type: memory or sqs (default: memory)")
 	fmt.Println("  -help               Show this help information")
+	fmt.Println("\nEnvironment Variables:")
+	fmt.Println("  QUEUE_TYPE          Type of queue to use: 'memory' or 'sqs' (default: memory)")
+	fmt.Println("  SQS_ENDPOINT        SQS endpoint URL (default: http://localhost:9324)")
+	fmt.Println("  SQS_REGION          AWS region (default: elasticmq)")
+	fmt.Println("  SQS_QUEUE_NAME      SQS queue name (default: ScrappingIntents)")
+	fmt.Println("  SQS_ACCESS_KEY      AWS access key for SQS")
+	fmt.Println("  SQS_SECRET_KEY      AWS secret key for SQS")
 	fmt.Println("\nExamples:")
 	fmt.Println("  ./ScrappingIntentPublisher series")
 	fmt.Println("  ./ScrappingIntentPublisher seasons -series=\"Formula One\"")
 	fmt.Println("  ./ScrappingIntentPublisher events -series=\"Formula One\" -season=2025")
-	fmt.Println("  ./ScrappingIntentPublisher series -queue=sqs")
+	fmt.Println("  QUEUE_TYPE=sqs ./ScrappingIntentPublisher series")
 }
 
 // executePublish handles adding scraping requests to the queue

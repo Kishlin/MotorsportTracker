@@ -11,26 +11,46 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
-// SQSQueue implements Queue interface using AWS SQS
-type SQSQueue struct {
-	client   *sqs.SQS
-	queueURL string
+// SQSConfig holds the configuration for SQS queue connection
+type SQSConfig struct {
+	Endpoint     string // SQS endpoint URL (e.g., http://localhost:9324 for local, https://sqs.region.amazonaws.com for prod)
+	Region       string // AWS region (e.g., elasticmq for local, us-east-1 for prod)
+	QueueName    string // Name of the SQS queue
+	AccessKey    string // AWS access key
+	SecretKey    string // AWS secret key
+	SessionToken string // AWS session token (optional)
 }
 
-// NewSQSQueue creates a new SQS queue client
-func NewSQSQueue(queueURL string) *SQSQueue {
+// SQSQueue implements Queue interface using AWS SQS
+type SQSQueue struct {
+	client    *sqs.SQS
+	queueURL  string
+	queueName string
+	config    SQSConfig
+}
+
+// NewSQSQueueWithConfig creates a new SQS queue client with the provided configuration
+func NewSQSQueueWithConfig(config SQSConfig) *SQSQueue {
 	return &SQSQueue{
-		queueURL: queueURL,
+		queueName: config.QueueName,
+		config:    config,
 	}
 }
 
 // Connect establishes the connection with AWS SQS
 func (q *SQSQueue) Connect() error {
-	// Create a custom session with local SQS endpoint
+	// Create AWS credentials from config
+	creds := credentials.NewStaticCredentials(
+		q.config.AccessKey,
+		q.config.SecretKey,
+		q.config.SessionToken,
+	)
+
+	// Create AWS session with config
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String("elasticmq"),
-		Endpoint:    aws.String("http://localhost:9324"),
-		Credentials: credentials.NewStaticCredentials("x", "x", ""),
+		Region:      aws.String(q.config.Region),
+		Endpoint:    aws.String(q.config.Endpoint),
+		Credentials: creds,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create AWS session: %v", err)
@@ -39,16 +59,18 @@ func (q *SQSQueue) Connect() error {
 	// Create SQS client
 	q.client = sqs.New(sess)
 
-	// Verify queue exists
-	_, err = q.client.GetQueueUrl(&sqs.GetQueueUrlInput{
-		QueueName: aws.String("ScrappingIntents"),
-	})
-
-	if err != nil {
-		return fmt.Errorf("failed to verify queue exists: %v", err)
+	// Get queue URL if not already set
+	if q.queueURL == "" {
+		result, err := q.client.GetQueueUrl(&sqs.GetQueueUrlInput{
+			QueueName: aws.String(q.queueName),
+		})
+		if err != nil {
+			return fmt.Errorf("failed to get queue URL: %v", err)
+		}
+		q.queueURL = *result.QueueUrl
 	}
 
-	log.Println("Successfully connected to SQS")
+	log.Printf("Successfully connected to SQS queue: %s", q.queueName)
 	return nil
 }
 
@@ -121,7 +143,9 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		// Add message to map with its handle as key
 		messages[handle] = msg
 
-		log.Printf("Received message with handle: %s", handle)
+		if sqsMsg.MessageId != nil {
+			log.Printf("Received message with ID: %s", *sqsMsg.MessageId)
+		}
 	}
 
 	return messages, nil
@@ -141,7 +165,7 @@ func (q *SQSQueue) Delete(handle MessageHandle) error {
 		return fmt.Errorf("failed to delete message: %v", err)
 	}
 
-	log.Printf("Successfully deleted message with receipt handle: %s", receiptHandle[:20]+"...")
+	log.Printf("Successfully deleted message with receipt handle: %s...", truncateString(receiptHandle, 20))
 	return nil
 }
 
@@ -150,4 +174,12 @@ func (q *SQSQueue) Disconnect() error {
 	// Nothing specific to clean up for AWS SQS client
 	q.client = nil
 	return nil
+}
+
+// truncateString truncates a string to the specified length and adds an ellipsis
+func truncateString(s string, length int) string {
+	if len(s) <= length {
+		return s
+	}
+	return s[:length] + "..."
 }
