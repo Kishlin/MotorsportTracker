@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
 	"github.com/kishlin/MotorsportTracker/src/Golang/worker"
 )
 
@@ -44,8 +45,12 @@ func main() {
 		*workerCount, *pollInterval)
 	fmt.Printf("Using queue type: %s\n", queue.GetQueueTypeFromEnv())
 
+	// Register handlers for scrapping intents
+	handlersList := queue.NewHandlersList()
+	scrapping.PopulateHandlers(handlersList)
+
 	// Create and start the worker
-	w := worker.NewWorker(q, *workerCount, *pollInterval)
+	w := worker.NewWorker(q, handlersList, *workerCount, *pollInterval)
 	w.Start()
 
 	// Set up graceful shutdown on interrupt/termination signals

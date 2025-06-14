@@ -2,10 +2,9 @@ package queue
 
 type MessageHandle string
 
-// Message represents a scraping or processing intent that can be sent to a queue
+// Message that can be sent to a queue
 type Message struct {
-	Type     string            // Type of the intent (e.g., "scrap_series", "scrap_season", etc.)
-	Target   string            // Target of the scraping (e.g., series name, season identifier)
+	Type     string            // Type of the message
 	Metadata map[string]string // Additional data required for processing
 }
 

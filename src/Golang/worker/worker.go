@@ -13,6 +13,7 @@ import (
 // Worker processes messages from a queue
 type Worker struct {
 	queue        queue.Queue
+	handlersList *queue.HandlersList
 	workerCount  int
 	pollInterval time.Duration
 	stopChan     chan struct{}
@@ -20,9 +21,10 @@ type Worker struct {
 }
 
 // NewWorker creates a new worker
-func NewWorker(q queue.Queue, workerCount int, pollInterval time.Duration) *Worker {
+func NewWorker(q queue.Queue, handlersList *queue.HandlersList, workerCount int, pollInterval time.Duration) *Worker {
 	return &Worker{
 		queue:        q,
+		handlersList: handlersList,
 		workerCount:  workerCount,
 		pollInterval: pollInterval,
 		stopChan:     make(chan struct{}),
@@ -75,7 +77,9 @@ func (w *Worker) runWorker(id int) {
 
 			// Process each message
 			for handle, message := range messages {
-				if err := w.processMessage(message); err != nil {
+				err := w.handlersList.HandleMessage(message)
+
+				if err != nil {
 					log.Printf("Error processing message: %v", err)
 					continue
 				}
@@ -87,32 +91,6 @@ func (w *Worker) runWorker(id int) {
 			}
 		}
 	}
-}
-
-// processMessage handles a single message from the queue
-func (w *Worker) processMessage(message queue.Message) error {
-	log.Printf("Processing message of type: %s, target: %s", message.Type, message.Target)
-
-	// Convert queue message to intent
-	var i intent.Intent
-
-	// Map message Type to intent.Command
-	switch message.Type {
-	case string(intent.ScrapSeries):
-		i = intent.CreateSeriesIntent()
-	case string(intent.ScrapSeasons):
-		i = intent.CreateSeasonsIntent(message.Target)
-	case string(intent.ScrapEvents):
-		season, ok := message.Metadata["season"]
-		if !ok {
-			return fmt.Errorf("missing season metadata for ScrapEvents")
-		}
-		i = intent.CreateEventsIntent(message.Target, season)
-	default:
-		return fmt.Errorf("unknown intent command: %s", message.Type)
-	}
-
-	return w.processIntent(i)
 }
 
 // processIntent performs the actual processing for a specific intent
