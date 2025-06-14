@@ -84,6 +84,25 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 	@echo "Ports may differ if overridden in the .env.local file."
 	@echo "Run static analysis: \`make complete-analysis\` (see Makefile for more options)."
 
+
+##> Apps
+
+.PHONY: build-publisher build-processor run-publisher run-processor
+
+build-publisher: APP=ScrappingIntentPublisher
+run-publisher: APP=ScrappingIntentPublisher
+
+build-processor: APP=ScrappingProcessor
+run-processor: APP=ScrappingProcessor
+
+build-publisher build-processor:
+	@echo "Building Golang app $(APP)"
+	@cd apps/$(APP) && go build -o build/$(APP) main.go
+
+run-publisher run-processor:
+	@echo "Running Golang app $(APP)"
+	@docker-compose exec golang /app/apps/$(APP)/build/$(APP)
+
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
 .PHONY: db.core.connect db.core.reload db.core.reload.test
