@@ -1,4 +1,4 @@
-module github.com/kishlin/MotorsportTracker/apps/ScrappingIntentPublisher
+module github.com/kishlin/MotorsportTracker/apps/ScrappingCommandPublishers
 
 go 1.24.4
 

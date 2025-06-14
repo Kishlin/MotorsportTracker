@@ -17,14 +17,16 @@ type ScrapSeriesCommand struct {
 
 // NewScrapSeriesCommand creates a new ScrapSeriesCommand.
 func NewScrapSeriesCommand() *ScrapSeriesCommand {
-	cmd := &ScrapSeriesCommand{}
-
-	cmd.SetConfig(cli.CommandConfig{
-		Name:        "scrap:series",
-		Description: "Scrap all available series",
-		Parameters:  []cli.Parameter{},
-		Options:     []cli.Option{},
-	})
+	cmd := &ScrapSeriesCommand{
+		BaseCommand: cli.BaseCommand{
+			Config: cli.CommandConfig{
+				Name:        "scrap:series",
+				Description: "Scrap all available series",
+				Parameters:  []cli.Parameter{},
+				Options:     []cli.Option{},
+			},
+		},
+	}
 
 	return cmd
 }

@@ -89,19 +89,20 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 
 .PHONY: build-publisher build-processor run-publisher run-processor
 
-build-publisher: APP=ScrappingIntentPublisher
-run-publisher: APP=ScrappingIntentPublisher
+build-publishers:
+	@echo "Building Golang apps in ScrappingCommandPublishers"
+	@cd apps/ScrappingCommandPublishers && go mod tidy
+	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-series series.go
+	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-seasons seasons.go
+	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-events events.go
 
-build-processor: APP=ScrappingProcessor
-run-processor: APP=ScrappingProcessor
+build-processor:
+	@echo "Building Golang app CommandsProcessor"
+	@cd apps/CommandsProcessor && go build -o build/CommandsProcessor main.go
 
-build-publisher build-processor:
-	@echo "Building Golang app $(APP)"
-	@cd apps/$(APP) && go build -o build/$(APP) main.go
-
-run-publisher run-processor:
-	@echo "Running Golang app $(APP)"
-	@docker-compose exec golang /app/apps/$(APP)/build/$(APP)
+run-processor:
+	@echo "Running Golang app CommandsProcessor"
+	@docker-compose exec golang /app/apps/CommandsProcessor/build/CommandsProcessor
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build

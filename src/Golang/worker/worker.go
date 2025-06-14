@@ -1,12 +1,10 @@
 package worker
 
 import (
-	"fmt"
 	"log"
 	"sync"
 	"time"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/intent"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
@@ -91,37 +89,4 @@ func (w *Worker) runWorker(id int) {
 			}
 		}
 	}
-}
-
-// processIntent performs the actual processing for a specific intent
-func (w *Worker) processIntent(i intent.Intent) error {
-	switch i.Type {
-	case intent.ScrapSeries:
-		return w.scrapSeries()
-	case intent.ScrapSeasons:
-		return w.scrapSeasons(i.Series)
-	case intent.ScrapEvents:
-		return w.scrapEvents(i.Series, i.Season)
-	default:
-		return fmt.Errorf("unknown intent command: %s", i.Type)
-	}
-}
-
-// Individual processing methods
-func (w *Worker) scrapSeries() error {
-	log.Println("Scraping all series...")
-	// TODO: Implement actual scraping logic
-	return nil
-}
-
-func (w *Worker) scrapSeasons(series string) error {
-	log.Printf("Scraping all seasons for series: %s", series)
-	// TODO: Implement actual scraping logic
-	return nil
-}
-
-func (w *Worker) scrapEvents(series, season string) error {
-	log.Printf("Scraping all events for series: %s, season: %s", series, season)
-	// TODO: Implement actual scraping logic
-	return nil
 }

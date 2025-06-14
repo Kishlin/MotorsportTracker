@@ -15,8 +15,8 @@ test.php
 ###< Dev Env ###
 
 ###> Golang ###
-/apps/ScrappingIntentPublisher/build/
-/apps/ScrappingProcessor/build/
+/apps/ScrappingCommandPublishers/build/
+/apps/CommandsProcessor/build/
 ###< Golang ###
 
 ###> Symfony/Composer ###

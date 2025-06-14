@@ -17,25 +17,27 @@ type ScrapEventsCommand struct {
 
 // NewScrapEventsCommand creates a new ScrapEventsCommand.
 func NewScrapEventsCommand() *ScrapEventsCommand {
-	cmd := &ScrapEventsCommand{}
-
-	cmd.SetConfig(cli.CommandConfig{
-		Name:        "scrap:events",
-		Description: "Scrap all available events",
-		Parameters: []cli.Parameter{
-			{
-				Name:        "series",
-				Description: "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
-				Required:    true,
-			},
-			{
-				Name:        "season",
-				Description: "Season identifier (e.g., 2025)",
-				Required:    true,
+	cmd := &ScrapEventsCommand{
+		BaseCommand: cli.BaseCommand{
+			Config: cli.CommandConfig{
+				Name:        "scrap:events",
+				Description: "Scrap all available events",
+				Parameters: []cli.Parameter{
+					{
+						Name:        "series",
+						Description: "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
+						Required:    true,
+					},
+					{
+						Name:        "season",
+						Description: "Season identifier (e.g., 2025)",
+						Required:    true,
+					},
+				},
+				Options: []cli.Option{},
 			},
 		},
-		Options: []cli.Option{},
-	})
+	}
 
 	return cmd
 }
