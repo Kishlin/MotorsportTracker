@@ -1,11 +1,12 @@
 package queue
 
 import (
+	"context"
 	"errors"
 )
 
 type Handler interface {
-	Handle(message Message) error
+	Handle(ctx context.Context, message Message) error
 }
 
 type HandlersList struct {
@@ -25,11 +26,11 @@ func (h *HandlersList) RegisterHandler(messageType string, handler Handler) {
 }
 
 // HandleMessage processes a message using the appropriate handler.
-func (h *HandlersList) HandleMessage(message Message) error {
+func (h *HandlersList) HandleMessage(ctx context.Context, message Message) error {
 	handler, exists := h.handlers[message.Type]
 	if !exists {
 		return errors.New("no handler registered for message type: " + message.Type)
 	}
 
-	return handler.Handle(message)
+	return handler.Handle(ctx, message)
 }

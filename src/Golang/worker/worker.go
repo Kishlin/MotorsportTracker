@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"log"
 	"sync"
 	"time"
@@ -30,12 +31,12 @@ func NewWorker(q queue.Queue, handlersList *queue.HandlersList, workerCount int,
 }
 
 // Start begins processing messages
-func (w *Worker) Start() {
+func (w *Worker) Start(ctx context.Context) {
 	log.Printf("Starting %d worker(s) with poll interval of %s", w.workerCount, w.pollInterval)
 
 	for i := 0; i < w.workerCount; i++ {
 		w.wg.Add(1)
-		go w.runWorker(i)
+		go w.runWorker(ctx, i)
 	}
 }
 
@@ -48,7 +49,7 @@ func (w *Worker) Stop() {
 }
 
 // runWorker continuously polls for messages and processes them
-func (w *Worker) runWorker(id int) {
+func (w *Worker) runWorker(ctx context.Context, id int) {
 	defer w.wg.Done()
 
 	log.Printf("Worker %d started", id)
@@ -75,7 +76,7 @@ func (w *Worker) runWorker(id int) {
 
 			// Process each message
 			for handle, message := range messages {
-				err := w.handlersList.HandleMessage(message)
+				err := w.handlersList.HandleMessage(ctx, message)
 
 				if err != nil {
 					log.Printf("Error processing message: %v", err)

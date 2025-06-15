@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
 	"log"
 	"os"
 	"os/signal"
@@ -10,11 +14,13 @@ import (
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
 	"github.com/kishlin/MotorsportTracker/src/Golang/worker"
 )
 
 func main() {
+	// Create a context for the application
+	ctx := context.WithoutCancel(context.Background())
+
 	// Define command-line flags specific to processing
 	workerCount := flag.Int("workers", 3, "Number of concurrent workers for processing")
 	pollInterval := flag.Duration("interval", 5*time.Second, "Queue polling interval")
@@ -47,11 +53,14 @@ func main() {
 
 	// Register handlers for scrapping intents
 	handlersList := queue.NewHandlersList()
-	scrapping.PopulateHandlers(handlersList)
+
+	handlersList.RegisterHandler(series.ScrapSeriesMessageType, series.NewScrapSeriesHandler())
+	handlersList.RegisterHandler(seasons.ScrapSeasonsMessageType, seasons.NewScrapSeasonsHandler())
+	handlersList.RegisterHandler(events.ScrapEventsMessageType, events.NewScrapEventsHandler())
 
 	// Create and start the worker
 	w := worker.NewWorker(q, handlersList, *workerCount, *pollInterval)
-	w.Start()
+	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals
 	sigChan := make(chan os.Signal, 1)

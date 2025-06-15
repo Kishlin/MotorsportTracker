@@ -1,8 +1,10 @@
 package events
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"context"
 	"log"
+
+	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ScrapEventsHandler struct {
@@ -16,7 +18,7 @@ func NewScrapEventsHandler() *ScrapEventsHandler {
 }
 
 // Handle processes the scrapping intent for events.
-func (h *ScrapEventsHandler) Handle(message queue.Message) error {
+func (h *ScrapEventsHandler) Handle(ctx context.Context, message queue.Message) error {
 	// Here you would implement the logic to scrap events data.
 	// For now, we will just log the intent.
 	log.Printf("Scrapping events for series: %s and season %s", message.Metadata["series"], message.Metadata["season"])

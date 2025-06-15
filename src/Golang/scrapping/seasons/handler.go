@@ -1,8 +1,10 @@
 package seasons
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"context"
 	"log"
+
+	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ScrapSeasonsHandler struct {
@@ -16,7 +18,7 @@ func NewScrapSeasonsHandler() *ScrapSeasonsHandler {
 }
 
 // Handle processes the scrapping intent for seasons.
-func (h *ScrapSeasonsHandler) Handle(message queue.Message) error {
+func (h *ScrapSeasonsHandler) Handle(ctx context.Context, message queue.Message) error {
 	// Here you would implement the logic to scrap seasons data.
 	// For now, we will just log the intent.
 	log.Printf("Scrapping seasons for series: %s", message.Metadata["series"])
