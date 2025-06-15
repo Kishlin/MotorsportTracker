@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
@@ -24,6 +25,7 @@ func main() {
 	// Define command-line flags specific to processing
 	workerCount := flag.Int("workers", 3, "Number of concurrent workers for processing")
 	pollInterval := flag.Duration("interval", 5*time.Second, "Queue polling interval")
+	skipMigrations := flag.Bool("skip-migrations", false, "Skip running database migrations")
 
 	// Parse the command-line flags
 	flag.Parse()
@@ -32,6 +34,23 @@ func main() {
 	if len(os.Args) > 1 && (os.Args[1] == "-h" || os.Args[1] == "--help") {
 		printHelp()
 		os.Exit(0)
+	}
+
+	// Initialize database connection
+	db := database.GetInstance()
+	if err := db.ConnectCore(ctx); err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	defer db.Close()
+
+	// Run database migrations if not skipped
+	if !*skipMigrations {
+		fmt.Println("Running database migrations...")
+		migrationRunner := database.NewMigrationRunner(db)
+		if err := migrationRunner.RunMigrations(ctx, database.GetCoreMigrations()); err != nil {
+			log.Fatalf("Failed to run migrations: %v", err)
+		}
+		fmt.Println("Migrations completed successfully")
 	}
 
 	// Create the queue using factory (with environment variables)
@@ -54,7 +73,7 @@ func main() {
 	// Register handlers for scrapping intents
 	handlersList := queue.NewHandlersList()
 
-	handlersList.RegisterHandler(series.ScrapSeriesMessageType, series.NewScrapSeriesHandler())
+	handlersList.RegisterHandler(series.ScrapSeriesMessageType, series.NewScrapSeriesHandler(db))
 	handlersList.RegisterHandler(seasons.ScrapSeasonsMessageType, seasons.NewScrapSeasonsHandler())
 	handlersList.RegisterHandler(events.ScrapEventsMessageType, events.NewScrapEventsHandler())
 
@@ -85,6 +104,7 @@ func printHelp() {
 	fmt.Println("\nOptions:")
 	fmt.Println("  -workers=<n>      Number of concurrent workers (default: 3)")
 	fmt.Println("  -interval=<dur>   Queue polling interval (default: 5s)")
+	fmt.Println("  -skip-migrations  Skip running database migrations")
 	fmt.Println("\nEnvironment Variables:")
 	fmt.Println("  QUEUE_TYPE          Type of queue to use: 'memory' or 'sqs' (default: memory)")
 	fmt.Println("  SQS_ENDPOINT        SQS endpoint URL (default: http://localhost:9324)")
@@ -92,6 +112,7 @@ func printHelp() {
 	fmt.Println("  SQS_QUEUE_NAME      SQS queue name (default: ScrappingIntents)")
 	fmt.Println("  SQS_ACCESS_KEY      AWS access key for SQS")
 	fmt.Println("  SQS_SECRET_KEY      AWS secret key for SQS")
+	fmt.Println("  POSTGRES_CORE_URL   PostgreSQL connection string for the core database")
 	fmt.Println("\nExamples:")
 	fmt.Println("  ./ScrappingProcessor")
 	fmt.Println("  ./ScrappingProcessor -workers=5")

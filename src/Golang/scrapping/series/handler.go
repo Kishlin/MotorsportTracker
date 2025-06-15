@@ -4,11 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"os"
-
-	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/client"
+	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
 )
@@ -43,6 +41,7 @@ const SchemaSeries = `{
 
 type ScrapSeriesHandler struct {
 	*scrapping.BaseScrappingHandler
+	DB *database.PostgresDB
 }
 
 type Series struct {
@@ -54,11 +53,12 @@ type Series struct {
 }
 
 // NewScrapSeriesHandler creates a new handler for scrapping series.
-func NewScrapSeriesHandler() *ScrapSeriesHandler {
+func NewScrapSeriesHandler(db *database.PostgresDB) *ScrapSeriesHandler {
 	handler := &ScrapSeriesHandler{
 		BaseScrappingHandler: &scrapping.BaseScrappingHandler{
 			Connector: client.NewConnector(),
 		},
+		DB: db,
 	}
 
 	return handler
@@ -83,15 +83,9 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, message queue.Message) 
 		return errors.New("unmarshalling series data: " + err.Error())
 	}
 
-	dbpool, err := pgxpool.New(ctx, os.Getenv("POSTGRES_CORE_URL"))
-	if err != nil {
-		return errors.New("connecting to database: " + err.Error())
-	}
-	defer dbpool.Close()
-
 	for _, series := range seriesList {
-		// Insert each series into the database
-		_, err = dbpool.Exec(ctx, `
+		// Insert each series into the database using the shared connection pool
+		_, err = h.DB.CorePool.Exec(ctx, `
 			INSERT INTO series (name, uuid, short_name, short_code, category)
 			VALUES ($1, $2, $3, $4, $5)
 			ON CONFLICT (uuid) DO NOTHING`,
