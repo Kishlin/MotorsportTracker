@@ -16,7 +16,6 @@ test.php
 
 ###> Golang ###
 /apps/ScrappingCommandPublishers/build/
-/apps/CommandsProcessor/build/
 ###< Golang ###
 
 ###> Symfony/Composer ###

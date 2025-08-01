@@ -1,4 +1,4 @@
-module github.com/kishlin/MotorsportTracker/apps/ScrappingProcessor
+module github.com/kishlin/MotorsportTracker/apps/Backend/CommandsProcessor
 
 go 1.24.4
 
@@ -19,4 +19,4 @@ require (
 	golang.org/x/text v0.24.0 // indirect
 )
 
-replace github.com/kishlin/MotorsportTracker/src/Golang => ../../src/Golang
+replace github.com/kishlin/MotorsportTracker/src/Golang => ../../../src/Golang

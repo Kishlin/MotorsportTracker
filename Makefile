@@ -96,7 +96,7 @@ build-dbmigrate:
 
 run-dbmigrate-core:
 	@echo "Running Golang app DBMigrate for Core"
-	@docker-compose exec golang bash -c 'DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) /app/apps/Backend/DBMigrate/build/dbmigrate'
+	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
 
 build-publishers:
 	@echo "Building Golang apps in ScrappingCommandPublishers"
@@ -107,11 +107,12 @@ build-publishers:
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
-	@cd apps/CommandsProcessor && go build -o build/CommandsProcessor main.go
+	@docker compose exec golang bash -c 'cd apps/Backend/CommandsProcessor && go mod tidy'
+	@docker compose exec golang bash -c 'cd apps/Backend/CommandsProcessor && go build -o build/processor main.go'
 
 run-processor:
 	@echo "Running Golang app CommandsProcessor"
-	@docker-compose exec golang /app/apps/CommandsProcessor/build/CommandsProcessor
+	@docker-compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
