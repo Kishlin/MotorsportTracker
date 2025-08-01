@@ -100,10 +100,10 @@ run-dbmigrate-core:
 
 build-publishers:
 	@echo "Building Golang apps in ScrappingCommandPublishers"
-	@cd apps/ScrappingCommandPublishers && go mod tidy
-	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-series series.go
-	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-seasons seasons.go
-	@cd apps/ScrappingCommandPublishers && go build -o build/scrape-events events.go
+	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go mod tidy'
+	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-series series.go'
+	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-seasons seasons.go'
+	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-events events.go'
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
