@@ -89,6 +89,15 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 
 .PHONY: build-publisher build-processor run-publisher run-processor
 
+build-dbmigrate:
+	@echo "Building Golang app DBMigrate"
+	@docker compose exec golang bash -c 'cd apps/Backend/DBMigrate && go mod tidy'
+	@docker compose exec golang bash -c 'cd apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
+
+run-dbmigrate-core:
+	@echo "Running Golang app DBMigrate for Core"
+	@docker-compose exec golang bash -c 'DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) /app/apps/Backend/DBMigrate/build/dbmigrate'
+
 build-publishers:
 	@echo "Building Golang apps in ScrappingCommandPublishers"
 	@cd apps/ScrappingCommandPublishers && go mod tidy

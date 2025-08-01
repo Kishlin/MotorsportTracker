@@ -36,9 +36,16 @@ func main() {
 		os.Exit(0)
 	}
 
+	// Get the database connection string from environment variable
+	connStr := os.Getenv("POSTGRES_CORE_URL")
+	if connStr == "" {
+		log.Fatalf("POSTGRES_CORE_URL environment variable not set")
+		return
+	}
+
 	// Initialize database connection
 	db := database.GetInstance()
-	if err := db.ConnectCore(ctx); err != nil {
+	if err := db.ConnectCore(ctx, connStr); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()

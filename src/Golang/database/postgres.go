@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"fmt"
-	"os"
 	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -27,15 +26,9 @@ func GetInstance() *PostgresDB {
 }
 
 // ConnectCore initializes the connection to the core database
-func (db *PostgresDB) ConnectCore(ctx context.Context) error {
+func (db *PostgresDB) ConnectCore(ctx context.Context, connStr string) error {
 	var err error
 	db.once.Do(func() {
-		connStr := os.Getenv("POSTGRES_CORE_URL")
-		if connStr == "" {
-			err = fmt.Errorf("POSTGRES_CORE_URL environment variable not set")
-			return
-		}
-
 		config, configErr := pgxpool.ParseConfig(connStr)
 		if configErr != nil {
 			err = fmt.Errorf("unable to parse database connection config: %w", configErr)
