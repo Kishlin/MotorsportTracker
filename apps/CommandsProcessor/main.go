@@ -25,7 +25,6 @@ func main() {
 	// Define command-line flags specific to processing
 	workerCount := flag.Int("workers", 3, "Number of concurrent workers for processing")
 	pollInterval := flag.Duration("interval", 5*time.Second, "Queue polling interval")
-	skipMigrations := flag.Bool("skip-migrations", false, "Skip running database migrations")
 
 	// Parse the command-line flags
 	flag.Parse()
@@ -49,16 +48,6 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
-
-	// Run database migrations if not skipped
-	if !*skipMigrations {
-		fmt.Println("Running database migrations...")
-		migrationRunner := database.NewMigrationRunner(db)
-		if err := migrationRunner.RunMigrations(ctx, database.GetCoreMigrations()); err != nil {
-			log.Fatalf("Failed to run migrations: %v", err)
-		}
-		fmt.Println("Migrations completed successfully")
-	}
 
 	// Create the queue using factory (with environment variables)
 	q, err := queue.Factory(queue.ScrappingIntentsQueue)
