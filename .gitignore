@@ -14,10 +14,6 @@ test.php
 /docker-compose.yaml
 ###< Dev Env ###
 
-###> Golang ###
-/apps/ScrappingCommandPublishers/build/
-###< Golang ###
-
 ###> Symfony/Composer ###
 /vendor/
 /apps/Backoffice/var/
