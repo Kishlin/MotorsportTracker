@@ -6,7 +6,6 @@ import (
 )
 
 // MemoryQueue implements Queue interface using in-memory maps
-// Useful for testing and local development
 type MemoryQueue struct {
 	hiddenMessages map[MessageHandle]Message
 	messages       map[MessageHandle]Message
@@ -16,7 +15,8 @@ type MemoryQueue struct {
 // NewMemoryQueue creates a new in-memory queue
 func NewMemoryQueue() *MemoryQueue {
 	return &MemoryQueue{
-		messages: make(map[MessageHandle]Message),
+		messages:       make(map[MessageHandle]Message),
+		hiddenMessages: make(map[MessageHandle]Message),
 	}
 }
 
