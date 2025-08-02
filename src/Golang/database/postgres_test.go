@@ -20,12 +20,12 @@ func TestPostgresDB_CloseMultipleTimesAndUsageAfterClose(t *testing.T) {
 	db.Close()
 
 	if pool.closeCount != 1 {
-		t.Errorf("Expected Close to be called once on the pool, got %d", pool.closeCount)
+		t.Errorf("Expected Close to be called once on the Pool, got %d", pool.closeCount)
 	}
 
 	// After closing, Ping should fail
 	if err := db.Ping(context.Background()); err == nil {
-		t.Error("Expected Ping to fail after pool is closed, got nil error")
+		t.Error("Expected Ping to fail after Pool is closed, got nil error")
 	}
 
 	// Try to reconnect after close (should not reopen)
@@ -44,10 +44,10 @@ func TestPostgresDB_ConnectErrorHandling(t *testing.T) {
 		t.Error("Expected error on bad config, got nil")
 	}
 
-	factory = &mockFactory{newWithConfigErr: errors.New("new pool error")}
+	factory = &mockFactory{newWithConfigErr: errors.New("new Pool error")}
 	db = GetInstance(factory)
 	if err := db.Connect(context.Background(), "mock-conn-str"); err == nil {
-		t.Error("Expected error on new pool, got nil")
+		t.Error("Expected error on new Pool, got nil")
 	}
 
 	factory = &mockFactory{pool: &mockPool{pingErr: errors.New("ping error")}}
@@ -75,15 +75,15 @@ func TestPostgresDB_MultipleDatabasesIsolation(t *testing.T) {
 
 	db1.Close()
 	if !pool1.closed {
-		t.Error("db1 pool should be closed after db1.Close()")
+		t.Error("db1 Pool should be closed after db1.Close()")
 	}
 	if pool2.closed {
-		t.Error("db2 pool should NOT be closed after db1.Close()")
+		t.Error("db2 Pool should NOT be closed after db1.Close()")
 	}
 
 	db2.Close()
 	if !pool2.closed {
-		t.Error("db2 pool should be closed after db2.Close()")
+		t.Error("db2 Pool should be closed after db2.Close()")
 	}
 }
 
@@ -103,6 +103,12 @@ func (m *mockPool) Ping(context.Context) error {
 		return errors.New("pool is closed")
 	}
 	return m.pingErr
+}
+func (m *mockPool) Exec(_ context.Context, _ string, _ ...any) error {
+	if m.closed {
+		return errors.New("pool is closed")
+	}
+	return nil
 }
 
 type mockFactory struct {

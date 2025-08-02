@@ -85,7 +85,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, message queue.Message) 
 
 	for _, series := range seriesList {
 		// Insert each series into the database using the shared connection pool
-		_, err = h.DB.pool.Exec(ctx, `
+		err = h.DB.Pool.Exec(ctx, `
 			INSERT INTO series (name, uuid, short_name, short_code, category)
 			VALUES ($1, $2, $3, $4, $5)
 			ON CONFLICT (uuid) DO NOTHING`,

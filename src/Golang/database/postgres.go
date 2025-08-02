@@ -12,6 +12,7 @@ import (
 type PostgresDBPool interface {
 	Close()
 	Ping(ctx context.Context) error
+	Exec(ctx context.Context, sql string, arguments ...any) error
 }
 
 type PostgresDBPoolFactory interface {
@@ -22,7 +23,7 @@ type PostgresDBPoolFactory interface {
 type PostgresDB struct {
 	factory PostgresDBPoolFactory
 	once    sync.Once
-	pool    PostgresDBPool
+	Pool    PostgresDBPool
 }
 
 // GetInstance returns a new instance of PostgresDB for each database
@@ -53,7 +54,7 @@ func (db *PostgresDB) Connect(ctx context.Context, connStr string) error {
 			return
 		}
 
-		db.pool = pool
+		db.Pool = pool
 	})
 
 	return err
@@ -61,17 +62,17 @@ func (db *PostgresDB) Connect(ctx context.Context, connStr string) error {
 
 // Close closes all database connections
 func (db *PostgresDB) Close() {
-	if db.pool != nil {
-		db.pool.Close()
-		db.pool = nil
+	if db.Pool != nil {
+		db.Pool.Close()
+		db.Pool = nil
 	}
 }
 
 func (db *PostgresDB) Ping(ctx context.Context) error {
-	if db.pool == nil {
-		return fmt.Errorf("database pool is closed")
+	if db.Pool == nil {
+		return fmt.Errorf("database Pool is closed")
 	}
-	return db.pool.Ping(ctx)
+	return db.Pool.Ping(ctx)
 }
 
 // --- Production PGXPoolFactory Implementation ---
@@ -110,4 +111,9 @@ func (w *PGXPoolWrapper) Close() {
 
 func (w *PGXPoolWrapper) Ping(ctx context.Context) error {
 	return w.pool.Ping(ctx)
+}
+
+func (w *PGXPoolWrapper) Exec(ctx context.Context, sql string, arguments ...any) error {
+	_, err := w.pool.Exec(ctx, sql, arguments...)
+	return err
 }
