@@ -104,8 +104,8 @@ build-publisher:
 	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
 
 run-publisher:
-	@echo "Running Golang app CommandsPublisher"
-	@docker-compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher
+	@echo "Running Golang app CommandsPublisher with ARGS=$(ARGS)"
+	@docker-compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher $(ARGS)
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
