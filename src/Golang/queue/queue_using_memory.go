@@ -87,6 +87,6 @@ func (q *MemoryQueue) Connect() error {
 }
 
 // Disconnect is a no-op for memory queue
-func (q *MemoryQueue) Disconnect() error {
-	return nil
+func (q *MemoryQueue) Disconnect() {
+	return
 }

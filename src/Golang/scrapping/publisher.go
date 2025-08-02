@@ -28,10 +28,7 @@ func NewIntentPublisher() (*IntentPublisher, error) {
 
 // Close disconnects from the queue
 func (p *IntentPublisher) Close() {
-	err := p.queue.Disconnect()
-	if err != nil {
-		log.Printf("Error disconnecting from queue: %v", err)
-	}
+	p.queue.Disconnect()
 }
 
 // PublishIntent sends a scrapping intent message to the queue

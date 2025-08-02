@@ -170,10 +170,9 @@ func (q *SQSQueue) Delete(handle MessageHandle) error {
 }
 
 // Disconnect closes the connection with AWS SQS
-func (q *SQSQueue) Disconnect() error {
+func (q *SQSQueue) Disconnect() {
 	// Nothing specific to clean up for AWS SQS client
 	q.client = nil
-	return nil
 }
 
 // truncateString truncates a string to the specified length and adds an ellipsis

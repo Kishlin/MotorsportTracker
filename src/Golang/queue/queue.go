@@ -23,5 +23,5 @@ type Queue interface {
 	Connect() error
 
 	// Disconnect closes the connection with the queue system
-	Disconnect() error
+	Disconnect()
 }
