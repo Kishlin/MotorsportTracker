@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestBaseCommandValidate(t *testing.T) {
+func TestCli_BaseCommandValidate(t *testing.T) {
 	tests := []struct {
 		name        string
 		config      CommandConfig
@@ -216,7 +216,7 @@ func TestBaseCommandValidate(t *testing.T) {
 }
 
 // Benchmark to ensure Validate is performant with commands that simulate real-world usage
-func BenchmarkBaseCommandValidate(b *testing.B) {
+func BenchmarkCli_BaseCommandValidate(b *testing.B) {
 	commandConfig := CommandConfig{
 		Name: "scrap",
 		Arguments: []Argument{
@@ -242,7 +242,7 @@ func BenchmarkBaseCommandValidate(b *testing.B) {
 }
 
 // Benchmark to ensure Validate is performant when there are errors
-func BenchmarkBaseCommandValidateOnMissingKeys(b *testing.B) {
+func BenchmarkCli_BaseCommandValidateOnMissingKeys(b *testing.B) {
 	commandConfig := CommandConfig{
 		Name: "scrap",
 		Arguments: []Argument{

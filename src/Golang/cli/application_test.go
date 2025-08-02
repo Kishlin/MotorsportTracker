@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestParseArgs(t *testing.T) {
+func TestCli_ParseArgs(t *testing.T) {
 	tests := []struct {
 		name              string
 		args              []string
@@ -96,7 +96,7 @@ func TestParseArgs(t *testing.T) {
 }
 
 // Benchmark to ensure parseArgs is performant with large argument lists
-func BenchmarkParseArgs(b *testing.B) {
+func BenchmarkCli_ParseArgs(b *testing.B) {
 	args := []string{
 		"--dry-run", "--format=json", "--timeout=30", "-q", "--verbose", "--", "-bad-file-name.txt",
 		"scrap", "series", "--series=f1", "--year=2023", "-v", "--output=/tmp/results.json",
