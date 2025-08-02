@@ -189,10 +189,14 @@ deploy:
 ##> Tests
 #.PHONY: tests.backend.use-cases tests.backend.api tests.backend.backoffice \
 
-.PHONY: tests.backend.use-cases \
+.PHONY: tests.golang tests.backend.use-cases \
         tests.backend.src.isolated tests.backend.src.contract tests.backend.src \
 		tests.backend.app.driving tests.backend.app.functional tests.backend.app.integration tests.backend.app \
 		tests.backend tests.frontend tests
+
+tests.golang:
+	@echo "Running Golang Tests"
+	@docker compose exec golang bash -c 'cd /app/src/Golang && go test ./...'
 
 tests.backend.use-cases:
 	@echo "Running Use Case Tests for src/"
