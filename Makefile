@@ -98,12 +98,14 @@ run-dbmigrate-core:
 	@echo "Running Golang app DBMigrate for Core"
 	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
 
-build-publishers:
-	@echo "Building Golang apps in ScrappingCommandPublishers"
-	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go mod tidy'
-	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-series series.go'
-	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-seasons seasons.go'
-	@docker compose exec golang bash -c 'cd apps/Backend/ScrappingCommandPublishers && go build -o build/scrape-events events.go'
+build-publisher:
+	@echo "Building Golang app CommandsPublisher"
+	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go mod tidy'
+	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
+
+run-publisher:
+	@echo "Running Golang app CommandsPublisher"
+	@docker-compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"

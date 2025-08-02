@@ -1,14 +1,9 @@
 package events
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/kishlin/MotorsportTracker/src/Golang/cli"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
 )
-
-const ScrapEventsMessageType = "scrap_events"
 
 // ScrapEventsCommand is a command that publishes a scrapping intent for all events.
 type ScrapEventsCommand struct {
@@ -22,7 +17,7 @@ func NewScrapEventsCommand() *ScrapEventsCommand {
 			Config: cli.CommandConfig{
 				Name:        "scrap:events",
 				Description: "Scrap all available events",
-				Parameters: []cli.Parameter{
+				Arguments: []cli.Argument{
 					{
 						Name:        "series",
 						Description: "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
@@ -43,32 +38,17 @@ func NewScrapEventsCommand() *ScrapEventsCommand {
 }
 
 // Execute runs the scrapping intent for events.
-func (c *ScrapEventsCommand) Execute(args map[string]string) error {
-	q, err := queue.Factory(queue.ScrappingIntentsQueue)
+func (c *ScrapEventsCommand) Execute(arguments []string, _ map[string]string) error {
+	publisher, err := scrapping.NewIntentPublisher()
 	if err != nil {
-		return fmt.Errorf("error creating queue: %v", err)
+		return err
+	}
+	defer publisher.Close()
+
+	metadata := map[string]string{
+		"series": arguments[0],
+		"season": arguments[1],
 	}
 
-	// Connect to the queue
-	if err := q.Connect(); err != nil {
-		return fmt.Errorf("error connecting to queue: %v", err)
-	}
-	defer q.Disconnect()
-
-	// Create and publish the message
-	message := queue.Message{
-		Type: ScrapEventsMessageType,
-		Metadata: map[string]string{
-			"series": args["series"],
-			"season": args["season"],
-		},
-	}
-
-	err = q.Send(message)
-	if err != nil {
-		return fmt.Errorf("error publishing to queue: %v", err)
-	}
-
-	log.Println("Successfully published events scrapping intent")
-	return nil
+	return publisher.PublishIntent(scrapping.ScrapeEventsMessageType, metadata)
 }

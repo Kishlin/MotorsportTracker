@@ -4,17 +4,18 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
+	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
 	"github.com/kishlin/MotorsportTracker/src/Golang/worker"
 )
 
@@ -43,7 +44,7 @@ func main() {
 	}
 
 	// Initialize database connection
-	db := database.GetInstance()
+	db := database.GetInstance(database.NewPGXPoolFactory())
 	if err := db.Connect(ctx, connStr); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -69,9 +70,9 @@ func main() {
 	// Register handlers for scrapping intents
 	handlersList := queue.NewHandlersList()
 
-	handlersList.RegisterHandler(series.ScrapSeriesMessageType, series.NewScrapSeriesHandler(db))
-	handlersList.RegisterHandler(seasons.ScrapSeasonsMessageType, seasons.NewScrapSeasonsHandler())
-	handlersList.RegisterHandler(events.ScrapEventsMessageType, events.NewScrapEventsHandler())
+	handlersList.RegisterHandler(scrapping.ScrapeSeriesMessageType, series.NewScrapSeriesHandler(db))
+	handlersList.RegisterHandler(scrapping.ScrapeSeasonsMessageType, seasons.NewScrapSeasonsHandler())
+	handlersList.RegisterHandler(scrapping.ScrapeEventsMessageType, events.NewScrapEventsHandler())
 
 	// Create and start the worker
 	w := worker.NewWorker(q, handlersList, *workerCount, *pollInterval)
