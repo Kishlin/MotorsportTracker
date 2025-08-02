@@ -7,11 +7,11 @@ import (
 
 // Command represents a CLI command that can be executed.
 type Command interface {
-	// Validate checks if the provided arguments are valid for this command.
-	Validate(args map[string]string) error
+	// Validate checks if the provided arguments and options are valid for this command.
+	Validate(arguments []string, options map[string]string) error
 
-	// Execute executes the command with the provided arguments.
-	Execute(args map[string]string) error
+	// Execute executes the command with the provided arguments and options.
+	Execute(arguments []string, options map[string]string) error
 }
 
 // CommandConfig holds the configuration for a command.
@@ -22,26 +22,26 @@ type CommandConfig struct {
 	// Description provides information about what the command does.
 	Description string
 
-	// Parameters are required arguments for the command.
-	Parameters []Parameter
+	// Arguments are positional arguments for the command.
+	Arguments []Argument
 
-	// Options are optional arguments for the command.
+	// Options are named optional arguments for the command.
 	Options []Option
 }
 
-// Parameter represents a required argument for a command.
-type Parameter struct {
-	// Name is the identifier of the parameter.
+// Argument represents a positional argument for a command.
+type Argument struct {
+	// Name is the identifier of the argument.
 	Name string
 
-	// Description provides information about the parameter.
+	// Description provides information about the argument.
 	Description string
 
-	// Required indicates if the parameter must be provided.
+	// Required indicates if the argument must be provided.
 	Required bool
 }
 
-// Option represents an optional argument for a command.
+// Option represents an optional named argument for a command.
 type Option struct {
 	// Name is the identifier of the option (e.g., "series").
 	Name string
@@ -52,8 +52,9 @@ type Option struct {
 	// Description provides information about the option.
 	Description string
 
-	// Required indicates if the option must be provided.
-	Required bool
+	// RequiresValue indicates if the option must have a value when provided.
+	// If false, the option is a boolean flag.
+	RequiresValue bool
 
 	// Default is the default value for the option if not provided.
 	Default string
@@ -64,22 +65,32 @@ type BaseCommand struct {
 	Config CommandConfig
 }
 
-// Validate checks if all required parameters and options are provided.
-func (c *BaseCommand) Validate(args map[string]string) error {
-	// Check required parameters
-	for _, param := range c.Config.Parameters {
-		if param.Required {
-			if _, exists := args[param.Name]; !exists {
-				return errors.New(fmt.Sprintf("required parameter '%s' is missing", param.Name))
-			}
+// Validate checks if all required arguments are provided and options are properly formatted.
+func (c *BaseCommand) Validate(arguments []string, options map[string]string) error {
+	// Check required arguments
+	requiredArgCount := 0
+	for _, arg := range c.Config.Arguments {
+		if arg.Required {
+			requiredArgCount++
 		}
 	}
 
-	// Check required options
+	if len(arguments) < requiredArgCount {
+		return errors.New(fmt.Sprintf("expected at least %d arguments, got %d", requiredArgCount, len(arguments)))
+	}
+
+	// Check options that require values
 	for _, opt := range c.Config.Options {
-		if opt.Required {
-			if _, exists := args[opt.Name]; !exists {
-				return errors.New(fmt.Sprintf("required option '--%s' is missing", opt.Name))
+		if opt.RequiresValue {
+			if value, exists := options[opt.Name]; exists && value == "true" {
+				// This means the option was provided as a flag but requires a value
+				return errors.New(fmt.Sprintf("option '--%s' requires a value", opt.Name))
+			}
+			// Check short name too
+			if opt.ShortName != "" {
+				if value, exists := options[opt.ShortName]; exists && value == "true" {
+					return errors.New(fmt.Sprintf("option '-%s' requires a value", opt.ShortName))
+				}
 			}
 		}
 	}
