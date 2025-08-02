@@ -14,10 +14,10 @@ type BaseScrappingHandler struct {
 }
 
 // Validate checks if the response conforms to the expected schema.
-func (h *BaseScrappingHandler) Validate(ctx context.Context, content []byte, expected string) error {
+func (h *BaseScrappingHandler) Validate(ctx context.Context, content []byte, expectedSchema string) error {
 	rs := jsonschema.Schema{}
-	if err := rs.UnmarshalJSON([]byte(expected)); err != nil {
-		return errors.New("unmarshalling expected: " + err.Error())
+	if err := rs.UnmarshalJSON([]byte(expectedSchema)); err != nil {
+		return errors.New("unmarshalling expectedSchema: " + err.Error())
 	}
 
 	errs, err := rs.ValidateBytes(ctx, content)
