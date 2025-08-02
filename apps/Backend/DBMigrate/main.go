@@ -32,13 +32,13 @@ func main() {
 
 	// Initialize database connection
 	pool := database.GetInstance()
-	if err := pool.ConnectCore(ctx, connStr); err != nil {
+	if err := pool.Connect(ctx, connStr); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer pool.Close()
 
 	// Create a migration driver using the pgx connection pool
-	driver, err := migratepgx.WithInstance(pgxstd.OpenDBFromPool(pool.CorePool), &migratepgx.Config{})
+	driver, err := migratepgx.WithInstance(pgxstd.OpenDBFromPool(pool.pool), &migratepgx.Config{})
 	if err != nil {
 		log.Fatalf("Failed to create migration driver: %v", err)
 		return

@@ -44,7 +44,7 @@ func main() {
 
 	// Initialize database connection
 	db := database.GetInstance()
-	if err := db.ConnectCore(ctx, connStr); err != nil {
+	if err := db.Connect(ctx, connStr); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
