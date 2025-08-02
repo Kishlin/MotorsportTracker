@@ -1,23 +1,16 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"log"
 	"os"
 
 	"github.com/golang-migrate/migrate/v4"
-	migratepgx "github.com/golang-migrate/migrate/v4/database/pgx/v5"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	pgxstd "github.com/jackc/pgx/v5/stdlib"
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 )
 
 func main() {
-	// Create a context for the application
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
 	sourceStr := os.Getenv("DB_MIGRATE_SOURCE")
 	if sourceStr == "" {
 		log.Fatalf("DB_MIGRATE_SOURCE environment variable not set")
@@ -30,22 +23,7 @@ func main() {
 		return
 	}
 
-	// Initialize database connection
-	pool := database.GetInstance()
-	if err := pool.Connect(ctx, connStr); err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
-	defer pool.Close()
-
-	// Create a migration driver using the pgx connection pool
-	driver, err := migratepgx.WithInstance(pgxstd.OpenDBFromPool(pool.pool), &migratepgx.Config{})
-	if err != nil {
-		log.Fatalf("Failed to create migration driver: %v", err)
-		return
-	}
-
-	// Create a new migration instance
-	m, err := migrate.NewWithDatabaseInstance(sourceStr, "pgx", driver)
+	m, err := migrate.New(sourceStr, connStr)
 	if err != nil {
 		log.Fatalf("Failed to create migration: %v", err)
 		return
