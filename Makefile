@@ -92,7 +92,7 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 
 build-dbmigrate:
 	@echo "Building Golang app DBMigrate"
-	@docker compose exec golang bash -c 'cd apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
 
 run-dbmigrate-core:
 	@echo "Running Golang app DBMigrate for Core"
@@ -100,7 +100,7 @@ run-dbmigrate-core:
 
 build-publisher:
 	@echo "Building Golang app CommandsPublisher"
-	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher main.go'
 
 run-publisher:
 	@echo "Running Golang app CommandsPublisher with ARGS=$(ARGS)"
@@ -108,7 +108,7 @@ run-publisher:
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
-	@docker compose exec golang bash -c 'cd apps/Backend/CommandsProcessor && go build -o build/processor main.go'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go build -o build/processor main.go'
 
 run-processor:
 	@echo "Running Golang app CommandsProcessor"
@@ -130,18 +130,15 @@ go-vendor: go-tidy
 go-setup: go-vendor
 	@echo "Go workspace setup complete! All modules synchronized and dependencies vendored."
 
-go-build: go-tidy
-	@echo "Building all Go applications"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go build -o build/processor main.go'
+go-build: go-tidy build-dbmigrate build-processor build-publisher
+	@echo "Built all Go applications"
 
 go-test:
 	@echo "Running Go tests across all modules"
 	@docker compose exec golang bash -c 'cd /app && go test ./src/Golang/...'
+	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/DBMigrate/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsPublisher/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/DBMigrate/...'
 
 go-lint:
 	@echo "Running Go linting across all modules"
