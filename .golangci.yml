@@ -1,0 +1,41 @@
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+  go: "1.24"
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - gofmt
+    - goimports
+    - goconst
+    - misspell
+    - revive
+    - unparam
+
+linters-settings:
+  revive:
+    min-confidence: 0.8
+  gofmt:
+    simplify: true
+  goimports:
+    local-prefixes: github.com/kishlin/MotorsportTracker
+
+issues:
+  exclude-dirs:
+    - vendor
+    - apps/Admin
+    - apps/MotorsportTracker
+    - src/Backend
+    - docs
+    - etc
+  exclude-files:
+    - ".*\\.pb\\.go$"
+  max-issues-per-linter: 0
+  max-same-issues: 0

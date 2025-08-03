@@ -9,6 +9,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
 )
 
 replace github.com/kishlin/MotorsportTracker/src/Golang => ../../../src/Golang

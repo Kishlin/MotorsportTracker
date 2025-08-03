@@ -88,10 +88,10 @@ start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.c
 ##> Apps
 
 .PHONY: build-publisher build-processor run-publisher run-processor
+.PHONY: build-go test-go lint-go tidy-go
 
 build-dbmigrate:
 	@echo "Building Golang app DBMigrate"
-	@docker compose exec golang bash -c 'cd apps/Backend/DBMigrate && go mod tidy'
 	@docker compose exec golang bash -c 'cd apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
 
 run-dbmigrate-core:
@@ -100,7 +100,6 @@ run-dbmigrate-core:
 
 build-publisher:
 	@echo "Building Golang app CommandsPublisher"
-	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go mod tidy'
 	@docker compose exec golang bash -c 'cd apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
 
 run-publisher:
@@ -109,12 +108,45 @@ run-publisher:
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
-	@docker compose exec golang bash -c 'cd apps/Backend/CommandsProcessor && go mod tidy'
 	@docker compose exec golang bash -c 'cd apps/Backend/CommandsProcessor && go build -o build/processor main.go'
 
 run-processor:
 	@echo "Running Golang app CommandsProcessor"
 	@docker-compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
+
+# Go workspace commands
+go-tidy:
+	@echo "Running go mod tidy across all Go modules"
+	@docker compose exec golang bash -c 'cd /app && go work sync'
+	@docker compose exec golang bash -c 'cd /app/src/Golang && go mod tidy'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go mod tidy'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go mod tidy'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go mod tidy'
+
+go-vendor: go-tidy
+	@echo "Downloading Go workspace dependencies to vendor/"
+	@docker compose exec golang bash -c 'cd /app && go work vendor'
+
+go-setup: go-vendor
+	@echo "Go workspace setup complete! All modules synchronized and dependencies vendored."
+
+go-build: go-tidy
+	@echo "Building all Go applications"
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher scrape-commands-publisher.go'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go build -o build/processor main.go'
+
+go-test:
+	@echo "Running Go tests across all modules"
+	@docker compose exec golang bash -c 'cd /app && go test ./src/Golang/...'
+	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'
+	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsPublisher/...'
+	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/DBMigrate/...'
+
+go-lint:
+	@echo "Running Go linting across all modules"
+	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate...'
+
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
