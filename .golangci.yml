@@ -1,41 +1,50 @@
+version: "2"
+
 run:
   timeout: 5m
   modules-download-mode: readonly
   go: "1.24"
 
+formatters:
+  enable:
+    - goimports
+    - gofmt
+  settings:
+    gofmt:
+      simplify: true
+    goimports:
+      local-prefixes:
+        - github.com/kishlin/MotorsportTracker
+
 linters:
   enable:
     - errcheck
-    - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - typecheck
     - unused
-    - gofmt
-    - goimports
-    - goconst
+    - gosec
     - misspell
+    - nilnil
+    - nilerr
     - revive
     - unparam
-
-linters-settings:
-  revive:
-    min-confidence: 0.8
-  gofmt:
-    simplify: true
-  goimports:
-    local-prefixes: github.com/kishlin/MotorsportTracker
+  settings:
+    revive:
+      confidence: 0.8
+  exclusions:
+    paths:
+      - "^apps/Admin/.*"  # Exclude Admin app directory
+      - "^apps/MotorsportTracker/.*"  # Exclude MotorsportTracker app directory
+      - "^docs/.*"  # Exclude documentation directory
+      - "^etc/.*"  # Exclude etc directory
+      - "^features/.*"  # Exclude vendor directory
+      - "^src/Backend/.*"  # Exclude Backend source directory
+      - "^tests/.*"  # Exclude etc directory
+      - "^vendor/.*"  # Exclude vendor directory
+      - ".*\\.pb\\.go$"  # Exclude generated protobuf files
+      - ".*\\.gen\\.go$"  # Exclude generated code files
 
 issues:
-  exclude-dirs:
-    - vendor
-    - apps/Admin
-    - apps/MotorsportTracker
-    - src/Backend
-    - docs
-    - etc
-  exclude-files:
-    - ".*\\.pb\\.go$"
   max-issues-per-linter: 0
   max-same-issues: 0

@@ -2,6 +2,7 @@ package client
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -32,7 +33,12 @@ func (c *Connector) Get(url string) ([]byte, error) {
 		return []byte{}, errors.New("making request: " + err.Error())
 	}
 
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Println("error closing response body:", err)
+		}
+	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
 		return []byte{}, errors.New("fetching data: " + resp.Status)

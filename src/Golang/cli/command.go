@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -76,7 +75,7 @@ func (c *BaseCommand) Validate(arguments []string, options map[string]string) er
 	}
 
 	if len(arguments) < requiredArgCount {
-		return errors.New(fmt.Sprintf("expected at least %d arguments, got %d", requiredArgCount, len(arguments)))
+		return fmt.Errorf("expected at least %d arguments, got %d", requiredArgCount, len(arguments))
 	}
 
 	// Check options that require values
@@ -84,12 +83,12 @@ func (c *BaseCommand) Validate(arguments []string, options map[string]string) er
 		if opt.RequiresValue {
 			if value, exists := options[opt.Name]; exists && value == "true" {
 				// This means the option was provided as a flag but requires a value
-				return errors.New(fmt.Sprintf("option '--%s' requires a value", opt.Name))
+				return fmt.Errorf("option '--%s' requires a value", opt.Name)
 			}
 			// Check short name too
 			if opt.ShortName != "" {
 				if value, exists := options[opt.ShortName]; exists && value == "true" {
-					return errors.New(fmt.Sprintf("option '-%s' requires a value", opt.ShortName))
+					return fmt.Errorf("option '-%s' requires a value", opt.ShortName)
 				}
 			}
 		}

@@ -1,8 +1,9 @@
 package queue
 
 import (
-	"github.com/google/uuid"
 	"sync"
+
+	"github.com/google/uuid"
 )
 
 // MemoryQueue implements Queue interface using in-memory maps
@@ -74,9 +75,7 @@ func (q *MemoryQueue) Delete(handle MessageHandle) error {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 
-	if _, exists := q.hiddenMessages[handle]; exists {
-		delete(q.hiddenMessages, handle)
-	}
+	delete(q.hiddenMessages, handle)
 
 	return nil
 }
@@ -87,6 +86,4 @@ func (q *MemoryQueue) Connect() error {
 }
 
 // Disconnect is a no-op for memory queue
-func (q *MemoryQueue) Disconnect() {
-	return
-}
+func (q *MemoryQueue) Disconnect() {}

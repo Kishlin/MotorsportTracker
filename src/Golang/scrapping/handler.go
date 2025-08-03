@@ -5,8 +5,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 	"github.com/qri-io/jsonschema"
+
+	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 )
 
 type BaseScrappingHandler struct {

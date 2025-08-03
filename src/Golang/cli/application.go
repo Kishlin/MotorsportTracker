@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -12,12 +11,12 @@ func Run(command Command, args []string) error {
 
 	// Validate the arguments and options
 	if err := command.Validate(arguments, options); err != nil {
-		return errors.New(fmt.Sprintf("invalid arguments: %s", err.Error()))
+		return fmt.Errorf("invalid arguments: %s", err.Error())
 	}
 
 	// Execute the command
 	if err := command.Execute(arguments, options); err != nil {
-		return errors.New(fmt.Sprintf("execution failed: %s", err.Error()))
+		return fmt.Errorf("execution failed: %s", err.Error())
 	}
 
 	return nil
