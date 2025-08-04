@@ -11,5 +11,3 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 )
-
-replace github.com/kishlin/MotorsportTracker/src/Golang => ../../../src/Golang
