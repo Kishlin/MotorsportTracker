@@ -1,18 +1,16 @@
-package worker
+package queue
 
 import (
 	"context"
 	"log"
 	"sync"
 	"time"
-
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 // Worker processes messages from a queue
 type Worker struct {
-	queue        queue.Queue
-	handlersList *queue.HandlersList
+	queue        Queue
+	handlersList *HandlersList
 	workerCount  int
 	pollInterval time.Duration
 	stopChan     chan struct{}
@@ -20,7 +18,7 @@ type Worker struct {
 }
 
 // NewWorker creates a new worker
-func NewWorker(q queue.Queue, handlersList *queue.HandlersList, workerCount int, pollInterval time.Duration) *Worker {
+func NewWorker(q Queue, handlersList *HandlersList, workerCount int, pollInterval time.Duration) *Worker {
 	return &Worker{
 		queue:        q,
 		handlersList: handlersList,

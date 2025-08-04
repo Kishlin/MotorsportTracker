@@ -16,7 +16,6 @@ import (
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
 	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/worker"
 )
 
 func main() {
@@ -75,7 +74,7 @@ func main() {
 	handlersList.RegisterHandler(scrapping.ScrapeEventsMessageType, events.NewScrapEventsHandler())
 
 	// Create and start the worker
-	w := worker.NewWorker(q, handlersList, *workerCount, *pollInterval)
+	w := queue.NewWorker(q, handlersList, *workerCount, *pollInterval)
 	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals

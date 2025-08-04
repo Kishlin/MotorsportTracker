@@ -1,21 +1,19 @@
-package worker
+package queue
 
 import (
 	"context"
 	"sync"
 	"testing"
 	"time"
-
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 func TestWorker_BasicProcessing(t *testing.T) {
-	q := queue.NewMemoryQueue()
+	q := NewMemoryQueue()
 	handler := &spyHandler{}
-	handlersList := queue.NewHandlersList()
+	handlersList := NewHandlersList()
 	handlersList.RegisterHandler("test", handler)
 
-	msg := queue.Message{Type: "test", Metadata: map[string]string{"payload": "foo"}}
+	msg := Message{Type: "test", Metadata: map[string]string{"payload": "foo"}}
 	_ = q.Send(msg)
 
 	worker := NewWorker(q, handlersList, 1, 10*time.Millisecond)
@@ -38,9 +36,9 @@ func TestWorker_BasicProcessing(t *testing.T) {
 }
 
 func TestWorker_StopHaltsProcessing(t *testing.T) {
-	q := queue.NewMemoryQueue()
+	q := NewMemoryQueue()
 	handler := &spyHandler{}
-	handlersList := queue.NewHandlersList()
+	handlersList := NewHandlersList()
 	handlersList.RegisterHandler("test", handler)
 
 	worker := NewWorker(q, handlersList, 1, 10*time.Millisecond)
@@ -51,7 +49,7 @@ func TestWorker_StopHaltsProcessing(t *testing.T) {
 	worker.Stop()
 
 	// Send a message after stopping
-	msg := queue.Message{Type: "test", Metadata: map[string]string{"payload": "should_not_process"}}
+	msg := Message{Type: "test", Metadata: map[string]string{"payload": "should_not_process"}}
 	_ = q.Send(msg)
 	time.Sleep(50 * time.Millisecond) // Give time for any potential processing
 
@@ -66,11 +64,11 @@ func TestWorker_StopHaltsProcessing(t *testing.T) {
 // Spy handler for testing
 type spyHandler struct {
 	called   bool
-	lastMsg  queue.Message
+	lastMsg  Message
 	callLock sync.Mutex
 }
 
-func (h *spyHandler) Handle(_ context.Context, message queue.Message) error {
+func (h *spyHandler) Handle(_ context.Context, message Message) error {
 	h.callLock.Lock()
 	defer h.callLock.Unlock()
 
