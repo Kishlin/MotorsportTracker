@@ -7,19 +7,23 @@ import (
 	"net/http"
 )
 
-type Connector struct {
+type Connector interface {
+	Get(url string) ([]byte, error)
+}
+
+type MotorsportConnector struct {
 	client *http.Client
 }
 
 // NewConnector creates a new Connector instance with a default HTTP client.
-func NewConnector() *Connector {
-	return &Connector{
+func NewConnector() *MotorsportConnector {
+	return &MotorsportConnector{
 		client: &http.Client{},
 	}
 }
 
 // Get retrieves data
-func (c *Connector) Get(url string) ([]byte, error) {
+func (c *MotorsportConnector) Get(url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return []byte{}, err

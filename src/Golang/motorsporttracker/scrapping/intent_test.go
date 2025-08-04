@@ -1,23 +1,23 @@
-package cli
+package scrapping
 
 import (
 	"testing"
 )
 
-func TestCli_BaseCommandValidate(t *testing.T) {
+func TestScrapping_BaseIntentValidate(t *testing.T) {
 	tests := []struct {
 		name        string
-		config      CommandConfig
+		config      IntentConfig
 		arguments   []string
 		options     map[string]string
 		expectError bool
 		errorMsg    string
 	}{
 		{
-			name: "valid command with no requirements",
-			config: CommandConfig{
+			name: "valid Intent with no requirements",
+			config: IntentConfig{
 				Name:        "test",
-				Description: "Test command",
+				Description: "Test Intent",
 				Arguments:   []Argument{},
 				Options:     []Option{},
 			},
@@ -26,12 +26,12 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 			expectError: false,
 		},
 		{
-			name: "valid command with required arguments satisfied",
-			config: CommandConfig{
+			name: "valid Intent with required arguments satisfied",
+			config: IntentConfig{
 				Name: "scrap",
 				Arguments: []Argument{
-					{Name: "command", Required: true},
-					{Name: "subcommand", Required: true},
+					{Name: "Intent", Required: true},
+					{Name: "subIntent", Required: true},
 					{Name: "year", Required: false},
 				},
 			},
@@ -41,10 +41,10 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "no arguments when required",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Arguments: []Argument{
-					{Name: "command", Required: true},
+					{Name: "Intent", Required: true},
 				},
 			},
 			arguments:   []string{},
@@ -54,22 +54,22 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "missing required arguments",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Arguments: []Argument{
-					{Name: "command", Required: true},
-					{Name: "subcommand", Required: true},
+					{Name: "Intent", Required: true},
+					{Name: "subIntent", Required: true},
 					{Name: "year", Required: false},
 				},
 			},
-			arguments:   []string{"scrap"}, // Missing subcommand
+			arguments:   []string{"scrap"}, // Missing subIntent
 			options:     map[string]string{},
 			expectError: true,
 			errorMsg:    "expected at least 2 arguments, got 1",
 		},
 		{
 			name: "multiple required arguments with some optional",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "process",
 				Arguments: []Argument{
 					{Name: "action", Required: true},
@@ -84,19 +84,19 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "excess arguments with required arguments satisfied",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "flexible",
 				Arguments: []Argument{
-					{Name: "command", Required: true},
+					{Name: "Intent", Required: true},
 				},
 			},
-			arguments:   []string{"command", "extra1", "extra2", "extra3"}, // More args than required
+			arguments:   []string{"Intent", "extra1", "extra2", "extra3"}, // More args than required
 			options:     map[string]string{},
 			expectError: false, // Should be valid - we only check minimum required
 		},
 		{
 			name: "valid options with values",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Options: []Option{
 					{Name: "series", RequiresValue: true},
@@ -109,7 +109,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "option requires value but provided as flag (long form)",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Options: []Option{
 					{Name: "series", RequiresValue: true},
@@ -122,7 +122,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "option requires value but provided as flag (short form)",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Options: []Option{
 					{Name: "series", ShortName: "s", RequiresValue: true},
@@ -135,7 +135,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "boolean flags are allowed to be true",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "test",
 				Options: []Option{
 					{Name: "verbose", RequiresValue: false},
@@ -149,7 +149,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "option with value provided correctly",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "deploy",
 				Options: []Option{
 					{Name: "environment", ShortName: "e", RequiresValue: true},
@@ -162,7 +162,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "option with empty value is valid (different from flag)",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "test",
 				Options: []Option{
 					{Name: "message", RequiresValue: true},
@@ -174,11 +174,11 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 		},
 		{
 			name: "mixed valid scenario",
-			config: CommandConfig{
+			config: IntentConfig{
 				Name: "scrap",
 				Arguments: []Argument{
-					{Name: "command", Required: true},
-					{Name: "subcommand", Required: true},
+					{Name: "Intent", Required: true},
+					{Name: "subIntent", Required: true},
 					{Name: "year", Required: false},
 				},
 				Options: []Option{
@@ -195,7 +195,7 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cmd := &BaseCommand{Config: tt.config}
+			cmd := &BaseIntent{Config: tt.config}
 			err := cmd.Validate(tt.arguments, tt.options)
 
 			if tt.expectError {
@@ -215,13 +215,13 @@ func TestCli_BaseCommandValidate(t *testing.T) {
 	}
 }
 
-// Benchmark to ensure Validate is performant with commands that simulate real-world usage
-func BenchmarkCli_BaseCommandValidate(b *testing.B) {
-	commandConfig := CommandConfig{
+// Benchmark to ensure Validate is performant with Intents that simulate real-world usage
+func BenchmarkScrapping_BaseIntentValidate(b *testing.B) {
+	IntentConfig := IntentConfig{
 		Name: "scrap",
 		Arguments: []Argument{
-			{Name: "command", Required: true},
-			{Name: "subcommand", Required: true},
+			{Name: "Intent", Required: true},
+			{Name: "subIntent", Required: true},
 			{Name: "year", Required: false},
 		},
 		Options: []Option{
@@ -236,18 +236,18 @@ func BenchmarkCli_BaseCommandValidate(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		cmd := &BaseCommand{Config: commandConfig}
+		cmd := &BaseIntent{Config: IntentConfig}
 		_ = cmd.Validate(arguments, options)
 	}
 }
 
 // Benchmark to ensure Validate is performant when there are errors
-func BenchmarkCli_BaseCommandValidateOnMissingKeys(b *testing.B) {
-	commandConfig := CommandConfig{
+func BenchmarkScrapping_BaseIntentValidateOnMissingKeys(b *testing.B) {
+	IntentConfig := IntentConfig{
 		Name: "scrap",
 		Arguments: []Argument{
-			{Name: "command", Required: true},
-			{Name: "subcommand", Required: true},
+			{Name: "Intent", Required: true},
+			{Name: "subIntent", Required: true},
 			{Name: "year", Required: false},
 		},
 		Options: []Option{
@@ -262,7 +262,7 @@ func BenchmarkCli_BaseCommandValidateOnMissingKeys(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		cmd := &BaseCommand{Config: commandConfig}
+		cmd := &BaseIntent{Config: IntentConfig}
 		_ = cmd.Validate(arguments, options)
 	}
 }

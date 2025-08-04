@@ -4,18 +4,18 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/events"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/seasons"
-	"github.com/kishlin/MotorsportTracker/src/Golang/scrapping/series"
 )
 
 func main() {
@@ -35,46 +35,28 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Get the database connection string from environment variable
-	connStr := os.Getenv("POSTGRES_CORE_URL")
-	if connStr == "" {
-		log.Fatalf("POSTGRES_CORE_URL environment variable not set")
-		return
-	}
-
-	// Initialize database connection
-	db := database.GetInstance(database.NewPGXPoolFactory())
-	if err := db.Connect(ctx, connStr); err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
-	defer db.Close()
-
-	// Create the queue using factory (with environment variables)
-	q, err := queue.Factory(queue.ScrappingIntentsQueue)
-	if err != nil {
-		log.Fatalf("Error creating queue: %v", err)
-	}
-
-	// Connect to the queue
-	if err := q.Connect(); err != nil {
-		log.Fatalf("Error connecting to queue: %v", err)
-	}
-	defer q.Disconnect()
+	registry := dependencyinjection.NewServicesRegistry(
+		client.NewDefaultConnectorFactory(),
+		database.NewDatabaseFactory(),
+		queue.NewSQSQueueFactory(),
+	)
+	defer registry.Close()
 
 	// Start the processor with the specified parameters
-	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n",
-		*workerCount, *pollInterval)
-	fmt.Printf("Using queue type: %s\n", queue.GetQueueTypeFromEnv())
+	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n", *workerCount, *pollInterval)
 
 	// Register handlers for scrapping intents
 	handlersList := queue.NewHandlersList()
 
-	handlersList.RegisterHandler(scrapping.ScrapeSeriesMessageType, series.NewScrapSeriesHandler(db))
-	handlersList.RegisterHandler(scrapping.ScrapeSeasonsMessageType, seasons.NewScrapSeasonsHandler())
-	handlersList.RegisterHandler(scrapping.ScrapeEventsMessageType, events.NewScrapEventsHandler())
+	handlersList.RegisterHandler(
+		series.ScrapeSeriesMessageType,
+		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetConnector()),
+	)
+	handlersList.RegisterHandler(seasons.ScrapeSeasonsMessageType, seasons.NewScrapSeasonsHandler())
+	handlersList.RegisterHandler(events.ScrapeEventsMessageType, events.NewScrapEventsHandler())
 
 	// Create and start the worker
-	w := queue.NewWorker(q, handlersList, *workerCount, *pollInterval)
+	w := queue.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
 	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals

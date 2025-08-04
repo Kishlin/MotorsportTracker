@@ -42,9 +42,9 @@ func TestClient_TestGet(t *testing.T) {
 	})
 }
 
-type setupOption func(*Connector)
+type setupOption func(*MotorsportConnector)
 
-func setup(opts ...setupOption) *Connector {
+func setup(opts ...setupOption) *MotorsportConnector {
 	connector := NewConnector()
 
 	for _, opt := range opts {
@@ -70,7 +70,7 @@ func (irt *inMemoryRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 }
 
 func withInMemoryRoundTripper(responses map[string]http.Response) setupOption {
-	return func(c *Connector) {
+	return func(c *MotorsportConnector) {
 		c.client.Transport = &inMemoryRoundTripper{responses}
 	}
 }

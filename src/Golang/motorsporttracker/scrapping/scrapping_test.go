@@ -6,7 +6,6 @@ import (
 )
 
 func TestBaseScrappingHandler_Validate(t *testing.T) {
-	handler := &BaseScrappingHandler{}
 	ctx := context.Background()
 
 	t.Run("Returns No Error When Content Validates Schema", func(t *testing.T) {
@@ -19,7 +18,7 @@ func TestBaseScrappingHandler_Validate(t *testing.T) {
 		}`
 		content := []byte(`{"name": "test"}`)
 
-		err := handler.Validate(ctx, content, schema)
+		err := Validate(ctx, content, schema)
 
 		if err != nil {
 			t.Errorf("Expected no error when content validates schema, got: %v", err)
@@ -36,7 +35,7 @@ func TestBaseScrappingHandler_Validate(t *testing.T) {
 		}`
 		content := []byte(`{}`) // missing required "name" field
 
-		err := handler.Validate(ctx, content, schema)
+		err := Validate(ctx, content, schema)
 
 		if err == nil {
 			t.Error("Expected validation error when content doesn't match schema")
@@ -54,7 +53,7 @@ func TestBaseScrappingHandler_Validate(t *testing.T) {
 		}`
 		content := []byte(`{}`) // missing both required fields
 
-		err := handler.Validate(ctx, content, schema)
+		err := Validate(ctx, content, schema)
 
 		if err == nil {
 			t.Error("Expected validation error when content has multiple validation failures")
@@ -71,7 +70,7 @@ func TestBaseScrappingHandler_Validate(t *testing.T) {
 		schema := `{"type": "invalid-schema"` // malformed JSON
 		content := []byte(`{"name": "test"}`)
 
-		err := handler.Validate(ctx, content, schema)
+		err := Validate(ctx, content, schema)
 
 		if err == nil {
 			t.Error("Expected error when schema is malformed")
@@ -82,7 +81,7 @@ func TestBaseScrappingHandler_Validate(t *testing.T) {
 		schema := `{"type": "object"}`
 		content := []byte(`{"name": "test"`) // malformed JSON content
 
-		err := handler.Validate(ctx, content, schema)
+		err := Validate(ctx, content, schema)
 
 		if err == nil {
 			t.Error("Expected error when content is malformed JSON")

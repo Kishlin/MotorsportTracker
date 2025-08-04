@@ -6,16 +6,10 @@ import (
 	"errors"
 
 	"github.com/qri-io/jsonschema"
-
-	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 )
 
-type BaseScrappingHandler struct {
-	Connector *client.Connector
-}
-
-// Validate checks if the response conforms to the expected schema.
-func (h *BaseScrappingHandler) Validate(ctx context.Context, content []byte, expectedSchema string) error {
+// Validate checks if the content conforms to the expected schema.
+func Validate(ctx context.Context, content []byte, expectedSchema string) error {
 	rs := jsonschema.Schema{}
 	if err := rs.UnmarshalJSON([]byte(expectedSchema)); err != nil {
 		return errors.New("unmarshalling expectedSchema: " + err.Error())

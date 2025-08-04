@@ -1,34 +1,34 @@
-package cli
+package scrapping
 
 import (
 	"fmt"
+
+	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
-// Command represents a CLI command that can be executed.
-type Command interface {
-	// Validate checks if the provided arguments and options are valid for this command.
+// Intent represents a scrapping intent that can be validated and converted to a Intent.
+type Intent interface {
 	Validate(arguments []string, options map[string]string) error
 
-	// Execute executes the command with the provided arguments and options.
-	Execute(arguments []string, options map[string]string) error
+	ToMessage() queue.Message
 }
 
-// CommandConfig holds the configuration for a command.
-type CommandConfig struct {
-	// Name is the identifier of the command (e.g., "scrap:series").
+// IntentConfig holds the configuration for a Intent.
+type IntentConfig struct {
+	// Name is the identifier of the Intent (e.g., "scrap:series").
 	Name string
 
-	// Description provides information about what the command does.
+	// Description provides information about what the Intent does.
 	Description string
 
-	// Arguments are positional arguments for the command.
+	// Arguments are positional arguments for the Intent.
 	Arguments []Argument
 
-	// Options are named optional arguments for the command.
+	// Options are named optional arguments for the Intent.
 	Options []Option
 }
 
-// Argument represents a positional argument for a command.
+// Argument represents a positional argument for a Intent.
 type Argument struct {
 	// Name is the identifier of the argument.
 	Name string
@@ -40,7 +40,7 @@ type Argument struct {
 	Required bool
 }
 
-// Option represents an optional named argument for a command.
+// Option represents an optional named argument for a Intent.
 type Option struct {
 	// Name is the identifier of the option (e.g., "series").
 	Name string
@@ -59,13 +59,13 @@ type Option struct {
 	Default string
 }
 
-// BaseCommand provides a basic implementation of Command that other commands can embed.
-type BaseCommand struct {
-	Config CommandConfig
+// BaseIntent provides a basic implementation of Intent that other Intents can embed.
+type BaseIntent struct {
+	Config IntentConfig
 }
 
 // Validate checks if all required arguments are provided and options are properly formatted.
-func (c *BaseCommand) Validate(arguments []string, options map[string]string) error {
+func (c *BaseIntent) Validate(arguments []string, options map[string]string) error {
 	// Check required arguments
 	requiredArgCount := 0
 	for _, arg := range c.Config.Arguments {
