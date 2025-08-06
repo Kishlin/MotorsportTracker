@@ -6,11 +6,11 @@ import (
 )
 
 func TestInMemoryConnector_Get_ReturnsData(t *testing.T) {
-	expectedData := []byte("mock response data")
+	expectedData := []byte("mock response Data")
 	mockData := map[string]MockResponse{
 		"https://example.com/api/data": {
-			data: expectedData,
-			err:  nil,
+			Data: expectedData,
+			Err:  nil,
 		},
 	}
 
@@ -30,8 +30,8 @@ func TestInMemoryConnector_Get_ReturnsError(t *testing.T) {
 	expectedError := errors.New("mock error response")
 	mockData := map[string]MockResponse{
 		"https://example.com/api/error": {
-			data: nil,
-			err:  expectedError,
+			Data: nil,
+			Err:  expectedError,
 		},
 	}
 
@@ -50,8 +50,8 @@ func TestInMemoryConnector_Get_ReturnsError(t *testing.T) {
 func TestInMemoryConnector_Get_PanicsOnUnexpectedURL(t *testing.T) {
 	mockData := map[string]MockResponse{
 		"https://example.com/api/known": {
-			data: []byte("known data"),
-			err:  nil,
+			Data: []byte("known Data"),
+			Err:  nil,
 		},
 	}
 
@@ -74,16 +74,16 @@ func TestInMemoryConnector_Get_PanicsOnUnexpectedURL(t *testing.T) {
 func TestInMemoryConnector_Get_MultipleURLs(t *testing.T) {
 	mockData := map[string]MockResponse{
 		"https://api.com/users": {
-			data: []byte(`{"users": []}`),
-			err:  nil,
+			Data: []byte(`{"users": []}`),
+			Err:  nil,
 		},
 		"https://api.com/products": {
-			data: []byte(`{"products": []}`),
-			err:  nil,
+			Data: []byte(`{"products": []}`),
+			Err:  nil,
 		},
 		"https://api.com/error": {
-			data: nil,
-			err:  errors.New("service unavailable"),
+			Data: nil,
+			Err:  errors.New("service unavailable"),
 		},
 	}
 

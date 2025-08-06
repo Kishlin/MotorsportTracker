@@ -1,8 +1,8 @@
 package connector
 
 type MockResponse struct {
-	data []byte
-	err  error
+	Data []byte
+	Err  error
 }
 
 type InMemoryConnector struct {
@@ -19,7 +19,7 @@ func NewInMemoryConnector(data map[string]MockResponse) *InMemoryConnector {
 // Get retrieves data from the in-memory store.
 func (c *InMemoryConnector) Get(url string) ([]byte, error) {
 	if response, exists := c.data[url]; exists {
-		return response.data, response.err
+		return response.Data, response.Err
 	}
 
 	panic("attempt to get from unexpected URL: " + url)
