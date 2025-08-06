@@ -6,14 +6,14 @@ import (
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
-// Intent represents a scrapping intent that can be validated and converted to a Intent.
+// Intent represents a scrapping intent that can be validated and converted to an Intent.
 type Intent interface {
 	Validate(arguments []string, options map[string]string) error
 
 	ToMessage() queue.Message
 }
 
-// IntentConfig holds the configuration for a Intent.
+// IntentConfig holds the configuration for an Intent.
 type IntentConfig struct {
 	// Name is the identifier of the Intent (e.g., "scrap:series").
 	Name string
@@ -28,7 +28,7 @@ type IntentConfig struct {
 	Options []Option
 }
 
-// Argument represents a positional argument for a Intent.
+// Argument represents a positional argument for an Intent.
 type Argument struct {
 	// Name is the identifier of the argument.
 	Name string
@@ -40,7 +40,7 @@ type Argument struct {
 	Required bool
 }
 
-// Option represents an optional named argument for a Intent.
+// Option represents an optional named argument for an Intent.
 type Option struct {
 	// Name is the identifier of the option (e.g., "series").
 	Name string
