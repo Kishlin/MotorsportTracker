@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ScrapSeriesHandler struct {
 	db        database.Database
-	connector client.Connector
+	connector connector.Connector
 }
 
 type Series struct {
@@ -25,7 +25,7 @@ type Series struct {
 }
 
 // NewScrapSeriesHandler creates a new handler for scrapping series.
-func NewScrapSeriesHandler(db database.Database, connector client.Connector) *ScrapSeriesHandler {
+func NewScrapSeriesHandler(db database.Database, connector connector.Connector) *ScrapSeriesHandler {
 	return &ScrapSeriesHandler{
 		connector: connector,
 		db:        db,

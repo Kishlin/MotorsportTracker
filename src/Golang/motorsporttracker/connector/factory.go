@@ -1,6 +1,6 @@
-package client
+package connector
 
-type ConnectorFactory interface {
+type Factory interface {
 	NewConnector() Connector
 }
 
@@ -12,6 +12,6 @@ func (f *DefaultConnectorFactory) NewConnector() Connector {
 }
 
 // NewDefaultConnectorFactory creates a new instance of DefaultConnectorFactory.
-func NewDefaultConnectorFactory() ConnectorFactory {
+func NewDefaultConnectorFactory() Factory {
 	return &DefaultConnectorFactory{}
 }

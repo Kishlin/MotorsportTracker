@@ -1,4 +1,4 @@
-package client
+package connector
 
 import (
 	"io"
@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestClient_TestGet(t *testing.T) {
+func TestConnector_TestGet(t *testing.T) {
 	dummyResponse := "Hello World!"
 	mockResponses := map[string]http.Response{
 		"https://example.com": {

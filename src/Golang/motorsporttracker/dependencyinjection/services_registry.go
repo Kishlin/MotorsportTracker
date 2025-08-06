@@ -5,13 +5,13 @@ import (
 	"os"
 	"sync"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ServicesRegistry struct {
-	connectorFactory client.ConnectorFactory
+	connectorFactory connector.Factory
 	databaseFactory  database.Factory
 	queueFactory     queue.Factory
 
@@ -19,13 +19,13 @@ type ServicesRegistry struct {
 	coreDBOnce       sync.Once
 	intentsQueueOnce sync.Once
 
-	connector    client.Connector
+	connector    connector.Connector
 	coreDB       database.Database
 	intentsQueue queue.Queue
 }
 
 func NewServicesRegistry(
-	connectorFactory client.ConnectorFactory,
+	connectorFactory connector.Factory,
 	databaseFactory database.Factory,
 	queueFactory queue.Factory,
 ) *ServicesRegistry {
@@ -46,7 +46,7 @@ func (s *ServicesRegistry) Close() {
 	}
 }
 
-func (s *ServicesRegistry) GetConnector() client.Connector {
+func (s *ServicesRegistry) GetConnector() connector.Connector {
 	s.connectorOnce.Do(func() {
 		s.connector = s.connectorFactory.NewConnector()
 		if s.connector == nil {

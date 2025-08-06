@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/client"
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
@@ -36,7 +36,7 @@ func main() {
 	}
 
 	registry := dependencyinjection.NewServicesRegistry(
-		client.NewDefaultConnectorFactory(),
+		connector.NewDefaultConnectorFactory(),
 		database.NewDatabaseFactory(),
 		queue.NewSQSQueueFactory(),
 	)
