@@ -6,7 +6,7 @@ type Factory interface {
 
 type DefaultConnectorFactory struct{}
 
-// NewConnector creates a new instance of MotorsportConnector.
+// NewConnector creates a new instance of MotorsportStatsConnector.
 func (f *DefaultConnectorFactory) NewConnector() Connector {
 	return NewConnector()
 }

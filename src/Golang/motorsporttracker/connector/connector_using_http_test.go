@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestConnector_TestGet(t *testing.T) {
+func TestMotorsportStatsConnector_TestGet(t *testing.T) {
 	dummyResponse := "Hello World!"
 	mockResponses := map[string]http.Response{
 		"https://example.com": {
@@ -42,9 +42,9 @@ func TestConnector_TestGet(t *testing.T) {
 	})
 }
 
-type setupOption func(*MotorsportConnector)
+type setupOption func(*MotorsportStatsConnector)
 
-func setup(opts ...setupOption) *MotorsportConnector {
+func setup(opts ...setupOption) *MotorsportStatsConnector {
 	connector := NewConnector()
 
 	for _, opt := range opts {
@@ -70,7 +70,7 @@ func (irt *inMemoryRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 }
 
 func withInMemoryRoundTripper(responses map[string]http.Response) setupOption {
-	return func(c *MotorsportConnector) {
+	return func(c *MotorsportStatsConnector) {
 		c.client.Transport = &inMemoryRoundTripper{responses}
 	}
 }
