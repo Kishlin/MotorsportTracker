@@ -1,4 +1,4 @@
-package queue
+package messaging
 
 type Factory interface {
 	NewSQSQueue(config SQSConfig) (Queue, error)

@@ -1,8 +1,8 @@
 package events
 
 import (
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 const ScrapeEventsMessageType = "scrap:events"
@@ -37,9 +37,9 @@ func NewScrapEventsIntent() *ScrapEventsIntent {
 	}
 }
 
-// ToMessage converts the ScrapEventsIntent to a queue.Message.
-func (c *ScrapEventsIntent) ToMessage() queue.Message {
-	return queue.Message{
+// ToMessage converts the ScrapEventsIntent to a messaging.Message.
+func (c *ScrapEventsIntent) ToMessage() messaging.Message {
+	return messaging.Message{
 		Type:     ScrapeEventsMessageType,
 		Metadata: nil,
 	}

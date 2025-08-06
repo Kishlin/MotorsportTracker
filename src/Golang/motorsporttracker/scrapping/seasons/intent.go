@@ -1,8 +1,8 @@
 package seasons
 
 import (
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 const ScrapeSeasonsMessageType = "scrap:seasons"
@@ -32,9 +32,9 @@ func NewScrapSeasonsIntent() *ScrapSeasonsIntent {
 	}
 }
 
-// ToMessage converts the ScrapSeasonsIntent to a queue.Message.
-func (c *ScrapSeasonsIntent) ToMessage() queue.Message {
-	return queue.Message{
+// ToMessage converts the ScrapSeasonsIntent to a messaging.Message.
+func (c *ScrapSeasonsIntent) ToMessage() messaging.Message {
+	return messaging.Message{
 		Type:     ScrapeSeasonsMessageType,
 		Metadata: nil,
 	}

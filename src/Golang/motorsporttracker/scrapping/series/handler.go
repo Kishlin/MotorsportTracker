@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ScrapSeriesHandler struct {
@@ -33,7 +33,7 @@ func NewScrapSeriesHandler(db database.Database, connector connector.Connector) 
 }
 
 // Handle processes the scrapping intent for series.
-func (h *ScrapSeriesHandler) Handle(ctx context.Context, message queue.Message) error {
+func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) error {
 	resp, err := h.connector.Get(endpointSeries)
 	if err != nil {
 		return errors.New("fetching series data: " + err.Error())

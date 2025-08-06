@@ -6,13 +6,13 @@ import (
 	"strings"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 func main() {
@@ -51,7 +51,7 @@ func main() {
 	registry := dependencyinjection.NewServicesRegistry(
 		connector.NewDefaultConnectorFactory(),
 		database.NewDatabaseFactory(),
-		queue.NewSQSQueueFactory(),
+		messaging.NewSQSQueueFactory(),
 	)
 	defer registry.Close()
 

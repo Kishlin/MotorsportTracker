@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 	registry := dependencyinjection.NewServicesRegistry(
 		connector.NewDefaultConnectorFactory(),
 		database.NewDatabaseFactory(),
-		queue.NewSQSQueueFactory(),
+		messaging.NewSQSQueueFactory(),
 	)
 	defer registry.Close()
 
@@ -46,7 +46,7 @@ func main() {
 	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n", *workerCount, *pollInterval)
 
 	// Register handlers for scrapping intents
-	handlersList := queue.NewHandlersList()
+	handlersList := messaging.NewHandlersList()
 
 	handlersList.RegisterHandler(
 		series.ScrapeSeriesMessageType,
@@ -56,7 +56,7 @@ func main() {
 	handlersList.RegisterHandler(events.ScrapeEventsMessageType, events.NewScrapEventsHandler())
 
 	// Create and start the worker
-	w := queue.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
+	w := messaging.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
 	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals

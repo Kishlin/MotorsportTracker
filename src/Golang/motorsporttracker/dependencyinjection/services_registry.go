@@ -6,14 +6,14 @@ import (
 	"sync"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 type ServicesRegistry struct {
 	connectorFactory connector.Factory
 	databaseFactory  database.Factory
-	queueFactory     queue.Factory
+	queueFactory     messaging.Factory
 
 	connectorOnce    sync.Once
 	coreDBOnce       sync.Once
@@ -21,13 +21,13 @@ type ServicesRegistry struct {
 
 	connector    connector.Connector
 	coreDB       database.Database
-	intentsQueue queue.Queue
+	intentsQueue messaging.Queue
 }
 
 func NewServicesRegistry(
 	connectorFactory connector.Factory,
 	databaseFactory database.Factory,
-	queueFactory queue.Factory,
+	queueFactory messaging.Factory,
 ) *ServicesRegistry {
 	return &ServicesRegistry{
 		connectorFactory: connectorFactory,
@@ -81,9 +81,9 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) database.Databas
 	return s.coreDB
 }
 
-func (s *ServicesRegistry) GetIntentsQueue() queue.Queue {
+func (s *ServicesRegistry) GetIntentsQueue() messaging.Queue {
 	s.intentsQueueOnce.Do(func() {
-		config := queue.SQSConfig{
+		config := messaging.SQSConfig{
 			QueueName:    os.Getenv("QUEUE_SCRAPPING_INTENTS"),
 			Endpoint:     os.Getenv("SQS_ENDPOINT"),
 			Region:       os.Getenv("SQS_REGION"),

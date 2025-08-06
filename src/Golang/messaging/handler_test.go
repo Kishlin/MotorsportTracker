@@ -1,4 +1,4 @@
-package queue
+package messaging
 
 import (
 	"context"
@@ -94,7 +94,7 @@ func TestHandler_HandleMessage_HandlerNotFound(t *testing.T) {
 	}
 
 	expectedError := "no handler registered for message type: unknown-message-type"
-	if err.Error() != expectedError {
+	if err != nil && err.Error() != expectedError {
 		t.Errorf("Expected error message '%s', got '%s'", expectedError, err.Error())
 	}
 }
@@ -176,7 +176,7 @@ func TestHandler_HandleMessage_EmptyMessageType(t *testing.T) {
 	}
 
 	expectedError := "no handler registered for message type: "
-	if err.Error() != expectedError {
+	if err != nil && err.Error() != expectedError {
 		t.Errorf("Expected error message '%s', got '%s'", expectedError, err.Error())
 	}
 }

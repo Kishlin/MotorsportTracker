@@ -3,14 +3,14 @@ package scrapping
 import (
 	"fmt"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 )
 
 // Intent represents a scrapping intent that can be validated and converted to an Intent.
 type Intent interface {
 	Validate(arguments []string, options map[string]string) error
 
-	ToMessage() queue.Message
+	ToMessage() messaging.Message
 }
 
 // IntentConfig holds the configuration for an Intent.

@@ -1,8 +1,8 @@
 package series
 
 import (
+	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/queue"
 )
 
 const ScrapeSeriesMessageType = "scrap:series"
@@ -26,9 +26,9 @@ func NewScrapSeriesIntent() *ScrapSeriesIntent {
 	}
 }
 
-// ToMessage converts the ScrapSeriesIntent to a queue.Message.
-func (c *ScrapSeriesIntent) ToMessage() queue.Message {
-	return queue.Message{
+// ToMessage converts the ScrapSeriesIntent to a messaging.Message.
+func (c *ScrapSeriesIntent) ToMessage() messaging.Message {
+	return messaging.Message{
 		Type:     ScrapeSeriesMessageType,
 		Metadata: nil,
 	}
