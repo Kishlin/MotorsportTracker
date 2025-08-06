@@ -6,8 +6,31 @@ import (
 	"log"
 	"sync"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+// PGXRows wraps pgx.Rows to implement our Rows interface
+type PGXRows struct {
+	pgxRows pgx.Rows
+}
+
+func (r *PGXRows) Next() bool {
+	return r.pgxRows.Next()
+}
+
+func (r *PGXRows) Scan(dest ...any) error {
+	return r.pgxRows.Scan(dest...)
+}
+
+func (r *PGXRows) Close() error {
+	r.pgxRows.Close()
+	return nil
+}
+
+func (r *PGXRows) Err() error {
+	return r.pgxRows.Err()
+}
 
 type PGXPoolAdapter struct {
 	once sync.Once
@@ -63,6 +86,15 @@ func (p *PGXPoolAdapter) Exec(ctx context.Context, sql string, arguments ...any)
 		return fmt.Errorf("failed to execute SQL: %w", err)
 	}
 	return nil
+}
+
+func (p *PGXPoolAdapter) Query(ctx context.Context, sql string, arguments ...any) (Rows, error) {
+	rows, err := p.pool.Query(ctx, sql, arguments...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	return &PGXRows{pgxRows: rows}, nil
 }
 
 func (p *PGXPoolAdapter) Close() {

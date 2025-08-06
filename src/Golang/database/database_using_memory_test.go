@@ -336,3 +336,204 @@ func TestMemoryDatabase_ConcurrentAccess(t *testing.T) {
 		t.Errorf("Expected %d queries from concurrent access, got %d", expectedCount, len(queries))
 	}
 }
+
+func TestMemoryDatabase_Query_Success(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+	_ = db.Connect(ctx)
+	defer db.Close()
+
+	// Add test data to the series table
+	testData := []map[string]interface{}{
+		{
+			"name":       "Formula 1",
+			"uuid":       "f1-uuid-123",
+			"short_name": "F1",
+			"short_code": "F1",
+			"category":   "Formula",
+		},
+		{
+			"name":       "Formula 2",
+			"uuid":       "f2-uuid-456",
+			"short_name": "F2",
+			"short_code": "F2",
+			"category":   "Formula",
+		},
+	}
+	db.AddTestData("series", testData)
+
+	// Execute query
+	rows, err := db.Query(ctx, "SELECT name, uuid, short_name, short_code, category FROM series")
+	if err != nil {
+		t.Errorf("Query should not return error: %v", err)
+	}
+	defer func(rows Rows) {
+		err := rows.Close()
+		if err != nil {
+			t.Errorf("Close should not return error: %v", err)
+		}
+	}(rows)
+
+	// Verify results
+	rowCount := 0
+	for rows.Next() {
+		var name, uuid, shortName, shortCode, category string
+		err := rows.Scan(&name, &uuid, &shortName, &shortCode, &category)
+		if err != nil {
+			t.Errorf("Scan should not return error: %v", err)
+		}
+
+		// Since we can't guarantee the order, just verify we got valid data
+		if name == "" || uuid == "" {
+			t.Errorf("Row %d should have non-empty name and uuid, got: name=%s, uuid=%s", rowCount, name, uuid)
+		}
+
+		// Verify it matches one of our expected series
+		validSeries := (name == "Formula 1" && uuid == "f1-uuid-123") ||
+			(name == "Formula 2" && uuid == "f2-uuid-456")
+		if !validSeries {
+			t.Errorf("Row %d has unexpected data: name=%s, uuid=%s", rowCount, name, uuid)
+		}
+
+		rowCount++
+	}
+
+	if err := rows.Err(); err != nil {
+		t.Errorf("Rows iteration should not return error: %v", err)
+	}
+
+	if rowCount != 2 {
+		t.Errorf("Expected 2 rows, got %d", rowCount)
+	}
+}
+
+func TestMemoryDatabase_Query_EmptyTable(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+	_ = db.Connect(ctx)
+	defer db.Close()
+
+	// Query empty table
+	rows, err := db.Query(ctx, "SELECT * FROM series")
+	if err != nil {
+		t.Errorf("Query should not return error for empty table: %v", err)
+	}
+	defer func(rows Rows) {
+		err := rows.Close()
+		if err != nil {
+			t.Errorf("Close should not return error: %v", err)
+		}
+	}(rows)
+
+	// Verify no rows
+	rowCount := 0
+	for rows.Next() {
+		rowCount++
+	}
+
+	if rowCount != 0 {
+		t.Errorf("Expected 0 rows from empty table, got %d", rowCount)
+	}
+}
+
+func TestMemoryDatabase_Query_NotConnected(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+
+	_, err := db.Query(ctx, "SELECT * FROM series")
+	if err == nil {
+		t.Error("Query should return error when not connected")
+	}
+
+	expectedError := "database is not connected"
+	if err.Error() != expectedError {
+		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
+	}
+}
+
+func TestMemoryDatabase_Query_AfterClose(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+	_ = db.Connect(ctx)
+	db.Close()
+
+	_, err := db.Query(ctx, "SELECT * FROM series")
+	if err == nil {
+		t.Error("Query should return error after database is closed")
+	}
+
+	expectedError := "database has been closed"
+	if err.Error() != expectedError {
+		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
+	}
+}
+
+func TestMemoryDatabase_Query_NonSelectStatement(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+	_ = db.Connect(ctx)
+	defer db.Close()
+
+	_, err := db.Query(ctx, "INSERT INTO series VALUES (1, 'test')")
+	if err == nil {
+		t.Error("Query should return error for non-SELECT statements")
+	}
+
+	expectedError := "only SELECT queries are supported in memory database"
+	if err.Error() != expectedError {
+		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
+	}
+}
+
+func TestMemoryDatabase_AddTestData(t *testing.T) {
+	db := NewMemoryDatabase()
+
+	testData := []map[string]interface{}{
+		{"id": 1, "name": "test1"},
+		{"id": 2, "name": "test2"},
+	}
+
+	db.AddTestData("test_table", testData)
+
+	retrievedData := db.GetTestData("test_table")
+	if len(retrievedData) != 2 {
+		t.Errorf("Expected 2 rows in test data, got %d", len(retrievedData))
+	}
+
+	if retrievedData[0]["name"] != "test1" {
+		t.Errorf("Expected first row name 'test1', got '%v'", retrievedData[0]["name"])
+	}
+}
+
+func TestMemoryRows_ScanTypes(t *testing.T) {
+	rows := &MemoryRows{
+		rows: []map[string]interface{}{
+			{"name": "Test", "id": 42, "nullable": nil},
+		},
+		columns: []string{"name", "id", "nullable"},
+		current: 0,
+	}
+
+	if !rows.Next() {
+		t.Fatal("Should have next row")
+	}
+
+	var name string
+	var id int
+	var nullable *string
+
+	err := rows.Scan(&name, &id, &nullable)
+	if err != nil {
+		t.Errorf("Scan should not return error: %v", err)
+	}
+
+	if name != "Test" {
+		t.Errorf("Expected name 'Test', got '%s'", name)
+	}
+	if id != 42 {
+		t.Errorf("Expected id 42, got %d", id)
+	}
+	if nullable != nil {
+		t.Errorf("Expected nullable to be nil, got %v", nullable)
+	}
+}
