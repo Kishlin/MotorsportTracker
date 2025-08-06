@@ -28,11 +28,11 @@ func main() {
 	var err error
 
 	switch subcommand {
-	case "series":
+	case series.ScrapeSeriesIntentName:
 		intent = series.NewScrapSeriesIntent()
-	case "seasons":
+	case seasons.ScrapeSeasonsIntentName:
 		intent = seasons.NewScrapSeasonsIntent()
-	case "events":
+	case events.ScrapeEventsIntentName:
 		intent = events.NewScrapEventsIntent()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)

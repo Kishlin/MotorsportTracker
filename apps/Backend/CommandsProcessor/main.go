@@ -49,11 +49,11 @@ func main() {
 	handlersList := messaging.NewHandlersList()
 
 	handlersList.RegisterHandler(
-		series.ScrapeSeriesMessageType,
+		series.ScrapeSeriesIntentName,
 		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetConnector()),
 	)
-	handlersList.RegisterHandler(seasons.ScrapeSeasonsMessageType, seasons.NewScrapSeasonsHandler())
-	handlersList.RegisterHandler(events.ScrapeEventsMessageType, events.NewScrapEventsHandler())
+	handlersList.RegisterHandler(seasons.ScrapeSeasonsIntentName, seasons.NewScrapSeasonsHandler())
+	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
 
 	// Create and start the worker
 	w := messaging.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)

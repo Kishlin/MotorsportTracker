@@ -9,7 +9,7 @@ func TestScrapSeriesIntent_ToMessage(t *testing.T) {
 
 	message := intent.ToMessage()
 
-	if message.Type != ScrapeSeriesMessageType {
-		t.Errorf("Expected message type '%s', got '%s'", ScrapeSeriesMessageType, message.Type)
+	if message.Type != ScrapeSeriesIntentName {
+		t.Errorf("Expected message type '%s', got '%s'", ScrapeSeriesIntentName, message.Type)
 	}
 }

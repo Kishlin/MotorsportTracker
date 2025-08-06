@@ -5,7 +5,7 @@ import (
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 )
 
-const ScrapeEventsMessageType = "scrap:events"
+const ScrapeEventsIntentName = "events"
 
 // ScrapEventsIntent is an Intent to scrape events.
 type ScrapEventsIntent struct {
@@ -17,8 +17,8 @@ func NewScrapEventsIntent() *ScrapEventsIntent {
 	return &ScrapEventsIntent{
 		BaseIntent: scrapping.BaseIntent{
 			Config: scrapping.IntentConfig{
-				Name:        "scrap:events",
-				Description: "Scrap all available events",
+				Name:        ScrapeEventsIntentName,
+				Description: "Scrape all available events",
 				Arguments: []scrapping.Argument{
 					{
 						Name:        "series",
@@ -40,7 +40,7 @@ func NewScrapEventsIntent() *ScrapEventsIntent {
 // ToMessage converts the ScrapEventsIntent to a messaging.Message.
 func (c *ScrapEventsIntent) ToMessage() messaging.Message {
 	return messaging.Message{
-		Type:     ScrapeEventsMessageType,
+		Type:     ScrapeEventsIntentName,
 		Metadata: nil,
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 )
 
-const ScrapeSeasonsMessageType = "scrap:seasons"
+const ScrapeSeasonsIntentName = "seasons"
 
 // ScrapSeasonsIntent is an Intent to scrape seasons.
 type ScrapSeasonsIntent struct {
@@ -17,8 +17,8 @@ func NewScrapSeasonsIntent() *ScrapSeasonsIntent {
 	return &ScrapSeasonsIntent{
 		BaseIntent: scrapping.BaseIntent{
 			Config: scrapping.IntentConfig{
-				Name:        "scrap:seasons",
-				Description: "Scrap all available seasons",
+				Name:        ScrapeSeasonsIntentName,
+				Description: "Scrape all available seasons",
 				Arguments: []scrapping.Argument{
 					{
 						Name:        "series",
@@ -35,7 +35,7 @@ func NewScrapSeasonsIntent() *ScrapSeasonsIntent {
 // ToMessage converts the ScrapSeasonsIntent to a messaging.Message.
 func (c *ScrapSeasonsIntent) ToMessage() messaging.Message {
 	return messaging.Message{
-		Type:     ScrapeSeasonsMessageType,
+		Type:     ScrapeSeasonsIntentName,
 		Metadata: nil,
 	}
 }
