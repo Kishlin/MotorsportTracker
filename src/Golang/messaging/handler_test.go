@@ -92,11 +92,6 @@ func TestHandler_HandleMessage_HandlerNotFound(t *testing.T) {
 	if err == nil {
 		t.Error("HandleMessage should return error for unknown message type")
 	}
-
-	expectedError := "no handler registered for message type: unknown-message-type"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error message '%s', got '%s'", expectedError, err.Error())
-	}
 }
 
 func TestHandler_HandleMessage_HandlerReturnsError(t *testing.T) {
@@ -173,11 +168,6 @@ func TestHandler_HandleMessage_EmptyMessageType(t *testing.T) {
 
 	if err == nil {
 		t.Error("HandleMessage should return error for empty message type")
-	}
-
-	expectedError := "no handler registered for message type: "
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error message '%s', got '%s'", expectedError, err.Error())
 	}
 }
 

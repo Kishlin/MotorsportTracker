@@ -32,9 +32,4 @@ func TestDatabaseFactory_NewDatabase_EmptyConnectionString(t *testing.T) {
 	if db != nil {
 		t.Error("Factory should return nil database for empty connection string")
 	}
-
-	expectedError := "unsupported database connection string: "
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 }

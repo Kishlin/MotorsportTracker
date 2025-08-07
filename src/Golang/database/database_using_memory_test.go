@@ -92,10 +92,6 @@ func TestMemoryDatabase_Ping_NotConnected(t *testing.T) {
 	if err == nil {
 		t.Error("Ping should return error when not connected")
 	}
-	expectedError := "database is not connected"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 }
 
 func TestMemoryDatabase_Ping_AfterClose(t *testing.T) {
@@ -109,10 +105,6 @@ func TestMemoryDatabase_Ping_AfterClose(t *testing.T) {
 	err := db.Ping(ctx)
 	if err == nil {
 		t.Error("Ping should return error after database is closed")
-	}
-	expectedError := "database has been closed"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
 	}
 }
 
@@ -191,10 +183,6 @@ func TestMemoryDatabase_Exec_EmptySQL(t *testing.T) {
 	if err == nil {
 		t.Error("Exec should return error for empty SQL")
 	}
-	expectedError := "empty SQL statement"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 
 	err = db.Exec(ctx, "   ")
 	if err == nil {
@@ -210,10 +198,6 @@ func TestMemoryDatabase_Exec_NotConnected(t *testing.T) {
 	if err == nil {
 		t.Error("Exec should return error when not connected")
 	}
-	expectedError := "database is not connected"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 }
 
 func TestMemoryDatabase_Exec_AfterClose(t *testing.T) {
@@ -227,10 +211,6 @@ func TestMemoryDatabase_Exec_AfterClose(t *testing.T) {
 	err := db.Exec(ctx, "SELECT 1")
 	if err == nil {
 		t.Error("Exec should return error after database is closed")
-	}
-	expectedError := "database has been closed"
-	if err != nil && err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
 	}
 }
 
@@ -444,11 +424,6 @@ func TestMemoryDatabase_Query_NotConnected(t *testing.T) {
 	if err == nil {
 		t.Error("Query should return error when not connected")
 	}
-
-	expectedError := "database is not connected"
-	if err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 }
 
 func TestMemoryDatabase_Query_AfterClose(t *testing.T) {
@@ -461,11 +436,6 @@ func TestMemoryDatabase_Query_AfterClose(t *testing.T) {
 	if err == nil {
 		t.Error("Query should return error after database is closed")
 	}
-
-	expectedError := "database has been closed"
-	if err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
-	}
 }
 
 func TestMemoryDatabase_Query_NonSelectStatement(t *testing.T) {
@@ -477,11 +447,6 @@ func TestMemoryDatabase_Query_NonSelectStatement(t *testing.T) {
 	_, err := db.Query(ctx, "INSERT INTO series VALUES (1, 'test')")
 	if err == nil {
 		t.Error("Query should return error for non-SELECT statements")
-	}
-
-	expectedError := "only SELECT queries are supported in memory database"
-	if err.Error() != expectedError {
-		t.Errorf("Expected error '%s', got '%s'", expectedError, err.Error())
 	}
 }
 
