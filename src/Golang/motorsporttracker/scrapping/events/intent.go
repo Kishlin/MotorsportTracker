@@ -1,7 +1,6 @@
 package events
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 )
 
@@ -19,28 +18,20 @@ func NewScrapEventsIntent() *ScrapEventsIntent {
 			Config: scrapping.IntentConfig{
 				Name:        ScrapeEventsIntentName,
 				Description: "Scrape all available events",
-				Arguments: []scrapping.Argument{
+				Arguments:   []scrapping.Argument{},
+				Options: []scrapping.Option{
 					{
-						Name:        "series",
-						Description: "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
-						Required:    true,
+						Name:          "series",
+						Description:   "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
+						RequiresValue: true,
 					},
 					{
-						Name:        "season",
-						Description: "Season identifier (e.g., 2025)",
-						Required:    true,
+						Name:          "season",
+						Description:   "Season identifier (e.g., 2025)",
+						RequiresValue: true,
 					},
 				},
-				Options: []scrapping.Option{},
 			},
 		},
-	}
-}
-
-// ToMessage converts the ScrapEventsIntent to a messaging.Message.
-func (c *ScrapEventsIntent) ToMessage() messaging.Message {
-	return messaging.Message{
-		Type:     ScrapeEventsIntentName,
-		Metadata: nil,
 	}
 }

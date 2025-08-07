@@ -8,9 +8,7 @@ import (
 
 // Intent represents a scrapping intent that can be validated and converted to an Intent.
 type Intent interface {
-	Validate(arguments []string, options map[string]string) error
-
-	ToMessage() messaging.Message
+	ToMessage(arguments []string, options map[string]string) (messaging.Message, error)
 }
 
 // IntentConfig holds the configuration for an Intent.
@@ -35,9 +33,6 @@ type Argument struct {
 
 	// Description provides information about the argument.
 	Description string
-
-	// Required indicates if the argument must be provided.
-	Required bool
 }
 
 // Option represents an optional named argument for an Intent.
@@ -64,18 +59,42 @@ type BaseIntent struct {
 	Config IntentConfig
 }
 
-// Validate checks if all required arguments are provided and options are properly formatted.
-func (c *BaseIntent) Validate(arguments []string, options map[string]string) error {
-	// Check required arguments
-	requiredArgCount := 0
-	for _, arg := range c.Config.Arguments {
-		if arg.Required {
-			requiredArgCount++
+func (c *BaseIntent) ToMessage(arguments []string, options map[string]string) (messaging.Message, error) {
+	err := c.validate(arguments, options)
+	if err != nil {
+		return messaging.Message{}, fmt.Errorf("validation error: %w", err)
+	}
+
+	metadata := make(map[string]string)
+
+	// Map all arguments to their configured names (validation ensures we have enough)
+	for i, arg := range c.Config.Arguments {
+		metadata[arg.Name] = arguments[i]
+	}
+
+	// Only include options that are defined in the config
+	for _, configOption := range c.Config.Options {
+		// Check both long name and short name
+		if value, exists := options[configOption.Name]; exists {
+			metadata[configOption.Name] = value
+		} else if configOption.ShortName != "" {
+			if value, exists := options[configOption.ShortName]; exists {
+				metadata[configOption.Name] = value // Store using long name
+			}
 		}
 	}
 
-	if len(arguments) < requiredArgCount {
-		return fmt.Errorf("expected at least %d arguments, got %d", requiredArgCount, len(arguments))
+	return messaging.Message{
+		Type:     c.Config.Name,
+		Metadata: metadata,
+	}, nil
+}
+
+// validate checks if all required arguments are provided and options are properly formatted.
+func (c *BaseIntent) validate(arguments []string, options map[string]string) error {
+	// Check that all positional arguments are provided (all arguments are now required)
+	if len(arguments) < len(c.Config.Arguments) {
+		return fmt.Errorf("expected %d arguments, got %d", len(c.Config.Arguments), len(arguments))
 	}
 
 	// Check options that require values

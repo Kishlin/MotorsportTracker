@@ -1,7 +1,6 @@
 package seasons
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 )
 
@@ -19,23 +18,15 @@ func NewScrapSeasonsIntent() *ScrapSeasonsIntent {
 			Config: scrapping.IntentConfig{
 				Name:        ScrapeSeasonsIntentName,
 				Description: "Scrape all available seasons",
-				Arguments: []scrapping.Argument{
+				Arguments:   []scrapping.Argument{},
+				Options: []scrapping.Option{
 					{
-						Name:        "series",
-						Description: "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
-						Required:    true,
+						Name:          "series",
+						Description:   "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",
+						RequiresValue: true,
 					},
 				},
-				Options: []scrapping.Option{},
 			},
 		},
-	}
-}
-
-// ToMessage converts the ScrapSeasonsIntent to a messaging.Message.
-func (c *ScrapSeasonsIntent) ToMessage() messaging.Message {
-	return messaging.Message{
-		Type:     ScrapeSeasonsIntentName,
-		Metadata: nil,
 	}
 }

@@ -42,9 +42,9 @@ func main() {
 
 	arguments, options := parseArgs(args)
 
-	err = intent.Validate(arguments, options)
+	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error validating arguments: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
 		os.Exit(1)
 	}
 
@@ -55,9 +55,8 @@ func main() {
 	)
 	defer registry.Close()
 
-	err = registry.GetIntentsQueue().Send(
-		intent.ToMessage(),
-	)
+	err = registry.GetIntentsQueue().Send(message)
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
