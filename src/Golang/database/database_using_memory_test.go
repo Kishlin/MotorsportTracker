@@ -326,24 +326,24 @@ func TestMemoryDatabase_Query_Success(t *testing.T) {
 	// Add test data to the series table
 	testData := []map[string]interface{}{
 		{
-			"name":       "Formula 1",
-			"uuid":       "f1-uuid-123",
-			"short_name": "F1",
-			"short_code": "F1",
-			"category":   "Formula",
+			"name":          "Formula 1",
+			"external_uuid": "f1-uuid-123",
+			"short_name":    "F1",
+			"short_code":    "F1",
+			"category":      "Formula",
 		},
 		{
-			"name":       "Formula 2",
-			"uuid":       "f2-uuid-456",
-			"short_name": "F2",
-			"short_code": "F2",
-			"category":   "Formula",
+			"name":          "Formula 2",
+			"external_uuid": "f2-uuid-456",
+			"short_name":    "F2",
+			"short_code":    "F2",
+			"category":      "Formula",
 		},
 	}
 	db.AddTestData("series", testData)
 
 	// Execute query
-	rows, err := db.Query(ctx, "SELECT name, uuid, short_name, short_code, category FROM series")
+	rows, err := db.Query(ctx, "SELECT name, external_uuid, short_name, short_code, category FROM series")
 	if err != nil {
 		t.Errorf("Query should not return error: %v", err)
 	}

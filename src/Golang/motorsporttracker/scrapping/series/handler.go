@@ -19,11 +19,11 @@ type ScrapSeriesHandler struct {
 }
 
 type Series struct {
-	Name      string `json:"name"`
-	UUID      string `json:"uuid"`
-	ShortName string `json:"shortName"`
-	ShortCode string `json:"shortCode"`
-	Category  string `json:"category"`
+	Name         string `json:"name"`
+	ExternalUUID string `json:"uuid"` // API returns "uuid", we store as "external_uuid"
+	ShortName    string `json:"shortName"`
+	ShortCode    string `json:"shortCode"`
+	Category     string `json:"category"`
 }
 
 // NewScrapSeriesHandler creates a new handler for scrapping series.
@@ -64,29 +64,29 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 	warningCount := 0
 
 	for _, series := range seriesList {
-		if existingData, exists := existingSeries[series.UUID]; exists {
+		if existingData, exists := existingSeries[series.ExternalUUID]; exists {
 			existingSeriesCount++
-			log.Printf("Series already exists: %s (UUID: %s)", series.Name, series.UUID)
+			log.Printf("Series already exists: %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
 
 			// Compare data and log warnings if different
 			if h.seriesAreEqual(series, existingData) {
 				warningCount++
-				log.Printf("WARNING: Series data differs for %s (UUID: %s)", series.Name, series.UUID)
+				log.Printf("WARNING: Series data differs for %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
 				h.logSeriesDifferences(series, existingData)
 			}
 		} else {
 			// Insert new series into the database
 			err = h.db.Exec(ctx, `
-				INSERT INTO series (name, uuid, short_name, short_code, category)
+				INSERT INTO series (name, external_uuid, short_name, short_code, category)
 				VALUES ($1, $2, $3, $4, $5)`,
-				series.Name, series.UUID, series.ShortName, series.ShortCode, series.Category)
+				series.Name, series.ExternalUUID, series.ShortName, series.ShortCode, series.Category)
 
 			if err != nil {
 				return errors.New("inserting series into database: " + err.Error())
 			}
 
 			newSeriesCount++
-			log.Printf("Inserted new series: %s (UUID: %s)", series.Name, series.UUID)
+			log.Printf("Inserted new series: %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
 		}
 	}
 
@@ -98,7 +98,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 
 // getExistingSeries retrieves all existing series from the database
 func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]Series, error) {
-	rows, err := h.db.Query(ctx, "SELECT name, uuid, short_name, short_code, category FROM series")
+	rows, err := h.db.Query(ctx, "SELECT name, external_uuid, short_name, short_code, category FROM series")
 	if err != nil {
 		return nil, fmt.Errorf("querying existing series: %w", err)
 	}
@@ -113,12 +113,16 @@ func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]
 
 	for rows.Next() {
 		var series Series
-		err := rows.Scan(&series.Name, &series.UUID, &series.ShortName, &series.ShortCode, &series.Category)
+		err := rows.Scan(&series.Name, &series.ExternalUUID, &series.ShortName, &series.ShortCode, &series.Category)
 		if err != nil {
 			return nil, fmt.Errorf("scanning series row: %w", err)
 		}
 
-		existingSeries[series.UUID] = series
+		// Debug logging to see what we actually scanned
+		log.Printf("DEBUG: Scanned series - Name: '%s', ExternalUUID: '%s', ShortName: '%s', ShortCode: '%s', Category: '%s'",
+			series.Name, series.ExternalUUID, series.ShortName, series.ShortCode, series.Category)
+
+		existingSeries[series.ExternalUUID] = series
 	}
 
 	if err := rows.Err(); err != nil {

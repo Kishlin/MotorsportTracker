@@ -299,7 +299,7 @@ func (m *MemoryDatabase) determineColumns(data []map[string]interface{}, tableNa
 	// Always return columns in a consistent order for known tables
 	switch tableName {
 	case "series":
-		return []string{"name", "uuid", "short_name", "short_code", "category"}
+		return []string{"name", "external_uuid", "short_name", "short_code", "category"}
 	default:
 		// For unknown tables, use the first row's keys if available
 		if len(data) > 0 {
