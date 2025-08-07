@@ -45,8 +45,8 @@ func TestMemoryDatabase_Connect_AlreadyConnected(t *testing.T) {
 
 	// Connect second time
 	err2 := db.Connect(ctx)
-	if err2 != nil {
-		t.Errorf("Second connect should not return error: %v", err2)
+	if err2 == nil {
+		t.Errorf("Second connect should return error")
 	}
 	if !db.IsConnected() {
 		t.Error("Database should still be connected")

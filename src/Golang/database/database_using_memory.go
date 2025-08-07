@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -46,12 +47,12 @@ func (r *MemoryRows) Next() bool {
 
 func (r *MemoryRows) Scan(dest ...any) error {
 	if r.current <= 0 || r.current > len(r.rows) {
-		return fmt.Errorf("no current row")
+		return errors.New("no current row")
 	}
 
 	row := r.rows[r.current-1]
 	if len(dest) > len(r.columns) {
-		return fmt.Errorf("too many destination arguments")
+		return errors.New("too many destination arguments")
 	}
 
 	for i, col := range r.columns {
@@ -107,12 +108,11 @@ func (m *MemoryDatabase) Connect(_ context.Context) error {
 	defer m.mu.Unlock()
 
 	if m.closed {
-		return fmt.Errorf("database has been closed")
+		return errors.New("database has been closed")
 	}
 
 	if m.connected {
-		log.Println("Memory database already connected")
-		return nil
+		return errors.New("database is already connected")
 	}
 
 	m.connected = true
@@ -127,11 +127,11 @@ func (m *MemoryDatabase) Ping(_ context.Context) error {
 	defer m.mu.RUnlock()
 
 	if m.closed {
-		return fmt.Errorf("database has been closed")
+		return errors.New("database has been closed")
 	}
 
 	if !m.connected {
-		return fmt.Errorf("database is not connected")
+		return errors.New("database is not connected")
 	}
 
 	return nil
@@ -144,16 +144,16 @@ func (m *MemoryDatabase) Exec(_ context.Context, sql string, arguments ...any) e
 	defer m.mu.Unlock()
 
 	if m.closed {
-		return fmt.Errorf("database has been closed")
+		return errors.New("database has been closed")
 	}
 
 	if !m.connected {
-		return fmt.Errorf("database is not connected")
+		return errors.New("database is not connected")
 	}
 
 	// Simulate basic SQL validation
 	if strings.TrimSpace(sql) == "" {
-		return fmt.Errorf("empty SQL statement")
+		return errors.New("empty SQL statement")
 	}
 
 	// Store the query for testing purposes
@@ -171,28 +171,28 @@ func (m *MemoryDatabase) Exec(_ context.Context, sql string, arguments ...any) e
 }
 
 // Query executes a SQL query and returns rows (simulated for in-memory)
-func (m *MemoryDatabase) Query(ctx context.Context, sql string, arguments ...any) (Rows, error) {
+func (m *MemoryDatabase) Query(_ context.Context, sql string, arguments ...any) (Rows, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
 	if m.closed {
-		return nil, fmt.Errorf("database has been closed")
+		return nil, errors.New("database has been closed")
 	}
 
 	if !m.connected {
-		return nil, fmt.Errorf("database is not connected")
+		return nil, errors.New("database is not connected")
 	}
 
 	// Simple SQL parsing for SELECT statements
 	sql = strings.TrimSpace(strings.ToLower(sql))
 	if !strings.HasPrefix(sql, "select") {
-		return nil, fmt.Errorf("only SELECT queries are supported in memory database")
+		return nil, errors.New("only SELECT queries are supported in memory database")
 	}
 
 	// Extract table name (very basic parsing)
 	tableName := m.extractTableName(sql)
 	if tableName == "" {
-		return nil, fmt.Errorf("could not determine table name from query")
+		return nil, errors.New("could not determine table name from query")
 	}
 
 	// Get data from the table
