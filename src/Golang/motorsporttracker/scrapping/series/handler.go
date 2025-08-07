@@ -53,7 +53,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 		return errors.New("unmarshalling series data: " + err.Error())
 	}
 
-	// Get existing series from database for comparison
+	// Get existing series from the database for comparison
 	existingSeries, err := h.getExistingSeries(ctx)
 	if err != nil {
 		return errors.New("fetching existing series from database: " + err.Error())
