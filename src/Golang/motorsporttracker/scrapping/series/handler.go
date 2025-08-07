@@ -69,7 +69,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 			log.Printf("Series already exists: %s (UUID: %s)", series.Name, series.UUID)
 
 			// Compare data and log warnings if different
-			if h.compareSeriesData(series, existingData) {
+			if h.seriesAreEqual(series, existingData) {
 				warningCount++
 				log.Printf("WARNING: Series data differs for %s (UUID: %s)", series.Name, series.UUID)
 				h.logSeriesDifferences(series, existingData)
@@ -129,9 +129,8 @@ func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]
 	return existingSeries, nil
 }
 
-// compareSeriesData compares new series data with existing data
-// Returns true if there are differences
-func (h *ScrapSeriesHandler) compareSeriesData(newSeries, existingSeries Series) bool {
+// seriesAreEqual compares new series data with existing data
+func (h *ScrapSeriesHandler) seriesAreEqual(newSeries, existingSeries Series) bool {
 	return newSeries.Name != existingSeries.Name ||
 		newSeries.ShortName != existingSeries.ShortName ||
 		newSeries.ShortCode != existingSeries.ShortCode ||

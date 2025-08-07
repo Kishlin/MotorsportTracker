@@ -506,7 +506,7 @@ func TestScrapSeriesHandler_Handle_DataDifferences_Warning(t *testing.T) {
 	// but the handler should log warnings about the differences
 }
 
-func TestScrapSeriesHandler_CompareSeriesData(t *testing.T) {
+func TestScrapSeriesHandler_SeriesAreEqual(t *testing.T) {
 	handler := &ScrapSeriesHandler{}
 
 	// Test identical data
@@ -519,20 +519,20 @@ func TestScrapSeriesHandler_CompareSeriesData(t *testing.T) {
 	}
 	series2 := series1
 
-	if handler.compareSeriesData(series1, series2) {
+	if handler.seriesAreEqual(series1, series2) {
 		t.Error("Identical series data should not show differences")
 	}
 
 	// Test different name
 	series2.Name = "Formula One"
-	if !handler.compareSeriesData(series1, series2) {
+	if !handler.seriesAreEqual(series1, series2) {
 		t.Error("Different names should show differences")
 	}
 
 	// Test different category
 	series2.Name = series1.Name // Reset name
 	series2.Category = "Single Seater"
-	if !handler.compareSeriesData(series1, series2) {
+	if !handler.seriesAreEqual(series1, series2) {
 		t.Error("Different categories should show differences")
 	}
 }
