@@ -11,26 +11,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
-// SQSConfig holds the configuration for SQS queue connection
-type SQSConfig struct {
-	Endpoint     string // SQS endpoint URL (e.g., http://localhost:9324 for local, https://sqs.region.amazonaws.com for prod)
-	Region       string // AWS region (e.g., elasticmq for local, us-east-1 for prod)
-	QueueName    string // Name of the SQS queue
-	AccessKey    string // AWS access key
-	SecretKey    string // AWS secret key
-	SessionToken string // AWS session token (optional)
-}
-
 // SQSQueue implements Queue interface using AWS SQS
 type SQSQueue struct {
 	client    *sqs.SQS
 	queueURL  string
 	queueName string
-	config    SQSConfig
+	config    QueueConfig
 }
 
 // NewSQSQueueWithConfig creates a new SQS queue client with the provided configuration
-func NewSQSQueueWithConfig(config SQSConfig) *SQSQueue {
+func NewSQSQueueWithConfig(config QueueConfig) *SQSQueue {
 	return &SQSQueue{
 		queueName: config.QueueName,
 		config:    config,

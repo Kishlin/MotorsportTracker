@@ -15,3 +15,15 @@ func (f *DefaultConnectorFactory) NewConnector() Connector {
 func NewDefaultConnectorFactory() Factory {
 	return &DefaultConnectorFactory{}
 }
+
+type InMemoryConnectorFactory struct{}
+
+// NewConnector creates a new instance of InMemoryConnector.
+func (f *InMemoryConnectorFactory) NewConnector() Connector {
+	return NewInMemoryConnector(make(map[string]MockResponse))
+}
+
+// NewInMemoryConnectorFactory creates a new instance of InMemoryConnectorFactory.
+func NewInMemoryConnectorFactory() Factory {
+	return &InMemoryConnectorFactory{}
+}

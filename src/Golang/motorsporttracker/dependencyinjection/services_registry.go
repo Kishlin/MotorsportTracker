@@ -83,7 +83,7 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) database.Databas
 
 func (s *ServicesRegistry) GetIntentsQueue() messaging.Queue {
 	s.intentsQueueOnce.Do(func() {
-		config := messaging.SQSConfig{
+		config := messaging.QueueConfig{
 			QueueName:    os.Getenv("QUEUE_SCRAPPING_INTENTS"),
 			Endpoint:     os.Getenv("SQS_ENDPOINT"),
 			Region:       os.Getenv("SQS_REGION"),
@@ -93,7 +93,7 @@ func (s *ServicesRegistry) GetIntentsQueue() messaging.Queue {
 		}
 
 		var err error
-		s.intentsQueue, err = s.queueFactory.NewSQSQueue(config)
+		s.intentsQueue, err = s.queueFactory.NewQueue(config)
 		if err != nil {
 			panic("unable to create intents queue: " + err.Error())
 		} else if s.intentsQueue == nil {

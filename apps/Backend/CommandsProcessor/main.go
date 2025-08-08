@@ -38,7 +38,7 @@ func main() {
 	registry := dependencyinjection.NewServicesRegistry(
 		connector.NewDefaultConnectorFactory(),
 		database.NewDatabaseFactory(),
-		messaging.NewSQSQueueFactory(),
+		messaging.NewQueueFactory(),
 	)
 	defer registry.Close()
 
