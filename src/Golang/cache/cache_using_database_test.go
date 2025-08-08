@@ -15,9 +15,12 @@ func TestDatabaseCache_GetOnEmptyCache(t *testing.T) {
 		withEmptyCache(namespace, key),
 	)
 
-	actual, err := cache.Get(namespace, key)
+	actual, hit, err := cache.Get(namespace, key)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
+	}
+	if hit {
+		t.Error("expected hit to be false, got true")
 	}
 	if actual != nil {
 		t.Errorf("expected nil value, got %v", actual)
@@ -32,9 +35,12 @@ func TestDatabaseCache_GetOnExistingCache(t *testing.T) {
 		withExistingCache(namespace, key, value),
 	)
 
-	actual, err := cache.Get(namespace, key)
+	actual, hit, err := cache.Get(namespace, key)
 	if err != nil {
 		t.Fatalf("unexpected error on Get: %v", err)
+	}
+	if !hit {
+		t.Error("expected hit to be true, got false")
 	}
 	if string(value) != string(actual) {
 		t.Errorf("expected 'test_value', got %s", value)

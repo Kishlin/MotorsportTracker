@@ -19,10 +19,10 @@ func NewDatabaseCache(db database.Database) *DatabaseCache {
 
 const getQuery = "SELECT value FROM %s WHERE key = ? LIMIT 1"
 
-func (c *DatabaseCache) Get(namespace, key string) (value []byte, err error) {
+func (c *DatabaseCache) Get(namespace, key string) (value []byte, hit bool, err error) {
 	rows, err := c.db.Query(context.Background(), fmt.Sprintf(getQuery, namespace), key)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 	defer func(rows database.Rows) {
 		err := rows.Close()
@@ -32,15 +32,15 @@ func (c *DatabaseCache) Get(namespace, key string) (value []byte, err error) {
 	}(rows)
 
 	if !rows.Next() {
-		return nil, nil // No value found
+		return nil, false, nil // No value found
 	}
 
 	var val []byte
 	if err := rows.Scan(&val); err != nil {
-		return nil, err
+		return nil, true, err
 	}
 
-	return val, nil
+	return val, true, nil
 }
 
 const setQuery = "INSERT INTO %s (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?"

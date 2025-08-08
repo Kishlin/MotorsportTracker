@@ -10,9 +10,12 @@ func TestInMemoryCache_NominalUse(t *testing.T) {
 	value := []byte("testValue")
 
 	// First get should return nil
-	retrievedValue, err := cache.Get(namespace, key)
+	retrievedValue, hit, err := cache.Get(namespace, key)
 	if err != nil {
 		t.Fatalf("Failed to get value from cache: %v", err)
+	}
+	if hit {
+		t.Error("Expected hit to be false, got true")
 	}
 	if retrievedValue != nil {
 		t.Errorf("Expected nil, got %s", retrievedValue)
@@ -24,9 +27,12 @@ func TestInMemoryCache_NominalUse(t *testing.T) {
 	}
 
 	// Get the value from the cache
-	retrievedValue, err = cache.Get(namespace, key)
+	retrievedValue, hit, err = cache.Get(namespace, key)
 	if err != nil {
 		t.Fatalf("Failed to get value from cache: %v", err)
+	}
+	if !hit {
+		t.Error("Expected hit to be true, got false")
 	}
 	if string(retrievedValue) != string(value) {
 		t.Errorf("Expected %s, got %s", value, retrievedValue)

@@ -10,14 +10,14 @@ func NewInMemoryCache() *InMemoryCache {
 	}
 }
 
-func (c *InMemoryCache) Get(namespace, key string) (value []byte, err error) {
+func (c *InMemoryCache) Get(namespace, key string) (value []byte, hit bool, err error) {
 	if ns, exists := c.cache[namespace]; exists {
 		if val, found := ns[key]; found {
-			return val, nil
+			return val, true, nil
 		}
 	}
 
-	return nil, nil
+	return nil, false, nil
 }
 
 func (c *InMemoryCache) Set(namespace, key string, value []byte) error {
