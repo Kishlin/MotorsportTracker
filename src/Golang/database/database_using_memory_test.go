@@ -4,501 +4,333 @@ import (
 	"context"
 	"fmt"
 	"testing"
-	"time"
 )
 
-func TestMemoryDatabase_NewMemoryDatabase(t *testing.T) {
+// Constructor tests
+func TestNewMemoryDatabase(t *testing.T) {
 	db := NewMemoryDatabase()
 	if db == nil {
 		t.Fatal("NewMemoryDatabase should return a non-nil database")
 	}
-	if db.IsConnected() {
+	if db.isConnected() {
 		t.Error("New database should not be connected initially")
-	}
-	if len(db.GetExecutedQueries()) != 0 {
-		t.Error("New database should have no executed queries")
 	}
 }
 
-func TestMemoryDatabase_Connect_Success(t *testing.T) {
+// Connection lifecycle tests
+func TestConnect_Success(t *testing.T) {
 	db := NewMemoryDatabase()
 	ctx := context.Background()
 
 	err := db.Connect(ctx)
 	if err != nil {
-		t.Errorf("Connect should not return error: %v", err)
+		t.Fatalf("Connect should not return error: %v", err)
 	}
-	if !db.IsConnected() {
+	if !db.isConnected() {
 		t.Error("Database should be connected after Connect")
 	}
 }
 
-func TestMemoryDatabase_Connect_AlreadyConnected(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
+func TestConnect_AlreadyConnected(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 
-	// Connect first time
-	err1 := db.Connect(ctx)
-	if err1 != nil {
-		t.Errorf("First connect should not return error: %v", err1)
-	}
-
-	// Connect second time
-	err2 := db.Connect(ctx)
-	if err2 == nil {
-		t.Errorf("Second connect should return error")
-	}
-	if !db.IsConnected() {
-		t.Error("Database should still be connected")
+	// Connect second time should fail
+	if err := db.Connect(ctx); err == nil {
+		t.Error("Second connect should return error")
 	}
 }
 
-func TestMemoryDatabase_Connect_AfterClose(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect and then close
-	_ = db.Connect(ctx)
+func TestConnect_AfterClose(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 	db.Close()
 
-	// Try to connect again
-	err := db.Connect(ctx)
-	if err == nil {
+	if err := db.Connect(ctx); err == nil {
 		t.Error("Connect should return error after database is closed")
-	}
-	if db.IsConnected() {
-		t.Error("Database should not be connected after being closed")
 	}
 }
 
-func TestMemoryDatabase_Ping_Success(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
+// Ping tests
+func TestPing_Success(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 
-	// Connect first
-	_ = db.Connect(ctx)
-
-	err := db.Ping(ctx)
-	if err != nil {
+	if err := db.Ping(ctx); err != nil {
 		t.Errorf("Ping should not return error when connected: %v", err)
 	}
 }
 
-func TestMemoryDatabase_Ping_NotConnected(t *testing.T) {
+func TestPing_NotConnected(t *testing.T) {
 	db := NewMemoryDatabase()
 	ctx := context.Background()
 
-	err := db.Ping(ctx)
-	if err == nil {
+	if err := db.Ping(ctx); err == nil {
 		t.Error("Ping should return error when not connected")
 	}
 }
 
-func TestMemoryDatabase_Ping_AfterClose(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect and then close
-	_ = db.Connect(ctx)
+func TestPing_AfterClose(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 	db.Close()
 
-	err := db.Ping(ctx)
-	if err == nil {
+	if err := db.Ping(ctx); err == nil {
 		t.Error("Ping should return error after database is closed")
 	}
 }
 
-func TestMemoryDatabase_Exec_Success(t *testing.T) {
+// Mock setup tests
+func TestSetQueryResponse(t *testing.T) {
 	db := NewMemoryDatabase()
-	ctx := context.Background()
 
-	// Connect first
-	_ = db.Connect(ctx)
+	response := QueryResponse{
+		Rows:    []map[string]interface{}{{"id": 123, "name": "John Doe"}},
+		Columns: []string{"id", "name"},
+	}
 
-	sql := "INSERT INTO users (name, email) VALUES ($1, $2)"
-	args := []any{"John Doe", "john@example.com"}
+	// Should not panic
+	db.SetQueryResponse("SELECT * FROM users WHERE id = $1", []any{123}, response)
+}
 
-	err := db.Exec(ctx, sql, args...)
+// Query success tests
+func TestQuery_Success(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+
+	response := QueryResponse{
+		Rows:    []map[string]interface{}{{"id": 123, "name": "John Doe"}},
+		Columns: []string{"id", "name"},
+	}
+	db.SetQueryResponse("SELECT id, name FROM users WHERE id = $1", []any{123}, response)
+
+	rows, err := db.Query(ctx, "SELECT id, name FROM users WHERE id = $1", 123)
 	if err != nil {
-		t.Errorf("Exec should not return error: %v", err)
+		t.Fatalf("Query should not return error: %v", err)
+	}
+	if rows == nil {
+		t.Fatal("Query should return non-nil rows")
 	}
 
-	queries := db.GetExecutedQueries()
-	if len(queries) != 1 {
-		t.Errorf("Expected 1 executed query, got %d", len(queries))
-	}
-	if queries[0].SQL != sql {
-		t.Errorf("Expected SQL '%s', got '%s'", sql, queries[0].SQL)
-	}
-	if len(queries[0].Arguments) != len(args) {
-		t.Errorf("Expected %d arguments, got %d", len(args), len(queries[0].Arguments))
-	}
-	for i, arg := range args {
-		if queries[0].Arguments[i] != arg {
-			t.Errorf("Expected argument %d to be %v, got %v", i, arg, queries[0].Arguments[i])
-		}
-	}
-}
-
-func TestMemoryDatabase_Exec_MultipleQueries(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect first
-	_ = db.Connect(ctx)
-
-	queries := []string{
-		"CREATE TABLE users (id SERIAL PRIMARY KEY, name TEXT)",
-		"INSERT INTO users (name) VALUES ('Alice')",
-		"INSERT INTO users (name) VALUES ('Bob')",
+	// Test row scanning
+	if !rows.Next() {
+		t.Fatal("Should have at least one row")
 	}
 
-	for _, sql := range queries {
-		err := db.Exec(ctx, sql)
-		if err != nil {
-			t.Errorf("Exec should not return error for query '%s': %v", sql, err)
-		}
+	var id int
+	var name string
+	if err := rows.Scan(&id, &name); err != nil {
+		t.Fatalf("Scan should not return error: %v", err)
 	}
 
-	executedQueries := db.GetExecutedQueries()
-	if len(executedQueries) != len(queries) {
-		t.Errorf("Expected %d executed queries, got %d", len(queries), len(executedQueries))
+	if id != 123 || name != "John Doe" {
+		t.Errorf("Expected id=123, name='John Doe', got id=%d, name='%s'", id, name)
 	}
 
-	for i, expectedSQL := range queries {
-		if executedQueries[i].SQL != expectedSQL {
-			t.Errorf("Query %d: expected '%s', got '%s'", i, expectedSQL, executedQueries[i].SQL)
-		}
+	if rows.Next() {
+		t.Error("Should not have more rows")
 	}
 }
 
-func TestMemoryDatabase_Exec_EmptySQL(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
+func TestQuery_NoArgs(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 
-	// Connect first
-	_ = db.Connect(ctx)
-
-	err := db.Exec(ctx, "")
-	if err == nil {
-		t.Error("Exec should return error for empty SQL")
+	response := QueryResponse{
+		Rows:    []map[string]interface{}{{"count": 42}},
+		Columns: []string{"count"},
 	}
+	db.SetQueryResponse("SELECT COUNT(*) FROM users", []any{}, response)
 
-	err = db.Exec(ctx, "   ")
-	if err == nil {
-		t.Error("Exec should return error for whitespace-only SQL")
-	}
-}
-
-func TestMemoryDatabase_Exec_NotConnected(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	err := db.Exec(ctx, "SELECT 1")
-	if err == nil {
-		t.Error("Exec should return error when not connected")
-	}
-}
-
-func TestMemoryDatabase_Exec_AfterClose(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect and then close
-	_ = db.Connect(ctx)
-	db.Close()
-
-	err := db.Exec(ctx, "SELECT 1")
-	if err == nil {
-		t.Error("Exec should return error after database is closed")
-	}
-}
-
-func TestMemoryDatabase_Close(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect first
-	_ = db.Connect(ctx)
-	if !db.IsConnected() {
-		t.Error("Database should be connected")
-	}
-
-	// Close the database
-	db.Close()
-	if db.IsConnected() {
-		t.Error("Database should not be connected after Close")
-	}
-
-	db.Close()
-	db.Close()
-
-	if db.IsConnected() {
-		t.Error("Database should still be closed after multiple Close calls")
-	}
-}
-
-func TestMemoryDatabase_ClearExecutedQueries(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect and execute some queries
-	_ = db.Connect(ctx)
-	_ = db.Exec(ctx, "SELECT 1")
-	_ = db.Exec(ctx, "SELECT 2")
-
-	if len(db.GetExecutedQueries()) != 2 {
-		t.Error("Should have 2 executed queries before clear")
-	}
-
-	db.ClearExecutedQueries()
-	if len(db.GetExecutedQueries()) != 0 {
-		t.Error("Should have 0 executed queries after clear")
-	}
-}
-
-func TestMemoryDatabase_GetExecutedQueries_IsCopy(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect and execute a query
-	_ = db.Connect(ctx)
-	_ = db.Exec(ctx, "SELECT 1")
-
-	queries1 := db.GetExecutedQueries()
-	queries2 := db.GetExecutedQueries()
-
-	// Modify one slice
-	if len(queries1) > 0 {
-		queries1[0].SQL = "MODIFIED"
-	}
-
-	// The other slice should not be affected
-	if len(queries2) > 0 && queries2[0].SQL == "MODIFIED" {
-		t.Error("GetExecutedQueries should return independent copies")
-	}
-}
-
-func TestMemoryDatabase_ConcurrentAccess(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	// Connect first
-	_ = db.Connect(ctx)
-
-	// Test concurrent access
-	done := make(chan bool)
-	numGoroutines := 10
-	queriesPerGoroutine := 5
-
-	for i := 0; i < numGoroutines; i++ {
-		go func(id int) {
-			for j := 0; j < queriesPerGoroutine; j++ {
-				sql := fmt.Sprintf("INSERT INTO test%d VALUES (%d)", id, j)
-				_ = db.Exec(ctx, sql)
-			}
-			done <- true
-		}(i)
-	}
-
-	// Wait for all goroutines to complete
-	for i := 0; i < numGoroutines; i++ {
-		select {
-		case <-done:
-		case <-time.After(5 * time.Second):
-			t.Fatal("Concurrent test timed out")
-		}
-	}
-
-	queries := db.GetExecutedQueries()
-	expectedCount := numGoroutines * queriesPerGoroutine
-	if len(queries) != expectedCount {
-		t.Errorf("Expected %d queries from concurrent access, got %d", expectedCount, len(queries))
-	}
-}
-
-func TestMemoryDatabase_Query_Success(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-	_ = db.Connect(ctx)
-	defer db.Close()
-
-	// Add test data to the series table
-	testData := []map[string]interface{}{
-		{
-			"name":          "Formula 1",
-			"external_uuid": "f1-uuid-123",
-			"short_name":    "F1",
-			"short_code":    "F1",
-			"category":      "Formula",
-		},
-		{
-			"name":          "Formula 2",
-			"external_uuid": "f2-uuid-456",
-			"short_name":    "F2",
-			"short_code":    "F2",
-			"category":      "Formula",
-		},
-	}
-	db.AddTestData("series", testData)
-
-	// Execute query
-	rows, err := db.Query(ctx, "SELECT name, external_uuid, short_name, short_code, category FROM series")
+	rows, err := db.Query(ctx, "SELECT COUNT(*) FROM users")
 	if err != nil {
-		t.Errorf("Query should not return error: %v", err)
-	}
-	defer func(rows Rows) {
-		err := rows.Close()
-		if err != nil {
-			t.Errorf("Close should not return error: %v", err)
-		}
-	}(rows)
-
-	// Verify results
-	rowCount := 0
-	for rows.Next() {
-		var name, uuid, shortName, shortCode, category string
-		err := rows.Scan(&name, &uuid, &shortName, &shortCode, &category)
-		if err != nil {
-			t.Errorf("Scan should not return error: %v", err)
-		}
-
-		// Since we can't guarantee the order, just verify we got valid data
-		if name == "" || uuid == "" {
-			t.Errorf("Row %d should have non-empty name and uuid, got: name=%s, uuid=%s", rowCount, name, uuid)
-		}
-
-		// Verify it matches one of our expected series
-		validSeries := (name == "Formula 1" && uuid == "f1-uuid-123") ||
-			(name == "Formula 2" && uuid == "f2-uuid-456")
-		if !validSeries {
-			t.Errorf("Row %d has unexpected data: name=%s, uuid=%s", rowCount, name, uuid)
-		}
-
-		rowCount++
+		t.Fatalf("Query should not return error: %v", err)
 	}
 
-	if err := rows.Err(); err != nil {
-		t.Errorf("Rows iteration should not return error: %v", err)
+	if !rows.Next() {
+		t.Fatal("Should have at least one row")
 	}
 
-	if rowCount != 2 {
-		t.Errorf("Expected 2 rows, got %d", rowCount)
+	var count int
+	if err := rows.Scan(&count); err != nil {
+		t.Fatalf("Scan should not return error: %v", err)
+	}
+
+	if count != 42 {
+		t.Errorf("Expected count=42, got %d", count)
 	}
 }
 
-func TestMemoryDatabase_Query_EmptyTable(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-	_ = db.Connect(ctx)
-	defer db.Close()
+func TestQuery_ReturnsError(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 
-	// Query empty table
-	rows, err := db.Query(ctx, "SELECT * FROM series")
-	if err != nil {
-		t.Errorf("Query should not return error for empty table: %v", err)
-	}
-	defer func(rows Rows) {
-		err := rows.Close()
-		if err != nil {
-			t.Errorf("Close should not return error: %v", err)
-		}
-	}(rows)
+	response := QueryResponse{Error: fmt.Errorf("table does not exist")}
+	db.SetQueryResponse("SELECT * FROM nonexistent", []any{}, response)
 
-	// Verify no rows
-	rowCount := 0
-	for rows.Next() {
-		rowCount++
-	}
-
-	if rowCount != 0 {
-		t.Errorf("Expected 0 rows from empty table, got %d", rowCount)
-	}
-}
-
-func TestMemoryDatabase_Query_NotConnected(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	_, err := db.Query(ctx, "SELECT * FROM series")
+	rows, err := db.Query(ctx, "SELECT * FROM nonexistent")
 	if err == nil {
+		t.Error("Query should return error")
+	}
+	if rows != nil {
+		t.Error("Query should return nil rows on error")
+	}
+}
+
+// Query error tests
+func TestQuery_NotConnected(t *testing.T) {
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+
+	if _, err := db.Query(ctx, "SELECT 1"); err == nil {
 		t.Error("Query should return error when not connected")
 	}
 }
 
-func TestMemoryDatabase_Query_AfterClose(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-	_ = db.Connect(ctx)
+func TestQuery_AfterClose(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
 	db.Close()
 
-	_, err := db.Query(ctx, "SELECT * FROM series")
-	if err == nil {
-		t.Error("Query should return error after database is closed")
+	if _, err := db.Query(ctx, "SELECT 1"); err == nil {
+		t.Error("Query should return error after close")
 	}
 }
 
-func TestMemoryDatabase_Query_NonSelectStatement(t *testing.T) {
+// Query panic tests
+func TestQuery_NoMockConfigured_Panics(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("Query should panic when no mock is configured")
+		}
+	}()
+
+	_, _ = db.Query(ctx, "SELECT * FROM users")
+}
+
+func TestQuery_DifferentArgs_Panics(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+
+	// Set up mock for specific args
+	response := QueryResponse{Rows: []map[string]interface{}{}, Columns: []string{}}
+	db.SetQueryResponse("SELECT * FROM users WHERE id = $1", []any{123}, response)
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("Query should panic when called with different args")
+		}
+	}()
+
+	_, _ = db.Query(ctx, "SELECT * FROM users WHERE id = $1", 456)
+}
+
+// Exec success tests
+func TestExec_Success(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+
+	response := QueryResponse{Error: nil}
+	db.SetQueryResponse("INSERT INTO users (name) VALUES ($1)", []any{"John Doe"}, response)
+
+	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ($1)", "John Doe"); err != nil {
+		t.Errorf("Exec should not return error: %v", err)
+	}
+}
+
+func TestExec_ReturnsError(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+
+	response := QueryResponse{Error: fmt.Errorf("table does not exist")}
+	db.SetQueryResponse("INSERT INTO nonexistent (name) VALUES ($1)", []any{"John Doe"}, response)
+
+	if err := db.Exec(ctx, "INSERT INTO nonexistent (name) VALUES ($1)", "John Doe"); err == nil {
+		t.Error("Exec should return error")
+	}
+}
+
+// Exec error tests
+func TestExec_NotConnected(t *testing.T) {
 	db := NewMemoryDatabase()
 	ctx := context.Background()
-	_ = db.Connect(ctx)
-	defer db.Close()
 
-	_, err := db.Query(ctx, "INSERT INTO series VALUES (1, 'test')")
-	if err == nil {
-		t.Error("Query should return error for non-SELECT statements")
+	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ('test')"); err == nil {
+		t.Error("Exec should return error when not connected")
 	}
 }
 
-func TestMemoryDatabase_AddTestData(t *testing.T) {
+func TestExec_AfterClose(t *testing.T) {
+	db, ctx := setupConnectedDB(t)
+	db.Close()
+
+	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ('test')"); err == nil {
+		t.Error("Exec should return error after close")
+	}
+}
+
+// Close tests
+func TestClose_Success(t *testing.T) {
+	db, _ := setupConnectedDB(t)
+
+	if !db.isConnected() {
+		t.Error("Database should be connected before close")
+	}
+
+	db.Close()
+
+	if db.isConnected() {
+		t.Error("Database should not be connected after close")
+	}
+}
+
+func TestClose_Multiple(t *testing.T) {
+	db, _ := setupConnectedDB(t)
+
+	// Should not panic on multiple closes
+	db.Close()
+	db.Close()
+	db.Close()
+
+	if db.isConnected() {
+		t.Error("Database should not be connected after multiple closes")
+	}
+}
+
+// Utility tests
+func TestBuildArgsKey(t *testing.T) {
 	db := NewMemoryDatabase()
 
-	testData := []map[string]interface{}{
-		{"id": 1, "name": "test1"},
-		{"id": 2, "name": "test2"},
+	tests := []struct {
+		name     string
+		args     []any
+		expected string
+	}{
+		{"no args", []any{}, "no_args"},
+		{"with args", []any{"test", 123, true}, "test:string|123:int|true:bool"},
 	}
 
-	db.AddTestData("test_table", testData)
-
-	retrievedData := db.GetTestData("test_table")
-	if len(retrievedData) != 2 {
-		t.Errorf("Expected 2 rows in test data, got %d", len(retrievedData))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			key := db.buildArgsKey(tt.args)
+			if key != tt.expected {
+				t.Errorf("Expected '%s', got '%s'", tt.expected, key)
+			}
+		})
 	}
 
-	if retrievedData[0]["name"] != "test1" {
-		t.Errorf("Expected first row name 'test1', got '%v'", retrievedData[0]["name"])
+	// Test consistency
+	key1 := db.buildArgsKey([]any{"test", 123, true})
+	key2 := db.buildArgsKey([]any{"test", 123, true})
+	if key1 != key2 {
+		t.Error("Same args should produce same key")
+	}
+
+	// Test uniqueness
+	key3 := db.buildArgsKey([]any{"different", 456})
+	if key1 == key3 {
+		t.Error("Different args should produce different keys")
 	}
 }
 
-func TestMemoryRows_ScanTypes(t *testing.T) {
-	rows := &MemoryRows{
-		rows: []map[string]interface{}{
-			{"name": "Test", "id": 42, "nullable": nil},
-		},
-		columns: []string{"name", "id", "nullable"},
-		current: 0,
+// Helper functions
+func setupConnectedDB(t *testing.T) (*MemoryDatabase, context.Context) {
+	t.Helper()
+	db := NewMemoryDatabase()
+	ctx := context.Background()
+	if err := db.Connect(ctx); err != nil {
+		t.Fatalf("Failed to connect database: %v", err)
 	}
-
-	if !rows.Next() {
-		t.Fatal("Should have next row")
-	}
-
-	var name string
-	var id int
-	var nullable *string
-
-	err := rows.Scan(&name, &id, &nullable)
-	if err != nil {
-		t.Errorf("Scan should not return error: %v", err)
-	}
-
-	if name != "Test" {
-		t.Errorf("Expected name 'Test', got '%s'", name)
-	}
-	if id != 42 {
-		t.Errorf("Expected id 42, got %d", id)
-	}
-	if nullable != nil {
-		t.Errorf("Expected nullable to be nil, got %v", nullable)
-	}
+	return db, ctx
 }
