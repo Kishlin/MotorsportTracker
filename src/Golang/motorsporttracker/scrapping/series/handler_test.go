@@ -3,7 +3,6 @@ package series
 import (
 	"context"
 	"errors"
-	"strings"
 	"testing"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
@@ -13,10 +12,10 @@ import (
 
 func TestScrapSeriesHandler_Handle_Success(t *testing.T) {
 	handler := setupHandler(t,
-		withValidSeriesData(),
+		withTwoSeriesConnectorResponse(),
 		withEmptyDatabase(),
-		withInsertMocks("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
-		withInsertMocks("Formula 2", "f2-uuid-456", "F2", "F2", "Formula"),
+		expectInsertQuery("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
+		expectInsertQuery("Formula 2", "f2-uuid-456", "F2", "F2", "Formula"),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -38,7 +37,7 @@ func TestScrapSeriesHandler_Handle_ConnectorError(t *testing.T) {
 
 func TestScrapSeriesHandler_Handle_InvalidJSON(t *testing.T) {
 	handler := setupHandler(t,
-		withInvalidJSON(),
+		withInvalidConnectorResponse(),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -49,7 +48,7 @@ func TestScrapSeriesHandler_Handle_InvalidJSON(t *testing.T) {
 
 func TestScrapSeriesHandler_Handle_EmptyResponse(t *testing.T) {
 	handler := setupHandler(t,
-		withEmptyResponse(),
+		withEmptyConnectorResponse(),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -77,9 +76,9 @@ func TestScrapSeriesHandler_NewScrapSeriesHandler(t *testing.T) {
 
 func TestScrapSeriesHandler_Handle_IntelligentBehavior_NewSeries(t *testing.T) {
 	handler := setupHandler(t,
-		withSingleSeriesData(),
+		withSingleSeriesConnectorResponse(),
 		withEmptyDatabase(),
-		withInsertMocks("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
+		expectInsertQuery("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -90,7 +89,7 @@ func TestScrapSeriesHandler_Handle_IntelligentBehavior_NewSeries(t *testing.T) {
 
 func TestScrapSeriesHandler_Handle_IntelligentBehavior_ExistingSeries(t *testing.T) {
 	handler := setupHandler(t,
-		withSingleSeriesData(),
+		withSingleSeriesConnectorResponse(),
 		withExistingSeries("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
 	)
 
@@ -102,9 +101,9 @@ func TestScrapSeriesHandler_Handle_IntelligentBehavior_ExistingSeries(t *testing
 
 func TestScrapSeriesHandler_Handle_IntelligentBehavior_MixedScenario(t *testing.T) {
 	handler := setupHandler(t,
-		withValidSeriesData(),
+		withTwoSeriesConnectorResponse(),
 		withExistingSeries("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
-		withInsertMocks("Formula 2", "f2-uuid-456", "F2", "F2", "Formula"),
+		expectInsertQuery("Formula 2", "f2-uuid-456", "F2", "F2", "Formula"),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -118,7 +117,13 @@ type setupOption func(*testSetup)
 
 type testSetup struct {
 	connectorData map[string]connector.MockResponse
-	dbResponses   map[string]map[string]database.QueryResponse
+	dbMocks       []dbMock
+}
+
+type dbMock struct {
+	query    string
+	args     []any
+	response database.QueryResponse
 }
 
 func setupHandler(t *testing.T, opts ...setupOption) *ScrapSeriesHandler {
@@ -126,7 +131,7 @@ func setupHandler(t *testing.T, opts ...setupOption) *ScrapSeriesHandler {
 
 	setup := &testSetup{
 		connectorData: make(map[string]connector.MockResponse),
-		dbResponses:   make(map[string]map[string]database.QueryResponse),
+		dbMocks:       []dbMock{},
 	}
 
 	for _, opt := range opts {
@@ -141,18 +146,9 @@ func setupHandler(t *testing.T, opts ...setupOption) *ScrapSeriesHandler {
 	}
 	t.Cleanup(func() { db.Close() })
 
-	// Apply database mocks
-	for query, argMap := range setup.dbResponses {
-		for argsKey, response := range argMap {
-			var args []any
-			if argsKey == "no_args" {
-				args = []any{}
-			} else {
-				// This is simplified - in practice you might want more sophisticated arg parsing
-				args = parseArgsFromKey(argsKey)
-			}
-			db.SetQueryResponse(query, args, response)
-		}
+	// Apply database mocks directly
+	for _, mock := range setup.dbMocks {
+		db.SetQueryResponse(mock.query, mock.args, mock.response)
 	}
 
 	// Setup connector
@@ -162,7 +158,7 @@ func setupHandler(t *testing.T, opts ...setupOption) *ScrapSeriesHandler {
 }
 
 // Connector options
-func withValidSeriesData() setupOption {
+func withTwoSeriesConnectorResponse() setupOption {
 	return func(s *testSetup) {
 		s.connectorData[endpointSeries] = connector.MockResponse{
 			Data: []byte(`[
@@ -186,7 +182,7 @@ func withValidSeriesData() setupOption {
 	}
 }
 
-func withSingleSeriesData() setupOption {
+func withSingleSeriesConnectorResponse() setupOption {
 	return func(s *testSetup) {
 		s.connectorData[endpointSeries] = connector.MockResponse{
 			Data: []byte(`[
@@ -212,7 +208,7 @@ func withConnectorError(err error) setupOption {
 	}
 }
 
-func withInvalidJSON() setupOption {
+func withInvalidConnectorResponse() setupOption {
 	return func(s *testSetup) {
 		s.connectorData[endpointSeries] = connector.MockResponse{
 			Data: []byte(`{"invalid": json data}`),
@@ -221,7 +217,7 @@ func withInvalidJSON() setupOption {
 	}
 }
 
-func withEmptyResponse() setupOption {
+func withEmptyConnectorResponse() setupOption {
 	return func(s *testSetup) {
 		s.connectorData[endpointSeries] = connector.MockResponse{
 			Data: []byte(`[]`),
@@ -230,70 +226,50 @@ func withEmptyResponse() setupOption {
 	}
 }
 
-// Database options
+// Database verification options (these set expectations for what queries the handler should execute)
 func withEmptyDatabase() setupOption {
 	return func(s *testSetup) {
-		query := "SELECT name, external_uuid, short_name, short_code, category FROM series"
-		if s.dbResponses[query] == nil {
-			s.dbResponses[query] = make(map[string]database.QueryResponse)
-		}
-		s.dbResponses[query]["no_args"] = database.QueryResponse{
-			Rows:    []map[string]interface{}{},
-			Columns: []string{"name", "external_uuid", "short_name", "short_code", "category"},
-		}
+		s.dbMocks = append(s.dbMocks, dbMock{
+			query: "SELECT name, external_uuid, short_name, short_code, category FROM series",
+			args:  []any{},
+			response: database.QueryResponse{
+				Rows:    []map[string]interface{}{},
+				Columns: []string{"name", "external_uuid", "short_name", "short_code", "category"},
+			},
+		})
 	}
 }
 
 func withExistingSeries(name, uuid, shortName, shortCode, category string) setupOption {
 	return func(s *testSetup) {
-		query := "SELECT name, external_uuid, short_name, short_code, category FROM series"
-		if s.dbResponses[query] == nil {
-			s.dbResponses[query] = make(map[string]database.QueryResponse)
-		}
-		s.dbResponses[query]["no_args"] = database.QueryResponse{
-			Rows: []map[string]interface{}{
-				{
-					"name":          name,
-					"external_uuid": uuid,
-					"short_name":    shortName,
-					"short_code":    shortCode,
-					"category":      category,
+		s.dbMocks = append(s.dbMocks, dbMock{
+			query: "SELECT name, external_uuid, short_name, short_code, category FROM series",
+			args:  []any{},
+			response: database.QueryResponse{
+				Rows: []map[string]interface{}{
+					{
+						"name":          name,
+						"external_uuid": uuid,
+						"short_name":    shortName,
+						"short_code":    shortCode,
+						"category":      category,
+					},
 				},
+				Columns: []string{"name", "external_uuid", "short_name", "short_code", "category"},
 			},
-			Columns: []string{"name", "external_uuid", "short_name", "short_code", "category"},
-		}
+		})
 	}
 }
 
-//nolint:unparam
-func withInsertMocks(name, uuid, shortName, shortCode, category string) setupOption {
+// nolint:unparam
+func expectInsertQuery(name, uuid, shortName, shortCode, category string) setupOption {
 	return func(s *testSetup) {
-		query := `
-			INSERT INTO series (name, external_uuid, short_name, short_code, category)
-			VALUES ($1, $2, $3, $4, $5)`
-
-		if s.dbResponses[query] == nil {
-			s.dbResponses[query] = make(map[string]database.QueryResponse)
-		}
-		argsKey := buildInsertArgsKey(name, uuid, shortName, shortCode, category)
-		s.dbResponses[query][argsKey] = database.QueryResponse{Error: nil}
+		s.dbMocks = append(s.dbMocks, dbMock{
+			query: `
+				INSERT INTO series (name, external_uuid, short_name, short_code, category)
+				VALUES ($1, $2, $3, $4, $5)`,
+			args:     []any{name, uuid, shortName, shortCode, category},
+			response: database.QueryResponse{Error: nil},
+		})
 	}
-}
-
-// Helper functions - simplified now that database handles normalization
-func parseArgsFromKey(argsKey string) []any {
-	if argsKey == "no_args" {
-		return []any{}
-	}
-	// For insert queries, parse the pipe-separated values
-	parts := strings.Split(argsKey, "|")
-	args := make([]any, len(parts))
-	for i, part := range parts {
-		args[i] = part
-	}
-	return args
-}
-
-func buildInsertArgsKey(name, uuid, shortName, shortCode, category string) string {
-	return name + "|" + uuid + "|" + shortName + "|" + shortCode + "|" + category
 }
