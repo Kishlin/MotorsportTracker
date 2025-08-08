@@ -75,7 +75,7 @@ func TestPing_AfterClose(t *testing.T) {
 	}
 }
 
-// Mock setup tests
+//goland:noinspection SqlResolve Mock setup tests
 func TestSetQueryResponse(t *testing.T) {
 	db := NewMemoryDatabase()
 
@@ -88,7 +88,7 @@ func TestSetQueryResponse(t *testing.T) {
 	db.SetQueryResponse("SELECT * FROM users WHERE id = $1", []any{123}, response)
 }
 
-// Query normalization tests (new functionality!)
+//goland:noinspection SqlResolve Query normalization tests (new functionality!)
 func TestNormalizeQuery_Internal(t *testing.T) {
 	db := NewMemoryDatabase()
 
@@ -128,7 +128,7 @@ func TestNormalizeQuery_Internal(t *testing.T) {
 	}
 }
 
-// Query success tests
+//goland:noinspection SqlResolve Query success tests
 func TestQuery_Success(t *testing.T) {
 	db, ctx := setupConnectedDB(t)
 
@@ -166,7 +166,7 @@ func TestQuery_Success(t *testing.T) {
 	}
 }
 
-// Query whitespace normalization tests (new functionality!)
+//goland:noinspection SqlResolve Query whitespace normalization tests (new functionality!)
 func TestQuery_WhitespaceNormalization(t *testing.T) {
 	db, ctx := setupConnectedDB(t)
 
@@ -217,6 +217,7 @@ func TestQuery_WhitespaceNormalization(t *testing.T) {
 	}
 }
 
+//goland:noinspection SqlResolve
 func TestQuery_RealWorldExample(t *testing.T) {
 	db, ctx := setupConnectedDB(t)
 
