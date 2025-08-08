@@ -103,7 +103,7 @@ func (m *MemoryDatabase) SetQueryResponse(query string, arguments []any, respons
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	normalizedQuery := strings.TrimSpace(strings.ToLower(query))
+	normalizedQuery := m.normalizeQuery(query)
 	argsKey := m.buildArgsKey(arguments)
 
 	if m.queryResponses[normalizedQuery] == nil {
@@ -124,6 +124,28 @@ func (m *MemoryDatabase) buildArgsKey(args []any) string {
 		keyParts = append(keyParts, fmt.Sprintf("%v:%T", arg, arg))
 	}
 	return strings.Join(keyParts, "|")
+}
+
+// normalizeQuery normalizes SQL queries to handle whitespace differences
+func (m *MemoryDatabase) normalizeQuery(query string) string {
+	// Convert to lowercase for case-insensitive matching
+	query = strings.ToLower(query)
+
+	// Split by lines and normalize each line
+	lines := strings.Split(strings.TrimSpace(query), "\n")
+	var normalized []string
+
+	for _, line := range lines {
+		// Trim whitespace from each line
+		trimmed := strings.TrimSpace(line)
+		if trimmed != "" {
+			// Replace multiple spaces with single spaces
+			normalized = append(normalized, strings.Join(strings.Fields(trimmed), " "))
+		}
+	}
+
+	// Join with single spaces
+	return strings.Join(normalized, " ")
 }
 
 // Connect establishes the connection (simulated for in-memory)
@@ -174,8 +196,8 @@ func (m *MemoryDatabase) Exec(_ context.Context, sql string, arguments ...any) e
 		return errors.New("database is not connected")
 	}
 
-	// Normalize the query for matching
-	normalizedQuery := strings.TrimSpace(strings.ToLower(sql))
+	// Use the same normalization as SetQueryResponse
+	normalizedQuery := m.normalizeQuery(sql)
 	argsKey := m.buildArgsKey(arguments)
 
 	// Try to find an exact match
@@ -203,8 +225,8 @@ func (m *MemoryDatabase) Query(_ context.Context, sql string, arguments ...any) 
 		return nil, errors.New("database is not connected")
 	}
 
-	// Normalize the query for matching
-	normalizedQuery := strings.TrimSpace(strings.ToLower(sql))
+	// Use the same normalization as SetQueryResponse
+	normalizedQuery := m.normalizeQuery(sql)
 	argsKey := m.buildArgsKey(arguments)
 
 	// Try to find an exact match
