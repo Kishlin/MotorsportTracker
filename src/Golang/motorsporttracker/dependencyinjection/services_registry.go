@@ -15,12 +15,16 @@ type ServicesRegistry struct {
 	databaseFactory  database.Factory
 	queueFactory     messaging.Factory
 
-	connectorOnce    sync.Once
-	coreDBOnce       sync.Once
-	intentsQueueOnce sync.Once
+	connectorOnce     sync.Once
+	coreDBOnce        sync.Once
+	clientCacheDBonce sync.Once
+	intentsQueueOnce  sync.Once
 
-	connector    connector.Connector
-	coreDB       database.Database
+	connector connector.Connector
+
+	coreDB        database.Database
+	clientCacheDB database.Database
+
 	intentsQueue messaging.Queue
 }
 
@@ -79,6 +83,30 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) database.Databas
 	})
 
 	return s.coreDB
+}
+
+func (s *ServicesRegistry) GetClientCacheDatabase(ctx context.Context) database.Database {
+	s.clientCacheDBonce.Do(func() {
+		connStr := os.Getenv("POSTGRES_CLIENT_CACHE_URL")
+		if connStr == "" {
+			panic("POSTGRES_CLIENT_CACHE_URL environment variable is not set")
+		}
+
+		var err error
+		s.clientCacheDB, err = s.databaseFactory.NewDatabase(connStr)
+		if err != nil {
+			panic("unable to create client cache database: " + err.Error())
+		} else if s.clientCacheDB == nil {
+			panic("client cache database is nil after creation")
+		}
+
+		err = s.clientCacheDB.Connect(ctx)
+		if err != nil {
+			panic("unable to connect to client cache database: " + err.Error())
+		}
+	})
+
+	return s.clientCacheDB
 }
 
 func (s *ServicesRegistry) GetIntentsQueue() messaging.Queue {

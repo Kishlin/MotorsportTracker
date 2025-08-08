@@ -170,6 +170,31 @@ func TestGetIntentsQueue_WithMemoryQueue(t *testing.T) {
 	}
 }
 
+func TestGetClientCacheDatabase_WithMemoryDatabase(t *testing.T) {
+	cleanup := replaceEnvVars(map[string]string{
+		"POSTGRES_CLIENT_CACHE_URL": "memory://test",
+	})
+	defer cleanup()
+
+	registry := NewServicesRegistry(
+		connector.NewInMemoryConnectorFactory(),
+		database.NewDatabaseFactory(),
+		messaging.NewQueueFactory(),
+	)
+	defer registry.Close()
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("GetClientCacheDatabase should not panic with memory database: %v", r)
+		}
+	}()
+
+	db := registry.GetClientCacheDatabase(context.Background())
+	if db == nil {
+		t.Error("Client cache database should not be nil")
+	}
+}
+
 func replaceEnvVars(vars map[string]string) func() {
 	originals := make(map[string]string)
 	for k, v := range vars {
