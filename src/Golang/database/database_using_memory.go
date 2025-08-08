@@ -75,6 +75,16 @@ func (r *MemoryRows) Scan(dest ...any) error {
 					*v = &str
 				}
 			}
+		case *[]uint8:
+			if bytes, ok := value.([]uint8); ok {
+				*v = bytes
+			} else if str, ok := value.(string); ok {
+				*v = []uint8(str)
+			} else if value != nil {
+				*v = []uint8(fmt.Sprintf("%v", value))
+			} else {
+				return errors.New("cannot scan nil value into []uint8")
+			}
 		default:
 			return fmt.Errorf("unsupported scan type: %T", dest[i])
 		}
