@@ -5,22 +5,26 @@ import (
 	"os"
 	"sync"
 
+	"github.com/kishlin/MotorsportTracker/src/Golang/cache"
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 )
 
 type ServicesRegistry struct {
-	connectorFactory connector.Factory
-	databaseFactory  database.Factory
-	queueFactory     messaging.Factory
+	cachedConnectorFactory connector.CachedConnectorFactory
+	connectorFactory       connector.Factory
+	databaseFactory        database.Factory
+	queueFactory           messaging.Factory
 
-	connectorOnce     sync.Once
-	coreDBOnce        sync.Once
-	clientCacheDBonce sync.Once
-	intentsQueueOnce  sync.Once
+	cachedConnectorOnce sync.Once
+	connectorOnce       sync.Once
+	coreDBOnce          sync.Once
+	clientCacheDBonce   sync.Once
+	intentsQueueOnce    sync.Once
 
-	connector connector.Connector
+	cachedConnector connector.Connector
+	connector       connector.Connector
 
 	coreDB        database.Database
 	clientCacheDB database.Database
@@ -48,6 +52,32 @@ func (s *ServicesRegistry) Close() {
 	if s.intentsQueue != nil {
 		s.intentsQueue.Disconnect()
 	}
+}
+
+func (s *ServicesRegistry) GetCachedConnector(ctx context.Context) connector.Connector {
+	s.cachedConnectorOnce.Do(func() {
+		inner := s.GetConnector()
+		if inner == nil {
+			panic("inner connector is nil")
+		}
+
+		clientDB := s.GetClientCacheDatabase(ctx)
+		if clientDB == nil {
+			panic("client cache database is nil")
+		}
+
+		cacheDB := cache.NewDatabaseCache(clientDB)
+		if cacheDB == nil {
+			panic("cacheDB is nil after creation")
+		}
+
+		s.cachedConnector = s.cachedConnectorFactory.NewConnector(inner, cacheDB)
+		if s.cachedConnector == nil {
+			panic("cached connector is nil after creation")
+		}
+	})
+
+	return s.cachedConnector
 }
 
 func (s *ServicesRegistry) GetConnector() connector.Connector {

@@ -98,6 +98,10 @@ run-dbmigrate-core:
 	@echo "Running Golang app DBMigrate for Core"
 	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
 
+run-dbmigrate-client:
+	@echo "Running Golang app DBMigrate for Client"
+	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Client" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CLIENT_CACHE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
+
 build-publisher:
 	@echo "Building Golang app CommandsPublisher"
 	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher main.go'

@@ -1,5 +1,7 @@
 package connector
 
+import "github.com/kishlin/MotorsportTracker/src/Golang/cache"
+
 type Factory interface {
 	NewConnector() Connector
 }
@@ -26,4 +28,16 @@ func (f *InMemoryConnectorFactory) NewConnector() Connector {
 // NewInMemoryConnectorFactory creates a new instance of InMemoryConnectorFactory.
 func NewInMemoryConnectorFactory() Factory {
 	return &InMemoryConnectorFactory{}
+}
+
+type CachedConnectorFactory struct{}
+
+// NewConnector creates a new instance of CachedConnector.
+func (f *CachedConnectorFactory) NewConnector(inner Connector, cache cache.Cache) Connector {
+	return NewCachedConnector(inner, cache)
+}
+
+// NewCachedConnectorFactory creates a new instance of CachedConnectorFactory.
+func NewCachedConnectorFactory() *CachedConnectorFactory {
+	return &CachedConnectorFactory{}
 }

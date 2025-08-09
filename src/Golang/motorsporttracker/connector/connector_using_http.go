@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -20,6 +21,8 @@ func NewConnector() *MotorsportStatsConnector {
 
 // Get retrieves data
 func (c *MotorsportStatsConnector) Get(url string) ([]byte, error) {
+	log.Printf("Fetching data from URL: %s", url)
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return []byte{}, err

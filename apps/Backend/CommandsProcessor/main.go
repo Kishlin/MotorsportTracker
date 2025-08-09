@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,6 +20,8 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	// Create a context for the application
 	ctx := context.WithoutCancel(context.Background())
 
@@ -50,7 +53,7 @@ func main() {
 
 	handlersList.RegisterHandler(
 		series.ScrapeSeriesIntentName,
-		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetConnector()),
+		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
 	)
 	handlersList.RegisterHandler(seasons.ScrapeSeasonsIntentName, seasons.NewScrapSeasonsHandler())
 	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
