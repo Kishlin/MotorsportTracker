@@ -80,7 +80,7 @@ func setupDatabaseCache(opts ...databaseCacheSetupOpt) *DatabaseCache {
 func withEmptyCache(namespace, key string) databaseCacheSetupOpt {
 	return func(db *database.MemoryDatabase) {
 		db.SetQueryResponse(
-			fmt.Sprintf("SELECT value FROM %s WHERE key = ? LIMIT 1", namespace),
+			fmt.Sprintf("SELECT value FROM %s WHERE key = $1 LIMIT 1", namespace),
 			[]any{key},
 			database.QueryResponse{
 				Rows:    make([]map[string]interface{}, 0),
@@ -94,7 +94,7 @@ func withEmptyCache(namespace, key string) databaseCacheSetupOpt {
 func withExistingCache(namespace, key string, value []byte) databaseCacheSetupOpt {
 	return func(db *database.MemoryDatabase) {
 		db.SetQueryResponse(
-			fmt.Sprintf("SELECT value FROM %s WHERE key = ? LIMIT 1", namespace),
+			fmt.Sprintf("SELECT value FROM %s WHERE key = $1 LIMIT 1", namespace),
 			[]any{key},
 			database.QueryResponse{
 				Rows: []map[string]interface{}{
@@ -110,7 +110,7 @@ func withExistingCache(namespace, key string, value []byte) databaseCacheSetupOp
 func expectInsertionQuery(namespace, key string, value []byte) databaseCacheSetupOpt {
 	return func(db *database.MemoryDatabase) {
 		db.SetQueryResponse(
-			fmt.Sprintf("INSERT INTO %s (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?", namespace),
+			fmt.Sprintf("INSERT INTO %s (key, value) VALUES ($1, $2) ON CONFLICT(key) DO UPDATE SET value = $3", namespace),
 			[]any{key, value, value},
 			database.QueryResponse{},
 		)
