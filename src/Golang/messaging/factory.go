@@ -30,7 +30,8 @@ func (f *QueueFactory) NewQueue(config QueueConfig) (Queue, error) {
 		return NewMemoryQueue(), nil
 	}
 
-	if strings.HasPrefix(strings.ToLower(config.Endpoint), "https://") {
+	if strings.HasPrefix(strings.ToLower(config.Endpoint), "https://") ||
+		strings.HasPrefix(strings.ToLower(config.Endpoint), "http://") {
 		return NewSQSQueueWithConfig(config), nil
 	}
 
