@@ -29,3 +29,11 @@ func (c *InMemoryCache) Set(namespace, key string, value []byte) error {
 
 	return nil
 }
+
+func (c *InMemoryCache) ItemsCount() int {
+	count := 0
+	for _, ns := range c.cache {
+		count += len(ns)
+	}
+	return count
+}
