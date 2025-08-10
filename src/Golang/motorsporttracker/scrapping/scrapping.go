@@ -3,7 +3,7 @@ package scrapping
 import (
 	"bytes"
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/qri-io/jsonschema"
 )
@@ -12,12 +12,12 @@ import (
 func Validate(ctx context.Context, content []byte, expectedSchema string) error {
 	rs := jsonschema.Schema{}
 	if err := rs.UnmarshalJSON([]byte(expectedSchema)); err != nil {
-		return errors.New("unmarshalling expectedSchema: " + err.Error())
+		return fmt.Errorf("unmarshalling expectedSchema: %w", err)
 	}
 
 	errs, err := rs.ValidateBytes(ctx, content)
 	if err != nil {
-		return errors.New("validating content: " + err.Error())
+		return fmt.Errorf("validating content: %w", err)
 	}
 
 	if len(errs) > 0 {
@@ -26,7 +26,7 @@ func Validate(ctx context.Context, content []byte, expectedSchema string) error 
 			buf.WriteString(e.Error() + "\n")
 		}
 
-		return errors.New("validation errors: " + buf.String())
+		return fmt.Errorf("validation errors: %s", buf.String())
 	}
 
 	return nil

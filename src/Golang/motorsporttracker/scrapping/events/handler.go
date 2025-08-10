@@ -2,7 +2,7 @@ package events
 
 import (
 	"context"
-	"log"
+	"log/slog"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 )
@@ -21,7 +21,7 @@ func NewScrapEventsHandler() *ScrapEventsHandler {
 func (h *ScrapEventsHandler) Handle(ctx context.Context, message messaging.Message) error {
 	// Here you would implement the logic to scrap events data.
 	// For now, we will just log the intent.
-	log.Printf("Scrapping events for series: %s and season %s", message.Metadata["series"], message.Metadata["season"])
+	slog.Info("Scrapping events intent received", "series", message.Metadata["series"], "season", message.Metadata["season"])
 
 	// Simulate scrapping process
 	// In a real implementation, you would fetch data from an API or database.

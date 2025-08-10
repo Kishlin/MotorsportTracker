@@ -3,6 +3,7 @@ package messaging
 import (
 	"context"
 	"errors"
+	"log/slog"
 )
 
 type Handler interface {
@@ -31,6 +32,8 @@ func (h *HandlersList) HandleMessage(ctx context.Context, message Message) error
 	if !exists {
 		return errors.New("no handler registered for message type: " + message.Type)
 	}
+
+	slog.Info("Handling message type: " + message.Type)
 
 	return handler.Handle(ctx, message)
 }

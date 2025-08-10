@@ -1,5 +1,7 @@
 package connector
 
+import "log/slog"
+
 type MockResponse struct {
 	Data []byte
 	Err  error
@@ -23,6 +25,8 @@ func (c *InMemoryConnector) SetMockResponse(url string, response MockResponse) {
 // Get retrieves data from the in-memory store.
 func (c *InMemoryConnector) Get(url string) ([]byte, error) {
 	if response, exists := c.data[url]; exists {
+		slog.Debug("Using memory connector for url: " + url)
+
 		return response.Data, response.Err
 	}
 

@@ -28,24 +28,24 @@ func TestCachedConnector_Get(t *testing.T) {
 	})
 }
 
-func TestCachedConnector_TableFromUrl(t *testing.T) {
+func TestCachedConnector_NamespaceAndKeyFromUrl(t *testing.T) {
 	connector := setupCachedConnector()
 
 	for name, testCase := range map[string]struct {
 		url               string
-		expectedTableName string
+		expectedNamespace string
 		expectedKey       string
 	}{
 		"Widget Url": {
 			url:               seriesUrl,
-			expectedTableName: "series",
+			expectedNamespace: "series",
 			expectedKey:       "all",
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
-			tableName, key := connector.tableAndKeyFromUrl(testCase.url)
-			if tableName != testCase.expectedTableName {
-				t.Errorf("Expected table name '%s', got '%s'", testCase.expectedTableName, tableName)
+			namespace, key := connector.namespaceAndKeyFromUrl(testCase.url)
+			if namespace != testCase.expectedNamespace {
+				t.Errorf("Expected namepsace '%s', got '%s'", testCase.expectedNamespace, namespace)
 			}
 			if key != testCase.expectedKey {
 				t.Errorf("Expected key '%s', got '%s'", testCase.expectedKey, key)

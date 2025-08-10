@@ -1,10 +1,9 @@
 package connector
 
 import (
-	"errors"
 	"fmt"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 )
 
@@ -21,8 +20,6 @@ func NewConnector() *MotorsportStatsConnector {
 
 // Get retrieves data
 func (c *MotorsportStatsConnector) Get(url string) ([]byte, error) {
-	log.Printf("Fetching data from URL: %s", url)
-
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return []byte{}, err
@@ -33,19 +30,21 @@ func (c *MotorsportStatsConnector) Get(url string) ([]byte, error) {
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return []byte{}, errors.New("making request: " + err.Error())
+		return []byte{}, fmt.Errorf("making request: %w", err)
 	}
 
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			fmt.Println("error closing response body:", err)
+			fmt.Println("cloning response body:", err)
 		}
 	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		return []byte{}, errors.New("fetching data: " + resp.Status)
+		return []byte{}, fmt.Errorf("fetching data: %s", resp.Status)
 	}
+
+	slog.Debug("Fetched data from URL", "url", url)
 
 	return io.ReadAll(resp.Body)
 }

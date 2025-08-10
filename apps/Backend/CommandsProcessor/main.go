@@ -4,13 +4,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/logger"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	logger.SetupSlog()
 
 	// Create a context for the application
 	ctx := context.WithoutCancel(context.Background())

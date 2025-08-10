@@ -62,7 +62,7 @@ type BaseIntent struct {
 func (c *BaseIntent) ToMessage(arguments []string, options map[string]string) (messaging.Message, error) {
 	err := c.validate(arguments, options)
 	if err != nil {
-		return messaging.Message{}, fmt.Errorf("validation error: %w", err)
+		return messaging.Message{}, fmt.Errorf("valdating arguments and options: %w", err)
 	}
 
 	metadata := make(map[string]string)

@@ -3,9 +3,8 @@ package series
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
@@ -38,25 +37,25 @@ func NewScrapSeriesHandler(db database.Database, connector connector.Connector) 
 func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) error {
 	resp, err := h.connector.Get(endpointSeries)
 	if err != nil {
-		return errors.New("fetching series data: " + err.Error())
+		return fmt.Errorf("fetching series data: %w", err)
 	}
 
 	// Validate the response content
 	if err := scrapping.Validate(ctx, resp, schemaSeries); err != nil {
-		return errors.New("validating series data: " + err.Error())
+		return fmt.Errorf("validating series data: %w", err)
 	}
 
 	// Unmarshal the response into a slice of Series
 	var seriesList []Series
 	err = json.Unmarshal(resp, &seriesList)
 	if err != nil {
-		return errors.New("unmarshalling series data: " + err.Error())
+		return fmt.Errorf("unmarshalling series data: %w", err)
 	}
 
 	// Get existing series from the database for comparison
 	existingSeries, err := h.getExistingSeries(ctx)
 	if err != nil {
-		return errors.New("fetching existing series from database: " + err.Error())
+		return fmt.Errorf("fetching existing series from database: %w", err)
 	}
 
 	newSeriesCount := 0
@@ -66,12 +65,12 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 	for _, series := range seriesList {
 		if existingData, exists := existingSeries[series.ExternalUUID]; exists {
 			existingSeriesCount++
-			log.Printf("Series already exists: %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
+			slog.Debug("Series already exists", "name", series.Name, "external_uuid", series.ExternalUUID)
 
 			// Compare data and log warnings if different
 			if h.seriesAreEqual(series, existingData) {
 				warningCount++
-				log.Printf("WARNING: Series data differs for %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
+				slog.Warn("Series data differs", "name", series.Name, "external_uuid", series.ExternalUUID)
 				h.logSeriesDifferences(series, existingData)
 			}
 		} else {
@@ -82,16 +81,23 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 				series.Name, series.ExternalUUID, series.ShortName, series.ShortCode, series.Category)
 
 			if err != nil {
-				return errors.New("inserting series into database: " + err.Error())
+				return fmt.Errorf("inserting series into database: %w", err)
 			}
 
 			newSeriesCount++
-			log.Printf("Inserted new series: %s (ExternalUUID: %s)", series.Name, series.ExternalUUID)
+			slog.Info("Inserted new series", "name", series.Name, "external_uuid", series.ExternalUUID)
 		}
 	}
 
-	log.Printf("Series scrapping completed - New: %d, Existing: %d, Warnings: %d",
-		newSeriesCount, existingSeriesCount, warningCount)
+	slog.Info(
+		"Series scrapping completed",
+		"new_series_count",
+		newSeriesCount,
+		"existing_series_count",
+		existingSeriesCount,
+		"warning_count",
+		warningCount,
+	)
 
 	return nil
 }
@@ -105,7 +111,7 @@ func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]
 	defer func(rows database.Rows) {
 		err := rows.Close()
 		if err != nil {
-			log.Printf("Error closing rows: %v", err)
+			slog.Error("Error closing rows", "err", err)
 		}
 	}(rows)
 
@@ -119,8 +125,7 @@ func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]
 		}
 
 		// Debug logging to see what we actually scanned
-		log.Printf("DEBUG: Scanned series - Name: '%s', ExternalUUID: '%s', ShortName: '%s', ShortCode: '%s', Category: '%s'",
-			series.Name, series.ExternalUUID, series.ShortName, series.ShortCode, series.Category)
+		slog.Debug("Scanned series", "name", series.Name, "external_uuid", series.ExternalUUID)
 
 		existingSeries[series.ExternalUUID] = series
 	}
@@ -129,7 +134,7 @@ func (h *ScrapSeriesHandler) getExistingSeries(ctx context.Context) (map[string]
 		return nil, fmt.Errorf("iterating series rows: %w", err)
 	}
 
-	log.Printf("Retrieved %d existing series from database", len(existingSeries))
+	slog.Info("Returning existing series from database", "existing_count", len(existingSeries))
 	return existingSeries, nil
 }
 
@@ -144,16 +149,16 @@ func (h *ScrapSeriesHandler) seriesAreEqual(newSeries, existingSeries Series) bo
 // logSeriesDifferences logs detailed differences between series data
 func (h *ScrapSeriesHandler) logSeriesDifferences(newSeries, existingSeries Series) {
 	if newSeries.Name != existingSeries.Name {
-		log.Printf("  Name differs: '%s' -> '%s'", existingSeries.Name, newSeries.Name)
+		slog.Debug("Series names differ", "name", newSeries.Name, "name", existingSeries.Name)
 	}
 	if newSeries.ShortName != existingSeries.ShortName {
-		log.Printf("  ShortName differs: '%s' -> '%s'", existingSeries.ShortName, newSeries.ShortName)
+		slog.Debug("Series shortnames differ", "name", newSeries.ShortName, "name", existingSeries.ShortName)
 	}
 	if newSeries.ShortCode != existingSeries.ShortCode {
-		log.Printf("  ShortCode differs: '%s' -> '%s'", existingSeries.ShortCode, newSeries.ShortCode)
+		slog.Debug("Series shortcodes differ", "name", newSeries.ShortName, "name", existingSeries.ShortName)
 	}
 	if newSeries.Category != existingSeries.Category {
-		log.Printf("  Category differs: '%s' -> '%s'", existingSeries.Category, newSeries.Category)
+		slog.Debug("Series categories differ", "category", newSeries.Category, "category", existingSeries.Category)
 	}
 }
 

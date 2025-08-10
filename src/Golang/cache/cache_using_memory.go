@@ -1,5 +1,7 @@
 package cache
 
+import "log/slog"
+
 type InMemoryCache struct {
 	cache map[string]map[string][]byte
 }
@@ -11,12 +13,16 @@ func NewInMemoryCache() *InMemoryCache {
 }
 
 func (c *InMemoryCache) Get(namespace, key string) (value []byte, hit bool, err error) {
+	logger := slog.With("namespace", namespace, "key", key)
+
 	if ns, exists := c.cache[namespace]; exists {
 		if val, found := ns[key]; found {
+			logger.Debug("Cache hit")
 			return val, true, nil
 		}
 	}
 
+	logger.Debug("Cache miss")
 	return nil, false, nil
 }
 
@@ -26,6 +32,8 @@ func (c *InMemoryCache) Set(namespace, key string, value []byte) error {
 	}
 
 	c.cache[namespace][key] = value
+
+	slog.Debug("Cache set", "namespace", namespace, "key", key)
 
 	return nil
 }

@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/logger"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
@@ -16,6 +18,8 @@ import (
 )
 
 func main() {
+	logger.SetupSlog()
+
 	if len(os.Args) < 2 {
 		printUsage()
 		os.Exit(1)
@@ -62,7 +66,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Intent %s successfully sent to the queue.\n", subcommand)
+	slog.Info("Intent sent to the queue", "intent", subcommand)
 	os.Exit(0)
 }
 

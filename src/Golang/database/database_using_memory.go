@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
+	"log/slog"
 	"strings"
 	"sync"
 )
@@ -172,7 +172,8 @@ func (m *MemoryDatabase) Connect(_ context.Context) error {
 	}
 
 	m.connected = true
-	log.Println("Successfully connected to in-memory database")
+
+	slog.Info("Successfully connected to in-memory database")
 
 	return nil
 }
@@ -213,7 +214,7 @@ func (m *MemoryDatabase) Exec(_ context.Context, sql string, arguments ...any) e
 	// Try to find an exact match
 	if queryMap, exists := m.queryResponses[normalizedQuery]; exists {
 		if response, argsExists := queryMap[argsKey]; argsExists {
-			log.Printf("Executed SQL: %s with %d arguments", sql, len(arguments))
+			slog.Debug("Executed SQL", "sql", sql, "args_key", argsKey)
 			return response.Error
 		}
 	}
@@ -246,7 +247,7 @@ func (m *MemoryDatabase) Query(_ context.Context, sql string, arguments ...any) 
 				return nil, response.Error
 			}
 
-			log.Printf("Executed query: %s with %d arguments, returned %d rows", sql, len(arguments), len(response.Rows))
+			slog.Debug("Executed SQL", "sql", sql, "args_key", argsKey)
 
 			return &MemoryRows{
 				rows:    response.Rows,
@@ -271,7 +272,8 @@ func (m *MemoryDatabase) Close() {
 
 	m.closed = true
 	m.connected = false
-	log.Println("Memory database connection closed")
+
+	slog.Info("Closing database connection")
 }
 
 // isConnected returns whether the database is currently connected

@@ -2,7 +2,7 @@ package messaging
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"sync"
 	"time"
 )
@@ -30,7 +30,7 @@ func NewWorker(q Queue, handlersList *HandlersList, workerCount int, pollInterva
 
 // Start begins processing messages
 func (w *Worker) Start(ctx context.Context) {
-	log.Printf("Starting %d worker(s) with poll interval of %s", w.workerCount, w.pollInterval)
+	slog.Info("Starting workers", "queue", w.queue, "workerCount", w.workerCount, "pollInterval", w.pollInterval)
 
 	for i := 0; i < w.workerCount; i++ {
 		w.wg.Add(1)
@@ -40,28 +40,28 @@ func (w *Worker) Start(ctx context.Context) {
 
 // Stop signals the workers to stop
 func (w *Worker) Stop() {
-	log.Println("Stopping workers...")
+	slog.Debug("Stopping workers")
 	close(w.stopChan)
 	w.wg.Wait()
-	log.Println("All workers stopped")
+	slog.Info("Worker stopped")
 }
 
 // runWorker continuously polls for messages and processes them
 func (w *Worker) runWorker(ctx context.Context, id int) {
 	defer w.wg.Done()
 
-	log.Printf("Worker %d started", id)
+	slog.Info("Worker started", "id", id)
 
 	for {
 		select {
 		case <-w.stopChan:
-			log.Printf("Worker %d stopping", id)
+			slog.Info("Worker stopped", "id", id)
 			return
 		default:
 			// Poll for messages
 			messages, err := w.queue.Receive(10) // Process up to 10 messages at a time
 			if err != nil {
-				log.Printf("Error receiving messages: %v", err)
+				slog.Error("Error receiving messages", "err", err)
 				time.Sleep(w.pollInterval)
 				continue
 			}
@@ -77,13 +77,13 @@ func (w *Worker) runWorker(ctx context.Context, id int) {
 				err := w.handlersList.HandleMessage(ctx, message)
 
 				if err != nil {
-					log.Printf("Error processing message: %v", err)
+					slog.Error("Error handling message", "handle", handle, "err", err)
 					continue
 				}
 
 				// Delete message from queue after successful processing
 				if err := w.queue.Delete(handle); err != nil {
-					log.Printf("Error deleting message: %v", err)
+					slog.Error("Error deleting message", "handle", handle, "err", err)
 				}
 			}
 		}

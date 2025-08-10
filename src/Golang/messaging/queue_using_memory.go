@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"log/slog"
 	"sync"
 
 	"github.com/google/uuid"
@@ -38,6 +39,8 @@ func (q *MemoryQueue) Send(message Message) error {
 	// Store the message in the map
 	q.messages[messageHandle] = message
 
+	slog.Debug("Message sent to memory queue", "handle", messageHandle, "type", message.Type)
+
 	return nil
 }
 
@@ -64,6 +67,8 @@ func (q *MemoryQueue) Receive(maxMessages int) (map[MessageHandle]Message, error
 			messages[handle] = msg
 
 			delete(q.messages, handle)
+
+			slog.Debug("Message moved to hidden queue", "handle", handle)
 		}
 	}
 
@@ -77,13 +82,19 @@ func (q *MemoryQueue) Delete(handle MessageHandle) error {
 
 	delete(q.hiddenMessages, handle)
 
+	slog.Debug("Message deleted from hidden queue", "handle", handle)
+
 	return nil
 }
 
 // Connect is a no-op for memory queue
 func (q *MemoryQueue) Connect() error {
+	slog.Info("Connecting to memory queue")
+
 	return nil
 }
 
 // Disconnect is a no-op for memory queue
-func (q *MemoryQueue) Disconnect() {}
+func (q *MemoryQueue) Disconnect() {
+	slog.Info("Disconnecting from memory queue")
+}

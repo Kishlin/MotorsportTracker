@@ -3,7 +3,7 @@ package messaging
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"log/slog"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -43,7 +43,7 @@ func (q *SQSQueue) Connect() error {
 		Credentials: creds,
 	})
 	if err != nil {
-		return fmt.Errorf("failed to create AWS session: %v", err)
+		return fmt.Errorf("creating AWS session: %v", err)
 	}
 
 	// Create SQS client
@@ -55,12 +55,13 @@ func (q *SQSQueue) Connect() error {
 			QueueName: aws.String(q.queueName),
 		})
 		if err != nil {
-			return fmt.Errorf("failed to get queue URL: %v", err)
+			return fmt.Errorf("getting queue URL: %v", err)
 		}
 		q.queueURL = *result.QueueUrl
 	}
 
-	log.Printf("Successfully connected to SQS queue: %s", q.queueName)
+	slog.Info("Connected to SQS queue", "queueName", q.queueName)
+
 	return nil
 }
 
@@ -69,7 +70,7 @@ func (q *SQSQueue) Send(message Message) error {
 	// Convert message to JSON
 	messageBody, err := json.Marshal(message)
 	if err != nil {
-		return fmt.Errorf("failed to marshal message: %v", err)
+		return fmt.Errorf("marshalling message: %v", err)
 	}
 
 	// Send message to SQS
@@ -78,7 +79,7 @@ func (q *SQSQueue) Send(message Message) error {
 		QueueUrl:    aws.String(q.queueURL),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to send message: %v", err)
+		return fmt.Errorf("sending message: %v", err)
 	}
 
 	return nil
@@ -102,7 +103,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		MessageAttributeNames:       []*string{aws.String("All")},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to receive messages: %v", err)
+		return nil, fmt.Errorf("receiving messages: %v", err)
 	}
 
 	// If no messages, return empty map
@@ -115,7 +116,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 
 	for _, sqsMsg := range result.Messages {
 		if sqsMsg.Body == nil || sqsMsg.ReceiptHandle == nil {
-			log.Println("Received message with nil body or receipt handle, skipping")
+			slog.Debug("Received message with nil body or receipt handle, skipping")
 			continue
 		}
 
@@ -123,7 +124,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		var msg Message
 		err := json.Unmarshal([]byte(*sqsMsg.Body), &msg)
 		if err != nil {
-			log.Printf("Error unmarshaling message: %v", err)
+			slog.Error("Failed to unmarshal message", "err", err)
 			continue
 		}
 
@@ -133,9 +134,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		// Add message to map with its handle as key
 		messages[handle] = msg
 
-		if sqsMsg.MessageId != nil {
-			log.Printf("Received message with ID: %s", *sqsMsg.MessageId)
-		}
+		slog.Debug("Received message", "handle", truncateString(*sqsMsg.ReceiptHandle, 20), "type", msg.Type)
 	}
 
 	return messages, nil
@@ -152,10 +151,11 @@ func (q *SQSQueue) Delete(handle MessageHandle) error {
 		ReceiptHandle: aws.String(receiptHandle),
 	})
 	if err != nil {
-		return fmt.Errorf("failed to delete message: %v", err)
+		return fmt.Errorf("deleting message: %v", err)
 	}
 
-	log.Printf("Successfully deleted message with receipt handle: %s...", truncateString(receiptHandle, 20))
+	slog.Debug("Deleted message", "handle", truncateString(receiptHandle, 20))
+
 	return nil
 }
 
@@ -163,6 +163,8 @@ func (q *SQSQueue) Delete(handle MessageHandle) error {
 func (q *SQSQueue) Disconnect() {
 	// Nothing specific to clean up for AWS SQS client
 	q.client = nil
+
+	slog.Info("Disconnected from SQS queue", "queueName", q.queueName)
 }
 
 // truncateString truncates a string to the specified length and adds an ellipsis
