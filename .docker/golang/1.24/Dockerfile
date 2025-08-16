@@ -12,5 +12,8 @@ RUN apt-get update && apt-get install -y \
 
 USER gouser
 
+# Set GOCACHE for build cache persistence
+ENV GOCACHE=/go/cache
+
 # Use tail -f /dev/null to keep the container running indefinitely
 CMD ["tail", "-f", "/dev/null"]
