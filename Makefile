@@ -118,6 +118,14 @@ run-processor:
 	@echo "Running Golang app CommandsProcessor"
 	@docker-compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
 
+build-motorsport-tracker:
+	@echo "Building Golang MotorsportTracker"
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/MotorsportTracker && go build -o build/motorsport-tracker main.go'
+
+run-motorsport-tracker:
+	@echo "Running Golang MotorsportTracker with ARGS=$(ARGS)"
+	@docker-compose exec golang /app/apps/Backend/MotorsportTracker/build/motorsport-tracker $(ARGS)
+
 # Go workspace commands
 go-tidy:
 	@echo "Running go mod tidy across all Go modules"
@@ -134,7 +142,7 @@ go-vendor: go-tidy
 go-setup: go-vendor
 	@echo "Go workspace setup complete! All modules synchronized and dependencies vendored."
 
-go-build: go-tidy build-dbmigrate build-processor build-publisher
+go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorsport-tracker
 	@echo "Built all Go applications"
 
 go-test:

@@ -4,5 +4,6 @@ use (
 	./apps/Backend/CommandsProcessor
 	./apps/Backend/CommandsPublisher
 	./apps/Backend/DBMigrate
+	./apps/Backend/MotorsportTracker
 	./src/Golang
 )
