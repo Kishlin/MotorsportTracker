@@ -32,6 +32,11 @@ linters:
   settings:
     revive:
       confidence: 0.8
+    staticcheck:
+      checks:
+        - "all"
+        - "-ST1000" # missing package comment
+        - "-S1002" # comparison with boolean prevention
   exclusions:
     paths:
       - "^apps/Admin/.*"  # Exclude Admin app directory
