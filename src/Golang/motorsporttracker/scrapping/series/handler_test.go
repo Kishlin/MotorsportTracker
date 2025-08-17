@@ -91,6 +91,20 @@ func TestScrapSeriesHandler_Handle_IntelligentBehavior_ExistingSeries(t *testing
 	handler := setupHandler(t,
 		withSingleSeriesConnectorResponse(),
 		withExistingSeries("Formula 1", "f1-uuid-123", "F1", "F1", "Formula"),
+		expectNoInsertQuery(),
+	)
+
+	err := handler.Handle(context.Background(), messaging.Message{})
+	if err != nil {
+		t.Errorf("Expected no error, got: %v", err)
+	}
+}
+
+func TestScrapSeresHandler_Handle_IntelligentBehavior_ExistingSeriesWithDifferentData(t *testing.T) {
+	handler := setupHandler(t,
+		withSingleSeriesConnectorResponse(),
+		withExistingSeries("Formula 1", "f1-uuid-123", "F1", "F1", "DifferentCategory"),
+		expectNoInsertQuery(),
 	)
 
 	err := handler.Handle(context.Background(), messaging.Message{})
@@ -272,4 +286,8 @@ func expectInsertQuery(name, uuid, shortName, shortCode, category string) setupO
 			response: database.QueryResponse{Error: nil},
 		})
 	}
+}
+
+func expectNoInsertQuery() setupOption {
+	return func(s *testSetup) {}
 }

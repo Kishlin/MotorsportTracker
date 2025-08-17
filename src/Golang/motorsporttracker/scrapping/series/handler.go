@@ -62,7 +62,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 			slog.Debug("Series already exists", "name", series.Name, "external_uuid", series.ExternalUUID)
 
 			// Compare data and log warnings if different
-			if series.IsEqualTo(existingData) {
+			if series.IsEqualTo(existingData) == false {
 				warningCount++
 				slog.Warn("Series data differs", "name", series.Name, "external_uuid", series.ExternalUUID)
 				h.logSeriesDifferences(series, existingData)
