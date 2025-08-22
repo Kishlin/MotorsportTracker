@@ -66,6 +66,11 @@ func main() {
 
 	err = handler.Handle(ctx, message)
 
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "handling intent %s: %v\n", subcommand, err)
+		os.Exit(1)
+	}
+
 	fmt.Print("Successfully processed command")
 	os.Exit(0)
 }

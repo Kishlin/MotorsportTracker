@@ -156,6 +156,8 @@ go-lint:
 	@echo "Running Go linting across all modules"
 	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/...'
 
+go-run:
+	@docker-compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
