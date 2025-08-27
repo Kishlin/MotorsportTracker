@@ -2,7 +2,7 @@ package series
 
 type Series struct {
 	Name         string `json:"name"`
-	ExternalUUID string `json:"uuid"` // We call it ExternalUUID because it comes from the API, n which it's called uuid
+	ExternalUUID string `json:"uuid"` // We call it ExternalUUID because it comes from the API, in which it's called uuid
 	ShortName    string `json:"shortName"`
 	ShortCode    string `json:"shortCode"`
 	Category     string `json:"category"`

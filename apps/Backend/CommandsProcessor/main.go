@@ -55,7 +55,10 @@ func main() {
 		series.ScrapeSeriesIntentName,
 		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
 	)
-	handlersList.RegisterHandler(seasons.ScrapeSeasonsIntentName, seasons.NewScrapSeasonsHandler())
+	handlersList.RegisterHandler(
+		seasons.ScrapeSeasonsIntentName,
+		seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
+	)
 	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
 
 	// Create and start the worker

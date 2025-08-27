@@ -37,7 +37,7 @@ func TestDatabaseCache_GetOnExistingCache(t *testing.T) {
 
 	actual, hit, err := cache.Get(namespace, key)
 	if err != nil {
-		t.Fatalf("unexpected error on Get: %v", err)
+		t.Fatalf("unexpected error on Search: %v", err)
 	}
 	if !hit {
 		t.Error("expected hit to be true, got false")

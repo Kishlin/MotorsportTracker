@@ -46,7 +46,7 @@ func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) er
 		return fmt.Errorf("unmarshalling series data: %w", err)
 	}
 
-	// Get existing series from the database for comparison
+	// Search existing series from the database for comparison
 	existingSeries, err := h.repository.FindAll(ctx)
 	if err != nil {
 		return fmt.Errorf("fetching existing series from database: %w", err)

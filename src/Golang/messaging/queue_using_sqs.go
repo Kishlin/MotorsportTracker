@@ -49,7 +49,7 @@ func (q *SQSQueue) Connect() error {
 	// Create SQS client
 	q.client = sqs.New(sess)
 
-	// Get queue URL if not already set
+	// Search queue URL if not already set
 	if q.queueURL == "" {
 		result, err := q.client.GetQueueUrl(&sqs.GetQueueUrlInput{
 			QueueName: aws.String(q.queueName),

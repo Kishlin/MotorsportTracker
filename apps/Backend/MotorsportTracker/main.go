@@ -48,7 +48,7 @@ func main() {
 		handler = series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
 	case seasons.ScrapeSeasonsIntentName:
 		intent = seasons.NewScrapSeasonsIntent()
-		handler = seasons.NewScrapSeasonsHandler()
+		handler = seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
 	case events.ScrapeEventsIntentName:
 		intent = events.NewScrapEventsIntent()
 		handler = events.NewScrapEventsHandler()
