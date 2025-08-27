@@ -35,15 +35,32 @@ func TestCachedConnector_NamespaceAndKeyFromUrl(t *testing.T) {
 		url               string
 		expectedNamespace string
 		expectedKey       string
+		shouldSucceed     bool
 	}{
-		"Widget Url": {
+		"Series Url": {
 			url:               seriesUrl,
 			expectedNamespace: "series",
 			expectedKey:       "all",
+			shouldSucceed:     true,
+		},
+		"Seasons Url": {
+			url:               "https://api.motorsportstats.com/widgets/1.0.0/series/f1-uuid/seasons",
+			expectedNamespace: "seasons",
+			expectedKey:       "f1-uuid",
+			shouldSucceed:     true,
+		},
+		"Unexpected Url": {
+			url:           "https://api.motorsportstats.com/widgets/1.0.0/unknown/endpoint",
+			shouldSucceed: false,
 		},
 	} {
 		t.Run(name, func(t *testing.T) {
-			namespace, key := connector.namespaceAndKeyFromUrl(testCase.url)
+			namespace, key, err := connector.namespaceAndKeyFromUrl(testCase.url)
+			if (err == nil) != testCase.shouldSucceed {
+				t.Errorf("Expected success: %v, got error: %v", testCase.shouldSucceed, err)
+				return
+			}
+
 			if namespace != testCase.expectedNamespace {
 				t.Errorf("Expected namepsace '%s', got '%s'", testCase.expectedNamespace, namespace)
 			}
