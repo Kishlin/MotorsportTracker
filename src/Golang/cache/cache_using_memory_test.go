@@ -31,7 +31,7 @@ func TestInMemoryCache_NominalUse(t *testing.T) {
 		t.Fatalf("Failed to set value in cache: %v", err)
 	}
 
-	// Get the value from the cache
+	// Search the value from the cache
 	retrievedValue, hit, err = cache.Get(namespace, key)
 	if err != nil {
 		t.Fatalf("Failed to get value from cache: %v", err)
