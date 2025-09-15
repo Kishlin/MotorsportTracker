@@ -30,7 +30,7 @@ func NewWorker(q Queue, handlersList *HandlersList, workerCount int, pollInterva
 
 // Start begins processing messages
 func (w *Worker) Start(ctx context.Context) {
-	slog.Info("Starting workers", "queue", w.queue, "workerCount", w.workerCount, "pollInterval", w.pollInterval)
+	slog.Info("Starting workers", "workerCount", w.workerCount, "pollInterval", w.pollInterval)
 
 	for i := 0; i < w.workerCount; i++ {
 		w.wg.Add(1)
