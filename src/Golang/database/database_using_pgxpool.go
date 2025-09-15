@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"regexp"
+	"strings"
 	"sync"
 
 	"github.com/jackc/pgx/v5"
@@ -81,6 +83,7 @@ func (p *PGXPoolAdapter) Ping(ctx context.Context) error {
 }
 
 func (p *PGXPoolAdapter) Exec(ctx context.Context, sql string, arguments ...any) error {
+	sql = stripExtraWhitespaces(sql)
 	_, err := p.pool.Exec(ctx, sql, arguments...)
 	if err != nil {
 		return fmt.Errorf("executing SQL: %w", err)
@@ -90,6 +93,7 @@ func (p *PGXPoolAdapter) Exec(ctx context.Context, sql string, arguments ...any)
 }
 
 func (p *PGXPoolAdapter) Query(ctx context.Context, sql string, arguments ...any) (Rows, error) {
+	sql = stripExtraWhitespaces(sql)
 	rows, err := p.pool.Query(ctx, sql, arguments...)
 	if err != nil {
 		return nil, fmt.Errorf("executing query: %w", err)
@@ -104,4 +108,10 @@ func (p *PGXPoolAdapter) Close() {
 	p.pool.Close()
 
 	slog.Info("Database connection closed")
+}
+
+var whitespaceRegex = regexp.MustCompile(`\s+`)
+
+func stripExtraWhitespaces(sql string) string {
+	return strings.TrimSpace(whitespaceRegex.ReplaceAllString(sql, " "))
 }
