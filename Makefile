@@ -94,13 +94,24 @@ build-dbmigrate:
 	@echo "Building Golang app DBMigrate"
 	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
 
-run-dbmigrate-core:
-	@echo "Running Golang app DBMigrate for Core"
-	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Core" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CORE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
+run-dbmigrate-core run-dbmigrate-client-cache: ENV=dev
+run-dbmigrate-core.test run-dbmigrate-client-cache.test: ENV=test
 
-run-dbmigrate-client:
-	@echo "Running Golang app DBMigrate for Client"
-	@docker-compose exec -e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/Client" -e DB_MIGRATE_DATABASE_URL=$(POSTGRES_CLIENT_CACHE_URL) golang /app/apps/Backend/DBMigrate/build/dbmigrate
+run-dbmigrate-core run-dbmigrate-core.test: DB=core
+run-dbmigrate-client-cache run-dbmigrate-client-cache.test: DB=client-cache
+
+run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test:
+	@echo "Running Golang app DBMigrate for $(DB) $(ENV)"
+	@docker-compose exec postgres /bin/bash -c '(createdb -U $$POSTGRES_USER $(DB)-$(ENV) &>/dev/null && echo "Created database $(DB)-$(ENV)") || echo "Database $(DB)-$(ENV) already exists"'
+	@docker-compose exec \
+		-e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/$(DB)" \
+		-e DB_MIGRATE_USER=$(POSTGRES_USER) \
+		-e DB_MIGRATE_PASSWORD=$(POSTGRES_PASSWORD) \
+		-e DB_MIGRATE_HOST=postgres \
+		-e DB_MIGRATE_PORT=$(POSTGRES_PORT) \
+		-e DB_MIGRATE_NO_SSL=true \
+		-e DB_MIGRATE_DATABASE="$(DB)-$(ENV)" \
+		 golang /app/apps/Backend/DBMigrate/build/dbmigrate
 
 build-publisher:
 	@echo "Building Golang app CommandsPublisher"

@@ -8,22 +8,18 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-
-	"github.com/kishlin/MotorsportTracker/src/Golang/logger"
 )
 
 func main() {
-	logger.SetupSlog()
+	connStr, err := connectionStringFromEnv()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to construct connection string: %v\n", err)
+		return
+	}
 
 	sourceStr := os.Getenv("DB_MIGRATE_SOURCE")
 	if sourceStr == "" {
 		fmt.Fprintf(os.Stderr, "DB_MIGRATE_SOURCE environment variable not set")
-		return
-	}
-
-	connStr := os.Getenv("DB_MIGRATE_DATABASE_URL")
-	if connStr == "" {
-		fmt.Fprintf(os.Stderr, "DB_MIGRATE_DATABASE_URL environment variable not set")
 		return
 	}
 
@@ -50,4 +46,41 @@ func main() {
 	}
 
 	fmt.Println("Migrations applied successfully")
+}
+
+func connectionStringFromEnv() (string, error) {
+	db := os.Getenv("DB_MIGRATE_DATABASE")
+	if db == "" {
+		return "", fmt.Errorf("DB_MIGRATE_DATABASE environment variable not set")
+	}
+
+	user := os.Getenv("DB_MIGRATE_USER")
+	if user == "" {
+		return "", fmt.Errorf("DB_MIGRATE_USER environment variable not set")
+	}
+
+	password := os.Getenv("DB_MIGRATE_PASSWORD")
+	if password == "" {
+		return "", fmt.Errorf("DB_MIGRATE_PASSWORD environment variable not set")
+	}
+
+	host := os.Getenv("DB_MIGRATE_HOST")
+	if host == "" {
+		return "", fmt.Errorf("DB_MIGRATE_HOST environment variable not set")
+	}
+
+	port := os.Getenv("DB_MIGRATE_PORT")
+	if port == "" {
+		return "", fmt.Errorf("DB_MIGRATE_PORT environment variable not set")
+	}
+
+	noSSL := os.Getenv("DB_MIGRATE_NO_SSL") != ""
+
+	sslMode := "require"
+	if noSSL {
+		sslMode = "disable"
+	}
+
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s", user, password, host, port, db, sslMode)
+	return connStr, nil
 }
