@@ -1,154 +1,206 @@
 services:
 
   sqs:
-    container_name: sqs-${PROJECT}
+    container_name: ${PROJECT}-sqs
     image: ${PROJECT}-sqs:${SQS_VERSION}
     build:
       context: ./.docker/sqs/${SQS_VERSION}
     restart: on-failure
+    volumes:
+      - ${PWD}/.docker/sqs/${SQS_VERSION}/conf/queues.conf:/opt/elasticmq.conf
     ports:
-      - "${SQS_PORT_EXTERNAL}:9324"
-    networks:
-        - "docker-app"
-
-  memcached:
-    container_name: memcached-${PROJECT}
-    image: ${PROJECT}-memcached:${MEMCACHED_VERSION}
-    build:
-      context: ./.docker/memcached/${MEMCACHED_VERSION}
-    restart: on-failure
-    ports:
-      - "${MEMCACHED_PORT_EXTERNAL}:11211"
+      - "${SQS_PORT_EXTERNAL}:${SQS_PORT}"
+      - "${SQS_UI_PORT_EXTERNAL}:${SQS_UI_PORT}"
     networks:
       - "docker-app"
 
   postgres:
-    container_name: postgres-${PROJECT}
-    image: ${PROJECT}-postgres:${DB_VERSION}
+    container_name: ${PROJECT}-postgres-core
+    image: ${PROJECT}-postgres-core:${POSTGRES_VERSION}
     build:
-      context: ./.docker/postgres/${DB_VERSION}
+      context: ./.docker/postgres/${POSTGRES_VERSION}
     restart: on-failure
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - ${PWD}:/app
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "${DB_PORT_EXTERNAL}:5432"
+      - "${POSTGRES_EXTERNAL_PORT}:${POSTGRES_PORT}"
     working_dir: "/app"
     networks:
       - "docker-app"
 
-  admin:
-    container_name: admin-${PROJECT}
-    image: ${PROJECT}-admin:${NODE_VERSION}
-    env_file:
-      - .env
-      - .env.local
+  golang:
+    container_name: ${PROJECT}-golang
+    image: ${PROJECT}-golang:${GOLANG_VERSION}
     build:
-      context: ./.docker/node/${NODE_VERSION}
+      context: ./.docker/golang/${GOLANG_VERSION}
       args:
-        DOCKER_USER: kishlin
-        DOCKER_USER_ID: 1000
+        DOCKER_USER: <DOCKER_USER>
+        DOCKER_USER_ID: <DOCKER_USER_ID>
     restart: on-failure
+    environment:
+      QUEUE_TYPE: ${QUEUE_TYPE}
+      SQS_ENDPOINT: ${SQS_ENDPOINT}
+      SQS_REGION: ${SQS_REGION}
+      SQS_ACCESS_KEY: ${SQS_ACCESS_KEY}
+      SQS_SECRET_KEY: ${SQS_SECRET_KEY}
+      SQS_SESSION_TOKEN: ${SQS_SESSION_TOKEN}
+      QUEUE_SCRAPPING_INTENTS: ${QUEUE_SCRAPPING_INTENTS}
+      POSTGRES_CORE_URL: ${POSTGRES_CORE_URL}
+      POSTGRES_CLIENT_CACHE_URL: ${POSTGRES_CLIENT_CACHE_URL}
+      LOG_LEVEL: ${LOG_LEVEL}
     volumes:
       - ${PWD}:/app
-      - cache:/srv/cache
-    ports:
-      - "${ADMIN_SERVER_PORT_EXTERNAL}:3000"
-    working_dir: "/app/apps/Admin"
-    user: kishlin
-    command: npm run install-and-start
     networks:
       - "docker-app"
 
-  frontend:
-    container_name: frontend-${PROJECT}
-    image: ${PROJECT}-frontend:${NODE_VERSION}
-    env_file:
-      - .env
-      - .env.local
-    build:
-      context: ./.docker/node/${NODE_VERSION}
-      args:
-        DOCKER_USER: <DOCKER_USER>
-        DOCKER_USER_ID: <DOCKER_USER_ID>
-    restart: on-failure
-    volumes:
-      - ${PWD}:/app
-      - cache:/srv/cache
-    ports:
-      - "${FRONTEND_SERVER_PORT_EXTERNAL}:3000"
-    working_dir: "/app/apps/MotorsportTracker/Frontend"
-    user: <DOCKER_USER>
-    command: npm run install-and-start
-    networks:
-      - "docker-app"
+#  sqs:
+#    container_name: sqs-${PROJECT}
+#    image: ${PROJECT}-sqs:${SQS_VERSION}
+#    build:
+#      context: ./.docker/sqs/${SQS_VERSION}
+#    restart: on-failure
+#    ports:
+#      - "${SQS_PORT_EXTERNAL}:9324"
+#    networks:
+#        - "docker-app"
+#
+#  memcached:
+#    container_name: memcached-${PROJECT}
+#    image: ${PROJECT}-memcached:${MEMCACHED_VERSION}
+#    build:
+#      context: ./.docker/memcached/${MEMCACHED_VERSION}
+#    restart: on-failure
+#    ports:
+#      - "${MEMCACHED_PORT_EXTERNAL}:11211"
+#    networks:
+#      - "docker-app"
 
-  backend:
-    env_file:
-        - .env
-        - .env.local
-    build:
-      context: .docker/php/${PHP_VERSION}
-      args:
-        DOCKER_USER: <DOCKER_USER>
-        DOCKER_USER_ID: <DOCKER_USER_ID>
-    container_name: backend-${PROJECT}
-    image: ${PROJECT}-backend:${PHP_VERSION}
-    ports:
-      - "${BACKEND_SERVER_PORT_EXTERNAL}:8000"
-      - "${BACKEND_XDEBUG_PORT_EXTERNAL}:9003"
-    depends_on:
-      - postgres
-    restart: on-failure
-    environment:
-        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
-        SSH_AUTH_SOCK: /ssh-agent
-        TZ: ${TIMEZONE}
-        XDEBUG_SESSION: PHPSTORM
-    volumes:
-        - ${PWD}:/app
-        - $SSH_AUTH_SOCK:/ssh-agent
-        - cache:/srv/cache
-    working_dir: "/app/apps/MotorsportTracker/Backend"
-    user: <DOCKER_USER>
-    command: symfony server:start --dir=/app/apps/MotorsportTracker/Backend/public --port=8000 --force-php-discovery
-    networks:
-        - "docker-app"
+#  postgres:
+#    container_name: postgres-${PROJECT}
+#    image: ${PROJECT}-postgres:${DB_VERSION}
+#    build:
+#      context: ./.docker/postgres/${DB_VERSION}
+#    restart: on-failure
+#    environment:
+#      POSTGRES_DB: ${DB_NAME}
+#      POSTGRES_USER: ${DB_USER}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - "${DB_PORT_EXTERNAL}:5432"
+#    working_dir: "/app"
+#    networks:
+#      - "docker-app"
 
-  backoffice:
-    env_file:
-        - .env
-        - .env.local
-    build:
-      context: .docker/php/${PHP_VERSION}
-      args:
-        DOCKER_USER: <DOCKER_USER>
-        DOCKER_USER_ID: <DOCKER_USER_ID>
-    container_name: backoffice-${PROJECT}
-    image: ${PROJECT}-backoffice:${PHP_VERSION}
-    ports:
-      - "${BACKOFFICE_SERVER_PORT_EXTERNAL}:8000"
-      - "${BACKOFFICE_XDEBUG_PORT_EXTERNAL}:9003"
-    depends_on:
-      - postgres
-    restart: on-failure
-    environment:
-        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
-        SSH_AUTH_SOCK: /ssh-agent
-        TZ: ${TIMEZONE}
-        XDEBUG_SESSION: PHPSTORM
-    volumes:
-        - ${PWD}:/app
-        - $SSH_AUTH_SOCK:/ssh-agent
-        - cache:/srv/cache
-    working_dir: "/app/apps/Backoffice"
-    user: <DOCKER_USER>
-    command: symfony server:start --dir=/app/apps/Backoffice/public --port=8000 --force-php-discovery
-    networks:
-        - "docker-app"
+#  admin:
+#    container_name: admin-${PROJECT}
+#    image: ${PROJECT}-admin:${NODE_VERSION}
+#    env_file:
+#      - .env
+#      - .env.local
+#    build:
+#      context: ./.docker/node/${NODE_VERSION}
+#      args:
+#        DOCKER_USER: <DOCKER_USER>
+#        DOCKER_USER_ID: <DOCKER_USER_ID>
+#    restart: on-failure
+#    volumes:
+#      - ${PWD}:/app
+#      - cache:/srv/cache
+#    ports:
+#      - "${ADMIN_SERVER_PORT_EXTERNAL}:3000"
+#    working_dir: "/app/apps/Admin"
+#    user: <DOCKER_USER>
+#    command: npm run install-and-start
+#    networks:
+#      - "docker-app"
+#
+#  frontend:
+#    container_name: frontend-${PROJECT}
+#    image: ${PROJECT}-frontend:${NODE_VERSION}
+#    env_file:
+#      - .env
+#      - .env.local
+#    build:
+#      context: ./.docker/node/${NODE_VERSION}
+#      args:
+#        DOCKER_USER: <DOCKER_USER>
+#        DOCKER_USER_ID: <DOCKER_USER_ID>
+#    restart: on-failure
+#    volumes:
+#      - ${PWD}:/app
+#      - cache:/srv/cache
+#    ports:
+#      - "${FRONTEND_SERVER_PORT_EXTERNAL}:3000"
+#    working_dir: "/app/apps/MotorsportTracker/Frontend"
+#    user: <DOCKER_USER>
+#    command: npm run install-and-start
+#    networks:
+#      - "docker-app"
+#
+#  backend:
+#    env_file:
+#        - .env
+#        - .env.local
+#    build:
+#      context: .docker/php/${PHP_VERSION}
+#      args:
+#        DOCKER_USER: <DOCKER_USER>
+#        DOCKER_USER_ID: <DOCKER_USER_ID>
+#    container_name: backend-${PROJECT}
+#    image: ${PROJECT}-backend:${PHP_VERSION}
+#    ports:
+#      - "${BACKEND_SERVER_PORT_EXTERNAL}:8000"
+#      - "${BACKEND_XDEBUG_PORT_EXTERNAL}:9003"
+#    depends_on:
+#      - postgres
+#    restart: on-failure
+#    environment:
+#        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
+#        SSH_AUTH_SOCK: /ssh-agent
+#        TZ: ${TIMEZONE}
+#        XDEBUG_SESSION: PHPSTORM
+#    volumes:
+#        - ${PWD}:/app
+#        - $SSH_AUTH_SOCK:/ssh-agent
+#        - cache:/srv/cache
+#    working_dir: "/app/apps/MotorsportTracker/Backend"
+#    user: <DOCKER_USER>
+#    command: symfony server:start --dir=/app/apps/MotorsportTracker/Backend/public --port=8000 --force-php-discovery
+#    networks:
+#        - "docker-app"
+#
+#  backoffice:
+#    env_file:
+#        - .env
+#        - .env.local
+#    build:
+#      context: .docker/php/${PHP_VERSION}
+#      args:
+#        DOCKER_USER: <DOCKER_USER>
+#        DOCKER_USER_ID: <DOCKER_USER_ID>
+#    container_name: backoffice-${PROJECT}
+#    image: ${PROJECT}-backoffice:${PHP_VERSION}
+#    ports:
+#      - "${BACKOFFICE_SERVER_PORT_EXTERNAL}:8000"
+#      - "${BACKOFFICE_XDEBUG_PORT_EXTERNAL}:9003"
+#    depends_on:
+#      - postgres
+#    restart: on-failure
+#    environment:
+#        COMPOSER_CACHE_DIR: /srv/cache/composer-cache
+#        SSH_AUTH_SOCK: /ssh-agent
+#        TZ: ${TIMEZONE}
+#        XDEBUG_SESSION: PHPSTORM
+#    volumes:
+#        - ${PWD}:/app
+#        - $SSH_AUTH_SOCK:/ssh-agent
+#        - cache:/srv/cache
+#    working_dir: "/app/apps/Backoffice"
+#    user: <DOCKER_USER>
+#    command: symfony server:start --dir=/app/apps/Backoffice/public --port=8000 --force-php-discovery
+#    networks:
+#        - "docker-app"
 
 networks:
   docker-app:
