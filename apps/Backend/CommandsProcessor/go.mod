@@ -1,6 +1,6 @@
 module github.com/kishlin/MotorsportTracker/apps/Backend/CommandsProcessor
 
-go 1.24.4
+go 1.25.1
 
 require github.com/kishlin/MotorsportTracker/src/Golang v0.0.0
 
