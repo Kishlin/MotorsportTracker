@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/env"
 	"github.com/kishlin/MotorsportTracker/src/Golang/logger"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
@@ -20,6 +21,12 @@ import (
 )
 
 func main() {
+	err := env.LoadEnv()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
+		os.Exit(1)
+	}
+
 	logger.SetupSlog()
 
 	// Create a context for the application

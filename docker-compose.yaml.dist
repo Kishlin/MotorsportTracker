@@ -39,16 +39,8 @@ services:
         DOCKER_USER_ID: <DOCKER_USER_ID>
     restart: on-failure
     environment:
-      QUEUE_TYPE: ${QUEUE_TYPE}
-      SQS_ENDPOINT: ${SQS_ENDPOINT}
-      SQS_REGION: ${SQS_REGION}
-      SQS_ACCESS_KEY: ${SQS_ACCESS_KEY}
-      SQS_SECRET_KEY: ${SQS_SECRET_KEY}
-      SQS_SESSION_TOKEN: ${SQS_SESSION_TOKEN}
-      QUEUE_SCRAPPING_INTENTS: ${QUEUE_SCRAPPING_INTENTS}
-      POSTGRES_CORE_URL: ${POSTGRES_CORE_URL}
-      POSTGRES_CLIENT_CACHE_URL: ${POSTGRES_CLIENT_CACHE_URL}
-      LOG_LEVEL: ${LOG_LEVEL}
+      APP_ENV: ${APP_ENV}
+      PROJECT_DIR: "/app"
     volumes:
       - ${PWD}:/app
     networks:
