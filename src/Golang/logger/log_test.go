@@ -3,9 +3,16 @@ package logger
 import (
 	"log/slog"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestLogger_ParseLogLevel(t *testing.T) {
+type LoggerUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *LoggerUnitTestSuite) TestParseLogLevel() {
 	tests := []struct {
 		name     string
 		logLevel string
@@ -20,11 +27,13 @@ func TestLogger_ParseLogLevel(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+		suite.T().Run(tt.name, func(t *testing.T) {
 			result := parseLogLevel(tt.logLevel)
-			if result != tt.expected {
-				t.Errorf("Expected %v, got %v", tt.expected, result)
-			}
+			require.Equal(t, tt.expected, result)
 		})
 	}
+}
+
+func TestUnit_Logger(t *testing.T) {
+	suite.Run(t, new(LoggerUnitTestSuite))
 }
