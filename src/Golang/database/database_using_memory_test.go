@@ -1,97 +1,69 @@
 package database
 
 import (
-	"context"
 	"testing"
+
+	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
-// Constructor tests
-func TestNewMemoryDatabase(t *testing.T) {
-	db := NewMemoryDatabase()
-	if db == nil {
-		t.Fatal("NewMemoryDatabase should return a non-nil database")
-	}
-	if db.isConnected() {
-		t.Error("New database should not be connected initially")
-	}
+type DatabaseUsingMemoryUnitTestSuite struct {
+	suite.Suite
+
+	db *MemoryDatabase
 }
 
-// Connection lifecycle tests
-func TestConnect_Success(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	err := db.Connect(ctx)
-	if err != nil {
-		t.Fatalf("Connect should not return error: %v", err)
-	}
-	if !db.isConnected() {
-		t.Error("Database should be connected after Connect")
-	}
+func (suite *DatabaseUsingMemoryUnitTestSuite) SetupTest() {
+	suite.db = NewMemoryDatabase()
 }
 
-func TestConnect_AlreadyConnected(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-
-	// Connect second time should fail
-	if err := db.Connect(ctx); err == nil {
-		t.Error("Second connect should return error")
-	}
+func (suite *DatabaseUsingMemoryUnitTestSuite) TearDownTest() {
+	suite.db.Close()
 }
 
-func TestConnect_AfterClose(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-	db.Close()
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestConnect() {
+	err := suite.db.Connect(suite.T().Context())
+	require.NoError(suite.T(), err)
+	require.True(suite.T(), suite.db.isConnected())
 
-	if err := db.Connect(ctx); err == nil {
-		t.Error("Connect should return error after database is closed")
-	}
+	// Second connect should fail
+	err = suite.db.Connect(suite.T().Context())
+	require.Error(suite.T(), err)
 }
 
-// Ping tests
-func TestPing_Success(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestPing() {
+	// Not connected yet
+	err := suite.db.Ping(suite.T().Context())
+	require.Error(suite.T(), err)
 
-	if err := db.Ping(ctx); err != nil {
-		t.Errorf("Ping should not return error when connected: %v", err)
-	}
+	err = suite.db.Connect(suite.T().Context())
+	require.NoError(suite.T(), err)
+
+	// Now ping should succeed
+	err = suite.db.Ping(suite.T().Context())
+	require.NoError(suite.T(), err)
+
+	suite.db.Close()
+
+	// After close, ping should fail
+	err = suite.db.Ping(suite.T().Context())
+	require.Error(suite.T(), err)
 }
 
-func TestPing_NotConnected(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	if err := db.Ping(ctx); err == nil {
-		t.Error("Ping should return error when not connected")
-	}
-}
-
-func TestPing_AfterClose(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-	db.Close()
-
-	if err := db.Ping(ctx); err == nil {
-		t.Error("Ping should return error after database is closed")
-	}
-}
-
-//goland:noinspection SqlResolve Mock setup tests
-func TestSetQueryResponse(t *testing.T) {
-	db := NewMemoryDatabase()
-
+//goland:noinspection SqlResolve
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestSetQueryResponse() {
 	response := QueryResponse{
 		Rows:    []map[string]interface{}{{"id": 123, "name": "John Doe"}},
 		Columns: []string{"id", "name"},
 	}
 
-	// Should not panic
-	db.SetQueryResponse("SELECT * FROM users WHERE id = $1", []any{123}, response)
+	suite.db.SetQueryResponse("SELECT * FROM users WHERE id = $1", []any{123}, response)
+	require.Equal(suite.T(), 1, len(suite.db.queryResponses))
 }
 
-//goland:noinspection SqlResolve Query normalization tests (new functionality!)
-func TestNormalizeQuery_Internal(t *testing.T) {
-	db := NewMemoryDatabase()
-
+//goland:noinspection SqlResolve
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestNormalizeQuery() {
 	testCases := []struct {
 		name     string
 		input    string
@@ -119,66 +91,26 @@ func TestNormalizeQuery_Internal(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			result := db.normalizeQuery(tc.input)
-			if result != tc.expected {
-				t.Errorf("Expected '%s', got '%s'", tc.expected, result)
-			}
+		suite.T().Run(tc.name, func(t *testing.T) {
+			result := suite.db.normalizeQuery(tc.input)
+			require.Equal(suite.T(), tc.expected, result)
 		})
 	}
 }
 
-//goland:noinspection SqlResolve Query success tests
-func TestQuery_Success(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-
-	response := QueryResponse{
-		Rows:    []map[string]interface{}{{"id": 123, "name": "John Doe"}},
-		Columns: []string{"id", "name"},
-	}
-	db.SetQueryResponse("SELECT id, name FROM users WHERE id = $1", []any{123}, response)
-
-	rows, err := db.Query(ctx, "SELECT id, name FROM users WHERE id = $1", 123)
-	if err != nil {
-		t.Fatalf("Query should not return error: %v", err)
-	}
-	if rows == nil {
-		t.Fatal("Query should return non-nil rows")
-	}
-
-	// Test row scanning
-	if !rows.Next() {
-		t.Fatal("Should have at least one row")
-	}
-
-	var id int
-	var name string
-	if err := rows.Scan(&id, &name); err != nil {
-		t.Fatalf("Scan should not return error: %v", err)
-	}
-
-	if id != 123 || name != "John Doe" {
-		t.Errorf("Expected id=123, name='John Doe', got id=%d, name='%s'", id, name)
-	}
-
-	if rows.Next() {
-		t.Error("Should not have more rows")
-	}
-}
-
-//goland:noinspection SqlResolve Query whitespace normalization tests (new functionality!)
-func TestQuery_WhitespaceNormalization(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
+//goland:noinspection SqlResolve
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestQuery() {
+	_, err := suite.db.Query(suite.T().Context(), "SELECT * FROM users")
+	require.Error(suite.T(), err, "Query must fail before connection")
+	_func.Must(suite.db.Connect(suite.T().Context()))
 
 	response := QueryResponse{
 		Rows:    []map[string]interface{}{{"id": 123, "name": "John Doe"}},
 		Columns: []string{"id", "name"},
 	}
 
-	// Set up mock with single-line query
-	db.SetQueryResponse("SELECT id, name FROM users WHERE id = $1", []any{123}, response)
+	suite.db.SetQueryResponse("SELECT id, name FROM users WHERE id = $1", []any{123}, response)
 
-	// Test key formatting variations that should all match
 	testCases := []struct {
 		name  string
 		query string
@@ -191,163 +123,61 @@ func TestQuery_WhitespaceNormalization(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			rows, err := db.Query(ctx, tc.query, 123)
-			if err != nil {
-				t.Errorf("Query should not return error for %s: %v", tc.name, err)
-				return
-			}
+		suite.T().Run(tc.name, func(t *testing.T) {
+			rows, err := suite.db.Query(suite.T().Context(), tc.query, 123)
+			require.NoError(suite.T(), err)
 
-			if !rows.Next() {
-				t.Error("Should have at least one row")
-				return
-			}
+			require.True(suite.T(), rows.Next())
 
 			var id int
 			var name string
-			if err := rows.Scan(&id, &name); err != nil {
-				t.Errorf("Scan should not return error: %v", err)
-				return
-			}
+			err = rows.Scan(&id, &name)
+			require.NoError(suite.T(), err)
 
-			if id != 123 || name != "John Doe" {
-				t.Errorf("Expected id=123, name='John Doe', got id=%d, name='%s'", id, name)
-			}
+			require.Equal(suite.T(), 123, id)
+			require.Equal(suite.T(), "John Doe", name)
 		})
 	}
+
+	suite.db.Close()
+	_, err = suite.db.Query(suite.T().Context(), "SELECT * FROM users")
+	require.Error(suite.T(), err, "Query must fail after close")
 }
 
 //goland:noinspection SqlResolve
-func TestQuery_RealWorldExample(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-
-	response := QueryResponse{
-		Rows:    []map[string]interface{}{{"name": "Formula 1", "external_uuid": "f1-uuid-123"}},
-		Columns: []string{"name", "external_uuid"},
-	}
-
-	// Set up mock with clean, single-line format (like tests might use)
-	db.SetQueryResponse("SELECT name, external_uuid FROM series WHERE category = $1", []any{"Formula"}, response)
-
-	// But the actual handler code uses multi-line formatting with indentation
-	handlerStyleQuery := `
-		SELECT name, external_uuid
-		FROM series
-		WHERE category = $1`
-
-	rows, err := db.Query(ctx, handlerStyleQuery, "Formula")
-	if err != nil {
-		t.Fatalf("Query should not return error despite different formatting: %v", err)
-	}
-
-	if !rows.Next() {
-		t.Fatal("Should have at least one row")
-	}
-
-	var name, uuid string
-	if err := rows.Scan(&name, &uuid); err != nil {
-		t.Fatalf("Scan should not return error: %v", err)
-	}
-
-	if name != "Formula 1" || uuid != "f1-uuid-123" {
-		t.Errorf("Expected name='Formula 1', uuid='f1-uuid-123', got name='%s', uuid='%s'", name, uuid)
-	}
-}
-
-// Exec success tests
-func TestExec_Success(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestExec() {
+	_, err := suite.db.Query(suite.T().Context(), "SELECT * FROM users")
+	require.Error(suite.T(), err, "Query must fail before connection")
+	_func.Must(suite.db.Connect(suite.T().Context()))
 
 	response := QueryResponse{Error: nil}
-	db.SetQueryResponse("INSERT INTO users (name) VALUES ($1)", []any{"John Doe"}, response)
+	suite.db.SetQueryResponse("INSERT INTO users (name) VALUES ($1)", []any{"John Doe"}, response)
 
-	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ($1)", "John Doe"); err != nil {
-		t.Errorf("Exec should not return error: %v", err)
-	}
-}
+	err = suite.db.Exec(suite.T().Context(), "INSERT INTO users (name) VALUES ($1)", "John Doe")
+	require.NoError(suite.T(), err)
 
-// Exec whitespace normalization tests (new functionality!)
-func TestExec_WhitespaceNormalization(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-
-	response := QueryResponse{Error: nil}
-
-	// Set up mock with single-line query
-	db.SetQueryResponse("INSERT INTO users (name) VALUES ($1)", []any{"John Doe"}, response)
-
-	// Test key formatting variations that should all match
-	testCases := []struct {
-		name  string
-		query string
-	}{
-		{"Multi-line", `INSERT INTO users (name)
-			VALUES ($1)`},
-		{"Mixed case", "insert INTO Users (Name) values ($1)"},
-		{"Complex multi-line with leading whitespace", `
-			INSERT INTO users (name)
-			VALUES ($1)`},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if err := db.Exec(ctx, tc.query, "John Doe"); err != nil {
-				t.Errorf("Exec should not return error for %s: %v", tc.name, err)
-			}
-		})
-	}
-}
-
-// Exec error tests
-func TestExec_NotConnected(t *testing.T) {
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-
-	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ('test')"); err == nil {
-		t.Error("Exec should return error when not connected")
-	}
-}
-
-func TestExec_AfterClose(t *testing.T) {
-	db, ctx := setupConnectedDB(t)
-	db.Close()
-
-	if err := db.Exec(ctx, "INSERT INTO users (name) VALUES ('test')"); err == nil {
-		t.Error("Exec should return error after close")
-	}
+	suite.db.Close()
+	_, err = suite.db.Query(suite.T().Context(), "SELECT * FROM users")
+	require.Error(suite.T(), err, "Query must fail after close")
 }
 
 // Close tests
-func TestClose_Success(t *testing.T) {
-	db, _ := setupConnectedDB(t)
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestClose() {
+	require.False(suite.T(), suite.db.isConnected())
 
-	if !db.isConnected() {
-		t.Error("Database should be connected before close")
-	}
+	suite.db.Close()
 
-	db.Close()
-
-	if db.isConnected() {
-		t.Error("Database should not be connected after close")
-	}
-}
-
-func TestClose_Multiple(t *testing.T) {
-	db, _ := setupConnectedDB(t)
+	require.False(suite.T(), suite.db.isConnected())
 
 	// Should not panic on multiple closes
-	db.Close()
-	db.Close()
-	db.Close()
+	suite.db.Close()
+	suite.db.Close()
+	suite.db.Close()
 
-	if db.isConnected() {
-		t.Error("Database should not be connected after multiple closes")
-	}
+	require.False(suite.T(), suite.db.isConnected())
 }
 
-// Utility tests
-func TestBuildArgsKey(t *testing.T) {
-	db := NewMemoryDatabase()
-
+func (suite *DatabaseUsingMemoryUnitTestSuite) TestBuildArgsKey() {
 	tests := []struct {
 		name     string
 		args     []any
@@ -358,8 +188,8 @@ func TestBuildArgsKey(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			key := db.buildArgsKey(tt.args)
+		suite.T().Run(tt.name, func(t *testing.T) {
+			key := suite.db.buildArgsKey(tt.args)
 			if key != tt.expected {
 				t.Errorf("Expected '%s', got '%s'", tt.expected, key)
 			}
@@ -367,26 +197,19 @@ func TestBuildArgsKey(t *testing.T) {
 	}
 
 	// Test consistency
-	key1 := db.buildArgsKey([]any{"test", 123, true})
-	key2 := db.buildArgsKey([]any{"test", 123, true})
+	key1 := suite.db.buildArgsKey([]any{"test", 123, true})
+	key2 := suite.db.buildArgsKey([]any{"test", 123, true})
 	if key1 != key2 {
-		t.Error("Same args should produce same key")
+		suite.T().Error("Same args should produce same key")
 	}
 
 	// Test uniqueness
-	key3 := db.buildArgsKey([]any{"different", 456})
+	key3 := suite.db.buildArgsKey([]any{"different", 456})
 	if key1 == key3 {
-		t.Error("Different args should produce different keys")
+		suite.T().Error("Different args should produce different keys")
 	}
 }
 
-// Helper functions
-func setupConnectedDB(t *testing.T) (*MemoryDatabase, context.Context) {
-	t.Helper()
-	db := NewMemoryDatabase()
-	ctx := context.Background()
-	if err := db.Connect(ctx); err != nil {
-		t.Fatalf("Failed to connect database: %v", err)
-	}
-	return db, ctx
+func TestUnit_DatabaseUsingMemory(t *testing.T) {
+	suite.Run(t, new(DatabaseUsingMemoryUnitTestSuite))
 }

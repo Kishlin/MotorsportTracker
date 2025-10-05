@@ -2,34 +2,30 @@ package database
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestDatabaseFactory_NewDatabase_Memory(t *testing.T) {
+type DatabaseFactoryUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *DatabaseFactoryUnitTestSuite) TestNewDatabase() {
 	factory := NewDatabaseFactory()
 
 	db, err := factory.NewDatabase("memory://test")
-	if err != nil {
-		t.Errorf("Factory should create memory database without error: %v", err)
-	}
+	require.NoError(suite.T(), err)
 
-	// Verify it's actually a memory database
 	memDb, ok := db.(*MemoryDatabase)
-	if !ok {
-		t.Error("Factory should return MemoryDatabase for memory:// connection string")
-	}
-	if memDb == nil {
-		t.Error("Created memory database should not be nil")
-	}
+	require.True(suite.T(), ok)
+	require.NotNil(suite.T(), memDb)
+
+	db, err = factory.NewDatabase("unsupported://")
+	require.Error(suite.T(), err)
+	require.Nil(suite.T(), db)
 }
 
-func TestDatabaseFactory_NewDatabase_EmptyConnectionString(t *testing.T) {
-	factory := NewDatabaseFactory()
-
-	db, err := factory.NewDatabase("")
-	if err == nil {
-		t.Error("Factory should return error for empty connection string")
-	}
-	if db != nil {
-		t.Error("Factory should return nil database for empty connection string")
-	}
+func TestUnit_DatabaseFactory(t *testing.T) {
+	suite.Run(t, new(DatabaseFactoryUnitTestSuite))
 }
