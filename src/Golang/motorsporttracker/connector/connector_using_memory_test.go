@@ -3,82 +3,21 @@ package connector
 import (
 	"errors"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestInMemoryConnector_Get_ReturnsData(t *testing.T) {
-	expectedData := []byte("mock response Data")
-	mockData := map[string]MockResponse{
-		"https://example.com/api/data": {
-			Data: expectedData,
-			Err:  nil,
-		},
-	}
+type InMemoryConnectorUnitTestSuite struct {
+	suite.Suite
 
-	connector := NewInMemoryConnector(mockData)
-
-	result, err := connector.Get("https://example.com/api/data")
-
-	if err != nil {
-		t.Errorf("Expected no error, got %v", err)
-	}
-	if string(result) != string(expectedData) {
-		t.Errorf("Expected data '%s', got '%s'", string(expectedData), string(result))
-	}
+	connector Connector
 }
 
-func TestInMemoryConnector_Get_ReturnsError(t *testing.T) {
-	expectedError := errors.New("mock error response")
-	mockData := map[string]MockResponse{
-		"https://example.com/api/error": {
-			Data: nil,
-			Err:  expectedError,
-		},
-	}
-
-	connector := NewInMemoryConnector(mockData)
-
-	result, err := connector.Get("https://example.com/api/error")
-
-	if !errors.Is(err, expectedError) {
-		t.Errorf("Expected error '%v', got '%v'", expectedError, err)
-	}
-	if result != nil {
-		t.Errorf("Expected nil data when error occurs, got '%s'", string(result))
-	}
-}
-
-func TestInMemoryConnector_Get_PanicsOnUnexpectedURL(t *testing.T) {
-	mockData := map[string]MockResponse{
-		"https://example.com/api/known": {
-			Data: []byte("known Data"),
-			Err:  nil,
-		},
-	}
-
-	connector := NewInMemoryConnector(mockData)
-
-	defer func() {
-		if r := recover(); r == nil {
-			t.Error("Expected panic when accessing unexpected URL, but no panic occurred")
-		} else {
-			expectedPanic := "attempt to get from unexpected URL: https://example.com/api/unknown"
-			if r != expectedPanic {
-				t.Errorf("Expected panic message '%s', got '%v'", expectedPanic, r)
-			}
-		}
-	}()
-
-	_, _ = connector.Get("https://example.com/api/unknown")
-}
-
-func TestInMemoryConnector_Get_MultipleURLs(t *testing.T) {
+func (suite *InMemoryConnectorUnitTestSuite) SetupSuite() {
 	mockData := map[string]MockResponse{
 		"https://api.com/users": {
 			Data: []byte(`{"users": []}`),
-			Err:  nil,
-		},
-		"https://api.com/products": {
-			Data: []byte(`{"products": []}`),
 			Err:  nil,
 		},
 		"https://api.com/error": {
@@ -87,35 +26,32 @@ func TestInMemoryConnector_Get_MultipleURLs(t *testing.T) {
 		},
 	}
 
-	connector := NewInMemoryConnector(mockData)
+	suite.connector = NewInMemoryConnector(mockData)
+}
 
-	// Test first URL
-	result1, err1 := connector.Get("https://api.com/users")
-	if err1 != nil {
-		t.Errorf("Expected no error for users URL, got %v", err1)
-	}
-	if string(result1) != `{"users": []}` {
-		t.Errorf("Unexpected data for users URL: %s", string(result1))
-	}
+func (suite *InMemoryConnectorUnitTestSuite) TestGet() {
+	suite.T().Run("it returns prepared data", func(t *testing.T) {
+		data, err := suite.connector.Get("https://api.com/users")
+		require.NoError(t, err)
+		require.Equal(t, `{"users": []}`, string(data))
+	})
 
-	// Test second URL
-	result2, err2 := connector.Get("https://api.com/products")
-	if err2 != nil {
-		t.Errorf("Expected no error for products URL, got %v", err2)
-	}
-	if string(result2) != `{"products": []}` {
-		t.Errorf("Unexpected data for products URL: %s", string(result2))
-	}
+	suite.T().Run("it returns prepared errors", func(t *testing.T) {
+		data, err := suite.connector.Get("https://api.com/error")
+		require.Error(t, err)
+		require.Nil(t, data)
+		require.Equal(t, "service unavailable", err.Error())
+	})
 
-	// Test error URL
-	result3, err3 := connector.Get("https://api.com/error")
-	if err3 == nil {
-		t.Error("Expected error for error URL, got nil")
+	suite.T().Run("it panics on unexpected URL", func(t *testing.T) {
+		defer func() {
+			require.NotNil(t, recover())
+		}()
 
-	} else if err3.Error() != "service unavailable" {
-		t.Errorf("Expected 'service unavailable' error, got '%v'", err3)
-	}
-	if result3 != nil {
-		t.Errorf("Expected nil data for error URL, got '%s'", string(result3))
-	}
+		_, _ = suite.connector.Get("https://api.com/unknown")
+	})
+}
+
+func TestUnit_InMemoryConnector(t *testing.T) {
+	suite.Run(t, new(InMemoryConnectorUnitTestSuite))
 }

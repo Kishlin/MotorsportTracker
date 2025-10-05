@@ -4,115 +4,74 @@ import (
 	"testing"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/cache"
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
 const seriesUrl = "https://api.motorsportstats.com/widgets/1.0.0/series"
 
-func TestCachedConnector_Get(t *testing.T) {
-	t.Run("Sets the cache if empty", func(t *testing.T) {
-		connector := setupCachedConnector(
-			withSeriesClientResponse(),
-			withEmptyClientCache(),
-		)
+type ConnectorDecoratorWithCacheUnitTestSuite struct {
+	suite.Suite
 
-		data, err := connector.Get(seriesUrl)
-		if err != nil {
-			t.Fatalf("Expected no error, got %v", err)
-		}
-		if len(data) == 0 {
-			t.Fatal("Expected to get data, got empty response")
-		}
-
-		// Assert cache state after the test
-		assertCacheItemCount(t, connector, 1)
-	})
+	connector *CachedConnector
 }
 
-func TestCachedConnector_NamespaceAndKeyFromUrl(t *testing.T) {
-	connector := setupCachedConnector()
-
-	for name, testCase := range map[string]struct {
-		url               string
-		expectedNamespace string
-		expectedKey       string
-		shouldSucceed     bool
-	}{
-		"Series Url": {
-			url:               seriesUrl,
-			expectedNamespace: "series",
-			expectedKey:       "all",
-			shouldSucceed:     true,
-		},
-		"Seasons Url": {
-			url:               "https://api.motorsportstats.com/widgets/1.0.0/series/f1-uuid/seasons",
-			expectedNamespace: "seasons",
-			expectedKey:       "f1-uuid",
-			shouldSucceed:     true,
-		},
-		"Unexpected Url": {
-			url:           "https://api.motorsportstats.com/widgets/1.0.0/unknown/endpoint",
-			shouldSucceed: false,
-		},
-	} {
-		t.Run(name, func(t *testing.T) {
-			namespace, key, err := connector.namespaceAndKeyFromUrl(testCase.url)
-			if (err == nil) != testCase.shouldSucceed {
-				t.Errorf("Expected success: %v, got error: %v", testCase.shouldSucceed, err)
-				return
-			}
-
-			if namespace != testCase.expectedNamespace {
-				t.Errorf("Expected namepsace '%s', got '%s'", testCase.expectedNamespace, namespace)
-			}
-			if key != testCase.expectedKey {
-				t.Errorf("Expected key '%s', got '%s'", testCase.expectedKey, key)
-			}
-		})
-	}
-}
-
-type cachedConnectorOpt func(connector *InMemoryConnector, cache *cache.InMemoryCache)
-
-func setupCachedConnector(opts ...cachedConnectorOpt) *CachedConnector {
-	connector := NewInMemoryConnector(make(map[string]MockResponse))
+func (suite *ConnectorDecoratorWithCacheUnitTestSuite) SetupSuite() {
+	innerMemoryConnector := NewInMemoryConnector(make(map[string]MockResponse))
 	inMemoryCache := cache.NewInMemoryCache()
 
-	for _, opt := range opts {
-		opt(connector, inMemoryCache)
-	}
-
-	return NewCachedConnector(connector, inMemoryCache)
+	suite.connector = NewCachedConnector(innerMemoryConnector, inMemoryCache)
 }
 
-func withEmptyClientCache() cachedConnectorOpt {
-	return func(_ *InMemoryConnector, _ *cache.InMemoryCache) {}
+func (suite *ConnectorDecoratorWithCacheUnitTestSuite) TestNamespaceAndKeyFromUrl() {
+	namespace, key, err := suite.connector.namespaceAndKeyFromUrl("https://api.motorsportstats.com/widgets/1.0.0/series")
+	require.NoError(suite.T(), err)
+	require.Equal(suite.T(), "series", namespace)
+	require.Equal(suite.T(), "all", key)
+
+	namespace, key, err = suite.connector.namespaceAndKeyFromUrl("https://api.motorsportstats.com/widgets/1.0.0/series/f1-uuid/seasons")
+	require.NoError(suite.T(), err)
+	require.Equal(suite.T(), "seasons", namespace)
+	require.Equal(suite.T(), "f1-uuid", key)
+
+	_, _, err = suite.connector.namespaceAndKeyFromUrl("https://api.motorsportstats.com/widgets/1.0.0/unknown")
+	require.Error(suite.T(), err)
 }
 
-func withSeriesClientResponse() cachedConnectorOpt {
-	return func(connector *InMemoryConnector, _ *cache.InMemoryCache) {
-		connector.SetMockResponse(
-			seriesUrl,
-			MockResponse{
-				Err: nil,
-				Data: []byte(`{
+func (suite *ConnectorDecoratorWithCacheUnitTestSuite) TearDownTest() {
+	suite.connector.inner.(*InMemoryConnector).ClearMockResponses()
+}
+
+func (suite *ConnectorDecoratorWithCacheUnitTestSuite) TestGet() {
+	prepareSeriesClientResponse(suite.connector.inner)
+
+	_, err := suite.connector.Get(seriesUrl)
+	require.NoError(suite.T(), err)
+
+	suite.connector.inner.(*InMemoryConnector).ClearMockResponses()
+
+	// Now that the in-memory connector is cleared, it will panic if it is called again.
+	// This ensures the cache is used to prevent another call.
+	_, err = suite.connector.Get(seriesUrl)
+	require.NoError(suite.T(), err)
+}
+
+func TestUnit_ConnectorDecoratorWithCache(t *testing.T) {
+	suite.Run(t, new(ConnectorDecoratorWithCacheUnitTestSuite))
+}
+
+func prepareSeriesClientResponse(connector Connector) {
+	connector.(*InMemoryConnector).SetMockResponse(
+		seriesUrl,
+		MockResponse{
+			Err: nil,
+			Data: []byte(`{
 				"name": "Formula 1",
 				"uuid": "f1-uuid",
 				"shortName": "F1", 
 				"shortCode": "F1",
 				"category": "Open Wheel",
 			}`),
-			},
-		)
-	}
-}
-
-func assertCacheItemCount(t *testing.T, c *CachedConnector, expected int) {
-	if inMemCache, ok := c.cache.(*cache.InMemoryCache); ok {
-		if inMemCache.ItemsCount() != expected {
-			t.Errorf("Expected %d items in cache, got %d", expected, inMemCache.ItemsCount())
-		}
-		return
-	}
-
-	panic("Cache is not of type InMemoryCache")
+		},
+	)
 }

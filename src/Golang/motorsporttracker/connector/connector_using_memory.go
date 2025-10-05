@@ -22,6 +22,10 @@ func (c *InMemoryConnector) SetMockResponse(url string, response MockResponse) {
 	c.data[url] = response
 }
 
+func (c *InMemoryConnector) ClearMockResponses() {
+	c.data = make(map[string]MockResponse)
+}
+
 // Get retrieves data from the in-memory store.
 func (c *InMemoryConnector) Get(url string) ([]byte, error) {
 	if response, exists := c.data[url]; exists {

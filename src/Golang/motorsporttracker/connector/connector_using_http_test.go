@@ -5,54 +5,10 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
-
-func TestMotorsportStatsConnector_TestGet(t *testing.T) {
-	dummyResponse := "Hello World!"
-	mockResponses := map[string]http.Response{
-		"https://example.com": {
-			StatusCode: http.StatusOK,
-			Body:       io.NopCloser(strings.NewReader(dummyResponse)),
-		},
-		"https://example.com/404": {
-			StatusCode: http.StatusNotFound,
-			Body:       io.NopCloser(strings.NewReader("")), // prevents potential nil pointer dereference
-		},
-	}
-
-	connector := setup(withInMemoryRoundTripper(mockResponses))
-
-	t.Run("OK Response", func(t *testing.T) {
-		// Test with a valid URL
-		data, err := connector.Get("https://example.com")
-		if err != nil {
-			t.Errorf("Expected no error, got %v", err)
-		}
-		if string(data) != dummyResponse {
-			t.Errorf("Expected '%s', got '%s'", dummyResponse, string(data))
-		}
-	})
-
-	t.Run("Error Response", func(t *testing.T) {
-		// Test with an error response
-		_, err := connector.Get("https://example.com/404")
-		if err == nil {
-			t.Error("Expected an error, got none")
-		}
-	})
-}
-
-type setupOption func(*MotorsportStatsConnector)
-
-func setup(opts ...setupOption) *MotorsportStatsConnector {
-	connector := NewConnector()
-
-	for _, opt := range opts {
-		opt(connector)
-	}
-
-	return connector
-}
 
 type inMemoryRoundTripper struct {
 	responses map[string]http.Response
@@ -69,8 +25,49 @@ func (irt *inMemoryRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 	}, nil
 }
 
-func withInMemoryRoundTripper(responses map[string]http.Response) setupOption {
-	return func(c *MotorsportStatsConnector) {
-		c.client.Transport = &inMemoryRoundTripper{responses}
+type ConnectorUsingHttpFunctionalTestSuite struct {
+	suite.Suite
+
+	connector *MotorsportStatsConnector
+}
+
+func (suite *ConnectorUsingHttpFunctionalTestSuite) SetupSuite() {
+	suite.connector = NewConnector()
+
+	suite.connector.client.Transport = &inMemoryRoundTripper{}
+}
+
+func (suite *ConnectorUsingHttpFunctionalTestSuite) TestGet() {
+	dummyResponse := "Hello World!"
+	mockResponses := map[string]http.Response{
+		"https://example.com": {
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(strings.NewReader(dummyResponse)),
+		},
+		"https://example.com/404": {
+			StatusCode: http.StatusNotFound,
+			Body:       io.NopCloser(strings.NewReader("")), // prevents potential nil pointer dereference
+		},
 	}
+
+	prepareMockResponses(suite.connector, mockResponses)
+
+	suite.T().Run("OK Response", func(t *testing.T) {
+		data, err := suite.connector.Get("https://example.com")
+		require.NoError(t, err)
+		require.Equal(t, dummyResponse, string(data))
+	})
+
+	suite.T().Run("Error Response", func(t *testing.T) {
+		_, err := suite.connector.Get("https://example.com/404")
+		require.Error(t, err)
+	})
+}
+
+func TestFunctional_ConnectorUsingHttp(t *testing.T) {
+	suite.Run(t, new(ConnectorUsingHttpFunctionalTestSuite))
+}
+
+func prepareMockResponses(connector Connector, responses map[string]http.Response) {
+	connector.(*MotorsportStatsConnector).client.Transport.(*inMemoryRoundTripper).responses = responses
 }
