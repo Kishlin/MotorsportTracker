@@ -1,9 +1,19 @@
 package cache
 
-import "testing"
+import (
+	"testing"
 
-func TestInMemoryCache_NominalUse(t *testing.T) {
-	cache := setupInMemoryCache()
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
+)
+
+type CacheUsingMemoryUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *CacheUsingMemoryUnitTestSuite) TestNominalUse() {
+	cache := NewInMemoryCache()
+	require.NotNil(suite.T(), cache)
 
 	namespace := "testNamespace"
 	key := "testKey"
@@ -11,72 +21,50 @@ func TestInMemoryCache_NominalUse(t *testing.T) {
 
 	// First get should return nil
 	retrievedValue, hit, err := cache.Get(namespace, key)
-	if err != nil {
-		t.Fatalf("Failed to get value from cache: %v", err)
-	}
-	if hit {
-		t.Error("Expected hit to be false, got true")
-	}
-	if retrievedValue != nil {
-		t.Errorf("Expected nil, got %s", retrievedValue)
-	}
+	require.Nil(suite.T(), err)
+	require.False(suite.T(), hit)
+	require.Nil(suite.T(), retrievedValue)
 
 	// Count should be 0 when it's empty
-	if count := cache.ItemsCount(); count != 0 {
-		t.Errorf("Expected 0 items in cache, got %d", count)
-	}
+	require.Zero(suite.T(), cache.ItemsCount())
 
 	// Set a value in the cache
-	if err := cache.Set(namespace, key, value); err != nil {
-		t.Fatalf("Failed to set value in cache: %v", err)
-	}
+	err = cache.Set(namespace, key, value)
+	require.NoError(suite.T(), err)
 
 	// Search the value from the cache
 	retrievedValue, hit, err = cache.Get(namespace, key)
-	if err != nil {
-		t.Fatalf("Failed to get value from cache: %v", err)
-	}
-	if !hit {
-		t.Error("Expected hit to be true, got false")
-	}
-	if string(retrievedValue) != string(value) {
-		t.Errorf("Expected %s, got %s", value, retrievedValue)
-	}
+	require.NoError(suite.T(), err)
+	require.True(suite.T(), hit)
+	require.Equal(suite.T(), value, retrievedValue)
 
 	// Count should be 1 after setting a value
-	if count := cache.ItemsCount(); count != 1 {
-		t.Errorf("Expected 1 item in cache, got %d", count)
-	}
+	require.Equal(suite.T(), 1, cache.ItemsCount())
 
 	// Set another value in the same namespace
 	anotherKey := "anotherKey"
 	anotherValue := []byte("anotherValue")
-	if err := cache.Set(namespace, anotherKey, anotherValue); err != nil {
-		t.Fatalf("Failed to set another value in cache: %v", err)
-	}
+	err = cache.Set(namespace, anotherKey, anotherValue)
+	require.NoError(suite.T(), err)
 
 	// Count should be 2 after setting another value
-	if count := cache.ItemsCount(); count != 2 {
-		t.Errorf("Expected 2 items in cache, got %d", count)
-	}
+	require.Equal(suite.T(), 2, cache.ItemsCount())
 
 	// Set the same key again with a different value
 	newValue := []byte("newValue")
-	if err := cache.Set(namespace, key, newValue); err != nil {
-		t.Fatalf("Failed to set new value in cache: %v", err)
-	}
+	err = cache.Set(namespace, key, newValue)
+	require.NoError(suite.T(), err)
 
 	// Count should still be 2
-	if count := cache.ItemsCount(); count != 2 {
-		t.Errorf("Expected 2 items in cache, got %d", count)
-	}
+	require.Equal(suite.T(), 2, cache.ItemsCount())
+
+	// Get should return the updated value
+	retrievedValue, hit, err = cache.Get(namespace, key)
+	require.NoError(suite.T(), err)
+	require.True(suite.T(), hit)
+	require.Equal(suite.T(), newValue, retrievedValue)
 }
 
-func setupInMemoryCache() *InMemoryCache {
-	cache := NewInMemoryCache()
-	if cache == nil {
-		panic("Failed to create InMemoryCache")
-	}
-
-	return cache
+func TestUnit_CacheUsingMemory(t *testing.T) {
+	suite.Run(t, new(CacheUsingMemoryUnitTestSuite))
 }
