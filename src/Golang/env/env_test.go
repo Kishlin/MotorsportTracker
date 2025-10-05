@@ -6,28 +6,33 @@ import (
 
 	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
 	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
 )
 
-func TestEnv_OverrideAppEnv(t *testing.T) {
+type EnvUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *EnvUnitTestSuite) TestOverrideAppEnv() {
 	initial := os.Getenv(appEnvKey)
 	expected := "please work"
 
 	resetFunc := OverrideAppEnv(expected)
-	require.Equal(t, expected, os.Getenv(appEnvKey))
+	require.Equal(suite.T(), expected, os.Getenv(appEnvKey))
 
 	resetFunc()
-	require.Equal(t, initial, os.Getenv(appEnvKey))
+	require.Equal(suite.T(), initial, os.Getenv(appEnvKey))
 }
 
-func TestEnv_GetEnv(t *testing.T) {
-	t.Run("it defaults to production", func(t *testing.T) {
+func (suite *EnvUnitTestSuite) TestGetEnv() {
+	suite.T().Run("it defaults to production", func(t *testing.T) {
 		resetFunc := OverrideAppEnv("")
 		defer resetFunc()
 
 		_func.Must(os.Unsetenv(appEnvKey))
 	})
 
-	t.Run("it reads the value of APP_ENV", func(t *testing.T) {
+	suite.T().Run("it reads the value of APP_ENV", func(t *testing.T) {
 		expected := "please work"
 
 		resetFunc := OverrideAppEnv(expected)
@@ -39,18 +44,18 @@ func TestEnv_GetEnv(t *testing.T) {
 	})
 }
 
-func TestEnv_EnvIsValid(t *testing.T) {
+func (suite *EnvUnitTestSuite) TestEnvIsValid() {
 	validEnvs := []string{"dev", "tests", "production"}
 	for _, env := range validEnvs {
-		if !envIsValid(env) {
-			t.Errorf("Expected envIsValid to return true for valid env '%s', got false", env)
-		}
+		require.True(suite.T(), envIsValid(env))
 	}
 
 	invalidEnvs := []string{"staging", "local", "invalid", ""}
 	for _, env := range invalidEnvs {
-		if envIsValid(env) {
-			t.Errorf("Expected envIsValid to return false for invalid env '%s', got true", env)
-		}
+		require.False(suite.T(), envIsValid(env))
 	}
+}
+
+func TestUnit_Env(t *testing.T) {
+	suite.Run(t, new(EnvUnitTestSuite))
 }
