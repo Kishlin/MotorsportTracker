@@ -5,3 +5,11 @@ func Must(err error) {
 		panic("Unwanted error: " + err.Error())
 	}
 }
+
+func MustReturn(value interface{}, err error) interface{} {
+	if err != nil {
+		panic("Unwanted error: " + err.Error())
+	}
+
+	return value
+}
