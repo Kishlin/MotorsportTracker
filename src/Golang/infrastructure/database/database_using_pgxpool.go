@@ -12,28 +12,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// PGXRows wraps pgx.Rows to implement our Rows interface
-type PGXRows struct {
-	pgxRows pgx.Rows
-}
-
-func (r *PGXRows) Next() bool {
-	return r.pgxRows.Next()
-}
-
-func (r *PGXRows) Scan(dest ...any) error {
-	return r.pgxRows.Scan(dest...)
-}
-
-func (r *PGXRows) Close() error {
-	r.pgxRows.Close()
-	return nil
-}
-
-func (r *PGXRows) Err() error {
-	return r.pgxRows.Err()
-}
-
 type PGXPoolAdapter struct {
 	once sync.Once
 
@@ -42,7 +20,7 @@ type PGXPoolAdapter struct {
 	pool *pgxpool.Pool
 }
 
-func NewPGXPoolAdapter(connStr string) *PGXPoolAdapter {
+func NewDatabaseUsingPGXPool(connStr string) *PGXPoolAdapter {
 	return &PGXPoolAdapter{
 		connStr: connStr,
 	}
@@ -84,16 +62,20 @@ func (p *PGXPoolAdapter) Ping(ctx context.Context) error {
 
 func (p *PGXPoolAdapter) Exec(ctx context.Context, sql string, arguments ...any) error {
 	sql = stripExtraWhitespaces(sql)
+
 	_, err := p.pool.Exec(ctx, sql, arguments...)
 	if err != nil {
 		return fmt.Errorf("executing SQL: %w", err)
 	}
+
 	slog.Debug("Executed SQL", "sql", sql, "arguments", len(arguments))
+
 	return nil
 }
 
-func (p *PGXPoolAdapter) Query(ctx context.Context, sql string, arguments ...any) (Rows, error) {
+func (p *PGXPoolAdapter) Query(ctx context.Context, sql string, arguments ...any) (pgx.Rows, error) {
 	sql = stripExtraWhitespaces(sql)
+
 	rows, err := p.pool.Query(ctx, sql, arguments...)
 	if err != nil {
 		return nil, fmt.Errorf("executing query: %w", err)
@@ -101,7 +83,7 @@ func (p *PGXPoolAdapter) Query(ctx context.Context, sql string, arguments ...any
 
 	slog.Debug("Executed query", "sql", sql, "arguments", len(arguments))
 
-	return &PGXRows{pgxRows: rows}, nil
+	return rows, nil
 }
 
 func (p *PGXPoolAdapter) Close() {
