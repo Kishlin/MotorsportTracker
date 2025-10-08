@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
 )
 
 type DatabaseCache struct {
-	db database.Database
+	db *database.PGXPoolAdapter
 }
 
-func NewDatabaseCache(db database.Database) *DatabaseCache {
+func NewDatabaseCache(db *database.PGXPoolAdapter) *DatabaseCache {
 	return &DatabaseCache{
 		db: db,
 	}
@@ -27,12 +27,7 @@ func (c *DatabaseCache) Get(namespace, key string) (value []byte, hit bool, err 
 	if err != nil {
 		return nil, false, err
 	}
-	defer func(rows database.Rows) {
-		err := rows.Close()
-		if err != nil {
-			logger.Error("Failed to close rows", "error", err)
-		}
-	}(rows)
+	defer rows.Close()
 
 	if !rows.Next() {
 		logger.Debug("Cache miss")

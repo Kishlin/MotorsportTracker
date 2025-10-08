@@ -5,11 +5,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/env"
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/env"
 )
 
 type CacheUsingDatabaseFunctionalTestSuite struct {
@@ -22,7 +23,7 @@ func (suite *CacheUsingDatabaseFunctionalTestSuite) SetupSuite() {
 	env.OverrideAppEnv("tests")
 	_func.Must(env.LoadEnv())
 
-	db := database.NewPGXPoolAdapter(os.Getenv("POSTGRES_CLIENT_CACHE_URL"))
+	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CLIENT_CACHE_URL"))
 	err := db.Connect(context.Background())
 	require.NoError(suite.T(), err)
 

@@ -7,9 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
 )
 
 type inMemoryRoundTripper struct {
@@ -28,11 +29,11 @@ func (irt *inMemoryRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 		}
 	}
 
-	headersJson := _func.MustReturn(json.Marshal(headers)).([]byte)
+	headersJSON := _func.MustReturn(json.Marshal(headers)).([]byte)
 
 	return &http.Response{
 		StatusCode: http.StatusOK,
-		Body:       io.NopCloser(strings.NewReader(string(headersJson))),
+		Body:       io.NopCloser(strings.NewReader(string(headersJSON))),
 	}, nil
 }
 

@@ -4,9 +4,10 @@ import (
 	"os"
 	"testing"
 
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
 )
 
 type EnvUnitTestSuite struct {

@@ -5,7 +5,8 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/func"
+
+	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
 )
 
 var allowedEnvs = []string{"dev", "tests", "production"}
