@@ -10,14 +10,14 @@ import (
 	"time"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/env"
-	"github.com/kishlin/MotorsportTracker/src/Golang/logger"
 	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/env"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/logger"
 )
 
 func main() {

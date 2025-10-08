@@ -6,7 +6,7 @@ import (
 
 	"github.com/joho/godotenv"
 
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/fn"
 )
 
 var allowedEnvs = []string{"dev", "tests", "production"}
@@ -39,10 +39,10 @@ func LoadEnv() error {
 
 func OverrideAppEnv(env string) func() {
 	initialValue := os.Getenv(appEnvKey)
-	_func.Must(os.Setenv(appEnvKey, env))
+	fn.Must(os.Setenv(appEnvKey, env))
 
 	return func() {
-		_func.Must(os.Setenv(appEnvKey, initialValue))
+		fn.Must(os.Setenv(appEnvKey, initialValue))
 	}
 }
 

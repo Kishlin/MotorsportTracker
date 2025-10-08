@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/fn"
 )
 
 type EnvUnitTestSuite struct {
@@ -30,7 +30,7 @@ func (suite *EnvUnitTestSuite) TestGetEnv() {
 		resetFunc := OverrideAppEnv("")
 		defer resetFunc()
 
-		_func.Must(os.Unsetenv(appEnvKey))
+		fn.Must(os.Unsetenv(appEnvKey))
 	})
 
 	suite.T().Run("it reads the value of APP_ENV", func(t *testing.T) {

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	_func "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/func"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/fn"
 )
 
 type inMemoryRoundTripper struct {
@@ -29,7 +29,7 @@ func (irt *inMemoryRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 		}
 	}
 
-	headersJSON := _func.MustReturn(json.Marshal(headers)).([]byte)
+	headersJSON := fn.MustReturn(json.Marshal(headers)).([]byte)
 
 	return &http.Response{
 		StatusCode: http.StatusOK,

@@ -1,4 +1,4 @@
-package _func
+package fn
 
 import (
 	"errors"
@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type FuncUnitTestSuite struct {
+type FnUnitTestSuite struct {
 	suite.Suite
 }
 
-func (suite *FuncUnitTestSuite) TestMust() {
+func (suite *FnUnitTestSuite) TestMust() {
 	suite.T().Run("it does not panic if no error", func(t *testing.T) {
 		defer func() {
 			require.Nil(suite.T(), recover())
@@ -28,7 +28,7 @@ func (suite *FuncUnitTestSuite) TestMust() {
 	})
 }
 
-func (suite *FuncUnitTestSuite) TestMustReturn() {
+func (suite *FnUnitTestSuite) TestMustReturn() {
 	suite.T().Run("it returns value if no error", func(t *testing.T) {
 		result := MustReturn("expected value", nil)
 		require.Equal(t, "expected value", result)
@@ -42,6 +42,6 @@ func (suite *FuncUnitTestSuite) TestMustReturn() {
 	})
 }
 
-func TestUnit_Func(t *testing.T) {
-	suite.Run(t, new(FuncUnitTestSuite))
+func TestUnit_Fn(t *testing.T) {
+	suite.Run(t, new(FnUnitTestSuite))
 }
