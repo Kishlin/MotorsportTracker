@@ -5,12 +5,14 @@ import (
 	"log/slog"
 	"sync"
 	"time"
+
+	domain "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 )
 
 // Worker processes messages from a queue
 type Worker struct {
-	queue        Queue
-	handlersList *HandlersList
+	queue        domain.Queue
+	handlersList *domain.HandlersList
 	workerCount  int
 	pollInterval time.Duration
 	stopChan     chan struct{}
@@ -18,7 +20,7 @@ type Worker struct {
 }
 
 // NewWorker creates a new worker
-func NewWorker(q Queue, handlersList *HandlersList, workerCount int, pollInterval time.Duration) *Worker {
+func NewWorker(q domain.Queue, handlersList *domain.HandlersList, workerCount int, pollInterval time.Duration) *Worker {
 	return &Worker{
 		queue:        q,
 		handlersList: handlersList,

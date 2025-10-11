@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"errors"
 	"log/slog"
 	"sync"
 
@@ -11,14 +12,17 @@ import (
 type MemoryQueue struct {
 	hiddenMessages map[MessageHandle]Message
 	messages       map[MessageHandle]Message
-	mutex          sync.Mutex
+	isConnected    bool
+
+	mutex sync.Mutex
 }
 
 // NewMemoryQueue creates a new in-memory queue
 func NewMemoryQueue() *MemoryQueue {
 	return &MemoryQueue{
-		messages:       make(map[MessageHandle]Message),
 		hiddenMessages: make(map[MessageHandle]Message),
+		messages:       make(map[MessageHandle]Message),
+		isConnected:    false,
 	}
 }
 
@@ -26,6 +30,10 @@ func NewMemoryQueue() *MemoryQueue {
 func (q *MemoryQueue) Send(message Message) error {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
+
+	if !q.isConnected {
+		return errors.New("queue is not connected")
+	}
 
 	// Generate a unique handle for the message
 	handle, err := uuid.NewUUID()
@@ -50,6 +58,10 @@ func (q *MemoryQueue) Receive(maxMessages int) (map[MessageHandle]Message, error
 	defer q.mutex.Unlock()
 
 	messages := make(map[MessageHandle]Message)
+
+	if !q.isConnected {
+		return messages, errors.New("queue is not connected")
+	}
 
 	if len(q.messages) == 0 {
 		return messages, nil
@@ -80,6 +92,10 @@ func (q *MemoryQueue) Delete(handle MessageHandle) error {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 
+	if !q.isConnected {
+		return errors.New("queue is not connected")
+	}
+
 	delete(q.hiddenMessages, handle)
 
 	slog.Debug("Message deleted from hidden queue", "handle", handle)
@@ -91,10 +107,14 @@ func (q *MemoryQueue) Delete(handle MessageHandle) error {
 func (q *MemoryQueue) Connect() error {
 	slog.Info("Connecting to memory queue")
 
+	q.isConnected = true
+
 	return nil
 }
 
 // Disconnect is a no-op for memory queue
 func (q *MemoryQueue) Disconnect() {
 	slog.Info("Disconnecting from memory queue")
+
+	q.isConnected = false
 }

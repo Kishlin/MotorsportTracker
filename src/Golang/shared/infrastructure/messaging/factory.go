@@ -3,6 +3,8 @@ package messaging
 import (
 	"fmt"
 	"strings"
+
+	domain "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 )
 
 // QueueConfig holds the configuration for SQS queue connection
@@ -16,7 +18,7 @@ type QueueConfig struct {
 }
 
 type Factory interface {
-	NewQueue(config QueueConfig) (Queue, error)
+	NewQueue(config QueueConfig) (domain.Queue, error)
 }
 
 type QueueFactory struct{}
@@ -25,9 +27,9 @@ func NewQueueFactory() *QueueFactory {
 	return &QueueFactory{}
 }
 
-func (f *QueueFactory) NewQueue(config QueueConfig) (Queue, error) {
+func (f *QueueFactory) NewQueue(config QueueConfig) (domain.Queue, error) {
 	if strings.HasPrefix(strings.ToLower(config.Endpoint), "memory://") {
-		return NewMemoryQueue(), nil
+		return domain.NewMemoryQueue(), nil
 	}
 
 	if strings.HasPrefix(strings.ToLower(config.Endpoint), "https://") ||

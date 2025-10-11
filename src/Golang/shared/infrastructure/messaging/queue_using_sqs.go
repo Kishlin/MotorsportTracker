@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
+
+	domain "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 )
 
 // SQSQueue implements Queue interface using AWS SQS
@@ -66,7 +68,7 @@ func (q *SQSQueue) Connect() error {
 }
 
 // Send adds a message to the SQS queue
-func (q *SQSQueue) Send(message Message) error {
+func (q *SQSQueue) Send(message domain.Message) error {
 	// Convert message to JSON
 	messageBody, err := json.Marshal(message)
 	if err != nil {
@@ -86,7 +88,7 @@ func (q *SQSQueue) Send(message Message) error {
 }
 
 // Receive fetches messages from the SQS queue
-func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
+func (q *SQSQueue) Receive(maxMessages int) (map[domain.MessageHandle]domain.Message, error) {
 	// Set the maximum number of messages to retrieve
 	maxMsg := int64(maxMessages)
 	if maxMsg > 10 {
@@ -108,11 +110,11 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 
 	// If no messages, return empty map
 	if len(result.Messages) == 0 {
-		return map[MessageHandle]Message{}, nil
+		return map[domain.MessageHandle]domain.Message{}, nil
 	}
 
 	// Parse messages and create the message-to-handle map
-	messages := make(map[MessageHandle]Message)
+	messages := make(map[domain.MessageHandle]domain.Message)
 
 	for _, sqsMsg := range result.Messages {
 		if sqsMsg.Body == nil || sqsMsg.ReceiptHandle == nil {
@@ -121,7 +123,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		}
 
 		// Parse the message body which contains our application message
-		var msg Message
+		var msg domain.Message
 		err := json.Unmarshal([]byte(*sqsMsg.Body), &msg)
 		if err != nil {
 			slog.Error("Failed to unmarshal message", "err", err)
@@ -129,7 +131,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 		}
 
 		// Create a handle from the SQS receipt handle
-		handle := MessageHandle(*sqsMsg.ReceiptHandle)
+		handle := domain.MessageHandle(*sqsMsg.ReceiptHandle)
 
 		// Add message to map with its handle as key
 		messages[handle] = msg
@@ -141,7 +143,7 @@ func (q *SQSQueue) Receive(maxMessages int) (map[MessageHandle]Message, error) {
 }
 
 // Delete removes a message from the SQS queue using its handle
-func (q *SQSQueue) Delete(handle MessageHandle) error {
+func (q *SQSQueue) Delete(handle domain.MessageHandle) error {
 	// Convert the MessageHandle back to string for SQS
 	receiptHandle := string(handle)
 
