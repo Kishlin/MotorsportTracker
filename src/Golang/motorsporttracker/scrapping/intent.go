@@ -3,7 +3,7 @@ package scrapping
 import (
 	"fmt"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 )
 
 // Intent represents a scrapping intent that can be validated and converted to an Intent.

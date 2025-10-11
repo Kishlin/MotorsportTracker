@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/cache"
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
 )
 
 type ServicesRegistry struct {

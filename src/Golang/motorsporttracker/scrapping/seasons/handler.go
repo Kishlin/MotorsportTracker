@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
 )
 
 type ScrapSeasonsHandler struct {

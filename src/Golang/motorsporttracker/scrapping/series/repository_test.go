@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/database"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
 )
 
 func TestSeries_Repository_NoData(t *testing.T) {

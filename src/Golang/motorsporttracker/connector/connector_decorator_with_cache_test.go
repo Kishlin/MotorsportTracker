@@ -3,9 +3,10 @@ package connector
 import (
 	"testing"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/cache"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
 )
 
 const seriesUrl = "https://api.motorsportstats.com/widgets/1.0.0/series"

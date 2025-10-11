@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/cache"
+	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
 )
 
 type CachedConnector struct {

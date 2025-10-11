@@ -1,6 +1,6 @@
 package connector
 
-import "github.com/kishlin/MotorsportTracker/src/Golang/cache"
+import "github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
 
 type Factory interface {
 	NewConnector() Connector
