@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/qri-io/jsonschema"
-	
+
 	client "github.com/kishlin/MotorsportTracker/src/Golang/shared/client/infrastructure"
 )
 
@@ -14,7 +14,7 @@ type ConnectorUsingClient struct {
 	client *client.Client
 }
 
-// NewConnectorUsingClient creates a new MotorsportStarsConnector using a HTTP client.
+// NewConnectorUsingClient creates a new MotorsportStarsConnector using an HTTP client.
 func NewConnectorUsingClient(client *client.Client) *ConnectorUsingClient {
 	return &ConnectorUsingClient{
 		client: client,
