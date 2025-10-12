@@ -48,6 +48,6 @@ func (suite *CachedConnectorUnitTestSuite) TestGetFromCacheOrConnector() {
 	})
 }
 
-func TestCachedConnectorUnitTestSuite(t *testing.T) {
+func TestUnit_CachedConnector(t *testing.T) {
 	suite.Run(t, new(CachedConnectorUnitTestSuite))
 }
