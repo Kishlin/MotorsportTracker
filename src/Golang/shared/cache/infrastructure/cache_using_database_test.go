@@ -20,7 +20,9 @@ type CacheUsingDatabaseFunctionalTestSuite struct {
 }
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) SetupSuite() {
-	env.OverrideAppEnv("tests")
+	resetEnv := env.OverrideAppEnv("tests")
+	defer resetEnv()
+
 	fn.Must(env.LoadEnv())
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CLIENT_CACHE_URL"))
