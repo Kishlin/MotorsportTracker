@@ -29,19 +29,19 @@ func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) TearDownSuite() {
 
 func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) TestCoreConnection() {
 	db := NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
-	testConnection(suite, db)
+	doTestConnection(suite, db)
 }
 
 func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) TestClientCacheConnection() {
 	db := NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CLIENT_CACHE_URL"))
-	testConnection(suite, db)
+	doTestConnection(suite, db)
 }
 
 func TestIntegration_DatabaseUsingPGXPool(t *testing.T) {
 	suite.Run(t, new(DatabaseUsingPGXPoolIntegrationTestSuite))
 }
 
-func testConnection(suite *DatabaseUsingPGXPoolIntegrationTestSuite, db *PGXPoolAdapter) {
+func doTestConnection(suite *DatabaseUsingPGXPoolIntegrationTestSuite, db *PGXPoolAdapter) {
 	ctx := suite.T().Context()
 
 	require.NoError(suite.T(), db.Connect(ctx))
