@@ -1,9 +1,9 @@
-package connector
+package domain
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
-	"strings"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
 )
@@ -21,13 +21,19 @@ func NewCachedConnector(inner Connector, cache cache.Cache) *CachedConnector {
 	}
 }
 
-// Get retrieves data from the cache or the inner connector if not found in the cache.
-func (c *CachedConnector) Get(url string) ([]byte, error) {
-	namespace, key, err := c.namespaceAndKeyFromUrl(url)
-	if err != nil {
-		return nil, fmt.Errorf("determining namespace and key from url: %w", err)
-	}
+func (c *CachedConnector) GetSeries(ctx context.Context) ([]byte, error) {
+	return c.getFromCacheOrConnector("series", "all", func() ([]byte, error) {
+		return c.inner.GetSeries(ctx)
+	})
+}
 
+func (c *CachedConnector) GetSeasons(ctx context.Context, seriesUuid string) ([]byte, error) {
+	return c.getFromCacheOrConnector("seasons", seriesUuid, func() ([]byte, error) {
+		return c.inner.GetSeasons(ctx, seriesUuid)
+	})
+}
+
+func (c *CachedConnector) getFromCacheOrConnector(namespace string, key string, getFromConnector func() ([]byte, error)) ([]byte, error) {
 	data, hit, err := c.cache.Get(namespace, key)
 	if err != nil {
 		return nil, fmt.Errorf("getting data from cache: %w", err)
@@ -35,7 +41,7 @@ func (c *CachedConnector) Get(url string) ([]byte, error) {
 	if !hit {
 		slog.Debug("Cache miss for %s/%s, fetching from inner connector", namespace, key)
 
-		data, err = c.inner.Get(url)
+		data, err = getFromConnector()
 		if err != nil {
 			return nil, fmt.Errorf("getting data from inner connector: %w", err)
 		}
@@ -46,18 +52,4 @@ func (c *CachedConnector) Get(url string) ([]byte, error) {
 	}
 
 	return data, nil
-}
-
-func (c *CachedConnector) namespaceAndKeyFromUrl(url string) (namespace, key string, err error) {
-	if strings.HasSuffix(url, "/series") {
-		return "series", "all", nil
-	}
-
-	parts := strings.Split(url, "/")
-	if len(parts) >= 2 && parts[len(parts)-1] == "seasons" {
-		// Url is like  "https://api.motorsportstats.com/widgets/1.0.0/series/%s/seasons" and we want to extract the %s part
-		return "seasons", parts[len(parts)-2], nil
-	}
-
-	return "", "", fmt.Errorf("unable to determine namespace and key from url: %s", url)
 }

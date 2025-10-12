@@ -171,7 +171,7 @@ func setupHandler(t *testing.T, opts ...setupOption) *ScrapSeriesHandler {
 	return NewScrapSeriesHandler(db, conn)
 }
 
-// Connector options
+// MotorsportStatsConnectorUsingClient options
 func withTwoSeriesConnectorResponse() setupOption {
 	return func(s *testSetup) {
 		s.connectorData[endpointSeries] = connector.MockResponse{

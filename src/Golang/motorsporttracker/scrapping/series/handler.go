@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
+	connector "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/domain"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
@@ -29,19 +29,13 @@ func NewScrapSeriesHandler(db database.Database, connector connector.Connector) 
 
 // Handle processes the scrapping intent for series.
 func (h *ScrapSeriesHandler) Handle(ctx context.Context, _ messaging.Message) error {
-	resp, err := h.connector.Get(endpointSeries)
+	data, err := h.connector.GetSeries(ctx)
 	if err != nil {
 		return fmt.Errorf("fetching series data: %w", err)
 	}
 
-	// Validate the response content
-	if err := scrapping.Validate(ctx, resp, schemaSeries); err != nil {
-		return fmt.Errorf("validating series data: %w", err)
-	}
-
-	// Unmarshal the response into a slice of Series
 	var seriesList []Series
-	err = json.Unmarshal(resp, &seriesList)
+	err = json.Unmarshal(data, &seriesList)
 	if err != nil {
 		return fmt.Errorf("unmarshalling series data: %w", err)
 	}
@@ -111,31 +105,3 @@ func (h *ScrapSeriesHandler) logSeriesDifferences(newSeries, existingSeries Seri
 		slog.Debug("Series categories differ", "category", newSeries.Category, "category", existingSeries.Category)
 	}
 }
-
-const endpointSeries = "https://api.motorsportstats.com/widgets/1.0.0/series"
-
-const schemaSeries = `{
-	"type": "array",
-	"items": {
-		"type": "object",
-		"properties": {
-			"name": {
-				"type": "string"
-			},
-			"uuid": {
-				"type": "string"
-			},
-			"shortName": {
-				"type": ["string", "null"]
-			},
-			"shortCode": {
-				"type": "string"
-			},
-			"category": {
-				"type": "string"
-			}
-		},
-		"required": ["name", "uuid", "shortName", "shortCode", "category"]
-	},
-	"minItems": 1
-}`

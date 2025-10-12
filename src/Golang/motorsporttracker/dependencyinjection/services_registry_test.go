@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
+	connector "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/domain"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
 )
@@ -135,7 +135,7 @@ func TestGetConnector_DoesNotPanic(t *testing.T) {
 
 	conn := registry.GetConnector()
 	if conn == nil {
-		t.Error("Connector should not be nil")
+		t.Error("MotorsportStatsConnectorUsingClient should not be nil")
 	}
 }
 

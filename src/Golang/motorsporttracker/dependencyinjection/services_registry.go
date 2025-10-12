@@ -5,7 +5,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
+	connector "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/domain"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
@@ -23,8 +23,8 @@ type ServicesRegistry struct {
 	clientCacheDBonce   sync.Once
 	intentsQueueOnce    sync.Once
 
-	cachedConnector connector.Connector
-	connector       connector.Connector
+	cachedConnector connector.MotorsportStatsConnector
+	connector       connector.MotorsportStatsConnector
 
 	coreDB        database.Database
 	clientCacheDB database.Database
@@ -54,7 +54,7 @@ func (s *ServicesRegistry) Close() {
 	}
 }
 
-func (s *ServicesRegistry) GetCachedConnector(ctx context.Context) connector.Connector {
+func (s *ServicesRegistry) GetCachedConnector(ctx context.Context) connector.MotorsportStatsConnector {
 	s.cachedConnectorOnce.Do(func() {
 		inner := s.GetConnector()
 		if inner == nil {
@@ -80,7 +80,7 @@ func (s *ServicesRegistry) GetCachedConnector(ctx context.Context) connector.Con
 	return s.cachedConnector
 }
 
-func (s *ServicesRegistry) GetConnector() connector.Connector {
+func (s *ServicesRegistry) GetConnector() connector.MotorsportStatsConnector {
 	s.connectorOnce.Do(func() {
 		s.connector = s.connectorFactory.NewConnector()
 		if s.connector == nil {
