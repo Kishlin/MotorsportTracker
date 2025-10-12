@@ -13,6 +13,16 @@ import (
 	"github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
+// QueueConfig holds the configuration for SQS queue connection
+type QueueConfig struct {
+	Endpoint     string // SQS endpoint URL (e.g., memory:// for memory, https://sqs.region.amazonaws.com for prod)
+	Region       string // AWS region (e.g., elasticmq for local, us-east-1 for prod)
+	QueueName    string // Name of the SQS queue
+	AccessKey    string // AWS access key
+	SecretKey    string // AWS secret key
+	SessionToken string // AWS session token (optional)
+}
+
 // SQSQueue implements Queue interface using AWS SQS
 type SQSQueue struct {
 	client    *sqs.SQS
@@ -32,7 +42,7 @@ func NewSQSQueueWithConfig(config QueueConfig) *SQSQueue {
 // Connect establishes the connection with AWS SQS
 func (q *SQSQueue) Connect() error {
 	// Create AWS credentials from config
-	creds := credentials.NewStaticCredentials(
+	credentials := credentials.NewStaticCredentials(
 		q.config.AccessKey,
 		q.config.SecretKey,
 		q.config.SessionToken,
@@ -42,7 +52,7 @@ func (q *SQSQueue) Connect() error {
 	sess, err := session.NewSession(&aws.Config{
 		Region:      aws.String(q.config.Region),
 		Endpoint:    aws.String(q.config.Endpoint),
-		Credentials: creds,
+		Credentials: credentials,
 	})
 	if err != nil {
 		return fmt.Errorf("creating AWS session: %v", err)
