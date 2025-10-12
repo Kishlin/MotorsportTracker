@@ -5,8 +5,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/client"
 	"github.com/qri-io/jsonschema"
+	
+	client "github.com/kishlin/MotorsportTracker/src/Golang/shared/client/infrastructure"
 )
 
 type ConnectorUsingClient struct {

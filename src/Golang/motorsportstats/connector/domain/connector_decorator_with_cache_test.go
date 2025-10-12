@@ -2,11 +2,12 @@ package domain
 
 import (
 	"testing"
-
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/cache"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/fn"
+	
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	cache "github.com/kishlin/MotorsportTracker/src/Golang/shared/cache/domain"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 type CachedConnectorUnitTestSuite struct {
