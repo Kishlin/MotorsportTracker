@@ -29,8 +29,13 @@ func (c *ConnectorUsingClient) GetSeasons(ctx context.Context, seriesUuid string
 	return c.doGet(ctx, schemaSeasons, endpointSeasons, seriesUuid)
 }
 
-func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...string) ([]byte, error) {
-	resp, err := c.client.Get(fmt.Sprintf(endpoint, params), headers)
+func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...any) ([]byte, error) {
+	url := endpoint
+	if len(params) > 0 {
+		url = fmt.Sprintf(endpoint, params...)
+	}
+
+	resp, err := c.client.Get(url, headers)
 	if err != nil {
 		return []byte{}, fmt.Errorf("getting series: %w", err)
 	}
@@ -71,7 +76,7 @@ var headers = map[string]string{
 	"X-Parent-Referer": "https://motorsportstats.com/",
 }
 
-const endpointSeries = "https://api.motorsportstats.com/widgets/1.0.0/series"
+const endpointSeries = "/widgets/1.0.0/series"
 
 const schemaSeries = `{
 	"type": "array",
@@ -99,7 +104,7 @@ const schemaSeries = `{
 	"minItems": 1
 }`
 
-const endpointSeasons = "https://api.motorsportstats.com/widgets/1.0.0/series/%s/seasons"
+const endpointSeasons = "/widgets/1.0.0/series/%s/seasons"
 
 const schemaSeasons = `{
 	"type": "array",

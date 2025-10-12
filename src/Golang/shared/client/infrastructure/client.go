@@ -9,16 +9,20 @@ import (
 
 type Client struct {
 	inner *http.Client
+	host  string
 }
 
 // NewClient creates a new Client instance
-func NewClient() *Client {
+func NewClient(host string) *Client {
 	return &Client{
 		inner: &http.Client{},
+		host:  host,
 	}
 }
 
-func (c *Client) Get(url string, headers map[string]string) ([]byte, error) {
+func (c *Client) Get(endpoint string, headers map[string]string) ([]byte, error) {
+	url := c.host + endpoint
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return []byte{}, fmt.Errorf("creating request: %v", err)

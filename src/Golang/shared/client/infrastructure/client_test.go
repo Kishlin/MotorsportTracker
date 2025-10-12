@@ -44,7 +44,7 @@ type ClientUnitTestSuite struct {
 }
 
 func (suite *ClientUnitTestSuite) SetupSuite() {
-	suite.client = NewClient()
+	suite.client = NewClient("https://example.com")
 
 	suite.client.inner.Transport = &inMemoryRoundTripper{}
 }
@@ -55,13 +55,13 @@ func (suite *ClientUnitTestSuite) TestGet() {
 	prepareMockResponses(suite.client, dummyResponse)
 
 	suite.T().Run("OK Response", func(t *testing.T) {
-		data, err := suite.client.Get("https://example.com", map[string]string{})
+		data, err := suite.client.Get("/", map[string]string{})
 		require.NoError(t, err)
 		require.Equal(t, dummyResponse, string(data))
 	})
 
 	suite.T().Run("Error Response", func(t *testing.T) {
-		_, err := suite.client.Get("https://example.com/404", map[string]string{})
+		_, err := suite.client.Get("/404", map[string]string{})
 		require.Error(t, err)
 	})
 
@@ -71,7 +71,7 @@ func (suite *ClientUnitTestSuite) TestGet() {
 			"X-Another-One":   "AnotherValue",
 		}
 
-		data, err := suite.client.Get("https://example.com/with-headers", headersToSend)
+		data, err := suite.client.Get("/with-headers", headersToSend)
 		require.NoError(t, err)
 
 		var receivedHeaders map[string]string
@@ -88,7 +88,7 @@ func TestUnit_Client(t *testing.T) {
 
 func prepareMockResponses(client *Client, dummyResponse string) {
 	mockResponses := map[string]http.Response{
-		"https://example.com": {
+		"https://example.com/": {
 			StatusCode: http.StatusOK,
 			Body:       io.NopCloser(strings.NewReader(dummyResponse)),
 		},
