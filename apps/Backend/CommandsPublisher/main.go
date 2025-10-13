@@ -6,16 +6,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/env"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/logger"
+	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
+	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
+	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
+	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
 )
 
 func main() {
@@ -35,16 +30,15 @@ func main() {
 	subcommand := os.Args[1]
 	args := os.Args[2:]
 
-	var intent scrapping.Intent
-	var err error
+	var intent application.Intent
 
 	switch subcommand {
 	case series.ScrapeSeriesIntentName:
 		intent = series.NewScrapSeriesIntent()
-	case seasons.ScrapeSeasonsIntentName:
-		intent = seasons.NewScrapSeasonsIntent()
-	case events.ScrapeEventsIntentName:
-		intent = events.NewScrapEventsIntent()
+	//case seasons.ScrapeSeasonsIntentName:
+	//	intent = seasons.NewScrapSeasonsIntent()
+	//case events.ScrapeEventsIntentName:
+	//	intent = events.NewScrapEventsIntent()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()
@@ -59,11 +53,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	registry := dependencyinjection.NewServicesRegistry(
-		connector.NewDefaultConnectorFactory(),
-		database.NewDatabaseFactory(),
-		messaging.NewQueueFactory(),
-	)
+	registry := dependencyinjection.NewServicesRegistry()
 	defer registry.Close()
 
 	err = registry.GetIntentsQueue().Send(message)

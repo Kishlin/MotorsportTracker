@@ -6,16 +6,13 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/env"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/logger"
+	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
+	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
+	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
+	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
+	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 func main() {
@@ -37,28 +34,28 @@ func main() {
 
 	arguments, options := parseArgs(args)
 
-	registry := dependencyinjection.NewServicesRegistry(
-		connector.NewDefaultConnectorFactory(),
-		database.NewDatabaseFactory(),
-		messaging.NewQueueFactory(),
-	)
+	registry := dependencyinjection.NewServicesRegistry()
 	defer registry.Close()
 
 	ctx := context.Background()
 
-	var intent scrapping.Intent
+	var intent application.Intent
 	var handler messaging.Handler
 
 	switch subcommand {
 	case series.ScrapeSeriesIntentName:
 		intent = series.NewScrapSeriesIntent()
-		handler = series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
-	case seasons.ScrapeSeasonsIntentName:
-		intent = seasons.NewScrapSeasonsIntent()
-		handler = seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
-	case events.ScrapeEventsIntentName:
-		intent = events.NewScrapEventsIntent()
-		handler = events.NewScrapEventsHandler()
+		handler = series.NewScrapSeriesHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			seriesImpls.NewExistingSeriesRepository(registry.GetCoreDatabase(ctx)),
+			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
+		)
+	//case seasons.ScrapeSeasonsIntentName:
+	//	intent = seasons.NewScrapSeasonsIntent()
+	//	handler = seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
+	//case events.ScrapeEventsIntentName:
+	//	intent = events.NewScrapEventsIntent()
+	//	handler = events.NewScrapEventsHandler()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()

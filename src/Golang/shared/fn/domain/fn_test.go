@@ -38,7 +38,16 @@ func (suite *FnUnitTestSuite) TestMustReturn() {
 		defer func() {
 			require.NotNil(suite.T(), recover())
 		}()
-		MustReturn(nil, errors.New("this should cause a panic"))
+		MustReturn("hi", errors.New("this should cause a panic"))
+	})
+}
+
+func (suite *FnUnitTestSuite) TestPtr() {
+	suite.T().Run("it returns a pointer to the value", func(t *testing.T) {
+		value := 42
+		ptr := Ptr(value)
+		require.NotNil(t, ptr)
+		require.Equal(t, value, *ptr)
 	})
 }
 

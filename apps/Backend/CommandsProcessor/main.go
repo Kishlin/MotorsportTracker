@@ -9,15 +9,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/connector"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons"
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/database"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/env"
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/infrastructure/logger"
+	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
+	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
+	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
+	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
+	messagingImpls "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
 
 func main() {
@@ -45,11 +43,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	registry := dependencyinjection.NewServicesRegistry(
-		connector.NewDefaultConnectorFactory(),
-		database.NewDatabaseFactory(),
-		messaging.NewQueueFactory(),
-	)
+	registry := dependencyinjection.NewServicesRegistry()
 	defer registry.Close()
 
 	// Start the processor with the specified parameters
@@ -60,16 +54,20 @@ func main() {
 
 	handlersList.RegisterHandler(
 		series.ScrapeSeriesIntentName,
-		series.NewScrapSeriesHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
+		series.NewScrapSeriesHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			seriesImpls.NewExistingSeriesRepository(registry.GetCoreDatabase(ctx)),
+			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
+		),
 	)
-	handlersList.RegisterHandler(
-		seasons.ScrapeSeasonsIntentName,
-		seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
-	)
-	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
+	//handlersList.RegisterHandler(
+	//	seasons.ScrapeSeasonsIntentName,
+	//	seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
+	//)
+	//handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
 
 	// Create and start the worker
-	w := messaging.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
+	w := messagingImpls.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
 	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals

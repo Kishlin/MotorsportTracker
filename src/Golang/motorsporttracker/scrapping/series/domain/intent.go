@@ -1,25 +1,25 @@
-package series
+package domain
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
+	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
 )
 
 const ScrapeSeriesIntentName = "series"
 
 // ScrapSeriesIntent is an Intent to scrape series.
 type ScrapSeriesIntent struct {
-	scrapping.BaseIntent
+	application.BaseIntent
 }
 
 // NewScrapSeriesIntent creates a new ScrapSeriesIntent.
 func NewScrapSeriesIntent() *ScrapSeriesIntent {
 	return &ScrapSeriesIntent{
-		BaseIntent: scrapping.BaseIntent{
-			Config: scrapping.IntentConfig{
+		BaseIntent: application.BaseIntent{
+			Config: application.IntentConfig{
 				Name:        ScrapeSeriesIntentName,
 				Description: "Scrape all available series",
-				Arguments:   []scrapping.Argument{},
-				Options:     []scrapping.Option{},
+				Arguments:   []application.Argument{},
+				Options:     []application.Option{},
 			},
 		},
 	}
