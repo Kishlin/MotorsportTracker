@@ -28,7 +28,7 @@ type ScrapeSeasonsHandler struct {
 	motorsportStatsGateway motorsportstats.Gateway
 	repoExistingSeasons    ExistingSeasonsRepository
 	repoSaveSeasons        SaveSeasonsRepository
-	repoSeriesId           SearchSeriesRepository
+	repoSeriesID           SearchSeriesRepository
 }
 
 // NewScrapeSeasonsHandler creates a new handler for scrapping series.
@@ -36,13 +36,13 @@ func NewScrapeSeasonsHandler(
 	motorsportStatsGateway motorsportstats.Gateway,
 	repoExistingSeasons ExistingSeasonsRepository,
 	repoSaveSeasons SaveSeasonsRepository,
-	repoSeriesId SearchSeriesRepository,
+	repoSeriesID SearchSeriesRepository,
 ) *ScrapeSeasonsHandler {
 	return &ScrapeSeasonsHandler{
 		motorsportStatsGateway: motorsportStatsGateway,
 		repoExistingSeasons:    repoExistingSeasons,
 		repoSaveSeasons:        repoSaveSeasons,
-		repoSeriesId:           repoSeriesId,
+		repoSeriesID:           repoSeriesID,
 	}
 }
 
@@ -53,7 +53,7 @@ func (h *ScrapeSeasonsHandler) Handle(ctx context.Context, message messaging.Mes
 		return fmt.Errorf("series search keywords is required")
 	}
 
-	seriesRef, hit, err := h.repoSeriesId.GetSeriesIdentifier(ctx, seriesKeyword)
+	seriesRef, hit, err := h.repoSeriesID.GetSeriesIdentifier(ctx, seriesKeyword)
 	if err != nil {
 		return fmt.Errorf("getting series keyword identifier: %w", err)
 	}

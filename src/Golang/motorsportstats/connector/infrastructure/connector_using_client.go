@@ -25,8 +25,8 @@ func (c *ConnectorUsingClient) GetSeries(ctx context.Context) ([]byte, error) {
 	return c.doGet(ctx, schemaSeries, endpointSeries)
 }
 
-func (c *ConnectorUsingClient) GetSeasons(ctx context.Context, seriesUuid string) ([]byte, error) {
-	return c.doGet(ctx, schemaSeasons, endpointSeasons, seriesUuid)
+func (c *ConnectorUsingClient) GetSeasons(ctx context.Context, seriesUUID string) ([]byte, error) {
+	return c.doGet(ctx, schemaSeasons, endpointSeasons, seriesUUID)
 }
 
 func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...any) ([]byte, error) {

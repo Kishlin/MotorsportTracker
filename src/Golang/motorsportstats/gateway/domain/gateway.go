@@ -21,5 +21,5 @@ type Season struct {
 type Gateway interface {
 	GetSeries(ctx context.Context) ([]*Series, error)
 
-	GetSeasons(ctx context.Context, seriesUuid string) ([]*Season, error)
+	GetSeasons(ctx context.Context, seriesUUID string) ([]*Season, error)
 }

@@ -27,9 +27,9 @@ func (c *CachedConnector) GetSeries(ctx context.Context) ([]byte, error) {
 	})
 }
 
-func (c *CachedConnector) GetSeasons(ctx context.Context, seriesUuid string) ([]byte, error) {
-	return c.getFromCacheOrConnector("seasons", seriesUuid, func() ([]byte, error) {
-		return c.inner.GetSeasons(ctx, seriesUuid)
+func (c *CachedConnector) GetSeasons(ctx context.Context, seriesUUID string) ([]byte, error) {
+	return c.getFromCacheOrConnector("seasons", seriesUUID, func() ([]byte, error) {
+		return c.inner.GetSeasons(ctx, seriesUUID)
 	})
 }
 

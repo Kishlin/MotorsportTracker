@@ -35,8 +35,8 @@ func (g GatewayUsingConnector) GetSeries(ctx context.Context) ([]*domain.Series,
 	return seriesList, nil
 }
 
-func (g GatewayUsingConnector) GetSeasons(ctx context.Context, seriesUuid string) ([]*domain.Season, error) {
-	data, err := g.connector.GetSeasons(ctx, seriesUuid)
+func (g GatewayUsingConnector) GetSeasons(ctx context.Context, seriesUUID string) ([]*domain.Season, error) {
+	data, err := g.connector.GetSeasons(ctx, seriesUUID)
 	if err != nil {
 		return nil, fmt.Errorf("getting seasons from connector: %w", err)
 	}

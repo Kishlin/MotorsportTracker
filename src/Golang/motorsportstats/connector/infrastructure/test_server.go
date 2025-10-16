@@ -81,9 +81,9 @@ func seriesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func seasonsHandler(w http.ResponseWriter, r *http.Request) {
-	seriesUuid := getField(r, 0)
+	seriesUUID := getField(r, 0)
 
-	data, exists := seasons[seriesUuid]
+	data, exists := seasons[seriesUUID]
 	if !exists {
 		http.Error(w, "Series not found", http.StatusNotFound)
 		return
