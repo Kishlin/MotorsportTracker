@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
@@ -38,8 +39,8 @@ func main() {
 		intent = series.NewScrapSeriesIntent()
 	case seasons.ScrapeSeasonsIntentName:
 		intent = seasons.NewScrapSeasonsIntent()
-	//case events.ScrapeEventsIntentName:
-	//	intent = events.NewScrapEventsIntent()
+	case events.ScrapeEventsIntentName:
+		intent = events.NewScrapEventsIntent()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()

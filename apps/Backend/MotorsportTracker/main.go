@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
@@ -60,12 +61,9 @@ func main() {
 			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
 			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 		)
-	//case seasons.ScrapeSeasonsIntentName:
-	//	intent = seasons.NewScrapSeasonsIntent()
-	//	handler = seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx))
-	//case events.ScrapeEventsIntentName:
-	//	intent = events.NewScrapEventsIntent()
-	//	handler = events.NewScrapEventsHandler()
+	case events.ScrapeEventsIntentName:
+		intent = events.NewScrapEventsIntent()
+		handler = events.NewScrapEventsHandler()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()

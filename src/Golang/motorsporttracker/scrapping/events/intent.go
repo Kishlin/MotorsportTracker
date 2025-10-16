@@ -1,25 +1,25 @@
 package events
 
 import (
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping"
+	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
 )
 
 const ScrapeEventsIntentName = "events"
 
 // ScrapEventsIntent is an Intent to scrape events.
 type ScrapEventsIntent struct {
-	scrapping.BaseIntent
+	application.BaseIntent
 }
 
 // NewScrapEventsIntent creates a new ScrapEventsIntent.
 func NewScrapEventsIntent() *ScrapEventsIntent {
 	return &ScrapEventsIntent{
-		BaseIntent: scrapping.BaseIntent{
-			Config: scrapping.IntentConfig{
+		BaseIntent: application.BaseIntent{
+			Config: application.IntentConfig{
 				Name:        ScrapeEventsIntentName,
 				Description: "Scrape all available events",
-				Arguments:   []scrapping.Argument{},
-				Options: []scrapping.Option{
+				Arguments:   []application.Argument{},
+				Options: []application.Option{
 					{
 						Name:          "series",
 						Description:   "Motorsport series (e.g., Formula One, Formula 2, World Endurance Championship, ...)",

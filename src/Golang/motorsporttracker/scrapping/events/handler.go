@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/shared/domain/messaging"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type ScrapEventsHandler struct {

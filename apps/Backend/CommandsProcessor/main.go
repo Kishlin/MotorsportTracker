@@ -10,6 +10,7 @@ import (
 	"time"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
@@ -71,12 +72,7 @@ func main() {
 			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 		),
 	)
-	// Example for future event scrapping handler registration
-	//handlersList.RegisterHandler(
-	//	seasons.ScrapeSeasonsIntentName,
-	//	seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),
-	//)
-	//handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
+	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())
 
 	// Create and start the worker
 	w := messagingImpls.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
