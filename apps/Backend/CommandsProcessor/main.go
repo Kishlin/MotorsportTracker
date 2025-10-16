@@ -10,6 +10,8 @@ import (
 	"time"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
+	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
 	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
@@ -60,6 +62,16 @@ func main() {
 			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
 		),
 	)
+	handlersList.RegisterHandler(
+		seasons.ScrapeSeasonsIntentName,
+		seasons.NewScrapeSeasonsHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			seasonsImpls.NewExistingSeasonsRepository(registry.GetCoreDatabase(ctx)),
+			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		),
+	)
+	// Example for future event scrapping handler registration
 	//handlersList.RegisterHandler(
 	//	seasons.ScrapeSeasonsIntentName,
 	//	seasons.NewScrapSeasonsHandler(registry.GetCoreDatabase(ctx), registry.GetCachedConnector(ctx)),

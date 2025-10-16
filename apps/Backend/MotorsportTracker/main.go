@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
+	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
 	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
@@ -49,6 +51,14 @@ func main() {
 			registry.GetMotorsportStatsGateway(ctx),
 			seriesImpls.NewExistingSeriesRepository(registry.GetCoreDatabase(ctx)),
 			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
+		)
+	case seasons.ScrapeSeasonsIntentName:
+		intent = seasons.NewScrapSeasonsIntent()
+		handler = seasons.NewScrapeSeasonsHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			seasonsImpls.NewExistingSeasonsRepository(registry.GetCoreDatabase(ctx)),
+			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 		)
 	//case seasons.ScrapeSeasonsIntentName:
 	//	intent = seasons.NewScrapSeasonsIntent()
