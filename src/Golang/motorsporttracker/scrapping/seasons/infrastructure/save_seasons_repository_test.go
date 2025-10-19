@@ -14,7 +14,7 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-const seriesRef = "967cd5ab-5562-40dc-a0b0-109738adcd01"
+const seriesRef = "00000000-0000-0000-0000-000000000001"
 
 type SaveSeasonsRepositoryFunctionalTestSuite struct {
 	suite.Suite
@@ -43,8 +43,8 @@ func (suite *SaveSeasonsRepositoryFunctionalTestSuite) TearDownSuite() {
 func (suite *SaveSeasonsRepositoryFunctionalTestSuite) TearDownTest() {
 	sql1 := "TRUNCATE TABLE series RESTART IDENTITY CASCADE;"
 	sql2 := "TRUNCATE TABLE seasons RESTART IDENTITY CASCADE;"
-	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql1))
 	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql2))
+	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql1))
 }
 
 func (suite *SaveSeasonsRepositoryFunctionalTestSuite) TestSaveSeasons() {
@@ -86,7 +86,7 @@ func requireSavedSeasonsCount(t *testing.T, db *database.PGXPoolAdapter, expecte
 
 func seriesRefFixtures() string {
 	return `
-INSERT INTO series (uuid, name, short_name, short_code, category) VALUES 
-('967cd5ab-5562-40dc-a0b0-109738adcd01', 'Series 1', 'S1', 'Ser1', 'Category 1');
+INSERT INTO series (id, uuid, name, short_name, short_code, category) VALUES 
+(1, '00000000-0000-0000-0000-000000000001', 'Series 1', 'S1', 'Ser1', 'Category 1');
 `
 }

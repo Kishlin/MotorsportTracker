@@ -62,9 +62,9 @@ func TestFunctional_ExistingSeriesRepository(t *testing.T) {
 
 func seriesFixtures() string {
 	return `
-INSERT INTO series (name, short_name, short_code, category) VALUES 
-('Series 1', 'S1', 'S1', 'Category 1'),
-('Series 2', 'S2', 'S2', 'Category 2'),
-('Series 3', null, 'S3', 'Category 3');
+INSERT INTO series (uuid, name, short_name, short_code, category) VALUES 
+('00000000-0000-0000-0000-000000000001', 'Series 1', 'S1', 'S1', 'Category 1'),
+('00000000-0000-0000-0000-000000000002', 'Series 2', 'S2', 'S2', 'Category 2'),
+('00000000-0000-0000-0000-000000000003', 'Series 3', null, 'S3', 'Category 3');
 `
 }

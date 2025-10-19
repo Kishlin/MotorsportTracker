@@ -62,13 +62,13 @@ func TestFunctional_ExistingSeasonsRepository(t *testing.T) {
 
 func seasonsFixture() string {
 	return `
-INSERT INTO series (uuid, name, short_code, category) VALUES
-('00000000-0000-0000-0000-000000000001', 'Super Racing Series', 'SRS', 'Racing'),
-('00000000-0000-0000-0000-000000000002', 'Extreme Racing Series', 'ERS', 'Racing');
+INSERT INTO series (id, uuid, name, short_code, category) VALUES
+(1, '00000000-0000-0000-0000-000000000001', 'Super Racing Series', 'SRS', 'Racing'),
+(2, '00000000-0000-0000-0000-000000000002', 'Extreme Racing Series', 'ERS', 'Racing');
 
-INSERT INTO seasons (uuid, series, name, year, end_year) VALUES 
-('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'Season 1', 2023, 2024),
-('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001', 'Season 2', 2022, 2023),
-('00000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000002', 'Season 3', 2022, 2023);
+INSERT INTO seasons (id, uuid, series, name, year, end_year) VALUES 
+(1, '00000000-0000-0000-0000-000000000001', 1, 'Season 1', 2023, 2024),
+(2, '00000000-0000-0000-0000-000000000002', 1, 'Season 2', 2022, 2023),
+(3, '00000000-0000-0000-0000-000000000003', 2, 'Season 3', 2022, 2023);
 `
 }

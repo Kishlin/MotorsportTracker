@@ -34,4 +34,9 @@ func (r *ExistingSeasonsRepository) GetExistingSeasons(ctx context.Context, seri
 	return existingSeasons, nil
 }
 
-const query = `SELECT uuid FROM seasons WHERE series = $1`
+const query = `
+SELECT seasons.uuid 
+FROM seasons 
+INNER JOIN series ON seasons.series = series.id  
+WHERE series.uuid = $1;
+`
