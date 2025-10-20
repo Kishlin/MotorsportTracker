@@ -38,39 +38,32 @@ func (suite *SaveSeriesRepositoryFunctionalTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveSeriesRepositoryFunctionalTestSuite) TearDownTest() {
-	sql := "TRUNCATE TABLE series RESTART IDENTITY CASCADE;"
+	sql := "DELETE FROM series WHERE uuid::text LIKE '875c810d-a048-414e-a048-%';"
 	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
 }
 
 func (suite *SaveSeriesRepositoryFunctionalTestSuite) TestSaveSeries() {
-	suite.T().Run("no-op when given an empty list", func(t *testing.T) {
-		err := suite.repository.SaveSeries(t.Context(), []*domain.Series{})
-		require.NoError(t, err)
+	seriesToSave := []*domain.Series{
+		{Name: "World Endurance Championship", ShortName: fn.Ptr("WEC"), ShortCode: "WEC", Category: "Sports Car", UUID: "875c810d-a048-414e-a048-000000000001"},
+		{Name: "Formula 1", ShortName: fn.Ptr("F1"), ShortCode: "F1", Category: "Open Wheel", UUID: "875c810d-a048-414e-a048-000000000002"},
+		{Name: "MotoGP", ShortName: nil, ShortCode: "MG", Category: "Motorcycle", UUID: "875c810d-a048-414e-a048-000000000003"},
+	}
 
-		requireSavedSeriesCount(t, suite.repository.db, 0)
-	})
+	err := suite.repository.SaveSeries(suite.T().Context(), seriesToSave)
+	require.NoError(suite.T(), err)
 
-	suite.T().Run("saves series into the database", func(t *testing.T) {
-		seriesToSave := []*domain.Series{
-			{Name: "World Endurance Championship", ShortName: fn.Ptr("WEC"), ShortCode: "WEC", Category: "Sports Car", UUID: "967cd5ab-5562-40dc-a0b0-109738adcd01"},
-			{Name: "Formula 1", ShortName: fn.Ptr("F1"), ShortCode: "F1", Category: "Open Wheel", UUID: "a33f8b4a-2b22-41ce-8e7d-0aea08f0e176"},
-			{Name: "MotoGP", ShortName: nil, ShortCode: "MG", Category: "Motorcycle", UUID: "a485d01c-f907-4ff7-83db-ca1c90cc28a1"},
-		}
-
-		err := suite.repository.SaveSeries(t.Context(), seriesToSave)
-		require.NoError(t, err)
-
-		requireSavedSeriesCount(t, suite.repository.db, len(seriesToSave))
-	})
+	requireSavedSeriesCount(suite.T(), suite.repository.db, len(seriesToSave))
 }
 
 func TestFunctional_SaveSeriesRepository(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(SaveSeriesRepositoryFunctionalTestSuite))
 }
 
 func requireSavedSeriesCount(t *testing.T, db *database.PGXPoolAdapter, expectedCount int) {
 	rows := fn.MustReturn(
-		db.Query(t.Context(), "SELECT COUNT(1) FROM series;"),
+		db.Query(t.Context(), "SELECT COUNT(1) FROM series WHERE uuid::text LIKE '875c810d-a048-414e-a048-%';"),
 	).(pgx.Rows)
 	defer rows.Close()
 

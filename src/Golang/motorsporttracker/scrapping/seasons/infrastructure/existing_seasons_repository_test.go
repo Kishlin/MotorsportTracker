@@ -31,10 +31,8 @@ func (suite *ExistingSeasonsRepositoryFunctionalTestSuite) SetupSuite() {
 }
 
 func (suite *ExistingSeasonsRepositoryFunctionalTestSuite) TearDownSuite() {
-	sql1 := "TRUNCATE TABLE seasons RESTART IDENTITY CASCADE;"
-	sql2 := "TRUNCATE TABLE series RESTART IDENTITY CASCADE;"
-	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql1))
-	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql2))
+	sql := "DELETE FROM series WHERE uuid::text LIKE '2e544906-bfa6-42e6-84a3-%';"
+	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
 
 	suite.repository.db.Close()
 	suite.resetEnv()
@@ -42,33 +40,41 @@ func (suite *ExistingSeasonsRepositoryFunctionalTestSuite) TearDownSuite() {
 
 func (suite *ExistingSeasonsRepositoryFunctionalTestSuite) TestGetExistingSeasons() {
 	suite.T().Run("returns empty map when no seasons exist for the series", func(t *testing.T) {
-		existingSeasons, err := suite.repository.GetExistingSeasons(t.Context(), "00000000-0000-0000-0000-000000000999")
+		existingSeasons, err := suite.repository.GetExistingSeasons(t.Context(), "2e544906-bfa6-42e6-84a3-000000000999")
 		suite.NoError(err)
 		suite.Empty(existingSeasons)
 	})
 
 	suite.T().Run("returns map of existing seasons for the series", func(t *testing.T) {
-		existingSeasons, err := suite.repository.GetExistingSeasons(t.Context(), "00000000-0000-0000-0000-000000000001")
+		existingSeasons, err := suite.repository.GetExistingSeasons(t.Context(), "2e544906-bfa6-42e6-84a3-000000000001")
 		suite.NoError(err)
 		suite.Len(existingSeasons, 2)
-		suite.Contains(existingSeasons, "00000000-0000-0000-0000-000000000001")
-		suite.Contains(existingSeasons, "00000000-0000-0000-0000-000000000002")
+		suite.Contains(existingSeasons, "d1f0a640-42fb-4abf-bc36-000000000001")
+		suite.Contains(existingSeasons, "d1f0a640-42fb-4abf-bc36-000000000002")
 	})
 }
 
 func TestFunctional_ExistingSeasonsRepository(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(ExistingSeasonsRepositoryFunctionalTestSuite))
 }
 
 func seasonsFixture() string {
 	return `
-INSERT INTO series (id, uuid, name, short_code, category) VALUES
-(1, '00000000-0000-0000-0000-000000000001', 'Super Racing Series', 'SRS', 'Racing'),
-(2, '00000000-0000-0000-0000-000000000002', 'Extreme Racing Series', 'ERS', 'Racing');
+INSERT INTO series (uuid, name, short_code, category) VALUES
+('2e544906-bfa6-42e6-84a3-000000000001', 'Super Racing Series', 'SRS', 'Racing'),
+('2e544906-bfa6-42e6-84a3-000000000002', 'Extreme Racing Series', 'ERS', 'Racing');
 
-INSERT INTO seasons (id, uuid, series, name, year, end_year) VALUES 
-(1, '00000000-0000-0000-0000-000000000001', 1, 'Season 1', 2023, 2024),
-(2, '00000000-0000-0000-0000-000000000002', 1, 'Season 2', 2022, 2023),
-(3, '00000000-0000-0000-0000-000000000003', 2, 'Season 3', 2022, 2023);
+INSERT INTO seasons (uuid, series, name, year, end_year) VALUES 
+('d1f0a640-42fb-4abf-bc36-000000000001', 
+ (SELECT id FROM series WHERE uuid = '2e544906-bfa6-42e6-84a3-000000000001'), 
+ 'Season 1', 2023, 2024),
+('d1f0a640-42fb-4abf-bc36-000000000002', 
+ (SELECT id FROM series WHERE uuid = '2e544906-bfa6-42e6-84a3-000000000001'), 
+ 'Season 2', 2022, 2023),
+('d1f0a640-42fb-4abf-bc36-000000000003', 
+ (SELECT id FROM series WHERE uuid = '2e544906-bfa6-42e6-84a3-000000000002'), 
+ 'Season 3', 2022, 2023);
 `
 }

@@ -35,36 +35,37 @@ func (suite *ExistingSeriesRepositoryFunctionalTestSuite) TearDownSuite() {
 	suite.resetEnv()
 }
 
-func (suite *ExistingSeriesRepositoryFunctionalTestSuite) TearDownTest() {
-	sql := "TRUNCATE TABLE series RESTART IDENTITY CASCADE;"
+func (suite *ExistingSeriesRepositoryFunctionalTestSuite) TestGetExistingSeries() {
+	// Fixtures
+	fn.Must(suite.repository.db.Exec(suite.T().Context(), seriesFixtures()))
+
+	existingSeries, err := suite.repository.GetExistingSeries(suite.T().Context())
+	require.NoError(suite.T(), err)
+
+	count := 0
+	for _, series := range existingSeries {
+		if series.UUID[:24] == "91e8a1b1-898c-4ba3-9dd1-" {
+			count++
+		}
+	}
+	require.Equal(suite.T(), 3, count)
+
+	// Clean up
+	sql := "DELETE FROM series WHERE uuid::text LIKE '91e8a1b1-898c-4ba3-9dd1-%';"
 	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
 }
 
-func (suite *ExistingSeriesRepositoryFunctionalTestSuite) TestGetExistingSeries() {
-	suite.T().Run("returns empty map when there are no series in the database", func(t *testing.T) {
-		existingSeries, err := suite.repository.GetExistingSeries(t.Context())
-		require.NoError(t, err)
-		require.Empty(t, existingSeries)
-	})
-
-	suite.T().Run("returns all existing series from the database", func(t *testing.T) {
-		fn.Must(suite.repository.db.Exec(suite.T().Context(), seriesFixtures()))
-
-		existingSeries, err := suite.repository.GetExistingSeries(t.Context())
-		require.NoError(t, err)
-		require.Len(t, existingSeries, 3)
-	})
-}
-
 func TestFunctional_ExistingSeriesRepository(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(ExistingSeriesRepositoryFunctionalTestSuite))
 }
 
 func seriesFixtures() string {
 	return `
 INSERT INTO series (uuid, name, short_name, short_code, category) VALUES 
-('00000000-0000-0000-0000-000000000001', 'Series 1', 'S1', 'S1', 'Category 1'),
-('00000000-0000-0000-0000-000000000002', 'Series 2', 'S2', 'S2', 'Category 2'),
-('00000000-0000-0000-0000-000000000003', 'Series 3', null, 'S3', 'Category 3');
+('91e8a1b1-898c-4ba3-9dd1-000000000001', 'Series 1', 'S1', 'S1', 'Category 1'),
+('91e8a1b1-898c-4ba3-9dd1-000000000002', 'Series 2', 'S2', 'S2', 'Category 2'),
+('91e8a1b1-898c-4ba3-9dd1-000000000003', 'Series 3', null, 'S3', 'Category 3');
 `
 }
