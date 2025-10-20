@@ -33,6 +33,12 @@ func (c *CachedConnector) GetSeasons(ctx context.Context, seriesUUID string) ([]
 	})
 }
 
+func (c *CachedConnector) GetCalendar(ctx context.Context, seasonUUID string) ([]byte, error) {
+	return c.getFromCacheOrConnector("calendar", seasonUUID, func() ([]byte, error) {
+		return c.inner.GetCalendar(ctx, seasonUUID)
+	})
+}
+
 func (c *CachedConnector) getFromCacheOrConnector(namespace string, key string, getFromConnector func() ([]byte, error)) ([]byte, error) {
 	data, hit, err := c.cache.Get(namespace, key)
 	if err != nil {

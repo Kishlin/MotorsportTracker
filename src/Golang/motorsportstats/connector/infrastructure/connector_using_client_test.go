@@ -50,6 +50,21 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetSeasons() {
 	require.Empty(suite.T(), data)
 }
 
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetCalendar() {
+	testServer := NewTestServer()
+	defer testServer.Close()
+
+	connector := ConnectorForTestServer(testServer)
+
+	data, err := connector.GetCalendar(suite.T().Context(), "71fdf79a-0cf3-4aab-99f6-b9a836c333da")
+	require.NoError(suite.T(), err)
+	require.NotEmpty(suite.T(), data)
+
+	data, err = connector.GetCalendar(suite.T().Context(), "missing-uuid")
+	require.Error(suite.T(), err)
+	require.Empty(suite.T(), data)
+}
+
 func TestFunctional_ConnectorUsingClient(t *testing.T) {
 	suite.Run(t, new(ConnectorUsingClientFunctionalTestSuite))
 }

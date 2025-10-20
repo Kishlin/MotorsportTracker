@@ -29,6 +29,10 @@ func (c *ConnectorUsingClient) GetSeasons(ctx context.Context, seriesUUID string
 	return c.doGet(ctx, schemaSeasons, endpointSeasons, seriesUUID)
 }
 
+func (c *ConnectorUsingClient) GetCalendar(ctx context.Context, seasonUUID string) ([]byte, error) {
+	return c.doGet(ctx, schemaCalendar, endpointCalendar, seasonUUID)
+}
+
 func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...any) ([]byte, error) {
 	url := endpoint
 	if len(params) > 0 {
@@ -129,4 +133,181 @@ const schemaSeasons = `{
 		},
 		"required": ["name", "uuid", "year", "endYear", "status"]
 	}
+}`
+
+const endpointCalendar = "/widgets/1.0.0/seasons/%s/calendar"
+
+const schemaCalendar = `{
+  "type": "object",
+  "properties": {
+    "season": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        },
+        "year": {
+          "type": "number"
+        },
+        "endYear": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "uuid",
+        "year",
+        "endYear"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": "string"
+          },
+          "shortCode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "number"
+          },
+          "startTimeUtc": {
+            "type": "number"
+          },
+          "endDate": {
+            "type": "number"
+          },
+          "endTimeUtc": {
+            "type": "number"
+          },
+          "venue": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "uuid": {
+                "type": "string"
+              },
+              "shortName": {
+                "type": "string"
+              },
+              "shortCode": {
+                "type": "string"
+              },
+              "picture": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "name",
+              "uuid",
+              "shortName",
+              "shortCode"
+            ]
+          },
+          "country": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "uuid": {
+                "type": "string"
+              },
+              "picture": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "uuid",
+              "picture"
+            ]
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "shortName": {
+                  "type": "string"
+                },
+                "shortCode": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "hasResults": {
+                  "type": "boolean"
+                },
+                "startTime": {
+                  "type": "number"
+                },
+                "startTimeUtc": {
+                  "type": "number"
+                },
+                "endTime": {
+                  "type": ["number", "null"]
+                },
+                "endTimeUtc": {
+                  "type": ["number", "null"]
+                }
+              },
+              "required": [
+                "uuid",
+                "name",
+                "shortName",
+                "shortCode",
+                "status",
+                "hasResults",
+                "startTime",
+                "startTimeUtc"
+              ]
+            }
+          }
+        },
+        "required": [
+          "uuid",
+          "name",
+          "shortName",
+          "shortCode",
+          "status",
+          "startDate",
+          "startTimeUtc",
+          "endDate",
+          "endTimeUtc",
+          "venue",
+          "country",
+          "sessions"
+        ]
+      }
+    }
+  },
+  "required": [
+    "season",
+    "events"
+  ]
 }`

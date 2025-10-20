@@ -49,3 +49,18 @@ func (g GatewayUsingConnector) GetSeasons(ctx context.Context, seriesUUID string
 
 	return seasonsList, nil
 }
+
+func (g GatewayUsingConnector) GetCalendar(ctx context.Context, seasonUUID string) (*domain.Calendar, error) {
+	data, err := g.connector.GetCalendar(ctx, seasonUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting calendar from connector: %w", err)
+	}
+
+	var calendar *domain.Calendar
+	err = json.Unmarshal(data, &calendar)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling calendar data: %w", err)
+	}
+
+	return calendar, nil
+}

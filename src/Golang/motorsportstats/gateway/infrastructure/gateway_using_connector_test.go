@@ -44,6 +44,16 @@ func (suite *GatewayUsingConnectorFunctionalTestSuite) TestGetSeasons() {
 	suite.Require().Empty(seasons)
 }
 
+func (suite *GatewayUsingConnectorFunctionalTestSuite) TestGetCalendar() {
+	calendar, err := suite.gateway.GetCalendar(suite.T().Context(), "71fdf79a-0cf3-4aab-99f6-b9a836c333da")
+	suite.Require().NoError(err)
+	suite.Require().NotEmpty(calendar)
+
+	calendar, err = suite.gateway.GetCalendar(suite.T().Context(), "missing-uuid")
+	suite.Require().Error(err)
+	suite.Require().Empty(calendar)
+}
+
 func TestFunctional_GatewayUsingConnector(t *testing.T) {
 	suite.Run(t, new(GatewayUsingConnectorFunctionalTestSuite))
 }
