@@ -34,7 +34,7 @@ func (s *ScrapeSeriesHandlerUnitTestSuite) SetupSuite() {
 	)
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) TearHandle() {
+func (s *ScrapeSeriesHandlerUnitTestSuite) TestHandle() {
 	s.T().Run("no-op when series is not found", func(t *testing.T) {
 		s.withNoMatchingSeries()
 
