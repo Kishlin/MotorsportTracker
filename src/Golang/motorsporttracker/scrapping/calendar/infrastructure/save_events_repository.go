@@ -312,6 +312,11 @@ func (s *SaveCalendarRepository) upsertData(ctx context.Context, queryTemplate s
 
 	ret.Close()
 
+	err = ret.Err()
+	if err != nil {
+		return stats, fmt.Errorf("after iterating upsert results: %w", err)
+	}
+
 	return stats, nil
 }
 

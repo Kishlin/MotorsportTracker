@@ -1,0 +1,2 @@
+- Fix the weird Dates bug on events
+- Batch queries because HOLY SHIT 2100 ARGUMENTS FOR SESSIONS
