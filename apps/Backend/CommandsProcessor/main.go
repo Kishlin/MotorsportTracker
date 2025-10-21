@@ -10,6 +10,8 @@ import (
 	"time"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
+	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
+	calendarImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/infrastructure"
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/events"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
@@ -70,6 +72,14 @@ func main() {
 			seasonsImpls.NewExistingSeasonsRepository(registry.GetCoreDatabase(ctx)),
 			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
 			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		),
+	)
+	handlersList.RegisterHandler(
+		calendar.ScrapeCalendarIntentName,
+		calendar.NewScrapeEventsHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
+			calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
 		),
 	)
 	handlersList.RegisterHandler(events.ScrapeEventsIntentName, events.NewScrapEventsHandler())

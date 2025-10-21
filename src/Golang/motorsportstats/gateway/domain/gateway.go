@@ -30,7 +30,7 @@ type Venue struct {
 type Country struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
-	Flag string `json:"flag"`
+	Flag string `json:"picture"`
 }
 
 type Session struct {
@@ -40,8 +40,8 @@ type Session struct {
 	ShortCode  string `json:"shortCode"`
 	Status     string `json:"status"`
 	HasResults bool   `json:"hasResults"`
-	StartTime  int    `json:"startTimeUtc"`
-	EndTime    *int   `json:"endTimeUtc"`
+	StartTime  int64  `json:"startTimeUtc"`
+	EndTime    *int64 `json:"endTimeUtc"`
 }
 
 type Event struct {
@@ -50,8 +50,8 @@ type Event struct {
 	ShortName string     `json:"shortName"`
 	ShortCode string     `json:"shortCode"`
 	Status    string     `json:"status"`
-	StartDate int        `json:"startDateUtc"`
-	EndDate   int        `json:"endDateUtc"`
+	StartDate int64      `json:"startDateUtc"`
+	EndDate   int64      `json:"endDateUtc"`
 	Venue     *Venue     `json:"venue"`
 	Country   *Country   `json:"country"`
 	Sessions  []*Session `json:"sessions"`
