@@ -8,18 +8,9 @@ import (
 	"time"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
-
-type UpsertStats struct {
-	Inserted int
-	Updated  int
-}
-
-type UpsertResult struct {
-	ID      int
-	Updated bool
-}
 
 type SaveCalendarRepository struct {
 	db *database.PGXPoolAdapter
@@ -68,33 +59,25 @@ func (s *SaveCalendarRepository) SaveCalendar(ctx context.Context, season string
 		eventsUUIDs[event.UUID] = struct{}{}
 	}
 
-	stats, err := s.saveCountries(ctx, uniqueCountries)
+	err = s.saveCountries(ctx, uniqueCountries)
 	if err != nil {
 		return fmt.Errorf("saving uniqueCountries: %w", err)
 	}
 
-	slog.Info("Countries upserted successfully", "countries_count", len(uniqueCountries), "inserted", stats.Inserted, "updated", stats.Updated)
-
-	stats, err = s.saveVenues(ctx, uniqueVenues)
+	err = s.saveVenues(ctx, uniqueVenues)
 	if err != nil {
 		return fmt.Errorf("saving uniqueVenues: %w", err)
 	}
 
-	slog.Info("Venues upserted successfully", "venues_count", len(uniqueVenues), "inserted", stats.Inserted, "updated", stats.Updated)
-
-	stats, err = s.saveEvents(ctx, calendar.Events, seasonID, venuesUUIDs, countriesUUIDs)
+	err = s.saveEvents(ctx, calendar.Events, seasonID, venuesUUIDs, countriesUUIDs)
 	if err != nil {
 		return fmt.Errorf("saving events: %w", err)
 	}
 
-	slog.Info("Events upserted successfully", "events_count", len(calendar.Events), "inserted", stats.Inserted, "updated", stats.Updated)
-
-	stats, err = s.saveSessions(ctx, sessionsPerEventUUID, eventsUUIDs)
+	err = s.saveSessions(ctx, sessionsPerEventUUID, eventsUUIDs)
 	if err != nil {
 		return fmt.Errorf("saving sessions: %w", err)
 	}
-
-	slog.Info("Sessions upserted successfully", "sessions_count", sessionsCount, "inserted", stats.Inserted, "updated", stats.Updated)
 
 	return nil
 }
@@ -121,54 +104,54 @@ func (s *SaveCalendarRepository) getSeasonID(ctx context.Context, season string)
 	return seasonID, nil
 }
 
-func (s *SaveCalendarRepository) saveCountries(ctx context.Context, countries []*motorsportstats.Country) (UpsertStats, error) {
+func (s *SaveCalendarRepository) saveCountries(ctx context.Context, countries []*motorsportstats.Country) error {
 	if len(countries) == 0 {
-		return UpsertStats{}, nil
+		slog.Debug("No countries to save")
+
+		return nil
 	}
 
-	queryValues := ""
-	var args []interface{}
-	for i, country := range countries {
-		if i > 0 {
-			queryValues += ","
-		}
-		argPosition := i*4 + 1
-		queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3)
+	var rows [][]interface{}
+	for _, country := range countries {
 		hash := s.toMD5(fmt.Sprintf("%s|%s", country.Name, country.Flag))
-		args = append(args, country.UUID, country.Name, country.Flag, hash)
+		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag, hash})
 	}
 
-	stats, err := s.upsertData(ctx, saveCountriesQuery, queryValues, args)
+	cols := []string{"uuid", "name", "flag", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "countries", cols, rows)
 	if err != nil {
-		return stats, fmt.Errorf("upserting countries: %w", err)
+		return fmt.Errorf("saving countries: %w", err)
 	}
 
-	return stats, nil
+	slog.Info("Countries saved successfully", "count", len(countries), "inserted", stats.Inserted, "updated", stats.Updated)
+
+	return nil
 }
 
-func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motorsportstats.Venue) (UpsertStats, error) {
+func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motorsportstats.Venue) error {
 	if len(venues) == 0 {
-		return UpsertStats{}, nil
+		slog.Debug("No venues to save")
+
+		return nil
 	}
 
-	queryValues := ""
-	var args []interface{}
-	for i, venue := range venues {
-		if i > 0 {
-			queryValues += ","
-		}
-		argPosition := i*5 + 1
-		queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3, argPosition+4)
+	var rows [][]interface{}
+	for _, venue := range venues {
 		hash := s.toMD5(fmt.Sprintf("%s|%s|%s", venue.Name, venue.ShortName, venue.ShortCode))
-		args = append(args, venue.UUID, venue.Name, venue.ShortName, venue.ShortCode, hash)
+		rows = append(rows, []interface{}{venue.UUID, venue.Name, venue.ShortName, venue.ShortCode, hash})
 	}
 
-	stats, err := s.upsertData(ctx, saveVenueQuery, queryValues, args)
+	cols := []string{"uuid", "name", "short_name", "short_code", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "venues", cols, rows)
 	if err != nil {
-		return stats, fmt.Errorf("upserting venues: %w", err)
+		return fmt.Errorf("saving venues: %w", err)
 	}
 
-	return stats, nil
+	slog.Info("Venues saved successfully", "count", len(venues), "inserted", stats.Inserted, "updated", stats.Updated)
+
+	return nil
 }
 
 func (s *SaveCalendarRepository) saveEvents(
@@ -177,187 +160,109 @@ func (s *SaveCalendarRepository) saveEvents(
 	seasonID int,
 	venuesUUIDs map[string]struct{},
 	countryUUIDs map[string]struct{},
-) (UpsertStats, error) {
+) error {
 	if len(events) == 0 {
-		return UpsertStats{}, nil
+		slog.Debug("No events to save")
+
+		return nil
 	}
 
-	venuesIDsPerUUIDs, err := s.getIDsForUUIDs(ctx, "venues", venuesUUIDs)
+	venuesIDsPerUUIDs, err := shared.GetIDsForUUIDs(ctx, s.db, "venues", venuesUUIDs)
 	if err != nil {
-		return UpsertStats{}, fmt.Errorf("getting venue IDs for UUIDs: %w", err)
+		return fmt.Errorf("getting venue IDs for UUIDs: %w", err)
 	}
 
-	countryIDPerUUID, err := s.getIDsForUUIDs(ctx, "countries", countryUUIDs)
+	countryIDPerUUID, err := shared.GetIDsForUUIDs(ctx, s.db, "countries", countryUUIDs)
 	if err != nil {
-		return UpsertStats{}, fmt.Errorf("getting country IDs for UUIDs: %w", err)
+		return fmt.Errorf("getting country IDs for UUIDs: %w", err)
 	}
 
-	queryValues := ""
-	var args []interface{}
-	for i, event := range events {
-		if i > 0 {
-			queryValues += ","
-		}
-		argPosition := i*11 + 1
-		queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3, argPosition+4, argPosition+5, argPosition+6, argPosition+7, argPosition+8, argPosition+9, argPosition+10)
-
+	var rows [][]interface{}
+	for _, event := range events {
 		if event.Venue == nil {
-			return UpsertStats{}, fmt.Errorf("event %s has no venue", event.UUID)
+			return fmt.Errorf("event %s has no venue", event.UUID)
 		}
 		venueID, ok := venuesIDsPerUUIDs[event.Venue.UUID]
 		if ok == false {
-			return UpsertStats{}, fmt.Errorf("venue UUID %s not found in saved venues", event.Venue.UUID)
+			return fmt.Errorf("venue UUID %s not found in saved venues", event.Venue.UUID)
 		}
 
 		if event.Country == nil {
-			return UpsertStats{}, fmt.Errorf("event %s has no country", event.UUID)
+			return fmt.Errorf("event %s has no country", event.UUID)
 		}
 		countryID, ok := countryIDPerUUID[event.Country.UUID]
 		if ok == false {
-			return UpsertStats{}, fmt.Errorf("country UUID %s not found in saved countries", event.Country.UUID)
+			return fmt.Errorf("country UUID %s not found in saved countries", event.Country.UUID)
 		}
 
 		startDate := time.Unix(event.StartDate, 0)
 		endDate := time.Unix(event.EndDate, 0)
 
 		hash := s.toMD5(fmt.Sprintf("%v|%v|%s|%s|%s|%s|%d|%d", venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, event.StartDate, event.EndDate))
-		args = append(args, event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDate, endDate, hash)
+		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDate, endDate, hash})
 	}
 
-	stats, err := s.upsertData(ctx, saveEventQuery, queryValues, args)
+	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_date", "end_date", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "events", cols, rows)
 	if err != nil {
-		return stats, fmt.Errorf("upserting events: %w", err)
+		return fmt.Errorf("saving events: %w", err)
 	}
 
-	return stats, nil
+	slog.Info("Events saved successfully", "count", len(rows), "inserted", stats.Inserted, "updated", stats.Updated)
+
+	return nil
 }
 
 func (s *SaveCalendarRepository) saveSessions(
 	ctx context.Context,
 	sessionsPerEventUUID map[string][]*motorsportstats.Session,
 	eventsUUIDs map[string]struct{},
-) (UpsertStats, error) {
-	eventsIDsPerUUIDs, err := s.getIDsForUUIDs(ctx, "events", eventsUUIDs)
+) error {
+	eventsIDsPerUUIDs, err := shared.GetIDsForUUIDs(ctx, s.db, "events", eventsUUIDs)
 	if err != nil {
-		return UpsertStats{}, fmt.Errorf("getting event IDs for UUIDs: %w", err)
+		return fmt.Errorf("getting event IDs for UUIDs: %w", err)
 	}
 
-	queryValues := ""
-	var args []interface{}
-	i := 0
+	var rows [][]interface{}
 	for eventUUID, session := range sessionsPerEventUUID {
 		eventID, ok := eventsIDsPerUUIDs[eventUUID]
 		if ok == false {
-			return UpsertStats{}, fmt.Errorf("event UUID %s not found in saved events", eventUUID)
+			return fmt.Errorf("event UUID %s not found in saved events", eventUUID)
 		}
 
 		for _, sess := range session {
-			if i > 0 {
-				queryValues += ","
-			}
-			argPosition := i*10 + 1
-			queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3, argPosition+4, argPosition+5, argPosition+6, argPosition+7, argPosition+8, argPosition+9)
-
 			startTime := time.Unix(sess.StartTime, 0)
 
 			var endTime *time.Time
+			endTimeForHash := int64(0)
 			if sess.EndTime != nil {
+				endTimeForHash = *sess.EndTime
 				t := time.Unix(*sess.EndTime, 0)
 				endTime = &t
 			}
 
-			hash := s.toMD5(fmt.Sprintf("%d|%s|%s|%s|%s|%t|%d|%v", eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, sess.StartTime, sess.EndTime))
-			args = append(args, sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, startTime, endTime, hash)
-			i++
+			hash := s.toMD5(fmt.Sprintf("%d|%s|%s|%s|%s|%t|%d|%v", eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, sess.StartTime, endTimeForHash))
+			rows = append(rows, []interface{}{sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, startTime, endTime, hash})
 		}
 	}
 
-	if i == 0 {
-		return UpsertStats{}, nil
+	if len(rows) == 0 {
+		slog.Debug("No sessions to save")
+
+		return nil
 	}
 
-	stats, err := s.upsertData(ctx, saveSessionQuery, queryValues, args)
+	cols := []string{"uuid", "event", "name", "short_name", "short_code", "status", "has_results", "start_time", "end_time", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "sessions", cols, rows)
 	if err != nil {
-		return stats, fmt.Errorf("upserting sessions: %w", err)
+		return fmt.Errorf("saving sessions: %w", err)
 	}
 
-	return stats, nil
-}
+	slog.Info("Sessions saved successfully", "count", len(rows), "inserted", stats.Inserted, "updated", stats.Updated)
 
-func (s *SaveCalendarRepository) upsertData(ctx context.Context, queryTemplate string, queryValues string, args []interface{}) (UpsertStats, error) {
-	stats := UpsertStats{
-		Inserted: 0,
-		Updated:  0,
-	}
-
-	finalQuery := fmt.Sprintf(queryTemplate, queryValues)
-
-	ret, err := s.db.Query(ctx, finalQuery, args...)
-	if err != nil {
-		return stats, fmt.Errorf("executing save data query: %w", err)
-	}
-
-	for ret.Next() {
-		var res UpsertResult
-		if err = ret.Scan(&res.ID, &res.Updated); err != nil {
-			return stats, fmt.Errorf("scanning upsert result: %w", err)
-		}
-
-		if res.Updated {
-			stats.Updated++
-		} else {
-			stats.Inserted++
-		}
-	}
-
-	ret.Close()
-
-	err = ret.Err()
-	if err != nil {
-		return stats, fmt.Errorf("after iterating upsert results: %w", err)
-	}
-
-	return stats, nil
-}
-
-func (s *SaveCalendarRepository) getIDsForUUIDs(ctx context.Context, table string, uuids map[string]struct{}) (map[string]int, error) {
-	if len(uuids) == 0 {
-		return make(map[string]int), nil
-	}
-
-	queryValues := ""
-	var args []interface{}
-	i := 0
-	for uuid := range uuids {
-		if i > 0 {
-			queryValues += ","
-		}
-		argPosition := i + 1
-		queryValues += fmt.Sprintf(" $%d", argPosition)
-		args = append(args, uuid)
-		i++
-	}
-
-	finalQuery := fmt.Sprintf("SELECT uuid, id FROM %s WHERE uuid IN (%s);", table, queryValues)
-
-	idPerUUID := make(map[string]int)
-
-	ret, err := s.db.Query(ctx, finalQuery, args...)
-	if err != nil {
-		return idPerUUID, fmt.Errorf("executing get IDs for UUIDs query: %w", err)
-	}
-	defer ret.Close()
-
-	for ret.Next() {
-		var id int
-		var uuid string
-		if err = ret.Scan(&uuid, &id); err != nil {
-			return idPerUUID, fmt.Errorf("scanning ID for UUID: %w", err)
-		}
-		idPerUUID[uuid] = id
-	}
-
-	return idPerUUID, nil
+	return nil
 }
 
 func (s *SaveCalendarRepository) toMD5(str string) string {
@@ -365,71 +270,3 @@ func (s *SaveCalendarRepository) toMD5(str string) string {
 	h.Write([]byte(str))
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
-
-const saveCountriesQuery = `
-INSERT INTO countries (uuid, name, flag, hash)
-VALUES %s
-ON CONFLICT (uuid) DO UPDATE SET
-  name = EXCLUDED.name,
-  flag = EXCLUDED.flag,
-  hash = EXCLUDED.hash,
-  updated_at = NOW()
-WHERE countries.hash IS DISTINCT FROM EXCLUDED.hash
-RETURNING
-  id,
-  CASE WHEN xmax = 0 THEN false ELSE true END as updated;
-`
-
-const saveVenueQuery = `
-INSERT INTO venues (uuid, name, short_name, short_code, hash)
-VALUES %s
-ON CONFLICT (uuid) DO UPDATE SET
-  name = EXCLUDED.name,
-  short_name = EXCLUDED.short_name,
-  short_code = EXCLUDED.short_code,
-  hash = EXCLUDED.hash,
-  updated_at = NOW()
-WHERE venues.hash IS DISTINCT FROM EXCLUDED.hash
-RETURNING
-  id,
-  CASE WHEN xmax = 0 THEN false ELSE true END as updated;
-`
-
-const saveEventQuery = `
-INSERT INTO events (uuid, season, venue, country, name, short_name, short_code, status, start_date, end_date, hash)
-VALUES %s
-ON CONFLICT (uuid) DO UPDATE SET
-  venue = EXCLUDED.venue,
-  country = EXCLUDED.country,
-  name = EXCLUDED.name,
-  short_name = EXCLUDED.short_name,
-  short_code = EXCLUDED.short_code,
-  status = EXCLUDED.status,
-  start_date = EXCLUDED.start_date,
-  end_date = EXCLUDED.end_date,
-  hash = EXCLUDED.hash,
-  updated_at = NOW()
-WHERE events.hash IS DISTINCT FROM EXCLUDED.hash
-RETURNING
-  id,
-  CASE WHEN xmax = 0 THEN false ELSE true END as updated;
-`
-
-const saveSessionQuery = `
-INSERT INTO sessions (uuid, event, name, short_name, short_code, status, has_results, start_time, end_time, hash)
-VALUES %s
-ON CONFLICT (uuid) DO UPDATE SET
-  name = EXCLUDED.name,
-  short_name = EXCLUDED.short_name,
-  short_code = EXCLUDED.short_code,
-  status = EXCLUDED.status,
-  has_results = EXCLUDED.has_results,
-  start_time = EXCLUDED.start_time,
-  end_time = EXCLUDED.end_time,
-  hash = EXCLUDED.hash,
-  updated_at = NOW()
-WHERE sessions.hash IS DISTINCT FROM EXCLUDED.hash
-RETURNING
-  id,
-  CASE WHEN xmax = 0 THEN false ELSE true END as updated;
-`
