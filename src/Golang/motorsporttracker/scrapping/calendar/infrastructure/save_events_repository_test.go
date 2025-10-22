@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
@@ -18,6 +19,7 @@ type SaveCalendarRepositoryIntegrationTestSuite struct {
 	suite.Suite
 
 	repository *SaveCalendarRepository
+	helper     *shared.SaveRepositoryHelper
 
 	resetEnv func()
 }
@@ -31,6 +33,7 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) SetupSuite() {
 	fn.Must(db.Exec(suite.T().Context(), suite.seasonFixture()))
 
 	suite.repository = NewSaveCalendarRepository(db)
+	suite.helper = shared.NewSaveRepositoryHelper(db)
 }
 
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) TearDownSuite() {
@@ -66,11 +69,10 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		counts := suite.storedCounts(t, "77dde66e-7835-4440-0001-%")
-		suite.Equal(1, counts.events)
-		suite.Equal(1, counts.venues)
-		suite.Equal(1, counts.countries)
-		suite.Equal(1, counts.sessions)
+		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0001-%"))
 	})
 
 	suite.T().Run("saves data when there are nil values", func(t *testing.T) {
@@ -78,11 +80,10 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		counts := suite.storedCounts(t, "77dde66e-7835-4440-0002-%")
-		suite.Equal(1, counts.events)
-		suite.Equal(1, counts.venues)
-		suite.Equal(1, counts.countries)
-		suite.Equal(1, counts.sessions)
+		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0002-%"))
 	})
 
 	suite.T().Run("saves everything with a complex calendar", func(t *testing.T) {
@@ -90,11 +91,10 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		counts := suite.storedCounts(t, "77dde66e-7835-4440-0003-%")
-		suite.Equal(2, counts.events)
-		suite.Equal(2, counts.venues)
-		suite.Equal(2, counts.countries)
-		suite.Equal(3, counts.sessions)
+		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(2, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(3, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(2, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0003-%"))
 	})
 
 	suite.T().Run("saves everything with repeated venues and countries", func(t *testing.T) {
@@ -102,11 +102,10 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		counts := suite.storedCounts(t, "77dde66e-7835-4440-0004-%")
-		suite.Equal(1, counts.venues)
-		suite.Equal(1, counts.countries)
-		suite.Equal(2, counts.sessions)
-		suite.Equal(2, counts.events)
+		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(2, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0004-%"))
 	})
 }
 
@@ -116,35 +115,15 @@ func TestIntegration_SaveCalendarRepository(t *testing.T) {
 	suite.Run(t, new(SaveCalendarRepositoryIntegrationTestSuite))
 }
 
-func (suite *SaveCalendarRepositoryIntegrationTestSuite) storedCounts(t *testing.T, uuidFilter string) struct{ events, venues, countries, sessions int } {
-	const countsQuery = `
-SELECT
-	(SELECT COUNT(*) FROM events WHERE uuid::text LIKE $1) AS events,
-	(SELECT COUNT(*) FROM venues WHERE uuid::text LIKE $1) AS venues,
-	(SELECT COUNT(*) FROM countries WHERE uuid::text LIKE $1) AS countries,
-	(SELECT COUNT(*) FROM sessions WHERE uuid::text LIKE $1) AS sessions;
-`
-	var counts struct{ events, venues, countries, sessions int }
-	rows, err := suite.repository.db.Query(t.Context(), countsQuery, uuidFilter)
-	suite.NoError(err)
-	defer rows.Close()
-
-	suite.True(rows.Next())
-	err = rows.Scan(&counts.events, &counts.venues, &counts.countries, &counts.sessions)
-	suite.NoError(err)
-
-	return counts
-}
-
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) seasonFixture() string {
 	return `
-INSERT INTO series (uuid, name, short_name, short_code, category)
-VALUES ('70d5b480-8935-4fe5-a8e6-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1');
+INSERT INTO series (uuid, name, short_name, short_code, category, hash)
+VALUES ('70d5b480-8935-4fe5-a8e6-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1', '70d5b480-8935-4fe5-a8e6');
 
-INSERT INTO seasons (uuid, series, name, year, end_year)
+INSERT INTO seasons (uuid, series, name, year, end_year, hash)
 VALUES ('eeefdfaa-69b8-4226-86d2-000000000001', 
 (SELECT id FROM series WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001'),
-'2024', 2024, 2025);
+'2024', 2024, 2025, 'eeefdfaa-69b8-4226-86d2');
 `
 }
 

@@ -3,8 +3,11 @@ package infrastructure
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
+	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
+	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
 
@@ -17,8 +20,10 @@ func NewSaveSeasonsRepository(db *database.PGXPoolAdapter) *SaveSeasonsRepositor
 }
 
 // SaveSeasons saves seasons into the database.
-func (s *SaveSeasonsRepository) SaveSeasons(ctx context.Context, series string, seasons []*domain.Season) error {
+func (s *SaveSeasonsRepository) SaveSeasons(ctx context.Context, series string, seasons []*motorsportstats.Season) error {
 	if len(seasons) == 0 {
+		slog.Debug("No seasons to save")
+
 		return nil
 	}
 
@@ -27,24 +32,25 @@ func (s *SaveSeasonsRepository) SaveSeasons(ctx context.Context, series string, 
 		return fmt.Errorf("getting series ID: %w", err)
 	}
 
-	queryValues := ""
-	var args []interface{}
-	for i, season := range seasons {
-		if i > 0 {
-			queryValues += ","
-		}
-		argPosition := i*5 + 1
-		queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3, argPosition+4)
-		args = append(args, season.UUID, seriesID, season.Name, season.Year, season.EndYear)
+	var rows [][]interface{}
+	for _, season := range seasons {
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%d|%d", season.UUID, series, season.Name, season.Year, season.EndYear))
+		rows = append(rows, []interface{}{season.UUID, seriesID, season.Name, season.Year, season.EndYear, hash})
 	}
 
-	err = s.db.Exec(ctx, queryPrefix+queryValues, args...)
+	cols := []string{"uuid", "series", "name", "year", "end_year", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "seasons", cols, rows)
 	if err != nil {
-		return fmt.Errorf("inserting seasons: %w", err)
+		return fmt.Errorf("saving seasons: %w", err)
 	}
+
+	slog.Debug("Seasons saved successfully", "count", len(seasons), "inserted", stats.Inserted, "updated", stats.Updated)
 
 	return nil
 }
+
+const seriesIDQuery = "SELECT id FROM series WHERE uuid = $1 LIMIT 1;"
 
 func (s *SaveSeasonsRepository) getSeriesID(ctx context.Context, series string) (int, error) {
 	ret, err := s.db.Query(ctx, seriesIDQuery, series)
@@ -65,7 +71,3 @@ func (s *SaveSeasonsRepository) getSeriesID(ctx context.Context, series string) 
 
 	return seriesID, nil
 }
-
-const queryPrefix = "INSERT INTO seasons (uuid, series, name, year, end_year) VALUES"
-
-const seriesIDQuery = "SELECT id FROM series WHERE uuid = $1 LIMIT 1;"

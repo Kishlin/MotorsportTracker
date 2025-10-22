@@ -3,8 +3,11 @@ package infrastructure
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
-	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
+	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
+	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
 
@@ -19,28 +22,32 @@ func NewSaveSeriesRepository(db *database.PGXPoolAdapter) *SaveSeriesRepository 
 }
 
 // SaveSeries saves a list of series into the database.
-func (s *SaveSeriesRepository) SaveSeries(ctx context.Context, series []*domain.Series) error {
+func (s *SaveSeriesRepository) SaveSeries(ctx context.Context, series []*motorsportstats.Series) error {
 	if len(series) == 0 {
+		slog.Debug("No series to save")
+
 		return nil
 	}
 
-	queryPrefix := "INSERT INTO series (uuid, name, short_name, short_code, category) VALUES"
-
-	queryValues := ""
-	var args []interface{}
-	for i, s := range series {
-		if i > 0 {
-			queryValues += ","
+	var rows [][]interface{}
+	for _, ser := range series {
+		shortNameForHash := ""
+		if ser.ShortName != nil {
+			shortNameForHash = *ser.ShortName
 		}
-		argPosition := i*5 + 1
-		queryValues += fmt.Sprintf(" ($%d, $%d, $%d, $%d, $%d)", argPosition, argPosition+1, argPosition+2, argPosition+3, argPosition+4)
-		args = append(args, s.UUID, s.Name, s.ShortName, s.ShortCode, s.Category)
+
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s|%s", ser.UUID, ser.Name, shortNameForHash, ser.ShortCode, ser.Category))
+		rows = append(rows, []interface{}{ser.UUID, ser.Name, ser.ShortName, ser.ShortCode, ser.Category, hash})
 	}
 
-	err := s.db.Exec(ctx, queryPrefix+queryValues, args...)
+	cols := []string{"uuid", "name", "short_name", "short_code", "category", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "series", cols, rows)
 	if err != nil {
-		return fmt.Errorf("inserting series: %w", err)
+		return fmt.Errorf("saving series: %w", err)
 	}
+
+	slog.Info("Series saved successfully", "count", len(series), "inserted", stats.Inserted, "updated", stats.Updated)
 
 	return nil
 }

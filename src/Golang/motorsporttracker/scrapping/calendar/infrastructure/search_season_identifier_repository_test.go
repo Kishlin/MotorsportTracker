@@ -31,8 +31,15 @@ func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) SetupSuite() 
 }
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TearDownSuite() {
-	sql := "DELETE FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001';"
-	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
+	cleanUps := []string{
+		"DELETE FROM seasons WHERE uuid::text LIKE 'a5940eb2-b69f-4946-9436-%';",
+		"DELETE FROM seasons_history WHERE uuid::text LIKE 'a5940eb2-b69f-4946-9436-%';",
+		"DELETE FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001';",
+		"DELETE FROM series_history WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001';",
+	}
+	for _, query := range cleanUps {
+		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
+	}
 
 	suite.repository.db.Close()
 	suite.resetEnv()
@@ -78,6 +85,7 @@ func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TestGetSeason
 		})
 	}
 }
+
 func TestSearchSeasonIdentifierRepositoryIntegrationTestSuite(t *testing.T) {
 	t.Parallel()
 
@@ -86,18 +94,20 @@ func TestSearchSeasonIdentifierRepositoryIntegrationTestSuite(t *testing.T) {
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) seasonFixtures() string {
 	return `
-INSERT INTO series (uuid, name, short_name, short_code, category) VALUES 
-('592e8e09-b250-446b-b1cd-000000000001', 'Test Seasons Match 1', 'ShortSeasonsTest1', 'SerSeasonsTest1', 'Category 1');
+INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
+('592e8e09-b250-446b-b1cd-000000000001', 'Test Seasons Match 1', 'ShortSeasonsTest1', 'SerSeasonsTest1', 'Category 1', '592e8e09-b250-446b-b1cd')
+ON CONFLICT (uuid) DO NOTHING;
 
-INSERT INTO seasons (uuid, series, name, year, end_year) VALUES 
+INSERT INTO seasons (uuid, series, name, year, end_year, hash) VALUES 
 ('a5940eb2-b69f-4946-9436-000000000001', 
  (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2023, 2024),
+ 'Season 1', 2023, 2024, 'a5940eb2-b69f-4946-9436-000000000001'),
 ('a5940eb2-b69f-4946-9436-000000000002', 
  (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2022, 2023),
+ 'Season 1', 2022, 2023, 'a5940eb2-b69f-4946-9436-000000000002'),
 ('a5940eb2-b69f-4946-9436-000000000003', 
  (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2021, 2022);
+ 'Season 1', 2021, 2022, 'a5940eb2-b69f-4946-9436-000000000003')
+ON CONFLICT (uuid) DO NOTHING;
 `
 }

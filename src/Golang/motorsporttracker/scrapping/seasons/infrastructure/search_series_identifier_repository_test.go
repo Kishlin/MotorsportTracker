@@ -12,7 +12,7 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-type SearchSeriesIdentifierRepositoryFunctionalTestSuite struct {
+type SearchSeriesIdentifierRepositoryIntegrationTestSuite struct {
 	suite.Suite
 
 	repository *SearchSeriesIdentifierRepository
@@ -20,7 +20,7 @@ type SearchSeriesIdentifierRepositoryFunctionalTestSuite struct {
 	resetEnv func()
 }
 
-func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) SetupSuite() {
+func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) SetupSuite() {
 	suite.resetEnv = env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
@@ -31,7 +31,7 @@ func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) SetupSuite() {
 	suite.repository = NewSearchSeriesIdentifierRepository(db)
 }
 
-func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) TearDownSuite() {
+func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TearDownSuite() {
 	sql := "DELETE FROM series WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';"
 	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
 
@@ -39,7 +39,7 @@ func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) TearDownSuite(
 	suite.resetEnv()
 }
 
-func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) TestGetSeriesIdentifier() {
+func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TestGetSeriesIdentifier() {
 	for name, tc := range map[string]struct {
 		keyword       string
 		expectedRef   string
@@ -66,7 +66,7 @@ func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) TestGetSeriesI
 			expectedFound: true,
 		},
 		"found by partial name match": {
-			keyword:       "Match 1",
+			keyword:       "Series Match 1",
 			expectedRef:   "82b7cd85-ee6f-4c2c-a289-000000000001",
 			expectedFound: true,
 		},
@@ -86,17 +86,18 @@ func (suite *SearchSeriesIdentifierRepositoryFunctionalTestSuite) TestGetSeriesI
 	}
 }
 
-func TestFunctional_SearchSeriesIdentifierRepository(t *testing.T) {
+func TestIntegration_SearchSeriesIdentifierRepository(t *testing.T) {
 	t.Parallel()
 
-	suite.Run(t, new(SearchSeriesIdentifierRepositoryFunctionalTestSuite))
+	suite.Run(t, new(SearchSeriesIdentifierRepositoryIntegrationTestSuite))
 }
 
 func seriesFixtures() string {
 	return `
-INSERT INTO series (uuid, name, short_name, short_code, category) VALUES 
-('82b7cd85-ee6f-4c2c-a289-000000000001', 'Test Series Match 1', 'ShortTest1', 'SerTest1', 'Category 1'),
-('82b7cd85-ee6f-4c2c-a289-000000000002', 'Test Series Match 2', 'ShortTest2', 'SerTest2', 'Category 2'),
-('82b7cd85-ee6f-4c2c-a289-000000000003', 'Test Series Match 3', null, 'SerTest3', 'Category 3');
+INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
+('82b7cd85-ee6f-4c2c-a289-000000000001', 'Test Series Match 1', 'ShortTest1', 'SerTest1', 'Category 1', '82b7cd85-ee6f-4c2c-a289-000000000001'),
+('82b7cd85-ee6f-4c2c-a289-000000000002', 'Test Series Match 2', 'ShortTest2', 'SerTest2', 'Category 2', '82b7cd85-ee6f-4c2c-a289-000000000002'),
+('82b7cd85-ee6f-4c2c-a289-000000000003', 'Test Series Match 3', null, 'SerTest3', 'Category 3', '82b7cd85-ee6f-4c2c-a289-000000000003')
+ON CONFLICT (uuid) DO NOTHING;
 `
 }

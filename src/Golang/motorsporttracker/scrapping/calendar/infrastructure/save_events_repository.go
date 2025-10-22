@@ -2,13 +2,13 @@ package infrastructure
 
 import (
 	"context"
-	"crypto/md5"
 	"fmt"
 	"log/slog"
 	"time"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
+	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
 
@@ -113,7 +113,7 @@ func (s *SaveCalendarRepository) saveCountries(ctx context.Context, countries []
 
 	var rows [][]interface{}
 	for _, country := range countries {
-		hash := s.toMD5(fmt.Sprintf("%s|%s", country.Name, country.Flag))
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s", country.UUID, country.Name, country.Flag))
 		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag, hash})
 	}
 
@@ -138,7 +138,7 @@ func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motor
 
 	var rows [][]interface{}
 	for _, venue := range venues {
-		hash := s.toMD5(fmt.Sprintf("%s|%s|%s", venue.Name, venue.ShortName, venue.ShortCode))
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s", venue.UUID, venue.Name, venue.ShortName, venue.ShortCode))
 		rows = append(rows, []interface{}{venue.UUID, venue.Name, venue.ShortName, venue.ShortCode, hash})
 	}
 
@@ -198,7 +198,7 @@ func (s *SaveCalendarRepository) saveEvents(
 		startDate := time.Unix(event.StartDate, 0)
 		endDate := time.Unix(event.EndDate, 0)
 
-		hash := s.toMD5(fmt.Sprintf("%v|%v|%s|%s|%s|%s|%d|%d", venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, event.StartDate, event.EndDate))
+		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, event.StartDate, event.EndDate))
 		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDate, endDate, hash})
 	}
 
@@ -242,7 +242,7 @@ func (s *SaveCalendarRepository) saveSessions(
 				endTime = &t
 			}
 
-			hash := s.toMD5(fmt.Sprintf("%d|%s|%s|%s|%s|%t|%d|%v", eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, sess.StartTime, endTimeForHash))
+			hash := crypto.Hash(fmt.Sprintf("%s|%d|%s|%s|%s|%s|%t|%d|%v", sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, sess.StartTime, endTimeForHash))
 			rows = append(rows, []interface{}{sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, startTime, endTime, hash})
 		}
 	}
@@ -263,10 +263,4 @@ func (s *SaveCalendarRepository) saveSessions(
 	slog.Info("Sessions saved successfully", "count", len(rows), "inserted", stats.Inserted, "updated", stats.Updated)
 
 	return nil
-}
-
-func (s *SaveCalendarRepository) toMD5(str string) string {
-	h := md5.New()
-	h.Write([]byte(str))
-	return fmt.Sprintf("%x", h.Sum(nil))
 }

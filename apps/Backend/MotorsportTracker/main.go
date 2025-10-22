@@ -50,16 +50,14 @@ func main() {
 	switch subcommand {
 	case series.ScrapeSeriesIntentName:
 		intent = series.NewScrapSeriesIntent()
-		handler = series.NewScrapSeriesHandler(
+		handler = series.NewScrapeSeriesHandler(
 			registry.GetMotorsportStatsGateway(ctx),
-			seriesImpls.NewExistingSeriesRepository(registry.GetCoreDatabase(ctx)),
 			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
 		)
 	case seasons.ScrapeSeasonsIntentName:
 		intent = seasons.NewScrapSeasonsIntent()
 		handler = seasons.NewScrapeSeasonsHandler(
 			registry.GetMotorsportStatsGateway(ctx),
-			seasonsImpls.NewExistingSeasonsRepository(registry.GetCoreDatabase(ctx)),
 			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
 			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 		)
