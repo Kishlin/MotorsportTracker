@@ -3,6 +3,8 @@ package infrastructure
 import (
 	"context"
 	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 
 	connectorImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/infrastructure"
@@ -52,14 +54,25 @@ func (s *ServicesRegistry) GetMotorsportStatsGateway(ctx context.Context) *gatew
 			panic("REMOTE_API_HOST environment variable is not set")
 		}
 
-		s.motorsportStatsGateway = gatewayImpls.NewGatewayUsingConnector(
-			connectorImpls.NewCachedConnector(
-				connectorImpls.NewConnectorUsingClient(
-					clientImpls.NewClient(host),
-				),
-				cacheImpls.NewDatabaseCache(s.GetClientCacheDatabase(ctx)),
+		connector := connectorImpls.NewCachedConnector(
+			connectorImpls.NewConnectorUsingClient(
+				clientImpls.NewClient(host),
 			),
+			cacheImpls.NewDatabaseCache(s.GetClientCacheDatabase(ctx)),
 		)
+
+		useFSCache := strings.ToLower(os.Getenv("USE_FS_CACHE")) == "true"
+		if useFSCache {
+			connector = connectorImpls.NewCachedConnector(
+				connector,
+				cacheImpls.NewFileSystemCache(
+					filepath.Join(os.Getenv("PROJECT_DIR"), "etc", "ConnectorCache"),
+					".json",
+				),
+			)
+		}
+
+		s.motorsportStatsGateway = gatewayImpls.NewGatewayUsingConnector(connector)
 
 		if s.motorsportStatsGateway == nil {
 			panic("unable to create motorsport stats gateway")

@@ -45,7 +45,7 @@ func (c *CachedConnector) getFromCacheOrConnector(namespace string, key string, 
 		return nil, fmt.Errorf("getting data from cache: %w", err)
 	}
 	if !hit {
-		slog.Debug("Cache miss for %s/%s, fetching from inner connector", namespace, key)
+		slog.Debug("Cache miss, fetching from inner connector", slog.String("namespace", namespace), slog.String("key", key))
 
 		data, err = getFromConnector()
 		if err != nil {
