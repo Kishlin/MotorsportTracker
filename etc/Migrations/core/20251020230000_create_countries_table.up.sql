@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS countries (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    flag TEXT NOT NULL,
+    name TEXT,
+    flag TEXT,
     hash TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS countries_history (
     history_id SERIAL PRIMARY KEY,
     id         INT          NOT NULL,
     uuid       UUID         NOT NULL,
-    name       TEXT NOT NULL,
-    flag       TEXT NOT NULL,
+    name       TEXT,
+    flag       TEXT,
     hash       TEXT         NOT NULL,
     valid_from TIMESTAMP    NOT NULL DEFAULT NOW(),
     valid_to   TIMESTAMP

@@ -9,6 +9,7 @@ import (
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 type SaveSeasonsRepository struct {
@@ -34,7 +35,11 @@ func (s *SaveSeasonsRepository) SaveSeasons(ctx context.Context, series string, 
 
 	var rows [][]interface{}
 	for _, season := range seasons {
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%d|%d", season.UUID, series, season.Name, season.Year, season.EndYear))
+		nameVal := fn.Deref(season.Name, "")
+		yearVal := fn.Deref(season.Year, 0)
+		endYearVal := fn.Deref(season.EndYear, 0)
+
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%d|%d", season.UUID, series, nameVal, yearVal, endYearVal))
 		rows = append(rows, []interface{}{season.UUID, seriesID, season.Name, season.Year, season.EndYear, hash})
 	}
 

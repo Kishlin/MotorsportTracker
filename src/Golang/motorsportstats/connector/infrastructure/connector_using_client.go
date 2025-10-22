@@ -87,23 +87,23 @@ const schemaSeries = `{
 	"items": {
 		"type": "object",
 		"properties": {
-			"name": {
-				"type": "string"
-			},
 			"uuid": {
 				"type": "string"
+			},
+			"name": {
+				"type": ["string", "null"]
 			},
 			"shortName": {
 				"type": ["string", "null"]
 			},
 			"shortCode": {
-				"type": "string"
+				"type": ["string", "null"]
 			},
 			"category": {
-				"type": "string"
+				"type": ["string", "null"]
 			}
 		},
-		"required": ["name", "uuid", "shortName", "shortCode", "category"]
+		"required": ["uuid", "name", "shortName", "shortCode", "category"]
 	},
 	"minItems": 1
 }`
@@ -115,23 +115,23 @@ const schemaSeasons = `{
 	"items": {
 		"type": "object",
 		"properties": {
-			"name": {
-				"type": "string"
-			},
 			"uuid": {
 				"type": "string"
 			},
+			"name": {
+				"type": ["string", "null"]
+			},
 			"year": {
-				"type": "integer"
+				"type": ["number", "null"]
 			},
 			"endYear": {
-				"type": "integer"
+				"type": ["number", "null"]
 			},
 			"status": {
-				"type": "string"
+				"type": ["string", "null"]
 			}
 		},
-		"required": ["name", "uuid", "year", "endYear", "status"]
+		"required": ["uuid", "name", "year", "endYear", "status"]
 	}
 }`
 
@@ -143,22 +143,22 @@ const schemaCalendar = `{
     "season": {
       "type": "object",
       "properties": {
-        "name": {
-          "type": "string"
-        },
         "uuid": {
           "type": "string"
         },
+        "name": {
+          "type": ["string", "null"]
+        },
         "year": {
-          "type": "number"
+          "type": ["number", "null"]
         },
         "endYear": {
-          "type": "number"
+          "type": ["number", "null"]
         }
       },
       "required": [
-        "name",
         "uuid",
+        "name",
         "year",
         "endYear"
       ]
@@ -172,51 +172,51 @@ const schemaCalendar = `{
             "type": "string"
           },
           "name": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "shortName": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "shortCode": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "status": {
-            "type": "string"
+            "type": ["string", "null"]
           },
           "startDate": {
-            "type": "number"
+            "type": ["number", "null"]
           },
           "startTimeUtc": {
-            "type": "number"
+            "type": ["number", "null"]
           },
           "endDate": {
-            "type": "number"
+            "type": ["number", "null"]
           },
           "endTimeUtc": {
-            "type": "number"
+            "type": ["number", "null"]
           },
           "venue": {
             "type": "object",
             "properties": {
-              "name": {
-                "type": "string"
-              },
               "uuid": {
                 "type": "string"
               },
+              "name": {
+                "type": ["string", "null"]
+              },
               "shortName": {
-                "type": "string"
+                "type": ["string", "null"]
               },
               "shortCode": {
-                "type": "string"
+                "type": ["string", "null"]
               },
               "picture": {
                 "type": ["string", "null"]
               }
             },
             "required": [
-              "name",
               "uuid",
+              "name",
               "shortName",
               "shortCode"
             ]
@@ -224,19 +224,19 @@ const schemaCalendar = `{
           "country": {
             "type": "object",
             "properties": {
-              "name": {
-                "type": "string"
-              },
               "uuid": {
                 "type": "string"
               },
+              "name": {
+                "type": ["string", "null"]
+              },
               "picture": {
-                "type": "string"
+                "type": ["string", "null"]
               }
             },
             "required": [
-              "name",
               "uuid",
+              "name",
               "picture"
             ]
           },
@@ -249,25 +249,25 @@ const schemaCalendar = `{
                   "type": "string"
                 },
                 "name": {
-                  "type": "string"
+                  "type": ["string", "null"]
                 },
                 "shortName": {
-                  "type": "string"
+                  "type": ["string", "null"]
                 },
                 "shortCode": {
-                  "type": "string"
+                  "type": ["string", "null"]
                 },
                 "status": {
-                  "type": "string"
+                  "type": ["string", "null"]
                 },
                 "hasResults": {
-                  "type": "boolean"
+                  "type": ["boolean", "null"]
                 },
                 "startTime": {
-                  "type": "number"
+                  "type": ["number", "null"]
                 },
                 "startTimeUtc": {
-                  "type": "number"
+                  "type": ["number", "null"]
                 },
                 "endTime": {
                   "type": ["number", "null"]

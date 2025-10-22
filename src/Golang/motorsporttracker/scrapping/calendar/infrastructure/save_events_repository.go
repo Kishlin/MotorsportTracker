@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"time"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 type SaveCalendarRepository struct {
@@ -113,7 +113,10 @@ func (s *SaveCalendarRepository) saveCountries(ctx context.Context, countries []
 
 	var rows [][]interface{}
 	for _, country := range countries {
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s", country.UUID, country.Name, country.Flag))
+		nameVal := fn.Deref(country.Name, "")
+		flagVal := fn.Deref(country.Flag, "")
+
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s", country.UUID, nameVal, flagVal))
 		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag, hash})
 	}
 
@@ -138,7 +141,11 @@ func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motor
 
 	var rows [][]interface{}
 	for _, venue := range venues {
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s", venue.UUID, venue.Name, venue.ShortName, venue.ShortCode))
+		nameVal := fn.Deref(venue.Name, "")
+		shortNameVal := fn.Deref(venue.ShortName, "")
+		shortCodeVal := fn.Deref(venue.ShortCode, "")
+
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s", venue.UUID, nameVal, shortNameVal, shortCodeVal))
 		rows = append(rows, []interface{}{venue.UUID, venue.Name, venue.ShortName, venue.ShortCode, hash})
 	}
 
@@ -179,27 +186,33 @@ func (s *SaveCalendarRepository) saveEvents(
 
 	var rows [][]interface{}
 	for _, event := range events {
-		if event.Venue == nil {
-			return fmt.Errorf("event %s has no venue", event.UUID)
+		var venueID, countryID *int = nil, nil
+		if event.Venue != nil {
+			storedVenueID, ok := venuesIDsPerUUIDs[event.Venue.UUID]
+			if ok == false {
+				return fmt.Errorf("venue UUID %s not found in saved venues", event.Venue.UUID)
+			}
+			venueID = &storedVenueID
 		}
-		venueID, ok := venuesIDsPerUUIDs[event.Venue.UUID]
-		if ok == false {
-			return fmt.Errorf("venue UUID %s not found in saved venues", event.Venue.UUID)
+		if event.Country != nil {
+			storedCountryID, ok := countryIDPerUUID[event.Country.UUID]
+			if ok == false {
+				return fmt.Errorf("country UUID %s not found in saved country IDs", event.Country.UUID)
+			}
+			countryID = &storedCountryID
 		}
 
-		if event.Country == nil {
-			return fmt.Errorf("event %s has no country", event.UUID)
-		}
-		countryID, ok := countryIDPerUUID[event.Country.UUID]
-		if ok == false {
-			return fmt.Errorf("country UUID %s not found in saved countries", event.Country.UUID)
-		}
+		venueIDVal := fn.Deref(venueID, 0)
+		countryIDVal := fn.Deref(countryID, 0)
+		nameVal := fn.Deref(event.Venue.Name, "")
+		shortNameVal := fn.Deref(event.Venue.ShortName, "")
+		shortCodeVal := fn.Deref(event.Venue.ShortCode, "")
+		statusVal := fn.Deref(event.Status, "")
+		startDateDBVal, startDateHashVal := shared.PrepareTimestamp(event.StartDate)
+		endDateDBVal, endDateHashVal := shared.PrepareTimestamp(event.EndDate)
 
-		startDate := time.Unix(event.StartDate, 0)
-		endDate := time.Unix(event.EndDate, 0)
-
-		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, event.StartDate, event.EndDate))
-		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDate, endDate, hash})
+		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startDateHashVal, endDateHashVal))
+		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDateDBVal, endDateDBVal, hash})
 	}
 
 	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_date", "end_date", "hash"}
@@ -225,25 +238,23 @@ func (s *SaveCalendarRepository) saveSessions(
 	}
 
 	var rows [][]interface{}
-	for eventUUID, session := range sessionsPerEventUUID {
+	for eventUUID, sessions := range sessionsPerEventUUID {
 		eventID, ok := eventsIDsPerUUIDs[eventUUID]
 		if ok == false {
 			return fmt.Errorf("event UUID %s not found in saved events", eventUUID)
 		}
 
-		for _, sess := range session {
-			startTime := time.Unix(sess.StartTime, 0)
+		for _, session := range sessions {
+			nameVal := fn.Deref(session.Name, "")
+			shortNameVal := fn.Deref(session.ShortName, "")
+			shortCodeVal := fn.Deref(session.ShortCode, "")
+			statusVal := fn.Deref(session.Status, "")
+			hasResultVal := fn.Deref(session.HasResults, false)
+			startTimeDBVal, startTimeHashVal := shared.PrepareTimestamp(session.StartTime)
+			endTimeDBVal, endTimeHashVal := shared.PrepareTimestamp(session.EndTime)
 
-			var endTime *time.Time
-			endTimeForHash := int64(0)
-			if sess.EndTime != nil {
-				endTimeForHash = *sess.EndTime
-				t := time.Unix(*sess.EndTime, 0)
-				endTime = &t
-			}
-
-			hash := crypto.Hash(fmt.Sprintf("%s|%d|%s|%s|%s|%s|%t|%d|%v", sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, sess.StartTime, endTimeForHash))
-			rows = append(rows, []interface{}{sess.UUID, eventID, sess.Name, sess.ShortName, sess.ShortCode, sess.Status, sess.HasResults, startTime, endTime, hash})
+			hash := crypto.Hash(fmt.Sprintf("%s|%d|%s|%s|%s|%s|%t|%d|%v", session.UUID, eventID, nameVal, shortNameVal, shortCodeVal, statusVal, hasResultVal, startTimeHashVal, endTimeHashVal))
+			rows = append(rows, []interface{}{session.UUID, eventID, session.Name, session.ShortName, session.ShortCode, session.Status, session.HasResults, startTimeDBVal, endTimeDBVal, hash})
 		}
 	}
 

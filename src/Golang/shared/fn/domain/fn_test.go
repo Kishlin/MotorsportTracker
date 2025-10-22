@@ -51,6 +51,28 @@ func (suite *FnUnitTestSuite) TestPtr() {
 	})
 }
 
+func (suite *FnUnitTestSuite) TestDeref() {
+	suite.T().Run("it returns the value if there is one", func(t *testing.T) {
+		intVal := 42
+		strVal := "test"
+		boolVal := true
+
+		require.Equal(t, 42, Deref(&intVal, 0))
+		require.Equal(t, true, Deref(&boolVal, false))
+		require.Equal(t, "test", Deref(&strVal, "wrong"))
+	})
+
+	suite.T().Run("it returns the default value if pointer is empty", func(t *testing.T) {
+		var intVal *int = nil
+		var strVal *string = nil
+		var boolVal *bool = nil
+
+		require.Equal(t, 42, Deref(intVal, 42))
+		require.Equal(t, true, Deref(boolVal, true))
+		require.Equal(t, "test", Deref(strVal, "test"))
+	})
+}
+
 func TestUnit_Fn(t *testing.T) {
 	suite.Run(t, new(FnUnitTestSuite))
 }

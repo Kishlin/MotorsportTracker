@@ -17,3 +17,11 @@ func MustReturn(value interface{}, err error) interface{} {
 func Ptr[T any](value T) *T {
 	return &value
 }
+
+func Deref[T any](ptr *T, defaultVal T) T {
+	if ptr == nil {
+		return defaultVal
+	}
+
+	return *ptr
+}

@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 	"github.com/stretchr/testify/suite"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type HandlerUnitTestSuite struct {
@@ -52,15 +53,15 @@ func (suite *HandlerUnitTestSuite) withSeriesInGateway() {
 	suite.mockGateway.SetSeries([]*motorsportstats.Series{
 		{
 			UUID:      "series-1",
-			Name:      "Series 1",
-			ShortCode: "S1",
-			Category:  "Category 1",
+			Name:      fn.Ptr("Series 1"),
+			ShortCode: fn.Ptr("S1"),
+			Category:  fn.Ptr("Category 1"),
 		},
 		{
 			UUID:      "series-2",
-			Name:      "Series 2",
-			ShortCode: "S2",
-			Category:  "Category 2",
+			Name:      fn.Ptr("Series 2"),
+			ShortCode: fn.Ptr("S2"),
+			Category:  fn.Ptr("Category 2"),
 		},
 	})
 }

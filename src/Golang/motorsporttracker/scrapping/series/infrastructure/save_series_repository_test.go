@@ -85,10 +85,10 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) oneSeries() []*motorsport
 	return []*motorsportstats.Series{
 		{
 			UUID:      "875c810d-a048-414e-0001-000000000001",
-			Name:      "Some series",
+			Name:      fn.Ptr("Some series"),
 			ShortName: fn.Ptr("SS"),
-			ShortCode: "SS",
-			Category:  "Some category",
+			ShortCode: fn.Ptr("SS"),
+			Category:  fn.Ptr("Some category"),
 		},
 	}
 }
@@ -97,24 +97,24 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) multipleSeries() []*motor
 	return []*motorsportstats.Series{
 		{
 			UUID:      "875c810d-a048-414e-0002-000000000001",
-			Name:      "First series",
+			Name:      fn.Ptr("First series"),
 			ShortName: fn.Ptr("FS"),
-			ShortCode: "FS",
-			Category:  "Some category",
+			ShortCode: fn.Ptr("FS"),
+			Category:  fn.Ptr("Some category"),
 		},
 		{
 			UUID:      "875c810d-a048-414e-0002-000000000002",
-			Name:      "Another series",
+			Name:      nil,
 			ShortName: nil,
-			ShortCode: "AS",
-			Category:  "Another category",
+			ShortCode: nil,
+			Category:  nil,
 		},
 		{
 			UUID:      "875c810d-a048-414e-0002-000000000003",
-			Name:      "Third series",
+			Name:      fn.Ptr("Third series"),
 			ShortName: fn.Ptr("TS"),
-			ShortCode: "TS",
-			Category:  "Third category",
+			ShortCode: fn.Ptr("TS"),
+			Category:  fn.Ptr("Third category"),
 		},
 	}
 }

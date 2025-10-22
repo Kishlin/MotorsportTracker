@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
@@ -75,9 +76,9 @@ func (s *ScrapeSeriesHandlerUnitTestSuite) message() messaging.Message {
 
 func (s *ScrapeSeriesHandlerUnitTestSuite) withSeasonsInGateway() {
 	s.mockGateway.SetSeasons([]*motorsportstats.Season{
-		{UUID: "season-uuid", Name: "Season 2023", Year: 2023, EndYear: 2023},
-		{UUID: "season-uuid-2", Name: "Season 2024", Year: 2024, EndYear: 2024},
-		{UUID: "season-uuid-3", Name: "Season 2025", Year: 2025, EndYear: 2025},
+		{UUID: "season-uuid", Name: fn.Ptr("Season 2023"), Year: fn.Ptr(2023), EndYear: fn.Ptr(2023)},
+		{UUID: "season-uuid-2", Name: fn.Ptr("Season 2024"), Year: fn.Ptr(2024), EndYear: fn.Ptr(2024)},
+		{UUID: "season-uuid-3", Name: fn.Ptr("Season 2025"), Year: fn.Ptr(2025), EndYear: fn.Ptr(2025)},
 	})
 }
 

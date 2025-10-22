@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS venues (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    short_name TEXT NOT NULL,
-    short_code TEXT NOT NULL,
+    name TEXT,
+    short_name TEXT,
+    short_code TEXT,
     hash TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS venues_history (
     history_id SERIAL PRIMARY KEY,
     id         INT          NOT NULL,
     uuid       UUID         NOT NULL,
-    name       TEXT NOT NULL,
-    short_name TEXT NOT NULL,
-    short_code TEXT NOT NULL,
+    name       TEXT,
+    short_name TEXT,
+    short_code TEXT,
     hash       TEXT         NOT NULL,
     valid_from TIMESTAMP    NOT NULL DEFAULT NOW(),
     valid_to   TIMESTAMP

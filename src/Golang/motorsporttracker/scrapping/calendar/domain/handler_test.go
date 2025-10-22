@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
@@ -79,43 +80,43 @@ func (s *ScrapeCalendarHandlerUnitTestSuite) withEventsInGateway() {
 			Events: []*motorsportstats.Event{
 				{
 					UUID:      "event-1",
-					Name:      "Event 1",
-					ShortName: "Event 1",
-					ShortCode: "E1",
-					Status:    "",
-					StartDate: 1704067200,
-					EndDate:   1704153600,
+					Name:      fn.Ptr("Event 1"),
+					ShortName: fn.Ptr("Event 1"),
+					ShortCode: fn.Ptr("E1"),
+					Status:    fn.Ptr(""),
+					StartDate: fn.Ptr(int64(1704067200)),
+					EndDate:   fn.Ptr(int64(1704153600)),
 					Venue: &motorsportstats.Venue{
 						UUID:      "venue-1",
-						Name:      "Venue 1",
-						ShortName: "Venue 1",
-						ShortCode: "V1",
+						Name:      fn.Ptr("Venue 1"),
+						ShortName: fn.Ptr("Venue 1"),
+						ShortCode: fn.Ptr("V1"),
 					},
 					Country: &motorsportstats.Country{
 						UUID: "country-1",
-						Name: "Country 1",
-						Flag: "flag-1",
+						Name: fn.Ptr("Country 1"),
+						Flag: fn.Ptr("flag-1"),
 					},
 					Sessions: []*motorsportstats.Session{},
 				},
 				{
 					UUID:      "event-2",
-					Name:      "Event 2",
-					ShortName: "Event 2",
-					ShortCode: "E2",
-					Status:    "",
-					StartDate: 1704728400,
-					EndDate:   1704814800,
+					Name:      fn.Ptr("Event 2"),
+					ShortName: fn.Ptr("Event 2"),
+					ShortCode: fn.Ptr("E2"),
+					Status:    fn.Ptr(""),
+					StartDate: fn.Ptr(int64(1704728400)),
+					EndDate:   fn.Ptr(int64(1704814800)),
 					Venue: &motorsportstats.Venue{
 						UUID:      "venue-2",
-						Name:      "Venue 2",
-						ShortName: "Venue 2",
-						ShortCode: "V2",
+						Name:      fn.Ptr("Venue 2"),
+						ShortName: fn.Ptr("Venue 2"),
+						ShortCode: fn.Ptr("V2"),
 					},
 					Country: &motorsportstats.Country{
 						UUID: "country-2",
-						Name: "Country 2",
-						Flag: "flag-2",
+						Name: fn.Ptr("Country 2"),
+						Flag: fn.Ptr("flag-2"),
 					},
 					Sessions: []*motorsportstats.Session{},
 				},

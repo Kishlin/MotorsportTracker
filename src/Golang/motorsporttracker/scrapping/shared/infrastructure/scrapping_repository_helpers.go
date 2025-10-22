@@ -3,9 +3,19 @@ package infrastructure
 import (
 	"context"
 	"fmt"
+	"time"
 
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
+
+func PrepareTimestamp(timestamp *int64) (dbVal *time.Time, hashVal int64) {
+	if timestamp == nil {
+		return nil, 0
+	}
+
+	time := time.Unix(*timestamp, 0)
+	return &time, *timestamp
+}
 
 func GetIDsForUUIDs(ctx context.Context, db *database.PGXPoolAdapter, table string, uuids map[string]struct{}) (map[string]int, error) {
 	if len(uuids) == 0 {

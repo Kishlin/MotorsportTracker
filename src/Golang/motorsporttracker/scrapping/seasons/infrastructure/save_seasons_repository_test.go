@@ -45,8 +45,8 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownTest() {
 	cleanUps := []string{
 		"DELETE FROM seasons WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
 		"DELETE FROM seasons_history WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
-		"DELETE FROM series WHERE uuid::text = '75f849b7-35be-44d8-%';",
-		"DELETE FROM series_history WHERE uuid::text = '75f849b7-35be-44d8-%';",
+		"DELETE FROM series WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
+		"DELETE FROM series_history WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
 	}
 	for _, sql := range cleanUps {
 		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
@@ -98,10 +98,10 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) oneSeason() []*motorspor
 	return []*motorsportstats.Season{
 		{
 			UUID:    "75f849b7-35be-44d8-0002-000000000001",
-			Name:    "2023 Championship",
-			Year:    2023,
-			EndYear: 2024,
-			Status:  "in progress",
+			Name:    fn.Ptr("2023 Championship"),
+			Year:    fn.Ptr(2023),
+			EndYear: fn.Ptr(2024),
+			Status:  fn.Ptr("in progress"),
 		},
 	}
 }
@@ -110,24 +110,24 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) multipleSeasons() []*mot
 	return []*motorsportstats.Season{
 		{
 			UUID:    "75f849b7-35be-44d8-0003-000000000001",
-			Name:    "2023 Championship",
-			Year:    2023,
-			EndYear: 2024,
-			Status:  "in progress",
+			Name:    fn.Ptr("2023 Championship"),
+			Year:    fn.Ptr(2023),
+			EndYear: fn.Ptr(2024),
+			Status:  fn.Ptr("in progress"),
 		},
 		{
 			UUID:    "75f849b7-35be-44d8-0003-000000000002",
-			Name:    "2022 Championship",
-			Year:    2022,
-			EndYear: 2023,
-			Status:  "historic",
+			Name:    fn.Ptr("2022 Championship"),
+			Year:    fn.Ptr(2022),
+			EndYear: fn.Ptr(2023),
+			Status:  fn.Ptr("historic"),
 		},
 		{
 			UUID:    "75f849b7-35be-44d8-0003-000000000003",
-			Name:    "2021 Championship",
-			Year:    2021,
-			EndYear: 2022,
-			Status:  "historic",
+			Name:    nil,
+			Year:    nil,
+			EndYear: nil,
+			Status:  nil,
 		},
 	}
 }

@@ -9,6 +9,7 @@ import (
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 // SaveSeriesRepository handles the persistence of series data into the database.
@@ -31,12 +32,12 @@ func (s *SaveSeriesRepository) SaveSeries(ctx context.Context, series []*motorsp
 
 	var rows [][]interface{}
 	for _, ser := range series {
-		shortNameForHash := ""
-		if ser.ShortName != nil {
-			shortNameForHash = *ser.ShortName
-		}
+		nameVal := fn.Deref(ser.Name, "")
+		shortNameVal := fn.Deref(ser.ShortName, "")
+		shortCodeVal := fn.Deref(ser.ShortCode, "")
+		categoryVal := fn.Deref(ser.Category, "")
 
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s|%s", ser.UUID, ser.Name, shortNameForHash, ser.ShortCode, ser.Category))
+		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s|%s", ser.UUID, nameVal, shortNameVal, shortCodeVal, categoryVal))
 		rows = append(rows, []interface{}{ser.UUID, ser.Name, ser.ShortName, ser.ShortCode, ser.Category, hash})
 	}
 
