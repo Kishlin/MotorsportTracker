@@ -64,3 +64,18 @@ func (g GatewayUsingConnector) GetCalendar(ctx context.Context, seasonUUID strin
 
 	return calendar, nil
 }
+
+func (g GatewayUsingConnector) GetClassification(ctx context.Context, sessionUUID string) (*domain.Classification, error) {
+	data, err := g.connector.GetClassification(ctx, sessionUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting classification from connector: %w", err)
+	}
+
+	var classification *domain.Classification
+	err = json.Unmarshal(data, &classification)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling classification data: %w", err)
+	}
+	
+	return classification, nil
+}

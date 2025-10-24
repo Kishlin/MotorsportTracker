@@ -33,6 +33,10 @@ func (c *ConnectorUsingClient) GetCalendar(ctx context.Context, seasonUUID strin
 	return c.doGet(ctx, schemaCalendar, endpointCalendar, seasonUUID)
 }
 
+func (c *ConnectorUsingClient) GetClassification(ctx context.Context, sessionUUD string) ([]byte, error) {
+	return c.doGet(ctx, schemaClassification, endpointClassification, sessionUUD)
+}
+
 func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...any) ([]byte, error) {
 	url := endpoint
 	if len(params) > 0 {
@@ -309,5 +313,267 @@ const schemaCalendar = `{
   "required": [
     "season",
     "events"
+  ]
+}`
+
+const endpointClassification = "/widgets/1.0.0/sessions/%s/classification"
+
+const schemaClassification = `{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "details": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "carNumber": {
+            "type": "string"
+          },
+          "finishPosition": {
+            "type": ["number", "null"]
+          },
+          "gridPosition": {
+            "type": ["number", "null"]
+          },
+          "drivers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": ["string", "null"]
+                },
+                "firstName": {
+                  "type": ["string", "null"]
+                },
+                "lastName": {
+                  "type": ["string", "null"]
+                },
+                "shortCode": {
+                  "type": ["string", "null"]
+                },
+                "colour": {
+                  "type": ["string", "null"]
+                },
+                "picture": {
+                  "type": ["string", "null"]
+                }
+              },
+              "required": [
+				"uuid",
+                "name",
+                "firstName",
+                "lastName",
+                "shortCode"
+              ]
+            }
+          },
+          "team": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string"
+              },
+              "name": {
+                "type": ["string", "null"]
+              },
+              "colour": {
+                "type": ["string", "null"]
+              },
+              "picture": {
+                "type": ["string", "null"]
+              },
+              "carIcon": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "uuid",
+              "name",
+              "colour",
+              "picture",
+              "carIcon"
+            ]
+          },
+          "nationality": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string"
+              },
+              "name": {
+                "type": ["string", "null"]
+              },
+              "picture": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "uuid",
+              "name",
+              "picture"
+            ]
+          },
+          "laps": {
+            "type": ["number", "null"]
+          },
+          "points": {
+            "type": ["number", "null"]
+          },
+          "time": {
+            "type": ["number", "null"]
+          },
+          "classifiedStatus": {
+            "type": ["string", "null"]
+          },
+          "avgLapSpeed": {
+            "type": ["number", "null"]
+          },
+          "fastestLapTime": {
+            "type": ["number", "null"]
+          },
+          "gap": {
+            "type": "object",
+            "properties": {
+              "timeToLead": {
+                "type": ["number", "null"]
+              },
+              "timeToNext": {
+                "type": ["number", "null"]
+              },
+              "lapsToLead": {
+                "type": ["number", "null"]
+              },
+              "lapsToNext": {
+                "type": ["number", "null"]
+              }
+            },
+            "required": [
+              "timeToLead",
+              "timeToNext",
+              "lapsToLead",
+              "lapsToNext"
+            ]
+          },
+          "best": {
+            "type": "object",
+            "properties": {
+              "lap": {
+                "type": ["number", "null"]
+              },
+              "time": {
+                "type": ["number", "null"]
+              },
+              "fastest": {
+                "type": ["boolean", "null"]
+              },
+              "speed": {
+                "type": ["number", "null"]
+              }
+            },
+            "required": [
+              "lap",
+              "time",
+              "fastest"
+            ]
+          }
+        },
+        "required": [
+          "carNumber",
+          "finishPosition",
+          "gridPosition",
+          "drivers",
+          "team",
+          "nationality",
+          "laps",
+          "points",
+          "time",
+          "classifiedStatus",
+          "avgLapSpeed",
+          "fastestLapTime",
+          "gap",
+          "best"
+        ]
+      }
+    },
+    "retirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "driver": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string"
+              },
+              "name": {
+                "type": ["string", "null"]
+              },
+              "firstName": {
+                "type": ["string", "null"]
+              },
+              "lastName": {
+                "type": ["string", "null"]
+              },
+              "shortCode": {
+                "type": ["string", "null"]
+              },
+              "colour": {
+				"type": ["string", "null"]
+			  },
+              "picture": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "uuid",
+              "name",
+              "firstName",
+              "lastName",
+              "shortCode",
+              "colour",
+              "picture"
+            ]
+          },
+          "carNumber": {
+            "type": "string"
+          },
+          "reason": {
+            "type": ["string", "null"]
+          },
+          "type": {
+            "type": ["string", "null"]
+          },
+          "dns": {
+            "type": ["boolean", "null"]
+          },
+          "lap": {
+            "type": ["number", "null"]
+          },
+		  "details": {
+			"type": ["string", "null"]
+		  }
+        },
+        "required": [
+          "driver",
+          "carNumber",
+          "reason",
+          "type",
+          "dns",
+          "lap",
+          "details"
+        ]
+      }
+    }
+  },
+  "required": [
+    "details",
+    "retirements"
   ]
 }`

@@ -39,6 +39,12 @@ func (c *CachedConnector) GetCalendar(ctx context.Context, seasonUUID string) ([
 	})
 }
 
+func (c *CachedConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
+	return c.getFromCacheOrConnector("classification", sessionUUID, func() ([]byte, error) {
+		return c.inner.GetClassification(ctx, sessionUUID)
+	})
+}
+
 func (c *CachedConnector) getFromCacheOrConnector(namespace string, key string, getFromConnector func() ([]byte, error)) ([]byte, error) {
 	data, hit, err := c.cache.Get(namespace, key)
 	if err != nil {

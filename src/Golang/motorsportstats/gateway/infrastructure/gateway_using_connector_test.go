@@ -54,6 +54,16 @@ func (suite *GatewayUsingConnectorFunctionalTestSuite) TestGetCalendar() {
 	suite.Require().Empty(calendar)
 }
 
+func (suite *GatewayUsingConnectorFunctionalTestSuite) TestGetClassification() {
+	classification, err := suite.gateway.GetClassification(suite.T().Context(), "8ebecded-edca-4521-bba3-aabfd89f45de")
+	suite.NoError(err)
+	suite.NotEmpty(classification)
+
+	classification, err = suite.gateway.GetClassification(suite.T().Context(), "missing-uuid")
+	suite.Error(err)
+	suite.Empty(classification)
+}
+
 func TestFunctional_GatewayUsingConnector(t *testing.T) {
 	suite.Run(t, new(GatewayUsingConnectorFunctionalTestSuite))
 }
