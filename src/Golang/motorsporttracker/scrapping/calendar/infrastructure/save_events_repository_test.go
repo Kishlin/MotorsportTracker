@@ -47,7 +47,9 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TearDownSuite() {
 		`DELETE FROM countries WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
 		`DELETE FROM countries_history WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
 		`DELETE FROM seasons WHERE uuid::text = 'eeefdfaa-69b8-4226-86d2-000000000001';`,
+		`DELETE FROM seasons_history WHERE uuid::text = 'eeefdfaa-69b8-4226-86d2-000000000001';`,
 		`DELETE FROM series WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001';`,
+		`DELETE FROM series_history WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001';`,
 	}
 	for _, sql := range cleanUps {
 		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
