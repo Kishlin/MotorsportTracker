@@ -100,7 +100,7 @@ type ClassificationBest struct {
 	Lap     *int     `json:"lap"`
 	Time    *float64 `json:"time"`
 	Fastest *bool    `json:"fastest"`
-	Speed   *int     `json:"speed"`
+	Speed   *float64 `json:"speed"`
 }
 
 type ClassificationDetail struct {
@@ -116,8 +116,8 @@ type ClassificationDetail struct {
 	ClassifiedStatus   *string            `json:"classifiedStatus"`
 	AvgLapSpeed        *float64           `json:"avgLapSpeed"`
 	FastestLapTime     *float64           `json:"fastestLapTime"`
-	ClassificationGap  ClassificationGap  `json:"classificationGap"`
-	ClassificationBest ClassificationBest `json:"classificationBest"`
+	ClassificationGap  ClassificationGap  `json:"gap"`
+	ClassificationBest ClassificationBest `json:"best"`
 }
 
 type Classification struct {
