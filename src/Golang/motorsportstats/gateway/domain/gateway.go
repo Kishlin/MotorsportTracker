@@ -50,8 +50,8 @@ type Event struct {
 	ShortName *string    `json:"shortName"`
 	ShortCode *string    `json:"shortCode"`
 	Status    *string    `json:"status"`
-	StartDate *int64     `json:"startDateUtc"`
-	EndDate   *int64     `json:"endDateUtc"`
+	StartTime *int64     `json:"startTimeUtc"`
+	EndTime   *int64     `json:"endTimeUtc"`
 	Venue     *Venue     `json:"venue"`
 	Country   *Country   `json:"country"`
 	Sessions  []*Session `json:"sessions"`

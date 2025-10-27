@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS events (
     short_name TEXT,
     short_code TEXT,
     status TEXT,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
     hash TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS events_history (
     short_name TEXT,
     short_code TEXT,
     status TEXT,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
     hash       TEXT         NOT NULL,
     valid_from TIMESTAMP    NOT NULL DEFAULT NOW(),
     valid_to   TIMESTAMP
@@ -47,8 +47,8 @@ BEGIN
         WHERE id = OLD.id AND valid_to IS NULL;
     END IF;
 
-    INSERT INTO events_history (id, uuid, season, venue, country, name, short_name, short_code, status, start_date, end_date, hash, valid_from)
-    VALUES (NEW.id, NEW.uuid, NEW.season, NEW.venue, NEW.country, NEW.name, NEW.short_name, NEW.short_code, NEW.status, NEW.start_date, NEW.end_date, NEW.hash, NOW());
+    INSERT INTO events_history (id, uuid, season, venue, country, name, short_name, short_code, status, start_time, end_time, hash, valid_from)
+    VALUES (NEW.id, NEW.uuid, NEW.season, NEW.venue, NEW.country, NEW.name, NEW.short_name, NEW.short_code, NEW.status, NEW.start_time, NEW.end_time, NEW.hash, NOW());
 
     RETURN NEW;
 END;

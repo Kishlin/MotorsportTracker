@@ -180,14 +180,14 @@ func (s *SaveCalendarRepository) saveEvents(
 		shortNameVal := fn.Deref(event.Venue.ShortName, "")
 		shortCodeVal := fn.Deref(event.Venue.ShortCode, "")
 		statusVal := fn.Deref(event.Status, "")
-		startDateDBVal, startDateHashVal := shared.PrepareTimestamp(event.StartDate)
-		endDateDBVal, endDateHashVal := shared.PrepareTimestamp(event.EndDate)
+		startTimeDBVal, startTimeHashVal := shared.PrepareTimestamp(event.StartTime)
+		endTimeDBVal, endTimeHashVal := shared.PrepareTimestamp(event.EndTime)
 
-		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startDateHashVal, endDateHashVal))
-		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startDateDBVal, endDateDBVal, hash})
+		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startTimeHashVal, endTimeHashVal))
+		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startTimeDBVal, endTimeDBVal, hash})
 	}
 
-	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_date", "end_date", "hash"}
+	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_time", "end_time", "hash"}
 
 	stats, err := shared.Save(ctx, s.db, "events", "uuid", cols, rows)
 	if err != nil {

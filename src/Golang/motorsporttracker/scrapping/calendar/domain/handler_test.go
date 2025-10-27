@@ -84,8 +84,8 @@ func (s *ScrapeCalendarHandlerUnitTestSuite) withEventsInGateway() {
 					ShortName: fn.Ptr("Event 1"),
 					ShortCode: fn.Ptr("E1"),
 					Status:    fn.Ptr(""),
-					StartDate: fn.Ptr(int64(1704067200)),
-					EndDate:   fn.Ptr(int64(1704153600)),
+					StartTime: fn.Ptr(int64(1704067200)),
+					EndTime:   fn.Ptr(int64(1704153600)),
 					Venue: &motorsportstats.Venue{
 						UUID:      "venue-1",
 						Name:      fn.Ptr("Venue 1"),
@@ -105,8 +105,8 @@ func (s *ScrapeCalendarHandlerUnitTestSuite) withEventsInGateway() {
 					ShortName: fn.Ptr("Event 2"),
 					ShortCode: fn.Ptr("E2"),
 					Status:    fn.Ptr(""),
-					StartDate: fn.Ptr(int64(1704728400)),
-					EndDate:   fn.Ptr(int64(1704814800)),
+					StartTime: fn.Ptr(int64(1704728400)),
+					EndTime:   fn.Ptr(int64(1704814800)),
 					Venue: &motorsportstats.Venue{
 						UUID:      "venue-2",
 						Name:      fn.Ptr("Venue 2"),
