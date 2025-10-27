@@ -17,7 +17,7 @@ func NewSaveRepositoryHelper(db *database.PGXPoolAdapter) *SaveRepositoryHelper 
 	return &SaveRepositoryHelper{db: db}
 }
 
-const countQuery = "SELECT COUNT(*) FROM %s WHERE uuid::text LIKE '%s';"
+const countQuery = "SELECT COUNT(id) FROM %s WHERE uuid::text LIKE '%s';"
 
 func (s *SaveRepositoryHelper) Count(ctx context.Context, table string, uuidTemplate string) int {
 	rows := fn.MustReturn(s.db.Query(ctx, fmt.Sprintf(countQuery, table, uuidTemplate))).(pgx.Rows)

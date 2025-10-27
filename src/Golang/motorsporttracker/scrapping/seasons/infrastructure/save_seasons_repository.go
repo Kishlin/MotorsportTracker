@@ -45,7 +45,7 @@ func (s *SaveSeasonsRepository) SaveSeasons(ctx context.Context, series string, 
 
 	cols := []string{"uuid", "series", "name", "year", "end_year", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "seasons", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "seasons", "uuid", cols, rows)
 	if err != nil {
 		return fmt.Errorf("saving seasons: %w", err)
 	}

@@ -8,6 +8,7 @@ import (
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
 	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
+	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
@@ -41,6 +42,8 @@ func main() {
 		intent = seasons.NewScrapSeasonsIntent()
 	case calendar.ScrapeCalendarIntentName:
 		intent = calendar.NewScrapCalendarIntent()
+	case classification.ScrapeClassificationIntentName:
+		intent = classification.NewScrapClassificationIntent()
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()

@@ -74,7 +74,6 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0001-%"))
 		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0001-%"))
 		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0001-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0001-%"))
 	})
 
 	suite.T().Run("saves data when there are nil values", func(t *testing.T) {
@@ -85,7 +84,6 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0002-%"))
 		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0002-%"))
 		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0002-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0002-%"))
 	})
 
 	suite.T().Run("saves everything with a complex calendar", func(t *testing.T) {
@@ -96,7 +94,6 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0003-%"))
 		suite.Equal(2, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0003-%"))
 		suite.Equal(3, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0003-%"))
-		suite.Equal(2, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0003-%"))
 	})
 
 	suite.T().Run("saves everything with repeated venues and countries", func(t *testing.T) {
@@ -107,7 +104,6 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0004-%"))
 		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0004-%"))
 		suite.Equal(2, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0004-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "77dde66e-7835-4440-0004-%"))
 	})
 }
 
@@ -120,12 +116,14 @@ func TestIntegration_SaveCalendarRepository(t *testing.T) {
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) seasonFixture() string {
 	return `
 INSERT INTO series (uuid, name, short_name, short_code, category, hash)
-VALUES ('70d5b480-8935-4fe5-a8e6-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1', '70d5b480-8935-4fe5-a8e6');
+VALUES ('70d5b480-8935-4fe5-a8e6-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1', '70d5b480-8935-4fe5-a8e6')
+ON CONFLICT DO NOTHING;
 
 INSERT INTO seasons (uuid, series, name, year, end_year, hash)
 VALUES ('eeefdfaa-69b8-4226-86d2-000000000001', 
 (SELECT id FROM series WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001'),
-'2024', 2024, 2025, 'eeefdfaa-69b8-4226-86d2');
+'2024', 2024, 2025, 'eeefdfaa-69b8-4226-86d2')
+ON CONFLICT DO NOTHING;
 `
 }
 

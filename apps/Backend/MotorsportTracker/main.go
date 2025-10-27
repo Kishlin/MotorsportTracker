@@ -9,6 +9,8 @@ import (
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
 	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
 	calendarImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/infrastructure"
+	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
+	classificationImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/infrastructure"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
 	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
@@ -66,6 +68,13 @@ func main() {
 			registry.GetMotorsportStatsGateway(ctx),
 			calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
 			calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		)
+	case classification.ScrapeClassificationIntentName:
+		intent = classification.NewScrapClassificationIntent()
+		handler = classification.NewScrapeClassificationHandler(
+			registry.GetMotorsportStatsGateway(ctx),
+			classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
+			classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
 		)
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)

@@ -13,7 +13,7 @@ const maxParamsPerQuery = 1000
 
 const upsertQueryTemplate = `
 INSERT INTO %s (%s) VALUES %s
-ON CONFLICT (uuid) DO UPDATE SET %s
+ON CONFLICT (%s) DO UPDATE SET %s
 WHERE %s.hash IS DISTINCT FROM EXCLUDED.hash
 RETURNING id, xmax <> 0 AS updated;
 `
@@ -31,7 +31,7 @@ type UpsertResult struct {
 }
 
 // Save chooses single vs batched execution based on total param count.
-func Save(ctx context.Context, db *database.PGXPoolAdapter, table string, columns []string, rows [][]interface{}) (UpsertStats, error) {
+func Save(ctx context.Context, db *database.PGXPoolAdapter, table string, conflictColumns string, columns []string, rows [][]interface{}) (UpsertStats, error) {
 	if len(rows) == 0 {
 		return UpsertStats{}, nil
 	}
@@ -43,13 +43,13 @@ func Save(ctx context.Context, db *database.PGXPoolAdapter, table string, column
 
 	totalParams := len(rows) * valuesPerRow
 	if totalParams <= maxParamsPerQuery {
-		return UpsertRows(ctx, db, table, columns, rows)
+		return UpsertRows(ctx, db, table, conflictColumns, columns, rows)
 	}
-	return UpsertInBatches(ctx, db, table, columns, rows)
+	return UpsertInBatches(ctx, db, table, conflictColumns, columns, rows)
 }
 
 // UpsertInBatches splits rows into batches and executes them sequentially.
-func UpsertInBatches(ctx context.Context, db *database.PGXPoolAdapter, table string, columns []string, rows [][]interface{}) (UpsertStats, error) {
+func UpsertInBatches(ctx context.Context, db *database.PGXPoolAdapter, table string, conflictColumns string, columns []string, rows [][]interface{}) (UpsertStats, error) {
 	if len(rows) == 0 {
 		return UpsertStats{}, nil
 	}
@@ -61,7 +61,7 @@ func UpsertInBatches(ctx context.Context, db *database.PGXPoolAdapter, table str
 
 	aggregate := UpsertStats{}
 	for _, batch := range batches {
-		stats, err := UpsertRows(ctx, db, table, columns, batch)
+		stats, err := UpsertRows(ctx, db, table, conflictColumns, columns, batch)
 		if err != nil {
 			return aggregate, err
 		}
@@ -74,8 +74,8 @@ func UpsertInBatches(ctx context.Context, db *database.PGXPoolAdapter, table str
 }
 
 // UpsertRows executes a single upsert for the provided rows (no internal batching).
-func UpsertRows(ctx context.Context, db *database.PGXPoolAdapter, table string, columns []string, rows [][]interface{}) (UpsertStats, error) {
-	query, flatArgs, err := prepareBatch(table, columns, rows)
+func UpsertRows(ctx context.Context, db *database.PGXPoolAdapter, table string, conflictColumns string, columns []string, rows [][]interface{}) (UpsertStats, error) {
+	query, flatArgs, err := prepareBatch(table, conflictColumns, columns, rows)
 	if err != nil {
 		return UpsertStats{}, fmt.Errorf("preparing single batch: %w", err)
 	}
@@ -117,7 +117,7 @@ func splitRowsIntoBatches(rows [][]interface{}) ([][][]interface{}, error) {
 }
 
 // prepareBatch builds VALUES placeholders and flattens batch rows into args.
-func prepareBatch(table string, columns []string, batchRows [][]interface{}) (string, []interface{}, error) {
+func prepareBatch(table string, conflictColumns string, columns []string, batchRows [][]interface{}) (string, []interface{}, error) {
 	if len(batchRows) == 0 {
 		return "", nil, fmt.Errorf("empty batch")
 	}
@@ -132,7 +132,7 @@ func prepareBatch(table string, columns []string, batchRows [][]interface{}) (st
 		}
 	}
 
-	query := buildQuery(table, columns, len(batchRows))
+	query := buildQuery(table, conflictColumns, columns, len(batchRows))
 
 	flatArgs := make([]interface{}, 0, len(batchRows)*valuesPerRow)
 	for _, row := range batchRows {
@@ -142,7 +142,7 @@ func prepareBatch(table string, columns []string, batchRows [][]interface{}) (st
 	return query, flatArgs, nil
 }
 
-func buildQuery(table string, columns []string, rowsCount int) string {
+func buildQuery(table string, conflictColumns string, columns []string, rowsCount int) string {
 	columnsList := strings.Join(columns, ", ")
 	placeholders := buildValuesPlaceholders(rowsCount, len(columns))
 	onConflictUpdates := buildOnConflictUpdates(columns)
@@ -152,6 +152,7 @@ func buildQuery(table string, columns []string, rowsCount int) string {
 		table,
 		columnsList,
 		placeholders,
+		conflictColumns,
 		onConflictUpdates,
 		table,
 	)

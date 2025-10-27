@@ -43,7 +43,7 @@ func (s *SaveSeriesRepository) SaveSeries(ctx context.Context, series []*motorsp
 
 	cols := []string{"uuid", "name", "short_name", "short_code", "category", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "series", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "series", "uuid", cols, rows)
 	if err != nil {
 		return fmt.Errorf("saving series: %w", err)
 	}

@@ -59,7 +59,7 @@ func (s *SaveCalendarRepository) SaveCalendar(ctx context.Context, season string
 		eventsUUIDs[event.UUID] = struct{}{}
 	}
 
-	err = s.saveCountries(ctx, uniqueCountries)
+	err = shared.SaveCountries(ctx, s.db, uniqueCountries)
 	if err != nil {
 		return fmt.Errorf("saving uniqueCountries: %w", err)
 	}
@@ -104,34 +104,6 @@ func (s *SaveCalendarRepository) getSeasonID(ctx context.Context, season string)
 	return seasonID, nil
 }
 
-func (s *SaveCalendarRepository) saveCountries(ctx context.Context, countries []*motorsportstats.Country) error {
-	if len(countries) == 0 {
-		slog.Debug("No countries to save")
-
-		return nil
-	}
-
-	var rows [][]interface{}
-	for _, country := range countries {
-		nameVal := fn.Deref(country.Name, "")
-		flagVal := fn.Deref(country.Flag, "")
-
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s", country.UUID, nameVal, flagVal))
-		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag, hash})
-	}
-
-	cols := []string{"uuid", "name", "flag", "hash"}
-
-	stats, err := shared.Save(ctx, s.db, "countries", cols, rows)
-	if err != nil {
-		return fmt.Errorf("saving countries: %w", err)
-	}
-
-	slog.Info("Countries saved successfully", "count", len(countries), "inserted", stats.Inserted, "updated", stats.Updated)
-
-	return nil
-}
-
 func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motorsportstats.Venue) error {
 	if len(venues) == 0 {
 		slog.Debug("No venues to save")
@@ -151,7 +123,7 @@ func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motor
 
 	cols := []string{"uuid", "name", "short_name", "short_code", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "venues", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "venues", "uuid", cols, rows)
 	if err != nil {
 		return fmt.Errorf("saving venues: %w", err)
 	}
@@ -217,7 +189,7 @@ func (s *SaveCalendarRepository) saveEvents(
 
 	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_date", "end_date", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "events", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "events", "uuid", cols, rows)
 	if err != nil {
 		return fmt.Errorf("saving events: %w", err)
 	}
@@ -266,7 +238,7 @@ func (s *SaveCalendarRepository) saveSessions(
 
 	cols := []string{"uuid", "event", "name", "short_name", "short_code", "status", "has_results", "start_time", "end_time", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "sessions", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "sessions", "uuid", cols, rows)
 	if err != nil {
 		return fmt.Errorf("saving sessions: %w", err)
 	}
