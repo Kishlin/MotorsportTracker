@@ -32,8 +32,13 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) SetupSuite() 
 }
 
 func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TearDownSuite() {
-	sql := "DELETE FROM series WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';"
-	fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
+	cleanUps := []string{
+		"DELETE FROM series WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';",
+		"DELETE FROM series_history WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';",
+	}
+	for _, query := range cleanUps {
+		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
+	}
 
 	suite.repository.db.Close()
 	suite.resetEnv()
