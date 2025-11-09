@@ -49,16 +49,16 @@ func main() {
 	var handler messaging.Handler
 
 	switch subcommand {
-	case series.ScrapeSeriesIntentName:
-		intent = series.NewScrapSeriesIntent()
+	case seriesImpls.ScrapeSeriesIntentName:
+		intent = seriesImpls.NewScrapSeriesIntent()
 		handler = seriesImpls.NewScrapeSeriesHandler(
 			series.NewScrapeSeriesUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
 				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
 			),
 		)
-	case seasons.ScrapeSeasonsIntentName:
-		intent = seasons.NewScrapSeasonsIntent()
+	case seasonsImpls.ScrapeSeasonsIntentName:
+		intent = seasonsImpls.NewScrapSeasonsIntent()
 		handler = seasonsImpls.NewScrapeSeasonsHandler(
 			seasons.NewScrapeSeasonsUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
@@ -66,8 +66,8 @@ func main() {
 				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
 		)
-	case calendar.ScrapeCalendarIntentName:
-		intent = calendar.NewScrapCalendarIntent()
+	case calendarImpls.ScrapeCalendarIntentName:
+		intent = calendarImpls.NewScrapCalendarIntent()
 		handler = calendarImpls.NewScrapeCalendarHandler(
 			calendar.NewScrapeCalendarUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
@@ -75,8 +75,8 @@ func main() {
 				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
 		)
-	case classification.ScrapeClassificationIntentName:
-		intent = classification.NewScrapClassificationIntent()
+	case classificationImpls.ScrapeClassificationIntentName:
+		intent = classificationImpls.NewScrapClassificationIntent()
 		handler = classificationImpls.NewScrapeClassificationHandler(
 			classification.NewScrapeClassificationUseCase(
 				registry.GetMotorsportStatsGateway(ctx),

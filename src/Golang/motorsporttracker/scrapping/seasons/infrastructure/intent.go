@@ -1,4 +1,4 @@
-package domain
+package infrastructure
 
 import (
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"

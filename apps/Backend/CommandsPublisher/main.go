@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
-	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
-	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
-	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
-	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
+	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/infrastructure"
+	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/infrastructure"
+	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
+	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
@@ -19,7 +19,7 @@ import (
 func main() {
 	err := env.LoadEnv()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -45,7 +45,7 @@ func main() {
 	case classification.ScrapeClassificationIntentName:
 		intent = classification.NewScrapClassificationIntent()
 	default:
-		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
+		_, _ = fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()
 		os.Exit(1)
 	}
@@ -54,7 +54,7 @@ func main() {
 
 	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
 		os.Exit(1)
 	}
 
@@ -64,7 +64,7 @@ func main() {
 	err = registry.GetIntentsQueue().Send(message)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 

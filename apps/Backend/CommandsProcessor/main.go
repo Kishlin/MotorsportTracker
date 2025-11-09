@@ -59,7 +59,7 @@ func main() {
 	handlersList := messaging.NewHandlersList()
 
 	handlersList.RegisterHandler(
-		series.ScrapeSeriesIntentName,
+		seriesImpls.ScrapeSeriesIntentName,
 		seriesImpls.NewScrapeSeriesHandler(
 			series.NewScrapeSeriesUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
@@ -68,7 +68,7 @@ func main() {
 		),
 	)
 	handlersList.RegisterHandler(
-		seasons.ScrapeSeasonsIntentName,
+		seasonsImpls.ScrapeSeasonsIntentName,
 		seasonsImpls.NewScrapeSeasonsHandler(
 			seasons.NewScrapeSeasonsUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
@@ -78,7 +78,7 @@ func main() {
 		),
 	)
 	handlersList.RegisterHandler(
-		calendar.ScrapeCalendarIntentName,
+		calendarImpls.ScrapeCalendarIntentName,
 		calendarImpls.NewScrapeCalendarHandler(
 			calendar.NewScrapeCalendarUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
@@ -88,7 +88,7 @@ func main() {
 		),
 	)
 	handlersList.RegisterHandler(
-		classification.ScrapeClassificationIntentName,
+		classificationImpls.ScrapeClassificationIntentName,
 		classificationImpls.NewScrapeClassificationHandler(
 			classification.NewScrapeClassificationUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
