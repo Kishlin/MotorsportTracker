@@ -18,7 +18,7 @@ func NewFileSystemCache(rootDir, fileExtension string) *FileSystemCache {
 
 func (f *FileSystemCache) Get(namespace, key string) (value []byte, hit bool, err error) {
 	filename := key + f.fileExtension
-	file := filepath.Join(f.rootDir, namespace, filename)
+	file := filepath.Clean(filepath.Join(f.rootDir, namespace, filename))
 
 	logger := slog.With("namespace", namespace, "key", key, "file", file)
 
@@ -48,14 +48,14 @@ func (f *FileSystemCache) Get(namespace, key string) (value []byte, hit bool, er
 
 func (f *FileSystemCache) Set(namespace, key string, value []byte) (err error) {
 	filename := key + f.fileExtension
-	file := filepath.Join(f.rootDir, namespace, filename)
+	file := filepath.Clean(filepath.Join(f.rootDir, namespace, filename))
 
-	err = os.MkdirAll(filepath.Dir(file), 0755)
+	err = os.MkdirAll(filepath.Dir(file), 0750)
 	if err != nil {
 		return fmt.Errorf("creating cache directories: %w", err)
 	}
 
-	handle, err := os.OpenFile(file, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
+	handle, err := os.OpenFile(file, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0600)
 	if err != nil {
 		return fmt.Errorf("creating cache file: %w", err)
 	}

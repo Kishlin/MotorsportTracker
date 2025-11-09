@@ -355,7 +355,7 @@ func (s *SaveClassificationRepository) saveRetirements(
 
 	var rows [][]interface{}
 	for _, retirement := range retirements {
-		var entryID, driverID *int = nil, nil
+		var entryID, driverID *int
 		if retirement.Driver != nil {
 			storedDriverID, ok := driverIDPerUUID[retirement.Driver.UUID]
 			if ok == false {
@@ -423,7 +423,7 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 
 	var rows [][]interface{}
 	for _, details := range classifications {
-		var entryID *int = nil
+		var entryID *int
 		storedEntryID, ok := entryIDPerCarNumber[details.CarNumber]
 		if ok == false {
 			return fmt.Errorf("car number for UUID %s not found", details.CarNumber)
@@ -540,7 +540,7 @@ func (s *SaveClassificationRepository) saveEntryDrivers(
 
 	var rows [][]interface{}
 	for carNumber, driverUUIDs := range driverUUIDsPerCarNumbers {
-		var entryID *int = nil
+		var entryID *int
 		storedEntryID, ok := entryIDPerCarNumber[carNumber]
 		if ok == false {
 			return fmt.Errorf("entry ID for car number %s not found", carNumber)
@@ -548,7 +548,7 @@ func (s *SaveClassificationRepository) saveEntryDrivers(
 		entryID = &storedEntryID
 
 		for _, driverUUID := range driverUUIDs {
-			var driverID *int = nil
+			var driverID *int
 			storedDriverID, ok := driverIDPerUUID[driverUUID]
 			if ok == false {
 				return fmt.Errorf("driver ID for UUID %s not found", driverUUID)
