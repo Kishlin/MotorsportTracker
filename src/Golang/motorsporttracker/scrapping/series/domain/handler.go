@@ -6,34 +6,33 @@ import (
 	"log/slog"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type SaveSeriesRepository interface {
 	SaveSeries(ctx context.Context, series []*motorsportstats.Series) error
 }
 
-type ScrapeSeriesHandler struct {
+type ScrapeSeriesUseCase struct {
 	motorsportStatsGateway motorsportstats.Gateway
 	saveSeriesRepository   SaveSeriesRepository
 }
 
-// NewScrapeSeriesHandler creates a new instance of ScrapeSeriesHandler.
-func NewScrapeSeriesHandler(
+// NewScrapeSeriesUseCase creates a new instance of ScrapeSeriesUseCase.
+func NewScrapeSeriesUseCase(
 	motorsportStatsGateway motorsportstats.Gateway,
 	saveSeriesRepository SaveSeriesRepository,
-) *ScrapeSeriesHandler {
-	return &ScrapeSeriesHandler{
+) *ScrapeSeriesUseCase {
+	return &ScrapeSeriesUseCase{
 		motorsportStatsGateway: motorsportStatsGateway,
 		saveSeriesRepository:   saveSeriesRepository,
 	}
 }
 
-// Handle processes the scrapping intent for series.
-func (h *ScrapeSeriesHandler) Handle(ctx context.Context, _ messaging.Message) error {
-	fetchedSeries, err := h.motorsportStatsGateway.GetSeries(ctx)
+// Execute scrapes and saves series.
+func (u *ScrapeSeriesUseCase) Execute(ctx context.Context) error {
+	fetchedSeries, err := u.motorsportStatsGateway.GetSeries(ctx)
 	if err != nil {
-		return fmt.Errorf("fetching series fetchedSeries: %w", err)
+		return fmt.Errorf("fetching series: %w", err)
 	}
 
 	if len(fetchedSeries) == 0 {
@@ -41,7 +40,7 @@ func (h *ScrapeSeriesHandler) Handle(ctx context.Context, _ messaging.Message) e
 		return nil
 	}
 
-	err = h.saveSeriesRepository.SaveSeries(ctx, fetchedSeries)
+	err = u.saveSeriesRepository.SaveSeries(ctx, fetchedSeries)
 	if err != nil {
 		return fmt.Errorf("saving fetched series: %w", err)
 	}

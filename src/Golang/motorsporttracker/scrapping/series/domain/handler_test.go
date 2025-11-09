@@ -8,48 +8,41 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
-type HandlerUnitTestSuite struct {
+type UseCaseUnitTestSuite struct {
 	suite.Suite
 
-	handler            *ScrapeSeriesHandler
+	useCase            *ScrapeSeriesUseCase
 	mockGateway        *motorsportstats.GatewayInMemory
 	mockSaveSeriesRepo *mockSaveSeriesRepository
 }
 
-func (suite *HandlerUnitTestSuite) SetupSuite() {
+func (suite *UseCaseUnitTestSuite) SetupSuite() {
 	suite.mockGateway = motorsportstats.NewGatewayInMemory()
 	suite.mockSaveSeriesRepo = &mockSaveSeriesRepository{}
 
-	suite.handler = NewScrapeSeriesHandler(
+	suite.useCase = NewScrapeSeriesUseCase(
 		suite.mockGateway,
 		suite.mockSaveSeriesRepo,
 	)
 }
 
-func (suite *HandlerUnitTestSuite) TestHandle() {
+func (suite *UseCaseUnitTestSuite) TestExecute() {
 	suite.T().Run("it stores series from the gateway", func(t *testing.T) {
 		suite.withSeriesInGateway()
 
-		err := suite.handler.Handle(context.Background(), suite.message())
+		err := suite.useCase.Execute(context.Background())
 		suite.Require().NoError(err)
 		suite.Equal(2, suite.mockSaveSeriesRepo.seriesCount)
 	})
 }
 
-func TestUnit_Handler(t *testing.T) {
-	suite.Run(t, new(HandlerUnitTestSuite))
+func TestUnit_UseCase(t *testing.T) {
+	suite.Run(t, new(UseCaseUnitTestSuite))
 }
 
-func (suite *HandlerUnitTestSuite) message() messaging.Message {
-	return messaging.Message{
-		Metadata: map[string]string{},
-	}
-}
-
-func (suite *HandlerUnitTestSuite) withSeriesInGateway() {
+func (suite *UseCaseUnitTestSuite) withSeriesInGateway() {
 	suite.mockGateway.SetSeries([]*motorsportstats.Series{
 		{
 			UUID:      "series-1",

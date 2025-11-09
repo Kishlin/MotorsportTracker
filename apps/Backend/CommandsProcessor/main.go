@@ -60,9 +60,11 @@ func main() {
 
 	handlersList.RegisterHandler(
 		series.ScrapeSeriesIntentName,
-		series.NewScrapeSeriesHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
+		seriesImpls.NewScrapeSeriesHandler(
+			series.NewScrapeSeriesUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
+			),
 		),
 	)
 	handlersList.RegisterHandler(
