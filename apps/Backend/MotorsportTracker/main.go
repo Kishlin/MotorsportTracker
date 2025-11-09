@@ -24,7 +24,7 @@ import (
 func main() {
 	err := env.LoadEnv()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -68,10 +68,12 @@ func main() {
 		)
 	case calendar.ScrapeCalendarIntentName:
 		intent = calendar.NewScrapCalendarIntent()
-		handler = calendar.NewScrapeEventsHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
-			calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		handler = calendarImpls.NewScrapeEventsHandler(
+			calendar.NewScrapeEventsUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
+				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+			),
 		)
 	case classification.ScrapeClassificationIntentName:
 		intent = classification.NewScrapClassificationIntent()
@@ -83,21 +85,21 @@ func main() {
 			),
 		)
 	default:
-		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
+		_, _ = fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
 		printUsage()
 		os.Exit(1)
 	}
 
 	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
 		os.Exit(1)
 	}
 
 	err = handler.Handle(ctx, message)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "handling intent %s: %v\n", subcommand, err)
+		_, _ = fmt.Fprintf(os.Stderr, "handling intent %s: %v\n", subcommand, err)
 		os.Exit(1)
 	}
 

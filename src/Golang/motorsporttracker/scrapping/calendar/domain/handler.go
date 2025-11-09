@@ -2,13 +2,10 @@ package domain
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log/slog"
-	"strconv"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type SearchSeasonsRepository interface {
@@ -19,70 +16,47 @@ type SaveEventsRepository interface {
 	SaveCalendar(ctx context.Context, season string, calendar *motorsportstats.Calendar) error
 }
 
-// ScrapeEventsHandler is the handler for scrapping events.
-type ScrapeEventsHandler struct {
+// ScrapeEventsUseCase is the use case for scrapping events.
+type ScrapeEventsUseCase struct {
 	motorsportStatsGateway motorsportstats.Gateway
 	repoSaveEvents         SaveEventsRepository
 	repoSeasonsID          SearchSeasonsRepository
 }
 
-// NewScrapeEventsHandler creates a new handler for scrapping events.
-func NewScrapeEventsHandler(
+// NewScrapeEventsUseCase creates a new use case for scrapping events.
+func NewScrapeEventsUseCase(
 	motorsportStatsGateway motorsportstats.Gateway,
 	repoSaveEvents SaveEventsRepository,
 	repoSeasonsID SearchSeasonsRepository,
-) *ScrapeEventsHandler {
-	return &ScrapeEventsHandler{
+) *ScrapeEventsUseCase {
+	return &ScrapeEventsUseCase{
 		motorsportStatsGateway: motorsportStatsGateway,
 		repoSaveEvents:         repoSaveEvents,
 		repoSeasonsID:          repoSeasonsID,
 	}
 }
 
-// Handle handles the scrapping of events.
-func (h *ScrapeEventsHandler) Handle(ctx context.Context, message messaging.Message) error {
-	seriesKeyword, year, err := h.paramsFromMessage(message)
-	if err != nil {
-		return fmt.Errorf("getting params from message: %w", err)
-	}
-
-	seasonRef, hit, err := h.repoSeasonsID.GetSeasonIdentifier(ctx, seriesKeyword, year)
+// Execute scrapes and saves events for a given season.
+func (u *ScrapeEventsUseCase) Execute(ctx context.Context, seriesKeyword string, year int) error {
+	seasonRef, hit, err := u.repoSeasonsID.GetSeasonIdentifier(ctx, seriesKeyword, year)
 	if err != nil {
 		return fmt.Errorf("getting season identifier: %w", err)
 	}
-	if hit == false {
-		slog.Warn("Season identifier not found", "seriesKeyword", seriesKeyword, "year", year)
+	if !hit {
+		slog.Warn("Season identifier not found", slog.String("seriesKeyword", seriesKeyword), slog.Int("year", year))
 		return nil
 	}
 
-	calendar, err := h.motorsportStatsGateway.GetCalendar(ctx, seasonRef)
+	calendar, err := u.motorsportStatsGateway.GetCalendar(ctx, seasonRef)
 	if err != nil {
 		return fmt.Errorf("getting calendar from motorsportstats gateway: %w", err)
 	}
 
-	if err := h.repoSaveEvents.SaveCalendar(ctx, seasonRef, calendar); err != nil {
+	if err := u.repoSaveEvents.SaveCalendar(ctx, seasonRef, calendar); err != nil {
 		return fmt.Errorf("saving events: %w", err)
 	}
 
-	slog.Info("Saved calendar", "seriesKeyword", seriesKeyword, "year", year)
+	slog.Info("Saved calendar", slog.String("seriesKeyword", seriesKeyword), slog.Int("year", year))
 
 	return nil
-}
-
-func (h *ScrapeEventsHandler) paramsFromMessage(message messaging.Message) (string, int, error) {
-	seriesKeyword, ok := message.Metadata["series"]
-	if !ok || seriesKeyword == "" {
-		return "", 0, errors.New("series search keywords is required")
-	}
-
-	yearStr, ok := message.Metadata["year"]
-	if !ok || yearStr == "" {
-		return "", 0, errors.New("year is required")
-	}
-
-	year, err := strconv.Atoi(yearStr)
-	if err != nil {
-		return "", 0, errors.New("invalid year format")
-	}
-	return seriesKeyword, year, nil
 }

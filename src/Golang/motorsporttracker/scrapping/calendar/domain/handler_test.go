@@ -8,35 +8,34 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
-type ScrapeCalendarHandlerUnitTestSuite struct {
+type UseCaseUnitTestSuite struct {
 	suite.Suite
 
-	handler              *ScrapeEventsHandler
+	useCase              *ScrapeEventsUseCase
 	mockGateway          *motorsportstats.GatewayInMemory
 	mockSeasonsIDRepo    *mockSeasonsIDRepository
 	mockSaveCalendarRepo *mockSaveCalendarRepository
 }
 
-func (s *ScrapeCalendarHandlerUnitTestSuite) SetupSuite() {
+func (s *UseCaseUnitTestSuite) SetupSuite() {
 	s.mockGateway = motorsportstats.NewGatewayInMemory()
 	s.mockSeasonsIDRepo = &mockSeasonsIDRepository{}
 	s.mockSaveCalendarRepo = &mockSaveCalendarRepository{}
 
-	s.handler = NewScrapeEventsHandler(
+	s.useCase = NewScrapeEventsUseCase(
 		s.mockGateway,
 		s.mockSaveCalendarRepo,
 		s.mockSeasonsIDRepo,
 	)
 }
 
-func (s *ScrapeCalendarHandlerUnitTestSuite) TestHandle() {
+func (s *UseCaseUnitTestSuite) TestExecute() {
 	s.T().Run("no-op when season identifier is not found", func(t *testing.T) {
 		s.withNoMatchingSeason()
 
-		err := s.handler.Handle(context.Background(), s.message())
+		err := s.useCase.Execute(context.Background(), "series", 2025)
 		s.Require().NoError(err)
 		s.Equal(0, s.mockSaveCalendarRepo.eventsCount)
 	})
@@ -45,36 +44,27 @@ func (s *ScrapeCalendarHandlerUnitTestSuite) TestHandle() {
 		s.withAMatchingSeason()
 		s.withEventsInGateway()
 
-		err := s.handler.Handle(context.Background(), s.message())
+		err := s.useCase.Execute(context.Background(), "series", 2025)
 		s.Require().NoError(err)
 		s.Equal(2, s.mockSaveCalendarRepo.eventsCount)
 		s.Equal("season", s.mockSaveCalendarRepo.sentSeason)
 	})
 }
 
-func TestUnit_ScrapeEventsHandler(t *testing.T) {
-	suite.Run(t, new(ScrapeCalendarHandlerUnitTestSuite))
+func TestUnit_UseCase(t *testing.T) {
+	suite.Run(t, new(UseCaseUnitTestSuite))
 }
 
-func (s *ScrapeCalendarHandlerUnitTestSuite) withNoMatchingSeason() {
+func (s *UseCaseUnitTestSuite) withNoMatchingSeason() {
 	s.mockSeasonsIDRepo.hit = false
 }
 
-func (s *ScrapeCalendarHandlerUnitTestSuite) withAMatchingSeason() {
+func (s *UseCaseUnitTestSuite) withAMatchingSeason() {
 	s.mockSeasonsIDRepo.identifier = "season"
 	s.mockSeasonsIDRepo.hit = true
 }
 
-func (s *ScrapeCalendarHandlerUnitTestSuite) message() messaging.Message {
-	return messaging.Message{
-		Metadata: map[string]string{
-			"series": "series",
-			"year":   "2025",
-		},
-	}
-}
-
-func (s *ScrapeCalendarHandlerUnitTestSuite) withEventsInGateway() {
+func (s *UseCaseUnitTestSuite) withEventsInGateway() {
 	s.mockGateway.SetCalendar(
 		&motorsportstats.Calendar{
 			Events: []*motorsportstats.Event{

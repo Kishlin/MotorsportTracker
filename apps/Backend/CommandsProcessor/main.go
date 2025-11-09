@@ -27,7 +27,7 @@ import (
 func main() {
 	err := env.LoadEnv()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -79,10 +79,12 @@ func main() {
 	)
 	handlersList.RegisterHandler(
 		calendar.ScrapeCalendarIntentName,
-		calendar.NewScrapeEventsHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
-			calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		calendarImpls.NewScrapeEventsHandler(
+			calendar.NewScrapeEventsUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
+				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+			),
 		),
 	)
 	handlersList.RegisterHandler(
