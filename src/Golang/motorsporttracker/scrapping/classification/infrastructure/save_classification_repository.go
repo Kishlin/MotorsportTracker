@@ -88,7 +88,7 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 		carNumbers[classificationDetails.CarNumber] = struct{}{}
 	}
 	for _, retirement := range classification.Retirements {
-		if _, exists := carNumbers[retirement.CarNumber]; exists {
+		if _, exists := carNumbers[retirement.CarNumber]; exists == false {
 			slog.Warn(
 				fmt.Sprintf("Retirement for missing car number %s", retirement.CarNumber),
 				slog.String("car_number", retirement.CarNumber),
