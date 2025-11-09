@@ -69,10 +69,12 @@ func main() {
 	)
 	handlersList.RegisterHandler(
 		seasons.ScrapeSeasonsIntentName,
-		seasons.NewScrapeSeasonsHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
-			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		seasonsImpls.NewScrapeSeasonsHandler(
+			seasons.NewScrapeSeasonsUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+			),
 		),
 	)
 	handlersList.RegisterHandler(

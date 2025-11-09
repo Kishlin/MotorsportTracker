@@ -6,7 +6,6 @@ import (
 	"log/slog"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type SearchSeriesRepository interface {
@@ -17,48 +16,47 @@ type SaveSeasonsRepository interface {
 	SaveSeasons(ctx context.Context, series string, seasons []*motorsportstats.Season) error
 }
 
-// ScrapeSeasonsHandler is the handler for scrapping series.
-type ScrapeSeasonsHandler struct {
+// ScrapeSeasonsUseCase is the use case for scrapping seasons.
+type ScrapeSeasonsUseCase struct {
 	motorsportStatsGateway motorsportstats.Gateway
 	repoSaveSeasons        SaveSeasonsRepository
 	repoSeriesID           SearchSeriesRepository
 }
 
-// NewScrapeSeasonsHandler creates a new handler for scrapping series.
-func NewScrapeSeasonsHandler(
+// NewScrapeSeasonsUseCase creates a new use case for scrapping seasons.
+func NewScrapeSeasonsUseCase(
 	motorsportStatsGateway motorsportstats.Gateway,
 	repoSaveSeasons SaveSeasonsRepository,
 	repoSeriesID SearchSeriesRepository,
-) *ScrapeSeasonsHandler {
-	return &ScrapeSeasonsHandler{
+) *ScrapeSeasonsUseCase {
+	return &ScrapeSeasonsUseCase{
 		motorsportStatsGateway: motorsportStatsGateway,
 		repoSaveSeasons:        repoSaveSeasons,
 		repoSeriesID:           repoSeriesID,
 	}
 }
 
-// Handle handles the scrapping of series.
-func (h *ScrapeSeasonsHandler) Handle(ctx context.Context, message messaging.Message) error {
-	seriesKeyword, ok := message.Metadata["series"]
-	if !ok || seriesKeyword == "" {
-		return fmt.Errorf("series search keywords is required")
+// Execute scrapes and saves seasons for a given series keyword.
+func (u *ScrapeSeasonsUseCase) Execute(ctx context.Context, seriesKeyword string) error {
+	if seriesKeyword == "" {
+		return fmt.Errorf("series search keyword is required")
 	}
 
-	seriesRef, hit, err := h.repoSeriesID.GetSeriesIdentifier(ctx, seriesKeyword)
+	seriesRef, hit, err := u.repoSeriesID.GetSeriesIdentifier(ctx, seriesKeyword)
 	if err != nil {
 		return fmt.Errorf("getting series keyword identifier: %w", err)
 	}
-	if hit == false {
+	if !hit {
 		slog.Warn("Series identifier not found", "seriesKeyword", seriesKeyword)
 		return nil
 	}
 
-	seasons, err := h.motorsportStatsGateway.GetSeasons(ctx, seriesRef)
+	seasons, err := u.motorsportStatsGateway.GetSeasons(ctx, seriesRef)
 	if err != nil {
 		return fmt.Errorf("getting seasons from motorsportstats: %w", err)
 	}
 
-	err = h.repoSaveSeasons.SaveSeasons(ctx, seriesRef, seasons)
+	err = u.repoSaveSeasons.SaveSeasons(ctx, seriesRef, seasons)
 	if err != nil {
 		return fmt.Errorf("saving seasons: %w", err)
 	}

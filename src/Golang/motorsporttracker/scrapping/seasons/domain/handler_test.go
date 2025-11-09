@@ -8,35 +8,34 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
-type ScrapeSeriesHandlerUnitTestSuite struct {
+type UseCaseUnitTestSuite struct {
 	suite.Suite
 
-	handler             *ScrapeSeasonsHandler
+	useCase             *ScrapeSeasonsUseCase
 	mockGateway         *motorsportstats.GatewayInMemory
 	mockSeriesRepo      *mockSeriesRepository
 	mockSaveSeasonsRepo *mockSaveSeasonsRepository
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) SetupSuite() {
+func (s *UseCaseUnitTestSuite) SetupSuite() {
 	s.mockGateway = motorsportstats.NewGatewayInMemory()
 	s.mockSeriesRepo = &mockSeriesRepository{}
 	s.mockSaveSeasonsRepo = &mockSaveSeasonsRepository{}
 
-	s.handler = NewScrapeSeasonsHandler(
+	s.useCase = NewScrapeSeasonsUseCase(
 		s.mockGateway,
 		s.mockSaveSeasonsRepo,
 		s.mockSeriesRepo,
 	)
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) TestHandle() {
+func (s *UseCaseUnitTestSuite) TestExecute() {
 	s.T().Run("no-op when series is not found", func(t *testing.T) {
 		s.withNoMatchingSeries()
 
-		err := s.handler.Handle(context.Background(), s.message())
+		err := s.useCase.Execute(context.Background(), "series")
 		s.Require().NoError(err)
 		s.Equal(0, s.mockSaveSeasonsRepo.seasonsCount)
 	})
@@ -45,36 +44,28 @@ func (s *ScrapeSeriesHandlerUnitTestSuite) TestHandle() {
 		s.withAMatchingSeries("series")
 		s.withSeasonsInGateway()
 
-		err := s.handler.Handle(context.Background(), s.message())
+		err := s.useCase.Execute(context.Background(), "series")
 		s.Require().NoError(err)
 		s.Greater(s.mockSaveSeasonsRepo.seasonsCount, 0)
 		s.Equal("series", s.mockSaveSeasonsRepo.sentSeries)
 	})
 }
 
-func TestUnit_ScrapeSeasonsHandler(t *testing.T) {
-	suite.Run(t, new(ScrapeSeriesHandlerUnitTestSuite))
+func TestUnit_UseCase(t *testing.T) {
+	suite.Run(t, new(UseCaseUnitTestSuite))
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) withAMatchingSeries(identifier string) {
+func (s *UseCaseUnitTestSuite) withAMatchingSeries(identifier string) {
 	s.mockSeriesRepo.identifier = identifier
 	s.mockSeriesRepo.hit = true
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) withNoMatchingSeries() {
+func (s *UseCaseUnitTestSuite) withNoMatchingSeries() {
 	s.mockSeriesRepo.identifier = ""
 	s.mockSeriesRepo.hit = false
 }
 
-func (s *ScrapeSeriesHandlerUnitTestSuite) message() messaging.Message {
-	return messaging.Message{
-		Metadata: map[string]string{
-			"series": "series",
-		},
-	}
-}
-
-func (s *ScrapeSeriesHandlerUnitTestSuite) withSeasonsInGateway() {
+func (s *UseCaseUnitTestSuite) withSeasonsInGateway() {
 	s.mockGateway.SetSeasons([]*motorsportstats.Season{
 		{UUID: "season-uuid", Name: fn.Ptr("Season 2023"), Year: fn.Ptr(2023), EndYear: fn.Ptr(2023)},
 		{UUID: "season-uuid-2", Name: fn.Ptr("Season 2024"), Year: fn.Ptr(2024), EndYear: fn.Ptr(2024)},

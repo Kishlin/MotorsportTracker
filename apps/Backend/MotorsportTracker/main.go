@@ -59,10 +59,12 @@ func main() {
 		)
 	case seasons.ScrapeSeasonsIntentName:
 		intent = seasons.NewScrapSeasonsIntent()
-		handler = seasons.NewScrapeSeasonsHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
-			seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+		handler = seasonsImpls.NewScrapeSeasonsHandler(
+			seasons.NewScrapeSeasonsUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+			),
 		)
 	case calendar.ScrapeCalendarIntentName:
 		intent = calendar.NewScrapCalendarIntent()
