@@ -68,8 +68,8 @@ func main() {
 		)
 	case calendar.ScrapeCalendarIntentName:
 		intent = calendar.NewScrapCalendarIntent()
-		handler = calendarImpls.NewScrapeEventsHandler(
-			calendar.NewScrapeEventsUseCase(
+		handler = calendarImpls.NewScrapeCalendarHandler(
+			calendar.NewScrapeCalendarUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
 				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
 				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),

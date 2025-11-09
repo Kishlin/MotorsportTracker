@@ -79,8 +79,8 @@ func main() {
 	)
 	handlersList.RegisterHandler(
 		calendar.ScrapeCalendarIntentName,
-		calendarImpls.NewScrapeEventsHandler(
-			calendar.NewScrapeEventsUseCase(
+		calendarImpls.NewScrapeCalendarHandler(
+			calendar.NewScrapeCalendarUseCase(
 				registry.GetMotorsportStatsGateway(ctx),
 				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
 				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),

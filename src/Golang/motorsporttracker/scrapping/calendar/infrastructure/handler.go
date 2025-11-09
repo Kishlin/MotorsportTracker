@@ -10,19 +10,19 @@ import (
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
-type ScrapeEventsHandler struct {
-	useCase *domain.ScrapeEventsUseCase
+type ScrapeCalendarHandler struct {
+	useCase *domain.ScrapeCalendarUseCase
 }
 
-// NewScrapeEventsHandler creates a new instance of ScrapeEventsHandler.
-func NewScrapeEventsHandler(useCase *domain.ScrapeEventsUseCase) *ScrapeEventsHandler {
-	return &ScrapeEventsHandler{
+// NewScrapeCalendarHandler creates a new instance of ScrapeCalendarHandler.
+func NewScrapeCalendarHandler(useCase *domain.ScrapeCalendarUseCase) *ScrapeCalendarHandler {
+	return &ScrapeCalendarHandler{
 		useCase: useCase,
 	}
 }
 
-// Handle processes the scrapping intent for events.
-func (h *ScrapeEventsHandler) Handle(ctx context.Context, message messaging.Message) error {
+// Handle processes the scrapping intent for calendars.
+func (h *ScrapeCalendarHandler) Handle(ctx context.Context, message messaging.Message) error {
 	seriesKeyword, year, err := h.paramsFromMessage(message)
 	if err != nil {
 		return fmt.Errorf("getting params from message: %w", err)
@@ -31,7 +31,7 @@ func (h *ScrapeEventsHandler) Handle(ctx context.Context, message messaging.Mess
 	return h.useCase.Execute(ctx, seriesKeyword, year)
 }
 
-func (h *ScrapeEventsHandler) paramsFromMessage(message messaging.Message) (string, int, error) {
+func (h *ScrapeCalendarHandler) paramsFromMessage(message messaging.Message) (string, int, error) {
 	seriesKeyword, ok := message.Metadata["series"]
 	if !ok || seriesKeyword == "" {
 		return "", 0, errors.New("series search keywords is required")

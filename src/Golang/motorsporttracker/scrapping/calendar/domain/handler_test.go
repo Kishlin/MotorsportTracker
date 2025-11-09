@@ -13,7 +13,7 @@ import (
 type UseCaseUnitTestSuite struct {
 	suite.Suite
 
-	useCase              *ScrapeEventsUseCase
+	useCase              *ScrapeCalendarUseCase
 	mockGateway          *motorsportstats.GatewayInMemory
 	mockSeasonsIDRepo    *mockSeasonsIDRepository
 	mockSaveCalendarRepo *mockSaveCalendarRepository
@@ -24,7 +24,7 @@ func (s *UseCaseUnitTestSuite) SetupSuite() {
 	s.mockSeasonsIDRepo = &mockSeasonsIDRepository{}
 	s.mockSaveCalendarRepo = &mockSaveCalendarRepository{}
 
-	s.useCase = NewScrapeEventsUseCase(
+	s.useCase = NewScrapeCalendarUseCase(
 		s.mockGateway,
 		s.mockSaveCalendarRepo,
 		s.mockSeasonsIDRepo,
