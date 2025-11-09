@@ -75,10 +75,12 @@ func main() {
 		)
 	case classification.ScrapeClassificationIntentName:
 		intent = classification.NewScrapClassificationIntent()
-		handler = classification.NewScrapeClassificationHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
+		handler = classificationImpls.NewScrapeClassificationHandler(
+			classification.NewScrapeClassificationUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
+				classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
+			),
 		)
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)

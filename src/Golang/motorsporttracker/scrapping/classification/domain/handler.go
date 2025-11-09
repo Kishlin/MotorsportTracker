@@ -2,13 +2,10 @@ package domain
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log/slog"
-	"strconv"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 )
 
 type SearchSessionRepository interface {
@@ -19,38 +16,33 @@ type SaveClassificationRepository interface {
 	SaveClassification(ctx context.Context, session string, classification *motorsportstats.Classification) error
 }
 
-// ScrapeClassificationHandler is the handler for scrapping classifications
-type ScrapeClassificationHandler struct {
+// ScrapeClassificationUseCase is the use case for scrapping classifications
+type ScrapeClassificationUseCase struct {
 	motorsportStatsGateway motorsportstats.Gateway
 	repoSearchSession      SearchSessionRepository
 	repoSaveClassification SaveClassificationRepository
 }
 
-// NewScrapeClassificationHandler creates a new handler for scrapping classifications
-func NewScrapeClassificationHandler(
+// NewScrapeClassificationUseCase creates a new use case for scrapping classifications
+func NewScrapeClassificationUseCase(
 	motorsportStatsGateway motorsportstats.Gateway,
 	repoSearchSession SearchSessionRepository,
 	repoSaveClassification SaveClassificationRepository,
-) *ScrapeClassificationHandler {
-	return &ScrapeClassificationHandler{
+) *ScrapeClassificationUseCase {
+	return &ScrapeClassificationUseCase{
 		motorsportStatsGateway: motorsportStatsGateway,
 		repoSearchSession:      repoSearchSession,
 		repoSaveClassification: repoSaveClassification,
 	}
 }
 
-// Handle handles the scrapping of classifications
-func (h *ScrapeClassificationHandler) Handle(ctx context.Context, message messaging.Message) error {
-	seriesKeyword, year, eventKeyword, sessionKeyword, err := h.paramsFromMessage(message)
-	if err != nil {
-		return fmt.Errorf("getting params from message: %w", err)
-	}
-
-	sessionRef, hit, err := h.repoSearchSession.GetSessionIdentifier(ctx, seriesKeyword, year, eventKeyword, sessionKeyword)
+// Execute scrapes and saves classification for a given session.
+func (u *ScrapeClassificationUseCase) Execute(ctx context.Context, seriesKeyword string, year int, eventKeyword string, sessionKeyword string) error {
+	sessionRef, hit, err := u.repoSearchSession.GetSessionIdentifier(ctx, seriesKeyword, year, eventKeyword, sessionKeyword)
 	if err != nil {
 		return fmt.Errorf("getting session identifier: %w", err)
 	}
-	if hit == false {
+	if !hit {
 		slog.Warn(
 			"Session identifier not found",
 			slog.String("seriesKeyword", seriesKeyword),
@@ -58,14 +50,15 @@ func (h *ScrapeClassificationHandler) Handle(ctx context.Context, message messag
 			slog.String("eventKeyword", eventKeyword),
 			slog.String("sessionKeyword", sessionKeyword),
 		)
+		return nil
 	}
 
-	classification, err := h.motorsportStatsGateway.GetClassification(ctx, sessionRef)
+	classification, err := u.motorsportStatsGateway.GetClassification(ctx, sessionRef)
 	if err != nil {
 		return fmt.Errorf("getting classification from gateway: %w", err)
 	}
 
-	err = h.repoSaveClassification.SaveClassification(ctx, sessionRef, classification)
+	err = u.repoSaveClassification.SaveClassification(ctx, sessionRef, classification)
 	if err != nil {
 		return fmt.Errorf("saving classification: %w", err)
 	}
@@ -79,33 +72,4 @@ func (h *ScrapeClassificationHandler) Handle(ctx context.Context, message messag
 	)
 
 	return nil
-}
-
-func (h *ScrapeClassificationHandler) paramsFromMessage(message messaging.Message) (string, int, string, string, error) {
-	seriesKeyword, ok := message.Metadata["series"]
-	if ok == false || seriesKeyword == "" {
-		return "", 0, "", "", errors.New("series search keywords is required")
-	}
-
-	yearStr, ok := message.Metadata["year"]
-	if ok == false || yearStr == "" {
-		return "", 0, "", "", errors.New("year is required")
-	}
-
-	year, err := strconv.Atoi(yearStr)
-	if err != nil {
-		return "", 0, "", "", errors.New("invalid year format")
-	}
-
-	eventKeyword, ok := message.Metadata["event"]
-	if ok == false || eventKeyword == "" {
-		return "", 0, "", "", errors.New("event search keywords is required")
-	}
-
-	sessionKeyword, ok := message.Metadata["session"]
-	if ok == false || sessionKeyword == "" {
-		return "", 0, "", "", errors.New("session keyword is required")
-	}
-
-	return seriesKeyword, year, eventKeyword, sessionKeyword, nil
 }

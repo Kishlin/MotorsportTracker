@@ -87,10 +87,12 @@ func main() {
 	)
 	handlersList.RegisterHandler(
 		classification.ScrapeClassificationIntentName,
-		classification.NewScrapeClassificationHandler(
-			registry.GetMotorsportStatsGateway(ctx),
-			classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
+		classificationImpls.NewScrapeClassificationHandler(
+			classification.NewScrapeClassificationUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
+				classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
+			),
 		),
 	)
 

@@ -6,36 +6,35 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
 	"github.com/stretchr/testify/suite"
 )
 
-type ScrapeClassificationHandlerUnitTestSuite struct {
+type UseCaseUnitTestSuite struct {
 	suite.Suite
 
-	handler                    *ScrapeClassificationHandler
+	useCase                    *ScrapeClassificationUseCase
 	mockGateway                *motorsportstats.GatewayInMemory
 	mockSessionIDRepo          *mockSessionIDRepository
 	mockSaveClassificationRepo *mockSaveClassificationRepository
 }
 
-func (s *ScrapeClassificationHandlerUnitTestSuite) SetupSuite() {
+func (s *UseCaseUnitTestSuite) SetupSuite() {
 	s.mockGateway = motorsportstats.NewGatewayInMemory()
 	s.mockSessionIDRepo = &mockSessionIDRepository{}
 	s.mockSaveClassificationRepo = &mockSaveClassificationRepository{}
 
-	s.handler = NewScrapeClassificationHandler(
+	s.useCase = NewScrapeClassificationUseCase(
 		s.mockGateway,
 		s.mockSessionIDRepo,
 		s.mockSaveClassificationRepo,
 	)
 }
 
-func (s *ScrapeClassificationHandlerUnitTestSuite) TestHandle() {
+func (s *UseCaseUnitTestSuite) TestExecute() {
 	s.T().Run("no-op when session identifier is not found", func(t *testing.T) {
 		s.withNoMatchingSession()
 
-		err := s.handler.Handle(t.Context(), s.message())
+		err := s.useCase.Execute(context.Background(), "series", 2025, "british", "race")
 		s.NoError(err)
 		s.Equal(0, s.mockSaveClassificationRepo.savedClassifications)
 	})
@@ -44,38 +43,27 @@ func (s *ScrapeClassificationHandlerUnitTestSuite) TestHandle() {
 		s.withAMatchingSession()
 		s.withClassificationInGateway()
 
-		err := s.handler.Handle(t.Context(), s.message())
+		err := s.useCase.Execute(context.Background(), "series", 2025, "british", "race")
 		s.NoError(err)
 		s.Equal("session", s.mockSaveClassificationRepo.sentSession)
 		s.Equal(2, s.mockSaveClassificationRepo.savedClassifications)
 	})
 }
 
-func TestUnit_ScrapeClassificationHandler(t *testing.T) {
-	suite.Run(t, new(ScrapeClassificationHandlerUnitTestSuite))
+func TestUnit_UseCase(t *testing.T) {
+	suite.Run(t, new(UseCaseUnitTestSuite))
 }
 
-func (s *ScrapeClassificationHandlerUnitTestSuite) withNoMatchingSession() {
+func (s *UseCaseUnitTestSuite) withNoMatchingSession() {
 	s.mockSessionIDRepo.hit = false
 }
 
-func (s *ScrapeClassificationHandlerUnitTestSuite) withAMatchingSession() {
+func (s *UseCaseUnitTestSuite) withAMatchingSession() {
 	s.mockSessionIDRepo.identifier = "session"
 	s.mockSessionIDRepo.hit = true
 }
 
-func (s *ScrapeClassificationHandlerUnitTestSuite) message() messaging.Message {
-	return messaging.Message{
-		Metadata: map[string]string{
-			"series":  "series",
-			"year":    "2025",
-			"event":   "british",
-			"session": "race",
-		},
-	}
-}
-
-func (s *ScrapeClassificationHandlerUnitTestSuite) withClassificationInGateway() {
+func (s *UseCaseUnitTestSuite) withClassificationInGateway() {
 	s.mockGateway.SetClassification(
 		&motorsportstats.Classification{
 			Details: []*motorsportstats.ClassificationDetail{
