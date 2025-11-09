@@ -1,12 +1,12 @@
 package doman
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"fmt"
 )
 
 func Hash(str string) string {
-	h := md5.New()
+	h := sha256.New()
 	h.Write([]byte(str))
 	return fmt.Sprintf("%x", h.Sum(nil))
 }

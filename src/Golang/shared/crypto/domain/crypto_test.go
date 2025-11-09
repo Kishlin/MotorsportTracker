@@ -13,11 +13,11 @@ type CryptoUnitTestSuite struct {
 func (suite *CryptoUnitTestSuite) TestHash() {
 	suite.T().Run("hashes strings correctly", func(t *testing.T) {
 		cases := map[string]string{
-			"hello":        "5d41402abc4b2a76b9719d911017c592",
-			"world":        "7d793037a0760186574b0282f2f435e7",
-			"motorsport":   "08476cf7cd921a422d69db4515cd2ea0",
-			"cryptography": "e0d00b9f337d357c6faa2f8ceae4a60d",
-			"":             "d41d8cd98f00b204e9800998ecf8427e",
+			"hello":        "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+			"world":        "486ea46224d1bb4fb680f34f7c9ad96a8f24ec88be73ea8e5a6c65260e9cb8a7",
+			"motorsport":   "2c645a531eb8640f3bf0cb1d805f772fede9a2238cb13304c01808e45ee47b9c",
+			"cryptography": "e06554818e902b4ba339f066967c0000da3fcda4fd7eb4ef89c124fa78bda419",
+			"":             "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 		}
 
 		for input, expectedHash := range cases {
