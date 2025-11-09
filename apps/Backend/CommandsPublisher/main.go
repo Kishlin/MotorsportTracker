@@ -11,7 +11,7 @@ import (
 	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/infrastructure"
 	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
-	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/domain"
+	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
 )

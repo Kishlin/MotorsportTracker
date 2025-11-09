@@ -76,6 +76,6 @@ func (g GatewayUsingConnector) GetClassification(ctx context.Context, sessionUUI
 	if err != nil {
 		return nil, fmt.Errorf("unmarshalling classification data: %w", err)
 	}
-	
+
 	return classification, nil
 }

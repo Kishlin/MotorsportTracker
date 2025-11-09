@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
 
 type ScrapeClassificationHandler struct {

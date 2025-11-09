@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
@@ -40,7 +39,7 @@ func (suite *QueueUsingSQSIntegrationTestSuite) TestQueueConnection() {
 	queue := NewSQSQueueWithConfig(config)
 	defer queue.Disconnect()
 
-	require.NoError(suite.T(), queue.Connect())
+	suite.NoError(queue.Connect())
 }
 
 func TestIntegration_QueueUsingSQS(t *testing.T) {

@@ -4,11 +4,12 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
-	"github.com/stretchr/testify/suite"
 )
 
 type SaveCountryHelperIntegrationTestSuite struct {

@@ -20,8 +20,7 @@ import (
 	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
-	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/domain"
-	messagingImpls "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
+	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
 
 func main() {
@@ -99,7 +98,7 @@ func main() {
 	)
 
 	// Create and start the worker
-	w := messagingImpls.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
+	w := messaging.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)
 	w.Start(ctx)
 
 	// Set up graceful shutdown on interrupt/termination signals
