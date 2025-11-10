@@ -4,7 +4,7 @@ import (
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 )
 
-const ScrapeCalendarIntentName = "calendar"
+const ScrapeCalendarIntentName = "scrape:calendar"
 
 // ScrapCalendarIntent is an Intent to scrape Calendar.
 type ScrapCalendarIntent struct {

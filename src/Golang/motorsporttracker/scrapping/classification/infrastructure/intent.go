@@ -4,7 +4,7 @@ import (
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 )
 
-const ScrapeClassificationIntentName = "classification"
+const ScrapeClassificationIntentName = "scrape:classification"
 
 // ScrapeClassificationIntent is an Intent to scrape Classification.
 type ScrapeClassificationIntent struct {

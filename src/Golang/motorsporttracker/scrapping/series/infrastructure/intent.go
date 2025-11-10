@@ -4,7 +4,7 @@ import (
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 )
 
-const ScrapeSeriesIntentName = "series"
+const ScrapeSeriesIntentName = "scrape:series"
 
 // ScrapSeriesIntent is an Intent to scrape series.
 type ScrapSeriesIntent struct {

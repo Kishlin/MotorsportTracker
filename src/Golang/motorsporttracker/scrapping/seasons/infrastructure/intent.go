@@ -4,7 +4,7 @@ import (
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 )
 
-const ScrapeSeasonsIntentName = "seasons"
+const ScrapeSeasonsIntentName = "scrape:seasons"
 
 // ScrapSeasonsIntent is an Intent to scrape seasons.
 type ScrapSeasonsIntent struct {
