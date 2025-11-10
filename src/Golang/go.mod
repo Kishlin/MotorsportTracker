@@ -4,7 +4,6 @@ go 1.25.1
 
 require (
 	github.com/aws/aws-sdk-go v1.55.7
-	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/joho/godotenv v1.5.1
 	github.com/qri-io/jsonschema v0.2.1
