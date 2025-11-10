@@ -17,15 +17,15 @@ func PrepareTimestamp(timestamp *int64) (dbVal *time.Time, hashVal int64) {
 	return &time, *timestamp
 }
 
-func GetIDsForUUIDs(ctx context.Context, db *database.PGXPoolAdapter, table string, uuids map[string]struct{}) (map[string]int, error) {
-	if len(uuids) == 0 {
+func GetIDsForValues(ctx context.Context, db *database.PGXPoolAdapter, table string, col string, values map[string]struct{}) (map[string]int, error) {
+	if len(values) == 0 {
 		return make(map[string]int), nil
 	}
 
 	i := 0
 	queryValues := ""
 	var args []interface{}
-	for uuid := range uuids {
+	for uuid := range values {
 		if i > 0 {
 			queryValues += ","
 		}
@@ -35,30 +35,30 @@ func GetIDsForUUIDs(ctx context.Context, db *database.PGXPoolAdapter, table stri
 		i++
 	}
 
-	finalQuery := fmt.Sprintf("SELECT uuid, id FROM %s WHERE uuid IN (%s);", table, queryValues)
+	finalQuery := fmt.Sprintf("SELECT %s, id FROM %s WHERE %s IN (%s);", col, table, col, queryValues)
 
-	idPerUUID := make(map[string]int)
+	idPerValue := make(map[string]int)
 
 	ret, err := db.Query(ctx, finalQuery, args...)
 	if err != nil {
-		return idPerUUID, fmt.Errorf("executing get IDs for UUIDs query: %w", err)
+		return idPerValue, fmt.Errorf("executing get IDs for UUIDs query: %w", err)
 	}
 
 	for ret.Next() {
 		var id int
-		var uuid string
-		if err = ret.Scan(&uuid, &id); err != nil {
-			return idPerUUID, fmt.Errorf("scanning IDs for UUIDs: %w", err)
+		var value string
+		if err = ret.Scan(&value, &id); err != nil {
+			return idPerValue, fmt.Errorf("scanning IDs for UUIDs: %w", err)
 		}
-		idPerUUID[uuid] = id
+		idPerValue[value] = id
 	}
 
 	ret.Close()
 
 	err = ret.Err()
 	if err != nil {
-		return idPerUUID, fmt.Errorf("after iterating IDs for UUIDs results: %w", err)
+		return idPerValue, fmt.Errorf("after iterating IDs for UUIDs results: %w", err)
 	}
 
-	return idPerUUID, nil
+	return idPerValue, nil
 }

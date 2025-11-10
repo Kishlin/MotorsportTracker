@@ -2,13 +2,15 @@ CREATE TABLE IF NOT EXISTS entries (
     id         SERIAL PRIMARY KEY,
     session SERIAL NOT NULL,
     team SERIAL NOT NULL,
+    garage SERIAL NOT NULL,
     car_number TEXT NOT NULL,
     hash       TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP   NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP   NOT NULL DEFAULT NOW(),
     UNIQUE(session, car_number),
     FOREIGN KEY (session) REFERENCES sessions(id) ON DELETE RESTRICT,
-    FOREIGN KEY (team) REFERENCES teams(id) ON DELETE RESTRICT
+    FOREIGN KEY (team) REFERENCES teams(id) ON DELETE RESTRICT,
+    FOREIGN KEY (garage) REFERENCES garages(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS entries_history (
@@ -16,6 +18,7 @@ CREATE TABLE IF NOT EXISTS entries_history (
     id SERIAL NOT NULL,
     session SERIAL NOT NULL,
     team SERIAL NOT NULL,
+    garage SERIAL NOT NULL,
     car_number TEXT NOT NULL,
     hash       TEXT NOT NULL,
     valid_from TIMESTAMP    NOT NULL DEFAULT NOW(),
@@ -33,8 +36,8 @@ BEGIN
         WHERE id = OLD.id AND valid_to IS NULL;
     END IF;
 
-    INSERT INTO entries_history (id, session, team, car_number, hash, valid_from)
-    VALUES (NEW.id, NEW.session, NEW.team, NEW.car_number, NEW.hash, NOW());
+    INSERT INTO entries_history (id, session, team, garage, car_number, hash, valid_from)
+    VALUES (NEW.id, NEW.session, NEW.team, NEW.garage, NEW.car_number, NEW.hash, NOW());
 
     RETURN NEW;
 END;

@@ -146,12 +146,12 @@ func (s *SaveCalendarRepository) saveEvents(
 		return nil
 	}
 
-	venuesIDsPerUUIDs, err := shared.GetIDsForUUIDs(ctx, s.db, "venues", venuesUUIDs)
+	venuesIDsPerUUIDs, err := shared.GetIDsForValues(ctx, s.db, "venues", "uuid", venuesUUIDs)
 	if err != nil {
 		return fmt.Errorf("getting venue IDs for UUIDs: %w", err)
 	}
 
-	countryIDPerUUID, err := shared.GetIDsForUUIDs(ctx, s.db, "countries", countryUUIDs)
+	countryIDPerUUID, err := shared.GetIDsForValues(ctx, s.db, "countries", "uuid", countryUUIDs)
 	if err != nil {
 		return fmt.Errorf("getting country IDs for UUIDs: %w", err)
 	}
@@ -204,7 +204,7 @@ func (s *SaveCalendarRepository) saveSessions(
 	sessionsPerEventUUID map[string][]*motorsportstats.Session,
 	eventsUUIDs map[string]struct{},
 ) error {
-	eventsIDsPerUUIDs, err := shared.GetIDsForUUIDs(ctx, s.db, "events", eventsUUIDs)
+	eventsIDsPerUUIDs, err := shared.GetIDsForValues(ctx, s.db, "events", "uuid", eventsUUIDs)
 	if err != nil {
 		return fmt.Errorf("getting event IDs for UUIDs: %w", err)
 	}

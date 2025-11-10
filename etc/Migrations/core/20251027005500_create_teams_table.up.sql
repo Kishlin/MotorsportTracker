@@ -1,10 +1,6 @@
 CREATE TABLE IF NOT EXISTS teams (
     id         SERIAL PRIMARY KEY,
     uuid       UUID UNIQUE NOT NULL,
-    name       TEXT,
-    colour     TEXT,
-    picture    TEXT,
-    car_icon    TEXT,
     hash       TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP   NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP   NOT NULL DEFAULT NOW()
@@ -13,11 +9,7 @@ CREATE TABLE IF NOT EXISTS teams (
 CREATE TABLE IF NOT EXISTS teams_history (
     history_id SERIAL PRIMARY KEY,
     id INT NOT NULL,
-    uuid UUID NOT NULL,
-    name       TEXT,
-    colour     TEXT,
-    picture    TEXT,
-    car_icon    TEXT,
+    uuid UUID UNIQUE NOT NULL,
     hash       TEXT NOT NULL,
     valid_from TIMESTAMP    NOT NULL DEFAULT NOW(),
     valid_to   TIMESTAMP
@@ -34,8 +26,8 @@ BEGIN
         WHERE id = OLD.id AND valid_to IS NULL;
     END IF;
 
-    INSERT INTO teams_history (id, uuid, name, colour, picture, car_icon, hash, valid_from)
-    VALUES (NEW.id, NEW.uuid, NEW.name, NEW.colour, NEW.picture, NEW.car_icon, NEW.hash, NOW());
+    INSERT INTO teams_history (id, uuid, hash, valid_from)
+    VALUES (NEW.id, NEW.uuid, NEW.hash, NOW());
 
     RETURN NEW;
 END;
