@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/etc/Migrations/client-cache/20251020154400_create_calendar_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/client-cache/20251027052700_create_classification_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251020230000_create_countries_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251020231800_create_venues_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251020234900_create_events_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251021000200_create_sessions_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251027005530_create_garages_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251027012600_create_entries_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251027034100_create_retirements_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251027042400_create_classifications_table.up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/etc/Migrations/core/20251027050200_create_entry_drivers_table.up.sql" dialect="PostgreSQL" />
+  </component>
+</project>

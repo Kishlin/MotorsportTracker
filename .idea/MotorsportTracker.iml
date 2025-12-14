@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="Go" enabled="true" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/apps/Backoffice/src" isTestSource="false" packagePrefix="Kishlin\Apps\Backoffice\" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/Backoffice/tests" isTestSource="true" packagePrefix="Kishlin\Tests\Apps\Backoffice\" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/MotorsportTracker/Backend/src" isTestSource="false" packagePrefix="Kishlin\Apps\MotorsportTracker\Backend\" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/MotorsportTracker/Backend/tests" isTestSource="true" packagePrefix="Kishlin\Tests\Apps\MotorsportTracker\Backend\" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Kishlin\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Kishlin\Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
