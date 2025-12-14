@@ -10,28 +10,33 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-type UseCaseUnitTestSuite struct {
+type ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite struct {
 	suite.Suite
 
-	useCase             *ScrapeSeasonsUseCase
-	mockGateway         *motorsportstats.GatewayInMemory
-	mockSeriesRepo      *mockSeriesRepository
-	mockSaveSeasonsRepo *mockSaveSeasonsRepository
+	useCase                                 *ScrapeSeasonsForSeriesKeywordUseCase
+	scrapeSeasonsForSeriesIdentifierUseCase *ScrapeSeasonsForSeriesIdentifierUseCase
+	mockGateway                             *motorsportstats.GatewayInMemory
+	mockSeriesRepo                          *mockSeriesRepository
+	mockSaveSeasonsRepo                     *mockSaveSeasonsRepository
 }
 
-func (s *UseCaseUnitTestSuite) SetupSuite() {
+func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) SetupSuite() {
 	s.mockGateway = motorsportstats.NewGatewayInMemory()
 	s.mockSeriesRepo = &mockSeriesRepository{}
 	s.mockSaveSeasonsRepo = &mockSaveSeasonsRepository{}
 
-	s.useCase = NewScrapeSeasonsUseCase(
+	s.scrapeSeasonsForSeriesIdentifierUseCase = NewScrapeSeasonsForSeriesIdentifierUseCase(
 		s.mockGateway,
 		s.mockSaveSeasonsRepo,
+	)
+
+	s.useCase = NewScrapeSeasonsForSeriesKeywordUseCase(
+		s.scrapeSeasonsForSeriesIdentifierUseCase,
 		s.mockSeriesRepo,
 	)
 }
 
-func (s *UseCaseUnitTestSuite) TestExecute() {
+func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) TestExecute() {
 	s.T().Run("no-op when series is not found", func(t *testing.T) {
 		s.withNoMatchingSeries()
 
@@ -51,21 +56,21 @@ func (s *UseCaseUnitTestSuite) TestExecute() {
 	})
 }
 
-func TestUnit_UseCase(t *testing.T) {
-	suite.Run(t, new(UseCaseUnitTestSuite))
+func TestUnit_ScrapeSeasonsForSeriesKeywordUseCase(t *testing.T) {
+	suite.Run(t, new(ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite))
 }
 
-func (s *UseCaseUnitTestSuite) withAMatchingSeries(identifier string) {
+func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) withAMatchingSeries(identifier string) {
 	s.mockSeriesRepo.identifier = identifier
 	s.mockSeriesRepo.hit = true
 }
 
-func (s *UseCaseUnitTestSuite) withNoMatchingSeries() {
+func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) withNoMatchingSeries() {
 	s.mockSeriesRepo.identifier = ""
 	s.mockSeriesRepo.hit = false
 }
 
-func (s *UseCaseUnitTestSuite) withSeasonsInGateway() {
+func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) withSeasonsInGateway() {
 	s.mockGateway.SetSeasons([]*motorsportstats.Season{
 		{UUID: "season-uuid", Name: fn.Ptr("Season 2023"), Year: fn.Ptr(2023), EndYear: fn.Ptr(2023)},
 		{UUID: "season-uuid-2", Name: fn.Ptr("Season 2024"), Year: fn.Ptr(2024), EndYear: fn.Ptr(2024)},

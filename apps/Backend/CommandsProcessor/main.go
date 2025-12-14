@@ -54,6 +54,11 @@ func main() {
 	// Start the processor with the specified parameters
 	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n", *workerCount, *pollInterval)
 
+	scrapeSeasonsForSeriesIdentifierUseCase := seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
+		registry.GetMotorsportStatsGateway(ctx),
+		seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+	)
+
 	// Register handlers for scrapping intents
 	handlersList := messaging.NewHandlersList()
 
@@ -67,13 +72,23 @@ func main() {
 		),
 	)
 	handlersList.RegisterHandler(
-		seasonsImpls.ScrapeSeasonsIntentName,
-		seasonsImpls.NewScrapeSeasonsHandler(
-			seasons.NewScrapeSeasonsUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+		seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName,
+		seasonsImpls.NewScrapeSeasonsForSeriesKeywordHandler(
+			seasons.NewScrapeSeasonsForSeriesKeywordUseCase(
+				scrapeSeasonsForSeriesIdentifierUseCase,
 				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
+		),
+	)
+	handlersList.RegisterHandler(
+		seasonsImpls.ScrapeSeasonsForSeriesIDIntentName,
+		seasonsImpls.NewScrapeSeasonsForSeriesIDHandler(scrapeSeasonsForSeriesIdentifierUseCase),
+	)
+	handlersList.RegisterHandler(
+		seasonsImpls.ScrapeSeasonsForAllSeriesIntentName,
+		seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
+			seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
+			registry.GetIntentsQueue(),
 		),
 	)
 	handlersList.RegisterHandler(

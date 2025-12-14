@@ -38,8 +38,12 @@ func main() {
 	switch subcommand {
 	case series.ScrapeSeriesIntentName:
 		intent = series.NewScrapSeriesIntent()
-	case seasons.ScrapeSeasonsIntentName:
-		intent = seasons.NewScrapSeasonsIntent()
+	case seasons.ScrapeSeasonsForSeriesKeywordIntentName:
+		intent = seasons.NewScrapeSeasonsForSeriesKeywordIntent()
+	case seasons.ScrapeSeasonsForSeriesIDIntentName:
+		intent = seasons.NewScrapeSeasonsForSeriesIDIntent()
+	case seasons.ScrapeSeasonsForAllSeriesIntentName:
+		intent = seasons.NewScrapeSeasonsForAllSeriesIntent()
 	case calendar.ScrapeCalendarIntentName:
 		intent = calendar.NewScrapCalendarIntent()
 	case classification.ScrapeClassificationIntentName:

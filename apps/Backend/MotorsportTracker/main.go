@@ -57,14 +57,30 @@ func main() {
 				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
 			),
 		)
-	case seasonsImpls.ScrapeSeasonsIntentName:
-		intent = seasonsImpls.NewScrapSeasonsIntent()
-		handler = seasonsImpls.NewScrapeSeasonsHandler(
-			seasons.NewScrapeSeasonsUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+	case seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName:
+		intent = seasonsImpls.NewScrapeSeasonsForSeriesKeywordIntent()
+		handler = seasonsImpls.NewScrapeSeasonsForSeriesKeywordHandler(
+			seasons.NewScrapeSeasonsForSeriesKeywordUseCase(
+				seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
+					registry.GetMotorsportStatsGateway(ctx),
+					seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+				),
 				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
+		)
+	case seasonsImpls.ScrapeSeasonsForSeriesIDIntentName:
+		intent = seasonsImpls.NewScrapeSeasonsForSeriesIDIntent()
+		handler = seasonsImpls.NewScrapeSeasonsForSeriesIDHandler(
+			seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
+				registry.GetMotorsportStatsGateway(ctx),
+				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
+			),
+		)
+	case seasonsImpls.ScrapeSeasonsForAllSeriesIntentName:
+		intent = seasonsImpls.NewScrapeSeasonsForAllSeriesIntent()
+		handler = seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
+			seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
+			registry.GetIntentsQueue(),
 		)
 	case calendarImpls.ScrapeCalendarIntentName:
 		intent = calendarImpls.NewScrapCalendarIntent()

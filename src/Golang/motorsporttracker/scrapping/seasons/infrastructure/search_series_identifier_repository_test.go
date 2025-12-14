@@ -4,7 +4,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
@@ -26,7 +25,7 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) SetupSuite() 
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
 	fn.Must(db.Connect(suite.T().Context()))
-	fn.Must(db.Exec(suite.T().Context(), seriesFixtures()))
+	fn.Must(db.Exec(suite.T().Context(), suite.seriesFixtures()))
 
 	suite.repository = NewSearchSeriesIdentifierRepository(db)
 }
@@ -81,12 +80,12 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TestGetSeries
 			suite.NoError(err)
 
 			if tc.expectedFound == false {
-				require.False(t, found)
+				suite.False(found)
 				return
 			}
 
-			require.True(t, found)
-			require.Equal(t, tc.expectedRef, ref)
+			suite.True(found)
+			suite.Equal(tc.expectedRef, ref)
 		})
 	}
 }
@@ -97,7 +96,7 @@ func TestIntegration_SearchSeriesIdentifierRepository(t *testing.T) {
 	suite.Run(t, new(SearchSeriesIdentifierRepositoryIntegrationTestSuite))
 }
 
-func seriesFixtures() string {
+func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) seriesFixtures() string {
 	return `
 INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
 ('82b7cd85-ee6f-4c2c-a289-000000000001', 'Test Series Match 1', 'ShortTest1', 'SerTest1', 'Category 1', '82b7cd85-ee6f-4c2c-a289-000000000001'),
