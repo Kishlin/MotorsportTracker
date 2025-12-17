@@ -5,14 +5,12 @@ import (
 	"fmt"
 	"log/slog"
 
-	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
 
 type ScrapeSeasonsForAllSeriesHandler struct {
 	repository *SearchAllSeriesIdentifiersRepository
 	queue      *messaging.SQSQueue
-	intent     application.Intent
 }
 
 // NewScrapeSeasonsForAllSeriesHandler creates a new instance of ScrapeSeasonsForAllSeriesHandler.
@@ -23,7 +21,6 @@ func NewScrapeSeasonsForAllSeriesHandler(
 	return &ScrapeSeasonsForAllSeriesHandler{
 		repository: repository,
 		queue:      queue,
-		intent:     NewScrapeSeasonsForSeriesIDIntent(),
 	}
 }
 
@@ -40,8 +37,9 @@ func (h *ScrapeSeasonsForAllSeriesHandler) Handle(ctx context.Context, _ messagi
 		return nil
 	}
 
+	intent := NewScrapeSeasonsForSeriesIDIntent()
 	for _, identifier := range identifiers {
-		message, err := h.intent.ToMessage([]string{identifier}, map[string]string{})
+		message, err := intent.ToMessage([]string{identifier}, map[string]string{})
 		if err != nil {
 			slog.Error("Failed to create message for series", "identifier", identifier, "error", err)
 			continue
