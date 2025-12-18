@@ -74,15 +74,15 @@ clean:
 	fi;
 	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
 
-start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test db.client.reload db.client.reload.test db.admin.reload db.admin.reload.test
-	@echo "All services should be running."
-	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
-	@echo "    Backend: http://localhost:8030/monitoring/check-health"
-	@echo "You can access fronts services."
-	@echo "    Frontend: http://localhost:3030/"
-	@echo "    Admin: http://localhost:3040/"
-	@echo "Ports may differ if overridden in the .env.local file."
-	@echo "Run static analysis: \`make complete-analysis\` (see Makefile for more options)."
+#start: containers vendor db.core.reload db.core.reload.test db.cache.reload db.cache.reload.test db.client.reload db.client.reload.test db.admin.reload db.admin.reload.test
+#	@echo "All services should be running."
+#	@echo "    Backoffice: http://localhost:8040/monitoring/check-health"
+#	@echo "    Backend: http://localhost:8030/monitoring/check-health"
+#	@echo "You can access fronts services."
+#	@echo "    Frontend: http://localhost:3030/"
+#	@echo "    Admin: http://localhost:3040/"
+#	@echo "Ports may differ if overridden in the .env.local file."
+#	@echo "Run static analysis: \`make complete-analysis\` (see Makefile for more options)."
 
 
 ##> Apps
@@ -163,12 +163,21 @@ go-test:
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsPublisher/...'
 
+go-cache-clear:
+	@docker compose exec golang go clean -testcache
+
+go-test-pristine: go-cache-clear go-test
+
 go-lint:
 	@echo "Running Go linting across all modules"
 	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/...'
 
 go-run:
 	@docker-compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
+
+start: containers go-tidy run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test
+	@echo "All services should be running."
+	@echo "Run backend tests: \`make go-test\` (see Makefile for more options)."
 
 ##> Helpers
 .PHONY: xdebug.on xdebug.off frontend.sh frontend.build
