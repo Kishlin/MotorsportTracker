@@ -52,6 +52,11 @@ if err != nil {
     return fmt.Errorf("context: %w", err)
 }
 
+// For boolean comparisons, use explicit equality checks (avoid '!' operator for readability)
+if ok == false || value == "" {
+    return fmt.Errorf("validation failed: %w", err)
+}
+
 // Struct tags for JSON serialization use camelCase
 type Series struct {
     UUID      string  `json:"uuid"`
