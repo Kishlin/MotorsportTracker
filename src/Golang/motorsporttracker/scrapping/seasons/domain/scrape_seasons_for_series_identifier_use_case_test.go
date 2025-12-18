@@ -28,13 +28,13 @@ func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) SetupSuite() {
 	)
 }
 
-func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) TearDownTest() {
+func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) SetupSubTest() {
 	s.mockSaveSeasonsRepo.seasonsCount = 0
 	s.mockSaveSeasonsRepo.sentSeries = ""
 }
 
 func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) TestExecute() {
-	s.T().Run("it saves seasons for a single series identifier", func(t *testing.T) {
+	s.Run("it saves seasons for a single series identifier", func() {
 		s.withSeasonsInGateway()
 
 		err := s.useCase.Execute(context.Background(), "series-uuid")
@@ -43,7 +43,9 @@ func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) TestExecute() {
 		s.Equal("series-uuid", s.mockSaveSeasonsRepo.sentSeries)
 	})
 
-	s.T().Run("it returns error when series identifier is empty", func(t *testing.T) {
+	s.Run("it returns error when series identifier is empty", func() {
+		s.withZeroSeasonsInGateway()
+
 		err := s.useCase.Execute(context.Background(), "")
 		s.Require().Error(err)
 		s.Equal(0, s.mockSaveSeasonsRepo.seasonsCount)
@@ -60,4 +62,8 @@ func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) withSeasonsInGateway(
 		{UUID: "season-uuid-2", Name: fn.Ptr("Season 2024"), Year: fn.Ptr(2024), EndYear: fn.Ptr(2024)},
 		{UUID: "season-uuid-3", Name: fn.Ptr("Season 2025"), Year: fn.Ptr(2025), EndYear: fn.Ptr(2025)},
 	})
+}
+
+func (s *ScrapeSeasonsForSeriesIdentifierUseCaseTestSuite) withZeroSeasonsInGateway() {
+	s.mockGateway.SetSeasons([]*motorsportstats.Season{})
 }

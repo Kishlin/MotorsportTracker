@@ -23,6 +23,11 @@ MotorsportTracker is a motorsport data aggregation and analysis platform that sc
 - **Functional tests**: End-to-end flows, suffix `FunctionalTestSuite`
 - Use `testify/suite` for test organization
 - Use `fn.Must()` and `fn.MustReturn()` for setup code that should never fail
+- **Test Lifecycle**:
+  - Use `SetupSuite()` for suite-wide setup (runs once before all tests)
+  - Use `SetupSubTest()` for cleanup/reset between test cases (runs before each `s.Run()`)
+  - Prefer `s.Run()` over `s.T().Run()` when you need per-test cleanup
+  - Avoid `TearDownTest()` - use `SetupSubTest()` instead for state reset between test cases
 
 ### 3. Database Patterns
 - **Migrations**: Located in `etc/Migrations/core/`
@@ -76,8 +81,30 @@ nameVal := fn.Deref(series.Name, "")
 
 ### Test Naming
 ```go
+type ServiceTestSuite struct {
+    suite.Suite
+    mockRepo *MockRepository
+}
+
+func (suite *ServiceTestSuite) SetupSuite() {
+    suite.mockRepo = &MockRepository{}
+}
+
+// SetupSubTest runs before each s.Run() to reset mock state
+func (suite *ServiceTestSuite) SetupSubTest() {
+    suite.mockRepo.Reset()
+}
+
 func (suite *ServiceTestSuite) TestMethodName() {
-    suite.T().Run("describes the scenario", func(t *testing.T) {
+    // Use s.Run() instead of s.T().Run() to trigger SetupSubTest()
+    suite.Run("describes scenario A", func() {
+        suite.mockRepo.ExpectCall()
+        // Test implementation
+    })
+
+    suite.Run("describes scenario B", func() {
+        // Mock state is reset from previous test case
+        suite.mockRepo.ExpectOtherCall()
         // Test implementation
     })
 }
