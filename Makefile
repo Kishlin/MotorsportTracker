@@ -175,7 +175,7 @@ go-lint:
 go-run:
 	@docker-compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
 
-start: containers go-tidy run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test
+start: containers go-vendor run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test
 	@echo "All services should be running."
 	@echo "Run backend tests: \`make go-test\` (see Makefile for more options)."
 
