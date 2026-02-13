@@ -87,8 +87,10 @@ func main() {
 	handlersList.RegisterHandler(
 		seasonsImpls.ScrapeSeasonsForAllSeriesIntentName,
 		seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
-			seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
-			registry.GetIntentsQueue(),
+			seasons.NewScrapeSeasonsForAllSeriesUseCase(
+				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
+				seasonsImpls.NewSeasonsScrapper(registry.GetIntentsQueue()),
+			),
 		),
 	)
 	handlersList.RegisterHandler(

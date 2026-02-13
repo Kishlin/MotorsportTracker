@@ -79,8 +79,10 @@ func main() {
 	case seasonsImpls.ScrapeSeasonsForAllSeriesIntentName:
 		intent = seasonsImpls.NewScrapeSeasonsForAllSeriesIntent()
 		handler = seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
-			seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
-			registry.GetIntentsQueue(),
+			seasons.NewScrapeSeasonsForAllSeriesUseCase(
+				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
+				seasonsImpls.NewSeasonsScrapper(registry.GetIntentsQueue()),
+			),
 		)
 	case calendarImpls.ScrapeCalendarIntentName:
 		intent = calendarImpls.NewScrapCalendarIntent()
