@@ -1,4 +1,4 @@
-```plantuml
+@startuml
 
 cloud "Motorsportstats.com" as external
 
@@ -31,7 +31,7 @@ Memcached -down-> API
 
 API -right-> Next
 
-User -left-> Next
 Next -right-> User
+User -left-> Next
 
-```
+@enduml
