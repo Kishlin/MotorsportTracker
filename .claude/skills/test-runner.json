@@ -1,0 +1,33 @@
+{
+  "name": "test-runner",
+  "description": "Run Go tests inside the Docker container. Supports different scopes: all modules, a specific module (scrapping, gateway, shared), or a specific test suite pattern.",
+  "version": "1.0.0",
+  "parameters": {
+    "scope": {
+      "type": "string",
+      "description": "Test scope: all, scrapping, gateway, shared, or a specific package path",
+      "default": "all"
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Verbose output showing all test names",
+      "default": false
+    },
+    "run": {
+      "type": "string",
+      "description": "Run only tests matching this pattern (passed to -run flag)",
+      "default": ""
+    },
+    "pristine": {
+      "type": "boolean",
+      "description": "Clear test cache before running",
+      "default": false
+    }
+  },
+  "commands": [
+    {
+      "type": "bash",
+      "command": "./scripts/test-runner.sh {{scope}} {{verbose}} {{run}} {{pristine}}"
+    }
+  ]
+}

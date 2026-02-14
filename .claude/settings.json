@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(chmod:*)",
+      "Bash(docker compose:*)",
+      "Bash(./scripts/test-runner.sh:*)"
+      "Bash(./scripts/architecture-check.sh:*)",
+    ]
+  }
+}

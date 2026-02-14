@@ -1,0 +1,12 @@
+{
+  "name": "architecture-check",
+  "description": "Verify hexagonal architecture compliance: ensures domain layers do not import infrastructure packages.",
+  "version": "1.0.0",
+  "parameters": {},
+  "commands": [
+    {
+      "type": "bash",
+      "command": "./scripts/architecture-check.sh"
+    }
+  ]
+}
