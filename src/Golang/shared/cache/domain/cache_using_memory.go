@@ -2,6 +2,7 @@ package domain
 
 import "log/slog"
 
+// InMemoryCache is not thread-safe. Do not share instances across goroutines.
 type InMemoryCache struct {
 	cache map[string]map[string][]byte
 }
