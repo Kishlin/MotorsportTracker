@@ -40,7 +40,7 @@ func main() {
 
 	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err) //nolint:gosec // G705: CLI stderr output, not a web context
 		os.Exit(1)
 	}
 
@@ -54,7 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	slog.Info("Intent sent to the queue", "intent", subcommand)
+	slog.Info("Intent sent to the queue", "intent", subcommand) //nolint:gosec // G706: slog structured logging safely isolates the value in a field
 	os.Exit(0)
 }
 

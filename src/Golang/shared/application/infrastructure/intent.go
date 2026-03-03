@@ -69,7 +69,7 @@ func (c *BaseIntent) ToMessage(arguments []string, options map[string]string) (m
 
 	// Map all arguments to their configured names (validation ensures we have enough)
 	for i, arg := range c.Config.Arguments {
-		metadata[arg.Name] = arguments[i]
+		metadata[arg.Name] = arguments[i] //nolint:gosec // G602: bounds checked by validate() before this loop
 	}
 
 	// Only include options that are defined in the config

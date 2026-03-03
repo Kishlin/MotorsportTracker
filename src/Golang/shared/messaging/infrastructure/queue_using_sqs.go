@@ -16,9 +16,9 @@ type QueueConfig struct {
 	Endpoint     string // SQS endpoint URL (e.g., memory:// for memory, https://sqs.region.amazonaws.com for prod)
 	Region       string // AWS region (e.g., elasticmq for local, us-east-1 for prod)
 	QueueName    string // Name of the SQS queue
-	AccessKey    string // AWS access key
+	AccessKey    string //nolint:gosec // G117: config struct field, not an embedded secret
 	SecretKey    string // AWS secret key
-	SessionToken string // AWS session token (optional)
+	SessionToken string //nolint:gosec // G117: config struct field, not an embedded secret
 }
 
 // SQSQueue implements Queue interface using AWS SQS

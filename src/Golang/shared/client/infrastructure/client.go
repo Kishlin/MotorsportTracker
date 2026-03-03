@@ -32,7 +32,7 @@ func (c *Client) Get(endpoint string, headers map[string]string) ([]byte, error)
 		req.Header.Set(key, value)
 	}
 
-	resp, err := c.inner.Do(req)
+	resp, err := c.inner.Do(req) //nolint:gosec // G704: host is configured at construction, not user-controlled
 	if err != nil {
 		return []byte{}, fmt.Errorf("making request: %w", err)
 	}
