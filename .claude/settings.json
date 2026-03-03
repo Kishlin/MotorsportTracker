@@ -9,8 +9,8 @@
       "Bash(head:*)",
       "Bash(chmod:*)",
       "Bash(docker compose:*)",
-      "Bash(./scripts/test-runner.sh:*)"
-      "Bash(./scripts/architecture-check.sh:*)",
+      "Bash(./scripts/test-runner.sh:*)",
+      "Bash(./scripts/architecture-check.sh:*)"
     ]
   }
 }
