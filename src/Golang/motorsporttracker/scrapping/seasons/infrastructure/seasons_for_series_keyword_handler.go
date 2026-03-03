@@ -21,9 +21,9 @@ func NewScrapeSeasonsForSeriesKeywordHandler(useCase *domain.ScrapeSeasonsForSer
 
 // Handle processes the scrapping intent for seasons by keyword.
 func (h *ScrapeSeasonsForSeriesKeywordHandler) Handle(ctx context.Context, message messaging.Message) error {
-	seriesKeyword, ok := message.Metadata["series"]
-	if !ok || seriesKeyword == "" {
-		return fmt.Errorf("series search keywords is required")
+	seriesKeyword, err := messaging.RequireString(message, "series")
+	if err != nil {
+		return fmt.Errorf("getting params from message: %w", err)
 	}
 
 	return h.useCase.Execute(ctx, seriesKeyword)

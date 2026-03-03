@@ -10,26 +10,9 @@ Actionable issues identified during architecture review. Each includes the affec
 
 ---
 
-## 2. Weak Metadata Typing in Handlers
+## 2. ~~Weak Metadata Typing in Handlers~~ (Resolved)
 
-**Impact**: Runtime errors from typos in metadata keys. No compile-time safety.
-
-**Files**:
-- `src/Golang/motorsporttracker/scrapping/calendar/infrastructure/handler.go` — manual `message.Metadata["series"]` extraction
-- `src/Golang/motorsporttracker/scrapping/classification/infrastructure/handler.go` — same pattern
-- `src/Golang/motorsporttracker/scrapping/seasons/infrastructure/handler.go` — same pattern
-
-**Problem**: Every handler manually checks key presence, converts types (`strconv.Atoi`), and validates. A typo in a metadata key (e.g., `"serie"` vs `"series"`) silently fails at runtime.
-
-**Remediation**: Consider defining typed message structs per intent, or a small metadata parser utility that extracts and validates required fields with type conversion in one call. Example:
-
-```go
-// In shared or per-module
-func RequireString(msg Message, key string) (string, error)
-func RequireInt(msg Message, key string) (int, error)
-```
-
-This centralizes validation without over-abstracting.
+**Resolution**: Added `RequireString(msg, key)` and `RequireInt(msg, key)` helpers in `src/Golang/shared/messaging/infrastructure/metadata.go`. All four handlers (calendar, classification, seasons keyword, seasons ID) now use these helpers instead of manual metadata extraction. Tests in `metadata_test.go`.
 
 ---
 

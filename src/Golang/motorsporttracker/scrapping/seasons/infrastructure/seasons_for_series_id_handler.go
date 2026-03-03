@@ -21,9 +21,9 @@ func NewScrapeSeasonsForSeriesIDHandler(useCase *domain.ScrapeSeasonsForSeriesId
 
 // Handle processes the scrapping intent for a single season by identifier.
 func (h *ScrapeSeasonsForSeriesIDHandler) Handle(ctx context.Context, message messaging.Message) error {
-	seriesIdentifier, ok := message.Metadata["identifier"]
-	if !ok || seriesIdentifier == "" {
-		return fmt.Errorf("series identifier is required")
+	seriesIdentifier, err := messaging.RequireString(message, "identifier")
+	if err != nil {
+		return fmt.Errorf("getting params from message: %w", err)
 	}
 
 	return h.useCase.Execute(ctx, seriesIdentifier)
