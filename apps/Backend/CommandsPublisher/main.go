@@ -71,4 +71,3 @@ func printUsage() {
 	fmt.Println("  scrapping-publisher seasons \"Formula One\"")
 	fmt.Println("  scrapping-publisher events \"Formula One\" \"2025\"")
 }
-
