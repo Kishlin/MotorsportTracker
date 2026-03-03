@@ -78,6 +78,7 @@ motorsporttracker/
     shared/           # Shared repository helpers (Save, UpsertStats)
   dependencyinjection/
     infrastructure/   # ServicesRegistry (lazy-init DI container)
+  registration/       # Centralized handler + intent registration
 
 motorsportstats/
   connector/
@@ -100,15 +101,15 @@ shared/
 
 ### `apps/Backend/MotorsportTracker/` — CLI Application
 
-Direct command processing. Accepts subcommands (`series`, `seasons`, `events`, `classification`), creates the appropriate Intent + Handler, converts CLI args to a Message, and processes it immediately.
+Direct command processing. Accepts subcommands (`series`, `seasons`, `events`, `classification`), converts CLI args to a Message via the shared `registration.GetIntent()`, and processes it immediately via `registration.RegisterAllHandlers()`.
 
 ### `apps/Backend/CommandsPublisher/` — Queue Publisher
 
-Same subcommands as MotorsportTracker CLI, but instead of processing directly, converts intents to messages and publishes them to SQS.
+Same subcommands as MotorsportTracker CLI, but instead of processing directly, converts intents to messages via `registration.GetIntent()` and publishes them to SQS.
 
 ### `apps/Backend/CommandsProcessor/` — Queue Consumer
 
-Long-running process that polls SQS for messages. Registers handlers for all scraping intent types. Supports configurable worker count (`-workers` flag) and graceful shutdown on SIGINT/SIGTERM.
+Long-running process that polls SQS for messages. Registers all handlers via `registration.RegisterAllHandlers()`. Supports configurable worker count (`-workers` flag) and graceful shutdown on SIGINT/SIGTERM.
 
 ### `apps/Backend/DBMigrate/` — Migration Runner
 

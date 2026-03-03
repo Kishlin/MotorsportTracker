@@ -4,17 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
-	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
-	calendarImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/infrastructure"
-	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
-	classificationImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/infrastructure"
-	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
-	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
-	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
-	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/registration"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
@@ -38,72 +30,16 @@ func main() {
 	subcommand := os.Args[1]
 	args := os.Args[2:]
 
-	arguments, options := parseArgs(args)
+	arguments, options := application.ParseArgs(args)
 
 	registry := dependencyinjection.NewServicesRegistry()
 	defer registry.Close()
 
 	ctx := context.Background()
 
-	var intent application.Intent
-	var handler messaging.Handler
-
-	switch subcommand {
-	case seriesImpls.ScrapeSeriesIntentName:
-		intent = seriesImpls.NewScrapSeriesIntent()
-		handler = seriesImpls.NewScrapeSeriesHandler(
-			series.NewScrapeSeriesUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
-			),
-		)
-	case seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName:
-		intent = seasonsImpls.NewScrapeSeasonsForSeriesKeywordIntent()
-		handler = seasonsImpls.NewScrapeSeasonsForSeriesKeywordHandler(
-			seasons.NewScrapeSeasonsForSeriesKeywordUseCase(
-				seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
-					registry.GetMotorsportStatsGateway(ctx),
-					seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
-				),
-				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			),
-		)
-	case seasonsImpls.ScrapeSeasonsForSeriesIDIntentName:
-		intent = seasonsImpls.NewScrapeSeasonsForSeriesIDIntent()
-		handler = seasonsImpls.NewScrapeSeasonsForSeriesIDHandler(
-			seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
-			),
-		)
-	case seasonsImpls.ScrapeSeasonsForAllSeriesIntentName:
-		intent = seasonsImpls.NewScrapeSeasonsForAllSeriesIntent()
-		handler = seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
-			seasons.NewScrapeSeasonsForAllSeriesUseCase(
-				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
-				seasonsImpls.NewSeasonsScrapper(registry.GetIntentsQueue()),
-			),
-		)
-	case calendarImpls.ScrapeCalendarIntentName:
-		intent = calendarImpls.NewScrapCalendarIntent()
-		handler = calendarImpls.NewScrapeCalendarHandler(
-			calendar.NewScrapeCalendarUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
-				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			),
-		)
-	case classificationImpls.ScrapeClassificationIntentName:
-		intent = classificationImpls.NewScrapClassificationIntent()
-		handler = classificationImpls.NewScrapeClassificationHandler(
-			classification.NewScrapeClassificationUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
-				classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
-			),
-		)
-	default:
-		_, _ = fmt.Fprintf(os.Stderr, "Unknown subcommand: %s\n\n", subcommand)
+	intent, err := registration.GetIntent(subcommand)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "%v\n\n", err)
 		printUsage()
 		os.Exit(1)
 	}
@@ -114,7 +50,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	err = handler.Handle(ctx, message)
+	handlersList := messaging.NewHandlersList()
+	registration.RegisterAllHandlers(ctx, handlersList, registry)
+
+	err = handlersList.HandleMessage(ctx, message)
 
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "handling intent %s: %v\n", subcommand, err)
@@ -139,45 +78,4 @@ func printUsage() {
 	fmt.Println("  motorsport-tracker series")
 	fmt.Println("  motorsport-tracker seasons \"Formula One\"")
 	fmt.Println("  motorsport-tracker events \"Formula One\" \"2025\"")
-}
-
-// parseArgs converts command-line arguments into separate arguments and options.
-func parseArgs(args []string) (arguments []string, options map[string]string) {
-	arguments = make([]string, 0) // Initialize empty slice
-	options = make(map[string]string)
-
-	optionsEnded := false
-
-	for _, arg := range args {
-		// Handle the Unix convention: -- signals end of options
-		if arg == "--" {
-			optionsEnded = true
-			continue
-		}
-
-		if optionsEnded {
-			arguments = append(arguments, arg)
-			continue
-		}
-
-		if strings.HasPrefix(arg, "--") {
-			parts := strings.SplitN(arg[2:], "=", 2)
-			if len(parts) == 2 {
-				options[parts[0]] = parts[1]
-			} else {
-				options[parts[0]] = "true"
-			}
-		} else if strings.HasPrefix(arg, "-") {
-			if len(arg) > 2 && arg[2] == '=' {
-				options[arg[1:2]] = arg[3:]
-			} else {
-				options[arg[1:]] = "true"
-			}
-		} else {
-			// Not an option, treat as positional argument
-			arguments = append(arguments, arg)
-		}
-	}
-
-	return arguments, options
 }

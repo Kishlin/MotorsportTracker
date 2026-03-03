@@ -237,6 +237,21 @@ type IntentConfig struct {
 
 Flow: CLI args -> `Intent.ToMessage()` -> `messaging.Message{Type, Metadata}` -> Handler or SQS queue
 
+## Handler Registration
+
+Handler and intent registration is centralized in `src/Golang/motorsporttracker/registration/registration.go`. It exposes two public functions:
+
+```go
+func RegisterAllHandlers(ctx context.Context, handlersList *messaging.HandlersList, registry *dependencyinjection.ServicesRegistry)
+func GetIntent(name string) (application.Intent, error)
+```
+
+`RegisterAllHandlers` delegates to private per-module helpers (`registerSeriesHandlers`, `registerSeasonsHandlers`, etc.) that construct handlers with their use case dependencies from the `ServicesRegistry`.
+
+`GetIntent` maps a subcommand name to its intent instance.
+
+All three backend apps use these shared functions instead of duplicating handler/intent wiring.
+
 ## Dependency Injection (ServicesRegistry)
 
 `ServicesRegistry` provides lazy-initialized singleton services via `sync.Once`:

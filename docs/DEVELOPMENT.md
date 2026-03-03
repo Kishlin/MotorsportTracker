@@ -109,10 +109,10 @@ docker compose exec golang bash -c 'cd /app && go test ./src/Golang/motorsporttr
 5. **Create SQL migration** — `etc/Migrations/core/YYYYMMDDHHMMSS_create_<table>.up.sql`
    - Include main table + history table + trigger (see template below)
 
-6. **Register in applications**:
-   - Add handler registration in `apps/Backend/CommandsProcessor/main.go`
-   - Add intent in `apps/Backend/CommandsPublisher/main.go`
-   - Add subcommand case in `apps/Backend/MotorsportTracker/main.go`
+6. **Register handlers and intents** in `src/Golang/motorsporttracker/registration/registration.go`:
+   - Add a `register<Module>Handlers()` helper that constructs the handler(s) and registers them with the `HandlersList`
+   - Call it from `RegisterAllHandlers()`
+   - Add the intent case(s) to `GetIntent()`
 
 7. **Run migration**: `make run-dbmigrate-core && make run-dbmigrate-core.test`
 

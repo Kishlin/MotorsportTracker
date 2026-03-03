@@ -50,7 +50,7 @@ Missing env vars panic immediately in `ServicesRegistry`. No silent defaults for
 See [ISSUES.md](ISSUES.md) for the full list with file paths and remediation steps.
 
 Summary:
-1. **Handler/intent registration duplicated** across 3 main.go files
+1. ~~**Handler/intent registration duplicated** across 3 main.go files~~ (resolved — centralized in `registration/`)
 2. **Weak metadata typing** — `map[string]string` with manual parsing in every handler
 3. **580-line connector file** — inline JSON schemas should be externalized
 4. **`fmt.Println` in env.go** — should use `slog`

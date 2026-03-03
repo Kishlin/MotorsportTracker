@@ -10,14 +10,7 @@ import (
 	"time"
 
 	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/dependencyinjection/infrastructure"
-	calendar "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/domain"
-	calendarImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/calendar/infrastructure"
-	classification "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/domain"
-	classificationImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/classification/infrastructure"
-	seasons "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/domain"
-	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
-	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
-	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
+	"github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/registration"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
@@ -54,65 +47,9 @@ func main() {
 	// Start the processor with the specified parameters
 	fmt.Printf("Starting ScrappingProcessor with %d workers (poll interval: %s)\n", *workerCount, *pollInterval)
 
-	scrapeSeasonsForSeriesIdentifierUseCase := seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
-		registry.GetMotorsportStatsGateway(ctx),
-		seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
-	)
-
 	// Register handlers for scrapping intents
 	handlersList := messaging.NewHandlersList()
-
-	handlersList.RegisterHandler(
-		seriesImpls.ScrapeSeriesIntentName,
-		seriesImpls.NewScrapeSeriesHandler(
-			series.NewScrapeSeriesUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
-			),
-		),
-	)
-	handlersList.RegisterHandler(
-		seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName,
-		seasonsImpls.NewScrapeSeasonsForSeriesKeywordHandler(
-			seasons.NewScrapeSeasonsForSeriesKeywordUseCase(
-				scrapeSeasonsForSeriesIdentifierUseCase,
-				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			),
-		),
-	)
-	handlersList.RegisterHandler(
-		seasonsImpls.ScrapeSeasonsForSeriesIDIntentName,
-		seasonsImpls.NewScrapeSeasonsForSeriesIDHandler(scrapeSeasonsForSeriesIdentifierUseCase),
-	)
-	handlersList.RegisterHandler(
-		seasonsImpls.ScrapeSeasonsForAllSeriesIntentName,
-		seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
-			seasons.NewScrapeSeasonsForAllSeriesUseCase(
-				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
-				seasonsImpls.NewSeasonsScrapper(registry.GetIntentsQueue()),
-			),
-		),
-	)
-	handlersList.RegisterHandler(
-		calendarImpls.ScrapeCalendarIntentName,
-		calendarImpls.NewScrapeCalendarHandler(
-			calendar.NewScrapeCalendarUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
-				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
-			),
-		),
-	)
-	handlersList.RegisterHandler(
-		classificationImpls.ScrapeClassificationIntentName,
-		classificationImpls.NewScrapeClassificationHandler(
-			classification.NewScrapeClassificationUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
-				classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
-				classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
-			),
-		),
-	)
+	registration.RegisterAllHandlers(ctx, handlersList, registry)
 
 	// Create and start the worker
 	w := messaging.NewWorker(registry.GetIntentsQueue(), handlersList, *workerCount, *pollInterval)

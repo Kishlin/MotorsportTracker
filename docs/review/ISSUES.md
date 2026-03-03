@@ -4,22 +4,9 @@ Actionable issues identified during architecture review. Each includes the affec
 
 ---
 
-## 1. Handler/Intent Registration Duplicated Across Apps
+## 1. ~~Handler/Intent Registration Duplicated Across Apps~~ (Resolved)
 
-**Impact**: Maintenance burden — adding a new scraping operation requires identical changes in 3 files.
-
-**Files**:
-- `apps/Backend/MotorsportTracker/main.go` — switch on subcommand, wires handlers
-- `apps/Backend/CommandsProcessor/main.go` — registers all handlers in HandlersList
-- `apps/Backend/CommandsPublisher/main.go` — switch on subcommand, wires intents
-
-**Problem**: Each app independently instantiates handlers/intents with the same DI wiring. No shared registration function exists.
-
-**Remediation**: Create a shared registration module (e.g., `motorsporttracker/registration/`) that exposes:
-- `RegisterHandlers(handlersList, registry)` — registers all handlers with their use cases
-- `RegisterIntents()` — returns all available intents
-
-Each app calls these shared functions instead of duplicating the wiring. The `ServicesRegistry` is passed as a parameter.
+**Resolution**: Centralized in `src/Golang/motorsporttracker/registration/registration.go`. `RegisterAllHandlers()` delegates to private per-module helpers. `GetIntent()` maps subcommand names to intents. All three apps now call these shared functions. CLI arg parsing was also deduplicated into `shared/application/infrastructure/parse_args.go`.
 
 ---
 

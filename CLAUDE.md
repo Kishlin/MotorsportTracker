@@ -37,6 +37,7 @@ apps/
     Frontend/             # Next.js + Material-UI frontend
 src/Golang/
   motorsporttracker/      # Core scraping modules (series, seasons, calendar, classification)
+    registration/         # Centralized handler + intent registration
   motorsportstats/        # External API gateway (connector + gateway layers)
   shared/                 # Shared utilities (cache, database, messaging, crypto, env, fn)
 etc/
@@ -55,7 +56,7 @@ Legacy PHP code exists in `src/Backend/`, `apps/Backoffice/`, and parts of `apps
 | Doc | When to read |
 |-----|-------------|
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Understanding system components, data flow, module organization |
-| [PATTERNS.md](docs/PATTERNS.md) | Working with Use Cases, Repositories, Gateways, Handlers, Intents, DI |
+| [PATTERNS.md](docs/PATTERNS.md) | Working with Use Cases, Repositories, Gateways, Handlers, Intents, Registration, DI |
 | [CODE_STYLE.md](docs/CODE_STYLE.md) | Writing Go code, SQL migrations, tests |
 | [DEVELOPMENT.md](docs/DEVELOPMENT.md) | Environment setup, Make targets, adding new scraping ops or tables, debugging |
 
