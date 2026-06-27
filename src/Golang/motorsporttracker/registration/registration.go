@@ -25,24 +25,23 @@ func RegisterAllHandlers(ctx context.Context, handlersList *messaging.HandlersLi
 	registerClassificationHandlers(ctx, handlersList, registry)
 }
 
+var registeredIntents = map[string]application.Intent{
+	seriesImpls.ScrapeSeriesIntentName:                   seriesImpls.NewScrapSeriesIntent(),
+	seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName: seasonsImpls.NewScrapeSeasonsForSeriesKeywordIntent(),
+	seasonsImpls.ScrapeSeasonsForSeriesIDIntentName:      seasonsImpls.NewScrapeSeasonsForSeriesIDIntent(),
+	seasonsImpls.ScrapeSeasonsForAllSeriesIntentName:     seasonsImpls.NewScrapeSeasonsForAllSeriesIntent(),
+	calendarImpls.ScrapeCalendarIntentName:               calendarImpls.NewScrapCalendarIntent(),
+	classificationImpls.ScrapeClassificationIntentName:   classificationImpls.NewScrapClassificationIntent(),
+}
+
 // GetIntent returns the intent for a given subcommand name.
 func GetIntent(name string) (application.Intent, error) {
-	switch name {
-	case seriesImpls.ScrapeSeriesIntentName:
-		return seriesImpls.NewScrapSeriesIntent(), nil
-	case seasonsImpls.ScrapeSeasonsForSeriesKeywordIntentName:
-		return seasonsImpls.NewScrapeSeasonsForSeriesKeywordIntent(), nil
-	case seasonsImpls.ScrapeSeasonsForSeriesIDIntentName:
-		return seasonsImpls.NewScrapeSeasonsForSeriesIDIntent(), nil
-	case seasonsImpls.ScrapeSeasonsForAllSeriesIntentName:
-		return seasonsImpls.NewScrapeSeasonsForAllSeriesIntent(), nil
-	case calendarImpls.ScrapeCalendarIntentName:
-		return calendarImpls.NewScrapCalendarIntent(), nil
-	case classificationImpls.ScrapeClassificationIntentName:
-		return classificationImpls.NewScrapClassificationIntent(), nil
-	default:
+	intent, exists := registeredIntents[name]
+	if exists == false {
 		return nil, fmt.Errorf("unknown subcommand: %s", name)
 	}
+
+	return intent, nil
 }
 
 func registerSeriesHandlers(ctx context.Context, handlersList *messaging.HandlersList, registry *dependencyinjection.ServicesRegistry) {
