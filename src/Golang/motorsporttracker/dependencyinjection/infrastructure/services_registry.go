@@ -73,10 +73,6 @@ func (s *ServicesRegistry) GetMotorsportStatsGateway(ctx context.Context) *gatew
 		}
 
 		s.motorsportStatsGateway = gatewayImpls.NewGatewayUsingConnector(connector)
-
-		if s.motorsportStatsGateway == nil {
-			panic("unable to create motorsport stats gateway")
-		}
 	})
 
 	return s.motorsportStatsGateway
