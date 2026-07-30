@@ -3,7 +3,7 @@
 if [ $# -lt 2 ]
 then
     echo "Usage: $(basename "$0" "$1") COMMAND CHAMPIONSHIP"
-    echo "Example: $(basename "$0" "$1") \"docker-compose exec backoffice bin/console kishlin:motorsport-etl:season:scrap\" \"Formula One\""
+    echo "Example: $(basename "$0" "$1") \"docker compose exec backoffice bin/console kishlin:motorsport-etl:season:scrap\" \"Formula One\""
     exit 2
 fi
 

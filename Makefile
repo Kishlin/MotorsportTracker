@@ -21,7 +21,7 @@ docker-compose.yaml:
 	@docker volume create --name=cache;
 
 node_modules:
-	@docker-compose exec frontend npm install
+	@docker compose exec frontend npm install
 
 cache: $(CACHE)
 $(CACHE): .docker-cache
@@ -40,14 +40,14 @@ setup: .env.local docker-compose.yaml
 
 containers: setup $(CACHE)
 	@echo "Starting services"
-	@docker-compose up -d --remove-orphans
+	@docker compose up -d --remove-orphans
 
 stop:
-	@docker-compose down
+	@docker compose down
 
 clean:
 	@if [ -f "./docker-compose.yaml" ]; then \
-		docker-compose down; \
+		docker compose down; \
 	fi;
 	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
 
@@ -76,8 +76,8 @@ run-dbmigrate-client-cache run-dbmigrate-client-cache.test: DB=client-cache
 
 run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test:
 	@echo "Running Golang app DBMigrate for $(DB) $(ENV)"
-	@docker-compose exec postgres /bin/bash -c '(createdb -U $$POSTGRES_USER $(DB)-$(ENV) &>/dev/null && echo "Created database $(DB)-$(ENV)") || echo "Database $(DB)-$(ENV) already exists"'
-	@docker-compose exec \
+	@docker compose exec postgres /bin/bash -c '(createdb -U $$POSTGRES_USER $(DB)-$(ENV) &>/dev/null && echo "Created database $(DB)-$(ENV)") || echo "Database $(DB)-$(ENV) already exists"'
+	@docker compose exec \
 		-e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/$(DB)" \
 		-e DB_MIGRATE_USER=$(POSTGRES_USER) \
 		-e DB_MIGRATE_PASSWORD=$(POSTGRES_PASSWORD) \
@@ -93,7 +93,7 @@ build-publisher:
 
 run-publisher:
 	@echo "Running Golang app CommandsPublisher with ARGS=$(ARGS)"
-	@docker-compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher $(ARGS)
+	@docker compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher $(ARGS)
 
 build-processor:
 	@echo "Building Golang app CommandsProcessor"
@@ -101,7 +101,7 @@ build-processor:
 
 run-processor:
 	@echo "Running Golang app CommandsProcessor"
-	@docker-compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
+	@docker compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
 
 build-motorsport-tracker:
 	@echo "Building Golang MotorsportTracker"
@@ -109,7 +109,7 @@ build-motorsport-tracker:
 
 run-motorsport-tracker:
 	@echo "Running Golang MotorsportTracker with ARGS=$(ARGS)"
-	@docker-compose exec golang /app/apps/Backend/MotorsportTracker/build/motorsport-tracker $(ARGS)
+	@docker compose exec golang /app/apps/Backend/MotorsportTracker/build/motorsport-tracker $(ARGS)
 
 # Go workspace commands
 go-tidy:
@@ -147,7 +147,7 @@ go-lint:
 	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/...'
 
 go-run:
-	@docker-compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
+	@docker compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
 
 ##> Helpers
 .PHONY: frontend.sh frontend.build
@@ -165,25 +165,25 @@ db.client.connect db.client.dump db.client.dump.data db.client.fill: DB=client
 db.admin.connect db.admin.dump db.admin.dump.data db.admin.fill: DB=admin
 
 db.core.connect db.cache.connect db.client.connect db.admin.connect:
-	@docker-compose exec postgres /bin/bash -c 'psql -U $$POSTGRES_USER -d $(DB)-dev'
+	@docker compose exec postgres /bin/bash -c 'psql -U $$POSTGRES_USER -d $(DB)-dev'
 
 db.core.dump db.cache.dump db.client.dump db.admin.dump:
 	@echo "Dump DB schema to file"
-	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d $(DB)-dev --schema-only > /app/etc/Schema/create-$(DB).sql'
+	@docker compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER -d $(DB)-dev --schema-only > /app/etc/Schema/create-$(DB).sql'
 
 db.core.dump.data db.cache.dump.data db.client.dump.data db.admin.dump.data:
 	@echo "Dump DB data to file"
-	@docker-compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER --column-inserts --data-only -d $(DB)-dev > /app/etc/Data/data-$(DB).sql'
+	@docker compose exec postgres /bin/bash -c 'pg_dump -U $$POSTGRES_USER --column-inserts --data-only -d $(DB)-dev > /app/etc/Data/data-$(DB).sql'
 
 db.core.fill db.cache.fill db.client.fill db.admin.fill:
 	@echo "Filling DB $(DB) with data from dump"
-	@docker-compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d $(DB)-dev -f /app/etc/Data/data-$(DB).sql &>/dev/null'
+	@docker compose exec postgres /bin/bash -c 'psql -q -U $$POSTGRES_USER -d $(DB)-dev -f /app/etc/Data/data-$(DB).sql &>/dev/null'
 
 frontend.sh:
-	@docker-compose exec node sh
+	@docker compose exec node sh
 
 frontend.build:
-	@docker-compose exec node npm run build
+	@docker compose exec node npm run build
 
 ##> Prod
 
@@ -211,7 +211,7 @@ tests.golang:
 
 tests.frontend:
 	@echo "Running Tests for the Frontend"
-	@docker-compose exec frontend npm run test
+	@docker compose exec frontend npm run test
 	@echo ""
 
 tests: tests.golang tests.frontend
@@ -221,7 +221,7 @@ tests: tests.golang tests.frontend
 .PHONY: eslint complete-analysis.back complete-analysis.front complete-analysis
 
 eslint:
-	@docker-compose exec frontend npm run lint
+	@docker compose exec frontend npm run lint
 
 complete-analysis.front: eslint tests.frontend
 complete-analysis: complete-analysis.back complete-analysis.front

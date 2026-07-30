@@ -4,7 +4,7 @@
 
 1. Copy the Docker Compose template:
    ```bash
-   make setup   # Creates .env.local and docker-compose.yaml from .dist
+   make setup   # Creates .env.local and docker compose.yaml from .dist
    ```
 
 2. Start all services:

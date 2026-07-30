@@ -61,7 +61,7 @@ Alternatively, you can install the project step by step:
 3. Create a docker volume named cache (or otherwise, but edit the `docker-compose.yaml` accordingly).
 4. (Optional) The `docker-compose.yaml` file isn't versioned. Modify it to your own needs.
 5. (Optional) Override the `.env` variables in a `.env.local` file, also not versioned.
-6. Up the containers `docker-compose up -d`. Frontend dependencies will be installed then, before the servers are started.
+6. Up the containers `docker compose up -d`. Frontend dependencies will be installed then, before the servers are started.
 7. `make vendor` and install backend dependencies.
 8. `make db.reload` will create the database schema from the dump file in `etc/Schema/create.sql`
 9. `make db.reload.test` will create the specific database for tests.
