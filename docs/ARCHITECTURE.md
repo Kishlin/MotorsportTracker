@@ -101,7 +101,9 @@ shared/
 
 ### `apps/Backend/MotorsportTracker/` — CLI Application
 
-Direct command processing. Accepts subcommands (`series`, `seasons`, `events`, `classification`), converts CLI args to a Message via the shared `registration.GetIntent()`, and processes it immediately via `registration.RegisterAllHandlers()`.
+Direct command processing. Accepts the registered intent names as subcommands — `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification` — converts CLI args to a Message via the shared `registration.GetIntent()`, and processes it immediately via `registration.RegisterAllHandlers()`.
+
+Note that `main.go`'s built-in help text still advertises the older bare names (`series`, `seasons`, `events`); those are not registered and fail with `unknown subcommand`.
 
 ### `apps/Backend/CommandsPublisher/` — Queue Publisher
 
@@ -139,6 +141,8 @@ Located at `apps/MotorsportTracker/Frontend/`. Next.js application with:
 
 - **core-dev / core-test**: Primary data store with scraped motorsport data
 - **client-cache-dev / client-cache-test**: Cache for external API responses (connector cache)
+
+Migrations for these live in `etc/Migrations/core/` and `etc/Migrations/client-cache/` — the lowercase directories. The capitalised `Core/`, `Cache/`, `Client/` and `Admin/` directories are PHP-era leftovers and are never executed.
 
 ### Client Cache (Filesystem)
 

@@ -45,3 +45,7 @@ test.php
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 ###< symfony/phpunit-bridge ###
+
+###> claude code ###
+.claude/settings.local.json
+###< claude code ###

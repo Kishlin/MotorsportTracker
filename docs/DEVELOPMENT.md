@@ -41,9 +41,11 @@
 | `make build-motorsport-tracker` | Build MotorsportTracker CLI |
 | `make build-dbmigrate` | Build DBMigrate |
 | `make run-processor` | Run CommandsProcessor (queue consumer) |
-| `make run-publisher ARGS="series"` | Publish a scraping intent to the queue |
-| `make run-motorsport-tracker ARGS="series"` | Run a scraping command directly |
-| `make go-run ARGS="series"` | Run MotorsportTracker via `go run` |
+| `make run-publisher ARGS="scrape:series"` | Publish a scraping intent to the queue |
+| `make run-motorsport-tracker ARGS="scrape:series"` | Run a scraping command directly |
+| `make go-run ARGS="scrape:series"` | Run MotorsportTracker via `go run` |
+
+The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. The bare forms (`series`, `events`) printed by the CLI's own help text in `apps/Backend/MotorsportTracker/main.go` are not registered and return `unknown subcommand`.
 
 ### Database Operations
 
@@ -92,8 +94,9 @@ docker compose exec golang bash -c 'cd /app && go test ./src/Golang/motorsporttr
 
 ## Adding a New Scraping Operation
 
-1. **Create the domain intent** — `src/Golang/motorsporttracker/scrapping/<module>/domain/intent.go`
+1. **Create the intent** — `src/Golang/motorsporttracker/scrapping/<module>/infrastructure/intent.go`
    - Define intent name constant and `IntentConfig` with arguments/options
+   - Intents are **infrastructure**, not domain — they build a `messaging.Message`
 
 2. **Create the domain use case** — `src/Golang/motorsporttracker/scrapping/<module>/domain/use_case.go`
    - Define repository interfaces needed
