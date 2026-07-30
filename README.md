@@ -1,8 +1,8 @@
 # Motorsport Tracker
 [![Symfony](https://img.shields.io/badge/Symfony-v6.0-blue.svg)](https://Symfony.com/)
 [![React](https://img.shields.io/badge/React-v17.0-orange.svg)](https://symfony.com/)
-[![Docker](https://img.shields.io/badge/Docker-v20.10-yellowgreen.svg)](https://Symfony.com/) 
-[![Docker-Compose](https://img.shields.io/badge/DockerCompose-v1.29-blueviolet.svg)](https://symfony.com/)
+[![Golang](https://img.shields.io/badge/Golang-v1.26-blue.svg)](https://golang.org/)
+[![Docker](https://img.shields.io/badge/Docker-v29.6-yellowgreen.svg)](https://www.docker.com/)
 
 [![licence](https://img.shields.io/badge/licence-MIT-green.svg)](https://github.com/Kishlin/MotorsportTracker/blob/master/LICENSE.md)
 
