@@ -46,11 +46,56 @@ func (w *Worker) Stop() {
 	slog.Info("Worker stopped")
 }
 
+// maxBackoff caps the wait between polls after consecutive receive failures.
+const maxBackoff = 60 * time.Second
+
+// backoffFor returns how long to wait after consecutiveErrors failed receives:
+// the poll interval doubled once per additional failure, capped at maxBackoff.
+func (w *Worker) backoffFor(consecutiveErrors int) time.Duration {
+	if w.pollInterval <= 0 {
+		return maxBackoff
+	}
+
+	backoff := w.pollInterval
+	for i := 1; i < consecutiveErrors; i++ {
+		if backoff >= maxBackoff {
+			return maxBackoff
+		}
+
+		backoff *= 2
+	}
+
+	if backoff > maxBackoff {
+		return maxBackoff
+	}
+
+	return backoff
+}
+
+// wait sleeps for the given duration, returning false if the worker was asked
+// to stop first. Backoff can reach a minute, so the wait must stay interruptible
+// or Stop() would block for that long.
+func (w *Worker) wait(ctx context.Context, duration time.Duration) bool {
+	timer := time.NewTimer(duration)
+	defer timer.Stop()
+
+	select {
+	case <-w.stopChan:
+		return false
+	case <-ctx.Done():
+		return false
+	case <-timer.C:
+		return true
+	}
+}
+
 // runWorker continuously polls for messages and processes them
 func (w *Worker) runWorker(ctx context.Context, id int) {
 	defer w.wg.Done()
 
 	slog.Info("Worker started", "id", id)
+
+	consecutiveErrors := 0
 
 	for {
 		select {
@@ -61,14 +106,30 @@ func (w *Worker) runWorker(ctx context.Context, id int) {
 			// Poll for messages
 			messages, err := w.queue.Receive(10) // Process up to 10 messages at a time
 			if err != nil {
-				slog.Error("Error receiving messages", "err", err)
-				time.Sleep(w.pollInterval)
+				consecutiveErrors++
+				backoff := w.backoffFor(consecutiveErrors)
+
+				slog.Error("Error receiving messages",
+					"err", err, "id", id,
+					"consecutiveErrors", consecutiveErrors, "retryIn", backoff)
+
+				if w.wait(ctx, backoff) == false {
+					slog.Info("Worker stopped", "id", id)
+					return
+				}
+
 				continue
 			}
 
+			consecutiveErrors = 0
+
 			if len(messages) == 0 {
 				// No messages, wait before polling again
-				time.Sleep(w.pollInterval)
+				if w.wait(ctx, w.pollInterval) == false {
+					slog.Info("Worker stopped", "id", id)
+					return
+				}
+
 				continue
 			}
 

@@ -88,6 +88,84 @@ func TestIntegration_Worker(t *testing.T) {
 	suite.Run(t, new(WorkerIntegrationTestSuite))
 }
 
+type WorkerBackoffUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestBackoffDoublesThenCaps() {
+	worker := NewWorker(nil, nil, 1, time.Second)
+
+	expected := map[int]time.Duration{
+		1:  1 * time.Second,
+		2:  2 * time.Second,
+		3:  4 * time.Second,
+		4:  8 * time.Second,
+		5:  16 * time.Second,
+		6:  32 * time.Second,
+		7:  maxBackoff,
+		8:  maxBackoff,
+		50: maxBackoff,
+	}
+
+	for consecutiveErrors, want := range expected {
+		require.Equal(suite.T(), want, worker.backoffFor(consecutiveErrors),
+			"consecutiveErrors=%d", consecutiveErrors)
+	}
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestBackoffNeverExceedsCap() {
+	// A poll interval already above the cap must not be doubled past it.
+	worker := NewWorker(nil, nil, 1, 5*time.Minute)
+	require.Equal(suite.T(), maxBackoff, worker.backoffFor(1))
+	require.Equal(suite.T(), maxBackoff, worker.backoffFor(10))
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestBackoffHandlesNonPositiveInterval() {
+	// A misconfigured interval must not produce a zero backoff and a tight retry loop.
+	worker := NewWorker(nil, nil, 1, 0)
+	require.Equal(suite.T(), maxBackoff, worker.backoffFor(1))
+
+	worker = NewWorker(nil, nil, 1, -time.Second)
+	require.Equal(suite.T(), maxBackoff, worker.backoffFor(3))
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestWaitReturnsTrueWhenTimerElapses() {
+	worker := NewWorker(nil, nil, 1, time.Millisecond)
+
+	require.True(suite.T(), worker.wait(context.Background(), time.Millisecond))
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestWaitIsInterruptedByStop() {
+	worker := NewWorker(nil, nil, 1, time.Millisecond)
+
+	start := time.Now()
+	go func() {
+		time.Sleep(10 * time.Millisecond)
+		close(worker.stopChan)
+	}()
+
+	require.False(suite.T(), worker.wait(context.Background(), time.Minute))
+	require.Less(suite.T(), time.Since(start), 5*time.Second, "wait should abort on stop, not run the full minute")
+}
+
+func (suite *WorkerBackoffUnitTestSuite) TestWaitIsInterruptedByContext() {
+	worker := NewWorker(nil, nil, 1, time.Millisecond)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	start := time.Now()
+	go func() {
+		time.Sleep(10 * time.Millisecond)
+		cancel()
+	}()
+
+	require.False(suite.T(), worker.wait(ctx, time.Minute))
+	require.Less(suite.T(), time.Since(start), 5*time.Second, "wait should abort on context cancellation")
+}
+
+func TestUnit_WorkerBackoff(t *testing.T) {
+	suite.Run(t, new(WorkerBackoffUnitTestSuite))
+}
+
 // Spy handler for testing
 type spyHandler struct {
 	called   bool
