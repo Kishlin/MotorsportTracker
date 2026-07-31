@@ -19,7 +19,9 @@ A migration written into `Core/` is never executed and produces no error — the
 
 ## Naming
 
-`YYYYMMDDHHMMSS_<verb>_<subject>.up.sql`, always paired with a `.down.sql`. Generate the timestamp with `date -u +%Y%m%d%H%M%S` rather than inventing one; `golang-migrate` orders strictly by that prefix, and a timestamp below an already-applied migration will not run.
+`YYYYMMDDHHMMSS_<verb>_<subject>.up.sql`. Generate the timestamp with `date -u +%Y%m%d%H%M%S` rather than inventing one; `golang-migrate` orders strictly by that prefix, and a timestamp below an already-applied migration will not run.
+
+**Migrations here are forward-only.** All 13 files in `core/` and all 4 in `client-cache/` are `.up.sql`; there is not a single `.down.sql` in either directory. Do not add one unless asked — a lone down migration implies a rollback path the rest of the project does not have.
 
 ## Column conventions
 

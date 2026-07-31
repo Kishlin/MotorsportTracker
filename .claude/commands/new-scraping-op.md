@@ -103,7 +103,7 @@ Return early with a `slog.Debug` when the slice is empty, and log `stats.Inserte
 
 Write to `etc/Migrations/core/` — **lowercase**. The capitalised `Core/` directory is dead PHP-era code and is never executed. Use the table + `_history` table + trigger template in `etc/Migrations/CLAUDE.md`.
 
-Create both `.up.sql` and `.down.sql`.
+`.up.sql` only — this project's migrations are forward-only, with no `.down.sql` anywhere.
 
 ## 6. Register
 
