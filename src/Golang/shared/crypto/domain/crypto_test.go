@@ -1,4 +1,4 @@
-package doman
+package domain
 
 import (
 	"testing"
