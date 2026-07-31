@@ -1,4 +1,4 @@
-module github.com/kishlin/MotorsportTracker/apps/Backend/CommandsPublishers
+module github.com/kishlin/MotorsportTracker/apps/Backend/CommandsPublisher
 
 go 1.25.1
 
