@@ -1,0 +1,174 @@
+{
+  "type": "object",
+  "properties": {
+    "season": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "year": {
+          "type": ["number", "null"]
+        },
+        "endYear": {
+          "type": ["number", "null"]
+        }
+      },
+      "required": [
+        "uuid",
+        "name",
+        "year",
+        "endYear"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "name": {
+            "type": ["string", "null"]
+          },
+          "shortName": {
+            "type": ["string", "null"]
+          },
+          "shortCode": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": ["string", "null"]
+          },
+          "startDate": {
+            "type": ["number", "null"]
+          },
+          "startTimeUtc": {
+            "type": ["number", "null"]
+          },
+          "endDate": {
+            "type": ["number", "null"]
+          },
+          "endTimeUtc": {
+            "type": ["number", "null"]
+          },
+          "venue": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string"
+              },
+              "name": {
+                "type": ["string", "null"]
+              },
+              "shortName": {
+                "type": ["string", "null"]
+              },
+              "shortCode": {
+                "type": ["string", "null"]
+              },
+              "picture": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "uuid",
+              "name",
+              "shortName",
+              "shortCode"
+            ]
+          },
+          "country": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string"
+              },
+              "name": {
+                "type": ["string", "null"]
+              },
+              "picture": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "uuid",
+              "name",
+              "picture"
+            ]
+          },
+          "sessions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": ["string", "null"]
+                },
+                "shortName": {
+                  "type": ["string", "null"]
+                },
+                "shortCode": {
+                  "type": ["string", "null"]
+                },
+                "status": {
+                  "type": ["string", "null"]
+                },
+                "hasResults": {
+                  "type": ["boolean", "null"]
+                },
+                "startTime": {
+                  "type": ["number", "null"]
+                },
+                "startTimeUtc": {
+                  "type": ["number", "null"]
+                },
+                "endTime": {
+                  "type": ["number", "null"]
+                },
+                "endTimeUtc": {
+                  "type": ["number", "null"]
+                }
+              },
+              "required": [
+                "uuid",
+                "name",
+                "shortName",
+                "shortCode",
+                "status",
+                "hasResults",
+                "startTime",
+                "startTimeUtc"
+              ]
+            }
+          }
+        },
+        "required": [
+          "uuid",
+          "name",
+          "shortName",
+          "shortCode",
+          "status",
+          "startDate",
+          "startTimeUtc",
+          "endDate",
+          "endTimeUtc",
+          "venue",
+          "country",
+          "sessions"
+        ]
+      }
+    }
+  },
+  "required": [
+    "season",
+    "events"
+  ]
+}
