@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/joho/godotenv"
 
@@ -15,6 +16,21 @@ import (
 var allowedEnvs = []string{"dev", "tests", "production"}
 
 const appEnvKey = "APP_ENV"
+
+// bootstrapDebug reports how the environment was resolved, before slog exists.
+//
+// LoadEnv runs ahead of logger.SetupSlog in every app, so slog.Debug here would
+// be swallowed by the default Info-level handler and never reach the output.
+// LOG_LEVEL is therefore read straight from the process environment — not from
+// the .env files, which have not been loaded yet at this point — and the message
+// goes to stderr so it never mixes into a command's real stdout.
+func bootstrapDebug(format string, args ...any) {
+	if strings.ToLower(os.Getenv("LOG_LEVEL")) != "debug" {
+		return
+	}
+
+	_, _ = fmt.Fprintf(os.Stderr, format+"\n", args...)
+}
 
 func LoadEnv() (err error) {
 	env := getEnv()
@@ -30,7 +46,7 @@ func LoadEnv() (err error) {
 		}
 	}
 
-	fmt.Println("Project Dir: " + projectDir)
+	bootstrapDebug("Resolved project dir: %s", projectDir)
 
 	// Env vars are not overridden, so we need to load prioritized files first
 	_ = godotenv.Load(projectDir + "/.env." + env + ".local")
@@ -38,7 +54,7 @@ func LoadEnv() (err error) {
 	_ = godotenv.Load(projectDir + "/.env.local")
 	_ = godotenv.Load(projectDir + "/.env")
 
-	fmt.Println("Loaded environment:", env)
+	bootstrapDebug("Loaded environment: %s", env)
 
 	return nil
 }
@@ -80,7 +96,7 @@ func findProjectDir() (string, error) {
 }
 
 func exists(path string) (bool, error) {
-	fmt.Println("Checking existence of .env file:", path)
+	bootstrapDebug("Checking existence of .env file: %s", path)
 	_, err := os.Stat(path)
 	if err == nil {
 		return true, nil

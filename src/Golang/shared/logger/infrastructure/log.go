@@ -12,7 +12,9 @@ func SetupSlog() {
 		AddSource: true,
 	}
 
-	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, opts)))
+	// Logs go to stderr, matching slog's own default and leaving stdout free for
+	// each app's actual output — the CLI's help text and command results.
+	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, opts)))
 
 	slog.Info("Log handler set up", "level", opts.Level.Level().String())
 }
