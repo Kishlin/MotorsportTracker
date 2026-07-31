@@ -68,6 +68,14 @@ Run via `./scripts/test-runner.sh <scope>` (the `test-runner` skill documents th
 
 ## Workspace
 
-Five modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
+Six modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
 
-The `CommandsPublisher` directory declares module path `.../apps/Backend/CommandsPublisher**s**` — a typo in its `go.mod`. Harmless today because nothing imports it, but do not copy the pattern.
+`apps/Backend/MotorsportTracker` is absent from `go-tidy`, `go-test`, `go-lint` and `scripts/test-runner.sh`, which is why its `go.mod` carries no `require` block and its `go.sum` is empty — it compiles only because `go.work` resolves `src/Golang` and the root `vendor/` supplies the rest. Do not copy it when adding an app; `CommandsProcessor` and `ApiCanary` have the complete wiring.
+
+## Schema validation sits below the cache
+
+`ConnectorUsingClient.validate()` is the only place the embedded JSON Schemas are enforced, and the caching decorators wrap it. A hit in `DatabaseCache` or `FileSystemCache` therefore returns bytes that were never validated, so the application path cannot detect upstream drift while the caches are warm. Do not "fix" this by validating in the decorator — re-checking bytes that already passed once buys nothing.
+
+Drift detection is `apps/Backend/ApiCanary` instead, which builds `NewConnectorUsingClient` directly with no decorators. If you change a schema or an endpoint constant, run `make run-api-canary` to confirm the live API still agrees.
+
+Note the schemas do not set `additionalProperties: false`, so validation is blind to fields motorsportstats adds; the canary reads the same `schemas/*.json` off disk to diff payload keys and reports those separately as warnings.

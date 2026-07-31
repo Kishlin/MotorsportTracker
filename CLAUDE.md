@@ -10,6 +10,7 @@ make go-build                   # Build all Go applications
 make go-test                    # Run all Go tests across all modules
 make go-lint                    # Lint with golangci-lint
 make go-run ARGS="scrape:series"  # Run the MotorsportTracker CLI directly
+make run-api-canary             # Check the live API against the connector schemas
 ```
 
 Go commands run inside the `golang` container. The CLI subcommand is the **full intent name** — `scrape:series`, not `series`.
@@ -31,6 +32,7 @@ apps/
     CommandsProcessor/    # Queue consumer (processes scraping messages)
     CommandsPublisher/    # Queue publisher (sends scraping intents to SQS)
     DBMigrate/            # Database migration runner (golang-migrate)
+    ApiCanary/            # Live API schema-drift check (no DB, no queue)
   MotorsportTracker/
     Frontend/             # Next.js + Material-UI frontend
 src/Golang/
@@ -42,7 +44,7 @@ etc/
   Migrations/             # SQL migrations — lowercase core/ and client-cache/ only
   ConnectorCache/         # Filesystem cache for API responses
 docs/                     # PlantUML diagrams and documentation
-go.work                   # Go workspace (5 modules)
+go.work                   # Go workspace (6 modules)
 ```
 
 ## Scoped Instructions

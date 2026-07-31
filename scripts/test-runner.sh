@@ -10,7 +10,7 @@ PRISTINE="${4:-false}"
 
 case "$SCOPE" in
   all)
-    TARGETS="./src/Golang/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/..."
+    TARGETS="./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/..."
     ;;
   scrapping)
     TARGETS="./src/Golang/motorsporttracker/scrapping/..."

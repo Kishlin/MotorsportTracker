@@ -46,11 +46,11 @@ func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoin
 
 	resp, err := c.client.Get(url, headers)
 	if err != nil {
-		return []byte{}, fmt.Errorf("getting series: %w", err)
+		return []byte{}, fmt.Errorf("getting %s: %w", url, err)
 	}
 
 	if err := c.validate(ctx, resp, schema); err != nil {
-		return []byte{}, fmt.Errorf("validating series data: %w", err)
+		return []byte{}, fmt.Errorf("validating response from %s: %w", url, err)
 	}
 
 	return resp, nil

@@ -2,7 +2,7 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-07-30: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below.
+Status as of 2026-08-01: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 11–14 are open; 12–14 were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
 
 ---
 
@@ -120,3 +120,95 @@ Both pass in isolation, and under `-count=5` within their own package. Reproduce
 2. Or give each suite its own PostgreSQL schema and set `search_path` per connection, keeping parallelism.
 
 Option 1 matches the project's "simplest approach first" principle.
+
+---
+
+## 12. Inverted `exists` Check Means Nationalities Are Never Saved
+
+Found 2026-08-01. Open.
+
+**Impact**: `countries` is never populated from classification payloads, so driver nationalities are silently dropped. No error, no warning.
+
+Scope is narrower than it first looks: `uniqueNationalities` is passed to `SaveCountries` (line 129) and nowhere else — nothing in this repository resolves a nationality back to an ID, so no foreign key is left dangling and no row references a missing country. The loss is that `countries` only ever receives the **event** countries written by the calendar path (`save_calendar_repository.go:62`). A driver whose nationality never hosts an event is absent from the table entirely.
+
+**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go:65-68`
+
+**Problem**: the dedup branch is inverted.
+
+```go
+if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists {
+	nationalitiesUUIDs[classificationDetails.Nationality.UUID] = struct{}{}
+	uniqueNationalities = append(uniqueNationalities, classificationDetails.Nationality)
+}
+```
+
+`nationalitiesUUIDs` starts empty (line 47) and is written **only inside this branch**, so `exists` is false on every iteration and the body never runs. `uniqueNationalities` is therefore always empty when it reaches `shared.SaveCountries` at line 129, which returns without doing anything.
+
+The drivers block twelve lines above (line 53) is the correct form of the same pattern — `exists == false` — which is what makes this a plain typo rather than a design choice. `src/Golang/CLAUDE.md` mandates the explicit `== false` comparison precisely because a bare `exists` reads as plausible.
+
+**Remediation**: `if _, exists := ...; exists == false {`. One character class. Worth adding a repository test asserting a non-zero `countries` count after saving a classification, since nothing currently covers it.
+
+---
+
+## 13. A Driver Can Only Be Linked to One Car Per Session
+
+Found 2026-08-01. Open.
+
+**Impact**: missing `entry_drivers` rows in multi-driver series. Affects endurance racing specifically — the case the schema was designed for.
+
+**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go:53-62`
+
+**Problem**: the per-car driver list is built **inside** the global driver dedup.
+
+```go
+for _, driver := range classificationDetails.Drivers {
+	if _, exists := driversUUIDs[driver.UUID]; exists == false {
+		driversUUIDs[driver.UUID] = struct{}{}
+		uniqueDrivers = append(uniqueDrivers, driver)
+		// ... driverUUIDsPerCarNumbers[carNumber] = append(...)  ← also gated by the check above
+	}
+}
+```
+
+The two maps answer different questions. `driversUUIDs` deduplicates the driver rows to insert — correctly global to the session. `driverUUIDsPerCarNumbers` records which drivers sat in which car — that is per car, and must not be suppressed just because the driver was already seen on another entry.
+
+So if car 7 lists drivers A, B, C and car 8 lists A, D, E, then car 8 gets only D and E: the A→car 8 link is silently dropped. First car to mention a driver wins. `saveEntryDrivers` (line 601) then writes an incomplete set.
+
+**Remediation**: lift the `driverUUIDsPerCarNumbers` append out of the `if`, leaving only `driversUUIDs`/`uniqueDrivers` inside it. `entry_drivers` has `UNIQUE(entry, driver)` so a repeat within one car is absorbed by the upsert. `save_classification_repository_test.go:331` (`complexClassification`) already builds a multi-driver fixture and asserts 10 `entry_drivers` rows — extend it with a driver shared across two entries.
+
+---
+
+## 14. Event Hash Is Built From Venue Fields, So Event Renames Never Persist
+
+Found 2026-08-01. Open.
+
+**Impact**: an event renamed upstream is never updated in `events`. Silent — the upsert reports the row as unchanged.
+
+**File**: `src/Golang/motorsporttracker/scrapping/calendar/infrastructure/save_calendar_repository.go:179-187`
+
+**Problem**: the hash is computed from the **venue's** name fields while the row stores the **event's**.
+
+```go
+nameVal := fn.Deref(event.Venue.Name, "")
+shortNameVal := fn.Deref(event.Venue.ShortName, "")
+shortCodeVal := fn.Deref(event.Venue.ShortCode, "")
+
+hash := crypto.Hash(fmt.Sprintf("...", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, ...))
+rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, ...})
+```
+
+`shared.Save()` emits `WHERE hash IS DISTINCT FROM EXCLUDED.hash`, so a renamed event produces an identical hash and the `UPDATE` is skipped. Only a venue change, a status change or a reschedule can ever refresh an event's stored name.
+
+This is copy-paste from the venue loop at lines 116-118, where `fn.Deref(venue.Name, ...)` is correct. The sessions loop at lines 220-222 gets it right too, leaving the events loop as the only one reading the wrong struct.
+
+**Remediation**: `event.Name`, `event.ShortName`, `event.ShortCode`.
+
+The fix is retroactive-unsafe on its own: existing rows carry venue-derived hashes, so renames already missed stay missed until the stored hash changes for some other reason. A one-off `UPDATE events SET hash = ''` before the next scrape forces every row to be rewritten.
+
+### Secondary: the file contradicts itself on whether `event.Venue` can be nil
+
+Line 162 guards `if event.Venue != nil` before the ID lookup; lines 179-181 then dereference it unguarded. One of the two is wrong.
+
+Today the guard is the redundant one, not the deref: `calendar.json` lists `venue` in the event `required` array **and** types it `"object"` (not `["object", "null"]`), so a payload that reaches `SaveCalendar` through `ConnectorUsingClient` has already been rejected if a venue were missing or null. The panic is therefore unreachable via the validated path — worth recording as latent rather than as a live crash.
+
+It becomes reachable if the schema is relaxed, or through a `CachedConnector` hit serving bytes stored before the schema required a venue, since cached payloads are never re-validated (see the Caching section of [PATTERNS.md](../PATTERNS.md)). Applying the remediation above removes the venue access from this loop entirely and the question disappears with it.

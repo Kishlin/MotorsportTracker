@@ -310,3 +310,17 @@ The `CachedConnector` wraps any `Connector` with a `Cache`. Multiple `CachedConn
 3. Optionally wrapped with `CachedConnector(FileSystemCache)` — Local file cache (when `USE_FS_CACHE=true`)
 
 The outermost cache is checked first. On miss, it falls through to the inner layer.
+
+### Validation sits below the cache
+
+Schema validation happens in `ConnectorUsingClient.doGet` — step 1, the innermost layer. A cache hit at step 2 or 3 returns bytes straight to the gateway, so **cached payloads are never validated**. Only a request that reaches the network is checked against the schemas.
+
+That is the right trade-off for scraping: bytes that came from the cache passed validation when they were first fetched, and re-checking them costs time for nothing. The consequence to remember is that the schemas cannot serve as an alarm for upstream API changes — with warm caches, drift is invisible to every application path.
+
+Detecting drift is `apps/Backend/ApiCanary`, which builds the connector without any decorator so every call reaches the live API:
+
+```go
+conn := connectorImpls.NewConnectorUsingClient(clientImpls.NewClient(os.Getenv("REMOTE_API_HOST")))
+```
+
+Note this is also the only way to get a gateway without a database — `ServicesRegistry.GetMotorsportStatsGateway` reaches `GetClientCacheDatabase` to build the `DatabaseCache`, and panics when `POSTGRES_CLIENT_CACHE_URL` is unset.

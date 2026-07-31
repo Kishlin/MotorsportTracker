@@ -22,7 +22,7 @@ Arguments are **positional and all-or-nothing**: to reach a later argument you m
 
 ## Scope targets
 
-- `all` → `src/Golang/...` plus the DBMigrate, CommandsProcessor and CommandsPublisher apps
+- `all` → `src/Golang/...` plus the ApiCanary, DBMigrate, CommandsProcessor and CommandsPublisher apps
 - `scrapping` → `src/Golang/motorsporttracker/scrapping/...`
 - `gateway` → `src/Golang/motorsportstats/...`
 - `shared` → `src/Golang/shared/...`

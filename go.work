@@ -1,6 +1,7 @@
 go 1.25.1
 
 use (
+	./apps/Backend/ApiCanary
 	./apps/Backend/CommandsProcessor
 	./apps/Backend/CommandsPublisher
 	./apps/Backend/DBMigrate

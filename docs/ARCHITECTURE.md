@@ -64,7 +64,7 @@ Located at `apps/MotorsportTracker/Frontend/`. Uses Material-UI. Supports both S
 
 ## Go Module Organization
 
-The project uses a Go workspace (`go.work`) with 5 modules:
+The project uses a Go workspace (`go.work`) with 6 modules:
 
 ### `src/Golang/` — Core Library
 
@@ -116,6 +116,28 @@ Long-running process that polls SQS for messages. Registers all handlers via `re
 ### `apps/Backend/DBMigrate/` — Migration Runner
 
 Uses `golang-migrate` to apply SQL migrations from `etc/Migrations/`. Reads migration source and DB connection from environment variables.
+
+### `apps/Backend/ApiCanary/` — Upstream Schema Drift Detection
+
+Walks series → seasons → calendar → classification against the **live** motorsportstats API and reports any endpoint whose payload no longer matches the connector's JSON Schemas. Needs only `REMOTE_API_HOST` and `PROJECT_DIR` — no database, no queue.
+
+It exists because schema validation lives in `ConnectorUsingClient.validate()`, *below* the caching decorators: a cache hit hands bytes to the gateway unvalidated, so the normal application path cannot detect drift while the caches are warm. The canary therefore constructs an uncached connector itself rather than taking one from `ServicesRegistry`, and consequently writes nothing to `etc/ConnectorCache/` or Postgres.
+
+Each response is checked three ways from a single request:
+
+| Layer | Catches | Verdict |
+|---|---|---|
+| the connector's own embedded-schema validation | missing required fields, wrong types, non-200 | FAIL |
+| `json.Unmarshal` into the `gateway/domain` struct | types the schema permits but Go rejects | FAIL |
+| key diff against the schema files on disk | fields motorsportstats **added**, and renames | WARN |
+
+The third layer matters because none of the four schemas sets `additionalProperties: false`, so added fields are otherwise invisible.
+
+Exit code is 0 when clear, 1 on any FAIL; `--strict` also fails on warnings. Verdicts are deliberately schema-only — item counts and results content change legitimately between runs and never produce a failure. Payload volume is reported purely as coverage, and a payload that validates while holding zero objects is flagged as a warning, since it exercised nothing.
+
+Probe set (a slice at the top of `main.go`, one line per series): `FIA Formula One World Championship` for the one-driver-per-entry shape and `FIA World Endurance Championship` for the multi-driver one. Sessions are chosen by `hasResults` plus a substring hint rather than an exact name — upstream session naming is inconsistent enough to include `Free Practice` alongside `Free practice`, a leading newline on `Super Pole 1`, and `Practice 3 - Cancelled`.
+
+> Note: `24 Hours of Le Mans` is a poor probe despite being the obvious multi-driver choice — its seasons stop at 2023 upstream, motorsportstats having folded later editions into WEC, so it would only ever re-read a frozen historic payload.
 
 ## Frontend
 

@@ -1,10 +1,12 @@
 # Go Architecture Review — February 2026
 
-> Status as of 2026-07-30: the Strong Points below were re-verified against the code and all hold. The Weak Points summary has been updated — items 1–8 and 10 are now resolved. See [ISSUES.md](ISSUES.md) for what each fix involved.
+> Status as of 2026-08-01: the Weak Points summary has been updated — items 1–8 and 10 are resolved, items 11–14 are open. See [ISSUES.md](ISSUES.md) for what each fix involved.
+>
+> Strong Point 5 has been **corrected**: the 2026-07-30 pass recorded the caching stack as an unqualified strength, but a cache hit returns bytes without ever validating them. The detail is below.
 
 ## Overview
 
-MotorsportTracker is a motorsport data aggregation platform scraping motorsportstats.com. The Go codebase implements hexagonal architecture across 5 modules coordinated by a Go workspace (`go.work`).
+MotorsportTracker is a motorsport data aggregation platform scraping motorsportstats.com. The Go codebase implements hexagonal architecture across 6 modules coordinated by a Go workspace (`go.work`).
 
 **Pipeline**: CLI/SQS Intent → Handler → UseCase → Gateway (HTTP) + Repository (PostgreSQL)
 
@@ -41,6 +43,8 @@ Every core table has a `_history` counterpart with trigger-based tracking (`vali
 
 Three-layer caching stack: `HTTP → DatabaseCache → FileSystemCache (optional)`. Transparent decorator pattern via `CachedConnector`. Cache interface (`Get`/`Set` with namespace+key) has three pluggable backends (in-memory, database, filesystem).
 
+**Caveat, corrected 2026-08-01 — schema validation sits *below* the cache.** `validate()` runs only in `ConnectorUsingClient`, so a hit at either cache layer hands bytes to the gateway having checked nothing. `ServicesRegistry.GetMotorsportStatsGateway` always wraps the connector in a `DatabaseCache`, and adds a `FileSystemCache` when `USE_FS_CACHE=true` (which `.env.dev` sets), so **the application path cannot detect upstream schema drift while the caches are warm**. That is the correct trade-off for scraping — re-validating cached bytes buys nothing — but it means the schemas cannot double as a drift alarm. `apps/Backend/ApiCanary` exists to cover that gap by building an uncached connector directly.
+
 ### 6. Unified Message Contract
 Same `Message{Type, Metadata}` struct flows through CLI (MotorsportTracker), queue publisher (CommandsPublisher), and queue consumer (CommandsProcessor). Handlers are transport-agnostic.
 
@@ -62,6 +66,16 @@ Summary:
 8. ~~**No integration tests for `shared.Save()`** — core persistence logic untested against real SQL~~ (resolved — 8 cases against `core-test`)
 9. **Database pool uses defaults** — no MaxConns/MaxConnLifetime tuning (open, deliberately; the stated premise was stale — see ISSUES.md)
 10. ~~**SQL interpolation in cache** — `fmt.Sprintf` with namespace as table name (safe today, fragile pattern)~~ (resolved — validated on both call sites)
+11. **Parallel integration suites share one test database** — intermittent false failures (open)
+12. **Inverted `exists` check** — driver nationalities from classifications are never written to `countries` (open, silent)
+13. **Driver linked to only one car per session** — missing `entry_drivers` rows in endurance series (open, silent)
+14. **Event hash built from venue fields** — event renames never persist; plus a latent nil-deref the schema currently makes unreachable (open, silent)
+
+Items 12–14 were found on 2026-08-01 while tracing the scraping chain for the API canary. All three are in the persistence layer, all three are silent, and none is caught by a test today.
+
+Fixed in passing, not tracked as numbered issues:
+
+- ~~`ConnectorUsingClient.doGet` wrapped every error as `"getting series"` / `"validating series data"` regardless of which of the four endpoints was called, so a calendar or classification failure reported itself as a series failure~~ (resolved 2026-08-01 — both wrappers now interpolate the `url` the function already computes, naming the exact path and UUID that failed; no signature change).
 
 Naming nits found while re-verifying, not tracked as numbered issues:
 
@@ -78,6 +92,9 @@ Naming nits found while re-verifying, not tracked as numbered issues:
 └──────────┬──────────────────┬──────────────┬────────────┘
            │                  │              │
            ▼                  ▼              ▼
+                    (ApiCanary bypasses all of this — it
+                     builds an uncached Connector directly
+                     and never touches a database)
     ┌─────────────┐    ┌───────────┐  ┌───────────┐
     │   Intent    │    │   Intent  │  │  Worker   │
     │ →ToMessage()│    │→ToMessage()│ │ →poll SQS │
@@ -123,5 +140,6 @@ Naming nits found while re-verifying, not tracked as numbered issues:
 | CLI entry point | `apps/Backend/MotorsportTracker/main.go` |
 | Queue consumer | `apps/Backend/CommandsProcessor/main.go` |
 | Queue publisher | `apps/Backend/CommandsPublisher/main.go` |
+| API drift canary | `apps/Backend/ApiCanary/main.go` |
 | Core migrations | `etc/Migrations/core/` |
 | Client cache migrations | `etc/Migrations/client-cache/` |

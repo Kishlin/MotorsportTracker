@@ -40,12 +40,18 @@
 | `make build-publisher` | Build CommandsPublisher |
 | `make build-motorsport-tracker` | Build MotorsportTracker CLI |
 | `make build-dbmigrate` | Build DBMigrate |
+| `make build-api-canary` | Build ApiCanary |
 | `make run-processor` | Run CommandsProcessor (queue consumer) |
 | `make run-publisher ARGS="scrape:series"` | Publish a scraping intent to the queue |
 | `make run-motorsport-tracker ARGS="scrape:series"` | Run a scraping command directly |
+| `make run-api-canary` | Check the live motorsportstats API against the schemas |
 | `make go-run ARGS="scrape:series"` | Run MotorsportTracker via `go run` |
 
 The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. The bare forms (`series`, `events`) printed by the CLI's own help text in `apps/Backend/MotorsportTracker/main.go` are not registered and return `unknown subcommand`.
+
+`make run-api-canary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it cannot go through `ServicesRegistry`.
+
+When a schema break is reported, the fix is to update the matching file in `src/Golang/motorsportstats/connector/infrastructure/schemas/` and rebuild — the connector embeds them at build time, so an edited schema does not take effect until `make build-api-canary` (or `make go-build`) runs. The added-key warnings read the same files from disk at run time and do not need a rebuild.
 
 ### Database Operations
 
