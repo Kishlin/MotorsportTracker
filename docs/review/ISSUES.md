@@ -2,6 +2,8 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
+Status as of 2026-07-30: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below.
+
 ---
 
 ## 1. ~~Handler/Intent Registration Duplicated Across Apps~~ (Resolved)
@@ -16,103 +18,60 @@ Actionable issues identified during architecture review. Each includes the affec
 
 ---
 
-## 3. Inline JSON Schemas in Connector (580 lines)
+## 3. ~~Inline JSON Schemas in Connector (580 lines)~~ (Resolved)
 
-**Impact**: Maintainability — schema changes require editing deep inside a Go file.
+**Resolution**: The four schemas moved to `src/Golang/motorsportstats/connector/infrastructure/schemas/{series,seasons,calendar,classification}.json` and are loaded with `go:embed`. `connector_using_client.go` dropped from 579 to 105 lines, and the endpoint constants were grouped into a single `const` block.
 
-**File**: `src/Golang/motorsportstats/connector/infrastructure/connector_using_client.go` (lines ~89-579 are schema strings)
-
-**Problem**: JSON schemas for API response validation are embedded as Go string literals. The file is 580 lines, ~500 of which are schema definitions.
-
-**Remediation**: Move schemas to `.json` files under `src/Golang/motorsportstats/connector/infrastructure/schemas/` and load them via `go:embed`:
-
-```go
-//go:embed schemas/series.json
-var seriesSchema string
-```
-
-The connector file drops to ~80 lines. Schemas become independently reviewable and diffable.
+Extraction was verified byte-identical against the original string literals, and the existing functional suite exercises all four schemas through `validate()`.
 
 ---
 
-## 4. `fmt.Println` in Environment Loading
+## 4. ~~`fmt.Println` in Environment Loading~~ (Resolved)
 
-**Impact**: Unconditional stdout output in production.
+**Resolution**: The three calls in `src/Golang/shared/env/infrastructure/env.go` now go through a small `bootstrapDebug` helper: silent unless `LOG_LEVEL=debug`, and written to **stderr** rather than stdout.
 
-**File**: `src/Golang/shared/env/infrastructure/env.go` (lines 33, 41, 83)
+**`slog` is deliberately not used here.** Every app calls `env.LoadEnv()` *before* `logger.SetupSlog()` (see `apps/Backend/CommandsProcessor/main.go:20-26`). Until `SetupSlog` runs, `slog.Default()` is Go's built-in handler: stderr, **Info** level. So `slog.Debug` in this file is swallowed and never reaches any output — verified as zero occurrences even with `LOG_LEVEL=DEBUG`. `bootstrapDebug` therefore reads `LOG_LEVEL` straight from the process environment, which is also why it cannot come from the `.env` files — they are not loaded yet at that point.
 
-**Problem**: Uses `fmt.Println` for debug output during `.env` file loading. This prints to stdout in all environments.
+Moving off stdout matters independently: these are diagnostics, and the CLI's real output goes to stdout.
 
-**Remediation**: Replace with `slog.Debug(...)`. Environment loading messages are useful for debugging but should not appear in production output.
-
----
-
-## 5. Package Name Typo: `doman` Instead of `domain`
-
-**Impact**: Misleading package declaration. No runtime effect.
-
-**File**: `src/Golang/shared/crypto/domain/crypto.go` (line 1)
-
-**Problem**: Package is declared as `package doman` but the directory is named `domain`. All imports use the directory path so it compiles, but the package name is wrong.
-
-**Remediation**: Change `package doman` to `package domain`. Update all files in the package and any direct package-name references (likely none since Go uses directory paths for imports).
-
-**Note**: Check if other files in the directory also use `doman` — all files in a package must share the same package name.
+Verified both ways — `LOG_LEVEL` unset produces no output; `LOG_LEVEL=debug` produces the trace on stderr only, with stdout clean.
 
 ---
 
-## 6. Casing Inconsistency: `clientCacheDBonce`
+## 5. ~~Package Name Typo: `doman` Instead of `domain`~~ (Resolved)
 
-**Impact**: Naming convention violation. No runtime effect.
-
-**File**: `src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go` (line 28)
-
-**Problem**: Field `clientCacheDBonce` uses lowercase 'o' while the convention elsewhere is `...Once` (e.g., `coreDBOnce`, `motorsportStatsGatewayOnce`).
-
-**Remediation**: Rename to `clientCacheDBOnce`. This is a private field so no external impact.
+**Resolution**: `package doman` → `package domain` in **both** files of the package, `crypto.go` and `crypto_test.go`. The original note was right to flag that the whole package had to move together. All importers already aliased the package as `crypto`, so no call sites changed.
 
 ---
 
-## 7. No Backoff in Queue Worker
+## 6. ~~Casing Inconsistency: `clientCacheDBonce`~~ (Resolved)
 
-**Impact**: Under degraded conditions (DB down, API unreachable), the worker hammers SQS in a tight loop and floods logs.
-
-**File**: `src/Golang/shared/messaging/infrastructure/worker.go` (around line 65)
-
-**Problem**: On error, the worker immediately retries on the next poll interval with no backoff. Consecutive errors produce rapid-fire log entries and unnecessary SQS API calls.
-
-**Remediation**: Add simple linear or exponential backoff:
-
-```go
-// In the poll loop:
-consecutiveErrors := 0
-// On error:
-consecutiveErrors++
-backoff := time.Duration(consecutiveErrors) * pollInterval
-if backoff > 60*time.Second {
-    backoff = 60 * time.Second
-}
-time.Sleep(backoff)
-// On success:
-consecutiveErrors = 0
-```
+**Resolution**: Renamed to `clientCacheDBOnce` in `services_registry.go` — declaration and use site.
 
 ---
 
-## 8. No Integration Tests for `shared.Save()`
+## 7. ~~No Backoff in Queue Worker~~ (Resolved)
 
-**Impact**: The core persistence logic (upsert, batching, hash change detection) is untested against a real database.
+**Resolution**: `runWorker` now tracks `consecutiveErrors` and waits `backoffFor(n)` — the poll interval doubled per additional failure, capped at `maxBackoff` (60s) — resetting to zero after any successful receive.
 
-**File**: `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go`
+Two hazards were handled beyond the original proposal:
 
-**Problem**: The SQL template is built via `fmt.Sprintf` with table and column names. Batching splits rows dynamically. None of this is tested against actual PostgreSQL. Current tests mock the repository entirely.
+- **The waits are now interruptible.** `time.Sleep` ignored `stopChan`, so a 60s backoff would have made `Stop()` block for up to a minute. The new `wait()` selects over `stopChan`, `ctx.Done()` and the timer.
+- **A non-positive `pollInterval`** returns `maxBackoff` rather than doubling zero forever.
 
-**Remediation**: Add integration tests that:
-1. Create a test table with known schema
-2. Call `Save()` with test data
-3. Verify inserted rows, updated rows, and unchanged rows (hash match)
-4. Test batching with >1000 parameters
-5. Run against the test database (`core-test`, already provisioned via `make run-dbmigrate-core.test`)
+Covered by `TestUnit_WorkerBackoff` (6 cases). The backoff and wait helpers are tested directly rather than introducing a queue interface purely for test injection.
+
+---
+
+## 8. ~~No Integration Tests for `shared.Save()`~~ (Resolved)
+
+**Resolution**: `save_repository_helpers_integration_test.go` exercises `Save()` against `core-test` using a throwaway `save_helpers_probe` table created and dropped by the suite, so assertions never depend on migrated schema.
+
+Eight cases: empty input, insert, unchanged-hash skip, hash-change update, mixed insert/update accounting, batching past `maxParamsPerQuery` (700 rows × 3 columns = 2100 params), updates across batch boundaries, and inconsistent row-width rejection.
+
+Note the semantics this pinned down: a row whose hash is unchanged is counted as **neither** inserted nor updated, because `WHERE hash IS DISTINCT FROM EXCLUDED.hash` excludes it from `RETURNING` entirely.
+
+The suite was mutation-tested — neutralising the hash guard fails exactly the two cases that encode that behaviour.
 
 ---
 
@@ -122,31 +81,42 @@ consecutiveErrors = 0
 
 **File**: `src/Golang/shared/database/infrastructure/database_using_pgxpool.go`
 
-**Problem**: `pgxpool.New(ctx, connStr)` is called with no configuration for `MaxConns`, `MaxConnLifetime`, `HealthCheckPeriod`, etc.
+**Problem**: ~~`pgxpool.New(ctx, connStr)` is called with no configuration~~ — **outdated**. The code already calls `pgxpool.ParseConfig` and then `pgxpool.NewWithConfig`. The remaining gap is narrower: the parsed config is passed straight through without setting `MaxConns`, `MaxConnLifetime` or `HealthCheckPeriod`, so pgx defaults still apply.
 
-**Remediation**: If scaling becomes relevant, parse the connection string into a `pgxpool.Config` and set:
-- `MaxConns` (match expected concurrency)
-- `MaxConnLifetime` (prevent stale connections)
-- `HealthCheckPeriod` (detect dead connections)
+**Remediation**: If scaling becomes relevant, set those three fields on the already-parsed `pgxpool.Config` before `NewWithConfig`. That is now a three-line change, not a restructure.
 
-Low priority — current single-digit concurrency works fine with defaults.
+Low priority — current single-digit concurrency works fine with defaults. Deliberately left open.
 
 ---
 
-## 10. SQL Interpolation in Database Cache
+## 10. ~~SQL Interpolation in Database Cache~~ (Resolved)
 
-**Impact**: Safe today (hardcoded namespaces), but fragile pattern if reused with dynamic input.
+**Resolution**: `assertValidNamespace` rejects anything not matching `^[a-z_]+$` before interpolation, guarding **both** call sites — `Get` (line 26) and `Set` (line 49). The original write-up mentioned only `Get`.
 
-**File**: `src/Golang/shared/cache/infrastructure/cache_using_database.go` (line 26)
+Covered by `TestUnit_CacheUsingDatabaseNamespace`, which asserts rejection of injection, hyphen, uppercase, digit, empty, schema-qualified and trailing-space namespaces, and acceptance of the four live table names. The suite passes a `nil` pool deliberately, proving validation short-circuits before any database access.
 
-**Problem**: `fmt.Sprintf(getQuery, namespace)` interpolates `namespace` directly into SQL as a table name. Current callers pass hardcoded strings ("series", "seasons", "calendar", "classification"), so there's no injection risk. But the function signature accepts any string.
+---
 
-**Remediation**: Add a validation check that namespace matches `^[a-z_]+$` before interpolation:
+## 11. Parallel Integration Suites Share One Test Database
 
-```go
-if !regexp.MustCompile(`^[a-z_]+$`).MatchString(namespace) {
-    return fmt.Errorf("invalid cache namespace: %q", namespace)
-}
-```
+Found 2026-07-30 while verifying unrelated work. Open.
 
-Or use a whitelist of known table names. Low priority given current usage.
+**Impact**: Intermittent false failures locally and in CI. No production impact.
+
+**Files**: 8 suites call `t.Parallel()` across `src/Golang/motorsporttracker/scrapping/`; 10 test files connect to the same `core-test` via `POSTGRES_CORE_URL`.
+
+**Problem**: Each suite seeds fixtures into shared tables (`series`, `seasons`, `events`, `sessions`) and cleans up only its own uuid-prefixed rows. But the repositories under test issue **global** queries — that is their job. So a "not found" case can observe a row another suite inserted concurrently, and fails with `expected: false, actual: true`.
+
+Observed on two different suites:
+
+- `TestIntegration_SearchSeriesIdentifierRepository/TestGetSeriesIdentifier`
+- `TestIntegration_SearchSessionIdentifierRepository` (`search_session_identifier_repository_test.go:110`)
+
+Both pass in isolation, and under `-count=5` within their own package. Reproduced by running the four series-touching packages together under `-count=6`. Pre-existing — it reproduces with `scrapping/shared/...` excluded from the run entirely.
+
+**Remediation**, simplest first:
+
+1. Drop `t.Parallel()` from the integration suites that share tables. Serialises them; each runs in ~0.1s, so the cost is negligible.
+2. Or give each suite its own PostgreSQL schema and set `search_path` per connection, keeping parallelism.
+
+Option 1 matches the project's "simplest approach first" principle.

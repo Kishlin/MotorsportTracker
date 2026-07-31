@@ -1,5 +1,7 @@
 # Go Architecture Review — February 2026
 
+> Status as of 2026-07-30: the Strong Points below were re-verified against the code and all hold. The Weak Points summary has been updated — items 1–8 and 10 are now resolved. See [ISSUES.md](ISSUES.md) for what each fix involved.
+
 ## Overview
 
 MotorsportTracker is a motorsport data aggregation platform scraping motorsportstats.com. The Go codebase implements hexagonal architecture across 5 modules coordinated by a Go workspace (`go.work`).
@@ -51,15 +53,20 @@ See [ISSUES.md](ISSUES.md) for the full list with file paths and remediation ste
 
 Summary:
 1. ~~**Handler/intent registration duplicated** across 3 main.go files~~ (resolved — centralized in `registration/`)
-2. **Weak metadata typing** — `map[string]string` with manual parsing in every handler
-3. **580-line connector file** — inline JSON schemas should be externalized
-4. **`fmt.Println` in env.go** — should use `slog`
-5. **Package typo** — `crypto/doman` instead of `crypto/domain`
-6. **Casing inconsistency** — `clientCacheDBonce` vs convention `...Once`
-7. **No backoff in queue worker** — tight retry loop under degraded conditions
-8. **No integration tests for `shared.Save()`** — core persistence logic untested against real SQL
-9. **Database pool uses defaults** — no MaxConns/MaxConnLifetime tuning
-10. **SQL interpolation in cache** — `fmt.Sprintf` with namespace as table name (safe today, fragile pattern)
+2. ~~**Weak metadata typing** — `map[string]string` with manual parsing in every handler~~ (resolved — `RequireString`/`RequireInt`)
+3. ~~**580-line connector file** — inline JSON schemas should be externalized~~ (resolved — `go:embed`, now 105 lines)
+4. ~~**`fmt.Println` in env.go** — should use `slog`~~ (resolved)
+5. ~~**Package typo** — `crypto/doman` instead of `crypto/domain`~~ (resolved — both files in the package)
+6. ~~**Casing inconsistency** — `clientCacheDBonce` vs convention `...Once`~~ (resolved)
+7. ~~**No backoff in queue worker** — tight retry loop under degraded conditions~~ (resolved — capped exponential, interruptible waits)
+8. ~~**No integration tests for `shared.Save()`** — core persistence logic untested against real SQL~~ (resolved — 8 cases against `core-test`)
+9. **Database pool uses defaults** — no MaxConns/MaxConnLifetime tuning (open, deliberately; the stated premise was stale — see ISSUES.md)
+10. ~~**SQL interpolation in cache** — `fmt.Sprintf` with namespace as table name (safe today, fragile pattern)~~ (resolved — validated on both call sites)
+
+Naming nits found while re-verifying, not tracked as numbered issues:
+
+- ~~`connector_decoractor_with_cache.go` — source filename misspelled ("decoractor") while its test file spelled it correctly~~ (resolved — renamed to `connector_decorator_with_cache.go`; Go never references filenames, so nothing else changed).
+- Intent types are inconsistently named: `ScrapSeriesIntent` and `ScrapCalendarIntent` drop the "e" that `ScrapeSeasonsFor*Intent` and `ScrapeClassificationIntent` keep. Constructors mismatch their own types too — `NewScrapClassificationIntent` returns `*ScrapeClassificationIntent`. The pattern table above records this faithfully.
 
 ## Architecture Diagram
 
@@ -106,7 +113,7 @@ Summary:
 | ServicesRegistry (DI) | `src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go` |
 | Save helpers (upsert) | `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` |
 | Connector (HTTP+schema) | `src/Golang/motorsportstats/connector/infrastructure/connector_using_client.go` |
-| Cached connector | `src/Golang/motorsportstats/connector/infrastructure/connector_decoractor_with_cache.go` |
+| Cached connector | `src/Golang/motorsportstats/connector/infrastructure/connector_decorator_with_cache.go` |
 | Gateway (JSON parsing) | `src/Golang/motorsportstats/gateway/infrastructure/gateway_using_connector.go` |
 | Domain objects | `src/Golang/motorsportstats/gateway/domain/gateway.go` |
 | Queue worker | `src/Golang/shared/messaging/infrastructure/worker.go` |
