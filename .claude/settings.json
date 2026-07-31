@@ -1,28 +1,30 @@
 {
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Bash(ls:*)",
       "Bash(wc:*)",
-      "Bash(find:*)",
       "Bash(tree:*)",
       "Bash(grep:*)",
       "Bash(head:*)",
-      "Bash(chmod:*)",
       "Bash(jq:*)",
-      "Bash(docker compose:*)",
-      "Bash(make:*)",
-      "Bash(gofmt:*)",
-      "Bash(go build:*)",
-      "Bash(go test:*)",
-      "Bash(go vet:*)",
+      "Bash(command -v:*)",
       "Bash(go doc:*)",
       "Bash(go list:*)",
+      "Bash(go vet:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
-      "Bash(./scripts/test-runner.sh:*)",
+      "Bash(git check-ignore:*)",
       "Bash(./scripts/architecture-check.sh:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git push --force:*)",
+      "Bash(docker compose down -v:*)"
     ]
   },
   "hooks": {
