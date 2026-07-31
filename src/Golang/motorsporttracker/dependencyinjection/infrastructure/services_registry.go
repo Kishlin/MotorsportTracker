@@ -25,7 +25,7 @@ type ServicesRegistry struct {
 
 	motorsportStatsGatewayOnce sync.Once
 	coreDBOnce                 sync.Once
-	clientCacheDBonce          sync.Once
+	clientCacheDBOnce          sync.Once
 	intentsQueueOnce           sync.Once
 }
 
@@ -97,7 +97,7 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) *databaseImpls.P
 }
 
 func (s *ServicesRegistry) GetClientCacheDatabase(ctx context.Context) *databaseImpls.PGXPoolAdapter {
-	s.clientCacheDBonce.Do(func() {
+	s.clientCacheDBOnce.Do(func() {
 		connStr := os.Getenv("POSTGRES_CLIENT_CACHE_URL")
 		if connStr == "" {
 			panic("POSTGRES_CLIENT_CACHE_URL environment variable is not set")
