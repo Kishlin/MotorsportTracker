@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"regexp"
 
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
@@ -18,9 +19,26 @@ func NewDatabaseCache(db *database.PGXPoolAdapter) *DatabaseCache {
 	}
 }
 
+// namespacePattern guards the table name interpolated into getQuery and setQuery.
+// The namespace cannot be a bound parameter, so it is validated instead.
+var namespacePattern = regexp.MustCompile(`^[a-z_]+$`)
+
+func assertValidNamespace(namespace string) error {
+	if namespacePattern.MatchString(namespace) == false {
+		return fmt.Errorf("invalid cache namespace: %q", namespace)
+	}
+
+	return nil
+}
+
 const getQuery = "SELECT value FROM %s WHERE key = $1 LIMIT 1"
 
 func (c *DatabaseCache) Get(namespace, key string) (value []byte, hit bool, err error) {
+	err = assertValidNamespace(namespace)
+	if err != nil {
+		return nil, false, err
+	}
+
 	logger := slog.With("namespace", namespace, "key", key)
 
 	rows, err := c.db.Query(context.Background(), fmt.Sprintf(getQuery, namespace), key)
@@ -46,7 +64,12 @@ func (c *DatabaseCache) Get(namespace, key string) (value []byte, hit bool, err 
 const setQuery = "INSERT INTO %s (key, value) VALUES ($1, $2) ON CONFLICT(key) DO UPDATE SET value = $3"
 
 func (c *DatabaseCache) Set(namespace, key string, value []byte) error {
-	err := c.db.Exec(context.Background(), fmt.Sprintf(setQuery, namespace), key, value, value)
+	err := assertValidNamespace(namespace)
+	if err != nil {
+		return err
+	}
+
+	err = c.db.Exec(context.Background(), fmt.Sprintf(setQuery, namespace), key, value, value)
 	if err != nil {
 		return fmt.Errorf("setting the value in cache: %w", err)
 	}

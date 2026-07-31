@@ -84,3 +84,45 @@ func (suite *CacheUsingDatabaseFunctionalTestSuite) TestSet() {
 func TestFunctional_CacheUsingDatabase(t *testing.T) {
 	suite.Run(t, new(CacheUsingDatabaseFunctionalTestSuite))
 }
+
+type CacheUsingDatabaseNamespaceUnitTestSuite struct {
+	suite.Suite
+}
+
+func (suite *CacheUsingDatabaseNamespaceUnitTestSuite) TestRejectsInvalidNamespace() {
+	invalidNamespaces := map[string]string{
+		"sql injection":    "series; DROP TABLE series",
+		"hyphen":           "series-cache",
+		"uppercase":        "Series",
+		"digit":            "series1",
+		"empty":            "",
+		"schema qualified": "public.series",
+		"trailing space":   "series ",
+	}
+
+	// A nil pool is deliberate: validation must reject the namespace before any database access.
+	cache := NewDatabaseCache(nil)
+
+	for name, namespace := range invalidNamespaces {
+		suite.Run(name, func() {
+			_, hit, err := cache.Get(namespace, "key")
+			require.Error(suite.T(), err)
+			require.False(suite.T(), hit)
+			require.ErrorContains(suite.T(), err, "invalid cache namespace")
+
+			err = cache.Set(namespace, "key", []byte("value"))
+			require.Error(suite.T(), err)
+			require.ErrorContains(suite.T(), err, "invalid cache namespace")
+		})
+	}
+}
+
+func (suite *CacheUsingDatabaseNamespaceUnitTestSuite) TestAcceptsValidNamespace() {
+	for _, namespace := range []string{"series", "seasons", "calendar", "classification", "client_cache"} {
+		require.NoError(suite.T(), assertValidNamespace(namespace), namespace)
+	}
+}
+
+func TestUnit_CacheUsingDatabaseNamespace(t *testing.T) {
+	suite.Run(t, new(CacheUsingDatabaseNamespaceUnitTestSuite))
+}
