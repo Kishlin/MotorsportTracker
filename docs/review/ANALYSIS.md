@@ -1,6 +1,6 @@
 # Go Architecture Review — February 2026
 
-> Status as of 2026-08-01: the Weak Points summary has been updated — items 1–8 and 10 are resolved, items 11–14 are open. See [ISSUES.md](ISSUES.md) for what each fix involved.
+> Status as of 2026-09-25: the Weak Points summary has been updated — items 1–8 and 10 are resolved, items 9 and 11–14 are open (re-verified against the code on 2026-09-25). See [ISSUES.md](ISSUES.md) for what each fix involved.
 >
 > Strong Point 5 has been **corrected**: the 2026-07-30 pass recorded the caching stack as an unqualified strength, but a cache hit returns bytes without ever validating them. The detail is below.
 

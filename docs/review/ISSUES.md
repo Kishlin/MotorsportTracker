@@ -2,7 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-08-01: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 11–14 are open; 12–14 were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
+Status as of 2026-09-25: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 11–14 are open; 12–14 were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
+
+Re-verified against the code on 2026-09-25: items 9 and 11–14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
 
 ---
 
@@ -91,7 +93,7 @@ Low priority — current single-digit concurrency works fine with defaults. Deli
 
 ## 10. ~~SQL Interpolation in Database Cache~~ (Resolved)
 
-**Resolution**: `assertValidNamespace` rejects anything not matching `^[a-z_]+$` before interpolation, guarding **both** call sites — `Get` (line 26) and `Set` (line 49). The original write-up mentioned only `Get`.
+**Resolution**: `assertValidNamespace` rejects anything not matching `^[a-z_]+$` before interpolation, guarding **both** call sites — `Get` (line 37) and `Set` (line 67). The original write-up mentioned only `Get`.
 
 Covered by `TestUnit_CacheUsingDatabaseNamespace`, which asserts rejection of injection, hyphen, uppercase, digit, empty, schema-qualified and trailing-space namespaces, and acceptance of the four live table names. The suite passes a `nil` pool deliberately, proving validation short-circuits before any database access.
 
@@ -103,7 +105,7 @@ Found 2026-07-30 while verifying unrelated work. Open.
 
 **Impact**: Intermittent false failures locally and in CI. No production impact.
 
-**Files**: 8 suites call `t.Parallel()` across `src/Golang/motorsporttracker/scrapping/`; 10 test files connect to the same `core-test` via `POSTGRES_CORE_URL`.
+**Files**: 8 suites call `t.Parallel()` across `src/Golang/motorsporttracker/scrapping/`; 11 test files connect to the same `core-test` via `POSTGRES_CORE_URL` — the 10 under `scrapping/` plus `shared/database/infrastructure/database_using_pgxpool_test.go`.
 
 **Problem**: Each suite seeds fixtures into shared tables (`series`, `seasons`, `events`, `sessions`) and cleans up only its own uuid-prefixed rows. But the repositories under test issue **global** queries — that is their job. So a "not found" case can observe a row another suite inserted concurrently, and fails with `expected: false, actual: true`.
 
@@ -172,7 +174,7 @@ for _, driver := range classificationDetails.Drivers {
 
 The two maps answer different questions. `driversUUIDs` deduplicates the driver rows to insert — correctly global to the session. `driverUUIDsPerCarNumbers` records which drivers sat in which car — that is per car, and must not be suppressed just because the driver was already seen on another entry.
 
-So if car 7 lists drivers A, B, C and car 8 lists A, D, E, then car 8 gets only D and E: the A→car 8 link is silently dropped. First car to mention a driver wins. `saveEntryDrivers` (line 601) then writes an incomplete set.
+So if car 7 lists drivers A, B, C and car 8 lists A, D, E, then car 8 gets only D and E: the A→car 8 link is silently dropped. First car to mention a driver wins. `saveEntryDrivers` (line 599) then writes an incomplete set.
 
 **Remediation**: lift the `driverUUIDsPerCarNumbers` append out of the `if`, leaving only `driversUUIDs`/`uniqueDrivers` inside it. `entry_drivers` has `UNIQUE(entry, driver)` so a repeat within one car is absorbed by the upsert. `save_classification_repository_test.go:331` (`complexClassification`) already builds a multi-driver fixture and asserts 10 `entry_drivers` rows — extend it with a driver shared across two entries.
 
