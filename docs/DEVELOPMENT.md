@@ -4,7 +4,7 @@
 
 1. Copy the Docker Compose template:
    ```bash
-   make setup   # Creates .env.local and docker compose.yaml from .dist
+   make setup   # Creates an empty .env.local, and docker-compose.yaml from docker-compose.yaml.dist
    ```
 
 2. Start all services:
@@ -72,7 +72,7 @@ The same `db.*` targets exist for `cache`, `client`, and `admin` databases.
 
 | Target | Description |
 |--------|-------------|
-| `make go-test` | Run all Go tests |
+| `make go-test` | Run all Go tests (runs `scripts/fixture-prefix-check.sh` first) |
 | `make go-test-pristine` | Clear test cache, then run all Go tests |
 | `make go-cache-clear` | Clear Go test cache |
 | `make tests.golang` | Run Go tests (alternative target) |
@@ -82,11 +82,14 @@ The same `db.*` targets exist for `cache`, `client`, and `admin` databases.
 
 ## Testing Strategy
 
-Tests use `testify/suite`. See `docs/CODE_STYLE.md` for naming conventions and lifecycle details.
+Tests use `testify/suite`. See `docs/CODE_STYLE.md` for naming conventions, lifecycle details, and the isolation rules integration suites follow to run in parallel.
 
 ```bash
 # Run all Go tests
 make go-test
+
+# Scoped runs: all | scrapping | gateway | shared | <package path>
+./scripts/test-runner.sh scrapping --run 'TestIntegration_SaveSeries'
 
 # Run a specific test suite
 docker compose exec golang bash -c 'cd /app && go test ./src/Golang/... -run TestIntegration_SuiteName'
@@ -97,6 +100,8 @@ docker compose exec golang bash -c 'cd /app && go test -v ./src/Golang/...'
 # Run tests for a specific module
 docker compose exec golang bash -c 'cd /app && go test ./src/Golang/motorsporttracker/scrapping/series/...'
 ```
+
+Go caches passing results, so a rerun can report `ok` without executing anything. Add `-count=1` (or use `make go-test-pristine`) when checking whether a test really passes, especially an integration test whose outcome depends on external state.
 
 ## Adding a New Scraping Operation
 
@@ -121,7 +126,8 @@ docker compose exec golang bash -c 'cd /app && go test ./src/Golang/motorsporttr
 6. **Register handlers and intents** in `src/Golang/motorsporttracker/registration/registration.go`:
    - Add a `register<Module>Handlers()` helper that constructs the handler(s) and registers them with the `HandlersList`
    - Call it from `RegisterAllHandlers()`
-   - Add the intent case(s) to `GetIntent()`
+   - Add the intent to the `registeredIntents` map, keyed by its name constant — `GetIntent()` looks names up there
+   - Both edits compile fine when missing and only fail at runtime
 
 7. **Run migration**: `make run-dbmigrate-core && make run-dbmigrate-core.test`
 
@@ -175,7 +181,7 @@ CREATE TRIGGER trg_update_<table_name>_history
 
 1. **Check logs**: All apps use structured logging with `slog`. Set `LOG_LEVEL=DEBUG` in `.env.local` for verbose output.
 2. **Inspect database**: `make db.core.connect` opens psql to the core-dev database.
-3. **Run tests with verbose**: `docker compose exec golang bash -c 'cd /app && go test -v ./...'`
+3. **Run tests with verbose**: `docker compose exec golang bash -c 'cd /app && go test -v ./src/Golang/...'` — a bare `./...` fails at `/app`, which is a workspace root, not a module
 4. **Check environment**: Ensure `.env.local` has correct values for your setup.
 5. **SQS UI**: Access the ElasticMQ UI at `http://localhost:9325` to inspect queue messages.
 
@@ -184,8 +190,8 @@ CREATE TRIGGER trg_update_<table_name>_history
 - **UUID vs ID**: Always use UUID for external references (from motorsportstats.com), SERIAL ID for internal foreign keys.
 - **Timestamps**: Use `shared.PrepareTimestamp()` for Unix timestamp to `time.Time` conversion.
 - **Batch Operations**: Use `shared.Save()` which automatically batches when parameter count exceeds 1000.
-- **Queue Messages**: Message metadata is `map[string]string` — all values are strings. Parse numbers with `strconv.Atoi()`.
+- **Queue Messages**: Message metadata is `map[string]string` — all values are strings. Read them with `messaging.RequireString()` / `messaging.RequireInt()`, which fail with a descriptive error on missing or empty keys.
 - **Error Wrapping**: Always preserve original error with `%w` for error chains.
-- **Testing Databases**: Always use `test` environment for integration tests (core-test, client-cache-test).
+- **Testing Databases**: Always use `test` environment for integration tests (core-test, client-cache-test). Those databases are shared by suites running in parallel — see the isolation rules in `docs/CODE_STYLE.md`.
 - **Go Workspace**: When adding dependencies, run `make go-vendor` to keep the vendored dependencies in sync.
 - **Docker**: All Go commands run inside the `golang` container. Use `docker compose exec golang ...` for ad-hoc commands.

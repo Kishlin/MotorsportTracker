@@ -156,8 +156,10 @@ Located at `apps/MotorsportTracker/Frontend/`. Next.js application with:
 | Service | Image | Purpose | Ports |
 |---------|-------|---------|-------|
 | `sqs` | ElasticMQ | Message queue (SQS-compatible) | 9324, 9325 (UI) |
-| `postgres` | PostgreSQL 16.9 | Databases (core-dev, core-test, client-cache-dev, client-cache-test) | 6378 -> 5432 |
-| `golang` | Go 1.25 | Development container for building and running Go apps | — |
+| `postgres` | PostgreSQL 17.11 | Databases (core-dev, core-test, client-cache-dev, client-cache-test) | 6378 -> 5432 |
+| `golang` | Go 1.27 | Development container for building and running Go apps | — |
+
+Versions come from `SQS_VERSION`, `POSTGRES_VERSION` and `GOLANG_VERSION` in `.env`, each selecting a directory under `.docker/`.
 
 ### Databases
 

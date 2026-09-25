@@ -108,10 +108,22 @@ Use `testify/suite` for test organization.
 
 ### Test Lifecycle
 
-- `SetupSuite()` — Suite-wide setup (runs once before all tests)
+- `SetupSuite()` — Suite-wide setup (runs once before all tests). Integration suites load the environment here with `env.OverrideAppEnv("tests")` then `env.LoadEnv()`, and never restore `APP_ENV` afterwards (see below)
 - `SetupSubTest()` — Cleanup/reset between test cases (runs before each `s.Run()`)
-- Use `s.Run()` over `s.T().Run()` when you need per-test cleanup
+- **Always use `s.Run()`, never `s.T().Run()`** — `s.Run()` points `s.T()` at the subtest, so a failed suite assertion is reported on the right case, and it is what makes `SetupSubTest()` fire at all
 - **Avoid `TearDownTest()`** — use `SetupSubTest()` instead for state reset
+- Hook names are exact: testify silently ignores a misspelled `TeardownSuite()`
+
+### Integration Test Isolation
+
+Every integration and functional suite calls `t.Parallel()`, and `go test ./...` runs packages as parallel processes, so suites share the `core-test` and client-cache test databases while running at the same time:
+
+- **One UUID prefix per suite**, the first three groups (`xxxxxxxx-xxxx-xxxx`), freshly generated and declared once in a `const`. Every UUID the suite writes is built from it, and teardown deletes `LIKE '<prefix>-%'`. `scripts/fixture-prefix-check.sh` enforces this before every `make go-test` and `scripts/test-runner.sh` run.
+- **Searched strings carry the prefix.** Repositories that search with `LIKE '%kw%'` would match another suite's generic names, so names and keywords end with the prefix.
+- **Other `UNIQUE` columns stay unique.** Every core table has a `UNIQUE` `hash`; in fixtures, use the row's own UUID as its hash.
+- **Leave `APP_ENV` set.** Restoring it in teardown could flip it back while a parallel suite is loading its env files. It only lives as long as the test binary.
+
+The full rules, with examples, are in `src/Golang/CLAUDE.md` under Tests.
 
 ### Test Utilities
 
@@ -124,3 +136,4 @@ Use `testify/suite` for test organization.
 - Test both success and error cases
 - Verify counts/effects, not just absence of errors
 - Use `tests` environment for integration tests
+- Call `t.Parallel()` and build every fixture UUID, searched string and hash from the suite's prefix `const`

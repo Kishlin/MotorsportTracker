@@ -218,7 +218,7 @@ type Intent interface {
 // BaseIntent provides validation and message construction.
 // Concrete intents embed BaseIntent and configure IntentConfig:
 type IntentConfig struct {
-    Name        string     // e.g., "scrap:series"
+    Name        string     // e.g., "scrape:series" — also the CLI subcommand
     Description string
     Arguments   []Argument // positional args
     Options     []Option   // named optional args
