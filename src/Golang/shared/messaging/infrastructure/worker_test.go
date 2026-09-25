@@ -2,7 +2,10 @@ package infrastructure
 
 import (
 	"context"
+	"fmt"
 	"os"
+	"reflect"
+	"slices"
 	"sync"
 	"testing"
 	"time"
@@ -56,22 +59,21 @@ func (suite *WorkerIntegrationTestSuite) TearDownTest() {
 }
 
 func (suite *WorkerIntegrationTestSuite) TestBasicProcessing() {
-	msg := Message{Type: "test", Metadata: map[string]string{"payload": "foo"}}
-	_ = suite.queue.Send(msg)
+	// The queue is real and shared across runs, so it can still hold messages an earlier run left behind.
+	// A unique payload ensures only this run's message can satisfy the assertion.
+	msg := Message{Type: "test", Metadata: map[string]string{"payload": fmt.Sprintf("basic-%d", time.Now().UnixNano())}}
+	suite.Require().NoError(suite.queue.Send(msg))
 
 	worker := NewWorker(suite.queue, suite.handlersList, 1, 10*time.Millisecond)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	worker.Start(ctx)
-	// Give worker time to process
-	time.Sleep(50 * time.Millisecond)
-	worker.Stop()
+	defer worker.Stop()
 
-	suite.handler.callLock.Lock()
-	defer suite.handler.callLock.Unlock()
-	require.True(suite.T(), suite.handler.called, "Handler should have been called")
-	require.Equal(suite.T(), msg, suite.handler.lastMsg)
+	require.Eventually(suite.T(), func() bool {
+		return suite.handler.hasReceived(msg)
+	}, 2*time.Second, 10*time.Millisecond, "Handler should have received the message")
 }
 
 func (suite *WorkerIntegrationTestSuite) TestStopHaltsProcessing() {
@@ -94,6 +96,8 @@ func (suite *WorkerIntegrationTestSuite) TestStopHaltsProcessing() {
 }
 
 func TestIntegration_Worker(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(WorkerIntegrationTestSuite))
 }
 
@@ -178,7 +182,7 @@ func TestUnit_WorkerBackoff(t *testing.T) {
 // Spy handler for testing
 type spyHandler struct {
 	called   bool
-	lastMsg  Message
+	received []Message
 	callLock sync.Mutex
 }
 
@@ -187,7 +191,7 @@ func (h *spyHandler) Handle(_ context.Context, message Message) error {
 	defer h.callLock.Unlock()
 
 	h.called = true
-	h.lastMsg = message
+	h.received = append(h.received, message)
 
 	return nil
 }
@@ -197,5 +201,14 @@ func (h *spyHandler) reset() {
 	defer h.callLock.Unlock()
 
 	h.called = false
-	h.lastMsg = Message{}
+	h.received = nil
+}
+
+func (h *spyHandler) hasReceived(message Message) bool {
+	h.callLock.Lock()
+	defer h.callLock.Unlock()
+
+	return slices.ContainsFunc(h.received, func(m Message) bool {
+		return reflect.DeepEqual(m, message)
+	})
 }

@@ -65,5 +65,7 @@ func (suite *GatewayUsingConnectorFunctionalTestSuite) TestGetClassification() {
 }
 
 func TestFunctional_GatewayUsingConnector(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(GatewayUsingConnectorFunctionalTestSuite))
 }

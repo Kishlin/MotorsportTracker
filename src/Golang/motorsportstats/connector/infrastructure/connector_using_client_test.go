@@ -81,5 +81,7 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetClassification() {
 }
 
 func TestFunctional_ConnectorUsingClient(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(ConnectorUsingClientFunctionalTestSuite))
 }

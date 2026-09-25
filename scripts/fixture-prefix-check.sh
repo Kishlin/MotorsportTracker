@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# Integration suites share one core-test database and run concurrently. Each suite
+# Integration suites share the core-test and client-cache test databases and run concurrently. Each suite
 # seeds rows under a UUID prefix and tears down with `uuid LIKE '<prefix>-%'`, so two
 # suites on the same prefix delete each other's fixtures and see each other's rows.
 # A prefix is the first three UUID groups (8-4-4 hex); every UUID literal in a suite
@@ -30,7 +30,7 @@ while IFS= read -r file; do
     continue
   fi
   OWNER[$prefixes]=$file
-done < <(grep -rl 'POSTGRES_CORE_URL' --include='*_test.go' src/Golang apps | sort)
+done < <(grep -rlE 'POSTGRES_(CORE|CLIENT_CACHE)_URL' --include='*_test.go' src/Golang apps | sort)
 
 if [ $ERRORS -ne 0 ]; then
   echo "Fixture prefix check: FAILED ($ERRORS violation(s)) — give each integration suite its own UUID prefix"

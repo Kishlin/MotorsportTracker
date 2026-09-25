@@ -43,5 +43,7 @@ func (suite *QueueUsingSQSIntegrationTestSuite) TestQueueConnection() {
 }
 
 func TestIntegration_QueueUsingSQS(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(QueueUsingSQSIntegrationTestSuite))
 }

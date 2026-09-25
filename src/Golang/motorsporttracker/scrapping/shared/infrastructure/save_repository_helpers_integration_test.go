@@ -165,6 +165,8 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) TestSave() {
 }
 
 func TestIntegration_SaveRepositoryHelpers(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(SaveRepositoryHelpersIntegrationTestSuite))
 }
 

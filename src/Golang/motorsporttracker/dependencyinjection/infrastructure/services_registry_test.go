@@ -94,5 +94,7 @@ func (suite *ServiceRegistryIntegrationTestSuite) TestGetIntentsQueue() {
 }
 
 func TestIntegration_ServiceRegistry(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(ServiceRegistryIntegrationTestSuite))
 }

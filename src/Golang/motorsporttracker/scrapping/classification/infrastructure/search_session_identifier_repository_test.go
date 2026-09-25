@@ -125,24 +125,24 @@ func TestIntegration_SearchSessionIdentifierRepository(t *testing.T) {
 func (suite *SearchSessionIdentifierRepositoryTestSuite) sessionFixtures() string {
 	return fmt.Sprintf(`
 INSERT INTO venues (uuid, hash) VALUES 
-('%[1]s-0001-000000000001', 'venues-hash')
+('%[1]s-0001-000000000001', '%[1]s-0001-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 INSERT INTO countries (uuid, hash) VALUES 
-('%[1]s-0002-000000000001', 'countries-hash')
+('%[1]s-0002-000000000001', '%[1]s-0002-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO series(uuid, name, hash) VALUES 
-('%[1]s-0003-000000000001', 'series %[1]s', 'series-hash'),
-('%[1]s-0003-000000000002', 'wrong %[1]s', 'wrong-series-hash')
+('%[1]s-0003-000000000001', 'series %[1]s', '%[1]s-0003-000000000001'),
+('%[1]s-0003-000000000002', 'wrong %[1]s', '%[1]s-0003-000000000002')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO seasons (uuid, series, year, hash) VALUES
 ('%[1]s-0004-000000000001',
 (SELECT id FROM series WHERE series.uuid = '%[1]s-0003-000000000001'),
-2025, '2025-hash'),
+2025, '%[1]s-0004-000000000001'),
 ('%[1]s-0004-000000000002',
 (SELECT id FROM series WHERE series.uuid = '%[1]s-0003-000000000002'),
-2024, 'wrong-year-hash')
+2024, '%[1]s-0004-000000000002')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO events (uuid, season, venue, country, name, hash) VALUES
@@ -150,21 +150,21 @@ INSERT INTO events (uuid, season, venue, country, name, hash) VALUES
 (SELECT id FROM seasons WHERE seasons.uuid = '%[1]s-0004-000000000001'),
 (SELECT id FROM venues WHERE uuid = '%[1]s-0001-000000000001'),
 (SELECT id FROM countries WHERE uuid = '%[1]s-0002-000000000001'),
-'event %[1]s', 'event-hash'),
+'event %[1]s', '%[1]s-0005-000000000001'),
 ('%[1]s-0005-000000000002',
 (SELECT id FROM seasons WHERE seasons.uuid = '%[1]s-0004-000000000002'),
 (SELECT id FROM venues where uuid = '%[1]s-0001-000000000001'),
 (SELECT id FROM countries WHERE uuid = '%[1]s-0002-000000000001'),
-'wrong %[1]s', 'wrong-event-hash')
+'wrong %[1]s', '%[1]s-0005-000000000002')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO sessions (uuid, event, name, hash) VALUES 
 ('%[1]s-0006-000000000001',
 (SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000001'),
-'session %[1]s', 'session-hash'),
+'session %[1]s', '%[1]s-0006-000000000001'),
 ('%[1]s-0006-000000000002',
 (SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000002'),
-'wrong %[1]s', 'wrong-hash')
+'wrong %[1]s', '%[1]s-0006-000000000002')
 ON CONFLICT (uuid) DO NOTHING;
 `, searchSessionIdentifierPrefix)
 }

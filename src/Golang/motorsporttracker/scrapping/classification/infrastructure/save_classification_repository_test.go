@@ -126,26 +126,28 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassific
 }
 
 func TestIntegration_SaveClassificationRepository(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(SaveClassificationRepositoryIntegrationTestSuite))
 }
 
 func (suite *SaveClassificationRepositoryIntegrationTestSuite) sessionFixtures() string {
 	return `
 INSERT INTO venues (uuid, hash) VALUES 
-('dbc082d8-53c0-468b-0001-000000000001', 'venues-hash')
+('dbc082d8-53c0-468b-0001-000000000001', 'dbc082d8-53c0-468b-0001-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 INSERT INTO countries (uuid, hash) VALUES 
-('dbc082d8-53c0-468b-0002-000000000001', 'countries-hash')
+('dbc082d8-53c0-468b-0002-000000000001', 'dbc082d8-53c0-468b-0002-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO series(uuid, name, hash) VALUES 
-('dbc082d8-53c0-468b-0003-000000000001', 'series', 'series-hash')
+('dbc082d8-53c0-468b-0003-000000000001', 'series', 'dbc082d8-53c0-468b-0003-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO seasons (uuid, series, year, hash) VALUES
 ('dbc082d8-53c0-468b-0004-000000000001',
 (SELECT id FROM series WHERE series.uuid = 'dbc082d8-53c0-468b-0003-000000000001'),
-2025, '2025-hash')
+2025, 'dbc082d8-53c0-468b-0004-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO events (uuid, season, venue, country, name, hash) VALUES
@@ -153,22 +155,22 @@ INSERT INTO events (uuid, season, venue, country, name, hash) VALUES
 (SELECT id FROM seasons WHERE seasons.uuid = 'dbc082d8-53c0-468b-0004-000000000001'),
 (SELECT id FROM venues WHERE uuid = 'dbc082d8-53c0-468b-0001-000000000001'),
 (SELECT id FROM countries WHERE uuid = 'dbc082d8-53c0-468b-0002-000000000001'),
-'event', 'event-hash')
+'event', 'dbc082d8-53c0-468b-0005-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO sessions (uuid, event, name, hash) VALUES 
 ('dbc082d8-53c0-468b-0006-000000000001',
 (SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'session-hash-1'),
+'session', 'dbc082d8-53c0-468b-0006-000000000001'),
 ('dbc082d8-53c0-468b-0006-000000000002',
 (SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'session-hash-2'),
+'session', 'dbc082d8-53c0-468b-0006-000000000002'),
 ('dbc082d8-53c0-468b-0006-000000000003',
 (SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'session-hash-3'),
+'session', 'dbc082d8-53c0-468b-0006-000000000003'),
 ('dbc082d8-53c0-468b-0006-000000000004',
 (SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'session-hash-4')
+'session', 'dbc082d8-53c0-468b-0006-000000000004')
 ON CONFLICT (uuid) DO NOTHING;
 `
 }

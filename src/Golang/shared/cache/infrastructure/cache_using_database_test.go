@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"testing"
 
@@ -36,7 +37,10 @@ func (suite *CacheUsingDatabaseFunctionalTestSuite) TearDownSuite() {
 	suite.cache.db.Close()
 }
 
-var setupQuery = "INSERT INTO series (key, value) VALUES ('existing_key', 'existing_value')"
+// cacheUsingDatabasePrefix namespaces this suite's cache keys: teardown deletes only its own rows.
+const cacheUsingDatabasePrefix = "6e6e0ce4-a7a7-4047"
+
+var setupQuery = fmt.Sprintf("INSERT INTO series (key, value) VALUES ('%s-existing_key', 'existing_value')", cacheUsingDatabasePrefix)
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) SetupTest() {
 	err := suite.cache.db.Exec(context.Background(), setupQuery)
@@ -44,18 +48,17 @@ func (suite *CacheUsingDatabaseFunctionalTestSuite) SetupTest() {
 }
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) TearDownTest() {
-	//goland:noinspection SqlWithoutWhere
-	err := suite.cache.db.Exec(context.Background(), "DELETE FROM series")
+	err := suite.cache.db.Exec(context.Background(), fmt.Sprintf("DELETE FROM series WHERE key LIKE '%s-%%'", cacheUsingDatabasePrefix))
 	require.NoError(suite.T(), err)
 }
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) TestGet() {
-	actual, hit, err := suite.cache.Get("series", "missing_key")
+	actual, hit, err := suite.cache.Get("series", cacheUsingDatabasePrefix+"-missing_key")
 	require.NoError(suite.T(), err)
 	require.False(suite.T(), hit)
 	require.Nil(suite.T(), actual)
 
-	actual, hit, err = suite.cache.Get("series", "existing_key")
+	actual, hit, err = suite.cache.Get("series", cacheUsingDatabasePrefix+"-existing_key")
 	require.NoError(suite.T(), err)
 	require.True(suite.T(), hit)
 	require.Equal(suite.T(), "existing_value", string(actual))
@@ -63,25 +66,27 @@ func (suite *CacheUsingDatabaseFunctionalTestSuite) TestGet() {
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) TestSet() {
 	// Test adding new key
-	err := suite.cache.Set("series", "new_key", []byte("test_value"))
+	err := suite.cache.Set("series", cacheUsingDatabasePrefix+"-new_key", []byte("test_value"))
 	require.NoError(suite.T(), err)
 
-	actual, hit, err := suite.cache.Get("series", "new_key")
+	actual, hit, err := suite.cache.Get("series", cacheUsingDatabasePrefix+"-new_key")
 	require.NoError(suite.T(), err)
 	require.True(suite.T(), hit)
 	require.Equal(suite.T(), "test_value", string(actual))
 
 	// Test updating existing key
-	err = suite.cache.Set("series", "existing_key", []byte("updated_value"))
+	err = suite.cache.Set("series", cacheUsingDatabasePrefix+"-existing_key", []byte("updated_value"))
 	require.NoError(suite.T(), err)
 
-	actual, hit, err = suite.cache.Get("series", "existing_key")
+	actual, hit, err = suite.cache.Get("series", cacheUsingDatabasePrefix+"-existing_key")
 	require.NoError(suite.T(), err)
 	require.True(suite.T(), hit)
 	require.Equal(suite.T(), "updated_value", string(actual))
 }
 
 func TestFunctional_CacheUsingDatabase(t *testing.T) {
+	t.Parallel()
+
 	suite.Run(t, new(CacheUsingDatabaseFunctionalTestSuite))
 }
 
