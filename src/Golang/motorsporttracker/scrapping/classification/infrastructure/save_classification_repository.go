@@ -62,7 +62,7 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 			}
 		}
 		if classificationDetails.Nationality != nil {
-			if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists {
+			if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists == false {
 				nationalitiesUUIDs[classificationDetails.Nationality.UUID] = struct{}{}
 				uniqueNationalities = append(uniqueNationalities, classificationDetails.Nationality)
 			}

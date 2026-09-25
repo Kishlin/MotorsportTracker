@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-25: items 1–8, 10 and 11 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 12–14 are open; they were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
+Status as of 2026-09-25: items 1–8 and 10–12 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 13 and 14 are open. They were found on 2026-08-01, along with item 12, while tracing the scraping chain to build the API canary. Both are silent: nothing fails, the data is just wrong.
 
-Re-verified against the code on 2026-09-25: items 9 and 12–14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
+Re-verified against the code on 2026-09-25: items 9, 13 and 14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
 
 ---
 
@@ -116,30 +116,15 @@ Verified: the four series-touching packages failed under `-count=6` before the c
 
 ---
 
-## 12. Inverted `exists` Check Means Nationalities Are Never Saved
+## 12. ~~Inverted `exists` Check Means Nationalities Are Never Saved~~ (Resolved)
 
-Found 2026-08-01. Open.
+**Resolution**: `exists` → `exists == false` in `save_classification_repository.go:65`, the same form as the drivers dedup twelve lines above. Nationalities from classification payloads now reach `shared.SaveCountries` and are written to `countries`.
 
-**Impact**: `countries` is never populated from classification payloads, so driver nationalities are silently dropped. No error, no warning.
+The cause was the inverted branch: `nationalitiesUUIDs` starts empty and was written only inside that branch, so the body never ran and `uniqueNationalities` was always empty. Nothing errored and nothing referenced the missing rows. Nationalities are only written to `countries`; nothing resolves them back to an ID, so no foreign key was left dangling.
 
-Scope is narrower than it first looks: `uniqueNationalities` is passed to `SaveCountries` (line 129) and nowhere else — nothing in this repository resolves a nationality back to an ID, so no foreign key is left dangling and no row references a missing country. The loss is that `countries` only ever receives the **event** countries written by the calendar path (`save_calendar_repository.go:62`). A driver whose nationality never hosts an event is absent from the table entirely.
+The three data-bearing cases in `save_classification_repository_test.go` now assert the `countries` count. The complex fixture repeats one nationality across three entries and asserts 2 rows, which covers the dedup as well. All three assertions failed with `actual: 0` before the fix.
 
-**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go:65-68`
-
-**Problem**: the dedup branch is inverted.
-
-```go
-if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists {
-	nationalitiesUUIDs[classificationDetails.Nationality.UUID] = struct{}{}
-	uniqueNationalities = append(uniqueNationalities, classificationDetails.Nationality)
-}
-```
-
-`nationalitiesUUIDs` starts empty (line 47) and is written **only inside this branch**, so `exists` is false on every iteration and the body never runs. `uniqueNationalities` is therefore always empty when it reaches `shared.SaveCountries` at line 129, which returns without doing anything.
-
-The drivers block twelve lines above (line 53) is the correct form of the same pattern — `exists == false` — which is what makes this a plain typo rather than a design choice. `src/Golang/CLAUDE.md` mandates the explicit `== false` comparison precisely because a bare `exists` reads as plausible.
-
-**Remediation**: `if _, exists := ...; exists == false {`. One character class. Worth adding a repository test asserting a non-zero `countries` count after saving a classification, since nothing currently covers it.
+The fix is not retroactive. Classifications scraped before it never wrote their nationalities, and they get them only when they are scraped again.
 
 ---
 

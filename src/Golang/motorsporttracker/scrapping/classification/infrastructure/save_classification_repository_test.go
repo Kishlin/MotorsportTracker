@@ -92,6 +92,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassific
 
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0007-%"))
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0007-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", saveClassificationPrefix+"-0007-%"))
 		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000002"))
 		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000002"))
 		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000002"))
@@ -105,6 +106,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassific
 
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0008-%"))
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0008-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", saveClassificationPrefix+"-0008-%"))
 		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000003"))
 		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000003"))
 		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000003"))
@@ -118,6 +120,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassific
 
 		suite.Equal(3, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0009-%"))
 		suite.Equal(10, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0009-%"))
+		suite.Equal(2, suite.helper.Count(suite.T().Context(), "countries", saveClassificationPrefix+"-0009-%"))
 		suite.Equal(4, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000004"))
 		suite.Equal(10, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000004"))
 		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000004"))
