@@ -1,4 +1,5 @@
 ---
+name: new-scraping-op
 description: Scaffold a new scraping operation end to end — intent, use case, handler, repository, migration, and registration.
 argument-hint: <module-name> (e.g. drivers, standings)
 ---

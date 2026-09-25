@@ -64,7 +64,7 @@ Integration suites need the test databases migrated:
 make run-dbmigrate-core.test && make run-dbmigrate-client-cache.test
 ```
 
-Run via `./scripts/test-runner.sh <scope>` (the `test-runner` skill documents the positional arguments) — tests execute inside the `golang` container, never on the host.
+Run via `./scripts/test-runner.sh [scope] [--verbose] [--run <pattern>] [--pristine]` (the `test-runner` skill lists the scopes) — tests execute inside the `golang` container, never on the host.
 
 ## Workspace
 

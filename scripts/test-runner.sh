@@ -3,53 +3,83 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-SCOPE="${1:-all}"
-VERBOSE="${2:-false}"
-RUN_PATTERN="${3:-}"
-PRISTINE="${4:-false}"
+usage() {
+  echo "Usage: $0 [scope] [--verbose] [--run <pattern>] [--pristine]" >&2
+  exit 1
+}
 
-case "$SCOPE" in
+SCOPE=""
+VERBOSE=false
+RUN_PATTERN=""
+PRISTINE=false
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --verbose)
+      VERBOSE=true
+      ;;
+    --run)
+      [ $# -ge 2 ] || usage
+      RUN_PATTERN="$2"
+      shift
+      ;;
+    --pristine)
+      PRISTINE=true
+      ;;
+    -*)
+      echo "Unknown flag: $1" >&2
+      usage
+      ;;
+    *)
+      [ -z "$SCOPE" ] || usage
+      SCOPE="$1"
+      ;;
+  esac
+  shift
+done
+
+case "${SCOPE:-all}" in
   all)
-    TARGETS="./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/..."
+    TARGETS=(./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/...)
     ;;
   scrapping)
-    TARGETS="./src/Golang/motorsporttracker/scrapping/..."
+    TARGETS=(./src/Golang/motorsporttracker/scrapping/...)
     ;;
   gateway)
-    TARGETS="./src/Golang/motorsportstats/..."
+    TARGETS=(./src/Golang/motorsportstats/...)
     ;;
   shared)
-    TARGETS="./src/Golang/shared/..."
+    TARGETS=(./src/Golang/shared/...)
     ;;
   *)
-    TARGETS="$SCOPE"
+    TARGETS=("$SCOPE")
     ;;
 esac
 
-FLAGS=""
+FLAGS=()
 
-if [ "$VERBOSE" = "true" ]; then
-  FLAGS="$FLAGS -v"
+if [ "$VERBOSE" = true ]; then
+  FLAGS+=(-v)
 fi
 
 if [ -n "$RUN_PATTERN" ]; then
-  FLAGS="$FLAGS -run $RUN_PATTERN"
+  FLAGS+=(-run "$RUN_PATTERN")
 fi
 
-if [ "$PRISTINE" = "true" ]; then
+if [ "$PRISTINE" = true ]; then
   echo "Clearing test cache..."
   docker compose exec golang go clean -testcache
   echo ""
 fi
 
-echo "Running tests: $TARGETS"
-if [ -n "$FLAGS" ]; then
-  echo "Flags:$FLAGS"
+echo "Running tests: ${TARGETS[*]}"
+if [ ${#FLAGS[@]} -gt 0 ]; then
+  echo "Flags: ${FLAGS[*]}"
 fi
 echo ""
 
-for TARGET in $TARGETS; do
-  docker compose exec golang bash -c "cd /app && go test $FLAGS $TARGET"
+for TARGET in "${TARGETS[@]}"; do
+  docker compose exec --workdir /app golang go test "${FLAGS[@]}" "$TARGET"
 done
 
 echo ""
