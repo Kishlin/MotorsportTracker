@@ -46,19 +46,19 @@ func (suite *SearchAllSeriesIdentifiersRepositoryIntegrationTestSuite) TearDownS
 }
 
 func (suite *SearchAllSeriesIdentifiersRepositoryIntegrationTestSuite) TestGetAllSeriesIdentifiers() {
-	suite.T().Run("it retrieves nothing when there are no series", func(t *testing.T) {
+	suite.Run("it retrieves nothing when there are no series", func() {
 		suite.withNoSeriesInDB()
 
-		identifiers, err := suite.repository.GetAllSeriesIdentifiers(t.Context())
+		identifiers, err := suite.repository.GetAllSeriesIdentifiers(suite.T().Context())
 		suite.NoError(err)
 
 		suite.requireCountForTest(0, identifiers)
 	})
 
-	suite.T().Run("it retrieves all the available identifiers", func(t *testing.T) {
+	suite.Run("it retrieves all the available identifiers", func() {
 		suite.withSeriesInDB()
 
-		identifiers, err := suite.repository.GetAllSeriesIdentifiers(t.Context())
+		identifiers, err := suite.repository.GetAllSeriesIdentifiers(suite.T().Context())
 		suite.NoError(err)
 
 		suite.requireCountForTest(3, identifiers)

@@ -29,7 +29,7 @@ func (suite *UseCaseUnitTestSuite) SetupSuite() {
 }
 
 func (suite *UseCaseUnitTestSuite) TestExecute() {
-	suite.T().Run("it stores series from the gateway", func(t *testing.T) {
+	suite.Run("it stores series from the gateway", func() {
 		suite.withSeriesInGateway()
 
 		err := suite.useCase.Execute(context.Background())

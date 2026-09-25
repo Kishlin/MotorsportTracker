@@ -54,29 +54,29 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownTest() {
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TestSaveSeasons() {
-	suite.T().Run("no-op when no seasons to save", func(t *testing.T) {
-		err := suite.repository.SaveSeasons(t.Context(), seriesRef, []*motorsportstats.Season{})
+	suite.Run("no-op when no seasons to save", func() {
+		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, []*motorsportstats.Season{})
 		suite.NoError(err)
 
-		suite.Equal(0, suite.helper.Count(t.Context(), "seasons", "75f849b7-35be-44d8-%"))
+		suite.Equal(0, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-%"))
 	})
 
-	suite.T().Run("saves one season", func(t *testing.T) {
+	suite.Run("saves one season", func() {
 		seasonsToSave := suite.oneSeason()
 
-		err := suite.repository.SaveSeasons(t.Context(), seriesRef, seasonsToSave)
+		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, seasonsToSave)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "seasons", "75f849b7-35be-44d8-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-0002-%"))
 	})
 
-	suite.T().Run("saves multiple seasons", func(t *testing.T) {
+	suite.Run("saves multiple seasons", func() {
 		seasonsToSave := suite.multipleSeasons()
 
-		err := suite.repository.SaveSeasons(t.Context(), seriesRef, seasonsToSave)
+		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, seasonsToSave)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(t.Context(), "seasons", "75f849b7-35be-44d8-0003-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-0003-%"))
 	})
 }
 

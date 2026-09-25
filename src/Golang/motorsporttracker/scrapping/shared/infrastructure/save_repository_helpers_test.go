@@ -11,7 +11,7 @@ type SaveRepositoryHelpersUnitTestSuite struct {
 }
 
 func (suite *SaveRepositoryHelpersUnitTestSuite) TestSplitRowsIntoBatches() {
-	suite.T().Run("one batch when under limit", func(t *testing.T) {
+	suite.Run("one batch when under limit", func() {
 		rows := make([][]interface{}, 10) // 10 rows
 		for i := range rows {
 			rows[i] = make([]interface{}, 5) // 5 columns
@@ -22,7 +22,7 @@ func (suite *SaveRepositoryHelpersUnitTestSuite) TestSplitRowsIntoBatches() {
 		suite.Len(batches[0], 10)
 	})
 
-	suite.T().Run("multiple batches when over limit", func(t *testing.T) {
+	suite.Run("multiple batches when over limit", func() {
 		const colsPerRow = 5
 		const expectedBatches = 7
 		const rowsCount = (6.5 * maxParamsPerQuery) / colsPerRow
@@ -67,7 +67,7 @@ func (suite *SaveRepositoryHelpersUnitTestSuite) TestBuildValuesPlaceholders() {
 			expectedPlaceholder: "($1,$2,$3),($4,$5,$6)",
 		},
 	} {
-		suite.T().Run(name, func(t *testing.T) {
+		suite.Run(name, func() {
 			actual := buildValuesPlaceholders(tc.numRows, tc.numColumns)
 			suite.Equal(tc.expectedPlaceholder, actual)
 		})
@@ -92,7 +92,7 @@ func (suite *SaveRepositoryHelpersUnitTestSuite) TestBuildOnConflictUpdates() {
 			expected: "col1 = EXCLUDED.col1, col2 = EXCLUDED.col2",
 		},
 	} {
-		suite.T().Run(name, func(t *testing.T) {
+		suite.Run(name, func() {
 			actual := buildOnConflictUpdates(tc.columns)
 			suite.Equal(tc.expected, actual)
 		})

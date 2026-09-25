@@ -60,50 +60,50 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
-	suite.T().Run("no-op when no events to save", func(t *testing.T) {
+	suite.Run("no-op when no events to save", func() {
 		emptyCalendar := &motorsportstats.Calendar{}
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, emptyCalendar)
 		suite.NoError(err)
 	})
 
-	suite.T().Run("saves events, venues, countries and sessions", func(t *testing.T) {
+	suite.Run("saves events, venues, countries and sessions", func() {
 		calendar := suite.verySimpleCalendar()
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0001-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0001-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "events", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "venues", "77dde66e-7835-4440-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "sessions", "77dde66e-7835-4440-0001-%"))
 	})
 
-	suite.T().Run("saves data when there are nil values", func(t *testing.T) {
+	suite.Run("saves data when there are nil values", func() {
 		calendar := suite.calendarWithNilValues()
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0002-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0002-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "events", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "venues", "77dde66e-7835-4440-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "sessions", "77dde66e-7835-4440-0002-%"))
 	})
 
-	suite.T().Run("saves everything with a complex calendar", func(t *testing.T) {
+	suite.Run("saves everything with a complex calendar", func() {
 		calendar := suite.bigCalendar()
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0003-%"))
-		suite.Equal(2, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0003-%"))
-		suite.Equal(3, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(2, suite.helper.Count(suite.T().Context(), "events", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(2, suite.helper.Count(suite.T().Context(), "venues", "77dde66e-7835-4440-0003-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "sessions", "77dde66e-7835-4440-0003-%"))
 	})
 
-	suite.T().Run("saves everything with repeated venues and countries", func(t *testing.T) {
+	suite.Run("saves everything with repeated venues and countries", func() {
 		calendar := suite.calendarWithRepeatedVenuesAndCountries()
 		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
 		suite.NoError(err)
 
-		suite.Equal(2, suite.helper.Count(t.Context(), "events", "77dde66e-7835-4440-0004-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "venues", "77dde66e-7835-4440-0004-%"))
-		suite.Equal(2, suite.helper.Count(t.Context(), "sessions", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(2, suite.helper.Count(suite.T().Context(), "events", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "venues", "77dde66e-7835-4440-0004-%"))
+		suite.Equal(2, suite.helper.Count(suite.T().Context(), "sessions", "77dde66e-7835-4440-0004-%"))
 	})
 }
 

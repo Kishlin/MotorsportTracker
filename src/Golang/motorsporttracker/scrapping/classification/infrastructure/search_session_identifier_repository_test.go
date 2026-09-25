@@ -98,7 +98,7 @@ func (suite *SearchSessionIdentifierRepositoryTestSuite) TestSearchSessionIdenti
 			expectedHit:    false,
 		},
 	} {
-		suite.T().Run(name, func(t *testing.T) {
+		suite.Run(name, func() {
 			actualRef, actualHit, err := suite.repository.GetSessionIdentifier(
 				suite.T().Context(),
 				tc.seriesKeyword,

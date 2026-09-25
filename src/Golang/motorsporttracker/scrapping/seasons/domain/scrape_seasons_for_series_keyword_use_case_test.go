@@ -37,7 +37,7 @@ func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) SetupSuite() {
 }
 
 func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) TestExecute() {
-	s.T().Run("no-op when series is not found", func(t *testing.T) {
+	s.Run("no-op when series is not found", func() {
 		s.withNoMatchingSeries()
 
 		err := s.useCase.Execute(context.Background(), "series")
@@ -45,7 +45,7 @@ func (s *ScrapeSeasonsForSeriesKeywordUseCaseUnitTestSuite) TestExecute() {
 		s.Equal(0, s.mockSaveSeasonsRepo.seasonsCount)
 	})
 
-	s.T().Run("it stores seasons when series is found", func(t *testing.T) {
+	s.Run("it stores seasons when series is found", func() {
 		s.withAMatchingSeries("series")
 		s.withSeasonsInGateway()
 

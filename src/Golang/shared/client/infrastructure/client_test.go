@@ -54,31 +54,31 @@ func (suite *ClientUnitTestSuite) TestGet() {
 
 	prepareMockResponses(suite.client, dummyResponse)
 
-	suite.T().Run("OK Response", func(t *testing.T) {
+	suite.Run("OK Response", func() {
 		data, err := suite.client.Get("/", map[string]string{})
-		require.NoError(t, err)
-		require.Equal(t, dummyResponse, string(data))
+		require.NoError(suite.T(), err)
+		require.Equal(suite.T(), dummyResponse, string(data))
 	})
 
-	suite.T().Run("Error Response", func(t *testing.T) {
+	suite.Run("Error Response", func() {
 		_, err := suite.client.Get("/404", map[string]string{})
-		require.Error(t, err)
+		require.Error(suite.T(), err)
 	})
 
-	suite.T().Run("Headers are sent", func(t *testing.T) {
+	suite.Run("Headers are sent", func() {
 		headersToSend := map[string]string{
 			"X-Custom-Header": "CustomValue",
 			"X-Another-One":   "AnotherValue",
 		}
 
 		data, err := suite.client.Get("/with-headers", headersToSend)
-		require.NoError(t, err)
+		require.NoError(suite.T(), err)
 
 		var receivedHeaders map[string]string
 		err = json.Unmarshal(data, &receivedHeaders)
-		require.NoError(t, err)
+		require.NoError(suite.T(), err)
 
-		require.Equal(t, headersToSend, receivedHeaders)
+		require.Equal(suite.T(), headersToSend, receivedHeaders)
 	})
 }
 

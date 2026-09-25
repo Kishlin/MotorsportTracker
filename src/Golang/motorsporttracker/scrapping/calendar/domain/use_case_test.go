@@ -32,7 +32,7 @@ func (s *UseCaseUnitTestSuite) SetupSuite() {
 }
 
 func (s *UseCaseUnitTestSuite) TestExecute() {
-	s.T().Run("no-op when season identifier is not found", func(t *testing.T) {
+	s.Run("no-op when season identifier is not found", func() {
 		s.withNoMatchingSeason()
 
 		err := s.useCase.Execute(context.Background(), "series", 2025)
@@ -40,7 +40,7 @@ func (s *UseCaseUnitTestSuite) TestExecute() {
 		s.Equal(0, s.mockSaveCalendarRepo.eventsCount)
 	})
 
-	s.T().Run("it stores events when season identifier is found", func(t *testing.T) {
+	s.Run("it stores events when season identifier is found", func() {
 		s.withAMatchingSeason()
 		s.withEventsInGateway()
 

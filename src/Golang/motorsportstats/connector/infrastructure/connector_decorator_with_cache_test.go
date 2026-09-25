@@ -20,10 +20,10 @@ func (suite *CachedConnectorUnitTestSuite) TestGetFromCacheOrConnector() {
 
 	decorator := NewCachedConnector(nil, cache)
 
-	suite.T().Run("gets from cache when present", func(t *testing.T) {
+	suite.Run("gets from cache when present", func() {
 		defer func() {
 			if r := recover(); r != nil {
-				t.Errorf("Unexpected panic: %v", r)
+				suite.T().Errorf("Unexpected panic: %v", r)
 			}
 		}()
 		data, err := decorator.getFromCacheOrConnector("namespace", "key", func() ([]byte, error) {
@@ -33,7 +33,7 @@ func (suite *CachedConnectorUnitTestSuite) TestGetFromCacheOrConnector() {
 		require.Equal(suite.T(), []byte("cached data"), data)
 	})
 
-	suite.T().Run("calls connector when cache miss", func(t *testing.T) {
+	suite.Run("calls connector when cache miss", func() {
 		data, err := decorator.getFromCacheOrConnector("namespace", "new-key", func() ([]byte, error) {
 			return []byte("from connector"), nil
 		})

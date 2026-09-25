@@ -32,7 +32,7 @@ func (s *UseCaseUnitTestSuite) SetupSuite() {
 }
 
 func (s *UseCaseUnitTestSuite) TestExecute() {
-	s.T().Run("no-op when session identifier is not found", func(t *testing.T) {
+	s.Run("no-op when session identifier is not found", func() {
 		s.withNoMatchingSession()
 
 		err := s.useCase.Execute(context.Background(), "series", 2025, "british", "race")
@@ -40,7 +40,7 @@ func (s *UseCaseUnitTestSuite) TestExecute() {
 		s.Equal(0, s.mockSaveClassificationRepo.savedClassifications)
 	})
 
-	s.T().Run("it stores classification when session identifier found", func(t *testing.T) {
+	s.Run("it stores classification when session identifier found", func() {
 		s.withAMatchingSession()
 		s.withClassificationInGateway()
 

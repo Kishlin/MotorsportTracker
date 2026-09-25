@@ -49,26 +49,26 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) TearDownTest() {
 }
 
 func (suite *SaveSeriesRepositoryIntegrationTestSuite) TestSaveSeries() {
-	suite.T().Run("no-op when no series to save", func(t *testing.T) {
-		err := suite.repository.SaveSeries(t.Context(), []*motorsportstats.Series{})
+	suite.Run("no-op when no series to save", func() {
+		err := suite.repository.SaveSeries(suite.T().Context(), []*motorsportstats.Series{})
 		suite.NoError(err)
 
 		suite.Equal(0, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-%"))
 	})
 
-	suite.T().Run("saves one series", func(t *testing.T) {
+	suite.Run("saves one series", func() {
 		seriesToSave := suite.oneSeries()
 
-		err := suite.repository.SaveSeries(t.Context(), seriesToSave)
+		err := suite.repository.SaveSeries(suite.T().Context(), seriesToSave)
 		suite.NoError(err)
 
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-0001-%"))
 	})
 
-	suite.T().Run("saves multiple series", func(t *testing.T) {
+	suite.Run("saves multiple series", func() {
 		seriesToSave := suite.multipleSeries()
 
-		err := suite.repository.SaveSeries(t.Context(), seriesToSave)
+		err := suite.repository.SaveSeries(suite.T().Context(), seriesToSave)
 		suite.NoError(err)
 
 		suite.Equal(3, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-0002-%"))

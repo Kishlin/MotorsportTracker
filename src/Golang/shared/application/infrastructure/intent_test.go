@@ -28,7 +28,7 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 		},
 	}
 
-	suite.T().Run("All arguments and options", func(t *testing.T) {
+	suite.Run("All arguments and options", func() {
 		message, err := intent.ToMessage(
 			[]string{"Formula 1", "2023"},
 			map[string]string{
@@ -37,35 +37,35 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 				"v": "true",
 			},
 		)
-		require.NoError(t, err)
+		require.NoError(suite.T(), err)
 
-		require.Equal(t, "test-intent", message.Type)
+		require.Equal(suite.T(), "test-intent", message.Type)
 
-		require.Equal(t, "Formula 1", message.Metadata["series"])
-		require.Equal(t, "2023", message.Metadata["season"])
-		require.Equal(t, "results.json", message.Metadata["output"])
-		require.Equal(t, "true", message.Metadata["verbose"])
-		require.Equal(t, "false", message.Metadata["quiet"])
+		require.Equal(suite.T(), "Formula 1", message.Metadata["series"])
+		require.Equal(suite.T(), "2023", message.Metadata["season"])
+		require.Equal(suite.T(), "results.json", message.Metadata["output"])
+		require.Equal(suite.T(), "true", message.Metadata["verbose"])
+		require.Equal(suite.T(), "false", message.Metadata["quiet"])
 	})
 
-	suite.T().Run("Missing options are not set", func(t *testing.T) {
+	suite.Run("Missing options are not set", func() {
 		message, err := intent.ToMessage(
 			[]string{"Formula 1", "2023"},
 			map[string]string{
 				"verbose": "true",
 			},
 		)
-		require.NoError(t, err)
+		require.NoError(suite.T(), err)
 
 		// Options not provided should not be in metadata
 		_, outputExists := message.Metadata["output"]
-		require.False(t, outputExists, "Output option should not be present")
+		require.False(suite.T(), outputExists, "Output option should not be present")
 
 		_, quietExists := message.Metadata["quiet"]
-		require.False(t, quietExists, "Quiet option should not be present")
+		require.False(suite.T(), quietExists, "Quiet option should not be present")
 	})
 
-	suite.T().Run("Extra arguments and options are ignored", func(t *testing.T) {
+	suite.Run("Extra arguments and options are ignored", func() {
 		message, err := intent.ToMessage(
 			[]string{"Formula 1", "2023", "extra-arg", "another-extra"},
 			map[string]string{
@@ -73,19 +73,19 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 				"verbose":   "true",
 			},
 		)
-		require.NoError(t, err)
+		require.NoError(suite.T(), err)
 
-		require.Len(t, message.Metadata, 3) // 2 arguments + 1 option
+		require.Len(suite.T(), message.Metadata, 3) // 2 arguments + 1 option
 
 		// Extra argument should be ignored
-		require.NotContains(t, message.Metadata, "extra-arg")
-		require.NotContains(t, message.Metadata, "another-extra")
+		require.NotContains(suite.T(), message.Metadata, "extra-arg")
+		require.NotContains(suite.T(), message.Metadata, "another-extra")
 
 		// Extra option should be ignored
-		require.NotContains(t, message.Metadata, "extra-opt")
+		require.NotContains(suite.T(), message.Metadata, "extra-opt")
 	})
 
-	suite.T().Run("Empty config", func(t *testing.T) {
+	suite.Run("Empty config", func() {
 		emptyIntent := &BaseIntent{
 			Config: IntentConfig{
 				Name:        "empty-intent",
@@ -96,35 +96,35 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 		}
 
 		message, err := emptyIntent.ToMessage([]string{}, map[string]string{})
-		require.NoError(t, err)
-		require.Equal(t, "empty-intent", message.Type)
-		require.Empty(t, message.Metadata)
+		require.NoError(suite.T(), err)
+		require.Equal(suite.T(), "empty-intent", message.Type)
+		require.Empty(suite.T(), message.Metadata)
 	})
 
-	suite.T().Run("Fails when arguments are missing", func(t *testing.T) {
+	suite.Run("Fails when arguments are missing", func() {
 		_, err := intent.ToMessage([]string{"OnlyOneArg"}, map[string]string{})
-		require.Error(t, err)
+		require.Error(suite.T(), err)
 	})
 
-	suite.T().Run("Fails when options that require a value are not given one", func(t *testing.T) {
+	suite.Run("Fails when options that require a value are not given one", func() {
 		_, err := intent.ToMessage(
 			[]string{"Formula 1", "2023"},
 			map[string]string{
 				"output": "", // Empty value
 			},
 		)
-		require.Error(t, err)
+		require.Error(suite.T(), err)
 	})
 
-	suite.T().Run("Boolean flags default to true", func(t *testing.T) {
+	suite.Run("Boolean flags default to true", func() {
 		message, err := intent.ToMessage(
 			[]string{"Formula 1", "2023"},
 			map[string]string{
 				"verbose": "", // No value provided, should default to "true"
 			},
 		)
-		require.NoError(t, err)
-		require.Equal(t, "true", message.Metadata["verbose"])
+		require.NoError(suite.T(), err)
+		require.Equal(suite.T(), "true", message.Metadata["verbose"])
 
 		message, err = intent.ToMessage(
 			[]string{"Formula 1", "2023"},
@@ -132,8 +132,8 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 				"verbose": "some-value", // Should still default to "true"
 			},
 		)
-		require.NoError(t, err)
-		require.Equal(t, "true", message.Metadata["verbose"])
+		require.NoError(suite.T(), err)
+		require.Equal(suite.T(), "true", message.Metadata["verbose"])
 
 		message, err = intent.ToMessage(
 			[]string{"Formula 1", "2023"},
@@ -141,8 +141,8 @@ func (suite *IntentUnitTestSuite) TestToMessage() {
 				"verbose": "false", // Should stay "false"
 			},
 		)
-		require.NoError(t, err)
-		require.Equal(t, "false", message.Metadata["verbose"])
+		require.NoError(suite.T(), err)
+		require.Equal(suite.T(), "false", message.Metadata["verbose"])
 	})
 }
 

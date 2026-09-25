@@ -77,8 +77,8 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TestGetSeries
 			expectedFound: true,
 		},
 	} {
-		suite.T().Run(name, func(t *testing.T) {
-			ref, found, err := suite.repository.GetSeriesIdentifier(t.Context(), tc.keyword)
+		suite.Run(name, func() {
+			ref, found, err := suite.repository.GetSeriesIdentifier(suite.T().Context(), tc.keyword)
 			suite.NoError(err)
 
 			if tc.expectedFound == false {

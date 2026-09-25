@@ -13,14 +13,14 @@ type FnUnitTestSuite struct {
 }
 
 func (suite *FnUnitTestSuite) TestMust() {
-	suite.T().Run("it does not panic if no error", func(t *testing.T) {
+	suite.Run("it does not panic if no error", func() {
 		defer func() {
 			require.Nil(suite.T(), recover())
 		}()
 		Must(nil)
 	})
 
-	suite.T().Run("it panics on error", func(t *testing.T) {
+	suite.Run("it panics on error", func() {
 		defer func() {
 			require.NotNil(suite.T(), recover())
 		}()
@@ -29,12 +29,12 @@ func (suite *FnUnitTestSuite) TestMust() {
 }
 
 func (suite *FnUnitTestSuite) TestMustReturn() {
-	suite.T().Run("it returns value if no error", func(t *testing.T) {
+	suite.Run("it returns value if no error", func() {
 		result := MustReturn("expected value", nil)
-		require.Equal(t, "expected value", result)
+		require.Equal(suite.T(), "expected value", result)
 	})
 
-	suite.T().Run("it panics on error", func(t *testing.T) {
+	suite.Run("it panics on error", func() {
 		defer func() {
 			require.NotNil(suite.T(), recover())
 		}()
@@ -43,33 +43,33 @@ func (suite *FnUnitTestSuite) TestMustReturn() {
 }
 
 func (suite *FnUnitTestSuite) TestPtr() {
-	suite.T().Run("it returns a pointer to the value", func(t *testing.T) {
+	suite.Run("it returns a pointer to the value", func() {
 		value := 42
 		ptr := Ptr(value)
-		require.NotNil(t, ptr)
-		require.Equal(t, value, *ptr)
+		require.NotNil(suite.T(), ptr)
+		require.Equal(suite.T(), value, *ptr)
 	})
 }
 
 func (suite *FnUnitTestSuite) TestDeref() {
-	suite.T().Run("it returns the value if there is one", func(t *testing.T) {
+	suite.Run("it returns the value if there is one", func() {
 		intVal := 42
 		strVal := "test"
 		boolVal := true
 
-		require.Equal(t, 42, Deref(&intVal, 0))
-		require.Equal(t, true, Deref(&boolVal, false))
-		require.Equal(t, "test", Deref(&strVal, "wrong"))
+		require.Equal(suite.T(), 42, Deref(&intVal, 0))
+		require.Equal(suite.T(), true, Deref(&boolVal, false))
+		require.Equal(suite.T(), "test", Deref(&strVal, "wrong"))
 	})
 
-	suite.T().Run("it returns the default value if pointer is empty", func(t *testing.T) {
+	suite.Run("it returns the default value if pointer is empty", func() {
 		var intVal *int = nil
 		var strVal *string = nil
 		var boolVal *bool = nil
 
-		require.Equal(t, 42, Deref(intVal, 42))
-		require.Equal(t, true, Deref(boolVal, true))
-		require.Equal(t, "test", Deref(strVal, "test"))
+		require.Equal(suite.T(), 42, Deref(intVal, 42))
+		require.Equal(suite.T(), true, Deref(boolVal, true))
+		require.Equal(suite.T(), "test", Deref(strVal, "test"))
 	})
 }
 

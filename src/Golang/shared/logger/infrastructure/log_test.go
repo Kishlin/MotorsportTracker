@@ -27,9 +27,9 @@ func (suite *LoggerUnitTestSuite) TestParseLogLevel() {
 	}
 
 	for _, tt := range tests {
-		suite.T().Run(tt.name, func(t *testing.T) {
+		suite.Run(tt.name, func() {
 			result := parseLogLevel(tt.logLevel)
-			require.Equal(t, tt.expected, result)
+			require.Equal(suite.T(), tt.expected, result)
 		})
 	}
 }

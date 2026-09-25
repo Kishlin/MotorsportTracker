@@ -45,34 +45,34 @@ func (suite *SaveCountryHelperIntegrationTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveCountryHelperIntegrationTestSuite) TestSaveCountry() {
-	suite.T().Run("no-op when then are no countries", func(t *testing.T) {
+	suite.Run("no-op when then are no countries", func() {
 		countries := suite.emptyCountriesList()
-		err := SaveCountries(t.Context(), suite.db, countries)
+		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 	})
 
-	suite.T().Run("saves one country", func(t *testing.T) {
+	suite.Run("saves one country", func() {
 		countries := suite.singleCountryList()
-		err := SaveCountries(t.Context(), suite.db, countries)
+		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "22b1a818-97f2-43d0-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0001-%"))
 	})
 
-	suite.T().Run("saves a country with nil values", func(t *testing.T) {
+	suite.Run("saves a country with nil values", func() {
 		countries := suite.countryWithNilValues()
-		err := SaveCountries(t.Context(), suite.db, countries)
+		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "countries", "22b1a818-97f2-43d0-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0002-%"))
 	})
 
-	suite.T().Run("saves multiple countries", func(t *testing.T) {
+	suite.Run("saves multiple countries", func() {
 		countries := suite.multipleCountriesList()
-		err := SaveCountries(t.Context(), suite.db, countries)
+		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(t.Context(), "countries", "22b1a818-97f2-43d0-0003-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0003-%"))
 	})
 }
 

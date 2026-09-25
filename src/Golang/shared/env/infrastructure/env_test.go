@@ -26,14 +26,14 @@ func (suite *EnvUnitTestSuite) TestOverrideAppEnv() {
 }
 
 func (suite *EnvUnitTestSuite) TestGetEnv() {
-	suite.T().Run("it defaults to production", func(t *testing.T) {
+	suite.Run("it defaults to production", func() {
 		resetFunc := OverrideAppEnv("")
 		defer resetFunc()
 
 		fn.Must(os.Unsetenv(appEnvKey))
 	})
 
-	suite.T().Run("it reads the value of APP_ENV", func(t *testing.T) {
+	suite.Run("it reads the value of APP_ENV", func() {
 		expected := "please work"
 
 		resetFunc := OverrideAppEnv(expected)
@@ -41,7 +41,7 @@ func (suite *EnvUnitTestSuite) TestGetEnv() {
 
 		actual := getEnv()
 
-		require.Equal(t, expected, actual)
+		require.Equal(suite.T(), expected, actual)
 	})
 }
 

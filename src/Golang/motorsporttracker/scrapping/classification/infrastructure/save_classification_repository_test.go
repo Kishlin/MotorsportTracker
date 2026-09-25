@@ -74,54 +74,54 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassification() {
-	suite.T().Run("no-op when no classifications or retirements", func(t *testing.T) {
+	suite.Run("no-op when no classifications or retirements", func() {
 		emptyClassification := suite.emptyClassification()
-		err := suite.repository.SaveClassification(t.Context(), "dbc082d8-53c0-468b-0006-000000000001", emptyClassification)
+		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000001", emptyClassification)
 		suite.NoError(err)
 
-		suite.Equal(0, suite.count(t, countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(0, suite.count(t, countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(len(emptyClassification.Retirements), suite.count(t, countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(len(emptyClassification.Details), suite.count(t, countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
+		suite.Equal(0, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000001"))
+		suite.Equal(0, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000001"))
+		suite.Equal(len(emptyClassification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
+		suite.Equal(len(emptyClassification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
 	})
 
-	suite.T().Run("saves a very simple classification", func(t *testing.T) {
+	suite.Run("saves a very simple classification", func() {
 		classification := suite.verySimpleClassification()
-		err := suite.repository.SaveClassification(t.Context(), "dbc082d8-53c0-468b-0006-000000000002", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000002", classification)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "teams", "dbc082d8-53c0-468b-0007-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "drivers", "dbc082d8-53c0-468b-0007-%"))
-		suite.Equal(1, suite.count(t, countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(1, suite.count(t, countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(len(classification.Retirements), suite.count(t, countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(len(classification.Details), suite.count(t, countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0007-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0007-%"))
+		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000002"))
+		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000002"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
 	})
 
-	suite.T().Run("saves data when there are nil values", func(t *testing.T) {
+	suite.Run("saves data when there are nil values", func() {
 		classification := suite.classificationWithNilValues()
-		err := suite.repository.SaveClassification(t.Context(), "dbc082d8-53c0-468b-0006-000000000003", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000003", classification)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(t.Context(), "teams", "dbc082d8-53c0-468b-0008-%"))
-		suite.Equal(1, suite.helper.Count(t.Context(), "drivers", "dbc082d8-53c0-468b-0008-%"))
-		suite.Equal(1, suite.count(t, countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(1, suite.count(t, countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(len(classification.Retirements), suite.count(t, countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(len(classification.Details), suite.count(t, countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0008-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0008-%"))
+		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000003"))
+		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000003"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
 	})
 
-	suite.T().Run("saves everything from a complex classification", func(t *testing.T) {
+	suite.Run("saves everything from a complex classification", func() {
 		classification := suite.complexClassification()
-		err := suite.repository.SaveClassification(t.Context(), "dbc082d8-53c0-468b-0006-000000000004", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000004", classification)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(t.Context(), "teams", "dbc082d8-53c0-468b-0009-%"))
-		suite.Equal(10, suite.helper.Count(t.Context(), "drivers", "dbc082d8-53c0-468b-0009-%"))
-		suite.Equal(4, suite.count(t, countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(10, suite.count(t, countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(len(classification.Retirements), suite.count(t, countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(len(classification.Details), suite.count(t, countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0009-%"))
+		suite.Equal(10, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0009-%"))
+		suite.Equal(4, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000004"))
+		suite.Equal(10, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000004"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
 	})
 }
 
