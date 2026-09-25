@@ -24,7 +24,7 @@ func (suite *GatewayUsingConnectorFunctionalTestSuite) SetupSuite() {
 	)
 }
 
-func (suite *GatewayUsingConnectorFunctionalTestSuite) TeardownSuite() {
+func (suite *GatewayUsingConnectorFunctionalTestSuite) TearDownSuite() {
 	suite.testServer.Close()
 }
 
