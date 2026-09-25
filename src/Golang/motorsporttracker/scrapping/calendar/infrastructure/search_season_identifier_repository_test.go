@@ -20,12 +20,10 @@ type SearchSeasonIdentifierRepositoryIntegrationTestSuite struct {
 	suite.Suite
 
 	repository *SearchSeasonIdentifierRepository
-
-	resetEnv func()
 }
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -42,7 +40,6 @@ func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TearDownSuite
 	}
 
 	suite.repository.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TestGetSeasonIdentifier() {

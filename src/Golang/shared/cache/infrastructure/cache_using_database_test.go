@@ -21,8 +21,7 @@ type CacheUsingDatabaseFunctionalTestSuite struct {
 }
 
 func (suite *CacheUsingDatabaseFunctionalTestSuite) SetupSuite() {
-	resetEnv := env.OverrideAppEnv("tests")
-	defer resetEnv()
+	env.OverrideAppEnv("tests")
 
 	fn.Must(env.LoadEnv())
 

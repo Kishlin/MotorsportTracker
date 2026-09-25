@@ -20,12 +20,10 @@ type SearchSessionIdentifierRepositoryTestSuite struct {
 	suite.Suite
 
 	repository *SearchSessionIdentifierRepository
-
-	resetEnv func()
 }
 
 func (suite *SearchSessionIdentifierRepositoryTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -51,7 +49,6 @@ func (suite *SearchSessionIdentifierRepositoryTestSuite) TearDownSuite() {
 	}
 
 	suite.repository.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SearchSessionIdentifierRepositoryTestSuite) TestSearchSessionIdentifierRepository() {

@@ -13,18 +13,12 @@ import (
 
 type DatabaseUsingPGXPoolIntegrationTestSuite struct {
 	suite.Suite
-
-	resetEnv func()
 }
 
 func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 
 	fn.Must(env.LoadEnv())
-}
-
-func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) TearDownSuite() {
-	suite.resetEnv()
 }
 
 func (suite *DatabaseUsingPGXPoolIntegrationTestSuite) TestCoreConnection() {

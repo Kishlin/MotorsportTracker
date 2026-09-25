@@ -24,12 +24,10 @@ type SaveCalendarRepositoryIntegrationTestSuite struct {
 
 	repository *SaveCalendarRepository
 	helper     *shared.SaveRepositoryHelper
-
-	resetEnv func()
 }
 
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -47,7 +45,6 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TearDownSuite() {
 	}
 
 	suite.repository.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {

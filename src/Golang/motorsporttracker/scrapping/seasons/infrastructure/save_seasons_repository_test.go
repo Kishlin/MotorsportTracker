@@ -24,12 +24,10 @@ type SaveSeasonsRepositoryIntegrationTestSuite struct {
 
 	repository *SaveSeasonsRepository
 	helper     *shared.SaveRepositoryHelper
-
-	resetEnv func()
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	db := database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -42,7 +40,6 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) SetupSuite() {
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownSuite() {
 	suite.repository.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownTest() {

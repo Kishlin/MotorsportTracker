@@ -12,18 +12,12 @@ import (
 
 type QueueUsingSQSIntegrationTestSuite struct {
 	suite.Suite
-
-	resetEnv func()
 }
 
 func (suite *QueueUsingSQSIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 
 	fn.Must(env.LoadEnv())
-}
-
-func (suite *QueueUsingSQSIntegrationTestSuite) TearDownSuite() {
-	suite.resetEnv()
 }
 
 func (suite *QueueUsingSQSIntegrationTestSuite) TestQueueConnection() {

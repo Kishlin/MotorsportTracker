@@ -31,6 +31,8 @@ func (suite *EnvUnitTestSuite) TestGetEnv() {
 		defer resetFunc()
 
 		fn.Must(os.Unsetenv(appEnvKey))
+
+		require.Equal(suite.T(), "production", getEnv())
 	})
 
 	suite.Run("it reads the value of APP_ENV", func() {

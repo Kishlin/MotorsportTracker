@@ -32,13 +32,11 @@ func TestUnit_ServiceRegistry(t *testing.T) {
 type ServiceRegistryIntegrationTestSuite struct {
 	suite.Suite
 
-	resetEnv func()
-
 	registry *ServicesRegistry
 }
 
 func (suite *ServiceRegistryIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	suite.registry = NewServicesRegistry()
 
 	fn.Must(env.LoadEnv())
@@ -46,7 +44,6 @@ func (suite *ServiceRegistryIntegrationTestSuite) SetupSuite() {
 
 func (suite *ServiceRegistryIntegrationTestSuite) TeardownSuite() {
 	suite.registry.Close()
-	suite.resetEnv()
 }
 
 func (suite *ServiceRegistryIntegrationTestSuite) TestGetMotorsportStatsGateway() {

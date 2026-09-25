@@ -36,12 +36,10 @@ type SaveRepositoryHelpersIntegrationTestSuite struct {
 	suite.Suite
 
 	db *database.PGXPoolAdapter
-
-	resetEnv func()
 }
 
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	suite.db = database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -54,7 +52,6 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) SetupSuite() {
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) TearDownSuite() {
 	fn.Must(suite.db.Exec(suite.T().Context(), "DROP TABLE IF EXISTS "+probeTable+";"))
 	suite.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) SetupSubTest() {

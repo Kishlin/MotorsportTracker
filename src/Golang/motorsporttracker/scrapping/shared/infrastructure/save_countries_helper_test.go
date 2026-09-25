@@ -21,12 +21,10 @@ type SaveCountryHelperIntegrationTestSuite struct {
 
 	db     *database.PGXPoolAdapter
 	helper *SaveRepositoryHelper
-
-	resetEnv func()
 }
 
 func (suite *SaveCountryHelperIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	suite.db = database.NewDatabaseUsingPGXPool(os.Getenv("POSTGRES_CORE_URL"))
@@ -42,7 +40,6 @@ func (suite *SaveCountryHelperIntegrationTestSuite) TearDownSuite() {
 	}
 
 	suite.db.Close()
-	suite.resetEnv()
 }
 
 func (suite *SaveCountryHelperIntegrationTestSuite) TestSaveCountry() {

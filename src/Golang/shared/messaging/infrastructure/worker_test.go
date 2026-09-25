@@ -23,12 +23,10 @@ type WorkerIntegrationTestSuite struct {
 	queue        *SQSQueue
 	handlersList *HandlersList
 	handler      *spyHandler
-
-	resetEnv func()
 }
 
 func (suite *WorkerIntegrationTestSuite) SetupSuite() {
-	suite.resetEnv = env.OverrideAppEnv("tests")
+	env.OverrideAppEnv("tests")
 	fn.Must(env.LoadEnv())
 
 	suite.handler = &spyHandler{}
@@ -51,7 +49,6 @@ func (suite *WorkerIntegrationTestSuite) SetupSuite() {
 func (suite *WorkerIntegrationTestSuite) TearDownSuite() {
 	suite.queue.Disconnect()
 	suite.queue = nil
-	suite.resetEnv()
 }
 
 func (suite *WorkerIntegrationTestSuite) TearDownTest() {
