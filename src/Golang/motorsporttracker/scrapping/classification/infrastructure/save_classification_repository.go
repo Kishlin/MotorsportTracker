@@ -53,13 +53,10 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 			if _, exists := driversUUIDs[driver.UUID]; exists == false {
 				driversUUIDs[driver.UUID] = struct{}{}
 				uniqueDrivers = append(uniqueDrivers, driver)
-				if _, exists = driverUUIDsPerCarNumbers[classificationDetails.CarNumber]; exists == false {
-					driverUUIDsPerCarNumbers[classificationDetails.CarNumber] = make([]string, 0)
-				}
-				driverUUIDsPerCarNumbers[classificationDetails.CarNumber] = append(
-					driverUUIDsPerCarNumbers[classificationDetails.CarNumber], driver.UUID,
-				)
 			}
+			driverUUIDsPerCarNumbers[classificationDetails.CarNumber] = append(
+				driverUUIDsPerCarNumbers[classificationDetails.CarNumber], driver.UUID,
+			)
 		}
 		if classificationDetails.Nationality != nil {
 			if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists == false {

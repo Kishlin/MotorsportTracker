@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-25: items 1–8 and 10–12 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 13 and 14 are open. They were found on 2026-08-01, along with item 12, while tracing the scraping chain to build the API canary. Both are silent: nothing fails, the data is just wrong.
+Status as of 2026-09-25: items 1–8 and 10–13 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 14 is open. It was found on 2026-08-01, along with items 12 and 13, while tracing the scraping chain to build the API canary. It is silent: nothing fails, the data is just wrong.
 
-Re-verified against the code on 2026-09-25: items 9, 13 and 14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
+Re-verified against the code on 2026-09-25: items 9 and 14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
 
 ---
 
@@ -128,31 +128,15 @@ The fix is not retroactive. Classifications scraped before it never wrote their 
 
 ---
 
-## 13. A Driver Can Only Be Linked to One Car Per Session
+## 13. ~~A Driver Can Only Be Linked to One Car Per Session~~ (Resolved)
 
-Found 2026-08-01. Open.
+**Resolution**: the per-car append in `save_classification_repository.go:56-58` now sits outside the driver dedup. `driversUUIDs` still deduplicates the driver rows across the session. `driverUUIDsPerCarNumbers` now records every car a driver is listed on.
 
-**Impact**: missing `entry_drivers` rows in multi-driver series. Affects endurance racing specifically — the case the schema was designed for.
+The cause was that both were gated by the same check, so the first car to list a driver kept the link and later cars silently lost it. This does happen in real racing. In 1950s F1, drivers took over a teammate's car mid-race, and both entries were classified: at Monza in 1956, Fangio retired his own car and finished second in Collins'. None of the five cached classifications shows the case, but they are all modern sessions, so it is unverified whether motorsportstats lists such a driver on both entries.
 
-**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go:53-62`
+`complexClassification` now lists one driver on two cars and asserts 11 `entry_drivers` rows. Before the fix it saved 10.
 
-**Problem**: the per-car driver list is built **inside** the global driver dedup.
-
-```go
-for _, driver := range classificationDetails.Drivers {
-	if _, exists := driversUUIDs[driver.UUID]; exists == false {
-		driversUUIDs[driver.UUID] = struct{}{}
-		uniqueDrivers = append(uniqueDrivers, driver)
-		// ... driverUUIDsPerCarNumbers[carNumber] = append(...)  ← also gated by the check above
-	}
-}
-```
-
-The two maps answer different questions. `driversUUIDs` deduplicates the driver rows to insert — correctly global to the session. `driverUUIDsPerCarNumbers` records which drivers sat in which car — that is per car, and must not be suppressed just because the driver was already seen on another entry.
-
-So if car 7 lists drivers A, B, C and car 8 lists A, D, E, then car 8 gets only D and E: the A→car 8 link is silently dropped. First car to mention a driver wins. `saveEntryDrivers` (line 599) then writes an incomplete set.
-
-**Remediation**: lift the `driverUUIDsPerCarNumbers` append out of the `if`, leaving only `driversUUIDs`/`uniqueDrivers` inside it. `entry_drivers` has `UNIQUE(entry, driver)` so a repeat within one car is absorbed by the upsert. `save_classification_repository_test.go:331` (`complexClassification`) already builds a multi-driver fixture and asserts 10 `entry_drivers` rows — extend it with a driver shared across two entries.
+The original remediation said `UNIQUE(entry, driver)` would absorb a repeat within one car. It does not. `saveEntryDrivers` sends every row in one statement, and Postgres rejects an `ON CONFLICT DO UPDATE` that hits the same key twice in one command (`cannot affect row a second time`, SQLSTATE 21000). A driver listed twice on one car therefore fails the save. That is a malformed payload, so failing loudly is correct.
 
 ---
 

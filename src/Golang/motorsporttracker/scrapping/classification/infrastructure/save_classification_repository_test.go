@@ -122,7 +122,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassific
 		suite.Equal(10, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0009-%"))
 		suite.Equal(2, suite.helper.Count(suite.T().Context(), "countries", saveClassificationPrefix+"-0009-%"))
 		suite.Equal(4, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000004"))
-		suite.Equal(10, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000004"))
+		suite.Equal(11, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000004"))
 		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000004"))
 		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, saveClassificationPrefix+"-0006-000000000004"))
 	})
@@ -407,6 +407,9 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 				Drivers: []*motorsportstats.Driver{
 					{
 						UUID: saveClassificationPrefix + "-0009-000000000010",
+					},
+					{
+						UUID: saveClassificationPrefix + "-0009-000000000001",
 					},
 				},
 				Team: &motorsportstats.Team{
