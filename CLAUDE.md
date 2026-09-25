@@ -112,6 +112,8 @@ Subject: `<Type>: <Sentence-case summary>` — e.g. `Hotfix: Send bootstrap trac
 | `Dependencies` | Go modules, `vendor/`, `go.work` |
 | `Project` | Tooling, Makefile, Docker services, IDE and Claude config |
 
+**Never commit without my explicit go-ahead on that specific commit.** An approved plan that mentions a commit is not approval. Stage the changes, show the diff summary and the proposed message, then wait.
+
 No other types — not `Doc`, `Refactoring`, `Cleanup`. Co-author trailers are disabled through `attribution` in `.claude/settings.json`.
 
 ## Communication Style
