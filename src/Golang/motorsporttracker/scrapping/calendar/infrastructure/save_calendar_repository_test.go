@@ -13,7 +13,7 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-const seasonRef = "eeefdfaa-69b8-4226-86d2-000000000001"
+const seasonRef = "77dde66e-7835-4440-0006-000000000001"
 
 type SaveCalendarRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -46,10 +46,10 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TearDownSuite() {
 		`DELETE FROM venues_history WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
 		`DELETE FROM countries WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
 		`DELETE FROM countries_history WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
-		`DELETE FROM seasons WHERE uuid::text = 'eeefdfaa-69b8-4226-86d2-000000000001';`,
-		`DELETE FROM seasons_history WHERE uuid::text = 'eeefdfaa-69b8-4226-86d2-000000000001';`,
-		`DELETE FROM series WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001';`,
-		`DELETE FROM series_history WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001';`,
+		`DELETE FROM seasons WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
+		`DELETE FROM seasons_history WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
+		`DELETE FROM series WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
+		`DELETE FROM series_history WHERE uuid::text LIKE '77dde66e-7835-4440-%';`,
 	}
 	for _, sql := range cleanUps {
 		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
@@ -116,13 +116,13 @@ func TestIntegration_SaveCalendarRepository(t *testing.T) {
 func (suite *SaveCalendarRepositoryIntegrationTestSuite) seasonFixture() string {
 	return `
 INSERT INTO series (uuid, name, short_name, short_code, category, hash)
-VALUES ('70d5b480-8935-4fe5-a8e6-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1', '70d5b480-8935-4fe5-a8e6')
+VALUES ('77dde66e-7835-4440-0005-000000000001', 'Calendar Series', 'CalendarSeries', 'CalendarS', 'Category 1', '77dde66e-7835-4440-0005')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO seasons (uuid, series, name, year, end_year, hash)
-VALUES ('eeefdfaa-69b8-4226-86d2-000000000001', 
-(SELECT id FROM series WHERE uuid::text = '70d5b480-8935-4fe5-a8e6-000000000001'),
-'2024', 2024, 2025, 'eeefdfaa-69b8-4226-86d2')
+VALUES ('77dde66e-7835-4440-0006-000000000001', 
+(SELECT id FROM series WHERE uuid::text = '77dde66e-7835-4440-0005-000000000001'),
+'2024', 2024, 2025, '77dde66e-7835-4440-0006')
 ON CONFLICT DO NOTHING;
 `
 }

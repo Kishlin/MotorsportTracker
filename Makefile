@@ -142,6 +142,7 @@ go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorspo
 
 go-test:
 	@echo "Running Go tests across all modules"
+	@./scripts/fixture-prefix-check.sh
 	@docker compose exec golang bash -c 'cd /app && go test ./src/Golang/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/DBMigrate/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'

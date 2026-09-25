@@ -1,6 +1,6 @@
 # Go Architecture Review — February 2026
 
-> Status as of 2026-09-25: the Weak Points summary has been updated — items 1–8 and 10 are resolved, items 9 and 11–14 are open (re-verified against the code on 2026-09-25). See [ISSUES.md](ISSUES.md) for what each fix involved.
+> Status as of 2026-09-25: the Weak Points summary has been updated — items 1–8, 10 and 11 are resolved, items 9 and 12–14 are open (re-verified against the code on 2026-09-25). See [ISSUES.md](ISSUES.md) for what each fix involved.
 >
 > Strong Point 5 has been **corrected**: the 2026-07-30 pass recorded the caching stack as an unqualified strength, but a cache hit returns bytes without ever validating them. The detail is below.
 
@@ -66,7 +66,7 @@ Summary:
 8. ~~**No integration tests for `shared.Save()`** — core persistence logic untested against real SQL~~ (resolved — 8 cases against `core-test`)
 9. **Database pool uses defaults** — no MaxConns/MaxConnLifetime tuning (open, deliberately; the stated premise was stale — see ISSUES.md)
 10. ~~**SQL interpolation in cache** — `fmt.Sprintf` with namespace as table name (safe today, fragile pattern)~~ (resolved — validated on both call sites)
-11. **Parallel integration suites share one test database** — intermittent false failures (open)
+11. ~~**Parallel integration suites share one test database** — intermittent false failures~~ (resolved — searchable fixture strings namespaced with each suite's UUID prefix)
 12. **Inverted `exists` check** — driver nationalities from classifications are never written to `countries` (open, silent)
 13. **Driver linked to only one car per session** — missing `entry_drivers` rows in endurance series (open, silent)
 14. **Event hash built from venue fields** — event renames never persist; plus a latent nil-deref the schema currently makes unreachable (open, silent)

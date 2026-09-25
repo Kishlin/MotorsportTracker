@@ -72,6 +72,8 @@ if [ "$PRISTINE" = true ]; then
   echo ""
 fi
 
+./scripts/fixture-prefix-check.sh
+
 echo "Running tests: ${TARGETS[*]}"
 if [ ${#FLAGS[@]} -gt 0 ]; then
   echo "Flags: ${FLAGS[*]}"

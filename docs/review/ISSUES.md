@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-25: items 1–8 and 10 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 11–14 are open; 12–14 were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
+Status as of 2026-09-25: items 1–8, 10 and 11 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Items 12–14 are open; they were found on 2026-08-01 while tracing the scraping chain to build the API canary, and all three are silent — nothing fails, the data is just wrong.
 
-Re-verified against the code on 2026-09-25: items 9 and 11–14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
+Re-verified against the code on 2026-09-25: items 9 and 12–14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
 
 ---
 
@@ -99,29 +99,20 @@ Covered by `TestUnit_CacheUsingDatabaseNamespace`, which asserts rejection of in
 
 ---
 
-## 11. Parallel Integration Suites Share One Test Database
+## 11. ~~Parallel Integration Suites Share One Test Database~~ (Resolved)
 
-Found 2026-07-30 while verifying unrelated work. Open.
+**Resolution**: The cause was fixture **strings** colliding, not parallelism as such. The search repositories match with `LIKE '%kw%'`, and suites seeded identical or generic searchable names:
 
-**Impact**: Intermittent false failures locally and in CI. No production impact.
+- `search_series_identifier_repository_test.go` and `search_all_series_identifiers_repository_test.go` (same package) both seeded `'Test Series Match 1'`, `'ShortTest2'` and `'SerTest3'`. `LIMIT 1` returned the other suite's UUID: `expected "82b7cd85-…-000000000001", actual "90772f9f-…-000000000001"`.
+- `search_session_identifier_repository_test.go` searched `%series%` / `%event%` / `%session%`. That matched `save_calendar_repository_test.go`'s `'Calendar Series'` → 2024 season → `'Event 1'` → `'Session 1'` chain in another package, so its "year is wrong" (2024) case came back found.
 
-**Files**: 8 suites call `t.Parallel()` across `src/Golang/motorsporttracker/scrapping/`; 11 test files connect to the same `core-test` via `POSTGRES_CORE_URL` — the 10 under `scrapping/` plus `shared/database/infrastructure/database_using_pgxpool_test.go`.
+Neither original remedy would have worked. Dropping `t.Parallel()` only serialises tests *within* a package; `go test ./...` still runs packages as parallel processes, which is how the session collision happened. Per-suite schemas would have had to work around `run-dbmigrate-core.test` migrating a single schema.
 
-**Problem**: Each suite seeds fixtures into shared tables (`series`, `seasons`, `events`, `sessions`) and cleans up only its own uuid-prefixed rows. But the repositories under test issue **global** queries — that is their job. So a "not found" case can observe a row another suite inserted concurrently, and fails with `expected: false, actual: true`.
+The fix: each keyword-searched suite holds its UUID prefix in a `const` and appends it to every searchable string and keyword (e.g. `'Test Series Match 1 82b7cd85-ee6f-4c2c-a289'`). The prefixes are random hex, so they're unique by construction and nothing else contains one. `t.Parallel()` stays. The rule for new suites is in `src/Golang/CLAUDE.md` under Tests.
 
-Observed on two different suites:
+Prefixes must also be unique across **all** integration suites, not just the searching ones: teardown deletes `LIKE '<prefix>-%'`, so two suites on one prefix would delete each other's fixtures mid-run. `save_calendar_repository_test.go` used three prefixes and now uses one. `scripts/fixture-prefix-check.sh` runs before `make go-test` and `scripts/test-runner.sh` and fails if any suite uses more than one prefix or two suites share one.
 
-- `TestIntegration_SearchSeriesIdentifierRepository/TestGetSeriesIdentifier`
-- `TestIntegration_SearchSessionIdentifierRepository` (`search_session_identifier_repository_test.go:110`)
-
-Both pass in isolation, and under `-count=5` within their own package. Reproduced by running the four series-touching packages together under `-count=6`. Pre-existing — it reproduces with `scrapping/shared/...` excluded from the run entirely.
-
-**Remediation**, simplest first:
-
-1. Drop `t.Parallel()` from the integration suites that share tables. Serialises them; each runs in ~0.1s, so the cost is negligible.
-2. Or give each suite its own PostgreSQL schema and set `search_path` per connection, keeping parallelism.
-
-Option 1 matches the project's "simplest approach first" principle.
+Verified: the four series-touching packages failed under `-count=6` before the change. After it, all of `scrapping/...` passed three consecutive runs at `-count=6`.
 
 ---
 

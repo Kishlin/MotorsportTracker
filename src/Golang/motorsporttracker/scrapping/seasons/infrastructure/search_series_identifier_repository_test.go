@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -10,6 +11,10 @@ import (
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
+
+// searchSeriesIdentifierPrefix namespaces this suite's UUIDs and searchable strings.
+// Suites share core-test and run concurrently, so a keyword without it can match another suite's rows.
+const searchSeriesIdentifierPrefix = "82b7cd85-ee6f-4c2c-a289"
 
 type SearchSeriesIdentifierRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -31,11 +36,8 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) SetupSuite() 
 }
 
 func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TearDownSuite() {
-	cleanUps := []string{
-		"DELETE FROM series WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';",
-		"DELETE FROM series_history WHERE uuid::text LIKE '82b7cd85-ee6f-4c2c-a289-%';",
-	}
-	for _, query := range cleanUps {
+	for _, table := range []string{"series", "series_history"} {
+		query := fmt.Sprintf("DELETE FROM %s WHERE uuid::text LIKE '%s-%%';", table, searchSeriesIdentifierPrefix)
 		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
 	}
 
@@ -50,28 +52,28 @@ func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) TestGetSeries
 		expectedFound bool
 	}{
 		"not found when there is no match": {
-			keyword:       "Non-existing series",
+			keyword:       "Non-existing series " + searchSeriesIdentifierPrefix,
 			expectedRef:   "",
 			expectedFound: false,
 		},
 		"found by exact name match": {
-			keyword:       "Test Series Match 1",
-			expectedRef:   "82b7cd85-ee6f-4c2c-a289-000000000001",
+			keyword:       "Test Series Match 1 " + searchSeriesIdentifierPrefix,
+			expectedRef:   searchSeriesIdentifierPrefix + "-000000000001",
 			expectedFound: true,
 		},
 		"found by exact short name match": {
-			keyword:       "ShortTest2",
-			expectedRef:   "82b7cd85-ee6f-4c2c-a289-000000000002",
+			keyword:       "ShortTest2 " + searchSeriesIdentifierPrefix,
+			expectedRef:   searchSeriesIdentifierPrefix + "-000000000002",
 			expectedFound: true,
 		},
 		"found by exact short code match": {
-			keyword:       "SerTest3",
-			expectedRef:   "82b7cd85-ee6f-4c2c-a289-000000000003",
+			keyword:       "SerTest3 " + searchSeriesIdentifierPrefix,
+			expectedRef:   searchSeriesIdentifierPrefix + "-000000000003",
 			expectedFound: true,
 		},
 		"found by partial name match": {
-			keyword:       "Series Match 1",
-			expectedRef:   "82b7cd85-ee6f-4c2c-a289-000000000001",
+			keyword:       "Series Match 1 " + searchSeriesIdentifierPrefix,
+			expectedRef:   searchSeriesIdentifierPrefix + "-000000000001",
 			expectedFound: true,
 		},
 	} {
@@ -97,11 +99,11 @@ func TestIntegration_SearchSeriesIdentifierRepository(t *testing.T) {
 }
 
 func (suite *SearchSeriesIdentifierRepositoryIntegrationTestSuite) seriesFixtures() string {
-	return `
-INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
-('82b7cd85-ee6f-4c2c-a289-000000000001', 'Test Series Match 1', 'ShortTest1', 'SerTest1', 'Category 1', '82b7cd85-ee6f-4c2c-a289-000000000001'),
-('82b7cd85-ee6f-4c2c-a289-000000000002', 'Test Series Match 2', 'ShortTest2', 'SerTest2', 'Category 2', '82b7cd85-ee6f-4c2c-a289-000000000002'),
-('82b7cd85-ee6f-4c2c-a289-000000000003', 'Test Series Match 3', null, 'SerTest3', 'Category 3', '82b7cd85-ee6f-4c2c-a289-000000000003')
+	return fmt.Sprintf(`
+INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES
+('%[1]s-000000000001', 'Test Series Match 1 %[1]s', 'ShortTest1 %[1]s', 'SerTest1 %[1]s', 'Category 1', '%[1]s-000000000001'),
+('%[1]s-000000000002', 'Test Series Match 2 %[1]s', 'ShortTest2 %[1]s', 'SerTest2 %[1]s', 'Category 2', '%[1]s-000000000002'),
+('%[1]s-000000000003', 'Test Series Match 3 %[1]s', null, 'SerTest3 %[1]s', 'Category 3', '%[1]s-000000000003')
 ON CONFLICT (uuid) DO NOTHING;
-`
+`, searchSeriesIdentifierPrefix)
 }

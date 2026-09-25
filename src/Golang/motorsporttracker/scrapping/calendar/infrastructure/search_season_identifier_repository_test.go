@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -10,6 +11,10 @@ import (
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
+
+// searchSeasonIdentifierPrefix namespaces this suite's UUIDs and searchable strings.
+// Suites share core-test and run concurrently, so a keyword without it can match another suite's rows.
+const searchSeasonIdentifierPrefix = "592e8e09-b250-446b"
 
 type SearchSeasonIdentifierRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -31,13 +36,8 @@ func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) SetupSuite() 
 }
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TearDownSuite() {
-	cleanUps := []string{
-		"DELETE FROM seasons WHERE uuid::text LIKE 'a5940eb2-b69f-4946-9436-%';",
-		"DELETE FROM seasons_history WHERE uuid::text LIKE 'a5940eb2-b69f-4946-9436-%';",
-		"DELETE FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001';",
-		"DELETE FROM series_history WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001';",
-	}
-	for _, query := range cleanUps {
+	for _, table := range []string{"seasons", "seasons_history", "series", "series_history"} {
+		query := fmt.Sprintf("DELETE FROM %s WHERE uuid::text LIKE '%s-%%';", table, searchSeasonIdentifierPrefix)
 		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
 	}
 
@@ -53,27 +53,27 @@ func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) TestGetSeason
 		expectedFound bool
 	}{
 		"not found when there is no series match": {
-			keyword:       "Non-existing series",
+			keyword:       "Non-existing series " + searchSeasonIdentifierPrefix,
 			year:          2023,
 			expectedRef:   "",
 			expectedFound: false,
 		},
 		"not found when there is no season match": {
-			keyword:       "Test Seasons Match 1",
+			keyword:       "Test Seasons Match 1 " + searchSeasonIdentifierPrefix,
 			year:          2020,
 			expectedRef:   "",
 			expectedFound: false,
 		},
 		"found by exact name match": {
-			keyword:       "Test Seasons Match 1",
+			keyword:       "Test Seasons Match 1 " + searchSeasonIdentifierPrefix,
 			year:          2023,
-			expectedRef:   "a5940eb2-b69f-4946-9436-000000000001",
+			expectedRef:   searchSeasonIdentifierPrefix + "-0002-000000000001",
 			expectedFound: true,
 		},
 		"still found season one year further back": {
-			keyword:       "Test Seasons Match 1",
+			keyword:       "Test Seasons Match 1 " + searchSeasonIdentifierPrefix,
 			year:          2022,
-			expectedRef:   "a5940eb2-b69f-4946-9436-000000000002",
+			expectedRef:   searchSeasonIdentifierPrefix + "-0002-000000000002",
 			expectedFound: true,
 		},
 	} {
@@ -93,21 +93,21 @@ func TestSearchSeasonIdentifierRepositoryIntegrationTestSuite(t *testing.T) {
 }
 
 func (suite *SearchSeasonIdentifierRepositoryIntegrationTestSuite) seasonFixtures() string {
-	return `
-INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
-('592e8e09-b250-446b-b1cd-000000000001', 'Test Seasons Match 1', 'ShortSeasonsTest1', 'SerSeasonsTest1', 'Category 1', '592e8e09-b250-446b-b1cd')
+	return fmt.Sprintf(`
+INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES
+('%[1]s-0001-000000000001', 'Test Seasons Match 1 %[1]s', 'ShortSeasonsTest1 %[1]s', 'SerSeasonsTest1 %[1]s', 'Category 1', '%[1]s-0001-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
-INSERT INTO seasons (uuid, series, name, year, end_year, hash) VALUES 
-('a5940eb2-b69f-4946-9436-000000000001', 
- (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2023, 2024, 'a5940eb2-b69f-4946-9436-000000000001'),
-('a5940eb2-b69f-4946-9436-000000000002', 
- (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2022, 2023, 'a5940eb2-b69f-4946-9436-000000000002'),
-('a5940eb2-b69f-4946-9436-000000000003', 
- (SELECT id FROM series WHERE uuid::text = '592e8e09-b250-446b-b1cd-000000000001'), 
- 'Season 1', 2021, 2022, 'a5940eb2-b69f-4946-9436-000000000003')
+INSERT INTO seasons (uuid, series, name, year, end_year, hash) VALUES
+('%[1]s-0002-000000000001',
+ (SELECT id FROM series WHERE uuid::text = '%[1]s-0001-000000000001'),
+ 'Season 1', 2023, 2024, '%[1]s-0002-000000000001'),
+('%[1]s-0002-000000000002',
+ (SELECT id FROM series WHERE uuid::text = '%[1]s-0001-000000000001'),
+ 'Season 1', 2022, 2023, '%[1]s-0002-000000000002'),
+('%[1]s-0002-000000000003',
+ (SELECT id FROM series WHERE uuid::text = '%[1]s-0001-000000000001'),
+ 'Season 1', 2021, 2022, '%[1]s-0002-000000000003')
 ON CONFLICT (uuid) DO NOTHING;
-`
+`, searchSeasonIdentifierPrefix)
 }
