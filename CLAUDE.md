@@ -96,6 +96,24 @@ Legacy PHP exists in `src/Backend/`, `apps/Backoffice/`, and parts of `apps/`. *
 - **Plan mode is sacred** — Stay in plan mode until I explicitly approve the plan. Do not begin implementation or exit planning prematurely.
 - **Verify docs against code** — Never guess values; read them from the source. The docs in `docs/` have drifted before and will again.
 
+## Commits
+
+Subject: `<Type>: <Sentence-case summary>` — e.g. `Hotfix: Send bootstrap traces and logs to stderr, not stdout`.
+
+`Feature`, `Hotfix` and `Refactor` commits get a body after a blank line: what changed and why — the bug's cause for a `Hotfix`, what moved and why for a `Refactor`. Wrap at 72 columns. The other types can stay subject-only when the subject says it all. Older history is mostly subject-only; don't copy that.
+
+| Type | For |
+|---|---|
+| `Feature` | New behavior |
+| `Hotfix` | Any bug fix, urgent or not |
+| `Refactor` | Restructuring with no behavior change, dead-code removal |
+| `Tests` | Test-only changes |
+| `Documentation` | `docs/` and other prose |
+| `Dependencies` | Go modules, `vendor/`, `go.work` |
+| `Project` | Tooling, Makefile, Docker services, IDE and Claude config |
+
+No other types — not `Doc`, `Refactoring`, `Cleanup`. Co-author trailers are disabled through `attribution` in `.claude/settings.json`.
+
 ## Communication Style
 
 - **Be direct and challenge me** — Push back when you think I'm wrong. No flattery, no sugarcoating, no sycophancy.
