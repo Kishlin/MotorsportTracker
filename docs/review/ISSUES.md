@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-25: items 1–8 and 10–13 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 14 is open. It was found on 2026-08-01, along with items 12 and 13, while tracing the scraping chain to build the API canary. It is silent: nothing fails, the data is just wrong.
+Status as of 2026-09-25: items 1–8 and 10–13 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 14 is open. It was found on 2026-08-01, along with items 12 and 13, while tracing the scraping chain to build the API canary. It is silent: nothing fails, the data is just wrong. Item 15 is open and needs a decision before it can be fixed.
 
-Re-verified against the code on 2026-09-25: items 9 and 14 are still open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
+Re-verified against the code on 2026-09-25: items 9, 14 and 15 are open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
 
 ---
 
@@ -174,3 +174,32 @@ Line 162 guards `if event.Venue != nil` before the ID lookup; lines 179-181 then
 Today the guard is the redundant one, not the deref: `calendar.json` lists `venue` in the event `required` array **and** types it `"object"` (not `["object", "null"]`), so a payload that reaches `SaveCalendar` through `ConnectorUsingClient` has already been rejected if a venue were missing or null. The panic is therefore unreachable via the validated path — worth recording as latent rather than as a live crash.
 
 It becomes reachable if the schema is relaxed, or through a `CachedConnector` hit serving bytes stored before the schema required a venue, since cached payloads are never re-validated (see the Caching section of [PATTERNS.md](../PATTERNS.md)). Applying the remediation above removes the venue access from this loop entirely and the question disappears with it.
+
+---
+
+## 15. Classification Rows Logged as Skipped Still Abort the Save
+
+Found 2026-09-25 while fixing item 13. Open, and it needs a decision before it can be fixed.
+
+**Impact**: a classification with a duplicate car number, an entry without a team, or a retirement for an unknown car logs a warning saying the row is skipped, and then fails anyway. The whole session's save returns an error. `SaveClassification` has no transaction, so every step before the failing one is committed and nothing after it is written.
+
+**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go`
+
+**Problem**: three checks log a warning and `continue`, but they only filter some of the data built in the loop. The later steps still receive the rows they skipped.
+
+| Check | Lines | Still receives the row | Fails with |
+|---|---|---|---|
+| Duplicate car number | 68-75 | The driver loop at 52-59 runs before the check, so the duplicate's drivers are appended to that car again. `saveClassificationDetails` (181) also gets the unfiltered `classification.Details` | `saving entry drivers: … ON CONFLICT DO UPDATE command cannot affect row a second time (SQLSTATE 21000)` |
+| Missing team | 76-83 | Same driver loop: the drivers are queued under a car number that never gets an entry | `saving entry drivers: entry ID for car number 302 not found` |
+| Retirement for unknown car | 108-115 | `saveRetirements` (176) gets the unfiltered `classification.Retirements` | `saving retirements: entry ID for car number 999 not found` |
+
+All three were reproduced with integration cases in `save_classification_repository_test.go` and fail exactly as shown. In the first two, `entries` had already been written when the save failed. Before item 13 was fixed, the duplicate case failed one step later, in `saveClassificationDetails`, with the same SQLSTATE. It has never actually skipped.
+
+**Reachability**: `classification.json` requires `team` and types it as a non-null object, so a missing team cannot pass the validated path. It stays latent in the same way as item 14's venue deref, because cached payloads are never re-validated. Nothing in the schema prevents a duplicate car number, and it cannot check a retirement's car number against the details. None of the five cached classifications contains any of the three cases.
+
+**Remediation**: decide which of these two behaviors is intended, then make the code match.
+
+- **Skip for real.** Move the driver loop below the two checks, and pass filtered slices of details and retirements to `saveClassificationDetails` and `saveRetirements`. The warnings then describe what actually happens, and one bad row no longer blocks the session.
+- **Fail loudly, before writing anything.** Replace the three warnings with returned errors and check every row before the first write. The error then names the bad row, and there is no partial write, but one bad row blocks the whole session.
+
+The checks don't all need the same answer. A missing team can only mean a stale cache or schema drift, which argues for failing. A duplicate car number or an orphan retirement could be a quirk of the upstream data, which argues for skipping. Whichever way each one goes, the three integration cases above become the regression tests, with their assertions flipped to `Error` for any check that fails loudly.
