@@ -15,6 +15,9 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
+// saveClassificationPrefix namespaces every UUID this suite writes; see scripts/fixture-prefix-check.sh.
+const saveClassificationPrefix = "dbc082d8-53c0-468b"
+
 type SaveClassificationRepositoryIntegrationTestSuite struct {
 	suite.Suite
 
@@ -38,35 +41,35 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) SetupSuite() {
 
 func (suite *SaveClassificationRepositoryIntegrationTestSuite) TearDownSuite() {
 	cleanUps := []string{
-		`DELETE FROM entry_drivers WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM entry_drivers_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM classifications WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM classifications_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM retirements WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM retirements_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM entries WHERE session IN (SELECT id FROM sessions WHERE uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM entries_history WHERE session IN (SELECT id FROM sessions WHERE uuid::text LIKE 'dbc082d8-53c0-468b-0006-%');`,
-		`DELETE FROM drivers WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM drivers_history WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM teams WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM teams_history WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM garages WHERE unique_key::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM garages_history WHERE unique_key::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM sessions WHERE uuid::text LIKE 'dbc082d8-53c0-468b-0006-%';`,
-		`DELETE FROM sessions_history WHERE uuid::text LIKE 'dbc082d8-53c0-468b-0006-%';`,
-		`DELETE FROM events WHERE uuid::text = 'dbc082d8-53c0-468b-0005-000000000001';`,
-		`DELETE FROM events_history WHERE uuid::text = 'dbc082d8-53c0-468b-0005-000000000001';`,
-		`DELETE FROM venues WHERE uuid::text = 'dbc082d8-53c0-468b-0001-000000000001';`,
-		`DELETE FROM venues_history WHERE uuid::text = 'dbc082d8-53c0-468b-0001-000000000001';`,
-		`DELETE FROM countries WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM countries_history WHERE uuid::text LIKE 'dbc082d8-53c0-468b-%';`,
-		`DELETE FROM seasons WHERE uuid::text = 'dbc082d8-53c0-468b-0004-000000000001';`,
-		`DELETE FROM seasons_history WHERE uuid::text = 'dbc082d8-53c0-468b-0004-000000000001';`,
-		`DELETE FROM series WHERE uuid::text = 'dbc082d8-53c0-468b-0003-000000000001';`,
-		`DELETE FROM series_history WHERE uuid::text = 'dbc082d8-53c0-468b-0003-000000000001';`,
+		`DELETE FROM entry_drivers WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM entry_drivers_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM classifications WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM classifications_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM retirements WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM retirements_history WHERE entry IN (SELECT e.id from entries e INNER JOIN sessions s ON s.id = e.session WHERE s.uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM entries WHERE session IN (SELECT id FROM sessions WHERE uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM entries_history WHERE session IN (SELECT id FROM sessions WHERE uuid::text LIKE '%[1]s-0006-%%');`,
+		`DELETE FROM drivers WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM drivers_history WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM teams WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM teams_history WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM garages WHERE unique_key::text LIKE '%[1]s-%%';`,
+		`DELETE FROM garages_history WHERE unique_key::text LIKE '%[1]s-%%';`,
+		`DELETE FROM sessions WHERE uuid::text LIKE '%[1]s-0006-%%';`,
+		`DELETE FROM sessions_history WHERE uuid::text LIKE '%[1]s-0006-%%';`,
+		`DELETE FROM events WHERE uuid::text = '%[1]s-0005-000000000001';`,
+		`DELETE FROM events_history WHERE uuid::text = '%[1]s-0005-000000000001';`,
+		`DELETE FROM venues WHERE uuid::text = '%[1]s-0001-000000000001';`,
+		`DELETE FROM venues_history WHERE uuid::text = '%[1]s-0001-000000000001';`,
+		`DELETE FROM countries WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM countries_history WHERE uuid::text LIKE '%[1]s-%%';`,
+		`DELETE FROM seasons WHERE uuid::text = '%[1]s-0004-000000000001';`,
+		`DELETE FROM seasons_history WHERE uuid::text = '%[1]s-0004-000000000001';`,
+		`DELETE FROM series WHERE uuid::text = '%[1]s-0003-000000000001';`,
+		`DELETE FROM series_history WHERE uuid::text = '%[1]s-0003-000000000001';`,
 	}
 	for _, sql := range cleanUps {
-		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
+		fn.Must(suite.repository.db.Exec(suite.T().Context(), fmt.Sprintf(sql, saveClassificationPrefix)))
 	}
 
 	suite.repository.db.Close()
@@ -76,52 +79,52 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) TearDownSuite() {
 func (suite *SaveClassificationRepositoryIntegrationTestSuite) TestSaveClassification() {
 	suite.Run("no-op when no classifications or retirements", func() {
 		emptyClassification := suite.emptyClassification()
-		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000001", emptyClassification)
+		err := suite.repository.SaveClassification(suite.T().Context(), saveClassificationPrefix+"-0006-000000000001", emptyClassification)
 		suite.NoError(err)
 
-		suite.Equal(0, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(0, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(len(emptyClassification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
-		suite.Equal(len(emptyClassification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000001"))
+		suite.Equal(0, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000001"))
+		suite.Equal(0, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000001"))
+		suite.Equal(len(emptyClassification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000001"))
+		suite.Equal(len(emptyClassification.Details), suite.count(suite.T(), countClassificationDetailsQuery, saveClassificationPrefix+"-0006-000000000001"))
 	})
 
 	suite.Run("saves a very simple classification", func() {
 		classification := suite.verySimpleClassification()
-		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000002", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), saveClassificationPrefix+"-0006-000000000002", classification)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0007-%"))
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0007-%"))
-		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
-		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000002"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0007-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0007-%"))
+		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000002"))
+		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000002"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000002"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, saveClassificationPrefix+"-0006-000000000002"))
 	})
 
 	suite.Run("saves data when there are nil values", func() {
 		classification := suite.classificationWithNilValues()
-		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000003", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), saveClassificationPrefix+"-0006-000000000003", classification)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0008-%"))
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0008-%"))
-		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
-		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000003"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0008-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0008-%"))
+		suite.Equal(1, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000003"))
+		suite.Equal(1, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000003"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000003"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, saveClassificationPrefix+"-0006-000000000003"))
 	})
 
 	suite.Run("saves everything from a complex classification", func() {
 		classification := suite.complexClassification()
-		err := suite.repository.SaveClassification(suite.T().Context(), "dbc082d8-53c0-468b-0006-000000000004", classification)
+		err := suite.repository.SaveClassification(suite.T().Context(), saveClassificationPrefix+"-0006-000000000004", classification)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(suite.T().Context(), "teams", "dbc082d8-53c0-468b-0009-%"))
-		suite.Equal(10, suite.helper.Count(suite.T().Context(), "drivers", "dbc082d8-53c0-468b-0009-%"))
-		suite.Equal(4, suite.count(suite.T(), countEntriesQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(10, suite.count(suite.T(), countEntryDriversQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
-		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, "dbc082d8-53c0-468b-0006-000000000004"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "teams", saveClassificationPrefix+"-0009-%"))
+		suite.Equal(10, suite.helper.Count(suite.T().Context(), "drivers", saveClassificationPrefix+"-0009-%"))
+		suite.Equal(4, suite.count(suite.T(), countEntriesQuery, saveClassificationPrefix+"-0006-000000000004"))
+		suite.Equal(10, suite.count(suite.T(), countEntryDriversQuery, saveClassificationPrefix+"-0006-000000000004"))
+		suite.Equal(len(classification.Retirements), suite.count(suite.T(), countRetirementsQuery, saveClassificationPrefix+"-0006-000000000004"))
+		suite.Equal(len(classification.Details), suite.count(suite.T(), countClassificationDetailsQuery, saveClassificationPrefix+"-0006-000000000004"))
 	})
 }
 
@@ -132,47 +135,47 @@ func TestIntegration_SaveClassificationRepository(t *testing.T) {
 }
 
 func (suite *SaveClassificationRepositoryIntegrationTestSuite) sessionFixtures() string {
-	return `
+	return fmt.Sprintf(`
 INSERT INTO venues (uuid, hash) VALUES 
-('dbc082d8-53c0-468b-0001-000000000001', 'dbc082d8-53c0-468b-0001-000000000001')
+('%[1]s-0001-000000000001', '%[1]s-0001-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 INSERT INTO countries (uuid, hash) VALUES 
-('dbc082d8-53c0-468b-0002-000000000001', 'dbc082d8-53c0-468b-0002-000000000001')
+('%[1]s-0002-000000000001', '%[1]s-0002-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO series(uuid, name, hash) VALUES 
-('dbc082d8-53c0-468b-0003-000000000001', 'series', 'dbc082d8-53c0-468b-0003-000000000001')
+('%[1]s-0003-000000000001', 'series', '%[1]s-0003-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO seasons (uuid, series, year, hash) VALUES
-('dbc082d8-53c0-468b-0004-000000000001',
-(SELECT id FROM series WHERE series.uuid = 'dbc082d8-53c0-468b-0003-000000000001'),
-2025, 'dbc082d8-53c0-468b-0004-000000000001')
+('%[1]s-0004-000000000001',
+(SELECT id FROM series WHERE series.uuid = '%[1]s-0003-000000000001'),
+2025, '%[1]s-0004-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO events (uuid, season, venue, country, name, hash) VALUES
-('dbc082d8-53c0-468b-0005-000000000001',
-(SELECT id FROM seasons WHERE seasons.uuid = 'dbc082d8-53c0-468b-0004-000000000001'),
-(SELECT id FROM venues WHERE uuid = 'dbc082d8-53c0-468b-0001-000000000001'),
-(SELECT id FROM countries WHERE uuid = 'dbc082d8-53c0-468b-0002-000000000001'),
-'event', 'dbc082d8-53c0-468b-0005-000000000001')
+('%[1]s-0005-000000000001',
+(SELECT id FROM seasons WHERE seasons.uuid = '%[1]s-0004-000000000001'),
+(SELECT id FROM venues WHERE uuid = '%[1]s-0001-000000000001'),
+(SELECT id FROM countries WHERE uuid = '%[1]s-0002-000000000001'),
+'event', '%[1]s-0005-000000000001')
 ON CONFLICT (uuid) DO NOTHING;
 
 INSERT INTO sessions (uuid, event, name, hash) VALUES 
-('dbc082d8-53c0-468b-0006-000000000001',
-(SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'dbc082d8-53c0-468b-0006-000000000001'),
-('dbc082d8-53c0-468b-0006-000000000002',
-(SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'dbc082d8-53c0-468b-0006-000000000002'),
-('dbc082d8-53c0-468b-0006-000000000003',
-(SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'dbc082d8-53c0-468b-0006-000000000003'),
-('dbc082d8-53c0-468b-0006-000000000004',
-(SELECT id FROM events WHERE events.uuid = 'dbc082d8-53c0-468b-0005-000000000001'),
-'session', 'dbc082d8-53c0-468b-0006-000000000004')
+('%[1]s-0006-000000000001',
+(SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000001'),
+'session', '%[1]s-0006-000000000001'),
+('%[1]s-0006-000000000002',
+(SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000001'),
+'session', '%[1]s-0006-000000000002'),
+('%[1]s-0006-000000000003',
+(SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000001'),
+'session', '%[1]s-0006-000000000003'),
+('%[1]s-0006-000000000004',
+(SELECT id FROM events WHERE events.uuid = '%[1]s-0005-000000000001'),
+'session', '%[1]s-0006-000000000004')
 ON CONFLICT (uuid) DO NOTHING;
-`
+`, saveClassificationPrefix)
 }
 
 const countEntriesQuery = `
@@ -236,7 +239,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) verySimpleClassif
 				GridPosition:   fn.Ptr(2),
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID:      "dbc082d8-53c0-468b-0007-000000000001",
+						UUID:      saveClassificationPrefix + "-0007-000000000001",
 						Name:      fn.Ptr("Max Verstappen"),
 						FirstName: fn.Ptr("Max"),
 						LastName:  fn.Ptr("Verstappen"),
@@ -246,14 +249,14 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) verySimpleClassif
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID:    "dbc082d8-53c0-468b-0007-000000000001",
+					UUID:    saveClassificationPrefix + "-0007-000000000001",
 					Name:    fn.Ptr("Red Bull"),
 					Colour:  fn.Ptr("Blue"),
 					Picture: fn.Ptr("some url"),
 					CarIcon: fn.Ptr("some url"),
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0007-000000000001",
+					UUID: saveClassificationPrefix + "-0007-000000000001",
 					Name: fn.Ptr("Austria"),
 					Flag: fn.Ptr("at.svg"),
 				},
@@ -281,7 +284,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) verySimpleClassif
 			{
 				CarNumber: "1",
 				Driver: &motorsportstats.Driver{
-					UUID:      "dbc082d8-53c0-468b-0007-000000000001",
+					UUID:      saveClassificationPrefix + "-0007-000000000001",
 					Name:      fn.Ptr("Max Verstappen"),
 					FirstName: fn.Ptr("Max"),
 					LastName:  fn.Ptr("Verstappen"),
@@ -306,14 +309,14 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) classificationWit
 				CarNumber: "11",
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID: "dbc082d8-53c0-468b-0008-000000000001",
+						UUID: saveClassificationPrefix + "-0008-000000000001",
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID: "dbc082d8-53c0-468b-0008-000000000001",
+					UUID: saveClassificationPrefix + "-0008-000000000001",
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0008-000000000001",
+					UUID: saveClassificationPrefix + "-0008-000000000001",
 				},
 				ClassificationGap:  motorsportstats.ClassificationGap{},
 				ClassificationBest: motorsportstats.ClassificationBest{},
@@ -323,7 +326,7 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) classificationWit
 			{
 				CarNumber: "11",
 				Driver: &motorsportstats.Driver{
-					UUID: "dbc082d8-53c0-468b-0008-000000000001",
+					UUID: saveClassificationPrefix + "-0008-000000000001",
 				},
 			},
 		},
@@ -337,20 +340,20 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 				CarNumber: "101",
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000001",
+						UUID: saveClassificationPrefix + "-0009-000000000001",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000002",
+						UUID: saveClassificationPrefix + "-0009-000000000002",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000003",
+						UUID: saveClassificationPrefix + "-0009-000000000003",
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 				ClassificationGap:  motorsportstats.ClassificationGap{},
 				ClassificationBest: motorsportstats.ClassificationBest{},
@@ -359,20 +362,20 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 				CarNumber: "102",
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000004",
+						UUID: saveClassificationPrefix + "-0009-000000000004",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000005",
+						UUID: saveClassificationPrefix + "-0009-000000000005",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000006",
+						UUID: saveClassificationPrefix + "-0009-000000000006",
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 				ClassificationGap:  motorsportstats.ClassificationGap{},
 				ClassificationBest: motorsportstats.ClassificationBest{},
@@ -381,20 +384,20 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 				CarNumber: "103",
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000007",
+						UUID: saveClassificationPrefix + "-0009-000000000007",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000008",
+						UUID: saveClassificationPrefix + "-0009-000000000008",
 					},
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000009",
+						UUID: saveClassificationPrefix + "-0009-000000000009",
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID: "dbc082d8-53c0-468b-0009-000000000002",
+					UUID: saveClassificationPrefix + "-0009-000000000002",
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 				ClassificationGap:  motorsportstats.ClassificationGap{},
 				ClassificationBest: motorsportstats.ClassificationBest{},
@@ -403,14 +406,14 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 				CarNumber: "104",
 				Drivers: []*motorsportstats.Driver{
 					{
-						UUID: "dbc082d8-53c0-468b-0009-000000000010",
+						UUID: saveClassificationPrefix + "-0009-000000000010",
 					},
 				},
 				Team: &motorsportstats.Team{
-					UUID: "dbc082d8-53c0-468b-0009-000000000003",
+					UUID: saveClassificationPrefix + "-0009-000000000003",
 				},
 				Nationality: &motorsportstats.Country{
-					UUID: "dbc082d8-53c0-468b-0009-000000000002",
+					UUID: saveClassificationPrefix + "-0009-000000000002",
 				},
 				ClassificationGap:  motorsportstats.ClassificationGap{},
 				ClassificationBest: motorsportstats.ClassificationBest{},
@@ -420,13 +423,13 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) complexClassifica
 			{
 				CarNumber: "101",
 				Driver: &motorsportstats.Driver{
-					UUID: "dbc082d8-53c0-468b-0009-000000000001",
+					UUID: saveClassificationPrefix + "-0009-000000000001",
 				},
 			},
 			{
 				CarNumber: "103",
 				Driver: &motorsportstats.Driver{
-					UUID: "dbc082d8-53c0-468b-0009-000000000008",
+					UUID: saveClassificationPrefix + "-0009-000000000008",
 				},
 			},
 		},

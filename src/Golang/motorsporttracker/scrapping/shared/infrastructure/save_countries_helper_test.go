@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -11,6 +12,9 @@ import (
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
+
+// saveCountryHelperPrefix namespaces every UUID this suite writes; see scripts/fixture-prefix-check.sh.
+const saveCountryHelperPrefix = "22b1a818-97f2-43d0"
 
 type SaveCountryHelperIntegrationTestSuite struct {
 	suite.Suite
@@ -32,12 +36,9 @@ func (suite *SaveCountryHelperIntegrationTestSuite) SetupSuite() {
 }
 
 func (suite *SaveCountryHelperIntegrationTestSuite) TearDownSuite() {
-	cleanUps := []string{
-		`DELETE FROM countries WHERE uuid::text LIKE '22b1a818-97f2-43d0-%';`,
-		`DELETE FROM countries_history WHERE uuid::text LIKE '22b1a818-97f2-43d0-%';`,
-	}
-	for _, sql := range cleanUps {
-		fn.Must(suite.db.Exec(suite.T().Context(), sql))
+	for _, table := range []string{"countries", "countries_history"} {
+		query := fmt.Sprintf("DELETE FROM %s WHERE uuid::text LIKE '%s-%%';", table, saveCountryHelperPrefix)
+		fn.Must(suite.db.Exec(suite.T().Context(), query))
 	}
 
 	suite.db.Close()
@@ -56,7 +57,7 @@ func (suite *SaveCountryHelperIntegrationTestSuite) TestSaveCountry() {
 		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", saveCountryHelperPrefix+"-0001-%"))
 	})
 
 	suite.Run("saves a country with nil values", func() {
@@ -64,7 +65,7 @@ func (suite *SaveCountryHelperIntegrationTestSuite) TestSaveCountry() {
 		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "countries", saveCountryHelperPrefix+"-0002-%"))
 	})
 
 	suite.Run("saves multiple countries", func() {
@@ -72,7 +73,7 @@ func (suite *SaveCountryHelperIntegrationTestSuite) TestSaveCountry() {
 		err := SaveCountries(suite.T().Context(), suite.db, countries)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(suite.T().Context(), "countries", "22b1a818-97f2-43d0-0003-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "countries", saveCountryHelperPrefix+"-0003-%"))
 	})
 }
 
@@ -89,7 +90,7 @@ func (suite *SaveCountryHelperIntegrationTestSuite) emptyCountriesList() []*moto
 func (suite *SaveCountryHelperIntegrationTestSuite) singleCountryList() []*motorsportstats.Country {
 	return []*motorsportstats.Country{
 		{
-			UUID: "22b1a818-97f2-43d0-0001-000000000001",
+			UUID: saveCountryHelperPrefix + "-0001-000000000001",
 			Name: fn.Ptr("Country"),
 			Flag: fn.Ptr("fl.svg"),
 		},
@@ -99,7 +100,7 @@ func (suite *SaveCountryHelperIntegrationTestSuite) singleCountryList() []*motor
 func (suite *SaveCountryHelperIntegrationTestSuite) countryWithNilValues() []*motorsportstats.Country {
 	return []*motorsportstats.Country{
 		{
-			UUID: "22b1a818-97f2-43d0-0002-000000000001",
+			UUID: saveCountryHelperPrefix + "-0002-000000000001",
 		},
 	}
 }
@@ -107,13 +108,13 @@ func (suite *SaveCountryHelperIntegrationTestSuite) countryWithNilValues() []*mo
 func (suite *SaveCountryHelperIntegrationTestSuite) multipleCountriesList() []*motorsportstats.Country {
 	return []*motorsportstats.Country{
 		{
-			UUID: "22b1a818-97f2-43d0-0003-000000000001",
+			UUID: saveCountryHelperPrefix + "-0003-000000000001",
 		},
 		{
-			UUID: "22b1a818-97f2-43d0-0003-000000000002",
+			UUID: saveCountryHelperPrefix + "-0003-000000000002",
 		},
 		{
-			UUID: "22b1a818-97f2-43d0-0003-000000000003",
+			UUID: saveCountryHelperPrefix + "-0003-000000000003",
 		},
 	}
 }

@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -13,7 +14,10 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-const seriesRef = "75f849b7-35be-44d8-0001-000000000001"
+// saveSeasonsPrefix namespaces every UUID this suite writes; see scripts/fixture-prefix-check.sh.
+const saveSeasonsPrefix = "75f849b7-35be-44d8"
+
+const seriesRef = saveSeasonsPrefix + "-0001-000000000001"
 
 type SaveSeasonsRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -42,14 +46,9 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TearDownTest() {
-	cleanUps := []string{
-		"DELETE FROM seasons WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
-		"DELETE FROM seasons_history WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
-		"DELETE FROM series WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
-		"DELETE FROM series_history WHERE uuid::text LIKE '75f849b7-35be-44d8-%';",
-	}
-	for _, sql := range cleanUps {
-		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
+	for _, table := range []string{"seasons", "seasons_history", "series", "series_history"} {
+		query := fmt.Sprintf("DELETE FROM %s WHERE uuid::text LIKE '%s-%%';", table, saveSeasonsPrefix)
+		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
 	}
 }
 
@@ -58,7 +57,7 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TestSaveSeasons() {
 		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, []*motorsportstats.Season{})
 		suite.NoError(err)
 
-		suite.Equal(0, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-%"))
+		suite.Equal(0, suite.helper.Count(suite.T().Context(), "seasons", saveSeasonsPrefix+"-%"))
 	})
 
 	suite.Run("saves one season", func() {
@@ -67,7 +66,7 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TestSaveSeasons() {
 		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, seasonsToSave)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-0002-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "seasons", saveSeasonsPrefix+"-0002-%"))
 	})
 
 	suite.Run("saves multiple seasons", func() {
@@ -76,7 +75,7 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) TestSaveSeasons() {
 		err := suite.repository.SaveSeasons(suite.T().Context(), seriesRef, seasonsToSave)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(suite.T().Context(), "seasons", "75f849b7-35be-44d8-0003-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "seasons", saveSeasonsPrefix+"-0003-%"))
 	})
 }
 
@@ -87,17 +86,17 @@ func TestIntegration_SaveSeasonsRepository(t *testing.T) {
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) seriesFixture() string {
-	return `
+	return fmt.Sprintf(`
 INSERT INTO series (uuid, name, short_name, short_code, category, hash) VALUES 
-('75f849b7-35be-44d8-0001-000000000001', 'Series 1', 'S1', 'Ser1', 'Category 1', '75f849b7-35be-44d8-0001')
+('%[1]s-0001-000000000001', 'Series 1', 'S1', 'Ser1', 'Category 1', '%[1]s-0001')
 ON CONFLICT (uuid) DO NOTHING;
-`
+`, saveSeasonsPrefix)
 }
 
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) oneSeason() []*motorsportstats.Season {
 	return []*motorsportstats.Season{
 		{
-			UUID:    "75f849b7-35be-44d8-0002-000000000001",
+			UUID:    saveSeasonsPrefix + "-0002-000000000001",
 			Name:    fn.Ptr("2023 Championship"),
 			Year:    fn.Ptr(2023),
 			EndYear: fn.Ptr(2024),
@@ -109,21 +108,21 @@ func (suite *SaveSeasonsRepositoryIntegrationTestSuite) oneSeason() []*motorspor
 func (suite *SaveSeasonsRepositoryIntegrationTestSuite) multipleSeasons() []*motorsportstats.Season {
 	return []*motorsportstats.Season{
 		{
-			UUID:    "75f849b7-35be-44d8-0003-000000000001",
+			UUID:    saveSeasonsPrefix + "-0003-000000000001",
 			Name:    fn.Ptr("2023 Championship"),
 			Year:    fn.Ptr(2023),
 			EndYear: fn.Ptr(2024),
 			Status:  fn.Ptr("in progress"),
 		},
 		{
-			UUID:    "75f849b7-35be-44d8-0003-000000000002",
+			UUID:    saveSeasonsPrefix + "-0003-000000000002",
 			Name:    fn.Ptr("2022 Championship"),
 			Year:    fn.Ptr(2022),
 			EndYear: fn.Ptr(2023),
 			Status:  fn.Ptr("historic"),
 		},
 		{
-			UUID:    "75f849b7-35be-44d8-0003-000000000003",
+			UUID:    saveSeasonsPrefix + "-0003-000000000003",
 			Name:    nil,
 			Year:    nil,
 			EndYear: nil,

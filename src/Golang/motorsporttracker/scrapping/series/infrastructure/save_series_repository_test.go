@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -12,6 +13,9 @@ import (
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
+
+// saveSeriesPrefix namespaces every UUID this suite writes; see scripts/fixture-prefix-check.sh.
+const saveSeriesPrefix = "875c810d-a048-414e"
 
 type SaveSeriesRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -39,12 +43,9 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) TearDownSuite() {
 }
 
 func (suite *SaveSeriesRepositoryIntegrationTestSuite) TearDownTest() {
-	cleanUps := []string{
-		"DELETE FROM series WHERE uuid::text LIKE '875c810d-a048-414e-%';",
-		"DELETE FROM series_history WHERE uuid::text LIKE '875c810d-a048-414e-%';",
-	}
-	for _, sql := range cleanUps {
-		fn.Must(suite.repository.db.Exec(suite.T().Context(), sql))
+	for _, table := range []string{"series", "series_history"} {
+		query := fmt.Sprintf("DELETE FROM %s WHERE uuid::text LIKE '%s-%%';", table, saveSeriesPrefix)
+		fn.Must(suite.repository.db.Exec(suite.T().Context(), query))
 	}
 }
 
@@ -53,7 +54,7 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) TestSaveSeries() {
 		err := suite.repository.SaveSeries(suite.T().Context(), []*motorsportstats.Series{})
 		suite.NoError(err)
 
-		suite.Equal(0, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-%"))
+		suite.Equal(0, suite.helper.Count(suite.T().Context(), "series", saveSeriesPrefix+"-%"))
 	})
 
 	suite.Run("saves one series", func() {
@@ -62,7 +63,7 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) TestSaveSeries() {
 		err := suite.repository.SaveSeries(suite.T().Context(), seriesToSave)
 		suite.NoError(err)
 
-		suite.Equal(1, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-0001-%"))
+		suite.Equal(1, suite.helper.Count(suite.T().Context(), "series", saveSeriesPrefix+"-0001-%"))
 	})
 
 	suite.Run("saves multiple series", func() {
@@ -71,7 +72,7 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) TestSaveSeries() {
 		err := suite.repository.SaveSeries(suite.T().Context(), seriesToSave)
 		suite.NoError(err)
 
-		suite.Equal(3, suite.helper.Count(suite.T().Context(), "series", "875c810d-a048-414e-0002-%"))
+		suite.Equal(3, suite.helper.Count(suite.T().Context(), "series", saveSeriesPrefix+"-0002-%"))
 	})
 }
 
@@ -84,7 +85,7 @@ func TestIntegration_SaveSeriesRepository(t *testing.T) {
 func (suite *SaveSeriesRepositoryIntegrationTestSuite) oneSeries() []*motorsportstats.Series {
 	return []*motorsportstats.Series{
 		{
-			UUID:      "875c810d-a048-414e-0001-000000000001",
+			UUID:      saveSeriesPrefix + "-0001-000000000001",
 			Name:      fn.Ptr("Some series"),
 			ShortName: fn.Ptr("SS"),
 			ShortCode: fn.Ptr("SS"),
@@ -96,21 +97,21 @@ func (suite *SaveSeriesRepositoryIntegrationTestSuite) oneSeries() []*motorsport
 func (suite *SaveSeriesRepositoryIntegrationTestSuite) multipleSeries() []*motorsportstats.Series {
 	return []*motorsportstats.Series{
 		{
-			UUID:      "875c810d-a048-414e-0002-000000000001",
+			UUID:      saveSeriesPrefix + "-0002-000000000001",
 			Name:      fn.Ptr("First series"),
 			ShortName: fn.Ptr("FS"),
 			ShortCode: fn.Ptr("FS"),
 			Category:  fn.Ptr("Some category"),
 		},
 		{
-			UUID:      "875c810d-a048-414e-0002-000000000002",
+			UUID:      saveSeriesPrefix + "-0002-000000000002",
 			Name:      nil,
 			ShortName: nil,
 			ShortCode: nil,
 			Category:  nil,
 		},
 		{
-			UUID:      "875c810d-a048-414e-0002-000000000003",
+			UUID:      saveSeriesPrefix + "-0002-000000000003",
 			Name:      fn.Ptr("Third series"),
 			ShortName: fn.Ptr("TS"),
 			ShortCode: fn.Ptr("TS"),

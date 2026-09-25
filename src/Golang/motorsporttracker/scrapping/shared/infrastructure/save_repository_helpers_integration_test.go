@@ -14,6 +14,9 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
+// saveRepositoryHelpersPrefix namespaces every UUID this suite writes; see scripts/fixture-prefix-check.sh.
+const saveRepositoryHelpersPrefix = "9f1c2d3e-4a5b-6c7d"
+
 // probeTable mirrors the shape every scraped table shares: a unique uuid, some
 // payload, and a unique hash used for change detection. It is created and
 // dropped by this suite so the assertions never depend on migrated schema.
@@ -155,7 +158,7 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) TestSave() {
 	suite.Run("rejects inconsistent row widths", func() {
 		malformed := [][]interface{}{
 			suite.row(1, "first"),
-			{"9f1c2d3e-4a5b-6c7d-8e9f-000000000002"},
+			{saveRepositoryHelpersPrefix + "-8e9f-000000000002"},
 		}
 
 		_, err := Save(ctx, suite.db, probeTable, "uuid", probeColumns, malformed)
@@ -174,7 +177,7 @@ func TestIntegration_SaveRepositoryHelpers(t *testing.T) {
 // means an unchanged hash and changing it forces an update.
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) row(index int, label string) []interface{} {
 	return []interface{}{
-		fmt.Sprintf("9f1c2d3e-4a5b-6c7d-8e9f-%012d", index),
+		fmt.Sprintf(saveRepositoryHelpersPrefix+"-8e9f-%012d", index),
 		fmt.Sprintf("%s-%d", label, index),
 		fmt.Sprintf("hash-%d-%s", index, label),
 	}
@@ -203,7 +206,7 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) countRows() int {
 
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) labelOf(index int) string {
 	query := "SELECT label FROM " + probeTable + " WHERE uuid = $1;"
-	uuid := fmt.Sprintf("9f1c2d3e-4a5b-6c7d-8e9f-%012d", index)
+	uuid := fmt.Sprintf(saveRepositoryHelpersPrefix+"-8e9f-%012d", index)
 
 	rows := fn.MustReturn(suite.db.Query(suite.T().Context(), query, uuid)).(pgx.Rows)
 	defer rows.Close()
