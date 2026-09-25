@@ -13,7 +13,7 @@ type Intent interface {
 
 // IntentConfig holds the configuration for an Intent.
 type IntentConfig struct {
-	// Name is the identifier of the Intent (e.g., "scrap:series").
+	// Name is the identifier of the Intent (e.g., "scrape:series").
 	Name string
 
 	// Description provides information about what the Intent does.
