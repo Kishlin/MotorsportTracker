@@ -42,7 +42,7 @@ func (suite *ServiceRegistryIntegrationTestSuite) SetupSuite() {
 	fn.Must(env.LoadEnv())
 }
 
-func (suite *ServiceRegistryIntegrationTestSuite) TeardownSuite() {
+func (suite *ServiceRegistryIntegrationTestSuite) TearDownSuite() {
 	suite.registry.Close()
 }
 
