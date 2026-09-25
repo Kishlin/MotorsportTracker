@@ -9,6 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+
+	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
+	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 type WorkerIntegrationTestSuite struct {
@@ -17,9 +20,14 @@ type WorkerIntegrationTestSuite struct {
 	queue        *SQSQueue
 	handlersList *HandlersList
 	handler      *spyHandler
+
+	resetEnv func()
 }
 
 func (suite *WorkerIntegrationTestSuite) SetupSuite() {
+	suite.resetEnv = env.OverrideAppEnv("tests")
+	fn.Must(env.LoadEnv())
+
 	suite.handler = &spyHandler{}
 	suite.handlersList = NewHandlersList()
 	suite.handlersList.RegisterHandler("test", suite.handler)
@@ -40,6 +48,7 @@ func (suite *WorkerIntegrationTestSuite) SetupSuite() {
 func (suite *WorkerIntegrationTestSuite) TearDownSuite() {
 	suite.queue.Disconnect()
 	suite.queue = nil
+	suite.resetEnv()
 }
 
 func (suite *WorkerIntegrationTestSuite) TearDownTest() {
