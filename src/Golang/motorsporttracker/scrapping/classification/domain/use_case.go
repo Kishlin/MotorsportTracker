@@ -42,7 +42,7 @@ func (u *ScrapeClassificationUseCase) Execute(ctx context.Context, seriesKeyword
 	if err != nil {
 		return fmt.Errorf("getting session identifier: %w", err)
 	}
-	if !hit {
+	if hit == false {
 		slog.Warn(
 			"Session identifier not found",
 			slog.String("seriesKeyword", seriesKeyword),

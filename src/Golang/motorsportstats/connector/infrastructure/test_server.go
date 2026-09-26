@@ -77,7 +77,7 @@ type ctxKey struct{}
 
 func getField(r *http.Request, index int) string {
 	fields, ok := r.Context().Value(ctxKey{}).([][]byte)
-	if !ok || index >= len(fields) {
+	if ok == false || index >= len(fields) {
 		return ""
 	}
 
@@ -94,7 +94,7 @@ func seasonsHandler(w http.ResponseWriter, r *http.Request) {
 	seriesUUID := getField(r, 0)
 
 	data, exists := seasons[seriesUUID]
-	if !exists {
+	if exists == false {
 		http.Error(w, "Series not found", http.StatusNotFound)
 		return
 	}
@@ -108,7 +108,7 @@ func calendarHandler(w http.ResponseWriter, r *http.Request) {
 	seasonUUID := getField(r, 0)
 
 	data, exists := calendar[seasonUUID]
-	if !exists {
+	if exists == false {
 		http.Error(w, "Season not found", http.StatusNotFound)
 		return
 	}

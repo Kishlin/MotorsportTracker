@@ -28,7 +28,7 @@ func (c *InMemoryCache) Get(namespace, key string) (value []byte, hit bool, err 
 }
 
 func (c *InMemoryCache) Set(namespace, key string, value []byte) error {
-	if _, exists := c.cache[namespace]; !exists {
+	if _, exists := c.cache[namespace]; exists == false {
 		c.cache[namespace] = make(map[string][]byte)
 	}
 

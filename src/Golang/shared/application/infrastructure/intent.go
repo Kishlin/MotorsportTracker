@@ -83,7 +83,7 @@ func (c *BaseIntent) ToMessage(arguments []string, options map[string]string) (m
 			}
 		}
 
-		if _, exists := metadata[configOption.Name]; exists && !configOption.RequiresValue {
+		if _, exists := metadata[configOption.Name]; exists && configOption.RequiresValue == false {
 			// If the option does not require a value, it's a boolean flag
 			// Then, unless "false" was explicitly provided, we set it to "true"
 			if metadata[configOption.Name] != "false" {

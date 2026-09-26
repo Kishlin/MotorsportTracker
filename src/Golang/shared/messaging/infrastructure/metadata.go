@@ -8,7 +8,7 @@ import (
 // RequireString extracts a non-empty string from message metadata.
 func RequireString(msg Message, key string) (string, error) {
 	value, ok := msg.Metadata[key]
-	if !ok || value == "" {
+	if ok == false || value == "" {
 		return "", fmt.Errorf("metadata key %q is required", key)
 	}
 

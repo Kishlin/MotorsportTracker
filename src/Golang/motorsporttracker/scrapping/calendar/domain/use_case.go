@@ -42,7 +42,7 @@ func (u *ScrapeCalendarUseCase) Execute(ctx context.Context, seriesKeyword strin
 	if err != nil {
 		return fmt.Errorf("getting season identifier: %w", err)
 	}
-	if !hit {
+	if hit == false {
 		slog.Warn("Season identifier not found", slog.String("seriesKeyword", seriesKeyword), slog.Int("year", year))
 		return nil
 	}

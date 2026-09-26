@@ -47,7 +47,7 @@ func (c *DatabaseCache) Get(namespace, key string) (value []byte, hit bool, err 
 	}
 	defer rows.Close()
 
-	if !rows.Next() {
+	if rows.Next() == false {
 		logger.Debug("Cache miss")
 		return nil, false, nil // No value found
 	}

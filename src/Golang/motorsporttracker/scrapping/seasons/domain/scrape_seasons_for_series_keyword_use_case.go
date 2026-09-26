@@ -43,7 +43,7 @@ func (u *ScrapeSeasonsForSeriesKeywordUseCase) Execute(ctx context.Context, seri
 	if err != nil {
 		return fmt.Errorf("getting series keyword identifier: %w", err)
 	}
-	if !hit {
+	if hit == false {
 		slog.Warn("Series identifier not found", "seriesKeyword", seriesKeyword)
 		return nil
 	}
