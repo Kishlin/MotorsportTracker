@@ -3,8 +3,7 @@ include .env
 
 current-dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-CACHE=node-cache node
-VOL_CACHE?=$(shell docker volume inspect -f '{{ index .Mountpoint }}' cache)
+CACHE=node-cache node go-build go-mod
 
 # Env
 .env.local:
@@ -16,29 +15,23 @@ docker-compose.yaml:
 	@sed -i "s/<DOCKER_USER_ID>/$(shell $(shell echo id -u ${USER}))/g" $@
 	@sed -i "s/<DOCKER_USER>/$(shell echo ${USER})/g" $@
 
-.docker-cache:
-	@touch .docker-cache
-	@docker volume create --name=cache;
-
 node_modules:
 	@docker compose exec frontend npm install
 
-cache: $(CACHE)
-$(CACHE): .docker-cache
-	@if [ ! -d "$(VOL_CACHE)/$@" ]; then \
-	sudo mkdir -pm 777 $(VOL_CACHE)/$@; \
-	fi;
+# The volume root belongs to root: a throwaway container creates the
+# per-tool directories, so the host needs no sudo.
+cache:
+	@docker volume create cache >/dev/null
+	@docker run --rm -v cache:/srv/cache busybox mkdir -pm 777 $(addprefix /srv/cache/,$(CACHE))
 
-.INTERMEDIATE: .docker-cache
-
-.PHONY: help setup start stop clean containers node_modules
+.PHONY: help setup start stop clean containers cache node_modules
 
 help:
 	@echo "Run make start_working"
 
 setup: .env.local docker-compose.yaml
 
-containers: setup $(CACHE)
+containers: setup cache
 	@echo "Starting services"
 	@docker compose up -d --remove-orphans
 
@@ -49,7 +42,7 @@ clean:
 	@if [ -f "./docker-compose.yaml" ]; then \
 		docker compose down; \
 	fi;
-	@sudo rm -rf docker-compose.yaml vendor apps/MotorsportTracler/Frontend/node_modules apps/MotorsportTracler/Frontend/build
+	@rm -rf docker-compose.yaml vendor apps/MotorsportTracker/Frontend/node_modules apps/MotorsportTracker/Frontend/.next
 
 start: containers go-vendor run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test
 	@echo "All services should be running."

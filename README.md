@@ -49,7 +49,7 @@ Tests require containers to be running.
 
 The `make start` command will:
 1. Create a `docker-compose.yaml` from the dist file, using your shell user.
-2. Create the docker cache using sudo. You'll have to input your sudo password. Otherwise, check alternatives below.
+2. Create the shared `cache` docker volume and its per-tool directories.
 3. Build the containers. See `docker-compose.yaml` and the `.docker/` folder for details.
 4. Install Composer and Node dependencies.
 5. Start the Symfony and React server for dev environment.

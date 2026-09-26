@@ -41,8 +41,11 @@ services:
     environment:
       APP_ENV: ${APP_ENV}
       PROJECT_DIR: "/app"
+      GOCACHE: /srv/cache/go-build
+      GOMODCACHE: /srv/cache/go-mod
     volumes:
       - ${PWD}:/app
+      - cache:/srv/cache
     networks:
       - "docker-app"
 

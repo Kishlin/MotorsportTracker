@@ -6,7 +6,6 @@ test.php
 /.env.local*
 /.env.local.php
 /.env.*.local
-/.docker-cache
 /docker-compose.yaml
 ###< Dev Env ###
 
