@@ -14,19 +14,19 @@ func main() {
 	connStr, err := connectionStringFromEnv()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to construct connection string: %v\n", err)
-		return
+		os.Exit(1)
 	}
 
 	sourceStr := os.Getenv("DB_MIGRATE_SOURCE")
 	if sourceStr == "" {
-		fmt.Fprintf(os.Stderr, "DB_MIGRATE_SOURCE environment variable not set")
-		return
+		fmt.Fprintln(os.Stderr, "DB_MIGRATE_SOURCE environment variable not set")
+		os.Exit(1)
 	}
 
 	m, err := migrate.New(sourceStr, connStr)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create migration: %v\n", err)
-		return
+		os.Exit(1)
 	}
 	defer func(m *migrate.Migrate) {
 		err, _ := m.Close()
@@ -41,8 +41,8 @@ func main() {
 		fmt.Println("No new migrations to apply")
 		return
 	} else if err != nil {
-		fmt.Printf("Failed to create migration driver: %v\n", err)
-		return
+		fmt.Fprintf(os.Stderr, "Failed to apply migrations: %v\n", err)
+		os.Exit(1)
 	}
 
 	fmt.Println("Migrations applied successfully")

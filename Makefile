@@ -64,7 +64,11 @@ run-dbmigrate-client-cache run-dbmigrate-client-cache.test: DB=client-cache
 
 run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigrate-client-cache.test:
 	@echo "Running Golang app DBMigrate for $(DB) $(ENV)"
-	@docker compose exec postgres /bin/bash -c '(createdb -U $$POSTGRES_USER $(DB)-$(ENV) &>/dev/null && echo "Created database $(DB)-$(ENV)") || echo "Database $(DB)-$(ENV) already exists"'
+	@if docker compose exec -T postgres psql -U $(POSTGRES_USER) -tAc "SELECT 1 FROM pg_database WHERE datname = '$(DB)-$(ENV)'" | grep -qx 1; then \
+		echo "Database $(DB)-$(ENV) already exists"; \
+	else \
+		docker compose exec postgres createdb -U $(POSTGRES_USER) $(DB)-$(ENV) && echo "Created database $(DB)-$(ENV)"; \
+	fi
 	@docker compose exec \
 		-e DB_MIGRATE_SOURCE="file:///app/etc/Migrations/$(DB)" \
 		-e DB_MIGRATE_USER=$(POSTGRES_USER) \
