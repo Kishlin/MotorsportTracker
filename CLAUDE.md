@@ -115,7 +115,7 @@ Subject: `<Type>: <Sentence-case summary>` — e.g. `Hotfix: Send bootstrap trac
 | `Dependencies` | Go modules, `vendor/`, `go.work` |
 | `Project` | Tooling, Makefile, Docker services, IDE and Claude config |
 
-**Never commit without my explicit go-ahead on that specific commit.** An approved plan that mentions a commit is not approval. Stage the changes, show the diff summary and the proposed message, then wait.
+An `ask` rule on `Bash(git commit:*)` in `.claude/settings.json` prompts me on every commit, and that prompt is my approval. Don't stop to ask first. Before the call, say what's staged, then run a plain `git commit` from the repo root: not `git -C`, not inside `bash -c`, not chained after another command. That form is the one the rule is sure to match.
 
 No other types — not `Doc`, `Refactoring`, `Cleanup`. Co-author trailers are disabled through `attribution` in `.claude/settings.json`.
 

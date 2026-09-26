@@ -18,6 +18,9 @@
       "Bash(git check-ignore:*)",
       "Bash(./scripts/architecture-check.sh:*)"
     ],
+    "ask": [
+      "Bash(git commit:*)"
+    ],
     "deny": [
       "Bash(rm -rf:*)",
       "Bash(git reset --hard:*)",
