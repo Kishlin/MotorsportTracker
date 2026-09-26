@@ -49,3 +49,7 @@ test.php
 ###> claude code ###
 .claude/settings.local.json
 ###< claude code ###
+
+###> Connector cache ###
+/etc/ConnectorCache/
+###< Connector cache ###
