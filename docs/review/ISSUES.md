@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-25: items 1–8 and 10–13 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 14 is open. It was found on 2026-08-01, along with items 12 and 13, while tracing the scraping chain to build the API canary. It is silent: nothing fails, the data is just wrong. Item 15 is open and needs a decision before it can be fixed.
+Status as of 2026-09-26: items 1–8 and 10–14 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 15 is open and needs a decision before it can be fixed.
 
-Re-verified against the code on 2026-09-25: items 9, 14 and 15 are open, and no resolved item has regressed. Line references below were refreshed where they had drifted.
+Re-verified against the code on 2026-09-25: items 9, 14 and 15 were open, and no resolved item had regressed. Line references below were refreshed where they had drifted. Item 14 was fixed the next day.
 
 ---
 
@@ -140,40 +140,17 @@ The original remediation said `UNIQUE(entry, driver)` would absorb a repeat with
 
 ---
 
-## 14. Event Hash Is Built From Venue Fields, So Event Renames Never Persist
+## 14. ~~Event Hash Is Built From Venue Fields, So Event Renames Never Persist~~ (Resolved)
 
-Found 2026-08-01. Open.
+**Resolution**: the events loop in `save_calendar_repository.go:179-186` now hashes `event.Name`, `event.ShortName` and `event.ShortCode`, and adds `seasonID`, so the hash covers every column the row stores.
 
-**Impact**: an event renamed upstream is never updated in `events`. Silent — the upsert reports the row as unchanged.
+The cause was copy-paste from the venue loop, where `fn.Deref(venue.Name, ...)` is correct. The hash was built from the **venue's** name fields while the row stored the **event's**. `shared.Save()` emits `WHERE hash IS DISTINCT FROM EXCLUDED.hash`, so a renamed event produced an identical hash and the `UPDATE` was skipped. Only a venue change, a status change or a reschedule could refresh an event's stored name. `season` was stored but not hashed either, so an event moved to another season was dropped the same way. The venues, sessions, seasons, series and countries hashes already covered every stored column.
 
-**File**: `src/Golang/motorsporttracker/scrapping/calendar/infrastructure/save_calendar_repository.go:179-187`
+`save_calendar_repository_test.go` gains two cases. One saves an event twice with only its names changed, and the other saves it twice with only its season changed. Each asserts the stored row carries the second values. Before the fix, both failed with the first values still stored.
 
-**Problem**: the hash is computed from the **venue's** name fields while the row stores the **event's**.
+**No backfill is needed.** The original remediation proposed `UPDATE events SET hash = ''` to force a rewrite. That fails on the second row, because `events.hash` is `UNIQUE NOT NULL`. It is also unnecessary: the hash formula changed, so every stored hash is stale, and the next calendar scrape of a season rewrites every event in it. The one exception is an event whose current season and names hash the same as the old venue names, which would need all three name fields to be nil both times. That first rescrape adds one `events_history` row per event, once. Events in seasons that are never scraped again keep their old names.
 
-```go
-nameVal := fn.Deref(event.Venue.Name, "")
-shortNameVal := fn.Deref(event.Venue.ShortName, "")
-shortCodeVal := fn.Deref(event.Venue.ShortCode, "")
-
-hash := crypto.Hash(fmt.Sprintf("...", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, ...))
-rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, ...})
-```
-
-`shared.Save()` emits `WHERE hash IS DISTINCT FROM EXCLUDED.hash`, so a renamed event produces an identical hash and the `UPDATE` is skipped. Only a venue change, a status change or a reschedule can ever refresh an event's stored name.
-
-This is copy-paste from the venue loop at lines 116-118, where `fn.Deref(venue.Name, ...)` is correct. The sessions loop at lines 220-222 gets it right too, leaving the events loop as the only one reading the wrong struct.
-
-**Remediation**: `event.Name`, `event.ShortName`, `event.ShortCode`.
-
-The fix is retroactive-unsafe on its own: existing rows carry venue-derived hashes, so renames already missed stay missed until the stored hash changes for some other reason. A one-off `UPDATE events SET hash = ''` before the next scrape forces every row to be rewritten.
-
-### Secondary: the file contradicts itself on whether `event.Venue` can be nil
-
-Line 162 guards `if event.Venue != nil` before the ID lookup; lines 179-181 then dereference it unguarded. One of the two is wrong.
-
-Today the guard is the redundant one, not the deref: `calendar.json` lists `venue` in the event `required` array **and** types it `"object"` (not `["object", "null"]`), so a payload that reaches `SaveCalendar` through `ConnectorUsingClient` has already been rejected if a venue were missing or null. The panic is therefore unreachable via the validated path — worth recording as latent rather than as a live crash.
-
-It becomes reachable if the schema is relaxed, or through a `CachedConnector` hit serving bytes stored before the schema required a venue, since cached payloads are never re-validated (see the Caching section of [PATTERNS.md](../PATTERNS.md)). Applying the remediation above removes the venue access from this loop entirely and the question disappears with it.
+The secondary note about `event.Venue` is gone with the fix. The loop dereferenced `event.Venue` unguarded right after an `if event.Venue != nil` guard. `calendar.json` requires a non-null venue, so the panic was unreachable through the validated path, but cached payloads are never re-validated. The loop now reads `event.Venue` only inside the guard.
 
 ---
 
@@ -195,7 +172,7 @@ Found 2026-09-25 while fixing item 13. Open, and it needs a decision before it c
 
 All three were reproduced with integration cases in `save_classification_repository_test.go` and fail exactly as shown. In the first two, `entries` had already been written when the save failed. Before item 13 was fixed, the duplicate case failed one step later, in `saveClassificationDetails`, with the same SQLSTATE. It has never actually skipped.
 
-**Reachability**: `classification.json` requires `team` and types it as a non-null object, so a missing team cannot pass the validated path. It stays latent in the same way as item 14's venue deref, because cached payloads are never re-validated. Nothing in the schema prevents a duplicate car number, and it cannot check a retirement's car number against the details. None of the five cached classifications contains any of the three cases.
+**Reachability**: `classification.json` requires `team` and types it as a non-null object, so a missing team cannot pass the validated path. It stays latent in the same way item 14's venue deref was, because cached payloads are never re-validated. Nothing in the schema prevents a duplicate car number, and it cannot check a retirement's car number against the details. None of the five cached classifications contains any of the three cases.
 
 **Remediation**: decide which of these two behaviors is intended, then make the code match.
 

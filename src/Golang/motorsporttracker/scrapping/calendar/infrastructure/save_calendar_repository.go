@@ -176,14 +176,14 @@ func (s *SaveCalendarRepository) saveEvents(
 
 		venueIDVal := fn.Deref(venueID, 0)
 		countryIDVal := fn.Deref(countryID, 0)
-		nameVal := fn.Deref(event.Venue.Name, "")
-		shortNameVal := fn.Deref(event.Venue.ShortName, "")
-		shortCodeVal := fn.Deref(event.Venue.ShortCode, "")
+		nameVal := fn.Deref(event.Name, "")
+		shortNameVal := fn.Deref(event.ShortName, "")
+		shortCodeVal := fn.Deref(event.ShortCode, "")
 		statusVal := fn.Deref(event.Status, "")
 		startTimeDBVal, startTimeHashVal := shared.PrepareTimestamp(event.StartTime)
 		endTimeDBVal, endTimeHashVal := shared.PrepareTimestamp(event.EndTime)
 
-		hash := crypto.Hash(fmt.Sprintf("%s|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startTimeHashVal, endTimeHashVal))
+		hash := crypto.Hash(fmt.Sprintf("%s|%d|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, seasonID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startTimeHashVal, endTimeHashVal))
 		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startTimeDBVal, endTimeDBVal, hash})
 	}
 

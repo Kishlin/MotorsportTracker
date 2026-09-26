@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/stretchr/testify/suite"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
@@ -18,6 +19,8 @@ import (
 const saveCalendarPrefix = "77dde66e-7835-4440"
 
 const seasonRef = saveCalendarPrefix + "-0006-000000000001"
+
+const otherSeasonRef = saveCalendarPrefix + "-0006-000000000002"
 
 type SaveCalendarRepositoryIntegrationTestSuite struct {
 	suite.Suite
@@ -93,6 +96,51 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(1, suite.helper.Count(suite.T().Context(), "venues", saveCalendarPrefix+"-0004-%"))
 		suite.Equal(2, suite.helper.Count(suite.T().Context(), "sessions", saveCalendarPrefix+"-0004-%"))
 	})
+
+	suite.Run("updates an event renamed upstream", func() {
+		eventUUID := saveCalendarPrefix + "-0007-000000000001"
+
+		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, suite.singleEventCalendar("0007", "Event 7", "Ev7", "E7"))
+		suite.NoError(err)
+
+		err = suite.repository.SaveCalendar(suite.T().Context(), seasonRef, suite.singleEventCalendar("0007", "Renamed Event 7", "REv7", "RE7"))
+		suite.NoError(err)
+
+		name, shortName, shortCode, season := suite.storedEvent(eventUUID)
+		suite.Equal("Renamed Event 7", name)
+		suite.Equal("REv7", shortName)
+		suite.Equal("RE7", shortCode)
+		suite.Equal(seasonRef, season)
+	})
+
+	suite.Run("moves an event to another season", func() {
+		eventUUID := saveCalendarPrefix + "-0008-000000000001"
+
+		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, suite.singleEventCalendar("0008", "Event 8", "Ev8", "E8"))
+		suite.NoError(err)
+
+		err = suite.repository.SaveCalendar(suite.T().Context(), otherSeasonRef, suite.singleEventCalendar("0008", "Event 8", "Ev8", "E8"))
+		suite.NoError(err)
+
+		_, _, _, season := suite.storedEvent(eventUUID)
+		suite.Equal(otherSeasonRef, season)
+	})
+}
+
+const storedEventQuery = `
+SELECT e.name, e.short_name, e.short_code, s.uuid::text
+FROM events e
+JOIN seasons s ON s.id = e.season
+WHERE e.uuid = $1;`
+
+func (suite *SaveCalendarRepositoryIntegrationTestSuite) storedEvent(eventUUID string) (name string, shortName string, shortCode string, season string) {
+	rows := fn.MustReturn(suite.repository.db.Query(suite.T().Context(), storedEventQuery, eventUUID)).(pgx.Rows)
+	defer rows.Close()
+
+	suite.Require().True(rows.Next(), "event %s not found", eventUUID)
+	fn.Must(rows.Scan(&name, &shortName, &shortCode, &season))
+
+	return name, shortName, shortCode, season
 }
 
 func TestIntegration_SaveCalendarRepository(t *testing.T) {
@@ -111,6 +159,12 @@ INSERT INTO seasons (uuid, series, name, year, end_year, hash)
 VALUES ('%[1]s-0006-000000000001', 
 (SELECT id FROM series WHERE uuid::text = '%[1]s-0005-000000000001'),
 '2024', 2024, 2025, '%[1]s-0006')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO seasons (uuid, series, name, year, end_year, hash)
+VALUES ('%[1]s-0006-000000000002',
+(SELECT id FROM series WHERE uuid::text = '%[1]s-0005-000000000001'),
+'2025', 2025, 2026, '%[1]s-0006-000000000002')
 ON CONFLICT DO NOTHING;
 `, saveCalendarPrefix)
 }
@@ -267,6 +321,47 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) bigCalendar() *motorspo
 						HasResults: fn.Ptr(false),
 						StartTime:  fn.Ptr(int64(1714958400)),
 						EndTime:    fn.Ptr(int64(1714962000)),
+					},
+				},
+			},
+		},
+	}
+}
+
+// singleEventCalendar builds a one-event calendar whose UUIDs sit in the given group. Only the event's names vary, so
+// saving it twice with different names changes nothing else.
+func (suite *SaveCalendarRepositoryIntegrationTestSuite) singleEventCalendar(group string, name string, shortName string, shortCode string) *motorsportstats.Calendar {
+	return &motorsportstats.Calendar{
+		Events: []*motorsportstats.Event{
+			{
+				UUID:      saveCalendarPrefix + "-" + group + "-000000000001",
+				Name:      fn.Ptr(name),
+				ShortName: fn.Ptr(shortName),
+				ShortCode: fn.Ptr(shortCode),
+				Status:    fn.Ptr("Scheduled"),
+				StartTime: fn.Ptr(int64(1714675200)),
+				EndTime:   fn.Ptr(int64(1714848000)),
+				Venue: &motorsportstats.Venue{
+					UUID:      saveCalendarPrefix + "-" + group + "-000000000002",
+					Name:      fn.Ptr("Venue " + group),
+					ShortName: fn.Ptr("V" + group),
+					ShortCode: fn.Ptr("VN" + group),
+				},
+				Country: &motorsportstats.Country{
+					UUID: saveCalendarPrefix + "-" + group + "-000000000003",
+					Name: fn.Ptr("Country " + group),
+					Flag: fn.Ptr("ca.svg"),
+				},
+				Sessions: []*motorsportstats.Session{
+					{
+						UUID:       saveCalendarPrefix + "-" + group + "-000000000004",
+						Name:       fn.Ptr("Session " + group),
+						ShortName:  fn.Ptr("S" + group),
+						ShortCode:  fn.Ptr("SS" + group),
+						Status:     fn.Ptr("Scheduled"),
+						HasResults: fn.Ptr(false),
+						StartTime:  fn.Ptr(int64(1714682400)),
+						EndTime:    fn.Ptr(int64(1714682400)),
 					},
 				},
 			},
