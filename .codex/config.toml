@@ -1,0 +1,5 @@
+developer_instructions = """
+Before working in this repository, read .codex/review.md relative to the
+repository root and follow its guidance. It defines the review workflow and
+which existing project instruction files to consult.
+"""
