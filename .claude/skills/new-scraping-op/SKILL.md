@@ -20,7 +20,7 @@ Work through all seven steps. Do not stop halfway — a half-registered module f
 | Save repository | `infrastructure` | `src/Golang/motorsporttracker/scrapping/$1/infrastructure/save_$1_repository.go` |
 | Migration | — | `etc/Migrations/core/<YYYYMMDDHHMMSS>_create_<table>.up.sql` |
 
-**Intents are infrastructure, not domain.** They import `shared/application/infrastructure` and construct a `messaging.Message`; both are infrastructure concerns. Commit `70c5ef1f` moved them. If you find a doc saying `domain/intent.go`, the doc is stale.
+**Intents are infrastructure, not domain.** They import `shared/application/infrastructure` and construct a `messaging.Message`; both are infrastructure concerns.
 
 If the module needs more than one operation, drop the generic `intent.go` / `handler.go` / `use_case.go` names and prefix each file instead — follow `scrapping/seasons/`, which has `seasons_for_series_id_intent.go`, `seasons_for_series_keyword_handler.go`, and so on.
 

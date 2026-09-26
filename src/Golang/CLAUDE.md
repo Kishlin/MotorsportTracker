@@ -19,7 +19,7 @@ A `PostToolUse` hook runs `scripts/architecture-check.sh` on every edit under a 
 | Use case, repository/gateway **interfaces**, domain structs | `domain` |
 | Intent, Handler, Repository impl, Gateway impl, Connector | `infrastructure` |
 
-**Intents are infrastructure.** They build a `messaging.Message` and import `shared/application/infrastructure`. Commit `70c5ef1f` moved them out of domain; `docs/DEVELOPMENT.md` still says otherwise and is wrong.
+**Intents are infrastructure.** They build a `messaging.Message` and import `shared/application/infrastructure`.
 
 ## File naming
 
@@ -33,7 +33,7 @@ Implementations are named for their mechanism: `GatewayUsingConnector`, `SaveSer
 
 Explicit boolean comparison — `if exists == false`, not `if !exists`. Early return on error, always wrapping with `%w`. `fn.Deref(ptr, "")` for pointer defaults. `slog` with key/value pairs, never `fmt.Sprintf` into the message.
 
-Existing code is not uniformly compliant: `shared/application/infrastructure/intent.go:86` uses `!configOption.RequiresValue`. Match the documented style in new code rather than the nearest counter-example.
+`make go-lint` enforces the boolean-comparison rule through `scripts/negation-check.sh`.
 
 ## Registration is manual and silent
 
@@ -47,8 +47,6 @@ The registry is keyed by the full name — `scrape:series`, `scrape:seasons`, `s
 make go-run ARGS="scrape:series"   # works
 make go-run ARGS="series"          # unknown subcommand
 ```
-
-The bare forms printed by the CLI's own help text in `apps/Backend/MotorsportTracker/main.go` do not exist.
 
 ## Persistence
 

@@ -49,7 +49,7 @@
 | `make run-cache-warmer ARGS='--series "…"'` | Fill `etc/ConnectorCache/` for a series without scraping |
 | `make go-run ARGS="scrape:series"` | Run MotorsportTracker via `go run` |
 
-The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. The bare forms (`series`, `events`) printed by the CLI's own help text in `apps/Backend/MotorsportTracker/main.go` are not registered and return `unknown subcommand`.
+The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. A bare name such as `series` returns `unknown subcommand`.
 
 `make run-api-canary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it cannot go through `ServicesRegistry`.
 
