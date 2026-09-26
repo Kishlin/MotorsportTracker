@@ -127,7 +127,7 @@ make go-build
 Then confirm the intent actually resolves — the subcommand is the **full intent name**:
 
 ```bash
-make go-run ARGS="scrape:$1"
+make go-run APP=MotorsportTracker ARGS="scrape:$1"
 ```
 
 `ARGS="$1"` alone returns `unknown subcommand`.

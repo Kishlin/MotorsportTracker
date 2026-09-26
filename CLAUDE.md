@@ -6,15 +6,15 @@ Guidance for Claude Code in this repository. Area-specific rules live in nested 
 
 ```bash
 make start                      # Containers + migrations + vendored deps
-make go-build                   # Build all Go applications
+make go-build                   # Build every Go app; APP=ApiCanary builds one
 make go-test                    # Run all Go tests across all modules
 make go-lint                    # Lint with golangci-lint
-make go-run ARGS="scrape:series"  # Run the MotorsportTracker CLI directly
-make run-api-canary             # Check the live API against the connector schemas
-make run-cache-warmer ARGS='--series "FIA Formula One World Championship" --from 1950 --to 1950'  # Fill etc/ConnectorCache/
+make go-run APP=MotorsportTracker ARGS="scrape:series"  # Build and run one app
+make go-run APP=ApiCanary       # Check the live API against the connector schemas
+make go-run APP=CacheWarmer ARGS='--series "FIA Formula One World Championship" --from 1950 --to 1950'  # Fill etc/ConnectorCache/
 ```
 
-Go commands run inside the `golang` container. The CLI subcommand is the **full intent name** — `scrape:series`, not `series`.
+Go commands run inside the `golang` container. An app is any `main` package in `go.work`, named by its directory for `APP`, so a new app needs no Makefile entry. The CLI subcommand is the **full intent name** — `scrape:series`, not `series`.
 
 ## Architecture
 

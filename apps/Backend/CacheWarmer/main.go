@@ -96,7 +96,7 @@ func printReport(w io.Writer, r *report, networkCalls int) {
 	}
 
 	// A failed payload is not cached, so the next run retries it. Schema validation failures land here
-	// too; make run-api-canary explains those in more detail.
+	// too; make go-run APP=ApiCanary explains those in more detail.
 	_, _ = fmt.Fprintf(w, "\n%d failures, not cached:\n", len(r.failures))
 
 	for _, f := range r.failures {

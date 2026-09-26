@@ -26,7 +26,7 @@
 | `make start` | Full startup: containers + migrations + vendor |
 | `make containers` | Start Docker containers only |
 | `make stop` | Stop all containers |
-| `make go-build` | Build all Go applications |
+| `make go-build` | Build every Go app, or one with `APP=ApiCanary` |
 | `make go-test` | Run all Go tests across all modules |
 | `make go-lint` | Lint all Go code with golangci-lint |
 | `make go-tidy` | Sync go.work and tidy all modules |
@@ -34,31 +34,26 @@
 
 ### Individual Applications
 
-| Target | Description |
+An app is any `main` package in `go.work`, named by its directory. `make go-run APP=<App> ARGS="…"` rebuilds that one app and runs it; `make go-build APP=<App>` only builds it, to `build/<kebab-case name>` in the app's directory (`DBMigrate` builds `build/db-migrate`). A new app needs no Makefile entry.
+
+| Command | Description |
 |--------|-------------|
-| `make build-processor` | Build CommandsProcessor |
-| `make build-publisher` | Build CommandsPublisher |
-| `make build-motorsport-tracker` | Build MotorsportTracker CLI |
-| `make build-dbmigrate` | Build DBMigrate |
-| `make build-api-canary` | Build ApiCanary |
-| `make build-cache-warmer` | Build CacheWarmer |
-| `make run-processor` | Run CommandsProcessor (queue consumer) |
-| `make run-publisher ARGS="scrape:series"` | Publish a scraping intent to the queue |
-| `make run-motorsport-tracker ARGS="scrape:series"` | Run a scraping command directly |
-| `make run-api-canary` | Check the live motorsportstats API against the schemas |
-| `make run-cache-warmer ARGS='--series "…"'` | Fill `etc/ConnectorCache/` for a series without scraping |
-| `make go-run ARGS="scrape:series"` | Run MotorsportTracker via `go run` |
+| `make go-run APP=CommandsProcessor` | Run the queue consumer |
+| `make go-run APP=CommandsPublisher ARGS="scrape:series"` | Publish a scraping intent to the queue |
+| `make go-run APP=MotorsportTracker ARGS="scrape:series"` | Run a scraping command directly |
+| `make go-run APP=ApiCanary` | Check the live motorsportstats API against the schemas |
+| `make go-run APP=CacheWarmer ARGS='--series "…"'` | Fill `etc/ConnectorCache/` for a series without scraping |
 
 The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. A bare name such as `series` returns `unknown subcommand`.
 
-`make run-api-canary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it cannot go through `ServicesRegistry`.
+`make go-run APP=ApiCanary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it cannot go through `ServicesRegistry`.
 
-When a schema break is reported, the fix is to update the matching file in `src/Golang/motorsportstats/connector/infrastructure/schemas/` and rebuild — the connector embeds them at build time, so an edited schema does not take effect until `make build-api-canary` (or `make go-build`) runs. The added-key warnings read the same files from disk at run time and do not need a rebuild.
+When a schema break is reported, the fix is to update the matching file in `src/Golang/motorsportstats/connector/infrastructure/schemas/` and run the canary again — the connector embeds them at build time, and `go-run` rebuilds the app first, so the edited schema takes effect on that run. The added-key warnings read the same files from disk at run time and do not need a rebuild.
 
-`make run-cache-warmer` needs at least one `--series`, spelt exactly as in `etc/ConnectorCache/series/all.json`; `--from` and `--to` bound the season years, and `--delay` (default `1s`) paces the requests that miss the cache. No database is needed. Full F1 history is several thousand requests, so bound the years; an interrupted run picks up where it stopped. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it warms.
+`make go-run APP=CacheWarmer` needs at least one `--series`, spelt exactly as in `etc/ConnectorCache/series/all.json`; `--from` and `--to` bound the season years, and `--delay` (default `1s`) paces the requests that miss the cache. No database is needed. Full F1 history is several thousand requests, so bound the years; an interrupted run picks up where it stopped. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it warms.
 
 ```bash
-make run-cache-warmer ARGS='--series "FIA Formula One World Championship" --from 1950 --to 1959'
+make go-run APP=CacheWarmer ARGS='--series "FIA Formula One World Championship" --from 1950 --to 1959'
 ```
 
 ### Database Operations

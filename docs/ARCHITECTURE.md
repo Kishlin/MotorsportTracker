@@ -153,7 +153,7 @@ CachedConnector(FileSystemCache)
 
 The throttle sits below the cache, so hits cost nothing and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Session endpoints are fetched only for sessions with `hasResults`.
 
-A failed call is reported and its subtree skipped; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make run-api-canary` explains the break.
+A failed call is reported and its subtree skipped; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make go-run APP=ApiCanary` explains the break.
 
 Warming a new endpoint: an endpoint keyed by a session UUID is one line in `sessionEndpoints` (`warm.go`) plus its method on `throttledConnector`, which the compiler asks for. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions.
 

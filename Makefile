@@ -61,14 +61,7 @@ start: containers go-vendor run-dbmigrate-core run-dbmigrate-core.test run-dbmig
 
 ##> Apps
 
-.PHONY: build-publisher build-processor run-publisher run-processor
-.PHONY: build-api-canary run-api-canary
-.PHONY: build-cache-warmer run-cache-warmer
-.PHONY: build-go test-go lint-go tidy-go
-
-build-dbmigrate:
-	@echo "Building Golang app DBMigrate"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go build -o build/dbmigrate main.go'
+.PHONY: go-build go-run go-test go-lint go-tidy
 
 run-dbmigrate-core run-dbmigrate-client-cache: ENV=dev
 run-dbmigrate-core.test run-dbmigrate-client-cache.test: ENV=test
@@ -87,47 +80,7 @@ run-dbmigrate-core run-dbmigrate-core.test run-dbmigrate-client-cache run-dbmigr
 		-e DB_MIGRATE_PORT=$(POSTGRES_PORT) \
 		-e DB_MIGRATE_NO_SSL=true \
 		-e DB_MIGRATE_DATABASE="$(DB)-$(ENV)" \
-		 golang /app/apps/Backend/DBMigrate/build/dbmigrate
-
-build-publisher:
-	@echo "Building Golang app CommandsPublisher"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go build -o build/scrape-commands-publisher main.go'
-
-run-publisher:
-	@echo "Running Golang app CommandsPublisher with ARGS=$(ARGS)"
-	@docker compose exec golang /app/apps/Backend/CommandsPublisher/build/scrape-commands-publisher $(ARGS)
-
-build-processor:
-	@echo "Building Golang app CommandsProcessor"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go build -o build/processor main.go'
-
-run-processor:
-	@echo "Running Golang app CommandsProcessor"
-	@docker compose exec golang /app/apps/Backend/CommandsProcessor/build/processor
-
-build-motorsport-tracker:
-	@echo "Building Golang MotorsportTracker"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/MotorsportTracker && go build -o build/motorsport-tracker main.go'
-
-run-motorsport-tracker:
-	@echo "Running Golang MotorsportTracker with ARGS=$(ARGS)"
-	@docker compose exec golang /app/apps/Backend/MotorsportTracker/build/motorsport-tracker $(ARGS)
-
-build-api-canary:
-	@echo "Building Golang app ApiCanary"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/ApiCanary && go build -o build/api-canary .'
-
-run-api-canary:
-	@echo "Running Golang app ApiCanary with ARGS=$(ARGS)"
-	@docker compose exec golang /app/apps/Backend/ApiCanary/build/api-canary $(ARGS)
-
-build-cache-warmer:
-	@echo "Building Golang app CacheWarmer"
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CacheWarmer && go build -o build/cache-warmer .'
-
-run-cache-warmer:
-	@echo "Running Golang app CacheWarmer with ARGS=$(ARGS)"
-	@docker compose exec golang /app/apps/Backend/CacheWarmer/build/cache-warmer $(ARGS)
+		 golang /app/scripts/go-app.sh run DBMigrate
 
 # Go workspace commands
 go-tidy:
@@ -142,8 +95,10 @@ go-vendor: go-tidy
 go-setup: go-vendor
 	@echo "Go workspace setup complete! All modules synchronized and dependencies vendored."
 
-go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorsport-tracker build-api-canary build-cache-warmer
-	@echo "Built all Go applications"
+# Apps are the main packages in go.work, named by directory: APP=ApiCanary.
+# Without APP, go-build tidies every module first and builds every app.
+go-build: $(if $(APP),,go-tidy)
+	@docker compose exec golang /app/scripts/go-app.sh build $(APP)
 
 go-test:
 	@echo "Running Go tests across every go.work module"
@@ -161,7 +116,8 @@ go-lint:
 	@docker compose exec golang bash -c 'cd /app && modules=$$(go list -m -f "{{.Dir}}/...") && golangci-lint run $$modules'
 
 go-run:
-	@docker compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
+	$(if $(APP),,$(error APP is required, e.g. make go-run APP=MotorsportTracker ARGS="scrape:series"))
+	@docker compose exec golang /app/scripts/go-app.sh run $(APP) $(ARGS)
 
 ##> Helpers
 .PHONY: frontend.sh frontend.build
