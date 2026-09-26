@@ -23,6 +23,12 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # Over TCP: the image's init phase runs a socket-only server that would
+    # pass a socket check, then restarts before the real one listens.
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "${POSTGRES_USER}"]
+      interval: 1s
+      retries: 30
     ports:
       - "${POSTGRES_EXTERNAL_PORT}:${POSTGRES_PORT}"
     working_dir: "/app"
