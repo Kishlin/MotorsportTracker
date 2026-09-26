@@ -100,9 +100,11 @@ func printReport(w io.Writer, r *report, networkCalls int) {
 	_, _ = fmt.Fprintf(w, "\n%d failures, not cached:\n", len(r.failures))
 
 	for _, f := range r.failures {
-		message, rest, multiline := strings.Cut(f.err.Error(), "\n")
+		// The connector ends every validation error with a newline, so a lone error must not count the
+		// empty remainder as a further line.
+		message, rest, multiline := strings.Cut(strings.TrimRight(f.err.Error(), "\n"), "\n")
 		if multiline {
-			message += fmt.Sprintf(" (+%d lines)", strings.Count(strings.TrimRight(rest, "\n"), "\n")+1)
+			message += fmt.Sprintf(" (+%d lines)", strings.Count(rest, "\n")+1)
 		}
 
 		_, _ = fmt.Fprintf(w, "  %s %s (%s)\n    %s\n", f.endpoint, f.target, f.uuid, message)

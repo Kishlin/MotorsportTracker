@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"testing"
@@ -153,6 +155,34 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.ErrorContains(suite.T(), err, `no series named "Formula 1"`)
 		require.Equal(suite.T(), 1, suite.network.calls)
 		require.NoDirExists(suite.T(), filepath.Join(suite.cacheDir, "seasons"))
+	})
+}
+
+func (suite *WarmUnitTestSuite) TestPrintReport() {
+	failed := func(message string) *report {
+		r := newReport()
+		r.count("classification").walked++
+		r.failures = append(r.failures, failure{endpoint: "classification", target: "a session", uuid: "session", err: errors.New(message)})
+
+		return r
+	}
+
+	suite.Run("A lone error ending in a newline is one line", func() {
+		var out bytes.Buffer
+
+		printReport(&out, failed("validation errors: /details/9/nationality: type should be object, got null\n"), 0)
+
+		require.Contains(suite.T(), out.String(), "got null\n")
+		require.NotContains(suite.T(), out.String(), "lines)")
+	})
+
+	suite.Run("Further errors are counted, not printed", func() {
+		var out bytes.Buffer
+
+		printReport(&out, failed("validation errors: first\nsecond\nthird\n"), 0)
+
+		require.Contains(suite.T(), out.String(), "validation errors: first (+2 lines)\n")
+		require.NotContains(suite.T(), out.String(), "second")
 	})
 }
 
