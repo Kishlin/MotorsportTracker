@@ -82,7 +82,7 @@ func registerSeasonsHandlers(ctx context.Context, handlersList *messaging.Handle
 		seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
 			seasons.NewScrapeSeasonsForAllSeriesUseCase(
 				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
-				seasonsImpls.NewSeasonsScrapper(registry.GetIntentsQueue()),
+				seasonsImpls.NewSeasonsScrapperUsingIntents(registry.GetIntentsQueue()),
 			),
 		),
 	)

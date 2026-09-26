@@ -7,18 +7,18 @@ import (
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
 
-// SeasonsScrapper orchestrates bulk scraping operations by publishing asynchronous intents.
-type SeasonsScrapper struct {
+// SeasonsScrapperUsingIntents orchestrates bulk scraping operations by publishing asynchronous intents.
+type SeasonsScrapperUsingIntents struct {
 	queue *messaging.SQSQueue
 }
 
-func NewSeasonsScrapper(queue *messaging.SQSQueue) *SeasonsScrapper {
-	return &SeasonsScrapper{
+func NewSeasonsScrapperUsingIntents(queue *messaging.SQSQueue) *SeasonsScrapperUsingIntents {
+	return &SeasonsScrapperUsingIntents{
 		queue: queue,
 	}
 }
 
-func (p *SeasonsScrapper) ScrapeSeasonsForSeries(_ context.Context, seriesID string) error {
+func (p *SeasonsScrapperUsingIntents) ScrapeSeasonsForSeries(_ context.Context, seriesID string) error {
 	intent := NewScrapeSeasonsForSeriesIDIntent()
 	message, err := intent.ToMessage([]string{seriesID}, map[string]string{})
 	if err != nil {
