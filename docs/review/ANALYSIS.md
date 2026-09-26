@@ -1,6 +1,6 @@
 # Go Architecture Review — February 2026
 
-> Status as of 2026-09-26: the Weak Points summary has been updated — items 1–8 and 10–14 are resolved, items 9 and 15 are open (re-verified against the code on 2026-09-25; item 14 fixed on 2026-09-26). See [ISSUES.md](ISSUES.md) for what each fix involved.
+> Status as of 2026-09-26: the Weak Points summary has been updated — items 1–8 and 10–15 are resolved, items 9 and 16 are open (re-verified against the code on 2026-09-25; items 14 and 15 fixed on 2026-09-26). See [ISSUES.md](ISSUES.md) for what each fix involved.
 >
 > Strong Point 5 has been **corrected**: the 2026-07-30 pass recorded the caching stack as an unqualified strength, but a cache hit returns bytes without ever validating them. The detail is below.
 
@@ -70,9 +70,10 @@ Summary:
 12. ~~**Inverted `exists` check** — driver nationalities from classifications are never written to `countries`~~ (resolved — `exists == false`, covered by the repository suite)
 13. ~~**Driver linked to only one car per session** — missing `entry_drivers` rows when a driver is listed on several cars~~ (resolved — per-car links recorded outside the driver dedup)
 14. ~~**Event hash built from venue fields** — event renames never persist; plus a latent nil-deref the schema currently makes unreachable~~ (resolved — hashes the event's own names and its season, covered by the repository suite)
-15. **Classification rows logged as skipped still abort the save** — duplicate car numbers, teamless entries and orphan retirements fail the whole session, leaving a partial write (open, needs a decision: skip or fail loudly)
+15. ~~**Classification rows logged as skipped still abort the save** — duplicate car numbers, teamless entries and orphan retirements fail the whole session, leaving a partial write~~ (resolved — the rows were real data a per-car schema could not hold; `entries` dropped, classifications keyed by car number and occurrence, retirements by session, car number and driver)
+16. **Rows upstream stops listing are never deleted** — `shared.Save()` only upserts, so every table keeps rows motorsportstats has dropped (open, needs a decision: reconcile, replace per scope, or accept)
 
-Items 12–14 were found on 2026-08-01 while tracing the scraping chain for the API canary. All three are in the persistence layer and all three are silent. All three are now fixed and covered by tests. Item 15 was found on 2026-09-25 while fixing item 13.
+Items 12–14 were found on 2026-08-01 while tracing the scraping chain for the API canary. All three are in the persistence layer and all three are silent. All three are now fixed and covered by tests. Item 15 was found on 2026-09-25 while fixing item 13, and item 16 on 2026-09-26 while fixing item 15.
 
 Fixed in passing, not tracked as numbered issues:
 

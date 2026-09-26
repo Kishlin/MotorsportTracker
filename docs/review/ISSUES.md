@@ -2,9 +2,9 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-26: items 1–8 and 10–14 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 15 is open and needs a decision before it can be fixed.
+Status as of 2026-09-26: items 1–8 and 10–15 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 16 is open and needs a decision before it can be fixed.
 
-Re-verified against the code on 2026-09-25: items 9, 14 and 15 were open, and no resolved item had regressed. Line references below were refreshed where they had drifted. Item 14 was fixed the next day.
+Re-verified against the code on 2026-09-25: items 9, 14 and 15 were open, and no resolved item had regressed. Line references below were refreshed where they had drifted. Items 14 and 15 were fixed the next day.
 
 ---
 
@@ -118,7 +118,7 @@ Verified: the four series-touching packages failed under `-count=6` before the c
 
 ## 12. ~~Inverted `exists` Check Means Nationalities Are Never Saved~~ (Resolved)
 
-**Resolution**: `exists` → `exists == false` in `save_classification_repository.go:65`, the same form as the drivers dedup twelve lines above. Nationalities from classification payloads now reach `shared.SaveCountries` and are written to `countries`.
+**Resolution**: `exists` → `exists == false` in `save_classification_repository.go:76`, the same form as the drivers dedup just above it. Nationalities from classification payloads now reach `shared.SaveCountries` and are written to `countries`.
 
 The cause was the inverted branch: `nationalitiesUUIDs` starts empty and was written only inside that branch, so the body never ran and `uniqueNationalities` was always empty. Nothing errored and nothing referenced the missing rows. Nationalities are only written to `countries`; nothing resolves them back to an ID, so no foreign key was left dangling.
 
@@ -130,13 +130,13 @@ The fix is not retroactive. Classifications scraped before it never wrote their 
 
 ## 13. ~~A Driver Can Only Be Linked to One Car Per Session~~ (Resolved)
 
-**Resolution**: the per-car append in `save_classification_repository.go:56-58` now sits outside the driver dedup. `driversUUIDs` still deduplicates the driver rows across the session. `driverUUIDsPerCarNumbers` now records every car a driver is listed on.
+**Resolution**: the per-car append was moved outside the driver dedup. `driversUUIDs` still deduplicated the driver rows across the session, and `driverUUIDsPerCarNumbers` then recorded every car a driver was listed on. Item 15 has since replaced that code: `entries` and `entry_drivers` are gone, and each classification row links its own drivers through `classification_drivers`.
 
-The cause was that both were gated by the same check, so the first car to list a driver kept the link and later cars silently lost it. This does happen in real racing. In 1950s F1, drivers took over a teammate's car mid-race, and both entries were classified: at Monza in 1956, Fangio retired his own car and finished second in Collins'. None of the five cached classifications shows the case, but they are all modern sessions, so it is unverified whether motorsportstats lists such a driver on both entries.
+The cause was that both were gated by the same check, so the first car to list a driver kept the link and later cars silently lost it. This does happen in real racing. In 1950s F1, drivers took over a teammate's car mid-race, and both entries were classified: at Monza in 1956, Fangio retired his own car and finished second in Collins'. The cache, since warmed to 4,961 sessions, confirms that motorsportstats lists such a driver on each car: 42 sessions have one. At Silverstone in 1956, for example, de Portago is classified 2nd in car #4 and 10th in car #3.
 
-`complexClassification` now lists one driver on two cars and asserts 11 `entry_drivers` rows. Before the fix it saved 10.
+`complexClassification` now lists one driver on two cars and asserts 11 driver links (`entry_drivers` then, `classification_drivers` since item 15). Before the fix it saved 10.
 
-The original remediation said `UNIQUE(entry, driver)` would absorb a repeat within one car. It does not. `saveEntryDrivers` sends every row in one statement, and Postgres rejects an `ON CONFLICT DO UPDATE` that hits the same key twice in one command (`cannot affect row a second time`, SQLSTATE 21000). A driver listed twice on one car therefore fails the save. That is a malformed payload, so failing loudly is correct.
+The original remediation said `UNIQUE(entry, driver)` would absorb a repeat within one car. It does not. `saveEntryDrivers` sends every row in one statement, and Postgres rejects an `ON CONFLICT DO UPDATE` that hits the same key twice in one command (`cannot affect row a second time`, SQLSTATE 21000). A driver listed twice on one car therefore fails the save. That is a malformed payload, so failing loudly is correct. Since item 15, the save rejects it before the first write.
 
 ---
 
@@ -154,29 +154,64 @@ The secondary note about `event.Venue` is gone with the fix. The loop dereferenc
 
 ---
 
-## 15. Classification Rows Logged as Skipped Still Abort the Save
+## 15. ~~Classification Rows Logged as Skipped Still Abort the Save~~ (Resolved)
 
-Found 2026-09-25 while fixing item 13. Open, and it needs a decision before it can be fixed.
+**Resolution**: the skip branches are gone, and the schema was reshaped so that every row motorsportstats sends has a place to go.
 
-**Impact**: a classification with a duplicate car number, an entry without a team, or a retirement for an unknown car logs a warning saying the row is skipped, and then fails anyway. The whole session's save returns an error. `SaveClassification` has no transaction, so every step before the failing one is committed and nothing after it is written.
+The issue's premise was stale. It said none of the five cached classifications contained any of the cases. The cache now holds 4,961 sessions (F1 1950–2025, WEC 2012–2023), and replaying the save over all of them showed 128 sessions (2.6%) failing. Those rows were real data, not bad data:
 
-**File**: `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go`
+| Condition | Sessions | What it is |
+|---|---|---|
+| Repeated car number | 69 | Shared drives, where each driver gets a row with the same position and a share of the points: Fangio on 5 and Fagioli on 4 for the 1951 French GP win. Also a number reused by a driver who withdrew or failed to qualify, and WEC practice listing one row per driver |
+| Several retirements on one car | 45 | Missing from the original write-up. One retirement per driver of a shared or crewed car. WEC adds a `Shared Driver` placeholder, and Piquet in 1987–89 has a second row under a wrong driver UUID |
+| Retirement for a car with no classification row | 19 | Non-starters, e.g. Hülkenberg at Melbourne in 2013 |
+| Missing team | 0 | Only a stale cache or schema drift |
 
-**Problem**: three checks log a warning and `continue`, but they only filter some of the data built in the loop. The later steps still receive the rows they skipped.
+The cause was the schema, not the warnings. It was keyed per car (`entries UNIQUE(session, car_number)`, `classifications UNIQUE(entry)`, `retirements UNIQUE(entry)`), and motorsportstats reports per driver. Neither of the two original remediations was right. Skipping would have dropped real results. Failing would have blocked those sessions for good, and on the queue a failing message comes back every 30 seconds, since nothing deletes it.
 
-| Check | Lines | Still receives the row | Fails with |
-|---|---|---|---|
-| Duplicate car number | 68-75 | The driver loop at 52-59 runs before the check, so the duplicate's drivers are appended to that car again. `saveClassificationDetails` (181) also gets the unfiltered `classification.Details` | `saving entry drivers: … ON CONFLICT DO UPDATE command cannot affect row a second time (SQLSTATE 21000)` |
-| Missing team | 76-83 | Same driver loop: the drivers are queued under a car number that never gets an entry | `saving entry drivers: entry ID for car number 302 not found` |
-| Retirement for unknown car | 108-115 | `saveRetirements` (176) gets the unfiltered `classification.Retirements` | `saving retirements: entry ID for car number 999 not found` |
+The fix:
 
-All three were reproduced with integration cases in `save_classification_repository_test.go` and fail exactly as shown. In the first two, `entries` had already been written when the save failed. Before item 13 was fixed, the duplicate case failed one step later, in `saveClassificationDetails`, with the same SQLSTATE. It has never actually skipped.
+- **`entries` is gone.** Once each detail row is its own entry, entries and classifications are 1:1. `classifications` now carries session, team, garage and car number, and drivers link through `classification_drivers`, which replaces `entry_drivers`.
+- **A classification row is keyed `UNIQUE(session, car_number, occurrence)`.** `occurrence` numbers the rows sharing a car number, in payload order, and is 1 on 99.87% of the 108,296 cached rows. The payload has no row identifier, and the other candidate keys fail. `finish_position` collides in 1,067 sessions, because every unclassified row is 0. A key built from the drivers collides twice: de Angelis at Brazil in 1983 and Villeneuve at Monza in 1980 are each listed twice with the same driver and team. The position in the list moves on every post-race penalty.
+- **Retirements are keyed `UNIQUE(session, car_number, driver)`.** That key is unique in every cached session, and a retirement no longer links to a classification row. Every retirement is stored, and so is every retirement's driver.
+- **Upstream errors are stored as sent.** The second Piquet and the `Shared Driver` placeholder are saved like any other row. Correcting them is not the scraper's job.
+- **A payload the save cannot store fails before the first write**, with an error naming the car number: a row without a team, a retirement without a driver, or a row listing the same driver twice.
 
-**Reachability**: `classification.json` requires `team` and types it as a non-null object, so a missing team cannot pass the validated path. It stays latent in the same way item 14's venue deref was, because cached payloads are never re-validated. Nothing in the schema prevents a duplicate car number, and it cannot check a retirement's car number against the details. None of the five cached classifications contains any of the three cases.
+The core migrations were rewritten in place rather than extended, because the database was empty. Any existing `core` database has to be dropped and migrated again.
 
-**Remediation**: decide which of these two behaviors is intended, then make the code match.
+`save_classification_repository_test.go` gains eight cases:
 
-- **Skip for real.** Move the driver loop below the two checks, and pass filtered slices of details and retirements to `saveClassificationDetails` and `saveRetirements`. The warnings then describe what actually happens, and one bad row no longer blocks the session.
-- **Fail loudly, before writing anything.** Replace the three warnings with returned errors and check every row before the first write. The error then names the bad row, and there is no partial write, but one bad row blocks the whole session.
+- a shared drive;
+- one driver twice on one car;
+- one retirement per driver;
+- a retirement with no classification row;
+- the three rejections, each asserting that nothing was written;
+- a re-save that must update rows in place.
 
-The checks don't all need the same answer. A missing team can only mean a stale cache or schema drift, which argues for failing. A duplicate car number or an orphan retirement could be a quirk of the upstream data, which argues for skipping. Whichever way each one goes, the three integration cases above become the regression tests, with their assertions flipped to `Error` for any check that fails loudly.
+The cases were mutation-tested. Numbering every row 1, validating after the first write, or dropping retirement drivers each fails exactly the cases that cover it. End to end, six sessions that used to fail now save from the cache with counts matching their payloads: one per condition, plus a WEC practice. A rescrape writes nothing.
+
+Rows that motorsportstats stops listing are still never deleted. That affects every table, not just these, and is item 16.
+
+---
+
+## 16. Rows Upstream Stops Listing Are Never Deleted
+
+Found 2026-09-26 while fixing item 15. Open, and it needs a decision before it can be fixed.
+
+**Impact**: when motorsportstats drops something the scraper stored earlier, the stored row stays, and reads exactly like a current one. Nothing errors. For example:
+
+- a driver removed from a crew keeps their `classification_drivers` link;
+- an event removed from a calendar keeps its row;
+- a session that comes back with fewer classification rows keeps the extra ones.
+
+**Files**: every repository that writes through `shared.Save()` in `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go`.
+
+**Problem**: `shared.Save()` only inserts and updates (`INSERT ... ON CONFLICT DO UPDATE`), and no repository deletes anything. The history triggers fire on `INSERT OR UPDATE` only, so they could not record a delete either.
+
+**Remediation**: decide the policy once, for the whole scraper.
+
+- **Reconcile.** After upserting, delete the rows in the scraped scope that the payload no longer contains: a session's classifications, a season's events. Add a `DELETE` branch to the history triggers that closes `valid_to`.
+- **Replace per scope.** Delete the scope's rows and insert them again, in one transaction. This is the simplest option and needs no natural key. It gives up hash change detection, though, and every rescrape churns IDs and history.
+- **Accept it.** Rows are never removed and consumers live with that, which is today's behavior, undocumented until now.
+
+Item 15's key choice limits how often this bites classifications. A row is tied to a car number, not a finishing position, so a post-race penalty updates rows in place instead of moving results between them.
