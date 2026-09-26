@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Guidance for Claude Code in this repository. Area-specific rules live in nested `CLAUDE.md` files and load automatically when you work in that subtree.
+Guidance for Claude Code in this repository. Area-specific rules live in nested `CLAUDE.md` files and in `.claude/rules/`, and load automatically when you work in that subtree or on matching files.
 
 ## Quick Start
 
@@ -56,6 +56,8 @@ go.work                   # Go workspace (7 modules)
 | [src/Golang/CLAUDE.md](src/Golang/CLAUDE.md) | Go core library — layers, naming, registration, persistence |
 | [etc/Migrations/CLAUDE.md](etc/Migrations/CLAUDE.md) | SQL migrations — live directories, history tables, triggers |
 | [apps/MotorsportTracker/Frontend/CLAUDE.md](apps/MotorsportTracker/Frontend/CLAUDE.md) | Next.js frontend |
+| [.claude/rules/go-style.md](.claude/rules/go-style.md) | Any Go file under `src/Golang/` or `apps/Backend/` — booleans, errors, naming, idioms |
+| [.claude/rules/go-tests.md](.claude/rules/go-tests.md) | Any `_test.go` file there — suite lifecycle, parallel isolation, `APP_ENV` |
 
 ## Tooling
 
@@ -75,7 +77,6 @@ Legacy PHP exists in `src/Backend/`, `apps/Backoffice/`, and parts of `apps/`. *
 |-----|-------------|
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System components, data flow, module organization |
 | [PATTERNS.md](docs/PATTERNS.md) | Use Cases, Repositories, Gateways, Handlers, Intents, Registration, DI |
-| [CODE_STYLE.md](docs/CODE_STYLE.md) | Go code, SQL migrations, tests |
 | [DEVELOPMENT.md](docs/DEVELOPMENT.md) | Environment setup, Make targets, debugging |
 
 ## Key Patterns

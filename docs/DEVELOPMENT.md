@@ -90,7 +90,7 @@ The same `db.*` targets exist for `cache`, `client`, and `admin` databases.
 
 ## Testing Strategy
 
-Tests use `testify/suite`. See `docs/CODE_STYLE.md` for naming conventions, lifecycle details, and the isolation rules integration suites follow to run in parallel.
+Tests use `testify/suite`. See `.claude/rules/go-tests.md` for naming conventions, lifecycle details, and the isolation rules integration suites follow to run in parallel.
 
 ```bash
 # Run all Go tests
@@ -200,6 +200,6 @@ CREATE TRIGGER trg_update_<table_name>_history
 - **Batch Operations**: Use `shared.Save()` which automatically batches when parameter count exceeds 1000.
 - **Queue Messages**: Message metadata is `map[string]string` — all values are strings. Read them with `messaging.RequireString()` / `messaging.RequireInt()`, which fail with a descriptive error on missing or empty keys.
 - **Error Wrapping**: Always preserve original error with `%w` for error chains.
-- **Testing Databases**: Always use `test` environment for integration tests (core-test, client-cache-test). Those databases are shared by suites running in parallel — see the isolation rules in `docs/CODE_STYLE.md`.
+- **Testing Databases**: Always use `test` environment for integration tests (core-test, client-cache-test). Those databases are shared by suites running in parallel — see the isolation rules in `.claude/rules/go-tests.md`.
 - **Go Workspace**: When adding dependencies, run `make go-vendor` to keep the vendored dependencies in sync.
 - **Docker**: All Go commands run inside the `golang` container. Use `docker compose exec golang ...` for ad-hoc commands.

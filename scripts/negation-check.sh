@@ -3,7 +3,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# CODE_STYLE.md: compare booleans explicitly (`ok == false`), never with the `!` operator.
+# .claude/rules/go-style.md: compare booleans explicitly (`ok == false`), never with the `!` operator.
 # The rewrite rule matches the unary `!` in the syntax tree, so `!=` and a `!` inside a
 # string or comment never trip it. `gofmt -l` lists the files the rewrite would change.
 

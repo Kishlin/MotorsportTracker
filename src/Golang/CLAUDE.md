@@ -27,14 +27,6 @@ Single-operation modules use bare names: `domain/use_case.go`, `infrastructure/{
 
 Multi-operation modules prefix every file with the operation — see `scrapping/seasons/`, which carries three intents, three handlers and three use cases side by side. Pick one style per module and stay with it.
 
-Implementations are named for their mechanism: `GatewayUsingConnector`, `SaveSeriesRepository`, `DatabaseCache`, `SeasonsScrapperUsingIntents`.
-
-## Style
-
-Explicit boolean comparison — `if exists == false`, not `if !exists`. Early return on error, always wrapping with `%w`. `fn.Deref(ptr, "")` for pointer defaults. `slog` with key/value pairs, never `fmt.Sprintf` into the message.
-
-`make go-lint` enforces the boolean-comparison rule through `scripts/negation-check.sh`.
-
 ## Registration is manual and silent
 
 A new operation needs **two** edits in `registration/registration.go`: an entry in the `registeredIntents` map and a `register<Module>Handlers()` call inside `RegisterAllHandlers`. Both compile fine when missing and fail only at runtime. `/new-scraping-op` walks the whole sequence.
@@ -54,14 +46,7 @@ Repositories write through `shared.Save()`, which emits `INSERT ... ON CONFLICT 
 
 ## Tests
 
-Colocated. `testify/suite`. Suffix `UnitTestSuite`, `IntegrationTestSuite`, or `FunctionalTestSuite`. Reset state in `SetupSubTest()`, not `TearDownTest()`. Prefer `s.Run()` over `s.T().Run()`. Assert counts and effects, not just a nil error.
-
-Integration suites share the `core-test` and client-cache test databases and run concurrently: every integration and functional suite calls `t.Parallel()`, and separate packages run as parallel processes under `go test ./...`. Two rules keep them apart:
-
-- **One UUID prefix per suite, unique across suites.** The suite declares its prefix, the first three UUID groups (`xxxxxxxx-xxxx-xxxx`), once in a `const`, and builds every UUID it writes from it: `prefix + "-0001-000000000001"` in Go, `%[1]s` in `fmt.Sprintf` fixtures. Teardown deletes `LIKE '<prefix>-%'`. Two suites sharing a prefix delete each other's fixtures mid-run. When a suite seeds several entities, give each its own group after the prefix (`-0001-`, `-0002-`, …). `scripts/fixture-prefix-check.sh` enforces all of this (one prefix, declared once in a `const`, unique across suites) and runs before `make go-test` and `scripts/test-runner.sh`; generate a new prefix for a new suite, never copy one. The same goes for every other `UNIQUE` column: each core table has a `UNIQUE` `hash`, and `ON CONFLICT (uuid)` does not absorb a hash clash, so two suites seeding `'venues-hash'` fail with SQLSTATE 23505 as soon as they overlap. In fixtures, use the row's own UUID as its hash.
-- **Searched strings carry the prefix.** Any string a repository **searches** on (name, short name, short code, and the keywords the test passes in) ends with the suite's prefix `const`. The search queries use `LIKE '%kw%'`, so a generic name like `'series'` or a name shared between suites matches another suite's rows mid-run. See `scrapping/classification/infrastructure/search_session_identifier_repository_test.go`.
-
-Suites call `env.OverrideAppEnv("tests")` before `env.LoadEnv()` and deliberately discard the reset function. Restoring `APP_ENV` in one suite's teardown would flip it back (to `dev` in the container) while a parallel suite is between setting it and loading its env files. The variable only lives as long as the test binary, so leaving it set changes nothing outside the tests. The one exception is `shared/env`'s own tests, which exercise the reset.
+Conventions for writing tests live in `.claude/rules/go-tests.md`, which loads when a `_test.go` file is read. Before writing a new suite, read an existing one in the same package or a neighbouring one.
 
 Integration suites need the test databases migrated:
 
