@@ -64,7 +64,7 @@ Located at `apps/MotorsportTracker/Frontend/`. Uses Material-UI. Supports both S
 
 ## Go Module Organization
 
-The project uses a Go workspace (`go.work`) with 6 modules:
+The project uses a Go workspace (`go.work`) with 7 modules:
 
 ### `src/Golang/` — Core Library
 
@@ -139,6 +139,24 @@ Probe set (a slice at the top of `main.go`, one line per series): `FIA Formula O
 
 > Note: `24 Hours of Le Mans` is a poor probe despite being the obvious multi-driver choice — its seasons stop at 2023 upstream, motorsportstats having folded later editions into WEC, so it would only ever re-read a frozen historic payload.
 
+### `apps/Backend/CacheWarmer/` — Filesystem Cache Filler
+
+Walks series → seasons → calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database. Needs only `REMOTE_API_HOST` and `PROJECT_DIR`.
+
+Its connector stack is built in `main.go`, not taken from `ServicesRegistry`, so it has no database:
+
+```
+CachedConnector(FileSystemCache)
+  -> throttledConnector      // pauses --delay (default 1s) before each request, counts them
+    -> ConnectorUsingClient
+```
+
+The throttle sits below the cache, so hits cost nothing and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Session endpoints are fetched only for sessions with `hasResults`.
+
+A failed call is reported and its subtree skipped; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make run-api-canary` explains the break.
+
+Warming a new endpoint: an endpoint keyed by a session UUID is one line in `sessionEndpoints` (`warm.go`) plus its method on `throttledConnector`, which the compiler asks for. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions.
+
 ## Frontend
 
 Located at `apps/MotorsportTracker/Frontend/`. Next.js application with:
@@ -170,4 +188,8 @@ Migrations for these live in `etc/Migrations/core/` and `etc/Migrations/client-c
 
 ### Client Cache (Filesystem)
 
-API responses can also be cached to the filesystem at `etc/ConnectorCache/` (enabled via `USE_FS_CACHE=true`), organized by namespace (series, seasons, calendar, classification).
+API responses can also be cached to the filesystem at `etc/ConnectorCache/<namespace>/<key>.json` (enabled via `USE_FS_CACHE=true`), organized by namespace (series, seasons, calendar, classification). `CacheWarmer` fills it in bulk.
+
+The directory is gitignored: it is local to each checkout, and a classification runs from ~20KB (1950) to ~90KB for a recent endurance race, so a series' full history comes to a hundred megabytes or more.
+
+Neither cache expires. A calendar or classification cached while its season is in progress stays frozen for the scrapers too, until both the file and the `client-cache` row are deleted. Warm with `--to` set to last year to stay clear of the current season.

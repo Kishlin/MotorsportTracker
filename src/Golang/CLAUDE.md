@@ -75,7 +75,7 @@ Run via `./scripts/test-runner.sh [scope] [--verbose] [--run <pattern>] [--prist
 
 ## Workspace
 
-Six modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
+Seven modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
 
 `apps/Backend/MotorsportTracker` is absent from `go-tidy`, `go-test`, `go-lint` and `scripts/test-runner.sh`, which is why its `go.mod` carries no `require` block and its `go.sum` is empty — it compiles only because `go.work` resolves `src/Golang` and the root `vendor/` supplies the rest. Do not copy it when adding an app; `CommandsProcessor` and `ApiCanary` have the complete wiring.
 
