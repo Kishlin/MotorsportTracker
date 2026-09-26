@@ -131,14 +131,9 @@ run-cache-warmer:
 
 # Go workspace commands
 go-tidy:
-	@echo "Running go mod tidy across all Go modules"
+	@echo "Running go mod tidy across every go.work module"
 	@docker compose exec golang bash -c 'cd /app && go work sync'
-	@docker compose exec golang bash -c 'cd /app/src/Golang && go mod tidy'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsProcessor && go mod tidy'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go mod tidy'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go mod tidy'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/ApiCanary && go mod tidy'
-	@docker compose exec golang bash -c 'cd /app/apps/Backend/CacheWarmer && go mod tidy'
+	@docker compose exec golang bash -c 'cd /app && dirs=$$(go list -m -f "{{.Dir}}") && for dir in $$dirs; do (cd $$dir && go mod tidy) || exit 1; done'
 
 go-vendor: go-tidy
 	@echo "Downloading Go workspace dependencies to vendor/"
@@ -151,14 +146,9 @@ go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorspo
 	@echo "Built all Go applications"
 
 go-test:
-	@echo "Running Go tests across all modules"
+	@echo "Running Go tests across every go.work module"
 	@./scripts/fixture-prefix-check.sh
-	@docker compose exec golang bash -c 'cd /app && go test ./src/Golang/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/DBMigrate/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsPublisher/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/ApiCanary/...'
-	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CacheWarmer/...'
+	@docker compose exec golang bash -c 'cd /app && modules=$$(go list -m -f "{{.Dir}}/...") && go test $$modules'
 
 go-cache-clear:
 	@docker compose exec golang go clean -testcache
@@ -166,9 +156,9 @@ go-cache-clear:
 go-test-pristine: go-cache-clear go-test
 
 go-lint:
-	@echo "Running Go linting across all modules"
+	@echo "Running Go linting across every go.work module"
 	@docker compose exec golang bash -c 'cd /app && ./scripts/negation-check.sh'
-	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/... ./apps/Backend/ApiCanary/... ./apps/Backend/CacheWarmer/...'
+	@docker compose exec golang bash -c 'cd /app && modules=$$(go list -m -f "{{.Dir}}/...") && golangci-lint run $$modules'
 
 go-run:
 	@docker compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)

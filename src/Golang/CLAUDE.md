@@ -60,8 +60,6 @@ Run via `./scripts/test-runner.sh [scope] [--verbose] [--run <pattern>] [--prist
 
 Seven modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
 
-`apps/Backend/MotorsportTracker` is absent from `go-tidy`, `go-test`, `go-lint` and `scripts/test-runner.sh`, which is why its `go.mod` carries no `require` block and its `go.sum` is empty — it compiles only because `go.work` resolves `src/Golang` and the root `vendor/` supplies the rest. Do not copy it when adding an app; `CommandsProcessor` and `ApiCanary` have the complete wiring.
-
 ## Schema validation sits below the cache
 
 `ConnectorUsingClient.validate()` is the only place the embedded JSON Schemas are enforced, and the caching decorators wrap it. A hit in `DatabaseCache` or `FileSystemCache` therefore returns bytes that were never validated, so the application path cannot detect upstream drift while the caches are warm. Do not "fix" this by validating in the decorator — re-checking bytes that already passed once buys nothing.

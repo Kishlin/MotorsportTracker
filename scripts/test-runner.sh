@@ -40,7 +40,9 @@ done
 
 case "${SCOPE:-all}" in
   all)
-    TARGETS=(./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/CacheWarmer/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/...)
+    # Every module in go.work, so a new app is tested without being listed here.
+    MODULES=$(docker compose exec -T --workdir /app golang go list -m -f '{{.Dir}}/...')
+    mapfile -t TARGETS <<< "$MODULES"
     ;;
   scrapping)
     TARGETS=(./src/Golang/motorsporttracker/scrapping/...)
