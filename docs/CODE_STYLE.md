@@ -4,7 +4,7 @@
 
 ### Boolean Comparisons
 
-Use explicit equality checks — avoid the `!` operator for readability:
+Use explicit equality checks — never the `!` operator — for readability. `scripts/negation-check.sh` enforces this in `make go-lint`:
 
 ```go
 // Good

@@ -167,6 +167,7 @@ go-test-pristine: go-cache-clear go-test
 
 go-lint:
 	@echo "Running Go linting across all modules"
+	@docker compose exec golang bash -c 'cd /app && ./scripts/negation-check.sh'
 	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/... ./apps/Backend/ApiCanary/... ./apps/Backend/CacheWarmer/...'
 
 go-run:
