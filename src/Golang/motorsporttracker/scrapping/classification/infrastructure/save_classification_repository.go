@@ -12,8 +12,20 @@ import (
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
-type Entry struct {
-	carNumber, garageKey, teamUUID string
+// ClassificationKey identifies a classification row within its session. A car
+// number can appear on several rows (shared drives, a number reused by another
+// driver), so occurrence numbers the rows carrying the same car number, in
+// payload order, starting at 1.
+type ClassificationKey struct {
+	carNumber  string
+	occurrence int
+}
+
+type ClassificationRow struct {
+	key       ClassificationKey
+	teamUUID  string
+	garageKey string
+	details   *motorsportstats.ClassificationDetail
 }
 
 type Garage struct {
@@ -29,14 +41,19 @@ func NewSaveClassificationRepository(db *database.PGXPoolAdapter) *SaveClassific
 	return &SaveClassificationRepository{db: db}
 }
 
-// SaveClassification saves a classification into the database
+// SaveClassification saves a classification into the database. Every detail row
+// and every retirement is stored as motorsportstats sends it.
 func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, session string, classification *motorsportstats.Classification) error {
+	err := validateClassification(classification)
+	if err != nil {
+		return fmt.Errorf("validating classification of session %s: %w", session, err)
+	}
+
 	sessionID, err := s.getSessionID(ctx, session)
 	if err != nil {
 		return fmt.Errorf("getting session ID: %w", err)
 	}
 
-	driverUUIDsPerCarNumbers := make(map[string][]string)
 	uniqueDrivers := make([]*motorsportstats.Driver, 0)
 	driversUUIDs := make(map[string]struct{})
 	uniqueTeams := make([]*motorsportstats.Team, 0)
@@ -45,8 +62,8 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 	garagesUniqueKeys := make(map[string]struct{})
 	uniqueNationalities := make([]*motorsportstats.Country, 0)
 	nationalitiesUUIDs := make(map[string]struct{})
-	uniqueEntries := make([]*Entry, 0)
-	carNumbers := make(map[string]struct{})
+	classificationRows := make([]*ClassificationRow, 0, len(classification.Details))
+	occurrencesPerCarNumbers := make(map[string]int)
 
 	for _, classificationDetails := range classification.Details {
 		for _, driver := range classificationDetails.Drivers {
@@ -54,32 +71,12 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 				driversUUIDs[driver.UUID] = struct{}{}
 				uniqueDrivers = append(uniqueDrivers, driver)
 			}
-			driverUUIDsPerCarNumbers[classificationDetails.CarNumber] = append(
-				driverUUIDsPerCarNumbers[classificationDetails.CarNumber], driver.UUID,
-			)
 		}
 		if classificationDetails.Nationality != nil {
 			if _, exists := nationalitiesUUIDs[classificationDetails.Nationality.UUID]; exists == false {
 				nationalitiesUUIDs[classificationDetails.Nationality.UUID] = struct{}{}
 				uniqueNationalities = append(uniqueNationalities, classificationDetails.Nationality)
 			}
-		}
-
-		if _, exists := carNumbers[classificationDetails.CarNumber]; exists {
-			slog.Warn(
-				"Duplicate Entry for car number",
-				slog.String("car_number", classificationDetails.CarNumber),
-				slog.String("session", session),
-			)
-			continue
-		}
-		if classificationDetails.Team == nil {
-			slog.Warn(
-				"Classification is missing a team",
-				slog.String("car_number", classificationDetails.CarNumber),
-				slog.String("session", session),
-			)
-			continue
 		}
 
 		if _, exists := teamsUUIDs[classificationDetails.Team.UUID]; exists == false {
@@ -97,30 +94,23 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 				&Garage{team: classificationDetails.Team, uniqueKey: garageUniqueKey},
 			)
 		}
-		uniqueEntries = append(uniqueEntries, &Entry{
-			carNumber: classificationDetails.CarNumber,
+
+		occurrencesPerCarNumbers[classificationDetails.CarNumber]++
+		classificationRows = append(classificationRows, &ClassificationRow{
+			key: ClassificationKey{
+				carNumber:  classificationDetails.CarNumber,
+				occurrence: occurrencesPerCarNumbers[classificationDetails.CarNumber],
+			},
 			teamUUID:  classificationDetails.Team.UUID,
 			garageKey: garageUniqueKey,
+			details:   classificationDetails,
 		})
-		carNumbers[classificationDetails.CarNumber] = struct{}{}
 	}
 	for _, retirement := range classification.Retirements {
-		if _, exists := carNumbers[retirement.CarNumber]; exists == false {
-			slog.Warn(
-				fmt.Sprintf("Retirement for missing car number %s", retirement.CarNumber),
-				slog.String("car_number", retirement.CarNumber),
-				slog.String("session", session),
-			)
-			continue
+		if _, exists := driversUUIDs[retirement.Driver.UUID]; exists == false {
+			driversUUIDs[retirement.Driver.UUID] = struct{}{}
+			uniqueDrivers = append(uniqueDrivers, retirement.Driver)
 		}
-		if retirement.Driver == nil {
-			continue
-		}
-		if _, exists := driversUUIDs[retirement.Driver.UUID]; exists {
-			continue
-		}
-		driversUUIDs[retirement.Driver.UUID] = struct{}{}
-		uniqueDrivers = append(uniqueDrivers, retirement.Driver)
 	}
 
 	err = shared.SaveCountries(ctx, s.db, uniqueNationalities)
@@ -158,29 +148,49 @@ func (s *SaveClassificationRepository) SaveClassification(ctx context.Context, s
 		return fmt.Errorf("getting teams IDs for Keys: %w", err)
 	}
 
-	err = s.saveEntries(ctx, uniqueEntries, sessionID, teamsIDsPerUUIDs, garagesIDsPerKeys)
+	err = s.saveClassifications(ctx, classificationRows, sessionID, teamsIDsPerUUIDs, garagesIDsPerKeys)
 	if err != nil {
-		return fmt.Errorf("saving entries: %w", err)
+		return fmt.Errorf("saving classifications: %w", err)
 	}
 
-	entryIDsPerCarNumbers, err := s.getEntryIDsForCarNumbers(ctx, sessionID)
+	classificationIDsPerKeys, err := s.getClassificationIDsForKeys(ctx, sessionID)
 	if err != nil {
-		return fmt.Errorf("getting entry IDs for car numbers: %w", err)
+		return fmt.Errorf("getting classification IDs for keys: %w", err)
 	}
 
-	err = s.saveEntryDrivers(ctx, driverUUIDsPerCarNumbers, entryIDsPerCarNumbers, driversIDsPerUUIDs)
+	err = s.saveClassificationDrivers(ctx, classificationRows, classificationIDsPerKeys, driversIDsPerUUIDs)
 	if err != nil {
-		return fmt.Errorf("saving entry drivers: %w", err)
+		return fmt.Errorf("saving classification drivers: %w", err)
 	}
 
-	err = s.saveRetirements(ctx, classification.Retirements, entryIDsPerCarNumbers, driversIDsPerUUIDs)
+	err = s.saveRetirements(ctx, classification.Retirements, sessionID, driversIDsPerUUIDs)
 	if err != nil {
 		return fmt.Errorf("saving retirements: %w", err)
 	}
 
-	err = s.saveClassificationDetails(ctx, classification.Details, entryIDsPerCarNumbers)
-	if err != nil {
-		return fmt.Errorf("saving classification details: %w", err)
+	return nil
+}
+
+// validateClassification rejects a payload that cannot be stored as sent, before
+// anything is written.
+func validateClassification(classification *motorsportstats.Classification) error {
+	for _, classificationDetails := range classification.Details {
+		if classificationDetails.Team == nil {
+			return fmt.Errorf("car number %s has no team", classificationDetails.CarNumber)
+		}
+
+		driversUUIDs := make(map[string]struct{})
+		for _, driver := range classificationDetails.Drivers {
+			if _, exists := driversUUIDs[driver.UUID]; exists {
+				return fmt.Errorf("car number %s lists driver %s twice", classificationDetails.CarNumber, driver.UUID)
+			}
+			driversUUIDs[driver.UUID] = struct{}{}
+		}
+	}
+	for _, retirement := range classification.Retirements {
+		if retirement.Driver == nil {
+			return fmt.Errorf("retirement for car number %s has no driver", retirement.CarNumber)
+		}
 	}
 
 	return nil
@@ -329,175 +339,32 @@ func (s *SaveClassificationRepository) saveGarages(
 	return nil
 }
 
-func (s *SaveClassificationRepository) saveEntries(
+func (s *SaveClassificationRepository) saveClassifications(
 	ctx context.Context,
-	entries []*Entry,
+	classificationRows []*ClassificationRow,
 	sessionID int,
 	teamsIDsPerUUIDs map[string]int,
 	garagesIDsPerKeys map[string]int,
 ) error {
-	if len(entries) == 0 {
-		slog.Debug("No entries to save")
+	if len(classificationRows) == 0 {
+		slog.Debug("No classifications to save")
 
 		return nil
 	}
 
 	var rows [][]interface{}
-	for _, entry := range entries {
-		teamID, ok := teamsIDsPerUUIDs[entry.teamUUID]
+	for _, classificationRow := range classificationRows {
+		teamID, ok := teamsIDsPerUUIDs[classificationRow.teamUUID]
 		if ok == false {
-			return fmt.Errorf("team ID for UUID %s not found", entry.teamUUID)
+			return fmt.Errorf("team ID for UUID %s not found", classificationRow.teamUUID)
 		}
 
-		garageID, ok := garagesIDsPerKeys[entry.garageKey]
+		garageID, ok := garagesIDsPerKeys[classificationRow.garageKey]
 		if ok == false {
-			return fmt.Errorf("garage ID for key %s not found", entry.garageKey)
+			return fmt.Errorf("garage ID for key %s not found", classificationRow.garageKey)
 		}
 
-		hash := crypto.Hash(fmt.Sprintf("%d|%d|%d|%s", sessionID, teamID, garageID, entry.carNumber))
-		rows = append(rows, []interface{}{sessionID, teamID, garageID, entry.carNumber, hash})
-	}
-
-	cols := []string{"session", "team", "garage", "car_number", "hash"}
-
-	stats, err := shared.Save(ctx, s.db, "entries", "session, car_number", cols, rows)
-	if err != nil {
-		return fmt.Errorf("saving entries: %w", err)
-	}
-
-	slog.Info(
-		"Entries saved successfully",
-		slog.Int("count", len(entries)),
-		slog.Int("inserted", stats.Inserted),
-		slog.Int("updated", stats.Updated),
-	)
-
-	return nil
-}
-
-const entryIDsForCarNumbersQuery = "SELECT id, car_number FROM entries WHERE session = $1;"
-
-func (s *SaveClassificationRepository) getEntryIDsForCarNumbers(
-	ctx context.Context,
-	sessionID int,
-) (map[string]int, error) {
-	idPerCarNumber := make(map[string]int)
-
-	rows, err := s.db.Query(ctx, entryIDsForCarNumbersQuery, sessionID)
-	if err != nil {
-		return nil, fmt.Errorf("getting entry IDs for car number: %w", err)
-	}
-
-	for rows.Next() {
-		var id int
-		var carNumber string
-		err = rows.Scan(&id, &carNumber)
-		if err != nil {
-			return nil, fmt.Errorf("getting entry IDs for car number: %w", err)
-		}
-		idPerCarNumber[carNumber] = id
-	}
-
-	rows.Close()
-
-	err = rows.Err()
-	if err != nil {
-		return nil, fmt.Errorf("getting entry IDs for car number: %w", err)
-	}
-
-	return idPerCarNumber, nil
-}
-
-func (s *SaveClassificationRepository) saveRetirements(
-	ctx context.Context,
-	retirements []*motorsportstats.Retirement,
-	entryIDPerCarNumber map[string]int,
-	driverIDPerUUID map[string]int,
-) error {
-	if len(retirements) == 0 {
-		slog.Debug("No retirements to save")
-
-		return nil
-	}
-
-	var rows [][]interface{}
-	for _, retirement := range retirements {
-		var entryID, driverID *int
-		if retirement.Driver != nil {
-			storedDriverID, ok := driverIDPerUUID[retirement.Driver.UUID]
-			if ok == false {
-				return fmt.Errorf("driver ID for UUID %s not found", retirement.Driver.UUID)
-			}
-			driverID = &storedDriverID
-		}
-		storedEntryID, ok := entryIDPerCarNumber[retirement.CarNumber]
-		if ok == false {
-			return fmt.Errorf("entry ID for car number %s not found", retirement.CarNumber)
-		}
-		entryID = &storedEntryID
-
-		entryIDVal := fn.Deref(entryID, 0)
-		driverIDVal := fn.Deref(driverID, 0)
-		reasonVal := fn.Deref(retirement.Reason, "")
-		typeVal := fn.Deref(retirement.Type, "")
-		dnsVal := fn.Deref(retirement.DNS, false)
-		lapVal := fn.Deref(retirement.Lap, 0)
-		detailsVal := fn.Deref(retirement.Details, "")
-
-		hash := crypto.Hash(fmt.Sprintf(
-			"%d|%d|%s|%s|%t|%d|%s",
-			entryIDVal, driverIDVal, reasonVal, typeVal, dnsVal, lapVal, detailsVal,
-		))
-		rows = append(rows, []interface{}{
-			entryID,
-			driverID,
-			retirement.Reason,
-			retirement.Type,
-			retirement.DNS,
-			retirement.Lap,
-			retirement.Details,
-			hash,
-		})
-	}
-
-	cols := []string{"entry", "driver", "reason", "type", "dns", "lap", "details", "hash"}
-
-	stats, err := shared.Save(ctx, s.db, "retirements", "entry", cols, rows)
-	if err != nil {
-		return fmt.Errorf("saving retirements: %w", err)
-	}
-
-	slog.Info(
-		"Retirements saved successfully",
-		slog.Int("count", len(retirements)),
-		slog.Int("inserted", stats.Inserted),
-		slog.Int("updated", stats.Updated),
-	)
-
-	return nil
-}
-
-func (s *SaveClassificationRepository) saveClassificationDetails(
-	ctx context.Context,
-	classifications []*motorsportstats.ClassificationDetail,
-	entryIDPerCarNumber map[string]int,
-) error {
-	if len(classifications) == 0 {
-		slog.Debug("No classification details to save")
-
-		return nil
-	}
-
-	var rows [][]interface{}
-	for _, details := range classifications {
-		var entryID *int
-		storedEntryID, ok := entryIDPerCarNumber[details.CarNumber]
-		if ok == false {
-			return fmt.Errorf("car number for UUID %s not found", details.CarNumber)
-		}
-		entryID = &storedEntryID
-
-		entryIDVal := fn.Deref(entryID, 0)
+		details := classificationRow.details
 		finishPositionVal := fn.Deref(details.FinishPosition, 0)
 		gridPositionVal := fn.Deref(details.GridPosition, 0)
 		lapsVal := fn.Deref(details.Laps, 0)
@@ -516,8 +383,12 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 		bestSpeedVal := fn.Deref(details.ClassificationBest.Speed, 0.0)
 
 		hash := crypto.Hash(fmt.Sprintf(
-			"%d|%d|%d|%d|%.2f|%.3f|%s|%.3f|%.3f|%.2f|%.2f|%d|%d|%d|%.2f|%t|%.3f",
-			entryIDVal,
+			"%d|%d|%d|%s|%d|%d|%d|%d|%.2f|%.3f|%s|%.3f|%.3f|%.2f|%.2f|%d|%d|%d|%.2f|%t|%.3f",
+			sessionID,
+			teamID,
+			garageID,
+			classificationRow.key.carNumber,
+			classificationRow.key.occurrence,
 			finishPositionVal,
 			gridPositionVal,
 			lapsVal,
@@ -536,7 +407,11 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 			bestSpeedVal,
 		))
 		rows = append(rows, []interface{}{
-			entryID,
+			sessionID,
+			teamID,
+			garageID,
+			classificationRow.key.carNumber,
+			classificationRow.key.occurrence,
 			details.FinishPosition,
 			details.GridPosition,
 			details.Laps,
@@ -558,7 +433,11 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 	}
 
 	cols := []string{
-		"entry",
+		"session",
+		"team",
+		"garage",
+		"car_number",
+		"occurrence",
 		"finish_position",
 		"grid_position",
 		"laps",
@@ -578,14 +457,14 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 		"hash",
 	}
 
-	stats, err := shared.Save(ctx, s.db, "classifications", "entry", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "classifications", "session, car_number, occurrence", cols, rows)
 	if err != nil {
-		return fmt.Errorf("saving classification details: %w", err)
+		return fmt.Errorf("saving classifications: %w", err)
 	}
 
 	slog.Info(
-		"Classification details saved successfully",
-		slog.Int("count", len(classifications)),
+		"Classifications saved successfully",
+		slog.Int("count", len(classificationRows)),
 		slog.Int("inserted", stats.Inserted),
 		slog.Int("updated", stats.Updated),
 	)
@@ -593,53 +472,142 @@ func (s *SaveClassificationRepository) saveClassificationDetails(
 	return nil
 }
 
-func (s *SaveClassificationRepository) saveEntryDrivers(
+const classificationIDsForKeysQuery = "SELECT id, car_number, occurrence FROM classifications WHERE session = $1;"
+
+func (s *SaveClassificationRepository) getClassificationIDsForKeys(
 	ctx context.Context,
-	driverUUIDsPerCarNumbers map[string][]string,
-	entryIDPerCarNumber map[string]int,
+	sessionID int,
+) (map[ClassificationKey]int, error) {
+	idPerKey := make(map[ClassificationKey]int)
+
+	rows, err := s.db.Query(ctx, classificationIDsForKeysQuery, sessionID)
+	if err != nil {
+		return nil, fmt.Errorf("getting classification IDs for keys: %w", err)
+	}
+
+	for rows.Next() {
+		var id int
+		var key ClassificationKey
+		err = rows.Scan(&id, &key.carNumber, &key.occurrence)
+		if err != nil {
+			return nil, fmt.Errorf("getting classification IDs for keys: %w", err)
+		}
+		idPerKey[key] = id
+	}
+
+	rows.Close()
+
+	err = rows.Err()
+	if err != nil {
+		return nil, fmt.Errorf("getting classification IDs for keys: %w", err)
+	}
+
+	return idPerKey, nil
+}
+
+func (s *SaveClassificationRepository) saveClassificationDrivers(
+	ctx context.Context,
+	classificationRows []*ClassificationRow,
+	classificationIDPerKey map[ClassificationKey]int,
 	driverIDPerUUID map[string]int,
 ) error {
-	if len(driverUUIDsPerCarNumbers) == 0 {
-		slog.Debug("No entry drivers to save")
+	if len(classificationRows) == 0 {
+		slog.Debug("No classification drivers to save")
 
 		return nil
 	}
 
 	var rows [][]interface{}
-	for carNumber, driverUUIDs := range driverUUIDsPerCarNumbers {
-		var entryID *int
-		storedEntryID, ok := entryIDPerCarNumber[carNumber]
+	for _, classificationRow := range classificationRows {
+		classificationID, ok := classificationIDPerKey[classificationRow.key]
 		if ok == false {
-			return fmt.Errorf("entry ID for car number %s not found", carNumber)
+			return fmt.Errorf(
+				"classification ID for car number %s, occurrence %d not found",
+				classificationRow.key.carNumber,
+				classificationRow.key.occurrence,
+			)
 		}
-		entryID = &storedEntryID
 
-		for _, driverUUID := range driverUUIDs {
-			var driverID *int
-			storedDriverID, ok := driverIDPerUUID[driverUUID]
+		for _, driver := range classificationRow.details.Drivers {
+			driverID, ok := driverIDPerUUID[driver.UUID]
 			if ok == false {
-				return fmt.Errorf("driver ID for UUID %s not found", driverUUID)
+				return fmt.Errorf("driver ID for UUID %s not found", driver.UUID)
 			}
-			driverID = &storedDriverID
 
-			entryIDVal := fn.Deref(entryID, 0)
-			driverIDVal := fn.Deref(driverID, 0)
-
-			hash := crypto.Hash(fmt.Sprintf("%d|%d", entryIDVal, driverIDVal))
-			rows = append(rows, []interface{}{entryID, driverID, hash})
+			hash := crypto.Hash(fmt.Sprintf("%d|%d", classificationID, driverID))
+			rows = append(rows, []interface{}{classificationID, driverID, hash})
 		}
 	}
 
-	cols := []string{"entry", "driver", "hash"}
+	cols := []string{"classification", "driver", "hash"}
 
-	stats, err := shared.Save(ctx, s.db, "entry_drivers", "entry, driver", cols, rows)
+	stats, err := shared.Save(ctx, s.db, "classification_drivers", "classification, driver", cols, rows)
 	if err != nil {
-		return fmt.Errorf("saving entry drivers: %w", err)
+		return fmt.Errorf("saving classification drivers: %w", err)
 	}
 
 	slog.Info(
-		"Entry drivers saved successfully",
+		"Classification drivers saved successfully",
 		slog.Int("count", len(rows)),
+		slog.Int("inserted", stats.Inserted),
+		slog.Int("updated", stats.Updated),
+	)
+
+	return nil
+}
+
+func (s *SaveClassificationRepository) saveRetirements(
+	ctx context.Context,
+	retirements []*motorsportstats.Retirement,
+	sessionID int,
+	driverIDPerUUID map[string]int,
+) error {
+	if len(retirements) == 0 {
+		slog.Debug("No retirements to save")
+
+		return nil
+	}
+
+	var rows [][]interface{}
+	for _, retirement := range retirements {
+		driverID, ok := driverIDPerUUID[retirement.Driver.UUID]
+		if ok == false {
+			return fmt.Errorf("driver ID for UUID %s not found", retirement.Driver.UUID)
+		}
+
+		reasonVal := fn.Deref(retirement.Reason, "")
+		typeVal := fn.Deref(retirement.Type, "")
+		dnsVal := fn.Deref(retirement.DNS, false)
+		lapVal := fn.Deref(retirement.Lap, 0)
+		detailsVal := fn.Deref(retirement.Details, "")
+
+		hash := crypto.Hash(fmt.Sprintf(
+			"%d|%s|%d|%s|%s|%t|%d|%s",
+			sessionID, retirement.CarNumber, driverID, reasonVal, typeVal, dnsVal, lapVal, detailsVal,
+		))
+		rows = append(rows, []interface{}{
+			sessionID,
+			retirement.CarNumber,
+			driverID,
+			retirement.Reason,
+			retirement.Type,
+			retirement.DNS,
+			retirement.Lap,
+			retirement.Details,
+			hash,
+		})
+	}
+
+	cols := []string{"session", "car_number", "driver", "reason", "type", "dns", "lap", "details", "hash"}
+
+	stats, err := shared.Save(ctx, s.db, "retirements", "session, car_number, driver", cols, rows)
+	if err != nil {
+		return fmt.Errorf("saving retirements: %w", err)
+	}
+
+	slog.Info(
+		"Retirements saved successfully",
+		slog.Int("count", len(retirements)),
 		slog.Int("inserted", stats.Inserted),
 		slog.Int("updated", stats.Updated),
 	)

@@ -1,6 +1,10 @@
 CREATE TABLE IF NOT EXISTS classifications (
     id         SERIAL PRIMARY KEY,
-    entry SERIAL UNIQUE NOT NULL,
+    session SERIAL NOT NULL,
+    team SERIAL NOT NULL,
+    garage SERIAL NOT NULL,
+    car_number TEXT NOT NULL,
+    occurrence INT NOT NULL,
     finish_position INT,
     grid_position INT,
     laps INT,
@@ -20,13 +24,20 @@ CREATE TABLE IF NOT EXISTS classifications (
     hash       TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP   NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP   NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (entry) REFERENCES entries(id) ON DELETE RESTRICT
+    UNIQUE(session, car_number, occurrence),
+    FOREIGN KEY (session) REFERENCES sessions(id) ON DELETE RESTRICT,
+    FOREIGN KEY (team) REFERENCES teams(id) ON DELETE RESTRICT,
+    FOREIGN KEY (garage) REFERENCES garages(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS classifications_history (
     history_id SERIAL PRIMARY KEY,
     id SERIAL NOT NULL,
-    entry SERIAL NOT NULL,
+    session SERIAL NOT NULL,
+    team SERIAL NOT NULL,
+    garage SERIAL NOT NULL,
+    car_number TEXT NOT NULL,
+    occurrence INT NOT NULL,
     finish_position INT,
     grid_position INT,
     laps INT,
@@ -61,7 +72,11 @@ BEGIN
 
     INSERT INTO classifications_history (
         id,
-        entry,
+        session,
+        team,
+        garage,
+        car_number,
+        occurrence,
         finish_position,
         grid_position,
         laps,
@@ -82,7 +97,11 @@ BEGIN
         valid_from
     ) VALUES (
         NEW.id,
-        NEW.entry,
+        NEW.session,
+        NEW.team,
+        NEW.garage,
+        NEW.car_number,
+        NEW.occurrence,
         NEW.finish_position,
         NEW.grid_position,
         NEW.laps,

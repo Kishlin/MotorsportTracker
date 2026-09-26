@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS retirements (
     id         SERIAL PRIMARY KEY,
-    entry SERIAL UNIQUE NOT NULL,
+    session SERIAL NOT NULL,
+    car_number TEXT NOT NULL,
     driver SERIAL NOT NULL,
     reason TEXT,
     type TEXT,
@@ -10,14 +11,16 @@ CREATE TABLE IF NOT EXISTS retirements (
     hash       TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP   NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP   NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (entry) REFERENCES entries(id) ON DELETE RESTRICT,
+    UNIQUE(session, car_number, driver),
+    FOREIGN KEY (session) REFERENCES sessions(id) ON DELETE RESTRICT,
     FOREIGN KEY (driver) REFERENCES drivers(id) ON DELETE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS retirements_history (
     history_id SERIAL PRIMARY KEY,
     id SERIAL NOT NULL,
-    entry SERIAL NOT NULL,
+    session SERIAL NOT NULL,
+    car_number TEXT NOT NULL,
     driver SERIAL NOT NULL,
     reason TEXT,
     type TEXT,
@@ -40,8 +43,8 @@ BEGIN
         WHERE id = OLD.id AND valid_to IS NULL;
     END IF;
 
-    INSERT INTO retirements_history (id, entry, driver, reason, type, dns, lap, details, hash, valid_from)
-    VALUES (NEW.id, NEW.entry, NEW.driver, NEW.reason, NEW.type, NEW.dns, NEW.lap, NEW.details, NEW.hash, NOW());
+    INSERT INTO retirements_history (id, session, car_number, driver, reason, type, dns, lap, details, hash, valid_from)
+    VALUES (NEW.id, NEW.session, NEW.car_number, NEW.driver, NEW.reason, NEW.type, NEW.dns, NEW.lap, NEW.details, NEW.hash, NOW());
 
     RETURN NEW;
 END;
