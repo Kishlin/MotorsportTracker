@@ -21,18 +21,18 @@
     <include_path>
       <path value="$PROJECT_DIR$/vendor/github.com/jmespath" />
       <path value="$PROJECT_DIR$/vendor/github.com/jackc" />
-      <path value="$PROJECT_DIR$/vendor/golang.org/x" />
-      <path value="$PROJECT_DIR$/vendor/github.com/golang-migrate" />
       <path value="$PROJECT_DIR$/vendor/github.com/aws" />
-      <path value="$PROJECT_DIR$/vendor/github.com/qri-io" />
-      <path value="$PROJECT_DIR$/vendor/github.com/hashicorp" />
-      <path value="$PROJECT_DIR$/vendor/github.com/lib" />
-      <path value="$PROJECT_DIR$/vendor/go.uber.org/atomic" />
-      <path value="$PROJECT_DIR$/vendor/github.com/davecgh" />
       <path value="$PROJECT_DIR$/vendor/github.com/stretchr" />
-      <path value="$PROJECT_DIR$/vendor/github.com/pmezard" />
-      <path value="$PROJECT_DIR$/vendor/github.com/joho" />
       <path value="$PROJECT_DIR$/vendor/gopkg.in/yaml.v3" />
+      <path value="$PROJECT_DIR$/vendor/github.com/joho" />
+      <path value="$PROJECT_DIR$/vendor/github.com/davecgh" />
+      <path value="$PROJECT_DIR$/vendor/github.com/lib" />
+      <path value="$PROJECT_DIR$/vendor/golang.org/x" />
+      <path value="$PROJECT_DIR$/vendor/github.com/qri-io" />
+      <path value="$PROJECT_DIR$/vendor/github.com/pmezard" />
+      <path value="$PROJECT_DIR$/vendor/github.com/golang-migrate" />
+      <path value="$PROJECT_DIR$/vendor/github.com/hashicorp" />
+      <path value="$PROJECT_DIR$/vendor/go.uber.org/atomic" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />
