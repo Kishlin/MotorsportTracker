@@ -40,7 +40,7 @@ done
 
 case "${SCOPE:-all}" in
   all)
-    TARGETS=(./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/...)
+    TARGETS=(./src/Golang/... ./apps/Backend/ApiCanary/... ./apps/Backend/CacheWarmer/... ./apps/Backend/DBMigrate/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/...)
     ;;
   scrapping)
     TARGETS=(./src/Golang/motorsporttracker/scrapping/...)

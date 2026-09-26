@@ -13,7 +13,7 @@ Tests run **inside the `golang` container** — never on the host.
 
 Scope defaults to `all`:
 
-- `all` → `src/Golang/...` plus the ApiCanary, DBMigrate, CommandsProcessor and CommandsPublisher apps
+- `all` → `src/Golang/...` plus the ApiCanary, CacheWarmer, DBMigrate, CommandsProcessor and CommandsPublisher apps
 - `scrapping` → `src/Golang/motorsporttracker/scrapping/...`
 - `gateway` → `src/Golang/motorsportstats/...`
 - `shared` → `src/Golang/shared/...`

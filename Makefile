@@ -63,6 +63,7 @@ start: containers go-vendor run-dbmigrate-core run-dbmigrate-core.test run-dbmig
 
 .PHONY: build-publisher build-processor run-publisher run-processor
 .PHONY: build-api-canary run-api-canary
+.PHONY: build-cache-warmer run-cache-warmer
 .PHONY: build-go test-go lint-go tidy-go
 
 build-dbmigrate:
@@ -120,6 +121,14 @@ run-api-canary:
 	@echo "Running Golang app ApiCanary with ARGS=$(ARGS)"
 	@docker compose exec golang /app/apps/Backend/ApiCanary/build/api-canary $(ARGS)
 
+build-cache-warmer:
+	@echo "Building Golang app CacheWarmer"
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CacheWarmer && go build -o build/cache-warmer .'
+
+run-cache-warmer:
+	@echo "Running Golang app CacheWarmer with ARGS=$(ARGS)"
+	@docker compose exec golang /app/apps/Backend/CacheWarmer/build/cache-warmer $(ARGS)
+
 # Go workspace commands
 go-tidy:
 	@echo "Running go mod tidy across all Go modules"
@@ -129,6 +138,7 @@ go-tidy:
 	@docker compose exec golang bash -c 'cd /app/apps/Backend/CommandsPublisher && go mod tidy'
 	@docker compose exec golang bash -c 'cd /app/apps/Backend/DBMigrate && go mod tidy'
 	@docker compose exec golang bash -c 'cd /app/apps/Backend/ApiCanary && go mod tidy'
+	@docker compose exec golang bash -c 'cd /app/apps/Backend/CacheWarmer && go mod tidy'
 
 go-vendor: go-tidy
 	@echo "Downloading Go workspace dependencies to vendor/"
@@ -137,7 +147,7 @@ go-vendor: go-tidy
 go-setup: go-vendor
 	@echo "Go workspace setup complete! All modules synchronized and dependencies vendored."
 
-go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorsport-tracker build-api-canary
+go-build: go-tidy build-dbmigrate build-processor build-publisher build-motorsport-tracker build-api-canary build-cache-warmer
 	@echo "Built all Go applications"
 
 go-test:
@@ -148,6 +158,7 @@ go-test:
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsProcessor/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CommandsPublisher/...'
 	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/ApiCanary/...'
+	@docker compose exec golang bash -c 'cd /app && go test ./apps/Backend/CacheWarmer/...'
 
 go-cache-clear:
 	@docker compose exec golang go clean -testcache
@@ -156,7 +167,7 @@ go-test-pristine: go-cache-clear go-test
 
 go-lint:
 	@echo "Running Go linting across all modules"
-	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/... ./apps/Backend/ApiCanary/...'
+	@docker compose exec golang bash -c 'cd /app && golangci-lint run ./src/Golang/... ./apps/Backend/CommandsProcessor/... ./apps/Backend/CommandsPublisher/... ./apps/Backend/DBMigrate/... ./apps/Backend/ApiCanary/... ./apps/Backend/CacheWarmer/...'
 
 go-run:
 	@docker compose exec golang go run /app/apps/Backend/MotorsportTracker/main.go $(ARGS)
