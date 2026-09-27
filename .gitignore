@@ -49,3 +49,7 @@ test.php
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
 ###< symfony/phpunit-bridge ###
+
+apps/Backend/
+etc/ConnectorCache/
+
