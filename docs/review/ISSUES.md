@@ -2,7 +2,7 @@
 
 Actionable issues identified during architecture review. Each includes the affected files, the problem, and a remediation approach. Ordered by impact.
 
-Status as of 2026-09-26: items 1–8 and 10–15 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 16 is open and needs a decision before it can be fixed.
+Status as of 2026-09-26: items 1–8 and 10–15 are resolved. Item 9 remains open, but its premise was stale and has been corrected below. Item 16 is open: its policy was decided on 2026-09-28 (see [FORWARD_PLANS.md](../FORWARD_PLANS.md)), and it gets built with the rescrape option.
 
 Re-verified against the code on 2026-09-25: items 9, 14 and 15 were open, and no resolved item had regressed. Line references below were refreshed where they had drifted. Items 14 and 15 were fixed the next day.
 
@@ -196,7 +196,7 @@ Rows that motorsportstats stops listing are still never deleted. That affects ev
 
 ## 16. Rows Upstream Stops Listing Are Never Deleted
 
-Found 2026-09-26 while fixing item 15. Open, and it needs a decision before it can be fixed.
+Found 2026-09-26 while fixing item 15. Open. The policy was decided on 2026-09-28 and is recorded, with the options that were rejected and why, in [FORWARD_PLANS.md](../FORWARD_PLANS.md) (plan 1). It gets built together with the rescrape option.
 
 **Impact**: when motorsportstats drops something the scraper stored earlier, the stored row stays, and reads exactly like a current one. Nothing errors. For example:
 
