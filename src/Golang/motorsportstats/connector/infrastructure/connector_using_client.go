@@ -38,6 +38,24 @@ func (c *ConnectorUsingClient) GetAvailableStandings(ctx context.Context, season
 	return c.doGet(ctx, schemaAvailableStandings, endpointAvailableStandings, seasonUUID)
 }
 
+func (c *ConnectorUsingClient) GetStandings(
+	ctx context.Context,
+	seasonUUID string,
+	kind StandingKind,
+	classUUID string,
+) ([]byte, error) {
+	schema, known := schemaStandings[kind]
+	if known == false {
+		return []byte{}, fmt.Errorf("getting standings: unknown standing kind %q", kind)
+	}
+
+	if classUUID == "" {
+		return c.doGet(ctx, schema, endpointStandings, seasonUUID, kind)
+	}
+
+	return c.doGet(ctx, schema, endpointStandingsOfClass, seasonUUID, kind, classUUID)
+}
+
 func (c *ConnectorUsingClient) GetClassification(ctx context.Context, sessionUUD string) ([]byte, error) {
 	return c.doGet(ctx, schemaClassification, endpointClassification, sessionUUD)
 }
@@ -94,6 +112,8 @@ const (
 	endpointSeasons            = "/widgets/1.0.0/series/%s/seasons"
 	endpointCalendar           = "/widgets/1.0.0/seasons/%s/calendar"
 	endpointAvailableStandings = "/widgets/1.0.0/seasons/%s/standings"
+	endpointStandings          = "/widgets/1.0.0/seasons/%s/standings/%s"
+	endpointStandingsOfClass   = endpointStandings + "?seriesClassUuid=%s"
 	endpointClassification     = "/widgets/1.0.0/sessions/%s/classification"
 )
 
@@ -108,6 +128,21 @@ var schemaCalendar string
 
 //go:embed schemas/available_standings.json
 var schemaAvailableStandings string
+
+//go:embed schemas/standings_drivers.json
+var schemaStandingsDrivers string
+
+//go:embed schemas/standings_teams.json
+var schemaStandingsTeams string
+
+//go:embed schemas/standings_constructors.json
+var schemaStandingsConstructors string
+
+var schemaStandings = map[StandingKind]string{
+	StandingDrivers:      schemaStandingsDrivers,
+	StandingTeams:        schemaStandingsTeams,
+	StandingConstructors: schemaStandingsConstructors,
+}
 
 //go:embed schemas/classification.json
 var schemaClassification string

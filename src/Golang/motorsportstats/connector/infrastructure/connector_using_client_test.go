@@ -80,6 +80,37 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetAvailableStandings(
 	require.Empty(suite.T(), data)
 }
 
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetStandings() {
+	testServer := NewTestServer()
+	defer testServer.Close()
+
+	connector := ConnectorForTestServer(testServer)
+
+	suite.Run("An overall standing", func() {
+		data, err := connector.GetStandings(suite.T().Context(), "afc5ab1b-c44b-4c21-904d-215fcc800578", StandingDrivers, "")
+		require.NoError(suite.T(), err)
+		require.Contains(suite.T(), string(data), "Max Verstappen")
+	})
+
+	suite.Run("A class standing", func() {
+		data, err := connector.GetStandings(suite.T().Context(), "0a83e053-b179-4b57-b509-d09f26209e74", StandingDrivers, "3da46a4d-11f3-428a-bb81-5c646959c99f")
+		require.NoError(suite.T(), err)
+		require.Contains(suite.T(), string(data), "Julien Canal")
+	})
+
+	suite.Run("A class the season does not hold", func() {
+		data, err := connector.GetStandings(suite.T().Context(), "afc5ab1b-c44b-4c21-904d-215fcc800578", StandingDrivers, "3da46a4d-11f3-428a-bb81-5c646959c99f")
+		require.Error(suite.T(), err)
+		require.Empty(suite.T(), data)
+	})
+
+	suite.Run("An unknown kind fails before any request", func() {
+		data, err := connector.GetStandings(suite.T().Context(), "afc5ab1b-c44b-4c21-904d-215fcc800578", StandingKind("nations"), "")
+		require.ErrorContains(suite.T(), err, `unknown standing kind "nations"`)
+		require.Empty(suite.T(), data)
+	})
+}
+
 func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetClassification() {
 	testServer := NewTestServer()
 	defer testServer.Close()

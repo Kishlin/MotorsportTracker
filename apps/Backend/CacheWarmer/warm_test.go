@@ -22,6 +22,7 @@ type fakeConnector struct {
 	seasons            map[string]string
 	calendars          map[string]string
 	availableStandings map[string]string
+	standings          map[string]string // keyed by season, kind and class, the class empty when overall
 	classifications    map[string]string
 }
 
@@ -39,6 +40,10 @@ func (f fakeConnector) GetCalendar(_ context.Context, seasonUUID string) ([]byte
 
 func (f fakeConnector) GetAvailableStandings(_ context.Context, seasonUUID string) ([]byte, error) {
 	return lookup(f.availableStandings, "available standings", seasonUUID)
+}
+
+func (f fakeConnector) GetStandings(_ context.Context, seasonUUID string, kind connector.StandingKind, classUUID string) ([]byte, error) {
+	return lookup(f.standings, "standings", seasonUUID+"/"+string(kind)+"/"+classUUID)
 }
 
 func (f fakeConnector) GetClassification(_ context.Context, sessionUUID string) ([]byte, error) {
@@ -84,6 +89,12 @@ func (c *countingConnector) GetAvailableStandings(ctx context.Context, seasonUUI
 	return c.inner.GetAvailableStandings(ctx, seasonUUID)
 }
 
+func (c *countingConnector) GetStandings(ctx context.Context, seasonUUID string, kind connector.StandingKind, classUUID string) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetStandings(ctx, seasonUUID, kind, classUUID)
+}
+
 func (c *countingConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
 	c.calls++
 
@@ -91,7 +102,8 @@ func (c *countingConnector) GetClassification(ctx context.Context, sessionUUID s
 }
 
 // upstream holds F1 with three seasons. 1950 has a race with results, a practice without, and a
-// qualifying whose classification fails; 1951 has one race and no standings; 2025's calendar fails,
+// qualifying whose classification fails, and lists an overall and a class drivers standing, and an
+// overall constructors one; 1951 has one race and no available standings; 2025's calendar fails,
 // its standings do not.
 var upstream = fakeConnector{
 	series: `[{"uuid":"series-f1","name":"FIA Formula One World Championship"},{"uuid":"series-wec","name":"FIA World Endurance Championship"}]`,
@@ -109,8 +121,14 @@ var upstream = fakeConnector{
 		]}]}`,
 	},
 	availableStandings: map[string]string{
-		"season-1950": `{"driverStandings":[null],"teamStandings":[],"constructorStandings":[null]}`,
-		"season-2025": `{"driverStandings":[null],"teamStandings":[],"constructorStandings":[null]}`,
+		"season-1950": `{"driverStandings":[null,{"name":"Class A","uuid":"class-a"}],"teamStandings":[],"constructorStandings":[null]}`,
+		"season-2025": `{"driverStandings":[null],"teamStandings":[],"constructorStandings":[]}`,
+	},
+	standings: map[string]string{
+		"season-1950/drivers/":        `{"standings":[]}`,
+		"season-1950/drivers/class-a": `{"standings":[]}`,
+		"season-1950/constructors/":   `{"standings":[]}`,
+		"season-2025/drivers/":        `{"standings":[]}`,
 	},
 	classifications: map[string]string{
 		"session-1950-race":     `{"details":[]}`,
@@ -152,16 +170,21 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.FileExists(suite.T(), suite.cached("calendar", "season-1950"))
 		require.FileExists(suite.T(), suite.cached("calendar", "season-1951"))
 		require.FileExists(suite.T(), suite.cached("available_standings", "season-1950"))
+		require.FileExists(suite.T(), suite.cached("standings_drivers", "season-1950"))
+		require.FileExists(suite.T(), suite.cached("standings_drivers", "season-1950_class-a"), "a class listed after the overall standing")
+		require.FileExists(suite.T(), suite.cached("standings_constructors", "season-1950"))
+		require.NoDirExists(suite.T(), filepath.Join(suite.cacheDir, "standings_teams"), "no team standings listed")
 		require.FileExists(suite.T(), suite.cached("classification", "session-1950-race"))
 		require.FileExists(suite.T(), suite.cached("classification", "session-1951-race"))
 		require.NoFileExists(suite.T(), suite.cached("calendar", "season-2025"), "outside the year range")
 		require.NoFileExists(suite.T(), suite.cached("classification", "session-1950-practice"), "session without results")
 		require.NoFileExists(suite.T(), suite.cached("seasons", "series-wec"), "series not asked for")
 		require.NoFileExists(suite.T(), suite.cached("available_standings", "season-1951"), "standings that failed")
-		require.Equal(suite.T(), []string{"series", "seasons", "available_standings", "calendar", "classification"}, r.endpoints)
+		require.Equal(suite.T(), []string{"series", "seasons", "available_standings", "standings_drivers", "standings_constructors", "calendar", "classification"}, r.endpoints)
 		require.Equal(suite.T(), count{walked: 2, failed: 1}, *r.counts["available_standings"])
+		require.Equal(suite.T(), count{walked: 2, failed: 0}, *r.counts["standings_drivers"])
 		require.Equal(suite.T(), count{walked: 3, failed: 1}, *r.counts["classification"])
-		require.Equal(suite.T(), 9, suite.network.calls)
+		require.Equal(suite.T(), 12, suite.network.calls)
 	})
 
 	suite.Run("A failed session is recorded and not cached, and its siblings are still warmed", func() {
@@ -176,7 +199,7 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.FileExists(suite.T(), suite.cached("classification", "session-1950-race"))
 	})
 
-	suite.Run("A failed calendar skips its sessions, not its season endpoints nor the other seasons", func() {
+	suite.Run("A failed calendar skips its sessions, not its standings nor the other seasons", func() {
 		r, err := warm(context.Background(), suite.conn, scope{series: []string{"FIA Formula One World Championship"}, from: 1951})
 
 		require.NoError(suite.T(), err)
@@ -186,6 +209,7 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.Equal(suite.T(), "calendar", r.failures[1].endpoint)
 		require.Equal(suite.T(), "season-2025", r.failures[1].uuid)
 		require.FileExists(suite.T(), suite.cached("available_standings", "season-2025"))
+		require.FileExists(suite.T(), suite.cached("standings_drivers", "season-2025"))
 		require.FileExists(suite.T(), suite.cached("classification", "session-1951-race"))
 	})
 
@@ -194,11 +218,11 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 
 		_, err := warm(context.Background(), suite.conn, warmed)
 		require.NoError(suite.T(), err)
-		require.Equal(suite.T(), 9, suite.network.calls)
+		require.Equal(suite.T(), 12, suite.network.calls)
 
 		r, err := warm(context.Background(), suite.conn, warmed)
 		require.NoError(suite.T(), err)
-		require.Equal(suite.T(), 11, suite.network.calls, "only the failed qualifying and 1951 standings are fetched again")
+		require.Equal(suite.T(), 14, suite.network.calls, "only the failed qualifying and 1951 standings are fetched again")
 		require.Equal(suite.T(), count{walked: 3, failed: 1}, *r.counts["classification"])
 	})
 

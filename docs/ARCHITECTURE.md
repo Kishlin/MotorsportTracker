@@ -143,7 +143,7 @@ Probe set (a slice at the top of `main.go`, one line per series): `FIA Formula O
 
 ### `apps/Backend/CacheWarmer/` — Filesystem Cache Filler
 
-Walks series → seasons → season endpoints and calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database.
+Walks series → seasons → standings and calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database.
 
 It takes its connector from the motorsportstats `ServicesRegistry`, the same chain the scrapers use, so it needs the client-cache database as well as `REMOTE_API_HOST` and `PROJECT_DIR`:
 
@@ -153,11 +153,11 @@ CachedConnector(FileSystemCache)
     -> ConnectorUsingClient
 ```
 
-It exits at once unless `USE_FS_CACHE=true`: without the filesystem layer it would fill the database alone. A payload already in the database is copied to `etc/ConnectorCache/` without a request, and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Requests are not paced. Season endpoints (available standings) are fetched for every season in range, session endpoints only for sessions with `hasResults`.
+It exits at once unless `USE_FS_CACHE=true`: without the filesystem layer it would fill the database alone. A payload already in the database is copied to `etc/ConnectorCache/` without a request, and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Requests are not paced. Every season in range gets its available standings, then one standings call per entry they list: the overall standing (`null`) and each class, so a season holding both gets both. Session endpoints are fetched only for sessions with `hasResults`.
 
-A failed call is reported and its subtree skipped — a failed calendar skips its sessions, not the season endpoints; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make go-run APP=ApiCanary` explains the break.
+A failed call is reported and its subtree skipped — a failed calendar skips its sessions, not the standings; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make go-run APP=ApiCanary` explains the break.
 
-Warming a new endpoint: an endpoint keyed by a season or session UUID is one line in `seasonEndpoints` or `sessionEndpoints` (`warm.go`) once the connector has the method. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions.
+Warming a new endpoint: an endpoint keyed by a session UUID is one line in `sessionEndpoints` (`warm.go`) once the connector has the method. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions and the available standings do for standings.
 
 ## Frontend
 
@@ -190,7 +190,7 @@ Migrations for these live in `etc/Migrations/core/` and `etc/Migrations/client-c
 
 ### Client Cache (Filesystem)
 
-API responses can also be cached to the filesystem at `etc/ConnectorCache/<namespace>/<key>.json` (enabled via `USE_FS_CACHE=true`), organized by namespace (series, seasons, calendar, available_standings, classification). `CacheWarmer` fills it in bulk.
+API responses can also be cached to the filesystem at `etc/ConnectorCache/<namespace>/<key>.json` (enabled via `USE_FS_CACHE=true`), organized by namespace (series, seasons, calendar, available_standings, standings_drivers, standings_teams, standings_constructors, classification). `CacheWarmer` fills it in bulk.
 
 The directory is gitignored: it is local to each checkout, and a classification runs from ~20KB (1950) to ~90KB for a recent endurance race, so a series' full history comes to a hundred megabytes or more.
 

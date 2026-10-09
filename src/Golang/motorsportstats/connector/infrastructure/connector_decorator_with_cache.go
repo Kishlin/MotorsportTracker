@@ -45,6 +45,24 @@ func (c *CachedConnector) GetAvailableStandings(ctx context.Context, seasonUUID 
 	})
 }
 
+// GetStandings caches each kind in its own namespace, keyed by the season, and by the class too
+// for a class standing.
+func (c *CachedConnector) GetStandings(
+	ctx context.Context,
+	seasonUUID string,
+	kind StandingKind,
+	classUUID string,
+) ([]byte, error) {
+	key := seasonUUID
+	if classUUID != "" {
+		key += "_" + classUUID
+	}
+
+	return c.getFromCacheOrConnector("standings_"+string(kind), key, func() ([]byte, error) {
+		return c.inner.GetStandings(ctx, seasonUUID, kind, classUUID)
+	})
+}
+
 func (c *CachedConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
 	return c.getFromCacheOrConnector("classification", sessionUUID, func() ([]byte, error) {
 		return c.inner.GetClassification(ctx, sessionUUID)

@@ -61,6 +61,21 @@ type Calendar struct {
 	Events []*Event `json:"events"`
 }
 
+// SeriesClass is a class within a series, such as LMP2. Classes race together, so no calendar or
+// classification names them: standings are the only place they appear.
+type SeriesClass struct {
+	UUID string  `json:"uuid"`
+	Name *string `json:"name"`
+}
+
+// AvailableStandings lists each kind's standings for a season. A nil entry is the overall
+// standing, and only ever comes first; every other entry is a class standing.
+type AvailableStandings struct {
+	Drivers      []*SeriesClass `json:"driverStandings"`
+	Teams        []*SeriesClass `json:"teamStandings"`
+	Constructors []*SeriesClass `json:"constructorStandings"`
+}
+
 type Driver struct {
 	UUID      string  `json:"uuid"`
 	Name      *string `json:"name"`

@@ -18,14 +18,6 @@ type endpoint struct {
 	fetch func(ctx context.Context, uuid string) ([]byte, error)
 }
 
-// seasonEndpoints are fetched once for every season in range. Warming a new season-level endpoint is
-// one line here once the connector has the method.
-func seasonEndpoints(conn connector.Connector) []endpoint {
-	return []endpoint{
-		{name: "available_standings", fetch: conn.GetAvailableStandings},
-	}
-}
-
 // sessionEndpoints are fetched once for every session with results. Warming a new session-level
 // endpoint is one line here once the connector has the method.
 func sessionEndpoints(conn connector.Connector) []endpoint {
@@ -46,8 +38,8 @@ func (s scope) includes(year int) bool {
 	return (s.from == 0 || year >= s.from) && (s.to == 0 || year <= s.to)
 }
 
-// warm walks series -> seasons -> season endpoints and calendar -> sessions, taking every identifier from the previous
-// payload. Caching is the connector's business: warm only fetches. The scraping use cases cannot be
+// warm walks series -> seasons -> standings and calendar -> sessions, taking every identifier from
+// the previous payload. Caching is the connector's business: warm only fetches. The scraping use cases cannot be
 // reused here, as they resolve their identifiers out of the core database.
 //
 // A failed call is recorded and its subtree skipped, and the walk carries on. The returned error is
@@ -72,11 +64,10 @@ func warm(ctx context.Context, conn connector.Connector, s scope) (*report, erro
 		targets = append(targets, target)
 	}
 
-	seasonLevel := seasonEndpoints(conn)
-	sessionLevel := sessionEndpoints(conn)
+	endpoints := sessionEndpoints(conn)
 
 	for _, series := range targets {
-		warmSeries(ctx, conn, s, r, seasonLevel, sessionLevel, series)
+		warmSeries(ctx, conn, s, r, endpoints, series)
 	}
 
 	return r, nil
@@ -87,8 +78,7 @@ func warmSeries(
 	conn connector.Connector,
 	s scope,
 	r *report,
-	seasonLevel []endpoint,
-	sessionLevel []endpoint,
+	endpoints []endpoint,
 	series *motorsportstats.Series,
 ) {
 	name := fn.Deref(series.Name, series.UUID)
@@ -105,27 +95,27 @@ func warmSeries(
 			continue
 		}
 
-		warmSeason(ctx, conn, r, seasonLevel, sessionLevel, fmt.Sprintf("%s %d", name, fn.Deref(season.Year, 0)), season)
+		warmSeason(ctx, conn, r, endpoints, fmt.Sprintf("%s %d", name, fn.Deref(season.Year, 0)), season)
 	}
 }
 
-// warmSeason fetches every season endpoint and the calendar, then every session endpoint for each
-// session with results. The season endpoints come first, as they do not hang off the calendar and so
-// are not skipped when it fails. A session without results has nothing to fetch yet, and caching its
+// warmSeason fetches the season's standings and its calendar, then every session endpoint for each
+// session with results. The standings come first, as they do not hang off the calendar and so are
+// not skipped when it fails. A session without results has nothing to fetch yet, and caching its
 // empty payload would freeze it.
 func warmSeason(
 	ctx context.Context,
 	conn connector.Connector,
 	r *report,
-	seasonLevel []endpoint,
-	sessionLevel []endpoint,
+	endpoints []endpoint,
 	label string,
 	season *motorsportstats.Season,
 ) {
-	for _, e := range seasonLevel {
-		r.fetch(e.name, label, season.UUID, func() ([]byte, error) {
-			return e.fetch(ctx, season.UUID)
-		})
+	available, ok := fetchAndParse[*motorsportstats.AvailableStandings](r, "available_standings", label, season.UUID, func() ([]byte, error) {
+		return conn.GetAvailableStandings(ctx, season.UUID)
+	})
+	if ok && available != nil {
+		warmStandings(ctx, conn, r, label, season, available)
 	}
 
 	calendar, ok := fetchAndParse[*motorsportstats.Calendar](r, "calendar", label, season.UUID, func() ([]byte, error) {
@@ -156,7 +146,7 @@ func warmSeason(
 				strings.TrimSpace(fn.Deref(session.Name, "unnamed session")),
 			)
 
-			for _, e := range sessionLevel {
+			for _, e := range endpoints {
 				r.fetch(e.name, target, session.UUID, func() ([]byte, error) {
 					return e.fetch(ctx, session.UUID)
 				})
@@ -165,6 +155,42 @@ func warmSeason(
 	}
 
 	slog.Info("Warmed season", "season", label, "sessions", sessions)
+}
+
+// warmStandings fetches every standing the season lists, one call per entry. The overall standing
+// does not stand in for the classes listed after it: a season can hold both, and each is its own
+// payload.
+func warmStandings(
+	ctx context.Context,
+	conn connector.Connector,
+	r *report,
+	label string,
+	season *motorsportstats.Season,
+	available *motorsportstats.AvailableStandings,
+) {
+	kinds := []struct {
+		kind    connector.StandingKind
+		classes []*motorsportstats.SeriesClass
+	}{
+		{kind: connector.StandingDrivers, classes: available.Drivers},
+		{kind: connector.StandingTeams, classes: available.Teams},
+		{kind: connector.StandingConstructors, classes: available.Constructors},
+	}
+
+	for _, k := range kinds {
+		for _, class := range k.classes {
+			classUUID, className, key := "", "overall", season.UUID
+			if class != nil {
+				classUUID, className, key = class.UUID, fn.Deref(class.Name, class.UUID), season.UUID+"_"+class.UUID
+			}
+
+			target := fmt.Sprintf("%s / %s / %s", label, k.kind, className)
+
+			r.fetch("standings_"+string(k.kind), target, key, func() ([]byte, error) {
+				return conn.GetStandings(ctx, season.UUID, k.kind, classUUID)
+			})
+		}
+	}
 }
 
 func findSeries(allSeries []*motorsportstats.Series, name string) *motorsportstats.Series {
