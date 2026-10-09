@@ -11,22 +11,28 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+// run holds what main would, returning the exit code instead of calling os.Exit, which would skip the
+// deferred m.Close().
+func run() int {
 	connStr, err := connectionStringFromEnv()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to construct connection string: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	sourceStr := os.Getenv("DB_MIGRATE_SOURCE")
 	if sourceStr == "" {
 		fmt.Fprintln(os.Stderr, "DB_MIGRATE_SOURCE environment variable not set")
-		os.Exit(1)
+		return 1
 	}
 
 	m, err := migrate.New(sourceStr, connStr)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to create migration: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 	defer func(m *migrate.Migrate) {
 		err, _ := m.Close()
@@ -39,13 +45,15 @@ func main() {
 	err = m.Up()
 	if errors.Is(err, migrate.ErrNoChange) {
 		fmt.Println("No new migrations to apply")
-		return
+		return 0
 	} else if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to apply migrations: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	fmt.Println("Migrations applied successfully")
+
+	return 0
 }
 
 func connectionStringFromEnv() (string, error) {

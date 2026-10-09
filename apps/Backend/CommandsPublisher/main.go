@@ -13,17 +13,23 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+// run holds what main would, returning the exit code instead of calling os.Exit, which would skip the
+// deferred registry.Close().
+func run() int {
 	err := env.LoadEnv()
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	logger.SetupSlog()
 
 	if len(os.Args) < 2 {
 		printUsage()
-		os.Exit(1)
+		return 1
 	}
 
 	subcommand := os.Args[1]
@@ -33,7 +39,7 @@ func main() {
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%v\n\n", err)
 		printUsage()
-		os.Exit(1)
+		return 1
 	}
 
 	arguments, options := application.ParseArgs(args)
@@ -41,7 +47,7 @@ func main() {
 	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err) //nolint:gosec // G705: CLI stderr output, not a web context
-		os.Exit(1)
+		return 1
 	}
 
 	registry := dependencyinjection.NewServicesRegistry()
@@ -51,11 +57,11 @@ func main() {
 
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	slog.Info("Intent sent to the queue", "intent", subcommand) //nolint:gosec // G706: slog structured logging safely isolates the value in a field
-	os.Exit(0)
+	return 0
 }
 
 func printUsage() {

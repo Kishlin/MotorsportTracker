@@ -14,17 +14,23 @@ import (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+// run holds what main would, returning the exit code instead of calling os.Exit, which would skip the
+// deferred registry.Close().
+func run() int {
 	err := env.LoadEnv()
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	logger.SetupSlog()
 
 	if len(os.Args) < 2 {
 		printUsage()
-		os.Exit(1)
+		return 1
 	}
 
 	subcommand := os.Args[1]
@@ -41,13 +47,13 @@ func main() {
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "%v\n\n", err)
 		printUsage()
-		os.Exit(1)
+		return 1
 	}
 
 	message, err := intent.ToMessage(arguments, options)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error creating message for intent %s: %v\n", subcommand, err)
-		os.Exit(1)
+		return 1
 	}
 
 	handlersList := messaging.NewHandlersList()
@@ -57,11 +63,11 @@ func main() {
 
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "handling intent %s: %v\n", subcommand, err)
-		os.Exit(1)
+		return 1
 	}
 
 	fmt.Print("Successfully processed command")
-	os.Exit(0)
+	return 0
 }
 
 func printUsage() {

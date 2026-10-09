@@ -33,12 +33,18 @@ var probes = []struct {
 const maxSeasonsBack = 3
 
 func main() {
+	os.Exit(run())
+}
+
+// run holds what main would, returning the exit code instead of calling os.Exit, which would skip the
+// deferred registry.Close().
+func run() int {
 	strict := flag.Bool("strict", false, "exit non-zero on warnings too, not only on failures")
 	flag.Parse()
 
 	if err := env.LoadEnv(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	logger.SetupSlog()
@@ -46,22 +52,20 @@ func main() {
 	projectDir := os.Getenv("PROJECT_DIR")
 	if projectDir == "" {
 		_, _ = fmt.Fprintln(os.Stderr, "PROJECT_DIR environment variable is not set, schemas cannot be located")
-		os.Exit(1)
+		return 1
 	}
 
 	registry := dependencyinjection.NewServicesRegistry()
+	defer registry.Close()
 
 	// Deliberately the base connector and not the cached one: a cache hit returns bytes without ever
 	// validating them. The canary must reach the live API.
 	checks := runCanary(context.Background(), registry.GetBaseConnector(), projectDir)
 
-	// Closed by hand rather than deferred: the os.Exit call below would skip a deferred Close.
-	registry.Close()
-
 	fmt.Printf("motorsportstats API canary — %s\n\n", os.Getenv("REMOTE_API_HOST"))
 	printReport(os.Stdout, checks)
 
-	os.Exit(exitCode(checks, *strict))
+	return exitCode(checks, *strict)
 }
 
 type verdict int

@@ -27,6 +27,12 @@ func (n *seriesNames) Set(name string) error {
 }
 
 func main() {
+	os.Exit(run())
+}
+
+// run holds what main would, returning the exit code instead of calling os.Exit, which would skip the
+// deferred registry.Close().
+func run() int {
 	var series seriesNames
 	flag.Var(&series, "series", "exact name of a series to warm, as motorsportstats spells it; repeatable")
 	from := flag.Int("from", 0, "first season year to warm; 0 for no lower bound")
@@ -35,43 +41,43 @@ func main() {
 
 	if len(series) == 0 {
 		_, _ = fmt.Fprintln(os.Stderr, "at least one --series is required")
-		os.Exit(2)
+		return 2
 	}
 
 	if err := env.LoadEnv(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error loading environment variables: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	logger.SetupSlog()
 
 	registry := motorsportstats.NewServicesRegistry()
+	defer registry.Close()
 
 	// Without the filesystem layer the walk would fill the client-cache database alone, and
 	// etc/ConnectorCache/ is the whole point of the run.
 	useFSCache := strings.ToLower(os.Getenv("USE_FS_CACHE")) == "true"
 	if useFSCache == false {
 		_, _ = fmt.Fprintln(os.Stderr, "USE_FS_CACHE is not true, the warmer would leave etc/ConnectorCache/ untouched")
-		os.Exit(1)
+		return 1
 	}
 
 	ctx := context.Background()
 
 	r, err := warm(ctx, registry.GetConnector(ctx), scope{series: series, from: *from, to: *to})
 
-	// Closed by hand rather than deferred: the os.Exit calls below would skip a deferred Close.
-	registry.Close()
-
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error warming the cache: %v\n", err)
-		os.Exit(1)
+		return 1
 	}
 
 	printReport(os.Stdout, r)
 
 	if len(r.failures) > 0 {
-		os.Exit(1)
+		return 1
 	}
+
+	return 0
 }
 
 func printReport(w io.Writer, r *report) {

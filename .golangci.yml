@@ -19,6 +19,7 @@ formatters:
 linters:
   enable:
     - errcheck
+    - gocritic
     - govet
     - ineffassign
     - staticcheck
@@ -30,6 +31,11 @@ linters:
     - revive
     - unparam
   settings:
+    gocritic:
+      # os.Exit skips deferred calls, so a main that defers a Close must exit through a run() int.
+      disable-all: true
+      enabled-checks:
+        - exitAfterDefer
     revive:
       confidence: 0.8
     staticcheck:
