@@ -39,6 +39,12 @@ func (c *CachedConnector) GetCalendar(ctx context.Context, seasonUUID string) ([
 	})
 }
 
+func (c *CachedConnector) GetAvailableStandings(ctx context.Context, seasonUUID string) ([]byte, error) {
+	return c.getFromCacheOrConnector("available_standings", seasonUUID, func() ([]byte, error) {
+		return c.inner.GetAvailableStandings(ctx, seasonUUID)
+	})
+}
+
 func (c *CachedConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
 	return c.getFromCacheOrConnector("classification", sessionUUID, func() ([]byte, error) {
 		return c.inner.GetClassification(ctx, sessionUUID)

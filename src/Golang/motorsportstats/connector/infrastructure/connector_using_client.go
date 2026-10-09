@@ -34,6 +34,10 @@ func (c *ConnectorUsingClient) GetCalendar(ctx context.Context, seasonUUID strin
 	return c.doGet(ctx, schemaCalendar, endpointCalendar, seasonUUID)
 }
 
+func (c *ConnectorUsingClient) GetAvailableStandings(ctx context.Context, seasonUUID string) ([]byte, error) {
+	return c.doGet(ctx, schemaAvailableStandings, endpointAvailableStandings, seasonUUID)
+}
+
 func (c *ConnectorUsingClient) GetClassification(ctx context.Context, sessionUUD string) ([]byte, error) {
 	return c.doGet(ctx, schemaClassification, endpointClassification, sessionUUD)
 }
@@ -86,10 +90,11 @@ var headers = map[string]string{
 }
 
 const (
-	endpointSeries         = "/widgets/1.0.0/series"
-	endpointSeasons        = "/widgets/1.0.0/series/%s/seasons"
-	endpointCalendar       = "/widgets/1.0.0/seasons/%s/calendar"
-	endpointClassification = "/widgets/1.0.0/sessions/%s/classification"
+	endpointSeries             = "/widgets/1.0.0/series"
+	endpointSeasons            = "/widgets/1.0.0/series/%s/seasons"
+	endpointCalendar           = "/widgets/1.0.0/seasons/%s/calendar"
+	endpointAvailableStandings = "/widgets/1.0.0/seasons/%s/standings"
+	endpointClassification     = "/widgets/1.0.0/sessions/%s/classification"
 )
 
 //go:embed schemas/series.json
@@ -100,6 +105,9 @@ var schemaSeasons string
 
 //go:embed schemas/calendar.json
 var schemaCalendar string
+
+//go:embed schemas/available_standings.json
+var schemaAvailableStandings string
 
 //go:embed schemas/classification.json
 var schemaClassification string

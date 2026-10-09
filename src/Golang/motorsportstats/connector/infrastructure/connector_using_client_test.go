@@ -65,6 +65,21 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetCalendar() {
 	require.Empty(suite.T(), data)
 }
 
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetAvailableStandings() {
+	testServer := NewTestServer()
+	defer testServer.Close()
+
+	connector := ConnectorForTestServer(testServer)
+
+	data, err := connector.GetAvailableStandings(suite.T().Context(), "afc5ab1b-c44b-4c21-904d-215fcc800578")
+	require.NoError(suite.T(), err)
+	require.NotEmpty(suite.T(), data)
+
+	data, err = connector.GetAvailableStandings(suite.T().Context(), "missing-uuid")
+	require.Error(suite.T(), err)
+	require.Empty(suite.T(), data)
+}
+
 func (suite *ConnectorUsingClientFunctionalTestSuite) TestGetClassification() {
 	testServer := NewTestServer()
 	defer testServer.Close()

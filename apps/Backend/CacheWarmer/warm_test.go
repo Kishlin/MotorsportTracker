@@ -18,10 +18,11 @@ import (
 // fakeConnector stands in for motorsportstats. An identifier missing from its maps fails the call, as a
 // 404 would.
 type fakeConnector struct {
-	series          string
-	seasons         map[string]string
-	calendars       map[string]string
-	classifications map[string]string
+	series             string
+	seasons            map[string]string
+	calendars          map[string]string
+	availableStandings map[string]string
+	classifications    map[string]string
 }
 
 func (f fakeConnector) GetSeries(_ context.Context) ([]byte, error) {
@@ -34,6 +35,10 @@ func (f fakeConnector) GetSeasons(_ context.Context, seriesUUID string) ([]byte,
 
 func (f fakeConnector) GetCalendar(_ context.Context, seasonUUID string) ([]byte, error) {
 	return lookup(f.calendars, "calendar", seasonUUID)
+}
+
+func (f fakeConnector) GetAvailableStandings(_ context.Context, seasonUUID string) ([]byte, error) {
+	return lookup(f.availableStandings, "available standings", seasonUUID)
 }
 
 func (f fakeConnector) GetClassification(_ context.Context, sessionUUID string) ([]byte, error) {
@@ -73,6 +78,12 @@ func (c *countingConnector) GetCalendar(ctx context.Context, seasonUUID string) 
 	return c.inner.GetCalendar(ctx, seasonUUID)
 }
 
+func (c *countingConnector) GetAvailableStandings(ctx context.Context, seasonUUID string) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetAvailableStandings(ctx, seasonUUID)
+}
+
 func (c *countingConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
 	c.calls++
 
@@ -80,7 +91,8 @@ func (c *countingConnector) GetClassification(ctx context.Context, sessionUUID s
 }
 
 // upstream holds F1 with three seasons. 1950 has a race with results, a practice without, and a
-// qualifying whose classification fails; 1951 has one race; 2025's calendar fails.
+// qualifying whose classification fails; 1951 has one race and no standings; 2025's calendar fails,
+// its standings do not.
 var upstream = fakeConnector{
 	series: `[{"uuid":"series-f1","name":"FIA Formula One World Championship"},{"uuid":"series-wec","name":"FIA World Endurance Championship"}]`,
 	seasons: map[string]string{
@@ -95,6 +107,10 @@ var upstream = fakeConnector{
 		"season-1951": `{"events":[{"uuid":"event-1951","name":"Swiss Grand Prix","sessions":[
 			{"uuid":"session-1951-race","name":"Race","hasResults":true}
 		]}]}`,
+	},
+	availableStandings: map[string]string{
+		"season-1950": `{"driverStandings":[null],"teamStandings":[],"constructorStandings":[null]}`,
+		"season-2025": `{"driverStandings":[null],"teamStandings":[],"constructorStandings":[null]}`,
 	},
 	classifications: map[string]string{
 		"session-1950-race":     `{"details":[]}`,
@@ -135,14 +151,17 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.FileExists(suite.T(), suite.cached("seasons", "series-f1"))
 		require.FileExists(suite.T(), suite.cached("calendar", "season-1950"))
 		require.FileExists(suite.T(), suite.cached("calendar", "season-1951"))
+		require.FileExists(suite.T(), suite.cached("available_standings", "season-1950"))
 		require.FileExists(suite.T(), suite.cached("classification", "session-1950-race"))
 		require.FileExists(suite.T(), suite.cached("classification", "session-1951-race"))
 		require.NoFileExists(suite.T(), suite.cached("calendar", "season-2025"), "outside the year range")
 		require.NoFileExists(suite.T(), suite.cached("classification", "session-1950-practice"), "session without results")
 		require.NoFileExists(suite.T(), suite.cached("seasons", "series-wec"), "series not asked for")
-		require.Equal(suite.T(), []string{"series", "seasons", "calendar", "classification"}, r.endpoints)
+		require.NoFileExists(suite.T(), suite.cached("available_standings", "season-1951"), "standings that failed")
+		require.Equal(suite.T(), []string{"series", "seasons", "available_standings", "calendar", "classification"}, r.endpoints)
+		require.Equal(suite.T(), count{walked: 2, failed: 1}, *r.counts["available_standings"])
 		require.Equal(suite.T(), count{walked: 3, failed: 1}, *r.counts["classification"])
-		require.Equal(suite.T(), 7, suite.network.calls)
+		require.Equal(suite.T(), 9, suite.network.calls)
 	})
 
 	suite.Run("A failed session is recorded and not cached, and its siblings are still warmed", func() {
@@ -157,12 +176,16 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 		require.FileExists(suite.T(), suite.cached("classification", "session-1950-race"))
 	})
 
-	suite.Run("A failed calendar skips its season and not the others", func() {
+	suite.Run("A failed calendar skips its sessions, not its season endpoints nor the other seasons", func() {
 		r, err := warm(context.Background(), suite.conn, scope{series: []string{"FIA Formula One World Championship"}, from: 1951})
 
 		require.NoError(suite.T(), err)
-		require.Len(suite.T(), r.failures, 1)
-		require.Equal(suite.T(), "season-2025", r.failures[0].uuid)
+		require.Len(suite.T(), r.failures, 2)
+		require.Equal(suite.T(), "available_standings", r.failures[0].endpoint)
+		require.Equal(suite.T(), "season-1951", r.failures[0].uuid)
+		require.Equal(suite.T(), "calendar", r.failures[1].endpoint)
+		require.Equal(suite.T(), "season-2025", r.failures[1].uuid)
+		require.FileExists(suite.T(), suite.cached("available_standings", "season-2025"))
 		require.FileExists(suite.T(), suite.cached("classification", "session-1951-race"))
 	})
 
@@ -171,11 +194,11 @@ func (suite *WarmUnitTestSuite) TestWarm() {
 
 		_, err := warm(context.Background(), suite.conn, warmed)
 		require.NoError(suite.T(), err)
-		require.Equal(suite.T(), 7, suite.network.calls)
+		require.Equal(suite.T(), 9, suite.network.calls)
 
 		r, err := warm(context.Background(), suite.conn, warmed)
 		require.NoError(suite.T(), err)
-		require.Equal(suite.T(), 8, suite.network.calls, "only the failed qualifying is fetched again")
+		require.Equal(suite.T(), 11, suite.network.calls, "only the failed qualifying and 1951 standings are fetched again")
 		require.Equal(suite.T(), count{walked: 3, failed: 1}, *r.counts["classification"])
 	})
 

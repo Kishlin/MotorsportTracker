@@ -9,5 +9,7 @@ type Connector interface {
 
 	GetCalendar(ctx context.Context, seasonUUID string) ([]byte, error)
 
+	GetAvailableStandings(ctx context.Context, seasonUUID string) ([]byte, error)
+
 	GetClassification(ctx context.Context, sessionUUD string) ([]byte, error)
 }
