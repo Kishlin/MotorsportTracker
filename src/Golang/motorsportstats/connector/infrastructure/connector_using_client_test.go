@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"encoding/json"
 	"net/http/httptest"
 	"testing"
 
@@ -176,6 +177,85 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateAvailableStand
 			require.Error(suite.T(), suite.connector.validate(suite.T().Context(), content, schemaAvailableStandings))
 		})
 	}
+}
+
+// Each base row is verbatim: Max Verstappen in the Formula 1 2024 drivers standing, AF Corse in the
+// WEC 2017 LMGTEPro teams standing, and McLaren-Mercedes in the Formula 1 2024 constructors standing.
+// Every case changes one thing about one of them.
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateStandings() {
+	driverRow := `{"driver":{"name":"Max Verstappen","uuid":"01e17884-0f97-4ce1-93b6-4de38b2a2445","shortCode":"VER","colour":null,"picture":"https://content.motorsportstats.com/medium/driverProfilePicture/driverProfilePicture-01e17884-0f97-4ce1-93b6-4de38b2a2445.jpg"},"team":{"name":"Oracle Red Bull Racing","uuid":"42ff413f-91b2-416b-b53f-cbfa77220a8a","colour":"#0600EF","picture":"https://assets.motorsportstats.com/team/icon/teamColour_0600EF.svg","carIcon":"https://assets.motorsportstats.com/carIcon/Default/caricon_RaceCar_0600EF.svg"},"nationality":{"name":"Netherlands","uuid":"39d8585b-1e74-4280-923d-9d3457ef4f82","picture":"https://assets.motorsportstats.com/flags/svg/nl.svg"},"position":1,"points":437.0,"analytics":{"avgFinishPosition":2.96,"classWins":0,"fastestLaps":3,"finalAppearances":0,"hatTricks":2,"podiums":14,"poles":8,"racesLed":16,"ralliesLed":0,"retirements":1,"semiFinalAppearances":0,"stageWins":0,"starts":24,"top10s":23,"top5s":19,"wins":9,"winsPercentage":37.5}}`
+	teamRow := `{"team":{"name":"AF Corse","uuid":"d50b2af7-6fc6-4c96-b8dd-57efa3a45b93","colour":"#CFDBDD","picture":"https://content.motorsportstats.com/medium/teamProfilePicture/teamProfilePicture-d50b2af7-6fc6-4c96-b8dd-57efa3a45b93.jpg","carIcon":"https://assets.motorsportstats.com/carIcon/Default/caricon_RaceCar_CFDBDD.svg"},"icon":"https://assets.motorsportstats.com/team/icon/teamColour_CFDBDD.svg","countryRepresenting":{"name":"Italy","uuid":"d30d30d2-66b1-4959-b15a-660b3db331ea","picture":"https://assets.motorsportstats.com/flags/svg/it.svg"},"position":1,"points":164.0,"analytics":{"classWins":5,"fastestLaps":0,"finalAppearances":0,"finishes1And2":0,"podiums":0,"poles":0,"qualifies1And2":0,"racesLed":0,"ralliesLed":0,"retirements":0,"semiFinalAppearances":0,"stageWins":0,"starts":9,"top10s":0,"top5s":0,"wins":0,"winsPercentage":0}}`
+	constructorRow := `{"constructor":{"name":"McLaren-Mercedes","uuid":"cd967069-65e6-40f6-9cf1-849d3baafa85","picture":null},"team":{"name":"McLaren Formula 1 Team","uuid":"bbdbb738-1b0b-4732-846b-10dc292b2f76","colour":"#FF9800","picture":"https://assets.motorsportstats.com/team/icon/teamColour_FF9800.svg","carIcon":"https://assets.motorsportstats.com/carIcon/Default/caricon_RaceCar_FF9800.svg"},"countryRepresenting":{"name":"Great Britain","uuid":"5378198e-1d1e-49ef-bbc9-4e43383b4d3e","picture":"https://assets.motorsportstats.com/flags/svg/gb.svg"},"position":1,"points":666.0,"analytics":{"wins":6}}`
+
+	object := func(row map[string]any, key string) map[string]any {
+		return row[key].(map[string]any)
+	}
+
+	type standingsCase struct {
+		name   string
+		schema string
+		row    string
+		change func(row map[string]any)
+	}
+
+	valid := []standingsCase{
+		{"A driver row as sent", schemaStandingsDrivers, driverRow, func(map[string]any) {}},
+		{"An unranked driver", schemaStandingsDrivers, driverRow, func(row map[string]any) { row["position"] = 0 }},
+		{"A driver without a team", schemaStandingsDrivers, driverRow, func(row map[string]any) { row["team"] = nil }},
+		{"A driver without a nationality", schemaStandingsDrivers, driverRow, func(row map[string]any) { row["nationality"] = nil }},
+		{"A driver with a colour", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "driver")["colour"] = "#FF0000" }},
+		{"A padded short code", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "driver")["shortCode"] = "DE " }},
+		{"A team without a name", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "team")["name"] = "" }},
+		{"A team row as sent", schemaStandingsTeams, teamRow, func(map[string]any) {}},
+		{"A team without a country", schemaStandingsTeams, teamRow, func(row map[string]any) { row["countryRepresenting"] = nil }},
+		{"A team without a picture", schemaStandingsTeams, teamRow, func(row map[string]any) { object(row, "team")["picture"] = nil }},
+		{"A constructor row as sent", schemaStandingsConstructors, constructorRow, func(map[string]any) {}},
+		{"A constructor without a team", schemaStandingsConstructors, constructorRow, func(row map[string]any) { row["team"] = nil }},
+	}
+
+	invalid := []standingsCase{
+		{"A lowercase colour", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "team")["colour"] = "#0600ef" }},
+		{"A colour without its hash", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "team")["colour"] = "0600EF" }},
+		{"A car icon that is not a URL", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "team")["carIcon"] = "caricon_RaceCar_0600EF.svg" }},
+		{"A negative position", schemaStandingsDrivers, driverRow, func(row map[string]any) { row["position"] = -1 }},
+		{"A negative counter", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "analytics")["wins"] = -1 }},
+		{"A fractional counter", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "analytics")["podiums"] = 1.5 }},
+		{"A null never observed", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "team")["picture"] = nil }},
+		{"An empty uuid", schemaStandingsDrivers, driverRow, func(row map[string]any) { object(row, "driver")["uuid"] = "" }},
+		{"An unknown key on a row", schemaStandingsDrivers, driverRow, func(row map[string]any) { row["carNumber"] = "1" }},
+		{"A missing counter", schemaStandingsDrivers, driverRow, func(row map[string]any) { delete(object(row, "analytics"), "poles") }},
+		{"A team icon that is not a URL", schemaStandingsTeams, teamRow, func(row map[string]any) { row["icon"] = "teamColour_CFDBDD.svg" }},
+		{"A driver counter on a team", schemaStandingsTeams, teamRow, func(row map[string]any) { object(row, "analytics")["hatTricks"] = 0 }},
+		{"A team counter on a constructor", schemaStandingsConstructors, constructorRow, func(row map[string]any) { object(row, "analytics")["podiums"] = 0 }},
+	}
+
+	payload := func(c standingsCase) []byte {
+		var row map[string]any
+		require.NoError(suite.T(), json.Unmarshal([]byte(c.row), &row))
+
+		c.change(row)
+
+		content, err := json.Marshal(map[string]any{"standings": []any{row}})
+		require.NoError(suite.T(), err)
+
+		return content
+	}
+
+	for _, c := range valid {
+		suite.Run(c.name, func() {
+			require.NoError(suite.T(), suite.connector.validate(suite.T().Context(), payload(c), c.schema))
+		})
+	}
+
+	for _, c := range invalid {
+		suite.Run(c.name, func() {
+			require.Error(suite.T(), suite.connector.validate(suite.T().Context(), payload(c), c.schema))
+		})
+	}
+
+	suite.Run("An empty standing", func() {
+		require.Error(suite.T(), suite.connector.validate(suite.T().Context(), []byte(`{"standings":[]}`), schemaStandingsDrivers))
+	})
 }
 
 func TestFunctional_ConnectorUsingClient(t *testing.T) {

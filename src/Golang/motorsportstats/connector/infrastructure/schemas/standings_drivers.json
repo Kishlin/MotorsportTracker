@@ -1,4 +1,243 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "title": "Open schema for the drivers standings, until samples settle the real one"
+  "type": "object",
+  "properties": {
+    "standings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "required": [
+    "standings"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "properties": {
+        "driver": {
+          "$ref": "#/$defs/driver"
+        },
+        "team": {
+          "$ref": "#/$defs/team"
+        },
+        "nationality": {
+          "$ref": "#/$defs/nationality"
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "points": {
+          "type": "number"
+        },
+        "analytics": {
+          "$ref": "#/$defs/analytics"
+        }
+      },
+      "required": [
+        "driver",
+        "team",
+        "nationality",
+        "position",
+        "points",
+        "analytics"
+      ],
+      "additionalProperties": false
+    },
+    "driver": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shortCode": {
+          "type": "string"
+        },
+        "colour": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^#[0-9A-F]{6}$"
+        },
+        "picture": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "name",
+        "uuid",
+        "shortCode",
+        "colour",
+        "picture"
+      ],
+      "additionalProperties": false
+    },
+    "team": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "colour": {
+          "type": "string",
+          "pattern": "^#[0-9A-F]{6}$"
+        },
+        "picture": {
+          "type": "string",
+          "format": "uri"
+        },
+        "carIcon": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "name",
+        "uuid",
+        "colour",
+        "picture",
+        "carIcon"
+      ],
+      "additionalProperties": false
+    },
+    "nationality": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "picture": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "name",
+        "uuid",
+        "picture"
+      ],
+      "additionalProperties": false
+    },
+    "analytics": {
+      "type": "object",
+      "properties": {
+        "avgFinishPosition": {
+          "type": "number"
+        },
+        "classWins": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fastestLaps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finalAppearances": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hatTricks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "podiums": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "poles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "racesLed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ralliesLed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retirements": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "semiFinalAppearances": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stageWins": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "starts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "top10s": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "top5s": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "wins": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "winsPercentage": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "avgFinishPosition",
+        "classWins",
+        "fastestLaps",
+        "finalAppearances",
+        "hatTricks",
+        "podiums",
+        "poles",
+        "racesLed",
+        "ralliesLed",
+        "retirements",
+        "semiFinalAppearances",
+        "stageWins",
+        "starts",
+        "top10s",
+        "top5s",
+        "wins",
+        "winsPercentage"
+      ],
+      "additionalProperties": false
+    }
+  }
 }
