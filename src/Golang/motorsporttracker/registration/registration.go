@@ -49,7 +49,7 @@ func registerSeriesHandlers(ctx context.Context, handlersList *messaging.Handler
 		seriesImpls.ScrapeSeriesIntentName,
 		seriesImpls.NewScrapeSeriesHandler(
 			series.NewScrapeSeriesUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
+				registry.MotorsportStats().GetGateway(ctx),
 				seriesImpls.NewSaveSeriesRepository(registry.GetCoreDatabase(ctx)),
 			),
 		),
@@ -58,7 +58,7 @@ func registerSeriesHandlers(ctx context.Context, handlersList *messaging.Handler
 
 func registerSeasonsHandlers(ctx context.Context, handlersList *messaging.HandlersList, registry *dependencyinjection.ServicesRegistry) {
 	scrapeSeasonsForSeriesIdentifierUseCase := seasons.NewScrapeSeasonsForSeriesIdentifierUseCase(
-		registry.GetMotorsportStatsGateway(ctx),
+		registry.MotorsportStats().GetGateway(ctx),
 		seasonsImpls.NewSaveSeasonsRepository(registry.GetCoreDatabase(ctx)),
 	)
 
@@ -93,7 +93,7 @@ func registerCalendarHandlers(ctx context.Context, handlersList *messaging.Handl
 		calendarImpls.ScrapeCalendarIntentName,
 		calendarImpls.NewScrapeCalendarHandler(
 			calendar.NewScrapeCalendarUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
+				registry.MotorsportStats().GetGateway(ctx),
 				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
 				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
@@ -106,7 +106,7 @@ func registerClassificationHandlers(ctx context.Context, handlersList *messaging
 		classificationImpls.ScrapeClassificationIntentName,
 		classificationImpls.NewScrapeClassificationHandler(
 			classification.NewScrapeClassificationUseCase(
-				registry.GetMotorsportStatsGateway(ctx),
+				registry.MotorsportStats().GetGateway(ctx),
 				classificationImpls.NewSearchSessionIdentifierRepository(registry.GetCoreDatabase(ctx)),
 				classificationImpls.NewSaveClassificationRepository(registry.GetCoreDatabase(ctx)),
 			),

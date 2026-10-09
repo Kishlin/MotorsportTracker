@@ -11,8 +11,8 @@ import (
 	"strings"
 
 	connector "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/infrastructure"
+	dependencyinjection "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/dependencyinjection/infrastructure"
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	client "github.com/kishlin/MotorsportTracker/src/Golang/shared/client/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
@@ -43,25 +43,22 @@ func main() {
 
 	logger.SetupSlog()
 
-	host := os.Getenv("REMOTE_API_HOST")
-	if host == "" {
-		_, _ = fmt.Fprintln(os.Stderr, "REMOTE_API_HOST environment variable is not set")
-		os.Exit(1)
-	}
-
 	projectDir := os.Getenv("PROJECT_DIR")
 	if projectDir == "" {
 		_, _ = fmt.Fprintln(os.Stderr, "PROJECT_DIR environment variable is not set, schemas cannot be located")
 		os.Exit(1)
 	}
 
-	// Deliberately not the ServicesRegistry gateway: that one is wrapped in a CachedConnector, and a
-	// cache hit returns bytes without ever validating them. The canary must reach the live API.
-	conn := connector.NewConnectorUsingClient(client.NewClient(host))
+	registry := dependencyinjection.NewServicesRegistry()
 
-	checks := runCanary(context.Background(), conn, projectDir)
+	// Deliberately the base connector and not the cached one: a cache hit returns bytes without ever
+	// validating them. The canary must reach the live API.
+	checks := runCanary(context.Background(), registry.GetBaseConnector(), projectDir)
 
-	fmt.Printf("motorsportstats API canary — %s\n\n", host)
+	// Closed by hand rather than deferred: the os.Exit call below would skip a deferred Close.
+	registry.Close()
+
+	fmt.Printf("motorsportstats API canary — %s\n\n", os.Getenv("REMOTE_API_HOST"))
 	printReport(os.Stdout, checks)
 
 	os.Exit(exitCode(checks, *strict))

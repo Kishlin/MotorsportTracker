@@ -135,7 +135,7 @@ func (c *CachedConnector) GetSeries(ctx context.Context) ([]byte, error) {
 }
 ```
 
-Cache implementations: `DatabaseCache` (PostgreSQL), `FileSystemCache` (disk), `MemoryCache` (in-process). The decorator chain in `ServicesRegistry`:
+Cache implementations: `DatabaseCache` (PostgreSQL), `FileSystemCache` (disk), `MemoryCache` (in-process). The decorator chain built by the motorsportstats `ServicesRegistry` (`GetConnector`):
 
 ```
 ConnectorUsingClient (HTTP)
@@ -236,7 +236,7 @@ func RegisterAllHandlers(ctx context.Context, handlersList *messaging.HandlersLi
 func GetIntent(name string) (application.Intent, error)
 ```
 
-`RegisterAllHandlers` delegates to private per-module helpers (`registerSeriesHandlers`, `registerSeasonsHandlers`, etc.) that construct handlers with their use case dependencies from the `ServicesRegistry`.
+`RegisterAllHandlers` delegates to private per-module helpers (`registerSeriesHandlers`, `registerSeasonsHandlers`, etc.) that construct handlers with their use case dependencies from the motorsporttracker `ServicesRegistry`, reaching the gateway through `registry.MotorsportStats().GetGateway(ctx)`.
 
 `GetIntent` maps a subcommand name to its intent instance.
 
@@ -244,20 +244,29 @@ All three backend apps use these shared functions instead of duplicating handler
 
 ## Dependency Injection (ServicesRegistry)
 
-`ServicesRegistry` provides lazy-initialized singleton services via `sync.Once`:
+Each bounded context has its own `ServicesRegistry`, holding the services that context owns, each a lazy-initialized singleton behind a `sync.Once`:
+
+| Registry | Services |
+|---|---|
+| `motorsportstats/dependencyinjection/infrastructure` | `GetBaseConnector` (`ConnectorUsingClient`, no cache), `GetConnector` (the base connector behind the caches), `GetGateway` (built on the cached one), `GetClientCacheDatabase` (the connector cache's own database) |
+| `motorsporttracker/dependencyinjection/infrastructure` | `GetCoreDatabase`, `GetIntentsQueue`, and `MotorsportStats()`, the motorsportstats registry it holds |
+
+The motorsporttracker registry creates its motorsportstats registry itself and closes it in its own `Close()`, following the dependency the use cases already have on the motorsportstats gateway. An app builds the registry of the one context it works in and never both: the scraping apps take the motorsporttracker one, while `ApiCanary` takes the motorsportstats one and so does not import `motorsporttracker` at all.
+
+Wiring belongs to the apps, not the library: `apps/*/main.go` is the composition root, and there is deliberately no project-wide registry under `src/Golang/` that would import every context.
 
 ```go
 // src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go
 
 type ServicesRegistry struct {
-    coreDB                 *databaseImpls.PGXPoolAdapter
-    motorsportStatsGateway *gatewayImpls.GatewayUsingConnector
-    intentsQueue           *messagingImpls.SQSQueue
+    motorsportStats *motorsportstats.ServicesRegistry
 
-    coreDBOnce                 sync.Once
-    motorsportStatsGatewayOnce sync.Once
-    intentsQueueOnce           sync.Once
-    // ...
+    coreDB *databaseImpls.PGXPoolAdapter
+
+    intentsQueue *messagingImpls.SQSQueue
+
+    coreDBOnce       sync.Once
+    intentsQueueOnce sync.Once
 }
 
 func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) *databaseImpls.PGXPoolAdapter {
@@ -279,8 +288,8 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) *databaseImpls.P
 Key points:
 - Services are created on first access, not at startup
 - Missing required env vars cause a panic (fail loudly)
-- `Close()` method cleans up all initialized resources
-- Used by all three backend applications (MotorsportTracker, CommandsProcessor, CommandsPublisher)
+- `Close()` method cleans up all initialized resources, the held motorsportstats registry's included
+- The motorsporttracker registry is used by MotorsportTracker, CommandsProcessor and CommandsPublisher; the motorsportstats one directly by ApiCanary
 
 ## Caching
 
@@ -303,7 +312,7 @@ type Cache interface {
 
 ### Decorator Chain
 
-The `CachedConnector` wraps any `Connector` with a `Cache`. Multiple `CachedConnector` layers can be stacked. The `ServicesRegistry` builds:
+The `CachedConnector` wraps any `Connector` with a `Cache`. Multiple `CachedConnector` layers can be stacked. The motorsportstats `ServicesRegistry` builds:
 
 1. `ConnectorUsingClient` — Makes HTTP requests to motorsportstats.com
 2. Wrapped with `CachedConnector(DatabaseCache)` — Persistent cache in PostgreSQL
@@ -317,10 +326,10 @@ Schema validation happens in `ConnectorUsingClient.doGet` — step 1, the innerm
 
 That is the right trade-off for scraping: bytes that came from the cache passed validation when they were first fetched, and re-checking them costs time for nothing. The consequence to remember is that the schemas cannot serve as an alarm for upstream API changes — with warm caches, drift is invisible to every application path.
 
-Detecting drift is `apps/Backend/ApiCanary`, which builds the connector without any decorator so every call reaches the live API:
+Detecting drift is `apps/Backend/ApiCanary`, which takes the base connector, with no decorator, so every call reaches the live API:
 
 ```go
-conn := connectorImpls.NewConnectorUsingClient(clientImpls.NewClient(os.Getenv("REMOTE_API_HOST")))
+checks := runCanary(ctx, registry.GetBaseConnector(), projectDir)
 ```
 
-Note this is also the only way to get a gateway without a database — `ServicesRegistry.GetMotorsportStatsGateway` reaches `GetClientCacheDatabase` to build the `DatabaseCache`, and panics when `POSTGRES_CLIENT_CACHE_URL` is unset.
+`GetBaseConnector` is also the only service that needs no database: `GetConnector` reaches `GetClientCacheDatabase` to build the `DatabaseCache`, and panics when `POSTGRES_CLIENT_CACHE_URL` is unset.

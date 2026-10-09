@@ -25,6 +25,17 @@ func (suite *ServiceRegistryUnitTestSuite) TestClose() {
 	registry.Close()
 }
 
+// The motorsportstats services have their own suite; this only checks the registry holds one.
+func (suite *ServiceRegistryUnitTestSuite) TestMotorsportStats() {
+	registry := NewServicesRegistry()
+
+	motorsportStats := registry.MotorsportStats()
+	require.NotNil(suite.T(), motorsportStats)
+
+	// Ensure the same instance is returned on subsequent calls
+	require.Same(suite.T(), motorsportStats, registry.MotorsportStats())
+}
+
 func TestUnit_ServiceRegistry(t *testing.T) {
 	suite.Run(t, new(ServiceRegistryUnitTestSuite))
 }
@@ -46,17 +57,6 @@ func (suite *ServiceRegistryIntegrationTestSuite) TearDownSuite() {
 	suite.registry.Close()
 }
 
-func (suite *ServiceRegistryIntegrationTestSuite) TestGetMotorsportStatsGateway() {
-	ctx := suite.T().Context()
-
-	gateway := suite.registry.GetMotorsportStatsGateway(ctx)
-	require.NotNil(suite.T(), gateway)
-
-	// Ensure the same instance is returned on subsequent calls
-	gateway2 := suite.registry.GetMotorsportStatsGateway(ctx)
-	require.Equal(suite.T(), gateway, gateway2)
-}
-
 func (suite *ServiceRegistryIntegrationTestSuite) TestGetCoreDatabase() {
 	ctx := suite.T().Context()
 
@@ -66,19 +66,7 @@ func (suite *ServiceRegistryIntegrationTestSuite) TestGetCoreDatabase() {
 
 	// Ensure the same instance is returned on subsequent calls
 	db2 := suite.registry.GetCoreDatabase(ctx)
-	require.Equal(suite.T(), db, db2)
-}
-
-func (suite *ServiceRegistryIntegrationTestSuite) TestGetClientCacheDatabase() {
-	ctx := suite.T().Context()
-
-	db := suite.registry.GetClientCacheDatabase(ctx)
-	require.NotNil(suite.T(), db)
-	require.NoError(suite.T(), db.Ping(ctx))
-
-	// Ensure the same instance is returned on subsequent calls
-	db2 := suite.registry.GetClientCacheDatabase(ctx)
-	require.Equal(suite.T(), db, db2)
+	require.Same(suite.T(), db, db2)
 }
 
 func (suite *ServiceRegistryIntegrationTestSuite) TestGetIntentsQueue() {
@@ -87,7 +75,7 @@ func (suite *ServiceRegistryIntegrationTestSuite) TestGetIntentsQueue() {
 
 	// Ensure the same instance is returned on subsequent calls
 	queue2 := suite.registry.GetIntentsQueue()
-	require.Equal(suite.T(), queue, queue2)
+	require.Same(suite.T(), queue, queue2)
 }
 
 func TestIntegration_ServiceRegistry(t *testing.T) {

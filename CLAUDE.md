@@ -40,7 +40,7 @@ apps/
 src/Golang/
   motorsporttracker/      # Core scraping modules (series, seasons, calendar, classification)
     registration/         # Centralized handler + intent registration
-  motorsportstats/        # External API gateway (connector + gateway layers)
+  motorsportstats/        # External API gateway (connector + gateway layers, own ServicesRegistry)
   shared/                 # Shared utilities (cache, database, messaging, crypto, env, fn)
 etc/
   Migrations/             # SQL migrations — lowercase core/ and client-cache/ only
@@ -86,7 +86,7 @@ Legacy PHP exists in `src/Backend/`, `apps/Backoffice/`, and parts of `apps/`. *
 - **Gateway**: Connector (HTTP) → Gateway (JSON parsing) → domain objects
 - **Handler**: Message processor — extracts metadata params, delegates to a Use Case
 - **Intent**: CLI command → Message, with argument/option validation. Lives in `infrastructure/`
-- **ServicesRegistry**: Dependency injection via `sync.Once` lazy initialization
+- **ServicesRegistry**: One per bounded context, `sync.Once` lazy initialization. The motorsporttracker one holds the motorsportstats one; apps build only the one they need — `main.go` is the composition root
 
 ## Design Principles
 

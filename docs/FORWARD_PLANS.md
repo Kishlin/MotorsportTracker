@@ -16,7 +16,7 @@ Decided 2026-09-28. Not built: build it together with the rescrape option. Imple
 
 ### Why it cannot happen yet
 
-Every scrape goes through `CachedConnector` over `DatabaseCache`, with a `FileSystemCache` on top when `USE_FS_CACHE=true` (`GetMotorsportStatsGateway` in `services_registry.go`). Neither cache expires ([ARCHITECTURE.md](ARCHITECTURE.md), "Client Cache (Filesystem)"). A rescrape replays the bytes saved the first time, so the save never sees a payload missing something it stored.
+Every scrape goes through `CachedConnector` over `DatabaseCache`, with a `FileSystemCache` on top when `USE_FS_CACHE=true` (`GetConnector` in `motorsportstats/dependencyinjection/infrastructure/services_registry.go`). Neither cache expires ([ARCHITECTURE.md](ARCHITECTURE.md), "Client Cache (Filesystem)"). A rescrape replays the bytes saved the first time, so the save never sees a payload missing something it stored.
 
 Drift reaches the database once commands can bypass or clear the cache for what they scrape. That option (`--rescrape`, `--clean-cache` or similar) is not designed yet. This plan is for that work.
 
@@ -156,4 +156,4 @@ These were not settled. Decide them while building.
 - `src/Golang/motorsporttracker/scrapping/{series,seasons,calendar,classification}/infrastructure/save_*_repository.go` hold the four repositories that gain a delete.
 - `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` holds `shared.Save()`, which stays as it is.
 - `etc/Migrations/core/` holds 12 tables, 12 history triggers and 12 foreign keys.
-- `src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go` and `src/Golang/motorsportstats/connector/infrastructure/connector_decorator_with_cache.go` are where the rescrape option will bypass or clear the cache.
+- `src/Golang/motorsportstats/dependencyinjection/infrastructure/services_registry.go` and `src/Golang/motorsportstats/connector/infrastructure/connector_decorator_with_cache.go` are where the rescrape option will bypass or clear the cache.

@@ -77,12 +77,14 @@ motorsporttracker/
     classification/   # Race classification scraping
     shared/           # Shared repository helpers (Save, UpsertStats)
   dependencyinjection/
-    infrastructure/   # ServicesRegistry (lazy-init DI container)
+    infrastructure/   # ServicesRegistry: core DB, intents queue, and the motorsportstats registry it holds
   registration/       # Centralized handler + intent registration
 
 motorsportstats/
   connector/
     infrastructure/   # HTTP client + cache decorator (CachedConnector)
+  dependencyinjection/
+    infrastructure/   # ServicesRegistry: cached connector, gateway, client-cache DB
   gateway/
     domain/           # Gateway interface + domain structs (Series, Season, Event, Classification, etc.)
     infrastructure/   # GatewayUsingConnector (JSON parsing)
@@ -121,7 +123,7 @@ Uses `golang-migrate` to apply SQL migrations from `etc/Migrations/`. Reads migr
 
 Walks series → seasons → calendar → classification against the **live** motorsportstats API and reports any endpoint whose payload no longer matches the connector's JSON Schemas. Needs only `REMOTE_API_HOST` and `PROJECT_DIR` — no database, no queue.
 
-It exists because schema validation lives in `ConnectorUsingClient.validate()`, *below* the caching decorators: a cache hit hands bytes to the gateway unvalidated, so the normal application path cannot detect drift while the caches are warm. The canary therefore constructs an uncached connector itself rather than taking one from `ServicesRegistry`, and consequently writes nothing to `etc/ConnectorCache/` or Postgres.
+It exists because schema validation lives in `ConnectorUsingClient.validate()`, *below* the caching decorators: a cache hit hands bytes to the gateway unvalidated, so the normal application path cannot detect drift while the caches are warm. The canary therefore takes the base connector from the motorsportstats `ServicesRegistry` (`GetBaseConnector`) rather than the cached one, and consequently writes nothing to `etc/ConnectorCache/` or Postgres.
 
 Each response is checked three ways from a single request:
 
@@ -143,7 +145,7 @@ Probe set (a slice at the top of `main.go`, one line per series): `FIA Formula O
 
 Walks series → seasons → calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database. Needs only `REMOTE_API_HOST` and `PROJECT_DIR`.
 
-Its connector stack is built in `main.go`, not taken from `ServicesRegistry`, so it has no database:
+Its connector stack is built in `main.go`, not taken from the motorsportstats `ServicesRegistry`, so it has no database:
 
 ```
 CachedConnector(FileSystemCache)

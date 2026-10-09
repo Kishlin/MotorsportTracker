@@ -111,7 +111,7 @@ Write to `etc/Migrations/core/` — **lowercase**. The capitalised `Core/` direc
 In `src/Golang/motorsporttracker/registration/registration.go`, both of these:
 
 - add an entry to the `registeredIntents` map, keyed by `Scrape$1IntentName`
-- add a `register$1Handlers(...)` func that wires the handler through the use case using `registry.GetMotorsportStatsGateway(ctx)` and `registry.GetCoreDatabase(ctx)`, then call it from `RegisterAllHandlers`
+- add a `register$1Handlers(...)` func that wires the handler through the use case using `registry.MotorsportStats().GetGateway(ctx)` and `registry.GetCoreDatabase(ctx)`, then call it from `RegisterAllHandlers`
 
 Missing the map entry compiles fine and fails at runtime. Missing the handler registration also compiles fine and fails when the message is consumed.
 

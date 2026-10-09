@@ -43,7 +43,7 @@ Every core table has a `_history` counterpart with trigger-based tracking (`vali
 
 Three-layer caching stack: `HTTP → DatabaseCache → FileSystemCache (optional)`. Transparent decorator pattern via `CachedConnector`. Cache interface (`Get`/`Set` with namespace+key) has three pluggable backends (in-memory, database, filesystem).
 
-**Caveat, corrected 2026-08-01 — schema validation sits *below* the cache.** `validate()` runs only in `ConnectorUsingClient`, so a hit at either cache layer hands bytes to the gateway having checked nothing. `ServicesRegistry.GetMotorsportStatsGateway` always wraps the connector in a `DatabaseCache`, and adds a `FileSystemCache` when `USE_FS_CACHE=true` (which `.env.dev` sets), so **the application path cannot detect upstream schema drift while the caches are warm**. That is the correct trade-off for scraping — re-validating cached bytes buys nothing — but it means the schemas cannot double as a drift alarm. `apps/Backend/ApiCanary` exists to cover that gap by building an uncached connector directly.
+**Caveat, corrected 2026-08-01 — schema validation sits *below* the cache.** `validate()` runs only in `ConnectorUsingClient`, so a hit at either cache layer hands bytes to the gateway having checked nothing. The motorsportstats `ServicesRegistry.GetConnector` always wraps the connector in a `DatabaseCache`, and adds a `FileSystemCache` when `USE_FS_CACHE=true` (which `.env.dev` sets), so **the application path cannot detect upstream schema drift while the caches are warm**. That is the correct trade-off for scraping — re-validating cached bytes buys nothing — but it means the schemas cannot double as a drift alarm. `apps/Backend/ApiCanary` exists to cover that gap by taking the uncached base connector (`GetBaseConnector`).
 
 ### 6. Unified Message Contract
 Same `Message{Type, Metadata}` struct flows through CLI (MotorsportTracker), queue publisher (CommandsPublisher), and queue consumer (CommandsProcessor). Handlers are transport-agnostic.
@@ -129,7 +129,7 @@ Naming nits found while re-verifying, not tracked as numbered issues:
 
 | Component | Path |
 |-----------|------|
-| ServicesRegistry (DI) | `src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go` |
+| ServicesRegistry (DI) | `src/Golang/motorsportstats/dependencyinjection/infrastructure/services_registry.go`, `src/Golang/motorsporttracker/dependencyinjection/infrastructure/services_registry.go` |
 | Save helpers (upsert) | `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` |
 | Connector (HTTP+schema) | `src/Golang/motorsportstats/connector/infrastructure/connector_using_client.go` |
 | Cached connector | `src/Golang/motorsportstats/connector/infrastructure/connector_decorator_with_cache.go` |

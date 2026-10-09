@@ -46,7 +46,7 @@ An app is any `main` package in `go.work`, named by its directory. `make go-run 
 
 The subcommand is the **full intent name**. Registered names: `scrape:series`, `scrape:seasons`, `scrape:seasons-one`, `scrape:seasons-all`, `scrape:calendar`, `scrape:classification`. A bare name such as `series` returns `unknown subcommand`.
 
-`make go-run APP=ApiCanary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it cannot go through `ServicesRegistry`.
+`make go-run APP=ApiCanary` takes no intent — it walks a fixed probe set. It hits the live API on every run and needs no database, so it works with the Postgres container stopped. Pass `ARGS="--strict"` to fail on warnings (added upstream fields) as well as on schema breaks. Exit code is 0 when clear, 1 otherwise, so it is safe to drive from cron or CI. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it checks and why it takes the uncached base connector.
 
 When a schema break is reported, the fix is to update the matching file in `src/Golang/motorsportstats/connector/infrastructure/schemas/` and run the canary again — the connector embeds them at build time, and `go-run` rebuilds the app first, so the edited schema takes effect on that run. The added-key warnings read the same files from disk at run time and do not need a rebuild.
 

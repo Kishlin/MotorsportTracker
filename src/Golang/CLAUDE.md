@@ -64,6 +64,6 @@ Seven modules under `go.work`. After changing dependencies run `make go-vendor` 
 
 `ConnectorUsingClient.validate()` is the only place the embedded JSON Schemas are enforced, and the caching decorators wrap it. A hit in `DatabaseCache` or `FileSystemCache` therefore returns bytes that were never validated, so the application path cannot detect upstream drift while the caches are warm. Do not "fix" this by validating in the decorator — re-checking bytes that already passed once buys nothing.
 
-Drift detection is `apps/Backend/ApiCanary` instead, which builds `NewConnectorUsingClient` directly with no decorators. If you change a schema or an endpoint constant, run `make go-run APP=ApiCanary` to confirm the live API still agrees.
+Drift detection is `apps/Backend/ApiCanary` instead, which takes `GetBaseConnector()` from the motorsportstats `ServicesRegistry`: the `ConnectorUsingClient` with no decorators. If you change a schema or an endpoint constant, run `make go-run APP=ApiCanary` to confirm the live API still agrees.
 
 Note the schemas do not set `additionalProperties: false`, so validation is blind to fields motorsportstats adds; the canary reads the same `schemas/*.json` off disk to diff payload keys and reports those separately as warnings.
