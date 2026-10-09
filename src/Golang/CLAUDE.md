@@ -66,4 +66,6 @@ Seven modules under `go.work`. After changing dependencies run `make go-vendor` 
 
 Drift detection is `apps/Backend/ApiCanary` instead, which takes `GetBaseConnector()` from the motorsportstats `ServicesRegistry`: the `ConnectorUsingClient` with no decorators. If you change a schema or an endpoint constant, run `make go-run APP=ApiCanary` to confirm the live API still agrees.
 
-Note the schemas do not set `additionalProperties: false`, so validation is blind to fields motorsportstats adds; the canary reads the same `schemas/*.json` off disk to diff payload keys and reports those separately as warnings.
+Note the older schemas (series, seasons, calendar, classification) do not set `additionalProperties: false`, so validation is blind to fields motorsportstats adds; the canary reads the same `schemas/*.json` off disk to diff payload keys and reports those separately as warnings. `available_standings.json` does set it, so an added field fails validation outright.
+
+The validator, `qri-io/jsonschema`, runs draft 2019-09 whatever `$schema` says. A shared subschema goes under `$defs` and is referenced as `#/$defs/<name>`: draft-07 `definitions` parses but never resolves, and every `$ref` to it fails validation, valid payloads included.

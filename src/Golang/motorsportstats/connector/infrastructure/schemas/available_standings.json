@@ -1,4 +1,61 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Open schema for the available standings, until samples settle the real one"
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "properties": {
+    "driverStandings": {
+      "$ref": "#/$defs/standings"
+    },
+    "teamStandings": {
+      "$ref": "#/$defs/standings"
+    },
+    "constructorStandings": {
+      "$ref": "#/$defs/standings"
+    }
+  },
+  "required": [
+    "driverStandings",
+    "teamStandings",
+    "constructorStandings"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "standings": {
+      "description": "One entry per standing: null for the overall one, which only ever comes first, then one per class.",
+      "type": "array",
+      "items": [
+        {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/class"
+            }
+          ]
+        }
+      ],
+      "additionalItems": {
+        "$ref": "#/$defs/class"
+      },
+      "uniqueItems": true
+    },
+    "class": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uuid": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "uuid"
+      ],
+      "additionalProperties": false
+    }
+  }
 }

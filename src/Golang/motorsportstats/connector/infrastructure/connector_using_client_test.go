@@ -104,6 +104,49 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateClassification
 	require.NoError(suite.T(), err)
 }
 
+// The base payload is the 2017 World Endurance Championship, verbatim: an overall standing then
+// classes for drivers and constructors, classes alone for teams.
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateAvailableStandings() {
+	lmp2 := `{"name":"LMP2","uuid":"3da46a4d-11f3-428a-bb81-5c646959c99f"}`
+	gtePro := `{"name":"LMGTEPro","uuid":"35c0e386-1af3-4790-bbe2-208269a7c775"}`
+	gteAm := `{"name":"LMGTEAm","uuid":"d1245d88-10ea-4fe9-81bb-b2cf0596fe89"}`
+
+	payload := func(drivers string, extra string) []byte {
+		return []byte(`{"driverStandings":` + drivers + `,"teamStandings":[` + lmp2 + `,` + gtePro + `,` + gteAm + `],"constructorStandings":[null,` + gtePro + `]` + extra + `}`)
+	}
+
+	valid := map[string][]byte{
+		"An overall standing then classes": payload(`[null,`+lmp2+`,`+gtePro+`,`+gteAm+`]`, ""),
+		"An overall standing alone":        payload(`[null]`, ""),
+		"Classes without an overall one":   payload(`[`+lmp2+`]`, ""),
+		"No standing of a kind at all":     payload(`[]`, ""),
+	}
+
+	for name, content := range valid {
+		suite.Run(name, func() {
+			require.NoError(suite.T(), suite.connector.validate(suite.T().Context(), content, schemaAvailableStandings))
+		})
+	}
+
+	invalid := map[string][]byte{
+		"An overall standing after a class": payload(`[`+lmp2+`,null]`, ""),
+		"Two overall standings":             payload(`[null,null]`, ""),
+		"The same class twice":              payload(`[null,`+lmp2+`,`+lmp2+`]`, ""),
+		"A class with an unknown key":       payload(`[{"name":"LMP2","uuid":"3da46a4d-11f3-428a-bb81-5c646959c99f","colour":"#000"}]`, ""),
+		"A class without a uuid":            payload(`[{"name":"LMP2"}]`, ""),
+		"A class with an empty name":        payload(`[{"name":"","uuid":"3da46a4d-11f3-428a-bb81-5c646959c99f"}]`, ""),
+		"A standing that is not a class":    payload(`["LMP2"]`, ""),
+		"An unknown kind of standing":       payload(`[null]`, `,"nationStandings":[null]`),
+		"A missing kind of standing":        []byte(`{"driverStandings":[null],"teamStandings":[]}`),
+	}
+
+	for name, content := range invalid {
+		suite.Run(name, func() {
+			require.Error(suite.T(), suite.connector.validate(suite.T().Context(), content, schemaAvailableStandings))
+		})
+	}
+}
+
 func TestFunctional_ConnectorUsingClient(t *testing.T) {
 	t.Parallel()
 
