@@ -6,13 +6,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
-	"time"
 
-	connector "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/connector/infrastructure"
-	cache "github.com/kishlin/MotorsportTracker/src/Golang/shared/cache/infrastructure"
-	client "github.com/kishlin/MotorsportTracker/src/Golang/shared/client/infrastructure"
+	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/dependencyinjection/infrastructure"
 	env "github.com/kishlin/MotorsportTracker/src/Golang/shared/env/infrastructure"
 	logger "github.com/kishlin/MotorsportTracker/src/Golang/shared/logger/infrastructure"
 )
@@ -35,7 +31,6 @@ func main() {
 	flag.Var(&series, "series", "exact name of a series to warm, as motorsportstats spells it; repeatable")
 	from := flag.Int("from", 0, "first season year to warm; 0 for no lower bound")
 	to := flag.Int("to", 0, "last season year to warm; 0 for no upper bound")
-	delay := flag.Duration("delay", time.Second, "pause before each request that reaches motorsportstats")
 	flag.Parse()
 
 	if len(series) == 0 {
@@ -50,46 +45,40 @@ func main() {
 
 	logger.SetupSlog()
 
-	host := os.Getenv("REMOTE_API_HOST")
-	if host == "" {
-		_, _ = fmt.Fprintln(os.Stderr, "REMOTE_API_HOST environment variable is not set")
+	registry := motorsportstats.NewServicesRegistry()
+
+	// Without the filesystem layer the walk would fill the client-cache database alone, and
+	// etc/ConnectorCache/ is the whole point of the run.
+	useFSCache := strings.ToLower(os.Getenv("USE_FS_CACHE")) == "true"
+	if useFSCache == false {
+		_, _ = fmt.Fprintln(os.Stderr, "USE_FS_CACHE is not true, the warmer would leave etc/ConnectorCache/ untouched")
 		os.Exit(1)
 	}
 
-	projectDir := os.Getenv("PROJECT_DIR")
-	if projectDir == "" {
-		_, _ = fmt.Fprintln(os.Stderr, "PROJECT_DIR environment variable is not set, the cache cannot be located")
-		os.Exit(1)
-	}
+	ctx := context.Background()
 
-	// Only the filesystem cache, and not the ServicesRegistry gateway: the warmer needs no database. The
-	// throttle sits below the cache so that hits are never delayed.
-	network := newThrottledConnector(connector.NewConnectorUsingClient(client.NewClient(host)), *delay)
-	conn := connector.NewCachedConnector(
-		network,
-		cache.NewFileSystemCache(filepath.Join(projectDir, "etc", "ConnectorCache"), ".json"),
-	)
+	r, err := warm(ctx, registry.GetConnector(ctx), scope{series: series, from: *from, to: *to})
 
-	r, err := warm(context.Background(), conn, scope{series: series, from: *from, to: *to})
+	// Closed by hand rather than deferred: the os.Exit calls below would skip a deferred Close.
+	registry.Close()
+
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error warming the cache: %v\n", err)
 		os.Exit(1)
 	}
 
-	printReport(os.Stdout, r, network.calls)
+	printReport(os.Stdout, r)
 
 	if len(r.failures) > 0 {
 		os.Exit(1)
 	}
 }
 
-func printReport(w io.Writer, r *report, networkCalls int) {
+func printReport(w io.Writer, r *report) {
 	for _, endpoint := range r.endpoints {
 		c := r.counts[endpoint]
 		_, _ = fmt.Fprintf(w, "%-16s %6d walked %6d failed\n", endpoint, c.walked, c.failed)
 	}
-
-	_, _ = fmt.Fprintf(w, "\n%d requests reached motorsportstats, the rest were cache hits\n", networkCalls)
 
 	if len(r.failures) == 0 {
 		return

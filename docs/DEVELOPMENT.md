@@ -50,7 +50,7 @@ The subcommand is the **full intent name**. Registered names: `scrape:series`, `
 
 When a schema break is reported, the fix is to update the matching file in `src/Golang/motorsportstats/connector/infrastructure/schemas/` and run the canary again — the connector embeds them at build time, and `go-run` rebuilds the app first, so the edited schema takes effect on that run. The added-key warnings read the same files from disk at run time and do not need a rebuild.
 
-`make go-run APP=CacheWarmer` needs at least one `--series`, spelt exactly as in `etc/ConnectorCache/series/all.json`; `--from` and `--to` bound the season years, and `--delay` (default `1s`) paces the requests that miss the cache. No database is needed. Full F1 history is several thousand requests, so bound the years; an interrupted run picks up where it stopped. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it warms.
+`make go-run APP=CacheWarmer` needs at least one `--series`, spelt exactly as in `etc/ConnectorCache/series/all.json`; `--from` and `--to` bound the season years. It goes through the same caches as the scrapers, so it needs the Postgres container and `USE_FS_CACHE=true` (which `.env.dev` sets), and refuses to start without the latter. Requests that miss both caches are not paced. Full F1 history is several thousand requests, so bound the years; an interrupted run picks up where it stopped. See [ARCHITECTURE.md](ARCHITECTURE.md) for what it warms.
 
 ```bash
 make go-run APP=CacheWarmer ARGS='--series "FIA Formula One World Championship" --from 1950 --to 1959'

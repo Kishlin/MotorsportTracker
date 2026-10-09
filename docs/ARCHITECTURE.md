@@ -143,21 +143,21 @@ Probe set (a slice at the top of `main.go`, one line per series): `FIA Formula O
 
 ### `apps/Backend/CacheWarmer/` — Filesystem Cache Filler
 
-Walks series → seasons → calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database. Needs only `REMOTE_API_HOST` and `PROJECT_DIR`.
+Walks series → seasons → calendar → sessions for the series named with `--series` (repeatable, exact upstream name) and the seasons in `--from`/`--to`, and does nothing with the payloads but let the connector cache them in `etc/ConnectorCache/`. It is there to collect upstream data for study without scraping it into the core database.
 
-Its connector stack is built in `main.go`, not taken from the motorsportstats `ServicesRegistry`, so it has no database:
+It takes its connector from the motorsportstats `ServicesRegistry`, the same chain the scrapers use, so it needs the client-cache database as well as `REMOTE_API_HOST` and `PROJECT_DIR`:
 
 ```
 CachedConnector(FileSystemCache)
-  -> throttledConnector      // pauses --delay (default 1s) before each request, counts them
+  -> CachedConnector(DatabaseCache)
     -> ConnectorUsingClient
 ```
 
-The throttle sits below the cache, so hits cost nothing and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Session endpoints are fetched only for sessions with `hasResults`.
+It exits at once unless `USE_FS_CACHE=true`: without the filesystem layer it would fill the database alone. A payload already in the database is copied to `etc/ConnectorCache/` without a request, and a re-run is a resume: only what is missing, or failed last time, reaches motorsportstats. Requests are not paced. Session endpoints are fetched only for sessions with `hasResults`.
 
 A failed call is reported and its subtree skipped; the run carries on and exits 1 at the end. A payload that fails schema validation is one of these failures and is **not cached** — `make go-run APP=ApiCanary` explains the break.
 
-Warming a new endpoint: an endpoint keyed by a session UUID is one line in `sessionEndpoints` (`warm.go`) plus its method on `throttledConnector`, which the compiler asks for. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions.
+Warming a new endpoint: an endpoint keyed by a session UUID is one line in `sessionEndpoints` (`warm.go`) once the connector has the method. An endpoint keyed by another level gets its own list at that level; one whose payload reveals new identifiers to walk needs walk code, as the calendar does for sessions.
 
 ## Frontend
 

@@ -49,6 +49,36 @@ func lookup(payloads map[string]string, resource string, uuid string) ([]byte, e
 	return []byte(payload), nil
 }
 
+// countingConnector counts the calls that get past the cache, to tell a fetch from a hit.
+type countingConnector struct {
+	inner connector.Connector
+	calls int
+}
+
+func (c *countingConnector) GetSeries(ctx context.Context) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetSeries(ctx)
+}
+
+func (c *countingConnector) GetSeasons(ctx context.Context, seriesUUID string) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetSeasons(ctx, seriesUUID)
+}
+
+func (c *countingConnector) GetCalendar(ctx context.Context, seasonUUID string) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetCalendar(ctx, seasonUUID)
+}
+
+func (c *countingConnector) GetClassification(ctx context.Context, sessionUUID string) ([]byte, error) {
+	c.calls++
+
+	return c.inner.GetClassification(ctx, sessionUUID)
+}
+
 // upstream holds F1 with three seasons. 1950 has a race with results, a practice without, and a
 // qualifying whose classification fails; 1951 has one race; 2025's calendar fails.
 var upstream = fakeConnector{
@@ -77,7 +107,7 @@ type WarmUnitTestSuite struct {
 	suite.Suite
 
 	cacheDir string
-	network  *throttledConnector
+	network  *countingConnector
 	conn     connector.Connector
 }
 
@@ -88,7 +118,7 @@ func TestUnit_Warm(t *testing.T) {
 // SetupSubTest gives every case a cold cache.
 func (suite *WarmUnitTestSuite) SetupSubTest() {
 	suite.cacheDir = suite.T().TempDir()
-	suite.network = newThrottledConnector(upstream, 0)
+	suite.network = &countingConnector{inner: upstream}
 	suite.conn = connector.NewCachedConnector(suite.network, cache.NewFileSystemCache(suite.cacheDir, ".json"))
 }
 
@@ -170,7 +200,7 @@ func (suite *WarmUnitTestSuite) TestPrintReport() {
 	suite.Run("A lone error ending in a newline is one line", func() {
 		var out bytes.Buffer
 
-		printReport(&out, failed("validation errors: /details/9/nationality: type should be object, got null\n"), 0)
+		printReport(&out, failed("validation errors: /details/9/nationality: type should be object, got null\n"))
 
 		require.Contains(suite.T(), out.String(), "got null\n")
 		require.NotContains(suite.T(), out.String(), "lines)")
@@ -179,7 +209,7 @@ func (suite *WarmUnitTestSuite) TestPrintReport() {
 	suite.Run("Further errors are counted, not printed", func() {
 		var out bytes.Buffer
 
-		printReport(&out, failed("validation errors: first\nsecond\nthird\n"), 0)
+		printReport(&out, failed("validation errors: first\nsecond\nthird\n"))
 
 		require.Contains(suite.T(), out.String(), "validation errors: first (+2 lines)\n")
 		require.NotContains(suite.T(), out.String(), "second")

@@ -251,7 +251,7 @@ Each bounded context has its own `ServicesRegistry`, holding the services that c
 | `motorsportstats/dependencyinjection/infrastructure` | `GetBaseConnector` (`ConnectorUsingClient`, no cache), `GetConnector` (the base connector behind the caches), `GetGateway` (built on the cached one), `GetClientCacheDatabase` (the connector cache's own database) |
 | `motorsporttracker/dependencyinjection/infrastructure` | `GetCoreDatabase`, `GetIntentsQueue`, and `MotorsportStats()`, the motorsportstats registry it holds |
 
-The motorsporttracker registry creates its motorsportstats registry itself and closes it in its own `Close()`, following the dependency the use cases already have on the motorsportstats gateway. An app builds the registry of the one context it works in and never both: the scraping apps take the motorsporttracker one, while `ApiCanary` takes the motorsportstats one and so does not import `motorsporttracker` at all.
+The motorsporttracker registry creates its motorsportstats registry itself and closes it in its own `Close()`, following the dependency the use cases already have on the motorsportstats gateway. An app builds the registry of the one context it works in and never both: the scraping apps take the motorsporttracker one, while `CacheWarmer` and `ApiCanary` take the motorsportstats one and so do not import `motorsporttracker` at all.
 
 Wiring belongs to the apps, not the library: `apps/*/main.go` is the composition root, and there is deliberately no project-wide registry under `src/Golang/` that would import every context.
 
@@ -289,7 +289,7 @@ Key points:
 - Services are created on first access, not at startup
 - Missing required env vars cause a panic (fail loudly)
 - `Close()` method cleans up all initialized resources, the held motorsportstats registry's included
-- The motorsporttracker registry is used by MotorsportTracker, CommandsProcessor and CommandsPublisher; the motorsportstats one directly by ApiCanary
+- The motorsporttracker registry is used by MotorsportTracker, CommandsProcessor and CommandsPublisher; the motorsportstats one directly by CacheWarmer and ApiCanary
 
 ## Caching
 
