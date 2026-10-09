@@ -81,9 +81,14 @@ func run() int {
 }
 
 func printReport(w io.Writer, r *report) {
+	width := 0
+	for _, endpoint := range r.endpoints {
+		width = max(width, len(endpoint))
+	}
+
 	for _, endpoint := range r.endpoints {
 		c := r.counts[endpoint]
-		_, _ = fmt.Fprintf(w, "%-16s %6d walked %6d failed\n", endpoint, c.walked, c.failed)
+		_, _ = fmt.Fprintf(w, "%-*s %6d walked %6d failed\n", width, endpoint, c.walked, c.failed)
 	}
 
 	if len(r.failures) == 0 {

@@ -220,6 +220,18 @@ func (suite *WarmUnitTestSuite) TestPrintReport() {
 		return r
 	}
 
+	suite.Run("The counts line up past the longest endpoint name", func() {
+		var out bytes.Buffer
+
+		r := newReport()
+		r.count("series").walked++
+		r.count("available_standings").walked++
+
+		printReport(&out, r)
+
+		require.Equal(suite.T(), "series                   1 walked      0 failed\navailable_standings      1 walked      0 failed\n", out.String())
+	})
+
 	suite.Run("A lone error ending in a newline is one line", func() {
 		var out bytes.Buffer
 
