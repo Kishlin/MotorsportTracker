@@ -65,6 +65,66 @@ func (g GatewayUsingConnector) GetCalendar(ctx context.Context, seasonUUID strin
 	return calendar, nil
 }
 
+func (g GatewayUsingConnector) GetAvailableStandings(ctx context.Context, seasonUUID string) (*domain.AvailableStandings, error) {
+	data, err := g.connector.GetAvailableStandings(ctx, seasonUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting available standings from connector: %w", err)
+	}
+
+	var availableStandings *domain.AvailableStandings
+	err = json.Unmarshal(data, &availableStandings)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling available standings data: %w", err)
+	}
+
+	return availableStandings, nil
+}
+
+func (g GatewayUsingConnector) GetDriverStandings(ctx context.Context, seasonUUID string, classUUID string) (*domain.DriverStandings, error) {
+	data, err := g.connector.GetStandings(ctx, seasonUUID, connector.StandingDrivers, classUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting driver standings from connector: %w", err)
+	}
+
+	var standings *domain.DriverStandings
+	err = json.Unmarshal(data, &standings)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling driver standings data: %w", err)
+	}
+
+	return standings, nil
+}
+
+func (g GatewayUsingConnector) GetTeamStandings(ctx context.Context, seasonUUID string, classUUID string) (*domain.TeamStandings, error) {
+	data, err := g.connector.GetStandings(ctx, seasonUUID, connector.StandingTeams, classUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting team standings from connector: %w", err)
+	}
+
+	var standings *domain.TeamStandings
+	err = json.Unmarshal(data, &standings)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling team standings data: %w", err)
+	}
+
+	return standings, nil
+}
+
+func (g GatewayUsingConnector) GetConstructorStandings(ctx context.Context, seasonUUID string, classUUID string) (*domain.ConstructorStandings, error) {
+	data, err := g.connector.GetStandings(ctx, seasonUUID, connector.StandingConstructors, classUUID)
+	if err != nil {
+		return nil, fmt.Errorf("getting constructor standings from connector: %w", err)
+	}
+
+	var standings *domain.ConstructorStandings
+	err = json.Unmarshal(data, &standings)
+	if err != nil {
+		return nil, fmt.Errorf("unmarshalling constructor standings data: %w", err)
+	}
+
+	return standings, nil
+}
+
 func (g GatewayUsingConnector) GetClassification(ctx context.Context, sessionUUID string) (*domain.Classification, error) {
 	data, err := g.connector.GetClassification(ctx, sessionUUID)
 	if err != nil {
