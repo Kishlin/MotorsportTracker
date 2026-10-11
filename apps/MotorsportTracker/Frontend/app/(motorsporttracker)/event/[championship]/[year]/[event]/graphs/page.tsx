@@ -13,8 +13,8 @@ declare type PageParams = {
     year: string,
 };
 
-const Page = async (props: { params: Promise<PageParams> }) => {
-    const { championship, event, year } = await props.params;
+const Page = async ({ params }: { params: Promise<PageParams> }) => {
+    const { championship, event, year } = await params;
 
     const { isMultiDriver } = championships[championship];
 

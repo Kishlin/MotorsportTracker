@@ -24,8 +24,8 @@ export async function generateMetadata(props: { params: Promise<PageParams> }): 
     };
 }
 
-const Page = async (props: { params: Promise<PageParams> }) => {
-    const { month, year } = await props.params;
+const Page = async ({ params } : { params: Promise<PageParams> }) => {
+    const { month, year } = await params;
 
     const events = await calendarApi(month, year);
 
