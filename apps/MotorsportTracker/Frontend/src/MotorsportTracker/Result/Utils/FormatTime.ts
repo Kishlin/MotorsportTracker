@@ -4,15 +4,28 @@ const pad = (value: number|string, length: number) => `00${value}`.slice(-length
 
 const padAllButFirst = (value: number, index: number) => (0 === index ? value : pad(value, 2));
 
-const formatTime: TimeFormatter = (time, skipMillis = false) => {
-    if ('0' === time) {
-        return '';
+const formatTime: TimeFormatter = (time: string, skipMillis = false) => {
+    let stime: string;
+    if ('string' !== typeof time) {
+        stime = String(time);
+    } else {
+        stime = time;
     }
 
-    const milliseconds = parseInt(time.slice(-3), 10);
+    let milliseconds = 0;
+    try {
+        milliseconds = parseInt(stime.slice(-3), 10);
+    } catch (err) {
+        console.log(err);
+    }
 
+    let seconds = 0;
     const parts = [];
-    let seconds = 3 < time.length ? parseInt(time.slice(0, -3), 10) : 0;
+    try {
+        seconds = 3 < stime.length ? parseInt(stime.slice(0, -3), 10) : 0;
+    } catch (err) {
+        console.log(err);
+    }
 
     do {
         parts.push(seconds % 60);
