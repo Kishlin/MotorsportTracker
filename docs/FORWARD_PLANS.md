@@ -8,7 +8,7 @@ File and line references were checked against the code on the date each plan giv
 
 ## 1. Keeping Stored Data in Step With Upstream on Rescrape
 
-Decided 2026-09-28. Not built: build it together with the rescrape option. Implementing it resolves review issue 16 in [review/ISSUES.md](review/ISSUES.md).
+Decided 2026-09-28. Not built: build it together with the rescrape option. Implementing it resolves review issue 16 in [review/ISSUES.md](review/ISSUES.md). Plan 2 replaces the horizontal tables this plan protects with look tables, which are never deleted.
 
 ### The problem
 
@@ -157,3 +157,94 @@ These were not settled. Decide them while building.
 - `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` holds `shared.Save()`, which stays as it is.
 - `etc/Migrations/core/` holds 12 tables, 12 history triggers and 12 foreign keys.
 - `src/Golang/motorsportstats/dependencyinjection/infrastructure/services_registry.go` and `src/Golang/motorsportstats/connector/infrastructure/connector_decorator_with_cache.go` are where the rescrape option will bypass or clear the cache.
+
+---
+
+## 2. Storing Embedded Entities as Content-Addressed Looks
+
+Decided 2026-10-13, while designing the standings tables. Standings are built this way first. Classifications move over later, as a separate job (see "Classifications, later"). This plan amends plan 1: the horizontal tables plan 1 protects go away.
+
+### The problem
+
+Every payload row embeds entity objects: a driver, a team, a country, a constructor. The classification save splits them into identity tables keyed by UUID (`drivers`, `teams`, `countries`) and a look table keyed by part of its content (`garages`, keyed `uuid:name:colour`). Standings embed the same entities, so the question was whether to share those tables, and how to key them.
+
+### What the data shows
+
+First measured on 2026-10-13 on 9,952 classifications and 568 standings of F1, MotoGP, WEC and IMSA, then re-measured the same day once `etc/ConnectorCache/` held 23 series over every season: 24,354 classifications and 956 standings, from single-seaters, sportscar and endurance series, GT series, MotoGP and the World Rally Championship, all fetched within a few days. Every hypothesis held on both runs. The numbers below are from the second.
+
+- **Looks repeat a lot.** Driver objects: 1,173,950 mentions, 20,107 distinct (58×). Teams: 837,629 and 5,400 (155×). Countries: 831,960 and 105 (7,923×). Constructors: 1,577 and 311 (5×). Race laps will multiply this: the PHP production database holds 2.2 million of them, in 1.1 GB.
+- **A team's look belongs to an entry, not to the team.** 508 of the 3,299 team UUIDs in classifications have more than one look, and a UUID has several looks within one season 731 times. The Lotus UUID is both "Gold Leaf Team Lotus" (`#0090FF`) and "John Player Team Lotus" (`#F92515`) at the 1971 Canadian Grand Prix. This is what `garages` exists for.
+- **A driver's look never varies.** None of 15,748 driver UUIDs has more than one name, short code, colour, picture or nationality, within a source or across sources. Upstream keeps one record per driver and embeds its current state in every payload, past or present. Kvyat is "Russia" from F1 2014 to IMSA 2025, through the years he raced as a neutral. Short codes are per driver, not per series: Norris is `NORL` in F1 too. They are not unique either: `MAN` is shared by several drivers, Mansell among them. The only axis of change is time between fetches, which a single snapshot cannot show.
+- **Sources disagree on fields, not on values.** Team standings send a profile photo as `team.picture` (`teamProfilePicture-<uuid>.jpg`, or null) and the colour badge as the row's `icon`. Every other source sends the badge as `team.picture`. The badge is always `team/icon/teamColour_<colour>.svg` (2,924 of 2,924) and matches the other sources for the same team and colour (2,895 of 2,895 comparable). Every source keeps its own image fields to these shapes, rallies included, and every country UUID has one look (105 of 105). Standings drivers have no `firstName` or `lastName`.
+
+### Options considered
+
+**A. Identity tables keyed by UUID, holding the look.** Today's `drivers` and `countries`. Rejected: there is one look per UUID, so a source sending a different look overwrites the other, and history fills with the flip-flop. It only works for drivers today because driver looks never vary.
+
+**B. Look tables keyed by part of their content.** Today's `garages`. Rejected: fields outside the key get overwritten. Within classifications this hits 6 of 4,522 garage keys, all on the car icon, as with a placeholder team whose car icon is `RaceCar` in some series and `Bike` in MotoGP. Shared with team standings, it would hit every photo.
+
+**C. Look fields as columns on every fact row.** Rejected after measuring: the 58× to 7,923× repetition above, multiplied again by race laps.
+
+**D. UUID-only identity tables, next to the look tables.** Rejected. A foreign key to a table filled from the same payload a moment earlier proves nothing, and analysis joins need the UUID on both sides, not a table between them.
+
+**E. Look tables keyed by their full content.** Chosen.
+
+### Decision
+
+**Every embedded entity is stored as a look: one row per distinct content, keyed by a hash of every field.** There is one look table per entity, shared across sources: `driver_looks`, `team_looks`, `country_looks`, `constructor_looks` and `class_looks`. The rule holds everywhere, even where a table stays small: the cache has 311 constructor looks over 1,577 mentions, and a few dozen classes.
+
+- **Insert-only.** Identical content hashes the same and is skipped. A difference in any field makes a new row. Nothing is ever overwritten, so a past row keeps the look it was sent with. `shared.Save()` with `hash` as the conflict column already behaves this way: its `WHERE hash IS DISTINCT FROM EXCLUDED.hash` can never hold on a hash conflict.
+- **No history table.** A look row never changes, so there is nothing to record. `etc/Migrations/CLAUDE.md` gets this as an explicit exception to "every table needs history".
+- **Every save sorts its rows by the conflict key before batching.** Two batch saves touching the same keys in a different order can deadlock: Postgres aborts one and the queue retries it, which is loud but avoidable. Sorting gives every worker the same lock order. Any consistent total order works, so `shared.Save()` can do it once for every caller, from the conflict columns it already receives.
+- **The hash must tell null from `""`, and no value may be able to break it.** Hash a JSON array of the fields in a fixed column order, or an equivalent encoding. Today's helpers do not qualify: `SaveCountries` hashes `uuid|name|flag` with nulls as `""`, and the cache holds empty team names. Under insert-only, a collision would silently give a row another look's values.
+- **Looks are never deleted.** A rescrape that wipes leaf rows leaves their looks behind. An orphaned look is harmless.
+
+**Columns are named by meaning, and the repository maps each source's keys onto them.** Values are placed, never changed.
+
+| Look | Column | Classifications, driver and constructor standings | Team standings |
+|---|---|---|---|
+| `team_looks` | `name`, `colour` | `team.name`, `team.colour` | same |
+| | `badge` | `team.picture` | the row's `icon` |
+| | `car_icon` | `team.carIcon` | same |
+| | `photo` | not sent | `team.picture` |
+| `driver_looks` | `name`, `short_code`, `colour` | as sent | as sent |
+| | `first_name`, `last_name` | sent by classifications | not sent by standings |
+| | `photo` | `driver.picture` | same |
+| `country_looks` | `name`, `flag` | `name`, `picture` | same |
+| `constructor_looks` | `name`, `logo` | constructor standings only: `name`, `picture` | not sent |
+| `class_looks` | `name` | available standings only: `name` | not sent |
+
+A field a source does not send stays NULL. Two sources sending the same content, apart from a column only one of them sends, give two rows. That is the price of not inventing values.
+
+**Fact rows carry the entity's UUID inline, next to the look reference:** `driver_uuid` and `driver_look`, for instance. Analyses filter and join on the UUID, as in classifications to race laps on `(session, driver_uuid)`. Display reads the look. There are no identity tables. Index every UUID column analyses filter by. Look references are `ON DELETE RESTRICT`.
+
+**Leaf rows keep payload order in a column, `payload_index`, and every read up to the frontend orders by it.** Postgres guarantees no row order, and `position` cannot stand in: unranked entries come last at position 0, and ties share a position.
+
+### Standings
+
+- **`standings`**: one row per entry of the available standings. Columns: `season` (`ON DELETE CASCADE`), `kind`, `class_uuid` and `class_look` (both NULL for the overall standing), and `available_index`, the entry's place in the available list. The key is `UNIQUE NULLS NOT DISTINCT (season, kind, class_uuid)`. Without `NULLS NOT DISTINCT`, `ON CONFLICT` never matches an overall standing and every re-save inserts a duplicate, without an error. A repository test saves an overall standing twice and asserts one row. This table is upserted and has history.
+- **`driver_standings`, `team_standings`, `constructor_standings`**: `standing` (`ON DELETE CASCADE`), `payload_index`, `UNIQUE (standing, payload_index)`, the entity UUIDs and look references, `position`, `points`, and the analytics columns as sent. They have history, per the migration rules. On rescrape, plan 1 applies: wipe the standing's rows, then re-insert.
+
+### Classifications, later
+
+Classifications move to the same model as a self-contained job. `classifications`, `classification_drivers` and `retirements` carry UUIDs plus look references, and `drivers`, `teams`, `garages` and `countries` are replaced by look tables. Check first whether the core database is still disposable (plan 1, "Existing core databases"). If it is, re-scraping from the connector cache rebuilds everything. Otherwise, the move needs a data migration.
+
+### Changes to plan 1
+
+- The horizontal tables (`drivers`, `teams`, `garages`, `countries`) and the `RESTRICT` foreign keys protecting them go, replaced by look tables, which are never deleted. Plan 1's foreign key table changes accordingly when classifications move.
+- Plan 1's "orphaned horizontal rows" question becomes orphaned looks, which are harmless.
+
+### Not planned
+
+- **Our own facts about an entity**, such as canonical names, or merging "Era Motorsport" and "Era Motorsports", two UUIDs in IMSA 2020. The data stays as close to what motorsportstats says as possible. If this is ever wanted, it belongs in a separate table keyed by UUID, filled from the distinct UUIDs in the fact tables, and nothing here prevents adding it.
+
+### Order of work
+
+Classifications, standings and race histories come first. Then every series of interest gets scraped, and what the other series send is looked at then. 23 of the 86 series were measured, and none assigns short codes or nationalities per event. One that did would not change the payload shape, so the schemas would not catch it, but looks keyed by full content would store it correctly either way.
+
+### Where to start
+
+- `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` holds `shared.Save()`, which already handles insert-only with `hash` as the conflict column, and is where the sort by conflict key goes.
+- `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_countries_helper.go` shows the hash encoding that must not be reused.
+- `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go` is the classification save to move later, garage keys included.
+- `src/Golang/motorsportstats/gateway/domain/gateway.go` holds the domain structs the looks are built from.
