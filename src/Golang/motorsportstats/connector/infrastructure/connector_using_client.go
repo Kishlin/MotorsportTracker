@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	_ "embed"
+	"errors"
 	"fmt"
+	"strings"
 
-	"github.com/qri-io/jsonschema"
+	"github.com/santhosh-tekuri/jsonschema/v6"
 
 	client "github.com/kishlin/MotorsportTracker/src/Golang/shared/client/infrastructure"
 )
@@ -60,7 +62,7 @@ func (c *ConnectorUsingClient) GetClassification(ctx context.Context, sessionUUD
 	return c.doGet(ctx, schemaClassification, endpointClassification, sessionUUD)
 }
 
-func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoint string, params ...any) ([]byte, error) {
+func (c *ConnectorUsingClient) doGet(ctx context.Context, schema *jsonschema.Schema, endpoint string, params ...any) ([]byte, error) {
 	url := endpoint
 	if len(params) > 0 {
 		url = fmt.Sprintf(endpoint, params...)
@@ -78,28 +80,67 @@ func (c *ConnectorUsingClient) doGet(ctx context.Context, schema string, endpoin
 	return resp, nil
 }
 
-// validate checks if the content conforms to the expected schema.
-func (c *ConnectorUsingClient) validate(ctx context.Context, content []byte, expectedSchema string) error {
-	rs := jsonschema.Schema{}
-	if err := rs.UnmarshalJSON([]byte(expectedSchema)); err != nil {
-		return fmt.Errorf("unmarshalling expectedSchema: %w", err)
+// validate checks if the content conforms to the expected schema. A failure lists one line per
+// leaf error, "<instance path>: <message>", which the CacheWarmer report and ApiCanary both read.
+func (c *ConnectorUsingClient) validate(_ context.Context, content []byte, schema *jsonschema.Schema) error {
+	instance, err := jsonschema.UnmarshalJSON(bytes.NewReader(content))
+	if err != nil {
+		return fmt.Errorf("unmarshalling content: %w", err)
 	}
 
-	errs, err := rs.ValidateBytes(ctx, content)
-	if err != nil {
+	err = schema.Validate(instance)
+	if err == nil {
+		return nil
+	}
+
+	var validationErr *jsonschema.ValidationError
+	if errors.As(err, &validationErr) == false {
 		return fmt.Errorf("validating content: %w", err)
 	}
 
-	if len(errs) > 0 {
-		var buf bytes.Buffer
-		for _, e := range errs {
-			buf.WriteString(e.Error() + "\n")
+	var buf bytes.Buffer
+	writeLeafErrors(&buf, validationErr.DetailedOutput())
+
+	return fmt.Errorf("validation errors: %s", buf.String())
+}
+
+// writeLeafErrors writes the errors at the bottom of the output tree. The units above them only group
+// their causes, under a $ref or a oneOf, and say nothing a leaf does not.
+func writeLeafErrors(buf *bytes.Buffer, unit *jsonschema.OutputUnit) {
+	if len(unit.Errors) == 0 {
+		path := unit.InstanceLocation
+		if path == "" {
+			path = "/"
 		}
 
-		return fmt.Errorf("validation errors: %s", buf.String())
+		buf.WriteString(path + ": " + unit.Error.String() + "\n")
+
+		return
 	}
 
-	return nil
+	for i := range unit.Errors {
+		writeLeafErrors(buf, &unit.Errors[i])
+	}
+}
+
+// compileSchema compiles an embedded schema once, at start-up. Schemas without a $schema keyword are
+// read as draft 2019-09, and format is asserted, so format: uri rejects a value that is not a URI. A
+// schema that does not compile is a bug in this repository, hence the panic.
+func compileSchema(name string, raw string) *jsonschema.Schema {
+	doc, err := jsonschema.UnmarshalJSON(strings.NewReader(raw))
+	if err != nil {
+		panic(fmt.Sprintf("parsing schema %s: %v", name, err))
+	}
+
+	compiler := jsonschema.NewCompiler()
+	compiler.DefaultDraft(jsonschema.Draft2019)
+	compiler.AssertFormat()
+
+	if err := compiler.AddResource(name, doc); err != nil {
+		panic(fmt.Sprintf("adding schema %s: %v", name, err))
+	}
+
+	return compiler.MustCompile(name)
 }
 
 var headers = map[string]string{
@@ -118,31 +159,47 @@ const (
 )
 
 //go:embed schemas/series.json
-var schemaSeries string
+var rawSchemaSeries string
+
+var schemaSeries = compileSchema("series.json", rawSchemaSeries)
 
 //go:embed schemas/seasons.json
-var schemaSeasons string
+var rawSchemaSeasons string
+
+var schemaSeasons = compileSchema("seasons.json", rawSchemaSeasons)
 
 //go:embed schemas/calendar.json
-var schemaCalendar string
+var rawSchemaCalendar string
+
+var schemaCalendar = compileSchema("calendar.json", rawSchemaCalendar)
 
 //go:embed schemas/available_standings.json
-var schemaAvailableStandings string
+var rawSchemaAvailableStandings string
+
+var schemaAvailableStandings = compileSchema("available_standings.json", rawSchemaAvailableStandings)
 
 //go:embed schemas/standings_drivers.json
-var schemaStandingsDrivers string
+var rawSchemaStandingsDrivers string
+
+var schemaStandingsDrivers = compileSchema("standings_drivers.json", rawSchemaStandingsDrivers)
 
 //go:embed schemas/standings_teams.json
-var schemaStandingsTeams string
+var rawSchemaStandingsTeams string
+
+var schemaStandingsTeams = compileSchema("standings_teams.json", rawSchemaStandingsTeams)
 
 //go:embed schemas/standings_constructors.json
-var schemaStandingsConstructors string
+var rawSchemaStandingsConstructors string
 
-var schemaStandings = map[StandingKind]string{
+var schemaStandingsConstructors = compileSchema("standings_constructors.json", rawSchemaStandingsConstructors)
+
+var schemaStandings = map[StandingKind]*jsonschema.Schema{
 	StandingDrivers:      schemaStandingsDrivers,
 	StandingTeams:        schemaStandingsTeams,
 	StandingConstructors: schemaStandingsConstructors,
 }
 
 //go:embed schemas/classification.json
-var schemaClassification string
+var rawSchemaClassification string
+
+var schemaClassification = compileSchema("classification.json", rawSchemaClassification)

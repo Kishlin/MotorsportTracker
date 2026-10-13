@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/santhosh-tekuri/jsonschema/v6"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )
@@ -202,7 +203,7 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateStandings() {
 
 	type standingsCase struct {
 		name   string
-		schema string
+		schema *jsonschema.Schema
 		row    string
 		change func(row map[string]any)
 	}
