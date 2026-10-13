@@ -27,7 +27,8 @@ A migration written into `Core/` is never executed and produces no error — the
 
 - `TEXT` over `VARCHAR` unless a length constraint is genuinely required
 - `UUID` for identifiers coming from motorsportstats.com
-- `SERIAL` primary key for internal foreign keys
+- `id SERIAL PRIMARY KEY` for the table's own key, referenced by internal foreign keys
+- foreign key columns are `INTEGER`, never `SERIAL`: `SERIAL` is shorthand for `INTEGER NOT NULL DEFAULT nextval(...)`, so a nullable reference becomes `NOT NULL`, and an insert that leaves the column out silently draws a sequence value. Add `NOT NULL` when the reference is required
 - `hash TEXT UNIQUE NOT NULL` — required by `shared.Save()` change detection
 - `created_at` / `updated_at`, both `TIMESTAMP NOT NULL DEFAULT NOW()`
 - foreign keys default to `ON DELETE RESTRICT`

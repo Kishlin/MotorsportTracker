@@ -83,7 +83,7 @@
             ]
           },
           "country": {
-            "type": "object",
+            "type": ["object", "null"],
             "properties": {
               "uuid": {
                 "type": "string"

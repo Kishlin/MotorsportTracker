@@ -113,6 +113,40 @@ func (suite *SaveCalendarRepositoryIntegrationTestSuite) TestSaveCalendar() {
 		suite.Equal(seasonRef, season)
 	})
 
+	// Shaped like the placeholders in Formula E 2024 and 2025: announced, never filled in.
+	suite.Run("saves an event without a country", func() {
+		eventUUID := saveCalendarPrefix + "-0009-000000000001"
+
+		calendar := &motorsportstats.Calendar{
+			Events: []*motorsportstats.Event{
+				{
+					UUID:      eventUUID,
+					Name:      fn.Ptr("TBC"),
+					ShortName: fn.Ptr("TBC"),
+					Status:    fn.Ptr(""),
+					Venue: &motorsportstats.Venue{
+						UUID:      saveCalendarPrefix + "-0009-000000000002",
+						Name:      fn.Ptr("TBA"),
+						ShortName: fn.Ptr(""),
+					},
+					Country:  nil,
+					Sessions: []*motorsportstats.Session{},
+				},
+			},
+		}
+
+		err := suite.repository.SaveCalendar(suite.T().Context(), seasonRef, calendar)
+		suite.Require().NoError(err)
+
+		rows := fn.MustReturn(suite.repository.db.Query(suite.T().Context(), `SELECT country IS NOT NULL FROM events WHERE uuid = $1`, eventUUID)).(pgx.Rows)
+		defer rows.Close()
+
+		var hasCountry bool
+		suite.Require().True(rows.Next(), "event %s not found", eventUUID)
+		fn.Must(rows.Scan(&hasCountry))
+		suite.False(hasCountry)
+	})
+
 	suite.Run("moves an event to another season", func() {
 		eventUUID := saveCalendarPrefix + "-0008-000000000001"
 

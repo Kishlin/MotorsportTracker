@@ -136,6 +136,15 @@ func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateClassification
 	require.NoError(suite.T(), err)
 }
 
+// The event is the fifth of Formula E 2025, verbatim: a placeholder announced as TBC, at a venue
+// named TBA, without a country or any session.
+func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateCalendarEventWithoutCountry() {
+	payload := `{"season":{"name":"2025 Formula E","uuid":"187adfce-463f-46d5-9969-b6bc6c4c6f4f","year":2025,"endYear":2025},"events":[{"uuid":"08240ec7-eafd-4e68-9f61-5f8a7410cc1a","name":"TBC","shortName":"TBC","shortCode":"TBC","status":"","startDate":1741392000,"startTimeUtc":1741392000,"endDate":1741392000,"endTimeUtc":1741478400,"venue":{"name":"TBA","uuid":"7df47c18-d3af-418b-ab55-4c78dbc73a67","shortName":"","shortCode":null,"picture":null},"country":null,"sessions":[]}]}`
+
+	err := suite.connector.validate(suite.T().Context(), []byte(payload), schemaCalendar)
+	require.NoError(suite.T(), err)
+}
+
 // The base payload is the 2017 World Endurance Championship, verbatim: an overall standing then
 // classes for drivers and constructors, classes alone for teams.
 func (suite *ConnectorUsingClientFunctionalTestSuite) TestValidateAvailableStandings() {
