@@ -13,6 +13,7 @@ import (
 	seasonsImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/seasons/infrastructure"
 	series "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/domain"
 	seriesImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/series/infrastructure"
+	sharedImpls "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
 	application "github.com/kishlin/MotorsportTracker/src/Golang/shared/application/infrastructure"
 	messaging "github.com/kishlin/MotorsportTracker/src/Golang/shared/messaging/infrastructure"
 )
@@ -67,7 +68,7 @@ func registerSeasonsHandlers(ctx context.Context, handlersList *messaging.Handle
 		seasonsImpls.NewScrapeSeasonsForSeriesKeywordHandler(
 			seasons.NewScrapeSeasonsForSeriesKeywordUseCase(
 				scrapeSeasonsForSeriesIdentifierUseCase,
-				seasonsImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
+				sharedImpls.NewSearchSeriesIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
 		),
 	)
@@ -81,7 +82,7 @@ func registerSeasonsHandlers(ctx context.Context, handlersList *messaging.Handle
 		seasonsImpls.ScrapeSeasonsForAllSeriesIntentName,
 		seasonsImpls.NewScrapeSeasonsForAllSeriesHandler(
 			seasons.NewScrapeSeasonsForAllSeriesUseCase(
-				seasonsImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
+				sharedImpls.NewSearchAllSeriesIdentifiersRepository(registry.GetCoreDatabase(ctx)),
 				seasonsImpls.NewSeasonsScrapperUsingIntents(registry.GetIntentsQueue()),
 			),
 		),
@@ -95,7 +96,7 @@ func registerCalendarHandlers(ctx context.Context, handlersList *messaging.Handl
 			calendar.NewScrapeCalendarUseCase(
 				registry.MotorsportStats().GetGateway(ctx),
 				calendarImpls.NewSaveCalendarRepository(registry.GetCoreDatabase(ctx)),
-				calendarImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
+				sharedImpls.NewSearchSeasonIdentifierRepository(registry.GetCoreDatabase(ctx)),
 			),
 		),
 	)
