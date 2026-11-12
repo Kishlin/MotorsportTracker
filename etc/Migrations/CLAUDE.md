@@ -31,9 +31,12 @@ A migration written into `Core/` is never executed and produces no error — the
 - foreign key columns are `INTEGER`, never `SERIAL`: `SERIAL` is shorthand for `INTEGER NOT NULL DEFAULT nextval(...)`, so a nullable reference becomes `NOT NULL`, and an insert that leaves the column out silently draws a sequence value. Add `NOT NULL` when the reference is required
 - `hash TEXT UNIQUE NOT NULL` — required by `shared.Save()` change detection
 - `created_at` / `updated_at`, both `TIMESTAMP NOT NULL DEFAULT NOW()`
-- foreign keys default to `ON DELETE RESTRICT`
+- foreign keys default to `ON DELETE RESTRICT`; the standings tables already use `ON DELETE CASCADE` up the hierarchy (season, standing) and `RESTRICT` to entity and look tables
+- a nullable column in a unique key needs `UNIQUE NULLS NOT DISTINCT`: in a plain `UNIQUE`, two NULLs never conflict, so `ON CONFLICT` never matches and every save inserts a duplicate, without an error (see `standings`)
 
 ## Every table needs history
+
+Except the look tables (`*_looks`), for entities whose look varies per entry or event, such as teams. A look row is keyed by a hash of its full content and never changes, so it has neither history nor `updated_at`: a different look is a new row. Entities with one current state per UUID, such as drivers, are ordinary tables keyed by `uuid`, with history.
 
 Main table, `_history` table, trigger function, trigger. The history table repeats the main table's columns and swaps the timestamps for `valid_from` / `valid_to`.
 
