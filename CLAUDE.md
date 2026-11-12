@@ -46,7 +46,7 @@ etc/
   Migrations/             # SQL migrations — lowercase core/ and client-cache/ only
   ConnectorCache/         # Filesystem cache for API responses (gitignored)
 docs/                     # PlantUML diagrams and documentation
-go.work                   # Go workspace (7 modules)
+go.work                   # Go workspace, one module per app plus src/Golang
 ```
 
 ## Scoped Instructions

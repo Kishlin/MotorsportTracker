@@ -25,7 +25,7 @@ A `PostToolUse` hook runs `scripts/architecture-check.sh` on every edit under a 
 
 Single-operation modules use bare names: `domain/use_case.go`, `infrastructure/{handler,intent}.go`, `infrastructure/save_<entity>_repository.go`.
 
-Multi-operation modules prefix every file with the operation — see `scrapping/seasons/`, which carries three intents, three handlers and three use cases side by side. Pick one style per module and stay with it.
+Multi-operation modules prefix every file with the operation — see `scrapping/seasons/`, which carries several intents, handlers and use cases side by side. Pick one style per module and stay with it.
 
 ## Registration is manual and silent
 
@@ -58,7 +58,7 @@ Run via `./scripts/test-runner.sh [scope] [--verbose] [--run <pattern>] [--prist
 
 ## Workspace
 
-Seven modules under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
+Every app and `src/Golang` is its own module under `go.work`. After changing dependencies run `make go-vendor` to keep `vendor/` in sync.
 
 ## Schema validation sits below the cache
 
