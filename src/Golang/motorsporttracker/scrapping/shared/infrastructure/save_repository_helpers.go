@@ -2,7 +2,9 @@ package infrastructure
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -30,10 +32,17 @@ type UpsertResult struct {
 	Updated bool
 }
 
-// Save chooses single vs batched execution based on total param count.
+// Save sorts the rows by their conflict key, then chooses single vs batched execution based on total
+// param count. Two saves touching the same keys in a different order can deadlock; sorting gives every
+// save the same lock order.
 func Save(ctx context.Context, db *database.PGXPoolAdapter, table string, conflictColumns string, columns []string, rows [][]interface{}) (UpsertStats, error) {
 	if len(rows) == 0 {
 		return UpsertStats{}, nil
+	}
+
+	rows, err := sortByConflictKey(conflictColumns, columns, rows)
+	if err != nil {
+		return UpsertStats{}, fmt.Errorf("sorting rows of %s by conflict key: %w", table, err)
 	}
 
 	valuesPerRow := len(rows[0])
@@ -80,6 +89,57 @@ func UpsertRows(ctx context.Context, db *database.PGXPoolAdapter, table string, 
 		return UpsertStats{}, fmt.Errorf("preparing single batch: %w", err)
 	}
 	return upsertData(ctx, db, query, flatArgs)
+}
+
+// sortByConflictKey returns a copy of rows ordered by the JSON encoding of their conflict columns' values.
+// Any total order works, as long as every save uses the same one.
+func sortByConflictKey(conflictColumns string, columns []string, rows [][]interface{}) ([][]interface{}, error) {
+	var keyIndexes []int
+	for _, name := range strings.Split(conflictColumns, ",") {
+		name = strings.TrimSpace(name)
+
+		index := slices.Index(columns, name)
+		if index == -1 {
+			return nil, fmt.Errorf("conflict column %q is not among the columns %v", name, columns)
+		}
+
+		keyIndexes = append(keyIndexes, index)
+	}
+
+	type keyedRow struct {
+		key string
+		row []interface{}
+	}
+
+	keyed := make([]keyedRow, len(rows))
+	for i, row := range rows {
+		if len(row) != len(columns) {
+			return nil, fmt.Errorf("row %d has %d values for %d columns", i, len(row), len(columns))
+		}
+
+		keyValues := make([]interface{}, len(keyIndexes))
+		for j, index := range keyIndexes {
+			keyValues[j] = row[index]
+		}
+
+		key, err := json.Marshal(keyValues)
+		if err != nil {
+			return nil, fmt.Errorf("encoding the conflict key of row %d: %w", i, err)
+		}
+
+		keyed[i] = keyedRow{key: string(key), row: row}
+	}
+
+	slices.SortStableFunc(keyed, func(a, b keyedRow) int {
+		return strings.Compare(a.key, b.key)
+	})
+
+	sorted := make([][]interface{}, len(keyed))
+	for i, k := range keyed {
+		sorted[i] = k.row
+	}
+
+	return sorted, nil
 }
 
 // splitRowsIntoBatches splits rows into batches that won't exceed maxParamsPerQuery when flattened.

@@ -99,6 +99,59 @@ func (suite *SaveRepositoryHelpersUnitTestSuite) TestBuildOnConflictUpdates() {
 	}
 }
 
+func (suite *SaveRepositoryHelpersUnitTestSuite) TestSortByConflictKey() {
+	columns := []string{"session", "car_number", "label", "hash"}
+
+	suite.Run("orders rows the same whatever their input order", func() {
+		a := []interface{}{2, "7", "a", "hash-a"}
+		b := []interface{}{1, "33", "b", "hash-b"}
+		c := []interface{}{1, "4", "c", "hash-c"}
+		d := []interface{}{nil, "1", "d", "hash-d"}
+
+		first, err := sortByConflictKey("session, car_number", columns, [][]interface{}{a, b, c, d})
+		suite.NoError(err)
+		second, err := sortByConflictKey("session, car_number", columns, [][]interface{}{d, c, b, a})
+		suite.NoError(err)
+
+		suite.Equal(first, second)
+		suite.Len(first, 4)
+	})
+
+	suite.Run("sorts on the conflict columns only", func() {
+		rows := [][]interface{}{
+			{1, "2", "z", "hash-1"},
+			{1, "1", "y", "hash-2"},
+		}
+
+		sorted, err := sortByConflictKey("car_number", columns, rows)
+		suite.NoError(err)
+		suite.Equal("y", sorted[0][2])
+		suite.Equal("z", sorted[1][2])
+	})
+
+	suite.Run("leaves the caller's rows in their order", func() {
+		rows := [][]interface{}{
+			{2, "1", "first", "hash-1"},
+			{1, "1", "second", "hash-2"},
+		}
+
+		_, err := sortByConflictKey("session", columns, rows)
+		suite.NoError(err)
+		suite.Equal("first", rows[0][2])
+		suite.Equal("second", rows[1][2])
+	})
+
+	suite.Run("fails on a conflict column missing from the columns", func() {
+		_, err := sortByConflictKey("session, occurrence", columns, [][]interface{}{{1, "1", "a", "hash"}})
+		suite.ErrorContains(err, `conflict column "occurrence" is not among the columns`)
+	})
+
+	suite.Run("fails on a row narrower than the columns", func() {
+		_, err := sortByConflictKey("session", columns, [][]interface{}{{1, "1"}})
+		suite.ErrorContains(err, "row 0 has 2 values for 4 columns")
+	})
+}
+
 func TestUnit_SaveRepositoryHelpers(t *testing.T) {
 	suite.Run(t, new(SaveRepositoryHelpersUnitTestSuite))
 }
