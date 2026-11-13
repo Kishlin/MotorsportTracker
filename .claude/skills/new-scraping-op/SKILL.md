@@ -92,10 +92,11 @@ Message metadata is `map[string]string`. Use `messaging.RequireString` / `messag
 
 ## 4. Save repository
 
-Use `shared.Save()`. Build a hash from every significant field so change detection works; a hash over only the UUID means rows never update.
+Use `shared.Save()`. Pass the values as sent, without a `hash` column: `Save()` computes the hash from every value of the row, and refuses one from the caller.
 
 ```go
-hash := crypto.Hash(fmt.Sprintf("%s|%s", item.UUID, fn.Deref(item.Name, "")))
+rows = append(rows, []interface{}{item.UUID, item.Name})
+cols := []string{"uuid", "name"}
 ```
 
 Return early with a `slog.Debug` when the slice is empty, and log `stats.Inserted` / `stats.Updated` on success.
