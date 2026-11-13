@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -23,6 +24,20 @@ func (suite *ServiceRegistryUnitTestSuite) TestClose() {
 	}()
 
 	registry.Close()
+}
+
+func (suite *ServiceRegistryUnitTestSuite) TestCloseAfterAFailedConnection() {
+	suite.T().Setenv("POSTGRES_CORE_URL", "postgres://nobody:nothing@127.0.0.1:1/missing?connect_timeout=1")
+	registry := NewServicesRegistry()
+
+	var recovered any
+	func() {
+		defer func() { recovered = recover() }()
+		registry.GetCoreDatabase(suite.T().Context())
+	}()
+
+	suite.Contains(fmt.Sprint(recovered), "unable to connect to core database")
+	suite.NotPanics(registry.Close)
 }
 
 // The motorsportstats services have their own suite; this only checks the registry holds one.

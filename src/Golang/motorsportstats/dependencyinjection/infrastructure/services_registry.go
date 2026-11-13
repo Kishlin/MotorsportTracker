@@ -93,12 +93,15 @@ func (s *ServicesRegistry) GetClientCacheDatabase(ctx context.Context) *database
 			panic("POSTGRES_CLIENT_CACHE_URL environment variable is not set")
 		}
 
-		s.clientCacheDB = databaseImpls.NewDatabaseUsingPGXPool(connStr)
+		// Kept only once connected, so Close never closes a pool that never opened.
+		db := databaseImpls.NewDatabaseUsingPGXPool(connStr)
 
-		err := s.clientCacheDB.Connect(ctx)
+		err := db.Connect(ctx)
 		if err != nil {
 			panic("unable to connect to client cache database: " + err.Error())
 		}
+
+		s.clientCacheDB = db
 	})
 
 	return s.clientCacheDB

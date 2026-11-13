@@ -52,12 +52,15 @@ func (s *ServicesRegistry) GetCoreDatabase(ctx context.Context) *databaseImpls.P
 			panic("POSTGRES_CORE_URL environment variable is not set")
 		}
 
-		s.coreDB = databaseImpls.NewDatabaseUsingPGXPool(connStr)
+		// Kept only once connected, so Close never closes a pool that never opened.
+		db := databaseImpls.NewDatabaseUsingPGXPool(connStr)
 
-		err := s.coreDB.Connect(ctx)
+		err := db.Connect(ctx)
 		if err != nil {
-			panic("unable to connect to core databaseImpls: " + err.Error())
+			panic("unable to connect to core database: " + err.Error())
 		}
+
+		s.coreDB = db
 	})
 
 	return s.coreDB

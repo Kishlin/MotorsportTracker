@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -23,6 +24,20 @@ func (suite *ServiceRegistryUnitTestSuite) TestClose() {
 	}()
 
 	registry.Close()
+}
+
+func (suite *ServiceRegistryUnitTestSuite) TestCloseAfterAFailedConnection() {
+	suite.T().Setenv("POSTGRES_CLIENT_CACHE_URL", "postgres://nobody:nothing@127.0.0.1:1/missing?connect_timeout=1")
+	registry := NewServicesRegistry()
+
+	var recovered any
+	func() {
+		defer func() { recovered = recover() }()
+		registry.GetClientCacheDatabase(suite.T().Context())
+	}()
+
+	suite.Contains(fmt.Sprint(recovered), "unable to connect to client cache database")
+	suite.NotPanics(registry.Close)
 }
 
 func TestUnit_ServiceRegistry(t *testing.T) {
