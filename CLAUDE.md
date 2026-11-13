@@ -78,6 +78,8 @@ Legacy PHP exists in `src/Backend/`, `apps/Backoffice/`, and parts of `apps/`. *
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System components, data flow, module organization |
 | [PATTERNS.md](docs/PATTERNS.md) | Use Cases, Repositories, Gateways, Handlers, Intents, Registration, DI |
 | [DEVELOPMENT.md](docs/DEVELOPMENT.md) | Environment setup, Make targets, debugging |
+| [ROADMAP.md](docs/ROADMAP.md) | What gets built next, in order |
+| [DECISIONS.md](docs/DECISIONS.md) | Settled designs and the options they beat — before touching a save path, the cache, or a new scraping level |
 
 ## Key Patterns
 
