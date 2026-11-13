@@ -76,15 +76,11 @@ func (s *SaveEntityRepository) SaveEntities(ctx context.Context, entities []*dom
 
     var rows [][]interface{}
     for _, entity := range entities {
-        fieldVal := fn.Deref(entity.Field, "")
-
-        // Hash from all significant fields for change detection
-        hash := crypto.Hash(fmt.Sprintf("%s|%s", entity.UUID, fieldVal))
-
-        rows = append(rows, []interface{}{entity.UUID, fieldVal, hash})
+        // Values as sent: a nil pointer is stored as NULL. Save() adds the hash.
+        rows = append(rows, []interface{}{entity.UUID, entity.Field})
     }
 
-    cols := []string{"uuid", "field", "hash"}
+    cols := []string{"uuid", "field"}
 
     stats, err := shared.Save(ctx, s.db, "table_name", "uuid", cols, rows)
     if err != nil {
@@ -99,9 +95,10 @@ func (s *SaveEntityRepository) SaveEntities(ctx context.Context, entities []*dom
 
 How `shared.Save()` works:
 - Generates an `INSERT ... ON CONFLICT DO UPDATE SET ... WHERE hash IS DISTINCT FROM EXCLUDED.hash` query
+- Computes the `hash` column itself, from the JSON array of every value of the row, and refuses one from the caller; the hash lets the upsert skip unchanged rows
+- Sorts the rows by the conflict key, so concurrent saves take their locks in the same order
 - Automatically batches when parameter count exceeds 1000
 - Returns `UpsertStats{Inserted, Updated}` counts
-- The hash column enables skipping unchanged rows
 
 ## Gateway Pattern
 

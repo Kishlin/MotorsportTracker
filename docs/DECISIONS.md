@@ -65,8 +65,8 @@ Rejected for teams and venues, whose looks vary per entry and event: each save w
 
 **For both kinds:**
 
-- **Every save sorts its rows by the conflict key before batching.** Two batch saves touching the same keys in a different order can deadlock: Postgres aborts one and the queue retries it, which is loud but avoidable. Sorting gives every worker the same lock order. Any consistent total order works, so `shared.Save()` can do it once for every caller, from the conflict columns it already receives.
-- **The hash must tell null from `""`, and no value may be able to break it.** Hash a JSON array of the fields in a fixed column order, or an equivalent encoding. Today's helpers do not qualify: `SaveCountries` hashes `uuid|name|flag` with nulls as `""`, and the cache holds empty team names. On a look table, a collision would silently give a row another look's values. On an identity table, a change would go unseen.
+- **Every save sorts its rows by the conflict key before batching.** Two batch saves touching the same keys in a different order can deadlock: Postgres aborts one and the queue retries it, which is loud but avoidable. Sorting gives every worker the same lock order. Any consistent total order works, so `shared.Save()` does it once for every caller: it orders the rows by the JSON encoding of their conflict columns.
+- **The hash must tell null from `""`, and no value may be able to break it.** `shared.Save()` computes it for every caller, as the SHA-256 of the JSON array of the row's values in column order, and refuses a hash column from the caller. The repositories used to build their own with `fmt.Sprintf` over pipe-separated values, writing nulls as `""` or 0 and floats with fixed decimals, and the cache holds empty team names. On a look table, a collision would silently give a row another look's values. On an identity table, a change would go unseen.
 - **References are `ON DELETE RESTRICT`.**
 
 **Columns are named by meaning, and the repository maps each source's keys onto them.** Values are placed, never changed.
@@ -112,9 +112,8 @@ Built as migrations (`etc/Migrations/core/20261013183809` to `20261013183816`).
 
 ### Where to start
 
-- `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` holds `shared.Save()`, where the sort by conflict key goes.
-- `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_countries_helper.go` shows the hash encoding that must not be reused.
-- `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go` writes `drivers`, first and last names included, and is the classification save to move later, garage keys included.
+- `src/Golang/motorsporttracker/scrapping/shared/infrastructure/save_repository_helpers.go` holds `shared.Save()`, with the hash and the sort by conflict key.
+- `src/Golang/motorsporttracker/scrapping/classification/infrastructure/save_classification_repository.go` writes `drivers`, and is the classification save to move later, garage keys included.
 - `src/Golang/motorsportstats/gateway/domain/gateway.go` holds the domain structs the rows are built from.
 
 ---

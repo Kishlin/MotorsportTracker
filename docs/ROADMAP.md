@@ -4,17 +4,9 @@ What gets built, in order. The reasoning behind each item lives in [DECISIONS.md
 
 ## Now
 
-### 1. Save groundwork
+### 1. Standings scraping
 
-Not started. See [Embedded entities: one current state, or one look per entry](DECISIONS.md#embedded-entities-one-current-state-or-one-look-per-entry).
-
-- `shared.Save()` sorts its rows by the conflict key before batching.
-- A hash that tells null from `""`: a JSON array of the fields in a fixed column order.
-- Driver first and last names go: a forward migration on `drivers`, `drivers_history` and its trigger function, and the classification save stops writing them. This comes before standings, which write `drivers` without them.
-
-### 2. Standings scraping
-
-Tables built. Repositories, use cases, handlers, intents and registration not started.
+Tables built, and `shared.Save()` ready for them. Repositories, use cases, handlers, intents and registration not started.
 
 - Save the entities (`drivers`, `countries`, `constructors`, `classes`, `team_looks`), then `standings`, then the driver, team and constructor rows. Test that an overall standing saved twice gives one row, and that `payload_index` order survives a re-save.
 - Two levels, each publishing to the next one down: a `StandingsScrapper` scrapes a season's available standings and publishes one message per standing, and a `StandingScrapper` scrapes one standing. Fan-outs follow [Fan-outs log failed publishes and move on](DECISIONS.md#fan-outs-log-failed-publishes-and-move-on).
@@ -31,29 +23,29 @@ Tables built. Repositories, use cases, handlers, intents and registration not st
 - `/new-scraping-op` is outdated for a multi-level module. Follow `scrapping/seasons/`, which has the same kinds of targets.
 - A keyword that resolves to nothing logs a warning and returns nil, as in seasons, calendar and classification: an error would requeue the message forever.
 
-### 3. ApiCanary covers the standings
+### 2. ApiCanary covers the standings
 
 Not started. ApiCanary checks no standings endpoint yet: available standings, then driver, team and constructor standings.
 
 ## Next
 
-### 4. Classifications and calendars move teams and venues to looks
+### 3. Classifications and calendars move teams and venues to looks
 
 Not started. See [Classifications and calendars, later](DECISIONS.md#classifications-and-calendars-later). `teams` and `garages` become `team_looks`, `venues` becomes `venue_looks`. Drivers and countries stay. Check whether the core database is still disposable.
 
-### 5. Versioned database cache
+### 4. Versioned database cache
 
 Not started. See [Upstream responses are versioned](DECISIONS.md#upstream-responses-are-versioned). Comes before the rescrape option, which is what creates new versions.
 
-### 6. Rescrape option
+### 5. Rescrape option
 
 Not started. See [Rescrapes keep stored data in step with upstream](DECISIONS.md#rescrapes-keep-stored-data-in-step-with-upstream). Resolves review issue 16.
 
-### 7. Scrape every series of interest
+### 6. Scrape every series of interest
 
 Then study what the series not measured yet send, against the assumptions in [DECISIONS.md](DECISIONS.md).
 
-### 8. Race histories
+### 7. Race histories
 
 Not designed. Study the payloads first. The rows are leaves: they follow the wipe-and-reinsert rule per session and endpoint.
 
