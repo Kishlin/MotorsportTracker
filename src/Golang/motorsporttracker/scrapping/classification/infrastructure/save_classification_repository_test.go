@@ -369,8 +369,6 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) verySimpleClassif
 					{
 						UUID:      saveClassificationPrefix + "-0007-000000000001",
 						Name:      fn.Ptr("Max Verstappen"),
-						FirstName: fn.Ptr("Max"),
-						LastName:  fn.Ptr("Verstappen"),
 						ShortCode: fn.Ptr("MV"),
 						Colour:    fn.Ptr("Blue"),
 						Picture:   fn.Ptr("some url"),
@@ -414,8 +412,6 @@ func (suite *SaveClassificationRepositoryIntegrationTestSuite) verySimpleClassif
 				Driver: &motorsportstats.Driver{
 					UUID:      saveClassificationPrefix + "-0007-000000000001",
 					Name:      fn.Ptr("Max Verstappen"),
-					FirstName: fn.Ptr("Max"),
-					LastName:  fn.Ptr("Verstappen"),
 					ShortCode: fn.Ptr("MV"),
 					Colour:    fn.Ptr("Blue"),
 					Picture:   fn.Ptr("some url"),

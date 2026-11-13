@@ -230,11 +230,11 @@ func (s *SaveClassificationRepository) saveDrivers(ctx context.Context, drivers 
 
 	var rows [][]interface{}
 	for _, driver := range drivers {
-		vals := []interface{}{driver.UUID, driver.Name, driver.FirstName, driver.LastName, driver.ShortCode, driver.Colour, driver.Picture}
+		vals := []interface{}{driver.UUID, driver.Name, driver.ShortCode, driver.Colour, driver.Picture}
 		rows = append(rows, vals)
 	}
 
-	cols := []string{"uuid", "name", "first_name", "last_name", "short_code", "colour", "picture"}
+	cols := []string{"uuid", "name", "short_code", "colour", "picture"}
 
 	stats, err := shared.Save(ctx, s.db, "drivers", "uuid", cols, rows)
 	if err != nil {

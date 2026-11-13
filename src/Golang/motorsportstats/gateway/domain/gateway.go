@@ -79,8 +79,6 @@ type AvailableStandings struct {
 type Driver struct {
 	UUID      string  `json:"uuid"`
 	Name      *string `json:"name"`
-	FirstName *string `json:"firstName"`
-	LastName  *string `json:"lastName"`
 	ShortCode *string `json:"shortCode"`
 	Colour    *string `json:"colour"`
 	Picture   *string `json:"picture"`
