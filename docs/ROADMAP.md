@@ -29,7 +29,7 @@ Tables built. Repositories, use cases, handlers, intents and registration not st
   | none | every season of every series |
 
 - `/new-scraping-op` is outdated for a multi-level module. Follow `scrapping/seasons/`, which has the same kinds of targets.
-- On 2026-10-13, a fix was agreed for seasons too, in a separate commit. What that fix was got lost with the session transcript. Ask before starting.
+- A keyword that resolves to nothing logs a warning and returns nil, as in seasons, calendar and classification: an error would requeue the message forever.
 
 ### 3. ApiCanary covers the standings
 
