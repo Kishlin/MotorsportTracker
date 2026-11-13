@@ -11,19 +11,16 @@ type ScrappingRepositoryHelpersUnitTestSuite struct {
 }
 
 func (suite *ScrappingRepositoryHelpersUnitTestSuite) TestPrepareTimestamp() {
-	suite.Run("returns nil and zero on a nil pointer", func() {
-		dbVal, hashVal := PrepareTimestamp(nil)
-		suite.Nil(dbVal)
-		suite.Equal(int64(0), hashVal)
+	suite.Run("returns nil on a nil pointer", func() {
+		suite.Nil(PrepareTimestamp(nil))
 	})
 
-	suite.Run("parses and defers a timestamp", func() {
+	suite.Run("parses a timestamp", func() {
 		timestamp := int64(1741870800)
-		dbVal, hashVal := PrepareTimestamp(&timestamp)
+		dbVal := PrepareTimestamp(&timestamp)
 
 		suite.NotNil(dbVal)
 		suite.Equal(timestamp, dbVal.Unix())
-		suite.Equal(timestamp, hashVal)
 	})
 }
 

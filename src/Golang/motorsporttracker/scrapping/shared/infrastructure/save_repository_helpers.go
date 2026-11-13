@@ -8,10 +8,13 @@ import (
 	"strconv"
 	"strings"
 
+	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
 
 const maxParamsPerQuery = 1000
+
+const hashColumn = "hash"
 
 const upsertQueryTemplate = `
 INSERT INTO %s (%s) VALUES %s
@@ -32,15 +35,21 @@ type UpsertResult struct {
 	Updated bool
 }
 
-// Save sorts the rows by their conflict key, then chooses single vs batched execution based on total
-// param count. Two saves touching the same keys in a different order can deadlock; sorting gives every
+// Save appends a hash of every value to each row, sorts the rows by their conflict key, then chooses
+// single vs batched execution based on total param count. The hash column is Save's own: callers never
+// pass one. Two saves touching the same keys in a different order can deadlock; sorting gives every
 // save the same lock order.
 func Save(ctx context.Context, db *database.PGXPoolAdapter, table string, conflictColumns string, columns []string, rows [][]interface{}) (UpsertStats, error) {
 	if len(rows) == 0 {
 		return UpsertStats{}, nil
 	}
 
-	rows, err := sortByConflictKey(conflictColumns, columns, rows)
+	columns, rows, err := withHashes(columns, rows)
+	if err != nil {
+		return UpsertStats{}, fmt.Errorf("hashing rows of %s: %w", table, err)
+	}
+
+	rows, err = sortByConflictKey(conflictColumns, columns, rows)
 	if err != nil {
 		return UpsertStats{}, fmt.Errorf("sorting rows of %s by conflict key: %w", table, err)
 	}
@@ -89,6 +98,31 @@ func UpsertRows(ctx context.Context, db *database.PGXPoolAdapter, table string, 
 		return UpsertStats{}, fmt.Errorf("preparing single batch: %w", err)
 	}
 	return upsertData(ctx, db, query, flatArgs)
+}
+
+// withHashes returns copies of columns and rows with a hash column appended. A row's hash is the SHA-256
+// of the JSON array of its values, in column order: JSON tells null from "" and from 0, and keeps every
+// digit of a float, so no change between two values can go unseen.
+func withHashes(columns []string, rows [][]interface{}) ([]string, [][]interface{}, error) {
+	if slices.Contains(columns, hashColumn) {
+		return nil, nil, fmt.Errorf("columns %v include %q, which Save computes itself", columns, hashColumn)
+	}
+
+	hashed := make([][]interface{}, len(rows))
+	for i, row := range rows {
+		if len(row) != len(columns) {
+			return nil, nil, fmt.Errorf("row %d has %d values for %d columns", i, len(row), len(columns))
+		}
+
+		encoded, err := json.Marshal(row)
+		if err != nil {
+			return nil, nil, fmt.Errorf("encoding row %d: %w", i, err)
+		}
+
+		hashed[i] = append(slices.Clone(row), crypto.Hash(string(encoded)))
+	}
+
+	return append(slices.Clone(columns), hashColumn), hashed, nil
 }
 
 // sortByConflictKey returns a copy of rows ordered by the JSON encoding of their conflict columns' values.

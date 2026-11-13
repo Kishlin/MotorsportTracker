@@ -42,7 +42,7 @@ make go-run APP=MotorsportTracker ARGS="series"          # unknown subcommand
 
 ## Persistence
 
-Repositories write through `shared.Save()`, which emits `INSERT ... ON CONFLICT DO UPDATE ... WHERE hash IS DISTINCT FROM EXCLUDED.hash` and batches automatically past 1000 parameters. Build the hash from every significant field — hashing the UUID alone silently prevents all updates. Returns `UpsertStats{Inserted, Updated}`; log both.
+Repositories write through `shared.Save()`, which emits `INSERT ... ON CONFLICT DO UPDATE ... WHERE hash IS DISTINCT FROM EXCLUDED.hash` and batches automatically past 1000 parameters. `Save()` computes the `hash` column itself, from the JSON array of every value of the row, and refuses a `hash` column from the caller: pass the table's other columns only. It also sorts the rows by the conflict key, so concurrent saves lock in the same order. Returns `UpsertStats{Inserted, Updated}`; log both.
 
 ## Tests
 

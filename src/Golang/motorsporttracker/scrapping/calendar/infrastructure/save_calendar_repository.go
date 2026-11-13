@@ -7,9 +7,7 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
-	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
-	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 type SaveCalendarRepository struct {
@@ -113,15 +111,10 @@ func (s *SaveCalendarRepository) saveVenues(ctx context.Context, venues []*motor
 
 	var rows [][]interface{}
 	for _, venue := range venues {
-		nameVal := fn.Deref(venue.Name, "")
-		shortNameVal := fn.Deref(venue.ShortName, "")
-		shortCodeVal := fn.Deref(venue.ShortCode, "")
-
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s", venue.UUID, nameVal, shortNameVal, shortCodeVal))
-		rows = append(rows, []interface{}{venue.UUID, venue.Name, venue.ShortName, venue.ShortCode, hash})
+		rows = append(rows, []interface{}{venue.UUID, venue.Name, venue.ShortName, venue.ShortCode})
 	}
 
-	cols := []string{"uuid", "name", "short_name", "short_code", "hash"}
+	cols := []string{"uuid", "name", "short_name", "short_code"}
 
 	stats, err := shared.Save(ctx, s.db, "venues", "uuid", cols, rows)
 	if err != nil {
@@ -174,20 +167,13 @@ func (s *SaveCalendarRepository) saveEvents(
 			countryID = &storedCountryID
 		}
 
-		venueIDVal := fn.Deref(venueID, 0)
-		countryIDVal := fn.Deref(countryID, 0)
-		nameVal := fn.Deref(event.Name, "")
-		shortNameVal := fn.Deref(event.ShortName, "")
-		shortCodeVal := fn.Deref(event.ShortCode, "")
-		statusVal := fn.Deref(event.Status, "")
-		startTimeDBVal, startTimeHashVal := shared.PrepareTimestamp(event.StartTime)
-		endTimeDBVal, endTimeHashVal := shared.PrepareTimestamp(event.EndTime)
+		startTime := shared.PrepareTimestamp(event.StartTime)
+		endTime := shared.PrepareTimestamp(event.EndTime)
 
-		hash := crypto.Hash(fmt.Sprintf("%s|%d|%v|%v|%s|%s|%s|%s|%d|%d", event.UUID, seasonID, venueIDVal, countryIDVal, nameVal, shortNameVal, shortCodeVal, statusVal, startTimeHashVal, endTimeHashVal))
-		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startTimeDBVal, endTimeDBVal, hash})
+		rows = append(rows, []interface{}{event.UUID, seasonID, venueID, countryID, event.Name, event.ShortName, event.ShortCode, event.Status, startTime, endTime})
 	}
 
-	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_time", "end_time", "hash"}
+	cols := []string{"uuid", "season", "venue", "country", "name", "short_name", "short_code", "status", "start_time", "end_time"}
 
 	stats, err := shared.Save(ctx, s.db, "events", "uuid", cols, rows)
 	if err != nil {
@@ -217,16 +203,10 @@ func (s *SaveCalendarRepository) saveSessions(
 		}
 
 		for _, session := range sessions {
-			nameVal := fn.Deref(session.Name, "")
-			shortNameVal := fn.Deref(session.ShortName, "")
-			shortCodeVal := fn.Deref(session.ShortCode, "")
-			statusVal := fn.Deref(session.Status, "")
-			hasResultVal := fn.Deref(session.HasResults, false)
-			startTimeDBVal, startTimeHashVal := shared.PrepareTimestamp(session.StartTime)
-			endTimeDBVal, endTimeHashVal := shared.PrepareTimestamp(session.EndTime)
+			startTime := shared.PrepareTimestamp(session.StartTime)
+			endTime := shared.PrepareTimestamp(session.EndTime)
 
-			hash := crypto.Hash(fmt.Sprintf("%s|%d|%s|%s|%s|%s|%t|%d|%v", session.UUID, eventID, nameVal, shortNameVal, shortCodeVal, statusVal, hasResultVal, startTimeHashVal, endTimeHashVal))
-			rows = append(rows, []interface{}{session.UUID, eventID, session.Name, session.ShortName, session.ShortCode, session.Status, session.HasResults, startTimeDBVal, endTimeDBVal, hash})
+			rows = append(rows, []interface{}{session.UUID, eventID, session.Name, session.ShortName, session.ShortCode, session.Status, session.HasResults, startTime, endTime})
 		}
 	}
 
@@ -236,7 +216,7 @@ func (s *SaveCalendarRepository) saveSessions(
 		return nil
 	}
 
-	cols := []string{"uuid", "event", "name", "short_name", "short_code", "status", "has_results", "start_time", "end_time", "hash"}
+	cols := []string{"uuid", "event", "name", "short_name", "short_code", "status", "has_results", "start_time", "end_time"}
 
 	stats, err := shared.Save(ctx, s.db, "sessions", "uuid", cols, rows)
 	if err != nil {

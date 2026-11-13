@@ -58,7 +58,7 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) SetupSubTest() {
 	fn.Must(suite.db.Exec(suite.T().Context(), "TRUNCATE "+probeTable+" RESTART IDENTITY;"))
 }
 
-var probeColumns = []string{"uuid", "label", "hash"}
+var probeColumns = []string{"uuid", "label"}
 
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) TestSave() {
 	ctx := context.Background()
@@ -126,7 +126,7 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) TestSave() {
 	})
 
 	suite.Run("batches beyond the parameter limit", func() {
-		// 700 rows x 3 columns = 2100 parameters, over maxParamsPerQuery (1000),
+		// 700 rows x 3 columns, the hash included, = 2100 parameters, over maxParamsPerQuery (1000),
 		// so Save() routes through UpsertInBatches and aggregates the results.
 		const rowCount = 700
 
@@ -152,6 +152,30 @@ func (suite *SaveRepositoryHelpersIntegrationTestSuite) TestSave() {
 		suite.Equal(rowCount, suite.countRows())
 	})
 
+	suite.Run("tells a null value from an empty string", func() {
+		uuid := saveRepositoryHelpersPrefix + "-8e9f-000000000001"
+
+		_, err := Save(ctx, suite.db, probeTable, "uuid", probeColumns, [][]interface{}{{uuid, nil}})
+		suite.NoError(err)
+
+		stats, err := Save(ctx, suite.db, probeTable, "uuid", probeColumns, [][]interface{}{{uuid, ""}})
+		suite.NoError(err)
+		suite.Equal(1, stats.Updated, "null to empty string is a change")
+
+		stats, err = Save(ctx, suite.db, probeTable, "uuid", probeColumns, [][]interface{}{{uuid, nil}})
+		suite.NoError(err)
+		suite.Equal(1, stats.Updated, "empty string to null is a change")
+	})
+
+	suite.Run("rejects a hash column passed by the caller", func() {
+		columns := []string{"uuid", "label", "hash"}
+		rows := [][]interface{}{{saveRepositoryHelpersPrefix + "-8e9f-000000000001", "label", "hash"}}
+
+		_, err := Save(ctx, suite.db, probeTable, "uuid", columns, rows)
+		suite.ErrorContains(err, "which Save computes itself")
+		suite.Equal(0, suite.countRows())
+	})
+
 	suite.Run("rejects inconsistent row widths", func() {
 		malformed := [][]interface{}{
 			suite.row(1, "first"),
@@ -170,13 +194,12 @@ func TestIntegration_SaveRepositoryHelpers(t *testing.T) {
 	suite.Run(t, new(SaveRepositoryHelpersIntegrationTestSuite))
 }
 
-// row builds a single row whose hash depends on the label, so reusing a label
-// means an unchanged hash and changing it forces an update.
+// row builds a single row. Save hashes its values, so reusing a label means an
+// unchanged hash and changing it forces an update.
 func (suite *SaveRepositoryHelpersIntegrationTestSuite) row(index int, label string) []interface{} {
 	return []interface{}{
 		fmt.Sprintf(saveRepositoryHelpersPrefix+"-8e9f-%012d", index),
 		fmt.Sprintf("%s-%d", label, index),
-		fmt.Sprintf("hash-%d-%s", index, label),
 	}
 }
 

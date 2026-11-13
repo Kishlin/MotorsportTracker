@@ -7,7 +7,6 @@ import (
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
 	shared "github.com/kishlin/MotorsportTracker/src/Golang/motorsporttracker/scrapping/shared/infrastructure"
-	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
@@ -231,27 +230,11 @@ func (s *SaveClassificationRepository) saveDrivers(ctx context.Context, drivers 
 
 	var rows [][]interface{}
 	for _, driver := range drivers {
-		nameVal := fn.Deref(driver.Name, "")
-		firstNameVal := fn.Deref(driver.FirstName, "")
-		lastNameVal := fn.Deref(driver.LastName, "")
-		shortCodeVal := fn.Deref(driver.ShortCode, "")
-		colourVal := fn.Deref(driver.Colour, "")
-		pictureVal := fn.Deref(driver.Picture, "")
-
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s",
-			driver.UUID,
-			nameVal,
-			firstNameVal,
-			lastNameVal,
-			shortCodeVal,
-			colourVal,
-			pictureVal,
-		))
-		vals := []interface{}{driver.UUID, driver.Name, driver.FirstName, driver.LastName, driver.ShortCode, driver.Colour, driver.Picture, hash}
+		vals := []interface{}{driver.UUID, driver.Name, driver.FirstName, driver.LastName, driver.ShortCode, driver.Colour, driver.Picture}
 		rows = append(rows, vals)
 	}
 
-	cols := []string{"uuid", "name", "first_name", "last_name", "short_code", "colour", "picture", "hash"}
+	cols := []string{"uuid", "name", "first_name", "last_name", "short_code", "colour", "picture"}
 
 	stats, err := shared.Save(ctx, s.db, "drivers", "uuid", cols, rows)
 	if err != nil {
@@ -275,12 +258,11 @@ func (s *SaveClassificationRepository) saveTeams(
 
 	var rows [][]interface{}
 	for _, team := range teams {
-		hash := crypto.Hash(team.UUID)
-		vals := []interface{}{team.UUID, hash}
+		vals := []interface{}{team.UUID}
 		rows = append(rows, vals)
 	}
 
-	cols := []string{"uuid", "hash"}
+	cols := []string{"uuid"}
 
 	stats, err := shared.Save(ctx, s.db, "teams", "uuid", cols, rows)
 	if err != nil {
@@ -309,20 +291,11 @@ func (s *SaveClassificationRepository) saveGarages(
 
 	var rows [][]interface{}
 	for _, garage := range garages {
-		nameVal := fn.Deref(garage.team.Name, "")
-		colourVal := fn.Deref(garage.team.Colour, "")
-		pictureVal := fn.Deref(garage.team.Picture, "")
-		carIconVal := fn.Deref(garage.team.CarIcon, "")
-
-		hash := crypto.Hash(fmt.Sprintf(
-			"%s|%s|%s|%s|%s",
-			garage.uniqueKey, nameVal, colourVal, pictureVal, carIconVal,
-		))
-		vals := []interface{}{garage.uniqueKey, garage.team.Name, garage.team.Colour, garage.team.Picture, garage.team.CarIcon, hash}
+		vals := []interface{}{garage.uniqueKey, garage.team.Name, garage.team.Colour, garage.team.Picture, garage.team.CarIcon}
 		rows = append(rows, vals)
 	}
 
-	cols := []string{"unique_key", "name", "colour", "picture", "car_icon", "hash"}
+	cols := []string{"unique_key", "name", "colour", "picture", "car_icon"}
 
 	stats, err := shared.Save(ctx, s.db, "garages", "unique_key", cols, rows)
 	if err != nil {
@@ -365,47 +338,6 @@ func (s *SaveClassificationRepository) saveClassifications(
 		}
 
 		details := classificationRow.details
-		finishPositionVal := fn.Deref(details.FinishPosition, 0)
-		gridPositionVal := fn.Deref(details.GridPosition, 0)
-		lapsVal := fn.Deref(details.Laps, 0)
-		pointsVal := fn.Deref(details.Points, 0.0)
-		timeVal := fn.Deref(details.Time, 0)
-		statusVal := fn.Deref(details.ClassifiedStatus, "")
-		avgLapSpeedVal := fn.Deref(details.AvgLapSpeed, 0)
-		fastestLapTime := fn.Deref(details.FastestLapTime, 0)
-		gapTimeToLeadVal := fn.Deref(details.ClassificationGap.TimeToLead, 0.0)
-		gapTimeToNextVal := fn.Deref(details.ClassificationGap.TimeToNext, 0.0)
-		gapLapsToLeadVal := fn.Deref(details.ClassificationGap.LapsToLead, 0)
-		gapLapsToNextVal := fn.Deref(details.ClassificationGap.LapsToNext, 0)
-		bestLapVal := fn.Deref(details.ClassificationBest.Lap, 0)
-		bestTimeVal := fn.Deref(details.ClassificationBest.Time, 0.0)
-		bestIsFastestVal := fn.Deref(details.ClassificationBest.Fastest, false)
-		bestSpeedVal := fn.Deref(details.ClassificationBest.Speed, 0.0)
-
-		hash := crypto.Hash(fmt.Sprintf(
-			"%d|%d|%d|%s|%d|%d|%d|%d|%.2f|%.3f|%s|%.3f|%.3f|%.2f|%.2f|%d|%d|%d|%.2f|%t|%.3f",
-			sessionID,
-			teamID,
-			garageID,
-			classificationRow.key.carNumber,
-			classificationRow.key.occurrence,
-			finishPositionVal,
-			gridPositionVal,
-			lapsVal,
-			pointsVal,
-			timeVal,
-			statusVal,
-			avgLapSpeedVal,
-			fastestLapTime,
-			gapTimeToLeadVal,
-			gapTimeToNextVal,
-			gapLapsToLeadVal,
-			gapLapsToNextVal,
-			bestLapVal,
-			bestTimeVal,
-			bestIsFastestVal,
-			bestSpeedVal,
-		))
 		rows = append(rows, []interface{}{
 			sessionID,
 			teamID,
@@ -428,7 +360,6 @@ func (s *SaveClassificationRepository) saveClassifications(
 			details.ClassificationBest.Time,
 			details.ClassificationBest.Fastest,
 			details.ClassificationBest.Speed,
-			hash,
 		})
 	}
 
@@ -454,7 +385,6 @@ func (s *SaveClassificationRepository) saveClassifications(
 		"best_time",
 		"best_is_fastest",
 		"best_speed",
-		"hash",
 	}
 
 	stats, err := shared.Save(ctx, s.db, "classifications", "session, car_number, occurrence", cols, rows)
@@ -534,12 +464,11 @@ func (s *SaveClassificationRepository) saveClassificationDrivers(
 				return fmt.Errorf("driver ID for UUID %s not found", driver.UUID)
 			}
 
-			hash := crypto.Hash(fmt.Sprintf("%d|%d", classificationID, driverID))
-			rows = append(rows, []interface{}{classificationID, driverID, hash})
+			rows = append(rows, []interface{}{classificationID, driverID})
 		}
 	}
 
-	cols := []string{"classification", "driver", "hash"}
+	cols := []string{"classification", "driver"}
 
 	stats, err := shared.Save(ctx, s.db, "classification_drivers", "classification, driver", cols, rows)
 	if err != nil {
@@ -575,16 +504,6 @@ func (s *SaveClassificationRepository) saveRetirements(
 			return fmt.Errorf("driver ID for UUID %s not found", retirement.Driver.UUID)
 		}
 
-		reasonVal := fn.Deref(retirement.Reason, "")
-		typeVal := fn.Deref(retirement.Type, "")
-		dnsVal := fn.Deref(retirement.DNS, false)
-		lapVal := fn.Deref(retirement.Lap, 0)
-		detailsVal := fn.Deref(retirement.Details, "")
-
-		hash := crypto.Hash(fmt.Sprintf(
-			"%d|%s|%d|%s|%s|%t|%d|%s",
-			sessionID, retirement.CarNumber, driverID, reasonVal, typeVal, dnsVal, lapVal, detailsVal,
-		))
 		rows = append(rows, []interface{}{
 			sessionID,
 			retirement.CarNumber,
@@ -594,11 +513,10 @@ func (s *SaveClassificationRepository) saveRetirements(
 			retirement.DNS,
 			retirement.Lap,
 			retirement.Details,
-			hash,
 		})
 	}
 
-	cols := []string{"session", "car_number", "driver", "reason", "type", "dns", "lap", "details", "hash"}
+	cols := []string{"session", "car_number", "driver", "reason", "type", "dns", "lap", "details"}
 
 	stats, err := shared.Save(ctx, s.db, "retirements", "session, car_number, driver", cols, rows)
 	if err != nil {

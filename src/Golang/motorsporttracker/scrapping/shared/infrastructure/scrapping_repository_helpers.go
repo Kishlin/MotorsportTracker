@@ -8,13 +8,13 @@ import (
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
 )
 
-func PrepareTimestamp(timestamp *int64) (dbVal *time.Time, hashVal int64) {
+func PrepareTimestamp(timestamp *int64) *time.Time {
 	if timestamp == nil {
-		return nil, 0
+		return nil
 	}
 
 	time := time.Unix(*timestamp, 0)
-	return &time, *timestamp
+	return &time
 }
 
 func GetIDsForValues(ctx context.Context, db *database.PGXPoolAdapter, table string, col string, values map[string]struct{}) (map[string]int, error) {

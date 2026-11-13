@@ -6,9 +6,7 @@ import (
 	"log/slog"
 
 	motorsportstats "github.com/kishlin/MotorsportTracker/src/Golang/motorsportstats/gateway/domain"
-	crypto "github.com/kishlin/MotorsportTracker/src/Golang/shared/crypto/domain"
 	database "github.com/kishlin/MotorsportTracker/src/Golang/shared/database/infrastructure"
-	fn "github.com/kishlin/MotorsportTracker/src/Golang/shared/fn/domain"
 )
 
 func SaveCountries(ctx context.Context, db *database.PGXPoolAdapter, countries []*motorsportstats.Country) error {
@@ -20,14 +18,10 @@ func SaveCountries(ctx context.Context, db *database.PGXPoolAdapter, countries [
 
 	var rows [][]interface{}
 	for _, country := range countries {
-		nameVal := fn.Deref(country.Name, "")
-		flagVal := fn.Deref(country.Flag, "")
-
-		hash := crypto.Hash(fmt.Sprintf("%s|%s|%s", country.UUID, nameVal, flagVal))
-		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag, hash})
+		rows = append(rows, []interface{}{country.UUID, country.Name, country.Flag})
 	}
 
-	cols := []string{"uuid", "name", "flag", "hash"}
+	cols := []string{"uuid", "name", "flag"}
 
 	stats, err := Save(ctx, db, "countries", "uuid", cols, rows)
 	if err != nil {
